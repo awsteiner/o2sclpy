@@ -30,7 +30,6 @@ import matplotlib.pyplot as plot
 from matplotlib.colors import LinearSegmentedColormap
 import urllib.request
 import numpy
-import matplotlib
 
 class cloud_file:
 
@@ -385,12 +384,6 @@ class plotter:
         myreds=LinearSegmentedColormap('MyReds',cdict)
         plot.register_cmap(cmap=myreds)
         self.cmap='MyReds'
-
-    def backend(self,new_be):
-        if new_be=="":
-            print('Using',plot.get_backend(),'backend.')
-        else:
-            matplotlib.use(new_be)
 
     def mygreens(self):
         cdict={'red': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
@@ -1190,13 +1183,6 @@ class plotter:
                         print('Not enough parameters for ylimits option.')
                     else:
                         self.ylimits(float(argv[ix+1]),float(argv[ix+2]))
-                elif cmd_name=='backend':
-                    if self.verbose>2:
-                        print('Process ylimits.')
-                    if ix_next-ix<2:
-                        self.backend('')
-                    else:
-                        self.backend(argv[ix+1])
                 elif cmd_name=='plot':
                     if self.verbose>2:
                         print('Process plot.')
