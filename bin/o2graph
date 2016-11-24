@@ -6,7 +6,7 @@ if len(sys.argv)>2 and sys.argv[1]=='-backend':
   matplotlib.use(sys.argv[2])
   import o2sclpy
   gc=o2sclpy.plotter()
-  gc.parse_argv(sys.argv[2:])
+  gc.parse_argv(sys.argv[3:])
 else:    
   import o2sclpy
   gc=o2sclpy.plotter()
