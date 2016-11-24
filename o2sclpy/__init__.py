@@ -1209,11 +1209,9 @@ class plotter:
                         print('Not enough parameters for plot1m option.')
                     else:
                         files=[]
-                        for i in range(ix+2,len(argv)):
+                        for i in range(ix+2,ix_next):
                             if argv[i][0]!='-':
                                 files.append(argv[i])
-                            else:
-                                i=len(argv)
                         self.plot1m(argv[ix+1],files)
                 elif cmd_name=='plotm':
                     if self.verbose>2:
