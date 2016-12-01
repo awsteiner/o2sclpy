@@ -69,6 +69,7 @@ import os
 # if backend!='':
 #   import matplotlib
 #   matplotlib.use(backend)
+o2scl=0
 
 import o2sclpy
 gc=o2sclpy.plotter()
