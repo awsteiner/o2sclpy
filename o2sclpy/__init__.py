@@ -1067,7 +1067,7 @@ class plotter:
             print('The value of zset is',self.zset,'.')
         return
 
-    def parse_argv(self,argv):
+    def parse_argv(self,argv,o2scl):
         if self.verbose>2:
             print('Number of arguments:',len(argv),'arguments.')
             print('Argument List:', str(argv))
