@@ -50,18 +50,21 @@ if platform.system()=='Darwin':
 
 else:
 
+  stdcpp=ctypes.CDLL(find_library("stdc++"),mode=ctypes.RTLD_GLOBAL)
+
   if o2scl_libdir=='' and os.getenv('O2SCL_LIB')!='None':
     o2scl_libdir=os.getenv('O2SCL_LIB')
     print('Set o2scl-libdir to',o2scl_libdir)
-    stdcpp=ctypes.CDLL(find_library("stdc++"),mode=ctypes.RTLD_GLOBAL)
 
   if o2scl_libdir=='':
     o2scl=ctypes.CDLL(find_library("o2scl"),mode=ctypes.RTLD_GLOBAL)
+    o2scl=ctypes.CDLL(find_library("o2scl_hdf"),mode=ctypes.RTLD_GLOBAL)
   else:
     o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.so',mode=ctypes.RTLD_GLOBAL)
+    o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.so',mode=ctypes.RTLD_GLOBAL)
 
-i=ctypes.c_int(2)
-print(o2scl.o2scl_python_test(i))
+#i=ctypes.c_int(2)
+#print(o2scl.o2scl_python_test(i))
 
 if backend!='':
   import matplotlib
