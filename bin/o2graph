@@ -31,25 +31,28 @@ for i in range(1,len(sys.argv)):
 
 if platform.system()=='Darwin':
 
-    if o2scl_cpplib=='' and os.getenv('O2SCL_CPPLIB')!='None':
-      o2scl_cpplib=os.getenv('O2SCL_CPPLIB')
-      print('Set o2scl-cpplib to',o2scl_cpplib)
+  # For debugging on antares
+  print('Here:',os.getenv('O2SCL_CPPLIB'),'None')
+  
+  if o2scl_cpplib=='' and os.getenv('O2SCL_CPPLIB')!='None':
+    o2scl_cpplib=os.getenv('O2SCL_CPPLIB')
+    print('Set o2scl-cpplib to',o2scl_cpplib)
 
-    if o2scl_cpplib!='':
-      systcpp=ctypes.CDLL(o2scl_cpplib,mode=ctypes.RTLD_GLOBAL)
+  if o2scl_cpplib!='':
+    systcpp=ctypes.CDLL(o2scl_cpplib,mode=ctypes.RTLD_GLOBAL)
     
-    if o2scl_libdir=='' and os.getenv('O2SCL_LIB')!='None':
-      o2scl_libdir=os.getenv('O2SCL_LIB')
-      print('Set o2scl-libdir to',o2scl_libdir)
-      
-    if o2scl_libdir!='':
-      o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.dylib',
-                        mode=ctypes.RTLD_GLOBAL)
-      o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.dylib',
-                        mode=ctypes.RTLD_GLOBAL)
-    else:
-      o2scl=ctypes.CDLL('libo2scl.dylib',mode=ctypes.RTLD_GLOBAL)
-      o2scl_hdf=ctypes.CDLL('libo2scl_hdf.dylib',mode=ctypes.RTLD_GLOBAL)
+  if o2scl_libdir=='' and os.getenv('O2SCL_LIB')!='None':
+    o2scl_libdir=os.getenv('O2SCL_LIB')
+    print('Set o2scl-libdir to',o2scl_libdir)
+    
+  if o2scl_libdir!='':
+    o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.dylib',
+                      mode=ctypes.RTLD_GLOBAL)
+    o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.dylib',
+                          mode=ctypes.RTLD_GLOBAL)
+  else:
+    o2scl=ctypes.CDLL('libo2scl.dylib',mode=ctypes.RTLD_GLOBAL)
+    o2scl_hdf=ctypes.CDLL('libo2scl_hdf.dylib',mode=ctypes.RTLD_GLOBAL)
 
 else:
 

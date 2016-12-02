@@ -1128,15 +1128,14 @@ class plotter:
                     if ix_next-ix<2:
                         print('Not enough parameters for read2.')
                     else:
-                        str_args='read'+argv[ix+1]
+                        str_args='-read'+argv[ix+1]
                         ccp=ctypes.c_char_p(self.force_bytes(str_args))
-                        n_entries=2
                         size_type=ctypes.c_int * 2
-                        sizes=size_type(4,len(argv[ix+1]))
-                        read_fn=o2scl_hdf.o2scl_acol_read
-                        read_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                        sizes=size_type(5,len(argv[ix+1]))
+                        parse_fn=o2scl_hdf.o2scl_acol_parse
+                        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
                                           size_type,ctypes.c_char_p]
-                        o2scl_hdf.o2scl_acol_read(amp,n_entries,sizes,ccp)
+                        parse_fn(amp,2,sizes,ccp)
                 elif cmd_name=='text':
                     if self.verbose>2:
                         print('Process text.')
