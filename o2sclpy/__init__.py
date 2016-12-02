@@ -1068,9 +1068,9 @@ class plotter:
         return
 
     def parse_argv(self,argv,o2scl):
-#        print('Creating acol_manager object.')
-#        amp=o2scl.o2scl_create_acol_manager()
-#        print('Done creating acol_manager object.')
+        print('Creating acol_manager object.')
+        #amp=o2scl.o2scl_create_acol_manager()
+        print('Done creating acol_manager object.')
         if self.verbose>2:
             print('Number of arguments:',len(argv),'arguments.')
             print('Argument List:', str(argv))
@@ -1134,7 +1134,7 @@ class plotter:
                         sizes=ctypes.c_int * 2
                         sizes[0]=5
                         sizes[1]=len(self.get(argv[ix+1]))
-#                        o2scl.o2scl_acol_read(amp,n_entries,sizes,ccp)
+                        #o2scl.o2scl_acol_read(amp,n_entries,sizes,ccp)
                 elif cmd_name=='text':
                     if self.verbose>2:
                         print('Process text.')
