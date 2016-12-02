@@ -30,6 +30,7 @@ import matplotlib.pyplot as plot
 from matplotlib.colors import LinearSegmentedColormap
 import urllib.request
 import numpy
+import ctypes
 
 class cloud_file:
 
@@ -1067,10 +1068,9 @@ class plotter:
             print('The value of zset is',self.zset,'.')
         return
 
-    def parse_argv(self,argv,o2scl):
-        print('Creating acol_manager object.')
-        #amp=o2scl.o2scl_create_acol_manager()
-        print('Done creating acol_manager object.')
+    def parse_argv(self,argv,o2scl_hdf):
+        amp=o2scl_hdf.o2scl_create_acol_manager.restype=ctypes.c_void_p
+        amp=o2scl_hdf.o2scl_create_acol_manager()
         if self.verbose>2:
             print('Number of arguments:',len(argv),'arguments.')
             print('Argument List:', str(argv))
@@ -1128,13 +1128,15 @@ class plotter:
                     if ix_next-ix<2:
                         print('Not enough parameters for read2.')
                     else:
-                        str_args='read '+self.get(argv[ix+1])
-                        ccp=ctypes.c_char_p(str_args)
+                        str_args='read'+argv[ix+1]
+                        ccp=ctypes.c_char_p(self.force_bytes(str_args))
                         n_entries=2
-                        sizes=ctypes.c_int * 2
-                        sizes[0]=5
-                        sizes[1]=len(self.get(argv[ix+1]))
-                        #o2scl.o2scl_acol_read(amp,n_entries,sizes,ccp)
+                        size_type=ctypes.c_int * 2
+                        sizes=size_type(4,len(argv[ix+1]))
+                        read_fn=o2scl_hdf.o2scl_acol_read
+                        read_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                                          size_type,ctypes.c_char_p]
+                        o2scl_hdf.o2scl_acol_read(amp,n_entries,sizes,ccp)
                 elif cmd_name=='text':
                     if self.verbose>2:
                         print('Process text.')

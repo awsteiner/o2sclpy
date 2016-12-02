@@ -45,8 +45,11 @@ if platform.system()=='Darwin':
     if o2scl_libdir!='':
       o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.dylib',
                         mode=ctypes.RTLD_GLOBAL)
+      o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.dylib',
+                        mode=ctypes.RTLD_GLOBAL)
     else:
       o2scl=ctypes.CDLL('libo2scl.dylib',mode=ctypes.RTLD_GLOBAL)
+      o2scl_hdf=ctypes.CDLL('libo2scl_hdf.dylib',mode=ctypes.RTLD_GLOBAL)
 
 else:
 
@@ -58,13 +61,12 @@ else:
 
   if o2scl_libdir=='':
     o2scl=ctypes.CDLL(find_library("o2scl"),mode=ctypes.RTLD_GLOBAL)
-    o2scl=ctypes.CDLL(find_library("o2scl_hdf"),mode=ctypes.RTLD_GLOBAL)
+    o2scl_hdf=ctypes.CDLL(find_library("o2scl_hdf"),
+                          mode=ctypes.RTLD_GLOBAL)
   else:
     o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.so',mode=ctypes.RTLD_GLOBAL)
-    o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.so',mode=ctypes.RTLD_GLOBAL)
-
-#i=ctypes.c_int(2)
-#print(o2scl.o2scl_python_test(i))
+    o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.so',
+                          mode=ctypes.RTLD_GLOBAL)
 
 if backend!='':
   import matplotlib
@@ -72,5 +74,5 @@ if backend!='':
 
 import o2sclpy
 gc=o2sclpy.plotter()
-gc.parse_argv(sys.argv,o2scl)
+gc.parse_argv(sys.argv,o2scl_hdf)
 
