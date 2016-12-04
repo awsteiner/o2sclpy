@@ -1114,47 +1114,71 @@ class plotter:
                         if self.verbose>2:
                             print('Incrementing ix_next')
                         ix_next=ix_next+1
+                        
                 # Now process the option
                 if cmd_name=='set':
+                    
                     if self.verbose>2:
                         print('Process set.')
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
                     else:
                         self.set(argv[ix+1],argv[ix+2])
+                        
                 elif cmd_name=='get':
+                    
                     if self.verbose>2:
                         print('Process get.')
                     if ix_next-ix<2:
                         self.get('')
                     else:
                         self.get(argv[ix+1])
-                elif cmd_name=='read':
+                        
+                elif (cmd_name=='read' or cmd_name=='list' or
+                      cmd_name=='assign' or cmd_name=='integ' or
+                      cmd_name=='cat' or cmd_name=='internal' or
+                      cmd_name=='commands' or cmd_name=='interp' or
+                      cmd_name=='convert-unit' or cmd_name=='interp-type' or
+                      cmd_name=='create' or cmd_name=='license' or
+                      cmd_name=='delete-col' or cmd_name=='max' or
+                      cmd_name=='delete-rows' or cmd_name=='min' or
+                      cmd_name=='deriv' or cmd_name=='output' or
+                      cmd_name=='deriv2' or cmd_name=='preview' or
+                      cmd_name=='filelist' or cmd_name=='rename' or
+                      cmd_name=='find-row' or cmd_name=='select' or
+                      cmd_name=='fit' or cmd_name=='select-rows' or
+                      cmd_name=='function' or cmd_name=='set-data' or
+                      cmd_name=='gen3-list' or cmd_name=='set-unit' or
+                      cmd_name=='generic' or cmd_name=='show_units' or
+                      cmd_name=='get-conv' or cmd_name=='slice' or
+                      cmd_name=='get-row' or cmd_name=='sort' or
+                      cmd_name=='get-unit' or cmd_name=='status' or
+                      cmd_name=='index' or cmd_name=='sum' or
+                      cmd_name=='insert' or cmd_name=='version' or
+                      cmd_name=='insert-full' or cmd_name=='warranty' or
+                      cmd_name=='calc'):
+                    
                     if self.verbose>2:
-                        print('Process read.')
-                    if ix_next-ix<2:
-                        print('Not enough parameters for read.')
-                    else:
-                        str_args='-read'+argv[ix+1]
-                        ccp=ctypes.c_char_p(self.force_bytes(str_args))
-                        size_type=ctypes.c_int * 2
-                        sizes=size_type(5,len(argv[ix+1]))
-                        parse_fn=o2scl_hdf.o2scl_acol_parse
-                        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                                          size_type,ctypes.c_char_p]
-                        parse_fn(amp,2,sizes,ccp)
-                elif cmd_name=='list':
-                    if self.verbose>2:
-                        print('Process list.')
-                    str_args='-list'
+                        print('Process '+cmd_name+'.')
+
+                    str_args='-'+cmd_name
+                    size_type=ctypes.c_int * (ix_next-ix)
+                    sizes=size_type()
+                    sizes[0]=len(cmd_name)+1
+
+                    for i in range(0,ix_next-ix-1):
+                        str_args=str_args+argv[i+ix+1]
+                        sizes[i+1]=len(argv[i+ix+1])
                     ccp=ctypes.c_char_p(self.force_bytes(str_args))
-                    size_type=ctypes.c_int * 1
-                    sizes=size_type(5)
+
                     parse_fn=o2scl_hdf.o2scl_acol_parse
                     parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
                                       size_type,ctypes.c_char_p]
-                    parse_fn(amp,2,sizes,ccp)
+
+                    parse_fn(amp,ix_next-ix,sizes,ccp)
+
                 elif cmd_name=='plot':
+                    
                     if self.verbose>2:
                         print('Process plot.')
                     if ix_next-ix<3:
@@ -1211,7 +1235,61 @@ class plotter:
                         if self.yset==1:
                             plot.ylim([self.ylo,self.yhi])
                             
+                elif cmd_name=='plot1':
+                    
+                    if self.verbose>2:
+                        print('Process plot1.')
+                    if ix_next-ix<2:
+                        print('Not enough parameters for plot1 option.')
+                    else:
+                        get_fn=o2scl_hdf.o2scl_acol_get_column
+                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                                         int_ptr,double_ptr_ptr]
+
+                        colx=ctypes.c_char_p(self.force_bytes(argv[ix+1]))
+                        idx=ctypes.c_int(0)
+                        ptrx=double_ptr()
+                        get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+
+                        xv=[i for i in range(0,idx.value)]
+                        yv=[ptrx[i] for i in range(0,idx.value)]
+
+                        if self.canvas_flag==0:
+                            self.canvas()
+                        if self.logx==1:
+                            if self.logy==1:
+                                if ix_next-ix<3:
+                                    plot.loglog(xv,yv)
+                                else:
+                                    plot.loglog(xv,yv,
+                                                **string_to_dict(argv[ix+2]))
+                            else:
+                                if ix_next-ix<3:
+                                    plot.semilogx(xv,yv)
+                                else:
+                                    plot.semilogx(xv,yv,
+                                                  **string_to_dict(argv[ix+2]))
+                        else:
+                            if self.logy==1:
+                                if ix_next-ix<3:
+                                    plot.semilogy(xv,yv)
+                                else:
+                                    plot.semilogy(xv,yv,
+                                                  **string_to_dict(argv[ix+2]))
+                            else:
+                                if ix_next-ix<3:
+                                    plot.plot(xv,yv)
+                                else:
+                                    plot.plot(xv,yv,
+                                              **string_to_dict(argv[ix+2]))
+                            
+                        if self.xset==1:
+                            plot.xlim([self.xlo,self.xhi])
+                        if self.yset==1:
+                            plot.ylim([self.ylo,self.yhi])
+                            
                 elif cmd_name=='plotm':
+                    
                     if self.verbose>2:
                         print('Process plotm.')
                     if ix_next-ix<4:
@@ -1273,7 +1351,65 @@ class plotter:
                                 plot.xlim([self.xlo,self.xhi])
                             if self.yset==1:
                                 plot.ylim([self.ylo,self.yhi])
-                            # End of file loop for 'plotm'
+                        # End of file loop for 'plotm'
+                            
+                elif cmd_name=='plot1m':
+                    
+                    if self.verbose>2:
+                        print('Process plot1m.')
+                    if ix_next-ix<3:
+                        print('Not enough parameters for plot1m option.')
+                    else:
+                        # Types for the file reading
+                        size_type=ctypes.c_int * 2
+                        parse_fn=o2scl_hdf.o2scl_acol_parse
+                        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                                           size_type,ctypes.c_char_p]
+
+                        # Define types to obtain the column
+                        get_fn=o2scl_hdf.o2scl_acol_get_column
+                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                                         int_ptr,double_ptr_ptr]
+
+                        # Construct the file list
+                        filelist=[argv[i] for i in range(ix+2,ix_next)]
+                        
+                        for ifile in range(0,len(filelist)):
+                            # Read the file
+                            str_args='-read'+filelist[ifile]
+                            ccp=ctypes.c_char_p(self.force_bytes(str_args))
+                            sizes=size_type(5,len(filelist[ifile]))
+                            parse_fn(amp,2,sizes,ccp)
+
+                            # Get the x column
+                            colx=ctypes.c_char_p(self.force_bytes(argv[ix+1]))
+                            idx=ctypes.c_int(0)
+                            ptrx=double_ptr()
+                            get_fn(amp,colx,ctypes.byref(idx),
+                                   ctypes.byref(ptrx))
+
+                            # Copy the data over
+                            xv=[i for i in range(0,idx.value)]
+                            yv=[ptrx[i] for i in range(0,idx.value)]
+
+                            # Plot
+                            if self.canvas_flag==0:
+                                self.canvas()
+                            if self.logx==1:
+                                if self.logy==1:
+                                    plot.loglog(xv,yv)
+                                else:
+                                    plot.semilogx(xv,yv)
+                            else:
+                                if self.logy==1:
+                                    plot.semilogy(xv,yv)
+                                else:
+                                    plot.plot(xv,yv)
+                            if self.xset==1:
+                                plot.xlim([self.xlo,self.xhi])
+                            if self.yset==1:
+                                plot.ylim([self.ylo,self.yhi])
+                        # End of file loop for 'plot1m'
                             
                 elif cmd_name=='text':
                     if self.verbose>2:
@@ -1295,27 +1431,6 @@ class plotter:
                     else:
                         self.ttext(argv[ix+1],argv[ix+2],argv[ix+3],
                                    **string_to_dict(argv[ix+4]))
-                elif cmd_name=='read_old':
-                    if self.verbose>2:
-                        print('Process read.')
-                    if ix_next-ix<2:
-                        print('Not enough parameters for read option.')
-                    else:
-                        self.read(argv[ix+1])
-                elif cmd_name=='read-name_old':
-                    if self.verbose>2:
-                        print('Process read-name.')
-                    if ix_next-ix<3:
-                        print('Not enough parameters for read-name option.')
-                    else:
-                        self.read_name(argv[ix+1],argv[ix+2])
-                elif cmd_name=='read-type_old':
-                    if self.verbose>2:
-                        print('Process read-type.')
-                    if ix_next-ix<3:
-                        print('Not enough parameters for read-type option.')
-                    else:
-                        self.read_type(argv[ix+1],argv[ix+2])
                 elif cmd_name=='den-plot_old':
                     if self.verbose>2:
                         print('Process den-plot.')
@@ -1339,47 +1454,6 @@ class plotter:
                         print('Not enough parameters for ylimits option.')
                     else:
                         self.ylimits(float(argv[ix+1]),float(argv[ix+2]))
-                elif cmd_name=='plot_old':
-                    if self.verbose>2:
-                        print('Process plot.')
-                    if ix_next-ix<3:
-                        print('Not enough parameters for plot option.')
-                    elif ix_next-ix<4:
-                        self.plot(argv[ix+1],argv[ix+2])
-                    else:
-                        self.plot(argv[ix+1],argv[ix+2],
-                                  **string_to_dict(argv[ix+3]))
-                elif cmd_name=='plot1_old':
-                    if self.verbose>2:
-                        print('Process plot1.')
-                    if ix_next-ix<2:
-                        print('Not enough parameters for plot1 option.')
-                    elif ix_next-ix<3:
-                        self.plot1(argv[ix+1])
-                    else:
-                        self.plot1(argv[ix+1],**string_to_dict(argv[ix+2]))
-                elif cmd_name=='plot1m_old':
-                    if self.verbose>2:
-                        print('Process plot1m.')
-                    if ix_next-ix<2:
-                        print('Not enough parameters for plot1m option.')
-                    else:
-                        files=[]
-                        for i in range(ix+2,ix_next):
-                            if argv[i][0]!='-':
-                                files.append(argv[i])
-                        self.plot1m(argv[ix+1],files)
-                elif cmd_name=='plotm_old':
-                    if self.verbose>2:
-                        print('Process plotm.')
-                    if ix_next-ix<3:
-                        print('Not enough parameters for plot1 option.')
-                    else:
-                        files=[]
-                        for i in range(ix+3,ix_next):
-                            if argv[i][0]!='-':
-                                files.append(argv[i])
-                        self.plotm(argv[ix+1],argv[ix+2],files)
                 elif cmd_name=='hist_old':
                     if self.verbose>2:
                         print('Process hist.')
@@ -1416,14 +1490,6 @@ class plotter:
                     else:
                         self.line(argv[ix+1],argv[ix+2],argv[ix+3],argv[ix+4],
                                   **string_to_dict(argv[ix+5]))
-                elif cmd_name=='list_old':
-                    if self.verbose>2:
-                        print('Process list.')
-                    self.list()
-                elif cmd_name=='type_old':
-                    if self.verbose>2:
-                        print('Process type.')
-                    print(self.dtype)
                 elif cmd_name=='move-labels':
                     if self.verbose>2:
                         print('Process move-labels.')
