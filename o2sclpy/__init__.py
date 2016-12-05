@@ -1123,17 +1123,75 @@ class plotter:
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
                     else:
-                        self.set(argv[ix+1],argv[ix+2])
-                        
+                        if (argv[ix+1]=='logx' or argv[ix+1]=='xtitle' or
+                            argv[ix+1]=='logy' or argv[ix+1]=='ytitle' or
+                            argv[ix+1]=='xlo' or argv[ix+1]=='ylo' or
+                            argv[ix+1]=='xset' or argv[ix+1]=='xhi' or
+                            argv[ix+1]=='yhi' or argv[ix+1]=='yset' or
+                            argv[ix+1]=='zlo' or argv[ix+1]=='zhi' or
+                            argv[ix+1]=='zset' or argv[ix+1]=='cmap' or
+                            argv[ix+1]=='colbar'):
+
+                            self.set(argv[ix+1],argv[ix+2])
+                            
+                        else:
+
+                            if argv[ix+1]=='verbose':
+                                self.set('verbose',argv[ix+2])
+                            
+                            str_args='-'+cmd_name
+                            size_type=ctypes.c_int * (ix_next-ix)
+                            sizes=size_type()
+                            sizes[0]=len(cmd_name)+1
+        
+                            for i in range(0,ix_next-ix-1):
+                                str_args=str_args+argv[i+ix+1]
+                                sizes[i+1]=len(argv[i+ix+1])
+                            ccp=ctypes.c_char_p(self.force_bytes(str_args))
+        
+                            parse_fn=o2scl_hdf.o2scl_acol_parse
+                            parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                                              size_type,ctypes.c_char_p]
+        
+                            parse_fn(amp,ix_next-ix,sizes,ccp)
+
                 elif cmd_name=='get':
                     
                     if self.verbose>2:
                         print('Process get.')
                     if ix_next-ix<2:
-                        self.get('')
+                        self.get('No parameter specified to get.')
                     else:
-                        self.get(argv[ix+1])
+
+                        if (argv[ix+1]=='logx' or argv[ix+1]=='xtitle' or
+                            argv[ix+1]=='logy' or argv[ix+1]=='ytitle' or
+                            argv[ix+1]=='xlo' or argv[ix+1]=='ylo' or
+                            argv[ix+1]=='xset' or argv[ix+1]=='xhi' or
+                            argv[ix+1]=='yhi' or argv[ix+1]=='yset' or
+                            argv[ix+1]=='zlo' or argv[ix+1]=='zhi' or
+                            argv[ix+1]=='zset' or argv[ix+1]=='cmap' or
+                            argv[ix+1]=='colbar'):
+
+                            self.get(argv[ix+1])
+                            
+                        else:
                         
+                            str_args='-'+cmd_name
+                            size_type=ctypes.c_int * (ix_next-ix)
+                            sizes=size_type()
+                            sizes[0]=len(cmd_name)+1
+        
+                            for i in range(0,ix_next-ix-1):
+                                str_args=str_args+argv[i+ix+1]
+                                sizes[i+1]=len(argv[i+ix+1])
+                            ccp=ctypes.c_char_p(self.force_bytes(str_args))
+        
+                            parse_fn=o2scl_hdf.o2scl_acol_parse
+                            parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                                              size_type,ctypes.c_char_p]
+        
+                            parse_fn(amp,ix_next-ix,sizes,ccp)
+
                 elif (cmd_name=='read' or cmd_name=='list' or
                       cmd_name=='assign' or cmd_name=='integ' or
                       cmd_name=='cat' or cmd_name=='internal' or
