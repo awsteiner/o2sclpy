@@ -929,14 +929,14 @@ class plotter:
             print('read_type <filename> <type>')
             print(border)
             print("Read the first object of type <type> from <filename>.")
-        elif arg=='reset-xlimits':
+        elif arg=='reset-xlim':
             print(border)
-            print('reset-xlimits')
+            print('reset-xlim')
             print(border)
             print('Let matplotlib adjust x-axis limits in next plot.')
-        elif arg=='reset-ylimits':
+        elif arg=='reset-ylim':
             print(border)
-            print('reset-ylimits')
+            print('reset-ylim')
             print(border)
             print('Let matplotlib adjust y-axis limits in next plot.')
         elif arg=='save':
@@ -1006,8 +1006,8 @@ class plotter:
             print('read-name <filename> <name>')
             print('read-type <filename> <type>')
             print('reds')
-            print('reset-xlimits')
-            print('reset-ylimits')
+            print('reset-xlim')
+            print('reset-ylim')
             print('save <filename>')
             print('set <name> <value>')
             print('show')
@@ -1156,7 +1156,7 @@ class plotter:
                       cmd_name=='index' or cmd_name=='sum' or
                       cmd_name=='insert' or cmd_name=='version' or
                       cmd_name=='insert-full' or cmd_name=='warranty' or
-                      cmd_name=='calc'):
+                      cmd_name=='calc' or cmd_name=='help'):
                     
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')
@@ -1494,7 +1494,7 @@ class plotter:
                     if self.verbose>2:
                         print('Process move-labels.')
                     self.move_labels()
-                elif cmd_name=='help':
+                elif cmd_name=='help-old':
                     if self.verbose>2:
                         print('Process help.')
                     if ix_next-ix<2:
