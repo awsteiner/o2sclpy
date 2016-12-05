@@ -1338,7 +1338,6 @@ class plotter:
                         extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
                         extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
                                                    ygrid[ny.value-2])/2
-                        print(extent1,extent2,extent3,extent4)
                         
                         if ix_next-ix<3:
                             plot.imshow(sl,cmap=self.cmap,
