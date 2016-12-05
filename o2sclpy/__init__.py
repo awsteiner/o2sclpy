@@ -1293,6 +1293,72 @@ class plotter:
                         if self.yset==1:
                             plot.ylim([self.ylo,self.yhi])
                             
+                elif cmd_name=='den-plot':
+                    
+                    if self.verbose>2:
+                        print('Process den-plot.')
+                    if ix_next-ix<2:
+                        print('Not enough parameters for den-plot option.')
+                    else:
+                        get_fn=o2scl_hdf.o2scl_acol_get_slice
+                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                                         int_ptr,double_ptr_ptr,
+                                         int_ptr,double_ptr_ptr,double_ptr_ptr]
+
+                        slice=ctypes.c_char_p(self.force_bytes(argv[ix+1]))
+                        nx=ctypes.c_int(0)
+                        ptrx=double_ptr()
+                        ny=ctypes.c_int(0)
+                        ptry=double_ptr()
+                        ptrs=double_ptr()
+                        get_fn(amp,slice,ctypes.byref(nx),ctypes.byref(ptrx),
+                               ctypes.byref(ny),ctypes.byref(ptry),
+                               ctypes.byref(ptrs))
+
+                        xgrid=[ptrx[i] for i in range(0,nx.value)]
+                        ygrid=[ptry[i] for i in range(0,ny.value)]
+                        stemp=[ptrs[i] for i in range(0,nx.value*ny.value)]
+                        stemp2=numpy.array(stemp)
+                        sl=stemp2.reshape(nx.value,ny.value)
+                        sl=sl.transpose()
+
+                        if self.logx==1:
+                            xgrid=[math.log(ptrx[i],10) for i in
+                                   range(0,nx.value)]
+                        if self.logy==1:
+                            ygrid=[math.log(ptry[i],10) for i in
+                                   range(0,ny.value)]
+
+                        if self.canvas_flag==0:
+                            self.canvas()
+
+                        extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+                        extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
+                                                   xgrid[nx.value-2])/2
+                        extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+                        extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
+                                                   ygrid[ny.value-2])/2
+                        print(extent1,extent2,extent3,extent4)
+                        
+                        if ix_next-ix<3:
+                            plot.imshow(sl,cmap=self.cmap,
+                                        interpolation='nearest',
+                                        origin='lower',
+                                        extent=[extent1,extent2,
+                                                extent3,extent4],
+                                        aspect='auto')
+                        else:
+                            plot.imshow(sl,cmap=self.cmap,
+                                        interpolation='nearest',
+                                        origin='lower',
+                                        extent=[extent1,extent2,
+                                                extent3,extent4],
+                                        aspect='auto',
+                                        **string_to_dict(argv[ix+2]))
+                            
+                        if self.colbar>0:
+                            plot.colorbar()
+                
                 elif cmd_name=='plot1':
                     
                     if self.verbose>2:
