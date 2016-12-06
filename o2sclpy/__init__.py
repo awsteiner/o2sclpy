@@ -377,6 +377,7 @@ class plotter:
     verbose=1
     cmap='jet'
     colbar=0
+    plotfiles=''
 
     def myreds(self):
         cdict={'red': ((0.0,1.0,1.0),(1.0,1.0,1.0)),
@@ -823,31 +824,6 @@ class plotter:
             print('Name can be any of: logx, logy, xtitle, ytitle, xlo,'+
                   'xhi, xset, ylo, yhi, yset,')
             print('zlo, zhi, zset, verbose, cmap, colbar')
-        elif arg=='line':
-            print(border)
-            print('line <x1> <y1> <x2> <y2>')
-            print(border)
-            print('Plot a line from (x1,y1) to (x2,y2).\n')
-            print('Useful kwargs:')
-            print('color or c                   matplotlib color')
-            print('dashes                       '+
-                  'sequence of on/off ink in points')
-            print("linestyle or ls              "+
-                  "['-' | '--' | '-.' | ':' | 'None' | ' ' | '']")
-            print("                              "+
-                  "linestyle, e.g., 'steps--'.")
-            print("linewidth or lw              float value in points")
-            print(border)
-        elif arg=='list':
-            print(border)
-            print('list')
-            print(border)
-            print('List the column or slice names for table or table3d')
-            print('objects.')
-        elif arg=='move-labels':
-            print(border)
-            print('move-labels')
-            print(border)
         elif arg=='plot':
             print(border)
             print('plot <x> <y> [kwargs]')
@@ -1130,31 +1106,26 @@ class plotter:
                             argv[ix+1]=='yhi' or argv[ix+1]=='yset' or
                             argv[ix+1]=='zlo' or argv[ix+1]=='zhi' or
                             argv[ix+1]=='zset' or argv[ix+1]=='cmap' or
-                            argv[ix+1]=='colbar'):
-
+                            argv[ix+1]=='colbar' or argv[ix+1]=='verbose'):
+                            
                             self.set(argv[ix+1],argv[ix+2])
                             
-                        else:
+                        str_args='-'+cmd_name
+                        size_type=ctypes.c_int * (ix_next-ix)
+                        sizes=size_type()
+                        sizes[0]=len(cmd_name)+1
+    
+                        for i in range(0,ix_next-ix-1):
+                            str_args=str_args+argv[i+ix+1]
+                            sizes[i+1]=len(argv[i+ix+1])
+                        ccp=ctypes.c_char_p(self.force_bytes(str_args))
+    
+                        parse_fn=o2scl_hdf.o2scl_acol_parse
+                        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                                           size_type,ctypes.c_char_p]
 
-                            if argv[ix+1]=='verbose':
-                                self.set('verbose',argv[ix+2])
-                            
-                            str_args='-'+cmd_name
-                            size_type=ctypes.c_int * (ix_next-ix)
-                            sizes=size_type()
-                            sizes[0]=len(cmd_name)+1
-        
-                            for i in range(0,ix_next-ix-1):
-                                str_args=str_args+argv[i+ix+1]
-                                sizes[i+1]=len(argv[i+ix+1])
-                            ccp=ctypes.c_char_p(self.force_bytes(str_args))
-        
-                            parse_fn=o2scl_hdf.o2scl_acol_parse
-                            parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                                              size_type,ctypes.c_char_p]
-        
-                            parse_fn(amp,ix_next-ix,sizes,ccp)
-
+                        parse_fn(amp,ix_next-ix,sizes,ccp)
+                        
                 elif cmd_name=='get':
                     
                     if self.verbose>2:
@@ -1415,7 +1386,7 @@ class plotter:
                     
                     if self.verbose>2:
                         print('Process plotm.')
-                    if ix_next-ix<4:
+                    if ix_next-ix<3:
                         print('Not enough parameters for plotm option.')
                     else:
                         # Types for the file reading
@@ -1429,14 +1400,11 @@ class plotter:
                         get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                                          int_ptr,double_ptr_ptr]
 
-                        # Construct the file list
-                        filelist=[argv[i] for i in range(ix+3,ix_next)]
-                        
-                        for ifile in range(0,len(filelist)):
+                        for ifile in range(0,len(self.plotfiles)):
                             # Read the file
-                            str_args='-read'+filelist[ifile]
+                            str_args='-read'+self.plotfiles[ifile]
                             ccp=ctypes.c_char_p(self.force_bytes(str_args))
-                            sizes=size_type(5,len(filelist[ifile]))
+                            sizes=size_type(5,len(self.plotfiles[ifile]))
                             parse_fn(amp,2,sizes,ccp)
 
                             # Get the x column
@@ -1480,7 +1448,7 @@ class plotter:
                     
                     if self.verbose>2:
                         print('Process plot1m.')
-                    if ix_next-ix<3:
+                    if ix_next-ix<2:
                         print('Not enough parameters for plot1m option.')
                     else:
                         # Types for the file reading
@@ -1494,14 +1462,11 @@ class plotter:
                         get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                                          int_ptr,double_ptr_ptr]
 
-                        # Construct the file list
-                        filelist=[argv[i] for i in range(ix+2,ix_next)]
-                        
-                        for ifile in range(0,len(filelist)):
+                        for ifile in range(0,len(self.plotfiles)):
                             # Read the file
-                            str_args='-read'+filelist[ifile]
+                            str_args='-read'+self.plotfiles[ifile]
                             ccp=ctypes.c_char_p(self.force_bytes(str_args))
-                            sizes=size_type(5,len(filelist[ifile]))
+                            sizes=size_type(5,len(self.plotfiles[ifile]))
                             parse_fn(amp,2,sizes,ccp)
 
                             # Get the x column
@@ -1544,6 +1509,15 @@ class plotter:
                     else:
                         self.text(argv[ix+1],argv[ix+2],argv[ix+3],
                                   **string_to_dict(argv[ix+4]))
+                elif cmd_name=='plot-files':
+                    if self.verbose>2:
+                        print('Process plot-files.')
+                    if ix_next-ix<2:
+                        print('Not enough parameters for plot-files option.')
+                    else:
+                        self.plotfiles=[argv[i+1] for i in
+                                       range(ix,ix_next-1)]
+                        print('File list is',self.plotfiles)
                 elif cmd_name=='ttext':
                     if self.verbose>2:
                         print('Process ttext.')

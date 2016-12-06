@@ -40,6 +40,9 @@ if platform.system()=='Darwin':
 
   if o2scl_cpplib!='':
     systcpp=ctypes.CDLL(o2scl_cpplib,mode=ctypes.RTLD_GLOBAL)
+
+  rl=ctypes.CDLL('/usr/lib/libreadline.dylib',
+                 mode=ctypes.RTLD_GLOBAL)
     
   if o2scl_libdir=='' and os.getenv('O2SCL_LIB')!='None':
     o2scl_libdir=os.getenv('O2SCL_LIB')
