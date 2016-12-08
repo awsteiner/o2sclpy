@@ -1430,14 +1430,30 @@ class plotter:
                                 self.canvas()
                             if self.logx==1:
                                 if self.logy==1:
-                                    plot.loglog(xv,yv)
+                                    if ix_next-ix<4:
+                                        plot.loglog(xv,yv)
+                                    else:
+                                        plot.loglog(xv,yv,
+                                                    **string_to_dict(argv[ix+3]))
                                 else:
-                                    plot.semilogx(xv,yv)
+                                    if ix_next-ix<4:
+                                        plot.semilogx(xv,yv)
+                                    else:
+                                        plot.semilogx(xv,yv,
+                                                      **string_to_dict(argv[ix+3]))
                             else:
                                 if self.logy==1:
-                                    plot.semilogy(xv,yv)
+                                    if ix_next-ix<4:
+                                        plot.semilogy(xv,yv)
+                                    else:
+                                        plot.semilogy(xv,yv,
+                                                      **string_to_dict(argv[ix+3]))
                                 else:
-                                    plot.plot(xv,yv)
+                                    if ix_next-ix<4:
+                                        plot.plot(xv,yv)
+                                    else:
+                                        plot.plot(xv,yv,
+                                                  **string_to_dict(argv[ix+3]))
                             if self.xset==1:
                                 plot.xlim([self.xlo,self.xhi])
                             if self.yset==1:
@@ -1485,14 +1501,30 @@ class plotter:
                                 self.canvas()
                             if self.logx==1:
                                 if self.logy==1:
-                                    plot.loglog(xv,yv)
+                                    if ix_next-ix<3:
+                                        plot.loglog(xv,yv)
+                                    else:
+                                        plot.loglog(xv,yv,
+                                                    **string_to_dict(argv[ix+2]))
                                 else:
-                                    plot.semilogx(xv,yv)
+                                    if ix_next-ix<3:
+                                        plot.semilogx(xv,yv)
+                                    else:
+                                        plot.semilogx(xv,yv,
+                                                      **string_to_dict(argv[ix+2]))
                             else:
                                 if self.logy==1:
-                                    plot.semilogy(xv,yv)
+                                    if ix_next-ix<3:
+                                        plot.semilogy(xv,yv)
+                                    else:
+                                        plot.semilogy(xv,yv,
+                                                      **string_to_dict(argv[ix+2]))
                                 else:
-                                    plot.plot(xv,yv)
+                                    if ix_next-ix<3:
+                                        plot.plot(xv,yv)
+                                    else:
+                                        plot.plot(xv,yv,
+                                                  **string_to_dict(argv[ix+2]))
                             if self.xset==1:
                                 plot.xlim([self.xlo,self.xhi])
                             if self.yset==1:
