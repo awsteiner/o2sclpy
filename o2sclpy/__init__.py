@@ -1192,7 +1192,8 @@ class plotter:
                       cmd_name=='index' or cmd_name=='sum' or
                       cmd_name=='insert' or cmd_name=='version' or
                       cmd_name=='insert-full' or cmd_name=='warranty' or
-                      cmd_name=='calc' or cmd_name=='help'):
+                      cmd_name=='calc' or cmd_name=='help' or
+                      cmd_name=='nlines'):
                     
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')
