@@ -1264,6 +1264,49 @@ class plotter:
                         if self.yset==1:
                             plot.ylim([self.ylo,self.yhi])
                             
+                elif cmd_name=='hist2d':
+                    
+                    if self.verbose>2:
+                        print('Process hist2d.')
+                    if ix_next-ix<3:
+                        print('Not enough parameters for hist2d option.')
+                    else:
+                        get_fn=o2scl_hdf.o2scl_acol_get_column
+                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                                         int_ptr,double_ptr_ptr]
+
+                        colx=ctypes.c_char_p(self.force_bytes(argv[ix+1]))
+                        idx=ctypes.c_int(0)
+                        ptrx=double_ptr()
+                        get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+
+                        coly=ctypes.c_char_p(self.force_bytes(argv[ix+2]))
+                        idy=ctypes.c_int(0)
+                        ptry=double_ptr()
+                        get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
+
+                        xv=[ptrx[i] for i in range(0,idx.value)]
+                        yv=[ptry[i] for i in range(0,idy.value)]
+
+
+                        if self.canvas_flag==0:
+                            self.canvas()
+                            if ix_next-ix<4:
+                                plot.hist2d(xv,yv)
+                            else:
+                                kwargs=string_to_dict(argv[ix+3])
+                                for key in kwargs:
+                                    if key=='bins':
+                                        kwargs[key]=int(kwargs[key])
+                                plot.hist2d(xv,yv,**kwargs)
+                            
+                        if self.xset==1:
+                            plot.xlim([self.xlo,self.xhi])
+                        if self.yset==1:
+                            plot.ylim([self.ylo,self.yhi])
+                        if self.colbar>0:
+                            plot.colorbar()
+                            
                 elif cmd_name=='den-plot':
                     
                     if self.verbose>2:
