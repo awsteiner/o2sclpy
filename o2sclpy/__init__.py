@@ -379,29 +379,40 @@ class plotter:
     colbar=0
     plotfiles=''
 
-    def myreds(self):
+    def reds2(self):
         cdict={'red': ((0.0,1.0,1.0),(1.0,1.0,1.0)),
                'green': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
                'blue': ((0.0,1.0,1.0),(1.0,0.0,0.0))}
-        myreds=LinearSegmentedColormap('MyReds',cdict)
-        plot.register_cmap(cmap=myreds)
-        self.cmap='MyReds'
+        reds2=LinearSegmentedColormap('reds2',cdict)
+        plot.register_cmap(cmap=reds2)
 
-    def mygreens(self):
+    def jet2(self):
+        # white, blue, green, yellow, orange, red
+        cdict={'red': ((0.0,1.0,1.0),(0.2,0.0,0.0),
+                       (0.4,0.0,0.0),(0.6,1.0,1.0),
+                       (0.8,1.0,1.0),(1.0,1.0,1.0)),
+               'green': ((0.0,1.0,1.0),(0.2,0.0,0.0),
+                         (0.4,0.5,0.5),(0.6,1.0,1.0),
+                         (0.8,0.6,0.6),(1.0,0.0,0.0)),
+               'blue': ((0.0,1.0,1.0),(0.2,1.0,1.0),
+                        (0.4,0.0,0.0),(0.6,0.0,0.0),
+                        (0.8,0.0,0.0),(1.0,0.0,0.0))}
+        jet2=LinearSegmentedColormap('jet2',cdict)
+        plot.register_cmap(cmap=jet2)
+
+    def greens2(self):
         cdict={'red': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
                'green': ((0.0,1.0,1.0),(1.0,1.0,1.0)),
                'blue': ((0.0,1.0,1.0),(1.0,0.0,0.0))}
-        mygreens=LinearSegmentedColormap('MyGreens',cdict)
-        plot.register_cmap(cmap=mygreens)
-        self.cmap='MyGreens'
+        greens2=LinearSegmentedColormap('greens2',cdict)
+        plot.register_cmap(cmap=greens2)
 
-    def myblues(self):
+    def blues2(self):
         cdict={'red': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
                'green': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
                'blue': ((0.0,1.0,1.0),(1.0,1.0,1.0))}
-        myblues=LinearSegmentedColormap('MyBlues',cdict)
-        plot.register_cmap(cmap=myblues)
-        self.cmap='MyBlues'
+        blues2=LinearSegmentedColormap('blues2',cdict)
+        plot.register_cmap(cmap=blues2)
         
     def contour_plot(self,level,**kwargs):
         if self.force_bytes(self.dtype)!=b'vector<contour_line>':
@@ -749,7 +760,7 @@ class plotter:
                     ygrid[i]=math.log(ygrid[i],10)
             lx=len(xgrid)
             ly=len(ygrid)
-            plot.imshow(sl,cmap=self.cmap,interpolation='nearest',
+            plot.imshow(sl,interpolation='nearest',
                         origin='lower',
                         extent=[xgrid[0]-(xgrid[1]-xgrid[0])/2,
                                 xgrid[lx-1]+(xgrid[lx-1]-xgrid[lx-2])/2,
@@ -800,8 +811,6 @@ class plotter:
             self.zset=int(value)
         elif name=='verbose':
             self.verbose=int(value)
-        elif name=='cmap':
-            self.cmap=value
         elif name=='colbar':
             self.colbar=int(value)
         else:
@@ -1010,8 +1019,6 @@ class plotter:
         return
 
     def get(self,name):
-        if name=='cmap' or name=='':
-            print('The value of cmap is',self.cmap,'.')
         if name=='colbar' or name=='':
             print('The value of colbar is',self.colbar,'.')
         if name=='logx' or name=='':
@@ -1288,22 +1295,36 @@ class plotter:
                         xv=[ptrx[i] for i in range(0,idx.value)]
                         yv=[ptry[i] for i in range(0,idy.value)]
 
-
+                        #(lmar=0.14,bmar=0.12,rmar=0.04,tmar=0.04):
+                        
                         if self.canvas_flag==0:
-                            self.canvas()
-                            if ix_next-ix<4:
-                                plot.hist2d(xv,yv)
+                            if self.colbar>0:
+                                # Default o2mpl plot
+                                (self.fig,self.axes)=default_plot(0.14,0.12,
+                                                                  0.0,0.04)
+                                # Plot limits
+                                if self.xset==1:
+                                    plot.xlim([self.xlo,self.xhi])
+                                if self.yset==1:
+                                    plot.ylim([self.ylo,self.yhi])
+                                # Titles
+                                if self.xtitle!='':
+                                    plot.xlabel(self.xtitle,fontsize=16)
+                                if self.ytitle!='':
+                                    plot.ylabel(self.ytitle,fontsize=16)
+                                self.canvas_flag=1
                             else:
-                                kwargs=string_to_dict(argv[ix+3])
-                                for key in kwargs:
-                                    if key=='bins':
-                                        kwargs[key]=int(kwargs[key])
-                                plot.hist2d(xv,yv,**kwargs)
+                                self.canvas()
                             
-                        if self.xset==1:
-                            plot.xlim([self.xlo,self.xhi])
-                        if self.yset==1:
-                            plot.ylim([self.ylo,self.yhi])
+                        if ix_next-ix<4:
+                            plot.hist2d(xv,yv)
+                        else:
+                            kwargs=string_to_dict(argv[ix+3])
+                            for key in kwargs:
+                                if key=='bins':
+                                    kwargs[key]=int(kwargs[key])
+                            plot.hist2d(xv,yv,**kwargs)
+                            
                         if self.colbar>0:
                             plot.colorbar()
                             
@@ -1354,14 +1375,14 @@ class plotter:
                                                    ygrid[ny.value-2])/2
                         
                         if ix_next-ix<3:
-                            plot.imshow(sl,cmap=self.cmap,
+                            plot.imshow(sl,
                                         interpolation='nearest',
                                         origin='lower',
                                         extent=[extent1,extent2,
                                                 extent3,extent4],
                                         aspect='auto')
                         else:
-                            plot.imshow(sl,cmap=self.cmap,
+                            plot.imshow(sl,
                                         interpolation='nearest',
                                         origin='lower',
                                         extent=[extent1,extent2,
@@ -1681,6 +1702,22 @@ class plotter:
                     if self.verbose>2:
                         print('Process canvas.')
                     self.canvas()
+                elif cmd_name=='reds2':
+                    if self.verbose>2:
+                        print('Process reds2.')
+                    self.reds2()
+                elif cmd_name=='blues2':
+                    if self.verbose>2:
+                        print('Process blues2.')
+                    self.blues2()
+                elif cmd_name=='greens2':
+                    if self.verbose>2:
+                        print('Process greens2.')
+                    self.greens2()
+                elif cmd_name=='jet2':
+                    if self.verbose>2:
+                        print('Process jet2.')
+                    self.jet2()
                 else:
                     print('No option named',cmd_name)
                 # Increment to the next option
