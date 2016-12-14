@@ -4,11 +4,22 @@ import ctypes
 from ctypes.util import find_library
 import platform
 import os
+import numpy
 
 o2scl_libdir=''
 o2scl_cpplib=''
 backend=''
 
+def force_bytes2(obj):
+  """
+  In cases where we're unsure whether or not obj is
+  a string or bytes object, we ensure it's a bytes
+  object by converting if necessary.
+  """
+  if isinstance(obj,numpy.bytes_)==False:
+    return bytes(obj,'utf-8')
+  return obj
+      
 for i in range(1,len(sys.argv)):
   if sys.argv[i]=='-o2scl-libdir':
     if i>=len(sys.argv)-1:
@@ -35,7 +46,8 @@ for i in range(1,len(sys.argv)):
       
 if platform.system()=='Darwin':
 
-  if o2scl_cpplib=='' and os.getenv('O2SCL_CPPLIB')!='None':
+  if (o2scl_cpplib=='' and
+      force_bytes2(os.getenv('O2SCL_CPPLIB'))!=b'None'):
     o2scl_cpplib=os.getenv('O2SCL_CPPLIB')
     print('Set o2scl-cpplib to',o2scl_cpplib)
 
@@ -45,7 +57,8 @@ if platform.system()=='Darwin':
   rl=ctypes.CDLL('/usr/lib/libreadline.dylib',
                  mode=ctypes.RTLD_GLOBAL)
     
-  if o2scl_libdir=='' and os.getenv('O2SCL_LIB')!='None':
+  if (o2scl_libdir=='' and
+      force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
     o2scl_libdir=os.getenv('O2SCL_LIB')
     print('Set o2scl-libdir to',o2scl_libdir)
     
@@ -61,8 +74,9 @@ if platform.system()=='Darwin':
 else:
 
   stdcpp=ctypes.CDLL(find_library("stdc++"),mode=ctypes.RTLD_GLOBAL)
-
-  if o2scl_libdir=='' and os.getenv('O2SCL_LIB')!='None':
+  
+  if (o2scl_libdir=='' and
+      force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
     o2scl_libdir=os.getenv('O2SCL_LIB')
     print('Set o2scl-libdir to',o2scl_libdir)
 
@@ -74,11 +88,11 @@ else:
     o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.so',mode=ctypes.RTLD_GLOBAL)
     o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.so',
                           mode=ctypes.RTLD_GLOBAL)
-
+    
 if backend!='':
   import matplotlib
   matplotlib.use(backend)
-
+  
 import o2sclpy
 gc=o2sclpy.plotter()
 gc.parse_argv(sys.argv,o2scl_hdf)

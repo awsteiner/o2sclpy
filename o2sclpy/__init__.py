@@ -1051,10 +1051,84 @@ class plotter:
             print('The value of zset is',self.zset,'.')
         return
 
-    def parse_argv(self,argv,o2scl_hdf):
+    def set_intl(self,o2scl_hdf,amp,args):
+        
+        if (args[0]=='logx' or args[0]=='xtitle' or
+            args[0]=='logy' or args[0]=='ytitle' or
+            args[0]=='xlo' or args[0]=='ylo' or
+            args[0]=='xset' or args[0]=='xhi' or
+            args[0]=='yhi' or args[0]=='yset' or
+            args[0]=='zlo' or args[0]=='zhi' or
+            args[0]=='zset' or args[0]=='colbar' or
+            args[0]=='verbose'):
+                
+            self.set(args[0],args[1])
+            
+        str_args='-set'
+        size_type=ctypes.c_int * (len(args)+1)
+        sizes=size_type()
+        sizes[0]=len('set')+1
+            
+        for i in range(0,len(args)):
+            str_args=str_args+args[i]
+            sizes[i+1]=len(args[i])
+        ccp=ctypes.c_char_p(self.force_bytes(str_args))
+    
+        parse_fn=o2scl_hdf.o2scl_acol_parse
+        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                           size_type,ctypes.c_char_p]
+            
+        parse_fn(amp,len(args)+1,sizes,ccp)
 
-        o2scl_hdf.o2scl_create_acol_manager.restype=ctypes.c_void_p
-        amp=o2scl_hdf.o2scl_create_acol_manager()
+    def get_intl(self,o2scl_hdf,amp,args):
+        
+        if (argv[ix+1]=='logx' or argv[ix+1]=='xtitle' or
+            argv[ix+1]=='logy' or argv[ix+1]=='ytitle' or
+            argv[ix+1]=='xlo' or argv[ix+1]=='ylo' or
+            argv[ix+1]=='xset' or argv[ix+1]=='xhi' or
+            argv[ix+1]=='yhi' or argv[ix+1]=='yset' or
+            argv[ix+1]=='zlo' or argv[ix+1]=='zhi' or
+            argv[ix+1]=='zset' or argv[ix+1]=='colbar'):
+            
+            self.get(args[0])
+                            
+        else:
+                        
+            str_args='-get'
+            size_type=ctypes.c_int * (len(args)+1)
+            sizes=size_type()
+            sizes[0]=len('get')+1
+        
+            for i in range(0,len(args)):
+                str_args=str_args+args[i]
+                sizes[i+1]=len(args[i])
+            ccp=ctypes.c_char_p(self.force_bytes(str_args))
+        
+            parse_fn=o2scl_hdf.o2scl_acol_parse
+            parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                              size_type,ctypes.c_char_p]
+        
+            parse_fn(amp,len(args)+1,sizes,ccp)
+
+    def gen_intl(self,o2scl_hdf,amp,cmd_name,args):
+
+        str_args='-'+cmd_name
+        size_type=ctypes.c_int * (len(args)+1)
+        sizes=size_type()
+        sizes[0]=len(cmd_name)+1
+        
+        for i in range(0,len(args)):
+            str_args=str_args+args[i]
+            sizes[i+1]=len(args[i])
+        ccp=ctypes.c_char_p(self.force_bytes(str_args))
+
+        parse_fn=o2scl_hdf.o2scl_acol_parse
+        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                           size_type,ctypes.c_char_p]
+        
+        parse_fn(amp,len(args)+1,sizes,ccp)
+
+    def plot_intl(self,o2scl_hdf,amp,args):
 
         # Useful pointer types
         double_ptr=ctypes.POINTER(ctypes.c_double)
@@ -1062,6 +1136,176 @@ class plotter:
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        if curr_type==b'table':
+                            
+            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr]
+
+            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+
+            coly=ctypes.c_char_p(self.force_bytes(args[1]))
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
+
+            xv=[ptrx[i] for i in range(0,idx.value)]
+            yv=[ptry[i] for i in range(0,idy.value)]
+    
+            if self.canvas_flag==0:
+                self.canvas()
+            if self.logx==1:
+                if self.logy==1:
+                    if len(args)<3:
+                        plot.loglog(xv,yv)
+                    else:
+                        plot.loglog(xv,yv,**string_to_dict(args[2]))
+                else:
+                    if len(args)<3:
+                        plot.semilogx(xv,yv)
+                    else:
+                        plot.semilogx(xv,yv,**string_to_dict(args[2]))
+            else:
+                if self.logy==1:
+                    if len(args)<3:
+                        plot.semilogy(xv,yv)
+                    else:
+                        plot.semilogy(xv,yv,**string_to_dict(args[2]))
+                else:
+                    if len(args)<3:
+                        plot.plot(xv,yv)
+                    else:
+                        plot.plot(xv,yv,**string_to_dict(args[2]))
+
+            # End of section for 'table' type
+        elif curr_type==b'hist':
+
+            get_reps_fn=o2scl_hdf.o2scl_acol_get_hist_reps
+            get_reps_fn.argtypes=[ctypes.c_void_p,
+                             int_ptr,double_ptr_ptr]
+                            
+            get_wgts_fn=o2scl_hdf.o2scl_acol_get_hist_wgts
+            get_wgts_fn.argtypes=[ctypes.c_void_p,
+                             int_ptr,double_ptr_ptr]
+                            
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_reps_fn(amp,ctypes.byref(idx),
+                        ctypes.byref(ptrx))
+
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_wgts_fn(amp,ctypes.byref(idy),
+                        ctypes.byref(ptry))
+
+            xv=[ptrx[i] for i in range(0,idx.value)]
+            yv=[ptry[i] for i in range(0,idy.value)]
+    
+            if self.canvas_flag==0:
+                self.canvas()
+            if self.logx==1:
+                if self.logy==1:
+                    if len(args)<1:
+                        plot.loglog(xv,yv)
+                    else:
+                        plot.loglog(xv,yv,**string_to_dict(args[0]))
+                else:
+                    if len(args)<1:
+                        plot.semilogx(xv,yv)
+                    else:
+                        plot.semilogx(xv,yv,**string_to_dict(args[0]))
+            else:
+                if self.logy==1:
+                    if len(args)<1:
+                        plot.semilogy(xv,yv)
+                    else:
+                        plot.semilogy(xv,yv,**string_to_dict(args[0]))
+                else:
+                    if len(args)<1:
+                        plot.plot(xv,yv)
+                    else:
+                        plot.plot(xv,yv,**string_to_dict(args[0]))
+                            
+            # End of section for 'hist' type
+        elif curr_type==b'vector<contour_line>':
+
+            # Get the total number of contour lines
+            cont_n_fn=o2scl_hdf.o2scl_acol_contours_n
+            cont_n_fn.argtypes=[ctypes.c_void_p]
+            cont_n_fn.restype=ctypes.c_int
+            nconts=cont_n_fn(amp)
+
+            # Define types for extracting each contour line
+            cont_line_fn=o2scl_hdf.o2scl_acol_contours_line
+            cont_line_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                                   int_ptr,double_ptr_ptr,
+                                   double_ptr_ptr]
+            cont_line_fn.restype=ctypes.c_double
+
+            if self.canvas_flag==0:
+                self.canvas()
+
+            # Loop over all contour lines
+            for k in range(0,nconts):
+                idx=ctypes.c_int(0)
+                ptrx=double_ptr()
+                ptry=double_ptr()
+                lev=cont_line_fn(amp,k,ctypes.byref(idx),
+                                 ctypes.byref(ptrx),ctypes.byref(ptry))
+                xv=[ptrx[i] for i in range(0,idx.value)]
+                yv=[ptry[i] for i in range(0,idx.value)]
+                
+                if self.logx==1:
+                    if self.logy==1:
+                        if len(args)<1:
+                            plot.loglog(xv,yv)
+                        else:
+                            plot.loglog(xv,yv,**string_to_dict(args[0]))
+                    else:
+                        if len(args)<1:
+                            plot.semilogx(xv,yv)
+                        else:
+                            plot.semilogx(xv,yv,**string_to_dict(args[0]))
+                else:
+                    if self.logy==1:
+                        if len(args)<1:
+                            plot.semilogy(xv,yv)
+                        else:
+                            plot.semilogy(xv,yv,**string_to_dict(args[0]))
+                    else:
+                        if len(args)<1:
+                            plot.plot(xv,yv)
+                        else:
+                            plot.plot(xv,yv,**string_to_dict(args[0]))
+            # End of section for 'vector<contour_line>' type
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+                                 
+        # End of 'plot_intl' function
+                                 
+    def parse_argv(self,argv,o2scl_hdf):
+
+        o2scl_hdf.o2scl_create_acol_manager.restype=ctypes.c_void_p
+        amp=o2scl_hdf.o2scl_create_acol_manager()
                         
         if self.verbose>2:
             print('Number of arguments:',len(argv),'arguments.')
@@ -1102,38 +1346,13 @@ class plotter:
                         
                 # Now process the option
                 if cmd_name=='set':
-                    
+
                     if self.verbose>2:
                         print('Process set.')
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
                     else:
-                        if (argv[ix+1]=='logx' or argv[ix+1]=='xtitle' or
-                            argv[ix+1]=='logy' or argv[ix+1]=='ytitle' or
-                            argv[ix+1]=='xlo' or argv[ix+1]=='ylo' or
-                            argv[ix+1]=='xset' or argv[ix+1]=='xhi' or
-                            argv[ix+1]=='yhi' or argv[ix+1]=='yset' or
-                            argv[ix+1]=='zlo' or argv[ix+1]=='zhi' or
-                            argv[ix+1]=='zset' or argv[ix+1]=='cmap' or
-                            argv[ix+1]=='colbar' or argv[ix+1]=='verbose'):
-                            
-                            self.set(argv[ix+1],argv[ix+2])
-                            
-                        str_args='-'+cmd_name
-                        size_type=ctypes.c_int * (ix_next-ix)
-                        sizes=size_type()
-                        sizes[0]=len(cmd_name)+1
-    
-                        for i in range(0,ix_next-ix-1):
-                            str_args=str_args+argv[i+ix+1]
-                            sizes[i+1]=len(argv[i+ix+1])
-                        ccp=ctypes.c_char_p(self.force_bytes(str_args))
-    
-                        parse_fn=o2scl_hdf.o2scl_acol_parse
-                        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                                           size_type,ctypes.c_char_p]
-
-                        parse_fn(amp,ix_next-ix,sizes,ccp)
+                        self.set_intl(o2scl_hdf,amp,argv[ix+1:ix_next])
                         
                 elif cmd_name=='get':
                     
@@ -1142,35 +1361,8 @@ class plotter:
                     if ix_next-ix<2:
                         self.get('No parameter specified to get.')
                     else:
+                        self.get_intl(o2scl_hdf,amp,argv[ix+1:ix_next])
 
-                        if (argv[ix+1]=='logx' or argv[ix+1]=='xtitle' or
-                            argv[ix+1]=='logy' or argv[ix+1]=='ytitle' or
-                            argv[ix+1]=='xlo' or argv[ix+1]=='ylo' or
-                            argv[ix+1]=='xset' or argv[ix+1]=='xhi' or
-                            argv[ix+1]=='yhi' or argv[ix+1]=='yset' or
-                            argv[ix+1]=='zlo' or argv[ix+1]=='zhi' or
-                            argv[ix+1]=='zset' or argv[ix+1]=='cmap' or
-                            argv[ix+1]=='colbar'):
-
-                            self.get(argv[ix+1])
-                            
-                        else:
-                        
-                            str_args='-'+cmd_name
-                            size_type=ctypes.c_int * (ix_next-ix)
-                            sizes=size_type()
-                            sizes[0]=len(cmd_name)+1
-        
-                            for i in range(0,ix_next-ix-1):
-                                str_args=str_args+argv[i+ix+1]
-                                sizes[i+1]=len(argv[i+ix+1])
-                            ccp=ctypes.c_char_p(self.force_bytes(str_args))
-        
-                            parse_fn=o2scl_hdf.o2scl_acol_parse
-                            parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                                              size_type,ctypes.c_char_p]
-        
-                            parse_fn(amp,ix_next-ix,sizes,ccp)
 
                 elif (cmd_name=='read' or cmd_name=='list' or
                       cmd_name=='assign' or cmd_name=='integ' or
@@ -1201,149 +1393,18 @@ class plotter:
                     
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')
-
-                    str_args='-'+cmd_name
-                    size_type=ctypes.c_int * (ix_next-ix)
-                    sizes=size_type()
-                    sizes[0]=len(cmd_name)+1
-
-                    for i in range(0,ix_next-ix-1):
-                        str_args=str_args+argv[i+ix+1]
-                        sizes[i+1]=len(argv[i+ix+1])
-                    ccp=ctypes.c_char_p(self.force_bytes(str_args))
-
-                    parse_fn=o2scl_hdf.o2scl_acol_parse
-                    parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                                      size_type,ctypes.c_char_p]
-
-                    parse_fn(amp,ix_next-ix,sizes,ccp)
+                    else:
+                        self.gen_intl(o2scl_hdf,amp,cmd_name,
+                                      argv[ix+1:ix_next])
 
                 elif cmd_name=='plot':
                     
                     if self.verbose>2:
                         print('Process plot.')
+                    else:
+                        self.plot_intl(o2scl_hdf,amp,
+                                       argv[ix+1:ix_next])
 
-                    # Set up wrapper for type function
-                    type_fn=o2scl_hdf.o2scl_acol_get_type
-                    type_fn.argtypes=[ctypes.c_void_p,
-                                     int_ptr,char_ptr_ptr]
-
-                    # Get current type
-                    it=ctypes.c_int(0)
-                    type_ptr=char_ptr()
-                    type_fn(amp,ctypes.byref(it),
-                            ctypes.byref(type_ptr))
-                    curr_type=b''
-                    for i in range(0,it.value):
-                        curr_type=curr_type+type_ptr[i]
-                        
-                    if curr_type==b'table':
-                            
-                        get_fn=o2scl_hdf.o2scl_acol_get_column
-                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                                         int_ptr,double_ptr_ptr]
-                            
-                        colx=ctypes.c_char_p(self.force_bytes(argv[ix+1]))
-                        idx=ctypes.c_int(0)
-                        ptrx=double_ptr()
-                        get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
-
-                        coly=ctypes.c_char_p(self.force_bytes(argv[ix+2]))
-                        idy=ctypes.c_int(0)
-                        ptry=double_ptr()
-                        get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
-
-                        xv=[ptrx[i] for i in range(0,idx.value)]
-                        yv=[ptry[i] for i in range(0,idy.value)]
-    
-                        if self.canvas_flag==0:
-                            self.canvas()
-                        if self.logx==1:
-                            if self.logy==1:
-                                if ix_next-ix<4:
-                                    plot.loglog(xv,yv)
-                                else:
-                                    plot.loglog(xv,yv,
-                                                **string_to_dict(argv[ix+3]))
-                            else:
-                                if ix_next-ix<4:
-                                    plot.semilogx(xv,yv)
-                                else:
-                                    plot.semilogx(xv,yv,
-                                                  **string_to_dict(argv[ix+3]))
-                        else:
-                            if self.logy==1:
-                                if ix_next-ix<4:
-                                    plot.semilogy(xv,yv)
-                                else:
-                                    plot.semilogy(xv,yv,
-                                                  **string_to_dict(argv[ix+3]))
-                            else:
-                                if ix_next-ix<4:
-                                    plot.plot(xv,yv)
-                                else:
-                                    plot.plot(xv,yv,
-                                              **string_to_dict(argv[ix+3]))
-
-                        # End of 'plot' for 'table' type
-                    elif curr_type==b'hist':
-
-                        get_reps_fn=o2scl_hdf.o2scl_acol_get_hist_reps
-                        get_reps_fn.argtypes=[ctypes.c_void_p,
-                                         int_ptr,double_ptr_ptr]
-                            
-                        get_wgts_fn=o2scl_hdf.o2scl_acol_get_hist_wgts
-                        get_wgts_fn.argtypes=[ctypes.c_void_p,
-                                         int_ptr,double_ptr_ptr]
-                            
-                        idx=ctypes.c_int(0)
-                        ptrx=double_ptr()
-                        get_reps_fn(amp,ctypes.byref(idx),
-                                    ctypes.byref(ptrx))
-
-                        idy=ctypes.c_int(0)
-                        ptry=double_ptr()
-                        get_wgts_fn(amp,ctypes.byref(idy),
-                                    ctypes.byref(ptry))
-
-                        xv=[ptrx[i] for i in range(0,idx.value)]
-                        yv=[ptry[i] for i in range(0,idy.value)]
-    
-                        if self.canvas_flag==0:
-                            self.canvas()
-                        if self.logx==1:
-                            if self.logy==1:
-                                if ix_next-ix<2:
-                                    plot.loglog(xv,yv)
-                                else:
-                                    plot.loglog(xv,yv,
-                                                **string_to_dict(argv[ix+1]))
-                            else:
-                                if ix_next-ix<2:
-                                    plot.semilogx(xv,yv)
-                                else:
-                                    plot.semilogx(xv,yv,
-                                                  **string_to_dict(argv[ix+1]))
-                        else:
-                            if self.logy==1:
-                                if ix_next-ix<2:
-                                    plot.semilogy(xv,yv)
-                                else:
-                                    plot.semilogy(xv,yv,
-                                                  **string_to_dict(argv[ix+1]))
-                            else:
-                                if ix_next-ix<2:
-                                    plot.plot(xv,yv)
-                                else:
-                                    plot.plot(xv,yv,
-                                              **string_to_dict(argv[ix+1]))
-                            
-                        # End of 'plot' for 'hist' type
-                    if self.xset==1:
-                        plot.xlim([self.xlo,self.xhi])
-                    if self.yset==1:
-                        plot.ylim([self.ylo,self.yhi])
-                            
                 elif cmd_name=='hist2d':
                     
                     if self.verbose>2:
