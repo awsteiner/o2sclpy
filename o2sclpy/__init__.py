@@ -1533,6 +1533,10 @@ class plotter:
                     if ix_next-ix<2:
                         print('Not enough parameters for plot1 option.')
                     else:
+                        double_ptr=ctypes.POINTER(ctypes.c_double)
+                        double_ptr_ptr=ctypes.POINTER(double_ptr)
+                        int_ptr=ctypes.POINTER(ctypes.c_int)
+                        
                         get_fn=o2scl_hdf.o2scl_acol_get_column
                         get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                                          int_ptr,double_ptr_ptr]
