@@ -400,6 +400,20 @@ class plotter:
         jet2=LinearSegmentedColormap('jet2',cdict)
         plot.register_cmap(cmap=jet2)
 
+    def pastel2(self):
+        # white, blue, green, yellow, orange, red
+        cdict={'red': ((0.0,1.0,1.0),(0.2,0.3,0.3),
+                       (0.4,0.3,0.3),(0.6,1.0,1.0),
+                       (0.8,1.0,1.0),(1.0,1.0,1.0)),
+               'green': ((0.0,1.0,1.0),(0.2,0.3,0.3),
+                         (0.4,0.5,0.5),(0.6,1.0,1.0),
+                         (0.8,0.6,0.6),(1.0,0.3,0.3)),
+               'blue': ((0.0,1.0,1.0),(0.2,1.0,1.0),
+                        (0.4,0.3,0.3),(0.6,0.3,0.3),
+                        (0.8,0.3,0.3),(1.0,0.3,0.3))}
+        pastel2=LinearSegmentedColormap('pastel2',cdict)
+        plot.register_cmap(cmap=pastel2)
+
     def greens2(self):
         cdict={'red': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
                'green': ((0.0,1.0,1.0),(1.0,1.0,1.0)),
@@ -1128,6 +1142,142 @@ class plotter:
         
         parse_fn(amp,len(args)+1,sizes,ccp)
 
+    def den_plot_intl(self,o2scl_hdf,amp,args):
+
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        if curr_type==b'table3d':
+            
+            get_fn=o2scl_hdf.o2scl_acol_get_slice
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr,
+                             int_ptr,double_ptr_ptr,double_ptr_ptr]
+
+            slice=ctypes.c_char_p(self.force_bytes(args[0]))
+            nx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            ny=ctypes.c_int(0)
+            ptry=double_ptr()
+            ptrs=double_ptr()
+            get_fn(amp,slice,ctypes.byref(nx),ctypes.byref(ptrx),
+                   ctypes.byref(ny),ctypes.byref(ptry),
+                   ctypes.byref(ptrs))
+
+            xgrid=[ptrx[i] for i in range(0,nx.value)]
+            ygrid=[ptry[i] for i in range(0,ny.value)]
+            stemp=[ptrs[i] for i in range(0,nx.value*ny.value)]
+            stemp2=numpy.array(stemp)
+            sl=stemp2.reshape(nx.value,ny.value)
+            sl=sl.transpose()
+
+            if self.logx==1:
+                xgrid=[math.log(ptrx[i],10) for i in
+                       range(0,nx.value)]
+            if self.logy==1:
+                ygrid=[math.log(ptry[i],10) for i in
+                       range(0,ny.value)]
+
+            if self.canvas_flag==0:
+                self.canvas()
+
+            extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+            extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
+                                       xgrid[nx.value-2])/2
+            extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+            extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
+                                       ygrid[ny.value-2])/2
+                        
+            if len(args)<2:
+                plot.imshow(sl,
+                            interpolation='nearest',
+                            origin='lower',
+                            extent=[extent1,extent2,
+                                    extent3,extent4],
+                            aspect='auto')
+            else:
+                plot.imshow(sl,
+                            interpolation='nearest',
+                            origin='lower',
+                            extent=[extent1,extent2,
+                                    extent3,extent4],
+                            aspect='auto',
+                            **string_to_dict(args[1]))
+
+        elif curr_type==b'hist_2d':
+
+            get_fn=o2scl_hdf.o2scl_acol_get_hist_2d
+            get_fn.argtypes=[ctypes.c_void_p,int_ptr,double_ptr_ptr,
+                             int_ptr,double_ptr_ptr,double_ptr_ptr]
+
+            nx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            ny=ctypes.c_int(0)
+            ptry=double_ptr()
+            ptrs=double_ptr()
+            get_fn(amp,ctypes.byref(nx),ctypes.byref(ptrx),
+                   ctypes.byref(ny),ctypes.byref(ptry),
+                   ctypes.byref(ptrs))
+
+            xgrid=[ptrx[i] for i in range(0,nx.value)]
+            ygrid=[ptry[i] for i in range(0,ny.value)]
+            stemp=[ptrs[i] for i in range(0,nx.value*ny.value)]
+            stemp2=numpy.array(stemp)
+            sl=stemp2.reshape(nx.value,ny.value)
+            sl=sl.transpose()
+
+            if self.logx==1:
+                xgrid=[math.log(ptrx[i],10) for i in
+                       range(0,nx.value)]
+            if self.logy==1:
+                ygrid=[math.log(ptry[i],10) for i in
+                       range(0,ny.value)]
+
+            if self.canvas_flag==0:
+                self.canvas()
+
+            extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+            extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
+                                       xgrid[nx.value-2])/2
+            extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+            extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
+                                       ygrid[ny.value-2])/2
+                        
+            if len(args)<1:
+                plot.imshow(sl,
+                            interpolation='nearest',
+                            origin='lower',
+                            extent=[extent1,extent2,
+                                    extent3,extent4],
+                            aspect='auto')
+            else:
+                plot.imshow(sl,
+                            interpolation='nearest',
+                            origin='lower',
+                            extent=[extent1,extent2,
+                                    extent3,extent4],
+                            aspect='auto',
+                            **string_to_dict(args[0]))
+
+        if self.colbar>0:
+            plot.colorbar()
+
     def plot_intl(self,o2scl_hdf,amp,args):
 
         # Useful pointer types
@@ -1349,6 +1499,7 @@ class plotter:
 
                     if self.verbose>2:
                         print('Process set.')
+                        
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
                     else:
@@ -1358,6 +1509,7 @@ class plotter:
                     
                     if self.verbose>2:
                         print('Process get.')
+                        
                     if ix_next-ix<2:
                         self.get('No parameter specified to get.')
                     else:
@@ -1392,17 +1544,17 @@ class plotter:
                     
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')
-                    else:
-                        self.gen_intl(o2scl_hdf,amp,cmd_name,
-                                      argv[ix+1:ix_next])
+
+                    self.gen_intl(o2scl_hdf,amp,cmd_name,
+                                  argv[ix+1:ix_next])
 
                 elif cmd_name=='plot':
                     
                     if self.verbose>2:
                         print('Process plot.')
-                    else:
-                        self.plot_intl(o2scl_hdf,amp,
-                                       argv[ix+1:ix_next])
+
+                    self.plot_intl(o2scl_hdf,amp,
+                                   argv[ix+1:ix_next])
 
                 elif cmd_name=='hist2d':
                     
@@ -1465,66 +1617,9 @@ class plotter:
                     
                     if self.verbose>2:
                         print('Process den-plot.')
-                    if ix_next-ix<2:
-                        print('Not enough parameters for den-plot option.')
-                    else:
-                        get_fn=o2scl_hdf.o2scl_acol_get_slice
-                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                                         int_ptr,double_ptr_ptr,
-                                         int_ptr,double_ptr_ptr,double_ptr_ptr]
 
-                        slice=ctypes.c_char_p(self.force_bytes(argv[ix+1]))
-                        nx=ctypes.c_int(0)
-                        ptrx=double_ptr()
-                        ny=ctypes.c_int(0)
-                        ptry=double_ptr()
-                        ptrs=double_ptr()
-                        get_fn(amp,slice,ctypes.byref(nx),ctypes.byref(ptrx),
-                               ctypes.byref(ny),ctypes.byref(ptry),
-                               ctypes.byref(ptrs))
-
-                        xgrid=[ptrx[i] for i in range(0,nx.value)]
-                        ygrid=[ptry[i] for i in range(0,ny.value)]
-                        stemp=[ptrs[i] for i in range(0,nx.value*ny.value)]
-                        stemp2=numpy.array(stemp)
-                        sl=stemp2.reshape(nx.value,ny.value)
-                        sl=sl.transpose()
-
-                        if self.logx==1:
-                            xgrid=[math.log(ptrx[i],10) for i in
-                                   range(0,nx.value)]
-                        if self.logy==1:
-                            ygrid=[math.log(ptry[i],10) for i in
-                                   range(0,ny.value)]
-
-                        if self.canvas_flag==0:
-                            self.canvas()
-
-                        extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-                        extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
-                                                   xgrid[nx.value-2])/2
-                        extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-                        extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
-                                                   ygrid[ny.value-2])/2
-                        
-                        if ix_next-ix<3:
-                            plot.imshow(sl,
-                                        interpolation='nearest',
-                                        origin='lower',
-                                        extent=[extent1,extent2,
-                                                extent3,extent4],
-                                        aspect='auto')
-                        else:
-                            plot.imshow(sl,
-                                        interpolation='nearest',
-                                        origin='lower',
-                                        extent=[extent1,extent2,
-                                                extent3,extent4],
-                                        aspect='auto',
-                                        **string_to_dict(argv[ix+2]))
-                            
-                        if self.colbar>0:
-                            plot.colorbar()
+                    self.den_plot_intl(o2scl_hdf,amp,
+                                       argv[ix+1:ix_next])
                 
                 elif cmd_name=='plot1':
                     
@@ -1855,6 +1950,10 @@ class plotter:
                     if self.verbose>2:
                         print('Process jet2.')
                     self.jet2()
+                elif cmd_name=='pastel2':
+                    if self.verbose>2:
+                        print('Process pastel2.')
+                    self.pastel2()
                 else:
                     print('No option named',cmd_name)
                 # Increment to the next option
