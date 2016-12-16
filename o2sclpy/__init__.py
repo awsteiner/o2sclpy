@@ -22,7 +22,7 @@
 """
 """
   Todos:
-  - Be able to close HDF5 file and retain data set?
+  - Move plot1, plotm and plot1m to separate functions
 """
 
 import getopt, sys, h5py, math, os, hashlib
