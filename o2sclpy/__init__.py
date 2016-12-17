@@ -22,7 +22,7 @@
 """
 """
   Todos:
-  - Move plot1, plotm and plot1m to separate functions
+  - new 'version' command
 """
 
 import getopt, sys, h5py, math, os, hashlib
@@ -31,6 +31,8 @@ from matplotlib.colors import LinearSegmentedColormap
 import urllib.request
 import numpy
 import ctypes
+
+version='0.920'
 
 class cloud_file:
 
@@ -375,7 +377,6 @@ class plotter:
     zhi=0
     zset=0
     verbose=1
-    cmap='jet'
     colbar=0
     plotfiles=''
 
@@ -831,192 +832,6 @@ class plotter:
             print('No variable named',name)
         return
 
-    def help(self,arg=''):
-        #border='---------------------------------------------------------'
-        border=' '
-        if arg=='canvas':
-            print('canvas()')
-        elif arg=='den-plot':
-            print(border)
-            print('den_plot <slice name>')
-            print(border)
-        elif arg=='get':
-            print(border)
-            print('get [name]')
-            print(border)
-            print('Name can be any of: logx, logy, xtitle, ytitle, xlo,'+
-                  'xhi, xset, ylo, yhi, yset,')
-            print('zlo, zhi, zset, verbose, cmap, colbar')
-        elif arg=='plot':
-            print(border)
-            print('plot <x> <y> [kwargs]')
-            print(border)
-            print('Plot data from columns x and y.\n')
-            print('Useful kwargs:')
-            print('color or c                   matplotlib color')
-            print('dashes                       '+
-                  'sequence of on/off ink in points')
-            print("fillstyle                    "+
-                  "['full' | 'left' | 'right' | 'bottom' | 'top'")
-            print("                              | 'none']")
-            print("label                        "+
-                  "string or anything printable with '%s' conversion.")
-            print("linestyle or ls              "+
-                  "['-' | '--' | '-.' | ':' | 'None' | ' ' | '']")
-            print("                              "+
-                  "and any drawstyle in combination with a")
-            print("                              "+
-                  "linestyle, e.g., 'steps--'.")
-            print("linewidth or lw              float value in points")
-            print('marker                       marker type')
-            print('markeredgecolor or mec       matplotlib color')
-            print('markeredgewidth or mew       float value in points')
-            print('markerfacecolor or mfc       matplotlib color')
-            print('markerfacecoloralt or mfcalt matplotlib color')
-            print('markersize or ms             float')
-            print(border)
-        elif arg=='plotm':
-            print(border)
-            print('plot <x> <y> <file1> [file2] ...')
-            print(border)
-            print('Plot data from columns x and y from several files.\n')
-        elif arg=='plot1':
-            print(border)
-            print('plot <x> [kwargs]')
-            print(border)
-            print('Plot data from column x.\n')
-            print('Useful kwargs:')
-            print('color or c                   matplotlib color')
-            print('dashes                       '+
-                  'sequence of on/off ink in points')
-            print("fillstyle                    "+
-                  "['full' | 'left' | 'right' | 'bottom' | 'top'")
-            print("                              | 'none']")
-            print("label                        "+
-                  "string or anything printable with '%s' conversion.")
-            print("linestyle or ls              "+
-                  "['-' | '--' | '-.' | ':' | 'None' | ' ' | '']")
-            print("                              "+
-                  "and any drawstyle in combination with a")
-            print("                              "+
-                  "linestyle, e.g., 'steps--'.")
-            print("linewidth or lw              float value in points")
-            print('marker                       marker type')
-            print('markeredgecolor or mec       matplotlib color')
-            print('markeredgewidth or mew       float value in points')
-            print('markerfacecolor or mfc       matplotlib color')
-            print('markerfacecoloralt or mfcalt matplotlib color')
-            print('markersize or ms             float')
-            print(border)
-        elif arg=='plot1m':
-            print(border)
-            print('plot <x> <file1> [file2] ...')
-            print(border)
-            print('Plot data from column x in several files.\n')
-        elif arg=='read':
-            print(border)
-            print('read <filename>')
-            print(border)
-            print("Read the first object of type 'table' from <filename>.")
-        elif arg=='read-name':
-            print(border)
-            print('read-name <filename> <name>')
-            print(border)
-            print('Read object with name <name> in file <filename>.')
-        elif arg=='read-type':
-            print(border)
-            print('read_type <filename> <type>')
-            print(border)
-            print("Read the first object of type <type> from <filename>.")
-        elif arg=='reset-xlim':
-            print(border)
-            print('reset-xlim')
-            print(border)
-            print('Let matplotlib adjust x-axis limits in next plot.')
-        elif arg=='reset-ylim':
-            print(border)
-            print('reset-ylim')
-            print(border)
-            print('Let matplotlib adjust y-axis limits in next plot.')
-        elif arg=='save':
-            print(border)
-            print('save <filename>')
-            print(border)
-            print("Save current plot to file named 'filename'.")
-        elif arg=='set':
-            print(border)
-            print('set <name> <value>')
-            print(border)
-            print('Name can be any of: logx, logy, xtitle, ytitle, xlo,'+
-                  'xhi, xset, ylo, yhi, yset,')
-            print('zlo, zhi, zset, verbose, cmap, colbar')
-        elif arg=='show':
-            print(border)
-            print('show')
-            print(border)
-            print('Show plot in a window.')
-        elif arg=='text':
-            print(border)
-            print('text <x> <y> <string>')
-            print(border)
-            print('Place string at location (x,y) in the canvas coordinate')
-            print('system.')
-        elif arg=='ttext':
-            print(border)
-            print('ttext <x> <y> <string>')
-            print(border)
-            print('Place string at location (x,y) in the plotted coordinate')
-            print('system.')
-        elif arg=='type':
-            print(border)
-            print('type')
-            print(border)
-            print('Print current object type.')
-        elif arg=='xlimits':
-            print(border)
-            print('xlimits <xlow> <xhigh>')
-            print(border)
-            print('Set limits on x-axis.')
-        elif arg=='ylimits':
-            print(border)
-            print('ylimits <ylow> <yhigh>')
-            print(border)
-            print('Set limits on y-axis.')
-        else:
-            print('o2graph: A plotting script for O2scl data files')
-            print(border)
-            print('Commands:')
-            print(border)
-            print('canvas')
-            print('contour-plot <level> [kwargs)')
-            print('den-plot <slice_name> [kwargs]')
-            print('get <name>')
-            print('help')
-            print('hist <col> [kwargs]')
-            print('hist2d <colx> <coly> [kwargs]')
-            print('line <x1> <y1> <x2> <y2> [kwargs]')
-            print('list')
-            print('move-labels')
-            print('plot <colx> <coly> [kwargs]')
-            print('plotm <colx> <coly> <file1> [file2] ...')
-            print('plot1 <colx> [kwargs]')
-            print('plot1m <colx> <file1> [file2] ...')
-            print('read <filename>')
-            print('read-name <filename> <name>')
-            print('read-type <filename> <type>')
-            print('reds')
-            print('reset-xlim')
-            print('reset-ylim')
-            print('save <filename>')
-            print('set <name> <value>')
-            print('show')
-            print('text <x> <y> <string> [kwargs]')
-            print('ttext <x> <y> <string> [kwargs]')
-            print('type')
-            print('xlimits <xlow> <xhigh>')
-            print('ylimits <ylow> <yhigh>')
-        return
-
     def ttext(self,tx,ty,str,**kwargs):
         if self.canvas_flag==0:
             self.canvas()
@@ -1142,6 +957,27 @@ class plotter:
         
         parse_fn(amp,len(args)+1,sizes,ccp)
 
+    def get_type_intl(self,o2scl_hdf,amp):
+        
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+        
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        return curr_type
+        
     def den_plot_intl(self,o2scl_hdf,amp,args):
 
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -1149,7 +985,7 @@ class plotter:
         char_ptr=ctypes.POINTER(ctypes.c_char)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
-        
+
         # Set up wrapper for type function
         type_fn=o2scl_hdf.o2scl_acol_get_type
         type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
@@ -1205,20 +1041,15 @@ class plotter:
                                        ygrid[ny.value-2])/2
                         
             if len(args)<2:
-                plot.imshow(sl,
-                            interpolation='nearest',
-                            origin='lower',
-                            extent=[extent1,extent2,
-                                    extent3,extent4],
+                plot.imshow(sl,interpolation='nearest',
+                            origin='lower',extent=[extent1,extent2,
+                                                   extent3,extent4],
                             aspect='auto')
             else:
-                plot.imshow(sl,
-                            interpolation='nearest',
-                            origin='lower',
-                            extent=[extent1,extent2,
-                                    extent3,extent4],
-                            aspect='auto',
-                            **string_to_dict(args[1]))
+                plot.imshow(sl,interpolation='nearest',
+                            origin='lower',extent=[extent1,extent2,
+                                                   extent3,extent4],
+                            aspect='auto',**string_to_dict(args[1]))
 
         elif curr_type==b'hist_2d':
 
@@ -1260,20 +1091,19 @@ class plotter:
                                        ygrid[ny.value-2])/2
                         
             if len(args)<1:
-                plot.imshow(sl,
-                            interpolation='nearest',
-                            origin='lower',
-                            extent=[extent1,extent2,
-                                    extent3,extent4],
+                plot.imshow(sl,interpolation='nearest',
+                            origin='lower',extent=[extent1,extent2,
+                                                   extent3,extent4],
                             aspect='auto')
             else:
-                plot.imshow(sl,
-                            interpolation='nearest',
-                            origin='lower',
-                            extent=[extent1,extent2,
-                                    extent3,extent4],
-                            aspect='auto',
-                            **string_to_dict(args[0]))
+                plot.imshow(sl,interpolation='nearest',
+                            origin='lower',extent=[extent1,extent2,
+                                                   extent3,extent4],
+                            aspect='auto',**string_to_dict(args[0]))
+        else:
+            print("Command 'den-plot' not supported for type",
+                  curr_type,".")
+            return
 
         if self.colbar>0:
             plot.colorbar()
@@ -1445,12 +1275,233 @@ class plotter:
                         else:
                             plot.plot(xv,yv,**string_to_dict(args[0]))
             # End of section for 'vector<contour_line>' type
+        else:
+            print("Command 'plot' not supported for type",
+                  curr_type,".")
+            return
+        
         if self.xset==1:
             plot.xlim([self.xlo,self.xhi])
         if self.yset==1:
             plot.ylim([self.ylo,self.yhi])
                                  
         # End of 'plot_intl' function
+                                 
+    def plot1_intl(self,o2scl_hdf,amp,args):
+
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        if curr_type!=b'table':
+            print("Command 'plot1' not supported for type",
+                  curr_type,".")
+            return
+            
+        get_fn=o2scl_hdf.o2scl_acol_get_column
+        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                         int_ptr,double_ptr_ptr]
+
+        colx=ctypes.c_char_p(self.force_bytes(args[0]))
+        idx=ctypes.c_int(0)
+        ptrx=double_ptr()
+        get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+
+        xv=[i for i in range(0,idx.value)]
+        yv=[ptrx[i] for i in range(0,idx.value)]
+
+        if self.canvas_flag==0:
+            self.canvas()
+        if self.logx==1:
+            if self.logy==1:
+                if ix_next-ix<3:
+                    plot.loglog(xv,yv)
+                else:
+                    plot.loglog(xv,yv,**string_to_dict(args[1]))
+            else:
+                if ix_next-ix<3:
+                    plot.semilogx(xv,yv)
+                else:
+                    plot.semilogx(xv,yv,**string_to_dict(args[1]))
+        else:
+            if self.logy==1:
+                if ix_next-ix<3:
+                    plot.semilogy(xv,yv)
+                else:
+                    plot.semilogy(xv,yv,**string_to_dict(args[1]))
+            else:
+                if ix_next-ix<3:
+                    plot.plot(xv,yv)
+                else:
+                    plot.plot(xv,yv,**string_to_dict(args[1]))
+                            
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+
+        # End of 'plot1_intl' function
+            
+    def plotm_intl(self,o2scl_hdf,amp,args):
+
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+
+        # Types for the file reading
+        size_type=ctypes.c_int * 2
+        parse_fn=o2scl_hdf.o2scl_acol_parse
+        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                           size_type,ctypes.c_char_p]
+
+        # Define types to obtain the column
+        get_fn=o2scl_hdf.o2scl_acol_get_column
+        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                         int_ptr,double_ptr_ptr]
+
+        for ifile in range(0,len(self.plotfiles)):
+            # Read the file
+            str_args='-read'+self.plotfiles[ifile]
+            ccp=ctypes.c_char_p(self.force_bytes(str_args))
+            sizes=size_type(5,len(self.plotfiles[ifile]))
+            parse_fn(amp,2,sizes,ccp)
+
+            # Get the x column
+            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_fn(amp,colx,ctypes.byref(idx),
+                   ctypes.byref(ptrx))
+
+            # Get the y column
+            coly=ctypes.c_char_p(self.force_bytes(args[1]))
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_fn(amp,coly,ctypes.byref(idy),
+                   ctypes.byref(ptry))
+
+            # Copy the data over
+            xv=[ptrx[i] for i in range(0,idx.value)]
+            yv=[ptry[i] for i in range(0,idy.value)]
+
+            # Plot
+            if self.canvas_flag==0:
+                self.canvas()
+            if self.logx==1:
+                if self.logy==1:
+                    if len(args)<3:
+                        plot.loglog(xv,yv)
+                    else:
+                        plot.loglog(xv,yv,**string_to_dict(args[2]))
+                else:
+                    if len(args)<3:
+                        plot.semilogx(xv,yv)
+                    else:
+                        plot.semilogx(xv,yv,**string_to_dict(args[2]))
+            else:
+                if self.logy==1:
+                    if len(args)<3:
+                        plot.semilogy(xv,yv)
+                    else:
+                        plot.semilogy(xv,yv,**string_to_dict(args[2]))
+                else:
+                    if len(args)<3:
+                        plot.plot(xv,yv)
+                    else:
+                        plot.plot(xv,yv,**string_to_dict(args[2]))
+            if self.xset==1:
+                plot.xlim([self.xlo,self.xhi])
+            if self.yset==1:
+                plot.ylim([self.ylo,self.yhi])
+
+        # End of 'plotm_intl' function
+        
+    def plot1m_intl(self,o2scl_hdf,amp,args):
+        
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        
+        # Types for the file reading
+        size_type=ctypes.c_int * 2
+        parse_fn=o2scl_hdf.o2scl_acol_parse
+        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                           size_type,ctypes.c_char_p]
+
+        # Define types to obtain the column
+        get_fn=o2scl_hdf.o2scl_acol_get_column
+        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                         int_ptr,double_ptr_ptr]
+
+        for ifile in range(0,len(self.plotfiles)):
+            # Read the file
+            str_args='-read'+self.plotfiles[ifile]
+            ccp=ctypes.c_char_p(self.force_bytes(str_args))
+            sizes=size_type(5,len(self.plotfiles[ifile]))
+            parse_fn(amp,2,sizes,ccp)
+
+            # Get the x column
+            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_fn(amp,colx,ctypes.byref(idx),
+                   ctypes.byref(ptrx))
+
+            # Copy the data over
+            xv=[i for i in range(0,idx.value)]
+            yv=[ptrx[i] for i in range(0,idx.value)]
+
+            # Plot
+            if self.canvas_flag==0:
+                self.canvas()
+            if self.logx==1:
+                if self.logy==1:
+                    if len(args)<2:
+                        plot.loglog(xv,yv)
+                    else:
+                        plot.loglog(xv,yv,**string_to_dict(args[1]))
+                else:
+                    if len(args)<2:
+                        plot.semilogx(xv,yv)
+                    else:
+                        plot.semilogx(xv,yv,**string_to_dict(args[1]))
+            else:
+                if self.logy==1:
+                    if len(args)<2:
+                        plot.semilogy(xv,yv)
+                    else:
+                        plot.semilogy(xv,yv,**string_to_dict(args[1]))
+                else:
+                    if len(args)<2:
+                        plot.plot(xv,yv)
+                    else:
+                        plot.plot(xv,yv,**string_to_dict(args[1]))
+                        
+            if self.xset==1:
+                plot.xlim([self.xlo,self.xhi])
+            if self.yset==1:
+                plot.ylim([self.ylo,self.yhi])
+                                
+        # End of 'plot1m_intl' function
                                  
     def parse_argv(self,argv,o2scl_hdf):
 
@@ -1515,6 +1566,11 @@ class plotter:
                     else:
                         self.get_intl(o2scl_hdf,amp,argv[ix+1:ix_next])
 
+                elif cmd_name=='version':
+                    
+                    print('o2graph: A data table plotting and',
+                          'processing program for O2scl.')
+                    print(' Version '+version+'.')
 
                 elif (cmd_name=='read' or cmd_name=='list' or
                       cmd_name=='assign' or cmd_name=='integ' or
@@ -1536,11 +1592,11 @@ class plotter:
                       cmd_name=='get-row' or cmd_name=='sort' or
                       cmd_name=='get-unit' or cmd_name=='status' or
                       cmd_name=='index' or cmd_name=='sum' or
-                      cmd_name=='insert' or cmd_name=='version' or
+                      cmd_name=='insert' or cmd_name=='contours' or
                       cmd_name=='insert-full' or cmd_name=='warranty' or
                       cmd_name=='calc' or cmd_name=='help' or
                       cmd_name=='nlines' or cmd_name=='to-hist' or
-                      cmd_name=='type' or cmd_name=='contours'):
+                      cmd_name=='type'):
                     
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')
@@ -1560,6 +1616,7 @@ class plotter:
                     
                     if self.verbose>2:
                         print('Process hist2d.')
+                        
                     if ix_next-ix<3:
                         print('Not enough parameters for hist2d option.')
                     else:
@@ -1625,211 +1682,39 @@ class plotter:
                     
                     if self.verbose>2:
                         print('Process plot1.')
+                        
                     if ix_next-ix<2:
                         print('Not enough parameters for plot1 option.')
                     else:
-                        double_ptr=ctypes.POINTER(ctypes.c_double)
-                        double_ptr_ptr=ctypes.POINTER(double_ptr)
-                        int_ptr=ctypes.POINTER(ctypes.c_int)
-                        
-                        get_fn=o2scl_hdf.o2scl_acol_get_column
-                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                                         int_ptr,double_ptr_ptr]
-
-                        colx=ctypes.c_char_p(self.force_bytes(argv[ix+1]))
-                        idx=ctypes.c_int(0)
-                        ptrx=double_ptr()
-                        get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
-
-                        xv=[i for i in range(0,idx.value)]
-                        yv=[ptrx[i] for i in range(0,idx.value)]
-
-                        if self.canvas_flag==0:
-                            self.canvas()
-                        if self.logx==1:
-                            if self.logy==1:
-                                if ix_next-ix<3:
-                                    plot.loglog(xv,yv)
-                                else:
-                                    plot.loglog(xv,yv,
-                                                **string_to_dict(argv[ix+2]))
-                            else:
-                                if ix_next-ix<3:
-                                    plot.semilogx(xv,yv)
-                                else:
-                                    plot.semilogx(xv,yv,
-                                                  **string_to_dict(argv[ix+2]))
-                        else:
-                            if self.logy==1:
-                                if ix_next-ix<3:
-                                    plot.semilogy(xv,yv)
-                                else:
-                                    plot.semilogy(xv,yv,
-                                                  **string_to_dict(argv[ix+2]))
-                            else:
-                                if ix_next-ix<3:
-                                    plot.plot(xv,yv)
-                                else:
-                                    plot.plot(xv,yv,
-                                              **string_to_dict(argv[ix+2]))
-                            
-                        if self.xset==1:
-                            plot.xlim([self.xlo,self.xhi])
-                        if self.yset==1:
-                            plot.ylim([self.ylo,self.yhi])
+                        self.plot1_intl(o2scl_hdf,amp,
+                                       argv[ix+1:ix_next])
                             
                 elif cmd_name=='plotm':
                     
                     if self.verbose>2:
                         print('Process plotm.')
+                        
                     if ix_next-ix<3:
                         print('Not enough parameters for plotm option.')
                     else:
-                        # Types for the file reading
-                        size_type=ctypes.c_int * 2
-                        parse_fn=o2scl_hdf.o2scl_acol_parse
-                        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                                           size_type,ctypes.c_char_p]
-
-                        # Define types to obtain the column
-                        get_fn=o2scl_hdf.o2scl_acol_get_column
-                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                                         int_ptr,double_ptr_ptr]
-
-                        for ifile in range(0,len(self.plotfiles)):
-                            # Read the file
-                            str_args='-read'+self.plotfiles[ifile]
-                            ccp=ctypes.c_char_p(self.force_bytes(str_args))
-                            sizes=size_type(5,len(self.plotfiles[ifile]))
-                            parse_fn(amp,2,sizes,ccp)
-
-                            # Get the x column
-                            colx=ctypes.c_char_p(self.force_bytes(argv[ix+1]))
-                            idx=ctypes.c_int(0)
-                            ptrx=double_ptr()
-                            get_fn(amp,colx,ctypes.byref(idx),
-                                   ctypes.byref(ptrx))
-
-                            # Get the y column
-                            coly=ctypes.c_char_p(self.force_bytes(argv[ix+2]))
-                            idy=ctypes.c_int(0)
-                            ptry=double_ptr()
-                            get_fn(amp,coly,ctypes.byref(idy),
-                                   ctypes.byref(ptry))
-
-                            # Copy the data over
-                            xv=[ptrx[i] for i in range(0,idx.value)]
-                            yv=[ptry[i] for i in range(0,idy.value)]
-
-                            # Plot
-                            if self.canvas_flag==0:
-                                self.canvas()
-                            if self.logx==1:
-                                if self.logy==1:
-                                    if ix_next-ix<4:
-                                        plot.loglog(xv,yv)
-                                    else:
-                                        plot.loglog(xv,yv,
-                                                    **string_to_dict(argv[ix+3]))
-                                else:
-                                    if ix_next-ix<4:
-                                        plot.semilogx(xv,yv)
-                                    else:
-                                        plot.semilogx(xv,yv,
-                                                      **string_to_dict(argv[ix+3]))
-                            else:
-                                if self.logy==1:
-                                    if ix_next-ix<4:
-                                        plot.semilogy(xv,yv)
-                                    else:
-                                        plot.semilogy(xv,yv,
-                                                      **string_to_dict(argv[ix+3]))
-                                else:
-                                    if ix_next-ix<4:
-                                        plot.plot(xv,yv)
-                                    else:
-                                        plot.plot(xv,yv,
-                                                  **string_to_dict(argv[ix+3]))
-                            if self.xset==1:
-                                plot.xlim([self.xlo,self.xhi])
-                            if self.yset==1:
-                                plot.ylim([self.ylo,self.yhi])
-                        # End of file loop for 'plotm'
-                            
+                        self.plotm_intl(o2scl_hdf,amp,
+                                       argv[ix+1:ix_next])
+                                                    
                 elif cmd_name=='plot1m':
                     
                     if self.verbose>2:
                         print('Process plot1m.')
+                        
                     if ix_next-ix<2:
                         print('Not enough parameters for plot1m option.')
                     else:
-                        # Types for the file reading
-                        size_type=ctypes.c_int * 2
-                        parse_fn=o2scl_hdf.o2scl_acol_parse
-                        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                                           size_type,ctypes.c_char_p]
-
-                        # Define types to obtain the column
-                        get_fn=o2scl_hdf.o2scl_acol_get_column
-                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                                         int_ptr,double_ptr_ptr]
-
-                        for ifile in range(0,len(self.plotfiles)):
-                            # Read the file
-                            str_args='-read'+self.plotfiles[ifile]
-                            ccp=ctypes.c_char_p(self.force_bytes(str_args))
-                            sizes=size_type(5,len(self.plotfiles[ifile]))
-                            parse_fn(amp,2,sizes,ccp)
-
-                            # Get the x column
-                            colx=ctypes.c_char_p(self.force_bytes(argv[ix+1]))
-                            idx=ctypes.c_int(0)
-                            ptrx=double_ptr()
-                            get_fn(amp,colx,ctypes.byref(idx),
-                                   ctypes.byref(ptrx))
-
-                            # Copy the data over
-                            xv=[i for i in range(0,idx.value)]
-                            yv=[ptrx[i] for i in range(0,idx.value)]
-
-                            # Plot
-                            if self.canvas_flag==0:
-                                self.canvas()
-                            if self.logx==1:
-                                if self.logy==1:
-                                    if ix_next-ix<3:
-                                        plot.loglog(xv,yv)
-                                    else:
-                                        plot.loglog(xv,yv,
-                                                    **string_to_dict(argv[ix+2]))
-                                else:
-                                    if ix_next-ix<3:
-                                        plot.semilogx(xv,yv)
-                                    else:
-                                        plot.semilogx(xv,yv,
-                                                      **string_to_dict(argv[ix+2]))
-                            else:
-                                if self.logy==1:
-                                    if ix_next-ix<3:
-                                        plot.semilogy(xv,yv)
-                                    else:
-                                        plot.semilogy(xv,yv,
-                                                      **string_to_dict(argv[ix+2]))
-                                else:
-                                    if ix_next-ix<3:
-                                        plot.plot(xv,yv)
-                                    else:
-                                        plot.plot(xv,yv,
-                                                  **string_to_dict(argv[ix+2]))
-                            if self.xset==1:
-                                plot.xlim([self.xlo,self.xhi])
-                            if self.yset==1:
-                                plot.ylim([self.ylo,self.yhi])
-                        # End of file loop for 'plot1m'
-                            
+                        self.plot1m_intl(o2scl_hdf,amp,
+                                       argv[ix+1:ix_next])
+                        
                 elif cmd_name=='text':
                     if self.verbose>2:
                         print('Process text.')
+                        
                     if ix_next-ix<4:
                         print('Not enough parameters for text option.')
                     elif ix_next-ix<5:
@@ -1840,6 +1725,7 @@ class plotter:
                 elif cmd_name=='plot-files':
                     if self.verbose>2:
                         print('Process plot-files.')
+                        
                     if ix_next-ix<2:
                         print('Not enough parameters for plot-files option.')
                     else:
@@ -1849,6 +1735,7 @@ class plotter:
                 elif cmd_name=='ttext':
                     if self.verbose>2:
                         print('Process ttext.')
+                        
                     if ix_next-ix<4:
                         print('Not enough parameters for ttext option.')
                     elif ix_next-ix<5:
@@ -1856,18 +1743,10 @@ class plotter:
                     else:
                         self.ttext(argv[ix+1],argv[ix+2],argv[ix+3],
                                    **string_to_dict(argv[ix+4]))
-                elif cmd_name=='den-plot_old':
-                    if self.verbose>2:
-                        print('Process den-plot.')
-                    if ix_next-ix<2:
-                        print('Not enough parameters for den-plot option.')
-                    elif ix_next-ix<3:
-                        self.den_plot(argv[ix+1])
-                    else:
-                        self.den_plot(argv[ix+1],**string_to_dict(argv[ix+2]))
                 elif cmd_name=='xlimits':
                     if self.verbose>2:
                         print('Process xlimits.')
+                        
                     if ix_next-ix<3:
                         print('Not enough parameters for xlimits option.')
                     else:
@@ -1875,29 +1754,11 @@ class plotter:
                 elif cmd_name=='ylimits':
                     if self.verbose>2:
                         print('Process ylimits.')
+                        
                     if ix_next-ix<3:
                         print('Not enough parameters for ylimits option.')
                     else:
                         self.ylimits(float(argv[ix+1]),float(argv[ix+2]))
-                elif cmd_name=='hist_old':
-                    if self.verbose>2:
-                        print('Process hist.')
-                    if ix_next-ix<2:
-                        print('Not enough parameters for hist option.')
-                    elif ix_next-ix<3:
-                        self.hist(argv[ix+1])
-                    else:
-                        self.hist(argv[ix+1],**string_to_dict(argv[ix+2]))
-                elif cmd_name=='hist2d_old':
-                    if self.verbose>2:
-                        print('Process hist2d.')
-                    if ix_next-ix<3:
-                        print('Not enough parameters for hist2d option.')
-                    elif ix_next-ix<4:
-                        self.hist2d(argv[ix+1],argv[ix+2])
-                    else:
-                        self.hist2d(argv[ix+1],argv[ix+2],
-                                    **string_to_dict(argv[ix+3]))
                 elif cmd_name=='save':
                     if self.verbose>2:
                         print('Process save.')
@@ -1908,6 +1769,7 @@ class plotter:
                 elif cmd_name=='line':
                     if self.verbose>2:
                         print('Process line.')
+                        
                     if ix_next-ix<5:
                         print('Not enough parameters for line option.')
                     elif ix_next-ix<6:
@@ -1919,13 +1781,6 @@ class plotter:
                     if self.verbose>2:
                         print('Process move-labels.')
                     self.move_labels()
-                elif cmd_name=='help-old':
-                    if self.verbose>2:
-                        print('Process help.')
-                    if ix_next-ix<2:
-                        self.help()
-                    else:
-                        self.help(argv[ix+1])
                 elif cmd_name=='show':
                     if self.verbose>2:
                         print('Process show.')
