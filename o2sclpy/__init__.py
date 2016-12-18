@@ -1329,23 +1329,23 @@ class plotter:
             self.canvas()
         if self.logx==1:
             if self.logy==1:
-                if ix_next-ix<3:
+                if len(args)<2:
                     plot.loglog(xv,yv)
                 else:
                     plot.loglog(xv,yv,**string_to_dict(args[1]))
             else:
-                if ix_next-ix<3:
+                if len(args)<2:
                     plot.semilogx(xv,yv)
                 else:
                     plot.semilogx(xv,yv,**string_to_dict(args[1]))
         else:
             if self.logy==1:
-                if ix_next-ix<3:
+                if len(args)<2:
                     plot.semilogy(xv,yv)
                 else:
                     plot.semilogy(xv,yv,**string_to_dict(args[1]))
             else:
-                if ix_next-ix<3:
+                if len(args)<2:
                     plot.plot(xv,yv)
                 else:
                     plot.plot(xv,yv,**string_to_dict(args[1]))
