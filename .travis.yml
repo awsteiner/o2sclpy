@@ -2,7 +2,7 @@ language: cpp
 
 os:
   - linux
-#  - osx
+  - osx
 
 dist: trusty
 sudo: required
@@ -22,7 +22,7 @@ before_install:
   # Install GSL, Boost, HDF5, readline, ncurses
   # 
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      sudo apt-get install libgsl0-dev && sudo apt-get install libboost-all-dev libhdf5-dev libreadline-dev libncurses-dev python3-pip;
+      sudo apt-get install libgsl0-dev && sudo apt-get install libboost-all-dev libhdf5-dev libreadline-dev libncurses-dev python3-pip && python3-h5py && python3-matplotlib ;
     fi
 
 #
@@ -47,7 +47,7 @@ script:
   # We need to use '-v' for brew install so that the build doesn't timeout.
   # 
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-      brew update && brew install homebrew/science/hdf5 && brew tap awsteiner/science && which autoconf && brew install o2scl --HEAD -v && make check ;
+      brew update && brew install homebrew/science/hdf5 && brew tap awsteiner/science && which autoconf && brew install o2scl --HEAD -v && brew install python3 && pip3 install Cython && brew install h5py && brew install scipy --with-python3 && brew install matplotlib --with-python3 && pip3 install o2sclpy && o2graph --help ;
     fi
 
 notifications:
