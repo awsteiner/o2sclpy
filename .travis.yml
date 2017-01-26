@@ -22,7 +22,7 @@ before_install:
   # Install GSL, Boost, HDF5, readline, ncurses
   # 
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      sudo apt-get install libgsl0-dev && sudo apt-get install libboost-all-dev libhdf5-dev libreadline-dev libncurses-dev;
+      sudo apt-get install libgsl0-dev && sudo apt-get install libboost-all-dev libhdf5-dev libreadline-dev libncurses-dev python3;
     fi
 
 #
@@ -39,7 +39,7 @@ script:
   # 'make install' does not fail. 
   # 
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      git clone https://github.com/awsteiner/o2scl && cd o2scl && mkdir m4 && autoreconf -i && ./configure && make blank-doc && sudo make install && cd .. && pip3 install o2sclpy && o2graph --help
+      git clone https://github.com/awsteiner/o2scl && cd o2scl && mkdir m4 && autoreconf -i && ./configure && make blank-doc && sudo make install && cd .. && sudo pip3 install o2sclpy && o2graph --help ;
     fi
   # 
   # Use homebrew to install the HEAD version on OSX. At the end,
