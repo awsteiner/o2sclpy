@@ -39,7 +39,7 @@ script:
   # 'make install' does not fail. 
   # 
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      git clone https://github.com/awsteiner/o2scl && cd o2scl && mkdir m4 && autoreconf -i && ./configure && make blank-doc && sudo make install && cd .. && sudo pip3 install o2sclpy && o2graph --help ;
+      git clone https://github.com/awsteiner/o2scl && cd o2scl && mkdir m4 && autoreconf -i && ./configure && make blank-doc && sudo make install && cd .. && sudo pip3 install o2sclpy && o2graph -help ;
     fi
   # 
   # Use homebrew to install the HEAD version on OSX. At the end,
@@ -47,7 +47,7 @@ script:
   # We need to use '-v' for brew install so that the build doesn't timeout.
   # 
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-      brew update && brew install homebrew/science/hdf5 && brew tap awsteiner/science && which autoconf && brew install o2scl --HEAD -v && brew install python3 && pip3 install Cython && pip3 install h5py && brew install scipy --with-python3 && brew install matplotlib --with-python3 && pip3 install o2sclpy && o2graph --help ;
+      brew update && brew install homebrew/science/hdf5 && brew tap awsteiner/science && which autoconf && brew install o2scl --HEAD -v && brew install python3 -v && pip3 install Cython && pip3 install h5py && brew install scipy -v --with-python3 && brew install matplotlib --with-python3 -v && pip3 install o2sclpy && o2graph -help ;
     fi
 
 notifications:
