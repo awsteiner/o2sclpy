@@ -1,3 +1,9 @@
+#
+# Linux seems to work. OSX has trouble with timing out, and I'm
+# not sure for some packages if it's faster to use homebrew or
+# pip3? It might also be better to install dependencies manually
+# so that the installation proceeds in smaller chunks.
+#
 language: cpp
 
 os:
@@ -47,7 +53,7 @@ script:
   # We need to use '-v' for brew install so that the build doesn't timeout.
   # 
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-      brew update && brew install homebrew/science/hdf5 && brew tap awsteiner/science && which autoconf && brew install o2scl --HEAD -v && brew install python3 -v && pip3 install Cython && pip3 install h5py && brew install scipy -v --with-python3 && brew install matplotlib --with-python3 -v && pip3 install o2sclpy && o2graph -help ;
+      brew update && brew install homebrew/science/hdf5 && brew tap awsteiner/science && which autoconf && brew install o2scl --HEAD -v && brew install python3 -v && pip3 install h5py && brew install freetype && brew install libpng && brew install matplotlib --with-python3 -v && pip3 install o2sclpy && o2graph -help ;
     fi
 
 notifications:
