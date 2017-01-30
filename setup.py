@@ -1,6 +1,6 @@
 from setuptools import setup
 
-setup(name='o2sclpy',version='0.920',
+setup(name='o2sclpy',version='0.920.2',
       description='Python extensions for O2scl',
       url='http://web.utk.edu/~asteine1/o2scl',
       author='Andrew W. Steiner',
