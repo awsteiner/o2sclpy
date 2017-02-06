@@ -18,18 +18,22 @@ sudo: required
 # Prepare autotools and install dependencies before installation
 #
 before_install:
+  # The ubuntu HDF5 package cannot be used because it is configured to
+  # be compatibile only the with older API. Newer versions of the
+  # Ubuntu HDF5 package do not seem to have this problem. For now, the
+  # script compiles HDF5 manually from source.
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+      wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-
+patch1/src/hdf5-1.10.0-patch1.tar.gz ;
+      tar -xzf hdf5-1.10.0-patch1.tar.gz ;
+      cd hdf5-1.10.0-patch1 && ./configure --build=x86_64-unknown-linux-gnu --pr
+efix=/usr && make > /dev/null 2> /dev/null && sudo make install && cd .. ;
+    fi
   # 
-  # Use GNU autotools to generate ./configure automatically on linux
-  # 
-  # - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-  #    mkdir m4 ;
-  #    autoreconf -i ;
-  #  fi
-  # 
-  # Install GSL, Boost, HDF5, readline, ncurses
+  # Install GSL, Boost, readline, ncurses, python3, h5py, and matplotlib
   # 
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      sudo apt-get install libgsl0-dev && sudo apt-get install libboost-all-dev libhdf5-dev libreadline-dev libncurses-dev python3-pip python3-h5py python3-matplotlib ;
+      sudo apt-get install libgsl0-dev && sudo apt-get install libboost-all-dev libreadline-dev libncurses-dev python3-pip python3-h5py python3-matplotlib ;
     fi
 
 #
@@ -54,7 +58,7 @@ script:
   # We need to use '-v' for brew install so that the build doesn't timeout.
   # 
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-      brew update && brew install homebrew/science/hdf5 && brew tap awsteiner/science && which autoconf && brew install o2scl --HEAD -v && brew install python3 -v && pip3 install h5py && brew install freetype && brew install libpng && brew install matplotlib --with-python3 -v && pip3 install o2sclpy && o2graph -help ;
+      brew update && brew install homebrew/science/hdf5 && brew tap awsteiner/science && which autoconf && brew install o2scl --HEAD -v && brew install python3 && pip3 install h5py && brew install freetype && brew install libpng && pip3 install matplotlib && pip3 install o2sclpy && o2graph -help ;
     fi
 
 notifications:

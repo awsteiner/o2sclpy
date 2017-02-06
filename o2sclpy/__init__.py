@@ -713,7 +713,7 @@ class plotter:
         a string or bytes object, we ensure it's a bytes
         object by converting if necessary.
         """
-        if isinstance(obj,numpy.bytes_)==False:
+        if isinstance(obj,numpy.bytes_)==False and isinstance(obj,bytes)==False:
             return bytes(obj,'utf-8')
         return obj
     
