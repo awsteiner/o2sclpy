@@ -32,7 +32,7 @@ import urllib.request
 import numpy
 import ctypes
 
-version='0.920'
+version='0.921'
 
 class cloud_file:
 
@@ -1287,6 +1287,150 @@ class plotter:
                                  
         # End of 'plot_intl' function
                                  
+    def errorbar_intl(self,o2scl_hdf,amp,args):
+
+        # Useful pointer types
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        if curr_type==b'table':
+                            
+            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr]
+
+            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+
+            coly=ctypes.c_char_p(self.force_bytes(args[1]))
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
+
+            colxerr=ctypes.c_char_p(self.force_bytes(args[3]))
+            idxerr=ctypes.c_int(0)
+            ptrxerr=double_ptr()
+            get_fn(amp,colxerr,ctypes.byref(idxerr),ctypes.byref(ptrxerr))
+
+            colyerr=ctypes.c_char_p(self.force_bytes(args[2]))
+            idyerr=ctypes.c_int(0)
+            ptryerr=double_ptr()
+            get_fn(amp,colyerr,ctypes.byref(idyerr),ctypes.byref(ptryerr))
+
+            xv=[ptrx[i] for i in range(0,idx.value)]
+            yv=[ptry[i] for i in range(0,idy.value)]
+            xerrv=[ptrxerr[i] for i in range(0,idxerr.value)]
+            yerrv=[ptryerr[i] for i in range(0,idyerr.value)]
+    
+            if self.canvas_flag==0:
+                self.canvas()
+            if self.logx==1:
+                if self.logy==1:
+                    if len(args)<5:
+                        plot.errorbar(xv,yv,yerr=yerr,xerr=xerr)
+                    else:
+                        plot.errorbar(xv,yv,yerr=yerr,xerr=xerr,
+                                      **string_to_dict(args[2]))
+                else:
+                    if len(args)<5:
+                        plot.errorbar(xv,yv,yerr=yerr,xerr=xerr)
+                    else:
+                        plot.errorbar(xv,yv,yerr=yerr,xerr=xerr,
+                                      **string_to_dict(args[2]))
+            else:
+                if self.logy==1:
+                    if len(args)<5:
+                        plot.errorbar(xv,yv,yerr=yerr,xerr=xerr)
+                    else:
+                        plot.errorbar(xv,yv,yerr=yerr,xerr=xerr,
+                                      **string_to_dict(args[2]))
+                else:
+                    if len(args)<5:
+                        plot.errorbar(xv,yv,yerr=yerr,xerr=xerr)
+                    else:
+                        plot.errorbar(xv,yv,yerr=yerr,xerr=xerr,
+                                      **string_to_dict(args[2]))
+
+            # End of section for 'table' type
+        elif curr_type==b'hist':
+
+            get_reps_fn=o2scl_hdf.o2scl_acol_get_hist_reps
+            get_reps_fn.argtypes=[ctypes.c_void_p,
+                             int_ptr,double_ptr_ptr]
+                            
+            get_wgts_fn=o2scl_hdf.o2scl_acol_get_hist_wgts
+            get_wgts_fn.argtypes=[ctypes.c_void_p,
+                             int_ptr,double_ptr_ptr]
+                            
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_reps_fn(amp,ctypes.byref(idx),
+                        ctypes.byref(ptrx))
+
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_wgts_fn(amp,ctypes.byref(idy),
+                        ctypes.byref(ptry))
+
+            xv=[ptrx[i] for i in range(0,idx.value)]
+            yv=[ptry[i] for i in range(0,idy.value)]
+    
+            if self.canvas_flag==0:
+                self.canvas()
+            if self.logx==1:
+                if self.logy==1:
+                    if len(args)<1:
+                        plot.loglog(xv,yv)
+                    else:
+                        plot.loglog(xv,yv,**string_to_dict(args[0]))
+                else:
+                    if len(args)<1:
+                        plot.semilogx(xv,yv)
+                    else:
+                        plot.semilogx(xv,yv,**string_to_dict(args[0]))
+            else:
+                if self.logy==1:
+                    if len(args)<1:
+                        plot.semilogy(xv,yv)
+                    else:
+                        plot.semilogy(xv,yv,**string_to_dict(args[0]))
+                else:
+                    if len(args)<1:
+                        plot.plot(xv,yv)
+                    else:
+                        plot.plot(xv,yv,**string_to_dict(args[0]))
+                            
+            # End of section for 'hist' type
+        else:
+            print("Command 'plot' not supported for type",
+                  curr_type,".")
+            return
+        
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+                                 
+        # End of 'errorbar_intl' function
+                                 
     def plot1_intl(self,o2scl_hdf,amp,args):
 
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -1596,7 +1740,7 @@ class plotter:
                       cmd_name=='insert-full' or cmd_name=='warranty' or
                       cmd_name=='calc' or cmd_name=='help' or
                       cmd_name=='nlines' or cmd_name=='to-hist' or
-                      cmd_name=='type'):
+                      cmd_name=='type' or cmd_name=='entry'):
                     
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')
@@ -1610,6 +1754,14 @@ class plotter:
                         print('Process plot.')
 
                     self.plot_intl(o2scl_hdf,amp,
+                                   argv[ix+1:ix_next])
+
+                elif cmd_name=='errorbar':
+                    
+                    if self.verbose>2:
+                        print('Process errorbar.')
+
+                    self.errorbar_intl(o2scl_hdf,amp,
                                    argv[ix+1:ix_next])
 
                 elif cmd_name=='hist2d':
