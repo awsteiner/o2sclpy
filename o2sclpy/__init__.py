@@ -1673,6 +1673,10 @@ class plotter:
             # If there is an option, then ix is its index
             if ix<len(argv):
                 cmd_name=argv[ix][1:]
+                # If there was two dashes, one will be left so
+                # remove it
+                if cmd_name[0]=='-':
+                    cmd_name=cmd_name[1:]
                 if self.verbose>2:
                     print('Found option',cmd_name,'at index',ix)
                 # Set ix_next to the next option, or to the end if
