@@ -17,6 +17,8 @@ def force_bytes2(obj):
   object by converting if necessary.
   """
   print('obj:',obj)
+  print('test3:',obj=='None')
+  print('test4:',obj==b'None')
   print('test1:',isinstance(obj,numpy.bytes_))
   if isinstance(obj,numpy.bytes_)==False:
     print('test2:',isinstance(obj,bytes))
@@ -79,7 +81,7 @@ else:
 
   stdcpp=ctypes.CDLL(find_library("stdc++"),mode=ctypes.RTLD_GLOBAL)
   
-  if (o2scl_libdir=='' and os.getenv('O2SCL_LIB')!='None' and
+  if (o2scl_libdir=='' and 
       force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
     o2scl_libdir=os.getenv('O2SCL_LIB')
     print('Set o2scl-libdir to',o2scl_libdir)
