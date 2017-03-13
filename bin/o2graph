@@ -79,7 +79,7 @@ else:
 
   stdcpp=ctypes.CDLL(find_library("stdc++"),mode=ctypes.RTLD_GLOBAL)
   
-  if (o2scl_libdir=='' and o2.getenv('O2SCL_LIB')!='None' and
+  if (o2scl_libdir=='' and os.getenv('O2SCL_LIB')!='None' and
       force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
     o2scl_libdir=os.getenv('O2SCL_LIB')
     print('Set o2scl-libdir to',o2scl_libdir)
