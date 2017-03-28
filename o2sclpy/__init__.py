@@ -35,7 +35,10 @@ import ctypes
 version='0.921'
 
 class cloud_file:
-
+    """ 
+    This class does what...
+    """
+    
     force_subdir=False
     env_var=''
     username=''
@@ -56,6 +59,9 @@ class cloud_file:
         return hash_md5.hexdigest()
     
     def download_file(self,data_dir,fname_orig,url,mhash):
+        """ 
+        Desc
+        """
         force_subdir_val=self.force_subdir
         self.force_subdir=False
         fname=self.download_file_subdir(data_dir,'',fname_orig,url,
@@ -157,6 +163,9 @@ class cloud_file:
         return fname
 
 class hdf5_reader:
+    """
+    This class 
+    """
 
     list_of_dsets=[]
     search_type=''
@@ -340,6 +349,9 @@ def parse_arguments(argv,verbose=0):
     return (list,unproc_list)
 
 def string_to_dict(s):
+    """ 
+    Desc
+    """
     # First split into keyword = value pairs
     arr=s.split(',')
     # Create empty dictionary
@@ -352,6 +364,9 @@ def string_to_dict(s):
     return dct
 
 class plotter:
+    """ 
+    Desc
+    """
 
     h5r=hdf5_reader()
     dset=0
