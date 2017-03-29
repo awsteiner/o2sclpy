@@ -20,6 +20,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../o2sclpy'))
+sys.path.insert(0, os.path.abspath('../bin'))
 
 # -- General configuration ------------------------------------------------
 
@@ -50,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'o2sclpy'
-copyright = '2017, Andrew W. Steiner'
+copyright = '2018, Andrew W. Steiner'
 author = 'Andrew W. Steiner'
 
 # The version info for the project you're documenting, acts as replacement for
