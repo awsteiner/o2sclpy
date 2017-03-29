@@ -19,7 +19,6 @@
 #  
 #  -------------------------------------------------------------------
 """
-Docstring for sphinx?
 """
 
 import getopt, sys, h5py, math, os, hashlib
@@ -30,17 +29,38 @@ import numpy
 import ctypes
 
 version='0.921'
+"""
+The version number string
+"""
 
-class cloud_file():
+class cloud_file:
     """
-    This is documentation.
+    A class to manage downloading files from the internet.
+
+    .. warning:: This class has several potential security issues 
+                 and should not be used without due care.
     """
     
     force_subdir=False
+    """
+    If true, force the same subdirectory structure
+    """
     env_var=''
+    """
+    The environment variable in which the data directory is stored
+    """
     username=''
+    """
+    The HTTP username
+    """
     password=''
+    """
+    The HTTP password
+    """
     verbose=1
+    """
+    The verbosity parameter
+    """
     
     def md5(fname):
         """
@@ -55,17 +75,6 @@ class cloud_file():
                 hash_md5.update(chunk)
         return hash_md5.hexdigest()
     
-    def download_file(self,data_dir,fname_orig,url,mhash):
-        """ 
-        This is a long sentence. Desc2.
-        """
-        force_subdir_val=self.force_subdir
-        self.force_subdir=False
-        fname=self.download_file_subdir(data_dir,'',fname_orig,url,
-                                        mhash)
-        self.force_subdir=force_subdir_val
-        return fname
-
     def download_file_subdir(self,data_dir,subdir_orig,fname_orig,url,
                              mhash):
         """
@@ -79,10 +88,6 @@ class cloud_file():
         'url'. If this process was successful at finding or downloading
         the file, then the full filename is returned. Otherwise, an
         exception is thrown.
-        
-        Warning: this function has several potential security issues 
-        and should not be used without due care.
-    
         """
         # First obtain the data directory
         method=''
@@ -159,13 +164,32 @@ class cloud_file():
         # Return the final filename
         return fname
 
+    def download_file(self,data_dir,fname_orig,url,mhash):
+        """
+        This function is similar to
+        :py:class:`o2sclpy.cloud_file.download_file_subdir()` except
+        that any subdirectory structure is ignored.
+        """
+        force_subdir_val=self.force_subdir
+        self.force_subdir=False
+        fname=self.download_file_subdir(data_dir,'',fname_orig,url,
+                                        mhash)
+        self.force_subdir=force_subdir_val
+        return fname
+
 class hdf5_reader:
     """
-    This class does something.
+    Class to read an o2scl object from an HDF5 file.
     """
 
     list_of_dsets=[]
+    """
+    Internal storage for list of datasets
+    """
     search_type=''
+    """
+    Internal storage for o2scl type 
+    """
 
     def hdf5_is_object_type(self,name,obj):
         """
@@ -347,7 +371,7 @@ def parse_arguments(argv,verbose=0):
 
 def string_to_dict(s):
     """ 
-    Desc
+    Convert a string to a dictionary
     """
     # First split into keyword = value pairs
     arr=s.split(',')
@@ -362,7 +386,9 @@ def string_to_dict(s):
 
 class plotter:
     """ 
-    Desc
+    A plotting class
+
+    .. todo:: Needs more documentation.
     """
 
     h5r=hdf5_reader()
