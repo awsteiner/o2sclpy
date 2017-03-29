@@ -64,6 +64,11 @@ along with O2scl. If not, see &lt;<a class="reference external" href="http://www
 <dt id="o2sclpy.cloud_file">
 <em class="property">class </em><code class="descclassname">o2sclpy.</code><code class="descname">cloud_file</code><a class="headerlink" href="#o2sclpy.cloud_file" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
+<dt id="o2sclpy.cloud_file.download_file">
+<code class="descname">download_file</code><span class="sig-paren">(</span><em>data_dir</em>, <em>fname_orig</em>, <em>url</em>, <em>mhash</em><span class="sig-paren">)</span><a class="headerlink" href="#o2sclpy.cloud_file.download_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="o2sclpy.cloud_file.download_file_subdir">
 <code class="descname">download_file_subdir</code><span class="sig-paren">(</span><em>data_dir</em>, <em>subdir_orig</em>, <em>fname_orig</em>, <em>url</em>, <em>mhash</em><span class="sig-paren">)</span><a class="headerlink" href="#o2sclpy.cloud_file.download_file_subdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function attempts to find a file named &#8216;fname_orig&#8217; in
@@ -80,6 +85,16 @@ exception is thrown.</p>
 and should not be used without due care.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="o2sclpy.cloud_file.env_var">
+<code class="descname">env_var</code><em class="property"> = ''</em><a class="headerlink" href="#o2sclpy.cloud_file.env_var" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="o2sclpy.cloud_file.force_subdir">
+<code class="descname">force_subdir</code><em class="property"> = False</em><a class="headerlink" href="#o2sclpy.cloud_file.force_subdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="o2sclpy.cloud_file.md5">
 <code class="descname">md5</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#o2sclpy.cloud_file.md5" title="Permalink to this definition">¶</a></dt>
@@ -88,6 +103,21 @@ reads 4k bytes at a time and updates the hash for each
 read in order to prevent from having to read the entire
 file in memory at once.</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="o2sclpy.cloud_file.password">
+<code class="descname">password</code><em class="property"> = ''</em><a class="headerlink" href="#o2sclpy.cloud_file.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="o2sclpy.cloud_file.username">
+<code class="descname">username</code><em class="property"> = ''</em><a class="headerlink" href="#o2sclpy.cloud_file.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="o2sclpy.cloud_file.verbose">
+<code class="descname">verbose</code><em class="property"> = 1</em><a class="headerlink" href="#o2sclpy.cloud_file.verbose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -118,6 +148,16 @@ file in memory at once.</p>
 <dd><p>If object &#8216;obj&#8217; named &#8216;name&#8217; is of type &#8216;search_type&#8217;, then add
 that name to &#8216;list_of_dsets&#8217;</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="o2sclpy.hdf5_reader.list_of_dsets">
+<code class="descname">list_of_dsets</code><em class="property"> = []</em><a class="headerlink" href="#o2sclpy.hdf5_reader.list_of_dsets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="o2sclpy.hdf5_reader.search_type">
+<code class="descname">search_type</code><em class="property"> = ''</em><a class="headerlink" href="#o2sclpy.hdf5_reader.search_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

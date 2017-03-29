@@ -8,8 +8,10 @@ o2sclpy - Python extensions to O2scl
 .. automodule:: o2sclpy
 .. autoclass:: cloud_file
 	       :members:
+	       :undoc-members:
 .. autoclass:: hdf5_reader
 	       :members:
+	       :undoc-members:
 
 Indices and tables
 ==================
