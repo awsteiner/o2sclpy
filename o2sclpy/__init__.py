@@ -1,28 +1,11 @@
 """
-  -------------------------------------------------------------------
-
-  Copyright (C) 2006-2017, Andrew W. Steiner
-  
-  This file is part of O2scl.
-  
-  O2scl is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 3 of the License, or
-  (at your option) any later version.
-  
-  O2scl is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-  
-  You should have received a copy of the GNU General Public License
-  along with O2scl. If not, see <http://www.gnu.org/licenses/>.
-
-  -------------------------------------------------------------------
+   -------------------------------------------------------------------
+   Docstring for sphinx
+   -------------------------------------------------------------------
 """
 """
-  Todos:
-  - new 'version' command
+   Todos:
+   - new 'version' command
 """
 
 import getopt, sys, h5py, math, os, hashlib
@@ -35,9 +18,10 @@ import ctypes
 version='0.921'
 
 class cloud_file:
-    """ 
-    This class does what...
-    """
+""" 
+This class does what.
+Or maybe this works.
+"""
     
     force_subdir=False
     env_var=''
@@ -60,7 +44,8 @@ class cloud_file:
     
     def download_file(self,data_dir,fname_orig,url,mhash):
         """ 
-        Desc
+        Desc.
+        Desc2.
         """
         force_subdir_val=self.force_subdir
         self.force_subdir=False
@@ -1987,3 +1972,27 @@ class plotter:
             if self.verbose>2:
                 print('Going to next.')
         return
+
+"""
+   -------------------------------------------------------------------
+   
+   Copyright (C) 2006-2017, Andrew W. Steiner
+   
+   This file is part of O2scl.
+   
+   O2scl is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+   
+   O2scl is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with O2scl. If not, see <http://www.gnu.org/licenses/>.
+   
+   -------------------------------------------------------------------
+"""
+    
