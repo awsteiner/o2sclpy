@@ -1,11 +1,25 @@
+#  -------------------------------------------------------------------
+#  
+#  Copyright (C) 2006-2017, Andrew W. Steiner
+#  
+#  This file is part of O2scl.
+#  
+#  O2scl is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#  
+#  O2scl is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with O2scl. If not, see <http://www.gnu.org/licenses/>.
+#  
+#  -------------------------------------------------------------------
 """
-   -------------------------------------------------------------------
-   Docstring for sphinx
-   -------------------------------------------------------------------
-"""
-"""
-   Todos:
-   - new 'version' command
+Docstring for sphinx?
 """
 
 import getopt, sys, h5py, math, os, hashlib
@@ -17,11 +31,10 @@ import ctypes
 
 version='0.921'
 
-class cloud_file:
-""" 
-This class does what.
-Or maybe this works.
-"""
+class cloud_file():
+    """
+    This is documentation.
+    """
     
     force_subdir=False
     env_var=''
@@ -44,8 +57,7 @@ Or maybe this works.
     
     def download_file(self,data_dir,fname_orig,url,mhash):
         """ 
-        Desc.
-        Desc2.
+        This is a long sentence. Desc2.
         """
         force_subdir_val=self.force_subdir
         self.force_subdir=False
@@ -149,7 +161,7 @@ Or maybe this works.
 
 class hdf5_reader:
     """
-    This class 
+    This class does something.
     """
 
     list_of_dsets=[]

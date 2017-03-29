@@ -5,13 +5,12 @@ o2sclpy - Python extensions to O2scl
    :maxdepth: 2
    :caption: Contents:
 
+.. todo::
+   Needs more documentation
+	   
 .. automodule:: o2sclpy
-.. autoclass:: cloud_file
-	       :members:
-	       :undoc-members:
-.. autoclass:: hdf5_reader
-	       :members:
-	       :undoc-members:
+	:members:
+	:undoc-members:
 
 Indices and tables
 ==================
