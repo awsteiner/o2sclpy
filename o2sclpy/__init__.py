@@ -1782,7 +1782,8 @@ class plotter:
                       cmd_name=='insert-full' or cmd_name=='warranty' or
                       cmd_name=='calc' or cmd_name=='help' or
                       cmd_name=='nlines' or cmd_name=='to-hist' or
-                      cmd_name=='type' or cmd_name=='entry'):
+                      cmd_name=='type' or cmd_name=='entry' or
+                      cmd_name=='create3'):
                     
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')

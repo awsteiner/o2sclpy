@@ -1,0 +1,1 @@
+o2graph -create x 0 6.23 0.1 -function "sin(x)" y -preview -set xtitle "$ x$" -deriv x y yp -plot x y -plot x yp -show
