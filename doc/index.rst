@@ -65,9 +65,11 @@ Examples
 Internal structure
 ------------------
 
-The O\ :sub:`2`\ graph script works
-by creating an instance of the
-:py:class:`o2sclpy.o2graph_plotter` class.
+The O\ :sub:`2`\ graph script works by creating an instance of the
+:py:class:`o2sclpy.o2graph_plotter` class. This class works by calling
+the global functions documented at
+<https://isospin.roam.utk.edu/data/o2scl/html/o2scl_python_section.html>
+in the O\ :sub:`2`\ scl documentation.
       
 --------------------------------------------------------------
 	     

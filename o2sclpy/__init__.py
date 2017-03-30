@@ -407,6 +407,19 @@ class plot_base:
     :py:class:`o2sclpy.o2graph_plotter` .    
     """
 
+    axes=0
+    """ 
+    Axis object
+    """
+    fig=0
+    """ 
+    Figure object
+    """
+    canvas_flag=0
+    """
+    If 1, then the default plot canvas has been initiated
+    """
+
     # Quantities modified by set/get
     
     logx=0
@@ -478,7 +491,7 @@ class plot_base:
     List of filenames for multiplots
     """
 
-    def reds2(self):
+    def new_cmaps(self):
         """
         Construct a white to red colormap
         """
@@ -487,8 +500,6 @@ class plot_base:
                'blue': ((0.0,1.0,1.0),(1.0,0.0,0.0))}
         reds2=LinearSegmentedColormap('reds2',cdict)
         plot.register_cmap(cmap=reds2)
-
-    def jet2(self):
         """
         Construct a new version of the ``jet`` colormap
         """
@@ -504,8 +515,6 @@ class plot_base:
                         (0.8,0.0,0.0),(1.0,0.0,0.0))}
         jet2=LinearSegmentedColormap('jet2',cdict)
         plot.register_cmap(cmap=jet2)
-
-    def pastel2(self):
         """
         Construct a new version of the ``pastel`` colormap
         """
@@ -521,8 +530,6 @@ class plot_base:
                         (0.8,0.3,0.3),(1.0,0.3,0.3))}
         pastel2=LinearSegmentedColormap('pastel2',cdict)
         plot.register_cmap(cmap=pastel2)
-
-    def greens2(self):
         """
         Construct a white to green colormap
         """
@@ -531,8 +538,6 @@ class plot_base:
                'blue': ((0.0,1.0,1.0),(1.0,0.0,0.0))}
         greens2=LinearSegmentedColormap('greens2',cdict)
         plot.register_cmap(cmap=greens2)
-
-    def blues2(self):
         """
         Construct a white to blue colormap
         """
@@ -546,8 +551,6 @@ class plot_base:
         """
         Set the value of parameter named ``name`` to value ``value``
         """
-        if self.verbose>0:
-            print('Set',name,'to',value)
         if name=='logx':
             self.logx=int(value)
         elif name=='logy':
@@ -586,6 +589,10 @@ class plot_base:
             self.colbar=int(value)
         else:
             print('No variable named',name)
+            
+        if self.verbose>0:
+            print('Set',name,'to',value)
+            
         return
 
     def get(self,name):
@@ -689,9 +696,9 @@ class plot_base:
 
     def force_bytes(self,obj):
         """
-        In cases where we're unsure whether or not obj is
-        a string or bytes object, we ensure it's a bytes
-        object by converting if necessary.
+        In cases where we're unsure whether or not ``obj`` is a string or
+        bytes object, we ensure it's a bytes object by converting if
+        necessary.
         """
         if isinstance(obj,numpy.bytes_)==False and isinstance(obj,bytes)==False:
             return bytes(obj,'utf-8')
@@ -718,6 +725,44 @@ class plot_base:
                        fontsize=16,va='center',ha='center',**kwargs)
         return
 
+    def canvas(self):
+        """
+        Create a default figure and axis object with specified
+        titles and limits .
+        """
+        if self.verbose>2:
+            print('Canvas')
+        # Default o2mpl plot
+        (self.fig,self.axes)=default_plot()
+        # Plot limits
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+        # Titles
+        if self.xtitle!='':
+            plot.xlabel(self.xtitle,fontsize=16)
+        if self.ytitle!='':
+            plot.ylabel(self.ytitle,fontsize=16)
+        self.canvas_flag=1
+        return
+
+    def move_labels(self):
+        """
+        Move tick labels
+        """
+        for label in self.axes.get_xticklabels():
+            t=label.get_position()
+            t2=t[0],t[1]-0.01
+            label.set_position(t2)
+            label.set_fontsize(16)
+        for label in self.axes.get_yticklabels():
+            t=label.get_position()
+            t2=t[0]-0.01,t[1]
+            label.set_position(t2)
+            label.set_fontsize(16)
+        return
+
 class plotter(plot_base):
     """ 
     A plotting class
@@ -725,9 +770,6 @@ class plotter(plot_base):
 
     h5r=hdf5_reader()
     dset=0
-    axes=0
-    fig=0
-    canvas_flag=0
     dtype=''
 
     def contour_plot(self,level,**kwargs):
@@ -911,40 +953,6 @@ class plotter(plot_base):
         plot.hist2d(self.dset['data/'+colx],self.dset['data/'+coly],**kwargs)
         return
 
-    def canvas(self):
-        if self.verbose>2:
-            print('Canvas')
-        # Default o2mpl plot
-        (self.fig,self.axes)=default_plot()
-        # Plot limits
-        if self.xset==1:
-            plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
-            plot.ylim([self.ylo,self.yhi])
-        # Titles
-        if self.xtitle!='':
-            plot.xlabel(self.xtitle,fontsize=16)
-        if self.ytitle!='':
-            plot.ylabel(self.ytitle,fontsize=16)
-        self.canvas_flag=1
-        return
-
-    def move_labels(self):
-        """
-        Move tick labels
-        """
-        for label in self.axes.get_xticklabels():
-            t=label.get_position()
-            t2=t[0],t[1]-0.01
-            label.set_position(t2)
-            label.set_fontsize(16)
-        for label in self.axes.get_yticklabels():
-            t=label.get_position()
-            t2=t[0]-0.01,t[1]
-            label.set_position(t2)
-            label.set_fontsize(16)
-        return
-
     def read(self,filename):
         """
         Read first object of type ``table`` from file ``filename``
@@ -1059,59 +1067,9 @@ class o2graph_plotter(plot_base):
     """
     A plotting class for the o2graph script.
 
-    This class is not necessarily inteded to be instantiated by the 
+    This class is not necessarily intended to be instantiated by the 
     end user.
     """
-
-    axes=0
-    """ 
-    Axis object
-    """
-    fig=0
-    """ 
-    Figure object
-    """
-    canvas_flag=0
-    """
-    If 1, then the default plot canvas has been initiated
-    """
-
-    def canvas(self):
-        """
-        Create the plotting canvas
-        """
-        if self.verbose>2:
-            print('Canvas')
-        # Default o2mpl plot
-        (self.fig,self.axes)=default_plot()
-        # Plot limits
-        if self.xset==1:
-            plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
-            plot.ylim([self.ylo,self.yhi])
-        # Titles
-        if self.xtitle!='':
-            plot.xlabel(self.xtitle,fontsize=16)
-        if self.ytitle!='':
-            plot.ylabel(self.ytitle,fontsize=16)
-        self.canvas_flag=1
-        return
-
-    def move_labels(self):
-        """
-        Move tick labels
-        """
-        for label in self.axes.get_xticklabels():
-            t=label.get_position()
-            t2=t[0],t[1]-0.01
-            label.set_position(t2)
-            label.set_fontsize(16)
-        for label in self.axes.get_yticklabels():
-            t=label.get_position()
-            t2=t[0]-0.01,t[1]
-            label.set_position(t2)
-            label.set_fontsize(16)
-        return
 
     def set_wrapper(self,o2scl_hdf,amp,args):
         
@@ -2203,26 +2161,10 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process canvas.')
                     self.canvas()
-                elif cmd_name=='reds2':
+                elif cmd_name=='new-cmaps':
                     if self.verbose>2:
                         print('Process reds2.')
-                    self.reds2()
-                elif cmd_name=='blues2':
-                    if self.verbose>2:
-                        print('Process blues2.')
-                    self.blues2()
-                elif cmd_name=='greens2':
-                    if self.verbose>2:
-                        print('Process greens2.')
-                    self.greens2()
-                elif cmd_name=='jet2':
-                    if self.verbose>2:
-                        print('Process jet2.')
-                    self.jet2()
-                elif cmd_name=='pastel2':
-                    if self.verbose>2:
-                        print('Process pastel2.')
-                    self.pastel2()
+                    self.new_cmaps()
                 elif cmd_name=='backend':
                     # Do nothing because this will be handled separately
                     cmd_name2=cmd_name
