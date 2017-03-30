@@ -1,0 +1,87 @@
+o2graph: A data viewing and processing program for O2scl.
+
+List of command-line options:
+
+   -alias        Create a command alias.                                        
+-a -assign       Assign a constant., e.g. assign pi acos(-1)                    
+   -backend      Select the matplotlib backend to use.                          
+   -calc         Compute the value of a constant expression.                    
+   -canvas       Create a plotting canvas.                                      
+   -cat          Concatenate data from a second table object onto current table.
+   -commands     List all available commands.                                   
+   -contour-plot Create a contour plot.                                         
+   -contours     Create contour lines from a table3d or hist_2d object.         
+   -convert-unit Convert a column to a new unit.                                
+-c -create       Create a table from uniform grid.                              
+   -create3      Create a table3d object.                                       
+   -delete-col   Delete a column (table3d only).                                
+-d -delete-rows  Delete rows selected by a function.                            
+   -den-plot     Create a density plot.                                         
+-D -deriv        Derivative of a function defined by two columns (table3d only).
+   -deriv2       Second derivative (table3d only).                              
+   -entry        Get a single entry in a table.                                 
+   -errorbar     Plot the specified columns with errobars.                      
+   -exit         Exit (synonymous with 'quit').                                 
+   -filelist     List objects in a HDF5 file.                                   
+   -find-row     Find a row which maximizes a function (table3d only).          
+   -fit          Fit two columns to a function (experimental, table3d only).    
+-f -function     Create a new column or slice from a function.                  
+   -gen3-list    Read in a generic data file (table3d only).                    
+-g -generic      Read in a generic data file (table3d only).                    
+   -get          Get the value of a parameter.                                  
+   -get-conv     Get a unit conversion factor.                                  
+   -get-row      Get a row by index.                                            
+   -get-unit     Get the units for a specified column.                          
+-h -help         Show help information.                                         
+   -hist         Create a histogram plot.                                       
+   -hist2d       Create a 2-D histogram plot.                                   
+-N -index        Add a column containing the row numbers (table3d only).        
+   -insert       Interpolate a column/slice from another file.                  
+   -insert-full  Interpolate a table from another file (table3d only).          
+-I -integ        Integrate a function specified by two columns (table3d only).  
+-q -interactive  Load the interactive interface.                                
+-i -internal     Output in the internal HDF5 format.                            
+   -interp       Interpolate a number into a column or slice.                   
+   -license      Show license information.                                      
+   -line         Plot a line.                                                   
+-l -list         List the constants, column/slice names and other info.         
+   -max          Find the maximum value of a column or slice.                   
+   -min          Find the minimum value of a column or slice.                   
+   -move-labels  Move the labels.                                               
+   -myreds       Select a red/white gradient color map.                         
+   -nlines       Add 'nlines' as a constant to a table object.                  
+   -no-intro     Do not print introductory text.                                
+-o -output       Output the full object as text.                                
+   -plot         Plot the specified columns.                                    
+   -plot-files   Specify a list of files for 'plotm' and 'plot1m'.              
+   -plot1        Plot the specified column.                                     
+   -plot1m       Plot the specified column from multiple files.                 
+   -plotm        Plot the specified columns from multiple files.                
+-P -preview      Preview the current table.                                     
+   -quit         Quit (synonymous with 'exit').                                 
+-r -read         Read a table or table3d from a file.                           
+   -rename       Rename a column or slice.                                      
+   -reset-xlim   Reset the x-axis limits.                                       
+   -reset-ylim   Reset the y-axis limits.                                       
+   -run          Run a file containing a list of commands.                      
+   -save         Save the current plot in a file.                               
+-s -select       Select columns or slices for a new table.                      
+   -select-rows  Select rows for a new table (table3d only).                    
+   -set          Set the value of a parameter.                                  
+   -set-data     Set the entries of a column.                                   
+   -set-unit     Set the units for a specified column.                          
+   -show         Show the current plot.                                         
+   -show-units   Show the unit conversion table.                                
+   -slice        Construct a slice (table3d only).                              
+-S -sort         Sort the entire table by a column (table only).                
+   -stats        Show column statistics (table only).                           
+   -sum          Add data from a second table object to current table.          
+   -text         Plot text in the canvas coordinate system.                     
+   -to-hist      Convert a table to a histogram.                                
+   -ttext        Plot text in the transformed coordinate system.                
+   -type         Show current object type.                                      
+-v -version      Print version information.                                     
+   -warranty     Show warranty information.                                     
+   -xlimits      Set the x-axis limits.                                         
+   -ylimits      Set the y-axis limits.                                         
+
