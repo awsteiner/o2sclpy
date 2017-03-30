@@ -1,5 +1,5 @@
-O2sclpy
-=======
+O2sclpy: v0.921
+===============
 
 .. toctree::
    :maxdepth: 2
@@ -9,9 +9,13 @@ O\ :sub:`2`\ sclpy: A set of python classes for use with the
 O\ :sub:`2`\ scl C++ library (separately documented
 at <https://web.utk.edu/~asteine1/o2scl>)
 
+.. warning:: This python library is highly experimental and under heavy
+	     development.
+
 The main objects of interest are the :ref:`O2graph script`, and the
 classes :py:class:`o2sclpy.cloud_file`,
-:py:class:`o2sclpy.hdf5_reader`, and :py:class:`o2sclpy.plotter` .
+:py:class:`o2sclpy.hdf5_reader`, :py:class:`o2sclpy.o2graph_plotter`,
+and :py:class:`o2sclpy.plotter` .    
 
 --------------------------------------------------------------
 	     
@@ -47,6 +51,17 @@ commands from the ``acol`` executable in O\ :sub:`2`\ scl
 documented at
 <https://web.utk.edu/~asteine1/o2scl/html/acol_section.html>
 	     
+Examples
+--------
+
+.. include:: static/ex1.scr
+   :literal:
+.. image:: static/ex1.png
+   :width: 70%
+
+.. include:: static/ex2.scr
+   :literal:
+
 --------------------------------------------------------------
 	     
 O2sclpy classes
@@ -68,6 +83,13 @@ Class hdf5_reader
 	:members:
 	:undoc-members:
 
+Class o2graph_plotter
+---------------------
+	    
+.. autoclass:: o2graph_plotter
+	:members:
+	:undoc-members:
+
 Class plotter
 -------------
 	    
@@ -82,8 +104,8 @@ Other O2sclpy objects
 
 .. autofunction:: default_plot
 .. autofunction:: get_str_array
-.. autofunction:: parse_arguments
 .. autofunction:: string_to_dict
+.. autofunction:: parse_arguments
 .. autodata:: version		  
 
 --------------------------------------------------------------

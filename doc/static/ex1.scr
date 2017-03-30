@@ -1,1 +1,5 @@
-o2graph -create x 0 6.23 0.1 -function "sin(x)" y -preview -set xtitle "$ x$" -deriv x y yp -plot x y -plot x yp -show
+o2graph -create x 0 6.23 0.1 -function "(1+sin(x))/2" y \
+	-set xlo 0 -set xhi 6.23 -set xtitle "$ x$" -deriv x y yp \
+	-plot x y marker=.,color=blue \
+	-plot x yp lw=2,color=red -text 4 0.3 "$ f(x)$" \
+	-text 1 0.1 "$ f^{\prime}(x)$" -save ex1.png -show

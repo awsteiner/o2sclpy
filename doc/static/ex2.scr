@@ -1,1 +1,2 @@
-o2graph -create3 x 0 1 0.05 y 0 1 0.05 z "sin(x*6)*cos(y*6)" -list -den-plot z -show
+o2graph -create3 x 0 1 0.05 y 0 1 0.05 z "sin(x*6)*cos(y*6)" \
+	-den-plot z -list -contours 0.0 z -contour-plot -show
