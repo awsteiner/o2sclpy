@@ -14,7 +14,7 @@ at <https://web.utk.edu/~asteine1/o2scl>)
 
 The main objects of interest are the :ref:`O2graph script`, and the
 classes :py:class:`o2sclpy.cloud_file`,
-:py:class:`o2sclpy.hdf5_reader`, :py:class:`o2sclpy.o2graph_plotter`,
+:py:class:`o2sclpy.hdf5_reader`, and 
 and :py:class:`o2sclpy.plotter` .    
 
 --------------------------------------------------------------
@@ -62,6 +62,13 @@ Examples
 .. include:: static/ex2.scr
    :literal:
 
+Internal structure
+------------------
+
+The O\ :sub:`2`\ graph script works
+by creating an instance of the
+:py:class:`o2sclpy.o2graph_plotter` class.
+      
 --------------------------------------------------------------
 	     
 O2sclpy classes
@@ -83,13 +90,6 @@ Class hdf5_reader
 	:members:
 	:undoc-members:
 
-Class o2graph_plotter
----------------------
-	    
-.. autoclass:: o2graph_plotter
-	:members:
-	:undoc-members:
-
 Class plotter
 -------------
 	    
@@ -107,6 +107,25 @@ Other O2sclpy objects
 .. autofunction:: string_to_dict
 .. autofunction:: parse_arguments
 .. autodata:: version		  
+
+--------------------------------------------------------------
+
+Internal class
+==============
+
+Class plot_base
+---------------------
+ 
+.. autoclass:: plot_base
+	:members:
+	:undoc-members:
+
+Class o2graph_plotter
+---------------------
+ 
+.. autoclass:: o2graph_plotter
+	:members:
+	:undoc-members:
 
 --------------------------------------------------------------
 

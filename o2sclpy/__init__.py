@@ -282,7 +282,7 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     
 def get_str_array(dset):
     """
-    Extract a string array from O2scl HDF5 dataset dset as a list
+    Extract a string array from O2scl HDF5 dataset ``dset`` as a list
     """
     nw=dset['nw'][0]
     nc=dset['nc'][0]
@@ -401,24 +401,10 @@ def string_to_dict(s):
         
     return dct
 
-class o2graph_plotter:
-    """ 
-    A plotting class for o2graph
-
-    .. todo:: Needs more documentation.
+class plot_base:
     """
-
-    axes=0
-    """ 
-    Axis object
-    """
-    fig=0
-    """ 
-    Figure object
-    """
-    canvas_flag=0
-    """
-    If 1, then the default plot canvas has been initiated
+    A base class for plotting classes :py:class:`o2sclpy.plotter` and
+    :py:class:`o2sclpy.o2graph_plotter` .    
     """
 
     # Quantities modified by set/get
@@ -556,15 +542,86 @@ class o2graph_plotter:
         blues2=LinearSegmentedColormap('blues2',cdict)
         plot.register_cmap(cmap=blues2)
         
-    def line(self,x1,y1,x2,y2,**kwargs):
+    def set(self,name,value):
         """
-        Plot a line from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
+        Set the value of parameter named ``name`` to value ``value``
         """
-        if self.verbose>2:
-            print('Line',x1,y1,x2,y1)
-        if self.canvas_flag==0:
-            self.canvas()
-        plot.plot([x1,x2],[y1,y2],**kwargs)
+        if self.verbose>0:
+            print('Set',name,'to',value)
+        if name=='logx':
+            self.logx=int(value)
+        elif name=='logy':
+            self.logy=int(value)
+        elif name=='xtitle':
+            self.xtitle=value
+        elif name=='ytitle':
+            self.ytitle=value
+        elif name=='xlo':
+            self.xlo=float(value)
+            self.xset=1
+        elif name=='xhi':
+            self.xhi=float(value)
+            self.xset=1
+        elif name=='xset':
+            self.xset=int(value)
+        elif name=='ylo':
+            self.ylo=float(value)
+            self.yset=1
+        elif name=='yhi':
+            self.yhi=float(value)
+            self.yset=1
+        elif name=='yset':
+            self.yset=int(value)
+        elif name=='zlo':
+            self.zlo=float(value)
+            self.zset=1
+        elif name=='zhi':
+            self.zhi=float(value)
+            self.zset=1
+        elif name=='zset':
+            self.zset=int(value)
+        elif name=='verbose':
+            self.verbose=int(value)
+        elif name=='colbar':
+            self.colbar=int(value)
+        else:
+            print('No variable named',name)
+        return
+
+    def get(self,name):
+        """
+        Output the value of parameter named ``name``
+        """
+        if name=='colbar' or name=='':
+            print('The value of colbar is',self.colbar,'.')
+        if name=='logx' or name=='':
+            print('The value of logx is',self.logx,'.')
+        if name=='logy' or name=='':
+            print('The value of logy is',self.logy,'.')
+        if name=='verbose' or name=='':
+            print('The value of verbose is',self.verbose,'.')
+        if name=='xhi' or name=='':
+            print('The value of xhi is',self.xhi,'.')
+        if name=='xlo' or name=='':
+            print('The value of xlo is',self.xlo,'.')
+        if name=='xset' or name=='':
+            print('The value of xset is',self.xset,'.')
+        if name=='xtitle' or name=='':
+            print('The value of xtitle is',self.xtitle,'.')
+        if name=='yhi' or name=='':
+            print('The value of yhi is',self.yhi,'.')
+        if name=='ylo' or name=='':
+            print('The value of ylo is',self.ylo,'.')
+        if name=='yset' or name=='':
+            print('The value of yset is',self.yset,'.')
+        if name=='ytitle' or name=='':
+            print('The value of ytitle is',self.ytitle,'.')
+        if name=='zhi' or name=='':
+            print('The value of zhi is',self.zhi,'.')
+        if name=='zlo' or name=='':
+            print('The value of zlo is',self.zlo,'.')
+        if name=='zset' or name=='':
+            print('The value of zset is',self.zset,'.')
         return
 
     def reset_xlimits(self):
@@ -603,41 +660,15 @@ class o2graph_plotter:
             plot.ylim([ylo,yhi])
         return
 
-    def canvas(self):
+    def line(self,x1,y1,x2,y2,**kwargs):
         """
-        Create the plotting canvas
+        Plot a line from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
         """
         if self.verbose>2:
-            print('Canvas')
-        # Default o2mpl plot
-        (self.fig,self.axes)=default_plot()
-        # Plot limits
-        if self.xset==1:
-            plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
-            plot.ylim([self.ylo,self.yhi])
-        # Titles
-        if self.xtitle!='':
-            plot.xlabel(self.xtitle,fontsize=16)
-        if self.ytitle!='':
-            plot.ylabel(self.ytitle,fontsize=16)
-        self.canvas_flag=1
-        return
-
-    def move_labels(self):
-        """
-        Move tick labels
-        """
-        for label in self.axes.get_xticklabels():
-            t=label.get_position()
-            t2=t[0],t[1]-0.01
-            label.set_position(t2)
-            label.set_fontsize(16)
-        for label in self.axes.get_yticklabels():
-            t=label.get_position()
-            t2=t[0]-0.01,t[1]
-            label.set_position(t2)
-            label.set_fontsize(16)
+            print('Line',x1,y1,x2,y1)
+        if self.canvas_flag==0:
+            self.canvas()
+        plot.plot([x1,x2],[y1,y2],**kwargs)
         return
 
     def show(self):
@@ -687,50 +718,402 @@ class o2graph_plotter:
                        fontsize=16,va='center',ha='center',**kwargs)
         return
 
-    def set(self,name,value):
-        if self.verbose>0:
-            print('Set',name,'to',value)
-        if name=='logx':
-            self.logx=int(value)
-        elif name=='logy':
-            self.logy=int(value)
-        elif name=='xtitle':
-            self.xtitle=value
-        elif name=='ytitle':
-            self.ytitle=value
-        elif name=='xlo':
-            self.xlo=float(value)
-            self.xset=1
-        elif name=='xhi':
-            self.xhi=float(value)
-            self.xset=1
-        elif name=='xset':
-            self.xset=int(value)
-        elif name=='ylo':
-            self.ylo=float(value)
-            self.yset=1
-        elif name=='yhi':
-            self.yhi=float(value)
-            self.yset=1
-        elif name=='yset':
-            self.yset=int(value)
-        elif name=='zlo':
-            self.zlo=float(value)
-            self.zset=1
-        elif name=='zhi':
-            self.zhi=float(value)
-            self.zset=1
-        elif name=='zset':
-            self.zset=int(value)
-        elif name=='verbose':
-            self.verbose=int(value)
-        elif name=='colbar':
-            self.colbar=int(value)
-        else:
-            print('No variable named',name)
+class plotter(plot_base):
+    """ 
+    A plotting class
+    """
+
+    h5r=hdf5_reader()
+    dset=0
+    axes=0
+    fig=0
+    canvas_flag=0
+    dtype=''
+
+    def contour_plot(self,level,**kwargs):
+        if self.force_bytes(self.dtype)!=b'vector<contour_line>':
+            print('Wrong type',self.dtype,'for contour_plotx.')
+            return
+        if self.verbose>2:
+            print('contour_plot',level,kwargs)
+        if self.canvas_flag==0:
+            self.canvas()
+        n_lines=self.dset['n_lines'][0]
+        for i in range(0,n_lines):
+            line_level=self.dset['line_'+str(i)+'/level'][0]
+            if abs(level-line_level) < 1.0e-7:
+                if self.logx==1:
+                    if self.logy==1:
+                        plot.loglog(self.dset['line_'+str(i)+'/x'],
+                                    self.dset['line_'+str(i)+'/y'],**kwargs)
+                    else:
+                        plot.semilogx(self.dset['line_'+str(i)+'/x'],
+                                      self.dset['line_'+str(i)+'/y'],**kwargs)
+                else:
+                    if self.logy==1:
+                        plot.semilogy(self.dset['line_'+str(i)+'/x'],
+                                      self.dset['line_'+str(i)+'/y'],**kwargs)
+                    else:
+                        plot.plot(self.dset['line_'+str(i)+'/x'],
+                                  self.dset['line_'+str(i)+'/y'],**kwargs)
+        return
+ 
+    def plot(self,colx,coly,**kwargs):
+        
+        if self.force_bytes(self.dtype)==b'table':
+            if self.verbose>2:
+                print('plot',colx,coly,kwargs)
+            if self.canvas_flag==0:
+                self.canvas()
+            if self.logx==1:
+                if self.logy==1:
+                    plot.loglog(self.dset['data/'+colx],
+                                self.dset['data/'+coly],**kwargs)
+                else:
+                    plot.semilogx(self.dset['data/'+colx],
+                                  self.dset['data/'+coly],**kwargs)
+            else:
+                if self.logy==1:
+                    plot.semilogy(self.dset['data/'+colx],
+                                  self.dset['data/'+coly],**kwargs)
+                else:
+                    plot.plot(self.dset['data/'+colx],
+                              self.dset['data/'+coly],**kwargs)
+            if self.xset==1:
+                plot.xlim([self.xlo,self.xhi])
+            if self.yset==1:
+                plot.ylim([self.ylo,self.yhi])
+        elif self.force_bytes(self.dtype)==b'hist':
+            size=dset['size'][0]
+            bins=dset['bins']
+            weights=dset['weights']
+            rmode=dset['rmode'][0]
+            reps=bins[0:size-1]
+            for i in range(0,size):
+                reps[i]=(bins[i]+bins[i+1])/2
+            if self.logx==1:
+                if self.logy==1:
+                    plot.loglog(reps,weights,**kwargs)
+                else:
+                    plot.semilogx(reps,weights,**kwargs)
+            else:
+                if self.logy==1:
+                    plot.semilogy(reps,weights,**kwargs)
+                else:
+                    plot.plot(reps,weights,**kwargs)
+            if self.xset==1:
+                plot.xlim([self.xlo,self.xhi])
+            if self.yset==1:
+                plot.ylim([self.ylo,self.yhi])
+            return
         return
 
-    def set_intl(self,o2scl_hdf,amp,args):
+    def plot1(self,col,**kwargs):
+        if self.force_bytes(self.dtype)!=b'table':
+            print('Wrong type',self.dtype,'for plot1.')
+            return
+        if self.verbose>2:
+            print('plot1',col,kwargs)
+        if self.canvas_flag==0:
+            self.canvas()
+        tlist=range(1,len(self.dset['data/'+col])+1)
+        if self.logx==1:
+            if self.logy==1:
+                plot.loglog(tlist,self.dset['data/'+col],**kwargs)
+            else:
+                plot.semilogx(tlist,self.dset['data/'+col],**kwargs)
+        else:
+            if self.logy==1:
+                plot.semilogy(tlist,self.dset['data/'+col],**kwargs)
+            else:
+                plot.plot(tlist,self.dset['data/'+col],**kwargs)
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+        return
+
+    def plot1m(self,col,files,**kwargs):
+        if self.verbose>2:
+            print('plot1m',col,kwargs)
+        if self.canvas_flag==0:
+            self.canvas()
+        for i in range(0,len(files)):
+            self.dset=self.h5r.h5read_first_type(files[i],'table')
+            self.dtype='table'
+            tlist=range(1,len(self.dset['data/'+col])+1)
+            if self.logx==1:
+                if self.logy==1:
+                    plot.loglog(tlist,self.dset['data/'+col],**kwargs)
+                else:
+                    plot.semilogx(tlist,self.dset['data/'+col],**kwargs)
+            else:
+                if self.logy==1:
+                    plot.semilogy(tlist,self.dset['data/'+col],**kwargs)
+                else:
+                    plot.plot(tlist,self.dset['data/'+col],**kwargs)
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+        return
+    
+    def plotm(self,colx,coly,files,**kwargs):
+        if self.verbose>2:
+            print('plotm',colx,coly,files,kwargs)
+        if self.canvas_flag==0:
+            self.canvas()
+        for i in range(0,len(files)):
+            self.dset=self.h5r.h5read_first_type(files[i],'table')
+            self.dtype='table'
+            if self.logx==1:
+                if self.logy==1:
+                    plot.loglog(self.dset['data/'+colx],
+                                self.dset['data/'+coly],**kwargs)
+                else:
+                    plot.semilogx(self.dset['data/'+colx],
+                                  self.dset['data/'+coly],**kwargs)
+            else:
+                if self.logy==1:
+                    plot.semilogy(self.dset['data/'+colx],
+                                  self.dset['data/'+coly],**kwargs)
+                else:
+                    plot.plot(self.dset['data/'+colx],
+                              self.dset['data/'+coly],**kwargs)
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+        return
+    
+    def hist(self,col,**kwargs):
+        if self.verbose>2:
+            print('hist',kwargs)
+        if self.canvas_flag==0:
+            self.canvas()
+        for key in kwargs:
+            if key=='bins':
+                kwargs[key]=int(kwargs[key])
+        if self.force_bytes(self.dtype)==b'table':
+            plot.hist(self.dset['data/'+col],**kwargs)
+        else:
+            print('Wrong type',self.dtype,'for hist()')
+        return
+
+    def hist2d(self,colx,coly,**kwargs):
+        if self.verbose>2:
+            print('hist2d',colx,coly,kwargs)
+        if self.canvas_flag==0:
+            self.canvas()
+        for key in kwargs:
+            if key=='bins':
+                kwargs[key]=int(kwargs[key])
+        plot.hist2d(self.dset['data/'+colx],self.dset['data/'+coly],**kwargs)
+        return
+
+    def canvas(self):
+        if self.verbose>2:
+            print('Canvas')
+        # Default o2mpl plot
+        (self.fig,self.axes)=default_plot()
+        # Plot limits
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+        # Titles
+        if self.xtitle!='':
+            plot.xlabel(self.xtitle,fontsize=16)
+        if self.ytitle!='':
+            plot.ylabel(self.ytitle,fontsize=16)
+        self.canvas_flag=1
+        return
+
+    def move_labels(self):
+        """
+        Move tick labels
+        """
+        for label in self.axes.get_xticklabels():
+            t=label.get_position()
+            t2=t[0],t[1]-0.01
+            label.set_position(t2)
+            label.set_fontsize(16)
+        for label in self.axes.get_yticklabels():
+            t=label.get_position()
+            t2=t[0]-0.01,t[1]
+            label.set_position(t2)
+            label.set_fontsize(16)
+        return
+
+    def read(self,filename):
+        """
+        Read first object of type ``table`` from file ``filename``
+        """
+        if self.verbose>0:
+            print('Reading file',filename,'.')
+        self.dset=self.h5r.h5read_first_type(filename,'table')
+        self.dtype='table'
+        return
+
+    def read_type(self,filename,loc_type):
+        """
+        Read first object of type ``loc_type`` from file ``filename``
+        """
+        if self.verbose>0:
+            print('Reading object of type',loc_type,
+                  'in file',filename,'.')
+        self.dset=self.h5r.h5read_first_type(filename,loc_type)
+        self.dtype=loc_type
+        return
+
+    def read_name(self,filename,name):
+        """
+        Read object named ``name`` from file ``filename``
+        """
+        if self.verbose>0:
+            print('Reading object named',name,'in file',filename,'.')
+        atuple=self.h5r.h5read_name(filename,name)
+        self.dset=atuple[0]
+        self.dtype=atuple[1]
+        return
+
+    def list(self):
+        """
+        List the columns in a table object
+        """
+        if self.force_bytes(self.dtype)==b'table':
+            col_list=get_str_array(self.dset['col_names'])
+            if self.verbose>2:
+                print('-----------------------')
+            unit_list=[]
+            unit_flag=self.dset['unit_flag'][0]
+            print('unit_flag',unit_flag)
+            if self.verbose>2:
+                print('unit_flag:',unit_flag)
+            if unit_flag==1:
+                unit_list=get_str_array(self.dset['units'])
+                if self.verbose>2:
+                    print('-----------------------')
+                    print('unit_list:',unit_list)
+            print(len(col_list),'columns.')
+            for ix in range(0,len(col_list)):
+                if unit_flag:
+                    print(str(ix)+'. '+col_list[ix]+' ['+unit_list[ix]+']')
+                else:
+                    print(str(ix)+'. '+col_list[ix])
+            print(self.dset['nlines'][0],'lines.')
+            if self.verbose>2:
+                print('Done in list')
+        elif self.force_bytes(self.dtype)==b'table3d':
+            sl_list=get_str_array(self.dset['slice_names'])
+            print(len(sl_list),'slices.')
+            for ix in range(0,len(sl_list)):
+                print(str(ix)+'. '+sl_list[ix])
+            xgrid=self.dset['xval'].value
+            ygrid=self.dset['yval'].value
+            lxgrid=len(xgrid)
+            lygrid=len(ygrid)
+            print('X-grid start: '+str(xgrid[0])+' end: '+
+                  str(xgrid[lxgrid-1])+' size '+str(lxgrid))
+            print('Y-grid start: '+str(ygrid[0])+' end: '+
+                  str(ygrid[lygrid-1])+' size '+str(lygrid))
+        else:
+            print('Cannot list type',self.dtype)
+        return
+
+    def den_plot(self,slice_name,**kwargs):
+        """
+        Create a density plot
+        """
+        if self.force_bytes(self.dtype)==b'table3d':
+            name='data/'+slice_name
+            sl=self.dset[name].value
+            sl=sl.transpose()
+            xgrid=self.dset['xval'].value
+            ygrid=self.dset['yval'].value
+            if self.canvas_flag==0:
+                self.canvas()
+            if self.logx==1:
+                for i in range(0,len(xgrid)):
+                    xgrid[i]=math.log(xgrid[i],10)
+            if self.logy==1:
+                for i in range(0,len(ygrid)):
+                    ygrid[i]=math.log(ygrid[i],10)
+            lx=len(xgrid)
+            ly=len(ygrid)
+            plot.imshow(sl,interpolation='nearest',
+                        origin='lower',
+                        extent=[xgrid[0]-(xgrid[1]-xgrid[0])/2,
+                                xgrid[lx-1]+(xgrid[lx-1]-xgrid[lx-2])/2,
+                                ygrid[0]-(ygrid[1]-ygrid[0])/2,
+                                ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2],
+                        aspect='auto',**kwargs)
+            if self.colbar>0:
+                plot.colorbar()
+                
+        else:
+            print('Cannot density plot object of type',self.dtype)
+        return
+
+class o2graph_plotter(plot_base):
+    """
+    A plotting class for the o2graph script.
+
+    This class is not necessarily inteded to be instantiated by the 
+    end user.
+    """
+
+    axes=0
+    """ 
+    Axis object
+    """
+    fig=0
+    """ 
+    Figure object
+    """
+    canvas_flag=0
+    """
+    If 1, then the default plot canvas has been initiated
+    """
+
+    def canvas(self):
+        """
+        Create the plotting canvas
+        """
+        if self.verbose>2:
+            print('Canvas')
+        # Default o2mpl plot
+        (self.fig,self.axes)=default_plot()
+        # Plot limits
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+        # Titles
+        if self.xtitle!='':
+            plot.xlabel(self.xtitle,fontsize=16)
+        if self.ytitle!='':
+            plot.ylabel(self.ytitle,fontsize=16)
+        self.canvas_flag=1
+        return
+
+    def move_labels(self):
+        """
+        Move tick labels
+        """
+        for label in self.axes.get_xticklabels():
+            t=label.get_position()
+            t2=t[0],t[1]-0.01
+            label.set_position(t2)
+            label.set_fontsize(16)
+        for label in self.axes.get_yticklabels():
+            t=label.get_position()
+            t2=t[0]-0.01,t[1]
+            label.set_position(t2)
+            label.set_fontsize(16)
+        return
+
+    def set_wrapper(self,o2scl_hdf,amp,args):
         
         if (args[0]=='logx' or args[0]=='xtitle' or
             args[0]=='logy' or args[0]=='ytitle' or
@@ -759,15 +1142,15 @@ class o2graph_plotter:
             
         parse_fn(amp,len(args)+1,sizes,ccp)
 
-    def get_intl(self,o2scl_hdf,amp,args):
+    def get_wrapper(self,o2scl_hdf,amp,args):
         
-        if (argv[ix+1]=='logx' or argv[ix+1]=='xtitle' or
-            argv[ix+1]=='logy' or argv[ix+1]=='ytitle' or
-            argv[ix+1]=='xlo' or argv[ix+1]=='ylo' or
-            argv[ix+1]=='xset' or argv[ix+1]=='xhi' or
-            argv[ix+1]=='yhi' or argv[ix+1]=='yset' or
-            argv[ix+1]=='zlo' or argv[ix+1]=='zhi' or
-            argv[ix+1]=='zset' or argv[ix+1]=='colbar'):
+        if (args[0]=='logx' or args[0]=='xtitle' or
+            args[0]=='logy' or args[0]=='ytitle' or
+            args[0]=='xlo' or args[0]=='ylo' or
+            args[0]=='xset' or args[0]=='xhi' or
+            args[0]=='yhi' or args[0]=='yset' or
+            args[0]=='zlo' or args[0]=='zhi' or
+            args[0]=='zset' or args[0]=='colbar'):
             
             self.get(args[0])
                             
@@ -1576,7 +1959,7 @@ class o2graph_plotter:
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
                     else:
-                        self.set_intl(o2scl_hdf,amp,argv[ix+1:ix_next])
+                        self.set_wrapper(o2scl_hdf,amp,argv[ix+1:ix_next])
                         
                 elif cmd_name=='get':
                     
@@ -1586,7 +1969,7 @@ class o2graph_plotter:
                     if ix_next-ix<2:
                         self.get('No parameter specified to get.')
                     else:
-                        self.get_intl(o2scl_hdf,amp,argv[ix+1:ix_next])
+                        self.get_wrapper(o2scl_hdf,amp,argv[ix+1:ix_next])
 
                 elif cmd_name=='version':
                     
@@ -1850,567 +2233,4 @@ class o2graph_plotter:
             if self.verbose>2:
                 print('Going to next.')
         return
-
-class plotter:
-    """ 
-    A plotting class
-    """
-
-    h5r=hdf5_reader()
-    dset=0
-    axes=0
-    fig=0
-    canvas_flag=0
-    dtype=''
-
-    # Quantities modified by set/get
     
-    logx=0
-    logy=0
-    logz=0
-    xtitle=''
-    ytitle=''
-    xlo=0
-    xhi=0
-    xset=0
-    ylo=0
-    yhi=0
-    yset=0
-    zlo=0
-    zhi=0
-    zset=0
-    verbose=1
-    colbar=0
-    plotfiles=''
-
-    def reds2(self):
-        """
-        Construct a white to red colormap
-        """
-        cdict={'red': ((0.0,1.0,1.0),(1.0,1.0,1.0)),
-               'green': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
-               'blue': ((0.0,1.0,1.0),(1.0,0.0,0.0))}
-        reds2=LinearSegmentedColormap('reds2',cdict)
-        plot.register_cmap(cmap=reds2)
-
-    def jet2(self):
-        """
-        Construct a new version of the ``jet`` colormap
-        """
-        # white, blue, green, yellow, orange, red
-        cdict={'red': ((0.0,1.0,1.0),(0.2,0.0,0.0),
-                       (0.4,0.0,0.0),(0.6,1.0,1.0),
-                       (0.8,1.0,1.0),(1.0,1.0,1.0)),
-               'green': ((0.0,1.0,1.0),(0.2,0.0,0.0),
-                         (0.4,0.5,0.5),(0.6,1.0,1.0),
-                         (0.8,0.6,0.6),(1.0,0.0,0.0)),
-               'blue': ((0.0,1.0,1.0),(0.2,1.0,1.0),
-                        (0.4,0.0,0.0),(0.6,0.0,0.0),
-                        (0.8,0.0,0.0),(1.0,0.0,0.0))}
-        jet2=LinearSegmentedColormap('jet2',cdict)
-        plot.register_cmap(cmap=jet2)
-
-    def pastel2(self):
-        """
-        Construct a new version of the ``pastel`` colormap
-        """
-        # white, blue, green, yellow, orange, red
-        cdict={'red': ((0.0,1.0,1.0),(0.2,0.3,0.3),
-                       (0.4,0.3,0.3),(0.6,1.0,1.0),
-                       (0.8,1.0,1.0),(1.0,1.0,1.0)),
-               'green': ((0.0,1.0,1.0),(0.2,0.3,0.3),
-                         (0.4,0.5,0.5),(0.6,1.0,1.0),
-                         (0.8,0.6,0.6),(1.0,0.3,0.3)),
-               'blue': ((0.0,1.0,1.0),(0.2,1.0,1.0),
-                        (0.4,0.3,0.3),(0.6,0.3,0.3),
-                        (0.8,0.3,0.3),(1.0,0.3,0.3))}
-        pastel2=LinearSegmentedColormap('pastel2',cdict)
-        plot.register_cmap(cmap=pastel2)
-
-    def greens2(self):
-        """
-        Construct a white to green colormap
-        """
-        cdict={'red': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
-               'green': ((0.0,1.0,1.0),(1.0,1.0,1.0)),
-               'blue': ((0.0,1.0,1.0),(1.0,0.0,0.0))}
-        greens2=LinearSegmentedColormap('greens2',cdict)
-        plot.register_cmap(cmap=greens2)
-
-    def blues2(self):
-        """
-        Construct a white to blue colormap
-        """
-        cdict={'red': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
-               'green': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
-               'blue': ((0.0,1.0,1.0),(1.0,1.0,1.0))}
-        blues2=LinearSegmentedColormap('blues2',cdict)
-        plot.register_cmap(cmap=blues2)
-        
-    def contour_plot(self,level,**kwargs):
-        if self.force_bytes(self.dtype)!=b'vector<contour_line>':
-            print('Wrong type',self.dtype,'for contour_plotx.')
-            return
-        if self.verbose>2:
-            print('contour_plot',level,kwargs)
-        if self.canvas_flag==0:
-            self.canvas()
-        n_lines=self.dset['n_lines'][0]
-        for i in range(0,n_lines):
-            line_level=self.dset['line_'+str(i)+'/level'][0]
-            if abs(level-line_level) < 1.0e-7:
-                if self.logx==1:
-                    if self.logy==1:
-                        plot.loglog(self.dset['line_'+str(i)+'/x'],
-                                    self.dset['line_'+str(i)+'/y'],**kwargs)
-                    else:
-                        plot.semilogx(self.dset['line_'+str(i)+'/x'],
-                                      self.dset['line_'+str(i)+'/y'],**kwargs)
-                else:
-                    if self.logy==1:
-                        plot.semilogy(self.dset['line_'+str(i)+'/x'],
-                                      self.dset['line_'+str(i)+'/y'],**kwargs)
-                    else:
-                        plot.plot(self.dset['line_'+str(i)+'/x'],
-                                  self.dset['line_'+str(i)+'/y'],**kwargs)
-        return
- 
-    def plot(self,colx,coly,**kwargs):
-        
-        if self.force_bytes(self.dtype)==b'table':
-            if self.verbose>2:
-                print('plot',colx,coly,kwargs)
-            if self.canvas_flag==0:
-                self.canvas()
-            if self.logx==1:
-                if self.logy==1:
-                    plot.loglog(self.dset['data/'+colx],
-                                self.dset['data/'+coly],**kwargs)
-                else:
-                    plot.semilogx(self.dset['data/'+colx],
-                                  self.dset['data/'+coly],**kwargs)
-            else:
-                if self.logy==1:
-                    plot.semilogy(self.dset['data/'+colx],
-                                  self.dset['data/'+coly],**kwargs)
-                else:
-                    plot.plot(self.dset['data/'+colx],
-                              self.dset['data/'+coly],**kwargs)
-            if self.xset==1:
-                plot.xlim([self.xlo,self.xhi])
-            if self.yset==1:
-                plot.ylim([self.ylo,self.yhi])
-        elif self.force_bytes(self.dtype)==b'hist':
-            size=dset['size'][0]
-            bins=dset['bins']
-            weights=dset['weights']
-            rmode=dset['rmode'][0]
-            reps=bins[0:size-1]
-            for i in range(0,size):
-                reps[i]=(bins[i]+bins[i+1])/2
-            if self.logx==1:
-                if self.logy==1:
-                    plot.loglog(reps,weights,**kwargs)
-                else:
-                    plot.semilogx(reps,weights,**kwargs)
-            else:
-                if self.logy==1:
-                    plot.semilogy(reps,weights,**kwargs)
-                else:
-                    plot.plot(reps,weights,**kwargs)
-            if self.xset==1:
-                plot.xlim([self.xlo,self.xhi])
-            if self.yset==1:
-                plot.ylim([self.ylo,self.yhi])
-            return
-        return
-
-    def plot1(self,col,**kwargs):
-        if self.force_bytes(self.dtype)!=b'table':
-            print('Wrong type',self.dtype,'for plot1.')
-            return
-        if self.verbose>2:
-            print('plot1',col,kwargs)
-        if self.canvas_flag==0:
-            self.canvas()
-        tlist=range(1,len(self.dset['data/'+col])+1)
-        if self.logx==1:
-            if self.logy==1:
-                plot.loglog(tlist,self.dset['data/'+col],**kwargs)
-            else:
-                plot.semilogx(tlist,self.dset['data/'+col],**kwargs)
-        else:
-            if self.logy==1:
-                plot.semilogy(tlist,self.dset['data/'+col],**kwargs)
-            else:
-                plot.plot(tlist,self.dset['data/'+col],**kwargs)
-        if self.xset==1:
-            plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
-            plot.ylim([self.ylo,self.yhi])
-        return
-
-    def plot1m(self,col,files,**kwargs):
-        if self.verbose>2:
-            print('plot1m',col,kwargs)
-        if self.canvas_flag==0:
-            self.canvas()
-        for i in range(0,len(files)):
-            self.dset=self.h5r.h5read_first_type(files[i],'table')
-            self.dtype='table'
-            tlist=range(1,len(self.dset['data/'+col])+1)
-            if self.logx==1:
-                if self.logy==1:
-                    plot.loglog(tlist,self.dset['data/'+col],**kwargs)
-                else:
-                    plot.semilogx(tlist,self.dset['data/'+col],**kwargs)
-            else:
-                if self.logy==1:
-                    plot.semilogy(tlist,self.dset['data/'+col],**kwargs)
-                else:
-                    plot.plot(tlist,self.dset['data/'+col],**kwargs)
-        if self.xset==1:
-            plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
-            plot.ylim([self.ylo,self.yhi])
-        return
-    
-    def plotm(self,colx,coly,files,**kwargs):
-        if self.verbose>2:
-            print('plotm',colx,coly,files,kwargs)
-        if self.canvas_flag==0:
-            self.canvas()
-        for i in range(0,len(files)):
-            self.dset=self.h5r.h5read_first_type(files[i],'table')
-            self.dtype='table'
-            if self.logx==1:
-                if self.logy==1:
-                    plot.loglog(self.dset['data/'+colx],
-                                self.dset['data/'+coly],**kwargs)
-                else:
-                    plot.semilogx(self.dset['data/'+colx],
-                                  self.dset['data/'+coly],**kwargs)
-            else:
-                if self.logy==1:
-                    plot.semilogy(self.dset['data/'+colx],
-                                  self.dset['data/'+coly],**kwargs)
-                else:
-                    plot.plot(self.dset['data/'+colx],
-                              self.dset['data/'+coly],**kwargs)
-        if self.xset==1:
-            plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
-            plot.ylim([self.ylo,self.yhi])
-        return
-    
-    def hist(self,col,**kwargs):
-        if self.verbose>2:
-            print('hist',kwargs)
-        if self.canvas_flag==0:
-            self.canvas()
-        for key in kwargs:
-            if key=='bins':
-                kwargs[key]=int(kwargs[key])
-        if self.force_bytes(self.dtype)==b'table':
-            plot.hist(self.dset['data/'+col],**kwargs)
-        else:
-            print('Wrong type',self.dtype,'for hist()')
-        return
-
-    def hist2d(self,colx,coly,**kwargs):
-        if self.verbose>2:
-            print('hist2d',colx,coly,kwargs)
-        if self.canvas_flag==0:
-            self.canvas()
-        for key in kwargs:
-            if key=='bins':
-                kwargs[key]=int(kwargs[key])
-        plot.hist2d(self.dset['data/'+colx],self.dset['data/'+coly],**kwargs)
-        return
-
-    def line(self,x1,y1,x2,y2,**kwargs):
-        if self.verbose>2:
-            print('Line',x1,y1,x2,y1)
-        if self.canvas_flag==0:
-            self.canvas()
-        plot.plot([x1,x2],[y1,y2],**kwargs)
-        return
-
-    def reset_xlimits(self):
-        self.xset=0
-        return
-
-    def xlimits(self,xlo,xhi):
-        self.xlo=xlo
-        self.xhi=xhi
-        self.xset=1
-        if self.canvas_flag==1:
-            plot.xlim([xlo,xhi])
-        return
-
-    def reset_ylimits(self):
-        self.yset=0
-        return
-
-    def ylimits(self,ylo,yhi):
-        self.ylo=ylo
-        self.yhi=yhi
-        self.yset=1
-        if self.canvas_flag==1:
-            plot.ylim([ylo,yhi])
-        return
-
-    def canvas(self):
-        if self.verbose>2:
-            print('Canvas')
-        # Default o2mpl plot
-        (self.fig,self.axes)=default_plot()
-        # Plot limits
-        if self.xset==1:
-            plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
-            plot.ylim([self.ylo,self.yhi])
-        # Titles
-        if self.xtitle!='':
-            plot.xlabel(self.xtitle,fontsize=16)
-        if self.ytitle!='':
-            plot.ylabel(self.ytitle,fontsize=16)
-        self.canvas_flag=1
-        return
-
-    def move_labels(self):
-        """
-        Move tick labels
-        """
-        for label in self.axes.get_xticklabels():
-            t=label.get_position()
-            t2=t[0],t[1]-0.01
-            label.set_position(t2)
-            label.set_fontsize(16)
-        for label in self.axes.get_yticklabels():
-            t=label.get_position()
-            t2=t[0]-0.01,t[1]
-            label.set_position(t2)
-            label.set_fontsize(16)
-        return
-
-    def show(self):
-        """
-        Call the ``matplotlib`` show function.
-        """
-        plot.show()
-        return
-
-    def save(self,filename):
-        """
-        Save plot to file named ``filename``
-        """
-        if self.verbose>0:
-            print('Saving as',filename,'.')
-        plot.savefig(filename)
-        return
-
-    def read(self,filename):
-        """
-        Read first object of type ``table`` from file ``filename``
-        """
-        if self.verbose>0:
-            print('Reading file',filename,'.')
-        self.dset=self.h5r.h5read_first_type(filename,'table')
-        self.dtype='table'
-        return
-
-    def read_type(self,filename,loc_type):
-        """
-        Read first object of type ``loc_type`` from file ``filename``
-        """
-        if self.verbose>0:
-            print('Reading object of type',loc_type,
-                  'in file',filename,'.')
-        self.dset=self.h5r.h5read_first_type(filename,loc_type)
-        self.dtype=loc_type
-        return
-
-    def read_name(self,filename,name):
-        """
-        Read object named ``name`` from file ``filename``
-        """
-        if self.verbose>0:
-            print('Reading object named',name,'in file',filename,'.')
-        atuple=self.h5r.h5read_name(filename,name)
-        self.dset=atuple[0]
-        self.dtype=atuple[1]
-        return
-
-    def force_bytes(self,obj):
-        """
-        In cases where we're unsure whether or not obj is
-        a string or bytes object, we ensure it's a bytes
-        object by converting if necessary.
-        """
-        if isinstance(obj,numpy.bytes_)==False and isinstance(obj,bytes)==False:
-            return bytes(obj,'utf-8')
-        return obj
-    
-    def list(self):
-        if self.force_bytes(self.dtype)==b'table':
-            col_list=get_str_array(self.dset['col_names'])
-            if self.verbose>2:
-                print('-----------------------')
-            unit_list=[]
-            unit_flag=self.dset['unit_flag'][0]
-            print('unit_flag',unit_flag)
-            if self.verbose>2:
-                print('unit_flag:',unit_flag)
-            if unit_flag==1:
-                unit_list=get_str_array(self.dset['units'])
-                if self.verbose>2:
-                    print('-----------------------')
-                    print('unit_list:',unit_list)
-            print(len(col_list),'columns.')
-            for ix in range(0,len(col_list)):
-                if unit_flag:
-                    print(str(ix)+'. '+col_list[ix]+' ['+unit_list[ix]+']')
-                else:
-                    print(str(ix)+'. '+col_list[ix])
-            print(self.dset['nlines'][0],'lines.')
-            if self.verbose>2:
-                print('Done in list')
-        elif self.force_bytes(self.dtype)==b'table3d':
-            sl_list=get_str_array(self.dset['slice_names'])
-            print(len(sl_list),'slices.')
-            for ix in range(0,len(sl_list)):
-                print(str(ix)+'. '+sl_list[ix])
-            xgrid=self.dset['xval'].value
-            ygrid=self.dset['yval'].value
-            lxgrid=len(xgrid)
-            lygrid=len(ygrid)
-            print('X-grid start: '+str(xgrid[0])+' end: '+
-                  str(xgrid[lxgrid-1])+' size '+str(lxgrid))
-            print('Y-grid start: '+str(ygrid[0])+' end: '+
-                  str(ygrid[lygrid-1])+' size '+str(lygrid))
-        else:
-            print('Cannot list type',self.dtype)
-        return
-
-    def den_plot(self,slice_name,**kwargs):
-        if self.force_bytes(self.dtype)==b'table3d':
-            name='data/'+slice_name
-            sl=self.dset[name].value
-            sl=sl.transpose()
-            xgrid=self.dset['xval'].value
-            ygrid=self.dset['yval'].value
-            if self.canvas_flag==0:
-                self.canvas()
-            if self.logx==1:
-                for i in range(0,len(xgrid)):
-                    xgrid[i]=math.log(xgrid[i],10)
-            if self.logy==1:
-                for i in range(0,len(ygrid)):
-                    ygrid[i]=math.log(ygrid[i],10)
-            lx=len(xgrid)
-            ly=len(ygrid)
-            plot.imshow(sl,interpolation='nearest',
-                        origin='lower',
-                        extent=[xgrid[0]-(xgrid[1]-xgrid[0])/2,
-                                xgrid[lx-1]+(xgrid[lx-1]-xgrid[lx-2])/2,
-                                ygrid[0]-(ygrid[1]-ygrid[0])/2,
-                                ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2],
-                        aspect='auto',**kwargs)
-            if self.colbar>0:
-                plot.colorbar()
-                
-        else:
-            print('Cannot density plot object of type',self.dtype)
-        return
-
-    def set(self,name,value):
-        if self.verbose>0:
-            print('Set',name,'to',value)
-        if name=='logx':
-            self.logx=int(value)
-        elif name=='logy':
-            self.logy=int(value)
-        elif name=='xtitle':
-            self.xtitle=value
-        elif name=='ytitle':
-            self.ytitle=value
-        elif name=='xlo':
-            self.xlo=float(value)
-            self.xset=1
-        elif name=='xhi':
-            self.xhi=float(value)
-            self.xset=1
-        elif name=='xset':
-            self.xset=int(value)
-        elif name=='ylo':
-            self.ylo=float(value)
-            self.yset=1
-        elif name=='yhi':
-            self.yhi=float(value)
-            self.yset=1
-        elif name=='yset':
-            self.yset=int(value)
-        elif name=='zlo':
-            self.zlo=float(value)
-            self.zset=1
-        elif name=='zhi':
-            self.zhi=float(value)
-            self.zset=1
-        elif name=='zset':
-            self.zset=int(value)
-        elif name=='verbose':
-            self.verbose=int(value)
-        elif name=='colbar':
-            self.colbar=int(value)
-        else:
-            print('No variable named',name)
-        return
-
-    def ttext(self,tx,ty,str,**kwargs):
-        if self.canvas_flag==0:
-            self.canvas()
-        self.axes.text(tx,ty,str,transform=self.axes.transAxes,
-                       fontsize=16,va='center',ha='center',
-                       **kwargs)
-        return
-
-    def text(self,tx,ty,str,**kwargs):
-        if self.canvas_flag==0:
-            self.canvas()
-        self.axes.text(tx,ty,str,
-                       fontsize=16,va='center',ha='center',**kwargs)
-        return
-
-    def get(self,name):
-        if name=='colbar' or name=='':
-            print('The value of colbar is',self.colbar,'.')
-        if name=='logx' or name=='':
-            print('The value of logx is',self.logx,'.')
-        if name=='logy' or name=='':
-            print('The value of logy is',self.logy,'.')
-        if name=='verbose' or name=='':
-            print('The value of verbose is',self.verbose,'.')
-        if name=='xhi' or name=='':
-            print('The value of xhi is',self.xhi,'.')
-        if name=='xlo' or name=='':
-            print('The value of xlo is',self.xlo,'.')
-        if name=='xset' or name=='':
-            print('The value of xset is',self.xset,'.')
-        if name=='xtitle' or name=='':
-            print('The value of xtitle is',self.xtitle,'.')
-        if name=='yhi' or name=='':
-            print('The value of yhi is',self.yhi,'.')
-        if name=='ylo' or name=='':
-            print('The value of ylo is',self.ylo,'.')
-        if name=='yset' or name=='':
-            print('The value of yset is',self.yset,'.')
-        if name=='ytitle' or name=='':
-            print('The value of ytitle is',self.ytitle,'.')
-        if name=='zhi' or name=='':
-            print('The value of zhi is',self.zhi,'.')
-        if name=='zlo' or name=='':
-            print('The value of zlo is',self.zlo,'.')
-        if name=='zset' or name=='':
-            print('The value of zset is',self.zset,'.')
-        return
