@@ -20,4 +20,4 @@ help:
 	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 prerelease-sync-doc:
-	cp -r build/html $(HOME)/data/o2sclpy
+	cp -r build/html/* $(HOME)/data/o2sclpy
