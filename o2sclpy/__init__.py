@@ -242,7 +242,6 @@ class hdf5_reader:
         str='No object of type '+loc_type+' named '+name+' in file '+fname+'.'
         raise RuntimeError(str)
         return
-    
 
 # This is probably best replaced by get_str_array() below
 #
@@ -375,7 +374,8 @@ def parse_arguments(argv,verbose=0):
 
 def string_to_dict(s):
     """ 
-    Convert a string to a dictionary
+    Convert a string to a dictionary, with extra processing
+    for some matplotlib keyword arguments.
     """
     # First split into keyword = value pairs
     arr=s.split(',')
@@ -493,17 +493,17 @@ class plot_base:
 
     def new_cmaps(self):
         """
-        Construct a white to red colormap
+        Add a few new colormaps
         """
+        # A white to red colormap
         cdict={'red': ((0.0,1.0,1.0),(1.0,1.0,1.0)),
                'green': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
                'blue': ((0.0,1.0,1.0),(1.0,0.0,0.0))}
         reds2=LinearSegmentedColormap('reds2',cdict)
         plot.register_cmap(cmap=reds2)
-        """
-        Construct a new version of the ``jet`` colormap
-        """
-        # white, blue, green, yellow, orange, red
+        # A new version of the ``jet`` colormap which starts with
+        # white instead of blue. In order, the index colors are white,
+        # blue, green, yellow, orange, and red
         cdict={'red': ((0.0,1.0,1.0),(0.2,0.0,0.0),
                        (0.4,0.0,0.0),(0.6,1.0,1.0),
                        (0.8,1.0,1.0),(1.0,1.0,1.0)),
@@ -515,10 +515,9 @@ class plot_base:
                         (0.8,0.0,0.0),(1.0,0.0,0.0))}
         jet2=LinearSegmentedColormap('jet2',cdict)
         plot.register_cmap(cmap=jet2)
-        """
-        Construct a new version of the ``pastel`` colormap
-        """
-        # white, blue, green, yellow, orange, red
+        # A new version of the ``pastel`` colormap which starts with
+        # white instead of blue. In order, the index colors are white,
+        # blue, green, yellow, orange, and red
         cdict={'red': ((0.0,1.0,1.0),(0.2,0.3,0.3),
                        (0.4,0.3,0.3),(0.6,1.0,1.0),
                        (0.8,1.0,1.0),(1.0,1.0,1.0)),
@@ -530,17 +529,13 @@ class plot_base:
                         (0.8,0.3,0.3),(1.0,0.3,0.3))}
         pastel2=LinearSegmentedColormap('pastel2',cdict)
         plot.register_cmap(cmap=pastel2)
-        """
-        Construct a white to green colormap
-        """
+        # A white to green colormap
         cdict={'red': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
                'green': ((0.0,1.0,1.0),(1.0,1.0,1.0)),
                'blue': ((0.0,1.0,1.0),(1.0,0.0,0.0))}
         greens2=LinearSegmentedColormap('greens2',cdict)
         plot.register_cmap(cmap=greens2)
-        """
-        Construct a white to blue colormap
-        """
+        # A white to blue colormap
         cdict={'red': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
                'green': ((0.0,1.0,1.0),(1.0,0.0,0.0)),
                'blue': ((0.0,1.0,1.0),(1.0,1.0,1.0))}
@@ -560,26 +555,44 @@ class plot_base:
         elif name=='ytitle':
             self.ytitle=value
         elif name=='xlo':
-            self.xlo=float(value)
+            if value[0]=='(':
+                self.xlo=float(eval(value))
+            else:
+                self.xlo=float(value)
             self.xset=1
         elif name=='xhi':
-            self.xhi=float(value)
+            if value[0]=='(':
+                self.xhi=float(eval(value))
+            else:
+                self.xhi=float(value)
             self.xset=1
         elif name=='xset':
             self.xset=int(value)
         elif name=='ylo':
-            self.ylo=float(value)
+            if value[0]=='(':
+                self.ylo=float(eval(value))
+            else:
+                self.ylo=float(value)
             self.yset=1
         elif name=='yhi':
-            self.yhi=float(value)
+            if value[0]=='(':
+                self.yhi=float(eval(value))
+            else:
+                self.yhi=float(value)
             self.yset=1
         elif name=='yset':
             self.yset=int(value)
         elif name=='zlo':
-            self.zlo=float(value)
+            if value[0]=='(':
+                self.zlo=float(eval(value))
+            else:
+                self.zlo=float(value)
             self.zset=1
         elif name=='zhi':
-            self.zhi=float(value)
+            if value[0]=='(':
+                self.zhi=float(eval(value))
+            else:
+                self.zhi=float(value)
             self.zset=1
         elif name=='zset':
             self.zset=int(value)
@@ -1960,7 +1973,13 @@ class o2graph_plotter(plot_base):
                       cmd_name=='calc' or cmd_name=='help' or
                       cmd_name=='nlines' or cmd_name=='to-hist' or
                       cmd_name=='type' or cmd_name=='entry' or
-                      cmd_name=='create3'):
+                      cmd_name=='create3' or cmd_name=='h' or
+                      cmd_name=='a' or cmd_name=='c' or cmd_name=='d' or
+                      cmd_name=='D' or cmd_name=='f' or cmd_name=='g' or
+                      cmd_name=='N' or cmd_name=='I' or cmd_name=='q' or
+                      cmd_name=='i' or cmd_name=='l' or cmd_name=='o' or
+                      cmd_name=='P' or cmd_name=='r' or cmd_name=='s' or
+                      cmd_name=='S' or cmd_name=='v'):
                     
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')
@@ -2165,10 +2184,8 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process reds2.')
                     self.new_cmaps()
-                elif cmd_name=='backend':
-                    # Do nothing because this will be handled separately
-                    cmd_name2=cmd_name
-                else:
+                elif (cmd_name!='backend' and cmd_name!='o2scl-cpplib' and
+                    cmd_name!='o2scl-libdir'):
                     print('No option named',cmd_name)
                 # Increment to the next option
                 ix=ix_next
