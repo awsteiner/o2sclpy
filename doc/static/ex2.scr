@@ -2,6 +2,7 @@
 # with two independent variables.
 #
 o2graph -create3 x 0 1 0.05 y "(-1)" 0 0.05 z "sin(x*6)*cos(y*6)" \
+	-set xtitle "$ \phi$" -set ytitle "$ \eta$" \
 	-new-cmaps -den-plot z cmap=jet2 -contours 0.2 z \
-	-type -list -preview -save ex2.png -show 
+	-plot lw=2,color=black -save ex2.png -show 
 	

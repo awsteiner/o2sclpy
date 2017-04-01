@@ -68,6 +68,9 @@ Examples
 
 .. include:: static/ex2.scr
    :literal:
+.. image:: static/ex2.png
+   :width: 70%
+
 
 Internal structure
 ------------------
