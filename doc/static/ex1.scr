@@ -1,5 +1,14 @@
-o2graph -create x 0 6.23 0.1 -function "(1+sin(x))/2" y \
-	-set xlo 0 -set xhi 6.23 -set xtitle "$ x$" -deriv x y yp \
-	-plot x y marker=.,color=blue \
-	-plot x yp lw=2,color=red -text 4 0.3 "$ f(x)$" \
-	-text 1 0.1 "$ f^{\prime}(x)$" -save ex1.png -show
+# This example creates a simple plot with one independent variable.
+# The 'create' command creates an o2scl table object, 'function'
+# creates a new column from a function, and 'deriv' creates a new
+# column using interpolation to obtain the derivative. The command
+# 'output' creates a HDF5 file which stores the full table. Quotes and
+# parentheses are used to avoid confusion between negative values and
+# commands. Also, in LaTeX strings, and extra space is placed after
+# some $'s to avoid confusion with shell variables.
+#
+o2graph -create x "(-acos(-1))" "acos(-1)" 0.1 -function "(1+sin(x))/2" y \
+	-set xlo "(-3.14)" -set xhi 3.14 -set xtitle "$ x$" -deriv x y yp \
+	-preview 20 -internal ex1.o2 -plot x y marker=.,color=blue \
+	-plot x yp lw=2,color=red -text 0.5 0.95 "$ f(x)$" \
+	-text 1 0.05 "$ f^{\prime}(x)$" -save ex1.png -show

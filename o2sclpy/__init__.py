@@ -37,11 +37,12 @@ class cloud_file:
     """
     A class to manage downloading files from the internet.
 
-    .. warning:: This class has several potential security issues 
-                 and should not be used without due care.
+    .. warning:: This class has several potential security issues
+                 (even if the md5 sum is verified) and should not be
+                 used without due care.
     """
     
-    force_subdir=False
+    force_subdir=True
     """
     If true, force the same subdirectory structure
     """
@@ -49,19 +50,18 @@ class cloud_file:
     """
     The environment variable which specifies the data directory
     """
-    username=''
-    """
-    The HTTP username
-    """
-    password=''
-    """
-    The HTTP password
-    """
     verbose=1
     """
     The verbosity parameter
     """
-    
+
+    # These are commented out until the code is rewritten to
+    # allow for them
+    #username=''
+    #The HTTP username
+    #password=''
+    #The HTTP password
+
     def md5(fname):
         """
         Compute the md5 hash of the specified file. This function
@@ -76,18 +76,41 @@ class cloud_file:
         return hash_md5.hexdigest()
     
     def download_file_subdir(self,data_dir,subdir_orig,fname_orig,url,
-                             mhash):
+                             md5sum):
         """
-        This function attempts to find a file named ``fname_orig`` in
-        subdirectory ``subdir_orig`` of the data directory
-        ``data_dir``. If ``data_dir`` is empty, it attempts to set it
-        equal to the value of the environment variable ``env_var``. If
-        that environment variable is not present, the user is prompted
-        for the correct data directory. If the file is not found, then
-        this function uses ``urllib.request.urlretrieve()``
-        to download the file from ``url``. If this process was
-        successful at finding or downloading the file, then the full
-        filename is returned. Otherwise, an exception is thrown.
+        This function proceeds in the following way:
+
+        First, if ``data_dir`` is empty, it attempts to set it
+        equal to the value of the environment variable
+        ``env_var``. If that environment variable is not present, the
+        user is prompted for the correct data directory. If 
+        at this point ``data_dir`` is still empty, then 
+        a ``ValueError`` exception is thrown.
+
+        Next, if ``subdir_orig`` is not empty and 
+        :py:func:`cloud_file.force_subdir` is ``True``, then 
+        the function tries to find the requested subdirectory.
+        If it is not found, then ``mkdir -p`` is used to create
+        the subdirectory. If this doesn't work, then a
+        ``FileNotFoundError`` exception is thrown.
+
+        The function then looks for the requested file in the
+        associated directory (or subdirectory). If the file is found
+        and ``md5sum`` is not empty, then it compares it to the MD5
+        checksum of the file.
+
+        If the file is not found or if the checksum was specified
+        and didn't match, then this function prompts the user
+        to proceed before using
+        ``urllib.request.urlretrieve()`` to download the file from
+        ``url``. Afterwards, the MD5 checksum is checked again. 
+        If the file cannot be found or if the checksum doesn't
+        match, a ``ConnectionError`` exception is thrown.
+        Otherwise, the function was successful, and the full filename 
+        (including subdirectory if applicable) is returned.
+
+        This function works similarly to the C++ O\ :sub:`2`\ scl
+        function ``o2scl::cloud_file::get_file_hash_subdir()``.
         """
         # First obtain the data directory
         method=''
@@ -117,7 +140,7 @@ class cloud_file:
         # Now test for the existence of the subdirectory and create it if
         # necessary
         subdir=''
-        if self.force_subdir==True:
+        if self.force_subdir==True and subdir_orig!='':
             subdir=data_dir+'/'+subdir_orig
             if os.path.isdir(subdir)==False:
                 if verbose>0:
@@ -133,13 +156,17 @@ class cloud_file:
 
         # The local filename
         fname=subdir+'/'+fname_orig
+
+        # Check the hash
         hash_match=False
-        if os.path.isfile(fname)==True:
+        if md5sum=='':
+            hash_match=True
+        elif os.path.isfile(fname)==True:
             mhash2=mda5(fname)
-            if mhash==mhash2:
+            if md5sum==mhash2:
                 hash_match=True
             elif verbose>0:
-                print('Hash of file',fname,'did not match',mhash)
+                print('Hash of file',fname,'did not match',md5sum)
         elif verbose>0:
             print('Could not find file',fname)
             
@@ -155,7 +182,7 @@ class cloud_file:
                 ret=0
             if ret==0:
                 mhash2=mda5(fname)
-                if mhash!=mhash2:
+                if md5sum!=mhash2:
                     raise ConnectionError('Downloaded file but '+
                                           'has does not match.')
             if ret!=0:
@@ -164,16 +191,16 @@ class cloud_file:
         # Return the final filename
         return fname
 
-    def download_file(self,data_dir,fname_orig,url,mhash):
+    def download_file(self,data_dir,fname_orig,url,md5sum):
         """
         This function is similar to
         :py:class:`o2sclpy.cloud_file.download_file_subdir()` except
-        that any subdirectory structure is ignored.
+        that no subdirectory structure is used.
         """
         force_subdir_val=self.force_subdir
         self.force_subdir=False
         fname=self.download_file_subdir(data_dir,'',fname_orig,url,
-                                        mhash)
+                                        md5sum)
         self.force_subdir=force_subdir_val
         return fname
 
@@ -185,17 +212,18 @@ class hdf5_reader:
 
     list_of_dsets=[]
     """
-    Internal storage for list of datasets
+    Data set list used by :py:func`cloud_file.hdf5_is_object_type`.
     """
     search_type=''
     """
-    Internal storage for o2scl type 
+    O2scl type used by :py:func`cloud_file.hdf5_is_object_type`.
     """
 
     def hdf5_is_object_type(self,name,obj):
         """
-        If object 'obj' named 'name' is of type 'search_type', then add
-        that name to 'list_of_dsets'
+        This is an internal function not intended for use by the end-user.
+        If object ``obj`` named ``name`` is of type 'search_type',
+        then this function adds that name to 'list_of_dsets'
         """
         # Convert search_type to a bytes object
         search_type_bytes=bytes(self.search_type,'utf-8')
@@ -208,7 +236,7 @@ class hdf5_reader:
 
     def h5read_first_type(self,fname,loc_type):
         """
-        Read the first object of type 'loc_type' from file named 'fname'
+        Read the first object of type ``loc_type`` from file named ``fname``
         """
         del self.list_of_dsets[:]
         self.search_type=loc_type
@@ -221,7 +249,7 @@ class hdf5_reader:
 
     def h5read_name(self,fname,name):
         """
-        Read object named 'name' from file named 'fname'
+        Read object named ``name`` from file named ``fname``
         """
         file=h5py.File(fname,'r')
         obj=file[name]
@@ -231,7 +259,8 @@ class hdf5_reader:
     
     def h5read_type_named(self,fname,loc_type,name):
         """
-        Read object of type 'loc_type' named 'name' from file named 'fname'
+        Read object of type ``loc_type`` named ``name`` from file 
+        named ``fname``
         """
         del self.list_of_dsets[:]
         self.search_type=loc_type
@@ -243,7 +272,7 @@ class hdf5_reader:
         raise RuntimeError(str)
         return
 
-# This is probably best replaced by get_str_array() below
+# This function is probably best replaced by get_str_array() below
 #
 # def parse_col_names(dset):
 #     nc=dset['nc'].__getitem__(0)
@@ -1145,7 +1174,7 @@ class o2graph_plotter(plot_base):
 
     def gen(self,o2scl_hdf,amp,cmd_name,args):
         """
-        Run a general acol command named ``cmd_name`` with arguments
+        Run a general ``acol`` command named ``cmd_name`` with arguments
         stored in ``args``.
         """
 
@@ -1167,7 +1196,7 @@ class o2graph_plotter(plot_base):
 
     def get_type(self,o2scl_hdf,amp):
         """
-        Get the current O\ :sub:2\ scl object type
+        Get the current O\ :sub:`2`\ scl object type
         """
         
         int_ptr=ctypes.POINTER(ctypes.c_int)
