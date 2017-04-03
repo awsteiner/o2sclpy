@@ -1528,7 +1528,62 @@ class o2graph_plotter(plot_base):
         if self.yset==1:
             plot.ylim([self.ylo,self.yhi])
                                  
-        # End of 'plot_intl' function
+        # End of 'plot' function
+                                 
+    def hist(self,o2scl_hdf,amp,args):
+
+        # Useful pointer types
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        if curr_type==b'table':
+                            
+            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr]
+
+            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+
+            xv=[ptrx[i] for i in range(0,idx.value)]
+    
+            if self.canvas_flag==0:
+                self.canvas()
+            if len(args)<2:
+                plot.hist(xv)
+            else:
+                plot.hist(xv,**string_to_dict(args[1]))
+                
+            # End of section for 'table' type
+        else:
+            print("Command 'plot' not supported for type",
+                  curr_type,".")
+            return
+        
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+                                 
+        # End of 'plot' function
                                  
     def errorbar(self,o2scl_hdf,amp,args):
         """
@@ -1675,7 +1730,7 @@ class o2graph_plotter(plot_base):
         if self.yset==1:
             plot.ylim([self.ylo,self.yhi])
                                  
-        # End of 'errorbar_intl' function
+        # End of 'errorbar' function
                                  
     def plot1(self,o2scl_hdf,amp,args):
         """
@@ -1748,7 +1803,7 @@ class o2graph_plotter(plot_base):
         if self.yset==1:
             plot.ylim([self.ylo,self.yhi])
 
-        # End of 'plot1_intl' function
+        # End of 'plot1' function
             
     def plotm(self,o2scl_hdf,amp,args):
         """
@@ -1827,7 +1882,7 @@ class o2graph_plotter(plot_base):
             if self.yset==1:
                 plot.ylim([self.ylo,self.yhi])
 
-        # End of 'plotm_intl' function
+        # End of 'plotm' function
         
     def plot1m(self,o2scl_hdf,amp,args):
         
@@ -1897,7 +1952,7 @@ class o2graph_plotter(plot_base):
             if self.yset==1:
                 plot.ylim([self.ylo,self.yhi])
                                 
-        # End of 'plot1m_intl' function
+        # End of 'plot1m' function
                                  
     def parse_argv(self,argv,o2scl_hdf):
         """
@@ -1914,6 +1969,7 @@ class o2graph_plotter(plot_base):
             print('Argument List:', str(argv))
         ix=0
         while ix<len(argv):
+            
             if self.verbose>2:
                 print('Processing index',ix,'with value',argv[ix],'.')
             # Find first option, at index ix
@@ -1927,8 +1983,10 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                          print('Incrementing ix')
                     ix=ix+1
+                    
             # If there is an option, then ix is its index
             if ix<len(argv):
+                
                 cmd_name=argv[ix][1:]
                 # If there was two dashes, one will be left so
                 # remove it
@@ -2013,24 +2071,28 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')
 
-                    self.gen(o2scl_hdf,amp,cmd_name,
-                                  argv[ix+1:ix_next])
+                    self.gen(o2scl_hdf,amp,cmd_name,argv[ix+1:ix_next])
 
                 elif cmd_name=='plot':
                     
                     if self.verbose>2:
                         print('Process plot.')
 
-                    self.plot(o2scl_hdf,amp,
-                                   argv[ix+1:ix_next])
+                    self.plot(o2scl_hdf,amp,argv[ix+1:ix_next])
+
+                elif cmd_name=='hist':
+                    
+                    if self.verbose>2:
+                        print('Process hist.')
+
+                    self.hist(o2scl_hdf,amp,argv[ix+1:ix_next])
 
                 elif cmd_name=='errorbar':
                     
                     if self.verbose>2:
                         print('Process errorbar.')
 
-                    self.errorbar(o2scl_hdf,amp,
-                                   argv[ix+1:ix_next])
+                    self.errorbar(o2scl_hdf,amp,argv[ix+1:ix_next])
 
                 elif cmd_name=='hist2d':
                     
@@ -2095,8 +2157,7 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process den-plot.')
 
-                    self.den_plot(o2scl_hdf,amp,
-                                  argv[ix+1:ix_next])
+                    self.den_plot(o2scl_hdf,amp,argv[ix+1:ix_next])
                 
                 elif cmd_name=='plot1':
                     
@@ -2106,8 +2167,7 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for plot1 option.')
                     else:
-                        self.plot1(o2scl_hdf,amp,
-                                   argv[ix+1:ix_next])
+                        self.plot1(o2scl_hdf,amp,argv[ix+1:ix_next])
                             
                 elif cmd_name=='plotm':
                     
@@ -2117,8 +2177,7 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<3:
                         print('Not enough parameters for plotm option.')
                     else:
-                        self.plotm(o2scl_hdf,amp,
-                                   argv[ix+1:ix_next])
+                        self.plotm(o2scl_hdf,amp,argv[ix+1:ix_next])
                                                     
                 elif cmd_name=='plot1m':
                     
@@ -2128,10 +2187,10 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for plot1m option.')
                     else:
-                        self.plot1m(o2scl_hdf,amp,
-                                    argv[ix+1:ix_next])
+                        self.plot1m(o2scl_hdf,amp,argv[ix+1:ix_next])
                         
                 elif cmd_name=='text':
+                    
                     if self.verbose>2:
                         print('Process text.')
                         
@@ -2142,7 +2201,9 @@ class o2graph_plotter(plot_base):
                     else:
                         self.text(argv[ix+1],argv[ix+2],argv[ix+3],
                                   **string_to_dict(argv[ix+4]))
+                        
                 elif cmd_name=='plot-files':
+                    
                     if self.verbose>2:
                         print('Process plot-files.')
                         
@@ -2152,7 +2213,9 @@ class o2graph_plotter(plot_base):
                         self.plotfiles=[argv[i+1] for i in
                                        range(ix,ix_next-1)]
                         print('File list is',self.plotfiles)
+                        
                 elif cmd_name=='ttext':
+                    
                     if self.verbose>2:
                         print('Process ttext.')
                         
@@ -2163,7 +2226,9 @@ class o2graph_plotter(plot_base):
                     else:
                         self.ttext(argv[ix+1],argv[ix+2],argv[ix+3],
                                    **string_to_dict(argv[ix+4]))
+                        
                 elif cmd_name=='xlimits':
+                    
                     if self.verbose>2:
                         print('Process xlimits.')
                         
@@ -2171,7 +2236,9 @@ class o2graph_plotter(plot_base):
                         print('Not enough parameters for xlimits option.')
                     else:
                         self.xlimits(float(argv[ix+1]),float(argv[ix+2]))
+                        
                 elif cmd_name=='ylimits':
+                    
                     if self.verbose>2:
                         print('Process ylimits.')
                         
@@ -2179,14 +2246,18 @@ class o2graph_plotter(plot_base):
                         print('Not enough parameters for ylimits option.')
                     else:
                         self.ylimits(float(argv[ix+1]),float(argv[ix+2]))
+                        
                 elif cmd_name=='save':
                     if self.verbose>2:
+                        
                         print('Process save.')
                     if ix_next-ix<2:
                         print('Not enough parameters for save option.')
                     else:
                         plot.savefig(argv[ix+1])
+                        
                 elif cmd_name=='line':
+                    
                     if self.verbose>2:
                         print('Process line.')
                         
@@ -2197,6 +2268,7 @@ class o2graph_plotter(plot_base):
                     else:
                         self.line(argv[ix+1],argv[ix+2],argv[ix+3],argv[ix+4],
                                   **string_to_dict(argv[ix+5]))
+                        
                 elif cmd_name=='move-labels':
                     if self.verbose>2:
                         print('Process move-labels.')
@@ -2218,7 +2290,10 @@ class o2graph_plotter(plot_base):
                     print('No option named',cmd_name)
                 # Increment to the next option
                 ix=ix_next
+                
             if self.verbose>2:
                 print('Going to next.')
+                
+        # End of function parse_argv()
         return
     
