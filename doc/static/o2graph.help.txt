@@ -9,7 +9,6 @@ List of command-line options:
    -canvas       Create a plotting canvas.                                      
    -cat          Concatenate data from a second table object onto current table.
    -commands     List all available commands.                                   
-   -contour-plot Create a contour plot.                                         
    -contours     Create contour lines from a table3d or hist_2d object.         
    -convert-unit Convert a column to a new unit.                                
 -c -create       Create a table from uniform grid.                              
@@ -48,11 +47,11 @@ List of command-line options:
    -max          Find the maximum value of a column or slice.                   
    -min          Find the minimum value of a column or slice.                   
    -move-labels  Move the labels.                                               
-   -myreds       Select a red/white gradient color map.                         
+   -new-cmaps    Define new color maps.                                         
    -nlines       Add 'nlines' as a constant to a table object.                  
    -no-intro     Do not print introductory text.                                
 -o -output       Output the full object as text.                                
-   -plot         Plot the specified columns.                                    
+   -plot         Plot hist, vector<contour_line> or columns in a table.         
    -plot-files   Specify a list of files for 'plotm' and 'plot1m'.              
    -plot1        Plot the specified column.                                     
    -plot1m       Plot the specified column from multiple files.                 
@@ -85,3 +84,13 @@ List of command-line options:
    -xlimits      Set the x-axis limits.                                         
    -ylimits      Set the y-axis limits.                                         
 
+Notes:
+
+1. Use parenthesis to indicate functions for setting axis limits.
+   For example, -set xlo "(-1)".
+2. Use a space after $'s in title strings to avoid confusion
+   with shell variables, e.g. -set xtitle '$ n$'.
+3. Options may be preceeded by two dashes instead of one.
+
+Set o2scl-cpplib to /usr/local/lib/gcc/6/libstdc++.dylib
+Set o2scl-libdir to /Users/awsteiner/install/o2scl-0.921/lib

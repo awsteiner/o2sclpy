@@ -18,8 +18,6 @@
 #  along with O2scl. If not, see <http://www.gnu.org/licenses/>.
 #  
 #  -------------------------------------------------------------------
-"""
-"""
 
 import getopt, sys, h5py, math, os, hashlib
 import matplotlib.pyplot as plot
@@ -212,11 +210,11 @@ class hdf5_reader:
 
     list_of_dsets=[]
     """
-    Data set list used by :py:func`cloud_file.hdf5_is_object_type`.
+    Data set list used by :py:func:`cloud_file.hdf5_is_object_type`.
     """
     search_type=''
     """
-    O2scl type used by :py:func`cloud_file.hdf5_is_object_type`.
+    O2scl type used by :py:func:`cloud_file.hdf5_is_object_type`.
     """
 
     def hdf5_is_object_type(self,name,obj):
@@ -807,14 +805,30 @@ class plot_base:
 
 class plotter(plot_base):
     """ 
-    A plotting class
+    A class useful for quickly plotting HDF5 data generated
+    by O\ :sub:`2`\ scl . This class is a child of the
+    :py:class:`o2sclpy.plot_base` class.
     """
 
     h5r=hdf5_reader()
+    """
+    Object which handles reading HDF5 files
+    """
     dset=0
+    """
+    The current HDF5 dataset
+    """
     dtype=''
+    """
+    The current type
+    """
 
     def contour_plot(self,level,**kwargs):
+        """
+        If the current dataset is of type ``vector<contour_line>``, then
+        plot the contour lines for the contour level specified in
+        ``level``.
+        """
         if self.force_bytes(self.dtype)!=b'vector<contour_line>':
             print('Wrong type',self.dtype,'for contour_plotx.')
             return
@@ -843,7 +857,13 @@ class plotter(plot_base):
         return
  
     def plot(self,colx,coly,**kwargs):
-        
+        """
+        If the current dataset is of type ``table``, then
+        plot the two columns specified in ``colx`` and ``coly``.
+        Otherwise, if the current dataset is of type 
+        ``hist``, then plot the histogram and ignore the
+        values of ``colx`` and ``coly``.
+        """
         if self.force_bytes(self.dtype)==b'table':
             if self.verbose>2:
                 print('plot',colx,coly,kwargs)
@@ -893,6 +913,10 @@ class plotter(plot_base):
         return
 
     def plot1(self,col,**kwargs):
+        """
+        If the current dataset is of type ``table``, then
+        plot the column specified in ``col``
+        """
         if self.force_bytes(self.dtype)!=b'table':
             print('Wrong type',self.dtype,'for plot1.')
             return
@@ -918,6 +942,11 @@ class plotter(plot_base):
         return
 
     def plot1m(self,col,files,**kwargs):
+        """
+        For each file in list ``files``, read the first
+        object of type ``table`` and plot the column
+        with name ``col`` from that file on the same plot.
+        """
         if self.verbose>2:
             print('plot1m',col,kwargs)
         if self.canvas_flag==0:
@@ -943,6 +972,11 @@ class plotter(plot_base):
         return
     
     def plotm(self,colx,coly,files,**kwargs):
+        """
+        For each file in list ``files``, read the first object of type
+        ``table`` and plot the columns with name ``colx`` and ``coly``
+        from that file on the same plot.
+        """
         if self.verbose>2:
             print('plotm',colx,coly,files,kwargs)
         if self.canvas_flag==0:
@@ -971,6 +1005,10 @@ class plotter(plot_base):
         return
     
     def hist(self,col,**kwargs):
+        """
+        If the current dataset is of type ``hist``, then
+        plot the associated histogram.
+        """
         if self.verbose>2:
             print('hist',kwargs)
         if self.canvas_flag==0:
@@ -985,6 +1023,10 @@ class plotter(plot_base):
         return
 
     def hist2d(self,colx,coly,**kwargs):
+        """
+        If the current dataset is of type ``hist2d``, then
+        plot the associated two-dimensional histogram.
+        """
         if self.verbose>2:
             print('hist2d',colx,coly,kwargs)
         if self.canvas_flag==0:
@@ -1029,7 +1071,8 @@ class plotter(plot_base):
 
     def list(self):
         """
-        List the columns in a table object
+        If the current data set is of type ``table``,
+        then list the columns.
         """
         if self.force_bytes(self.dtype)==b'table':
             col_list=get_str_array(self.dset['col_names'])
@@ -1073,7 +1116,8 @@ class plotter(plot_base):
 
     def den_plot(self,slice_name,**kwargs):
         """
-        Create a density plot
+        If the current object is of type ``table3d``, create a density
+        plot from the slice named ``slice_name`` .
         """
         if self.force_bytes(self.dtype)==b'table3d':
             name='data/'+slice_name
@@ -1107,7 +1151,8 @@ class plotter(plot_base):
 
 class o2graph_plotter(plot_base):
     """
-    A plotting class for the o2graph script.
+    A plotting class for the o2graph script. This class is a child of the
+    :py:class:`o2sclpy.plot_base` class.
 
     This class is not necessarily intended to be instantiated by the 
     end user.

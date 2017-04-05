@@ -21,3 +21,6 @@ help:
 
 prerelease-sync-doc:
 	cp -r build/html/* $(HOME)/data/o2sclpy
+
+help.txt:
+	cd static; o2graph -h > o2graph.help.txt
