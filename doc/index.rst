@@ -58,19 +58,33 @@ The O\ :sub:`2`\ graph script implements all of the commands from the
 ``acol`` executable in O\ :sub:`2`\ scl documented at
 <https://web.utk.edu/~asteine1/o2scl/html/acol_section.html>
 	     
-Examples
---------
+Example 1
+---------
 
 .. include:: static/ex1.scr
    :literal:
 .. image:: static/ex1.png
    :width: 70%
 
+Example 2
+---------
+
 .. include:: static/ex2.scr
    :literal:
 .. image:: static/ex2.png
    :width: 70%
 
+Example 3
+---------
+
+.. include:: static/ex3.scr
+   :literal:
+
+Example 4
+---------
+
+.. include:: static/ex4.scr
+   :literal:
 
 Internal structure
 ------------------

@@ -2294,6 +2294,11 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process canvas.')
                     self.canvas()
+                elif cmd_name=='clf':
+                    if self.verbose>2:
+                        print('Process clf.')
+                    plot.clf()
+                    self.canvas_flag=0
                 elif cmd_name=='new-cmaps':
                     if self.verbose>2:
                         print('Process reds2.')

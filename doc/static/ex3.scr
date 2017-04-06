@@ -1,7 +1,7 @@
 # This example uses the Agg backend to create plots stored as .png
-# files without opening a plot window. The command '-set canvas_flag 0'
-# instructs o2graph to create a new matplotlib figure and axis.
+# files without opening a plot window. The command '-clf' instructs
+# o2graph to clear the current figure before starting a new plot
 #
 o2graph -backend Agg -create x "(-3.14)" 3.14 0.1 \
 	-function "(1+sin(x))/2" y -plot x y -save ex3a.png \
-	-set canvas_flag 0 -deriv x y yp -plot x yp -save ex3b.png 
+	-clf -deriv x y yp -plot x yp -save ex3b.png 
