@@ -36,9 +36,10 @@ Usage requirements
 The script attempts to dynamically load the O\ :sub:`2`\ scl libraries
 ``libo2scl`` and ``libo2scl_hdf`` using python's ctypes module. If it
 cannot find them, you may need to use the argument ``-o2scl-libdir``
-to specify the proper directory. On OSX, the script must load
-the C++ library first, and if necessary you can specify its location
-with the argument ``-o2scl-cpplib``.
+to specify the proper directory. If you're on OSX and using GCC, the
+script must load the C++ library first, and if necessary you can
+specify its location with the argument ``-o2scl-cpplib`` (on my laptop
+this is ``-o2scl-cpplib /usr/local/lib/gcc/6/libstdc++.dylib``).
 
 Basic usage
 -----------
