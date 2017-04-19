@@ -1159,6 +1159,11 @@ class o2graph_plotter(plot_base):
     """
 
     def set_wrapper(self,o2scl_hdf,amp,args):
+        """
+        Wrapper for :py:func:`o2sclpy.plot_base.set` which sets
+        plot-related parameters and sends other parameters to
+        ``acol_manager``
+        """
         
         if (args[0]=='logx' or args[0]=='xtitle' or
             args[0]=='logy' or args[0]=='ytitle' or
@@ -1188,6 +1193,11 @@ class o2graph_plotter(plot_base):
         parse_fn(amp,len(args)+1,sizes,ccp)
 
     def get_wrapper(self,o2scl_hdf,amp,args):
+        """
+        Wrapper for :py:func:`o2sclpy.plot_base.get` which
+        gets plot-related parameters and gets other parameters
+        from ``acol_manager``
+        """
         
         if (args[0]=='logx' or args[0]=='xtitle' or
             args[0]=='logy' or args[0]=='ytitle' or
@@ -1397,6 +1407,9 @@ class o2graph_plotter(plot_base):
             plot.colorbar()
 
     def plot(self,o2scl_hdf,amp,args):
+        """
+        Plot a two-dimensional set of data
+        """
 
         # Useful pointer types
         double_ptr=ctypes.POINTER(ctypes.c_double)
@@ -1586,6 +1599,9 @@ class o2graph_plotter(plot_base):
         # End of 'plot' function
                                  
     def hist(self,o2scl_hdf,amp,args):
+        """
+        Plot a histogram
+        """
 
         # Useful pointer types
         double_ptr=ctypes.POINTER(ctypes.c_double)
@@ -1809,7 +1825,7 @@ class o2graph_plotter(plot_base):
             
     def plotm(self,o2scl_hdf,amp,args):
         """
-        Plot the same quantity from several files
+        Plot the same pair of columns from several files
         """
 
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -1898,6 +1914,9 @@ class o2graph_plotter(plot_base):
         # End of 'plotm' function
         
     def plot1m(self,o2scl_hdf,amp,args):
+        """
+        Plot the same column from several files
+        """
         
         int_ptr=ctypes.POINTER(ctypes.c_int)
         double_ptr=ctypes.POINTER(ctypes.c_double)
