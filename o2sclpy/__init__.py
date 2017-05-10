@@ -517,7 +517,11 @@ class plot_base:
     """
     List of filenames for multiplots
     """
-
+    left_margin=0
+    right_margin=0
+    top_margin=0
+    bottom_margin=0
+    
     def new_cmaps(self):
         """
         Add a few new colormaps
@@ -627,6 +631,14 @@ class plot_base:
             self.verbose=int(value)
         elif name=='colbar':
             self.colbar=int(value)
+        elif name=='left-margin':
+            self.left_margin=float(value)
+        elif name=='right-margin':
+            self.right_margin=float(value)
+        elif name=='top-margin':
+            self.top_margin=float(value)
+        elif name=='bottom-margin':
+            self.bottom_margin=float(value)
         else:
             print('No variable named',name)
             
@@ -772,8 +784,20 @@ class plot_base:
         """
         if self.verbose>2:
             print('Canvas')
+        lm=0.14
+        bm=0.12
+        rm=0.04
+        tm=0.04
+        if self.left_margin>0.0:
+            lm=self.left_margin
+        if self.bottom_margin>0.0:
+            bm=self.bottom_margin
+        if self.right_margin>0.0:
+            rm=self.right_margin
+        if self.top_margin>0.0:
+            tm=self.top_margin
         # Default o2mpl plot
-        (self.fig,self.axes)=default_plot()
+        (self.fig,self.axes)=default_plot(lm,bm,rm,tm)
         # Plot limits
         if self.xset==1:
             plot.xlim([self.xlo,self.xhi])
@@ -1164,7 +1188,7 @@ class o2graph_plotter(plot_base):
         plot-related parameters and sends other parameters to
         ``acol_manager``
         """
-        
+
         if (args[0]=='logx' or args[0]=='xtitle' or
             args[0]=='logy' or args[0]=='ytitle' or
             args[0]=='xlo' or args[0]=='ylo' or
@@ -1172,10 +1196,13 @@ class o2graph_plotter(plot_base):
             args[0]=='yhi' or args[0]=='yset' or
             args[0]=='zlo' or args[0]=='zhi' or
             args[0]=='zset' or args[0]=='colbar' or
+            args[0]=='left-margin' or args[0]=='right-margin' or
+            args[0]=='top-margin' or args[0]=='bottom-margin' or
             args[0]=='verbose'):
                 
             self.set(args[0],args[1])
-            
+            return
+        
         str_args='-set'
         size_type=ctypes.c_int * (len(args)+1)
         sizes=size_type()
