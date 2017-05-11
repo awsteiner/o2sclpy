@@ -1171,7 +1171,8 @@ class plotter(plot_base):
                                 ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2],
                         aspect='auto',**kwargs)
             if self.colbar>0:
-                plot.colorbar()
+                cbar=plot.colorbar()
+                cbar.ax.tick_params(labelsize=self.font*0.8)
                 
         else:
             print('Cannot density plot object of type',self.dtype)
@@ -1435,7 +1436,8 @@ class o2graph_plotter(plot_base):
             return
 
         if self.colbar>0:
-            plot.colorbar()
+            cbar=plot.colorbar()
+            cbar.ax.tick_params(labelsize=self.font*0.8)
 
     def plot(self,o2scl_hdf,amp,args):
         """
@@ -2195,7 +2197,8 @@ class o2graph_plotter(plot_base):
                             plot.hist2d(xv,yv,**kwargs)
                             
                         if self.colbar>0:
-                            plot.colorbar()
+                            cbar=plot.colorbar()
+                            cbar.ax.tick_params(labelsize=self.font*0.8)
                             
                 elif cmd_name=='den-plot':
                     
