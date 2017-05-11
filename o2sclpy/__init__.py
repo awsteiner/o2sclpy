@@ -288,7 +288,7 @@ class hdf5_reader:
 #     return clist
 
 def default_plot(left_margin=0.14,bottom_margin=0.12,
-                 right_margin=0.04,top_margin=0.04):
+                 right_margin=0.04,top_margin=0.04,font=16):
     """
     This function sets up my commonly-used ``matplotlib`` defaults.
     It returns a pair of objects, the figure object and axes object.
@@ -303,6 +303,7 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     ax.minorticks_on()
     ax.tick_params('both',length=12,width=1,which='major')
     ax.tick_params('both',length=5,width=1,which='minor')
+    ax.tick_params(labelsize=font*0.8)
     plot.grid(False)
     return (fig,ax)
     
@@ -521,6 +522,7 @@ class plot_base:
     right_margin=0
     top_margin=0
     bottom_margin=0
+    font=16
     
     def new_cmaps(self):
         """
@@ -631,6 +633,8 @@ class plot_base:
             self.verbose=int(value)
         elif name=='colbar':
             self.colbar=int(value)
+        elif name=='font':
+            self.font=float(value)
         elif name=='left-margin':
             self.left_margin=float(value)
         elif name=='right-margin':
@@ -763,7 +767,7 @@ class plot_base:
         if self.canvas_flag==0:
             self.canvas()
         self.axes.text(tx,ty,str,transform=self.axes.transAxes,
-                       fontsize=16,va='center',ha='center',
+                       fontsize=self.font,va='center',ha='center',
                        **kwargs)
         return
 
@@ -774,7 +778,7 @@ class plot_base:
         if self.canvas_flag==0:
             self.canvas()
         self.axes.text(tx,ty,str,
-                       fontsize=16,va='center',ha='center',**kwargs)
+                       fontsize=self.font,va='center',ha='center',**kwargs)
         return
 
     def canvas(self):
@@ -797,7 +801,7 @@ class plot_base:
         if self.top_margin>0.0:
             tm=self.top_margin
         # Default o2mpl plot
-        (self.fig,self.axes)=default_plot(lm,bm,rm,tm)
+        (self.fig,self.axes)=default_plot(lm,bm,rm,tm,self.font)
         # Plot limits
         if self.xset==1:
             plot.xlim([self.xlo,self.xhi])
@@ -805,9 +809,9 @@ class plot_base:
             plot.ylim([self.ylo,self.yhi])
         # Titles
         if self.xtitle!='':
-            plot.xlabel(self.xtitle,fontsize=16)
+            plot.xlabel(self.xtitle,fontsize=self.font)
         if self.ytitle!='':
-            plot.ylabel(self.ytitle,fontsize=16)
+            plot.ylabel(self.ytitle,fontsize=self.font)
         self.canvas_flag=1
         return
 
@@ -1198,7 +1202,7 @@ class o2graph_plotter(plot_base):
             args[0]=='zset' or args[0]=='colbar' or
             args[0]=='left-margin' or args[0]=='right-margin' or
             args[0]=='top-margin' or args[0]=='bottom-margin' or
-            args[0]=='verbose'):
+            args[0]=='verbose' or args[0]=='font'):
                 
             self.set(args[0],args[1])
             return
@@ -2178,26 +2182,8 @@ class o2graph_plotter(plot_base):
                         xv=[ptrx[i] for i in range(0,idx.value)]
                         yv=[ptry[i] for i in range(0,idy.value)]
 
-                        #(lmar=0.14,bmar=0.12,rmar=0.04,tmar=0.04):
-                        
                         if self.canvas_flag==0:
-                            if self.colbar>0:
-                                # Default o2mpl plot
-                                (self.fig,self.axes)=default_plot(0.14,0.12,
-                                                                  0.0,0.04)
-                                # Plot limits
-                                if self.xset==1:
-                                    plot.xlim([self.xlo,self.xhi])
-                                if self.yset==1:
-                                    plot.ylim([self.ylo,self.yhi])
-                                # Titles
-                                if self.xtitle!='':
-                                    plot.xlabel(self.xtitle,fontsize=16)
-                                if self.ytitle!='':
-                                    plot.ylabel(self.ytitle,fontsize=16)
-                                self.canvas_flag=1
-                            else:
-                                self.canvas()
+                            self.canvas()
                             
                         if ix_next-ix<4:
                             plot.hist2d(xv,yv)
