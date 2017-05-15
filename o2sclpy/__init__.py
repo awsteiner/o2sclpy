@@ -25,6 +25,7 @@ from matplotlib.colors import LinearSegmentedColormap
 import urllib.request
 import numpy
 import ctypes
+import readline
 
 version='0.921'
 """
@@ -518,11 +519,27 @@ class plot_base:
     """
     List of filenames for multiplots
     """
-    left_margin=0
-    right_margin=0
-    top_margin=0
-    bottom_margin=0
+    left_margin=0.14
+    """
+    Left plot margin (default 0.14)
+    """
+    right_margin=0.04
+    """
+    Right plot margin (default 0.04)
+    """
+    top_margin=0.04
+    """
+    Top plot margin (default 0.04)
+    """
+    bottom_margin=0.12
+    """
+    Bottom plot margin (default 0.12)
+    """
     font=16
+    """
+    Font size for text(), ttext(), axis titles (default 16). Axis labels
+    are set by this size times 0.8 .
+    """
     
     def new_cmaps(self):
         """
@@ -788,20 +805,11 @@ class plot_base:
         """
         if self.verbose>2:
             print('Canvas')
-        lm=0.14
-        bm=0.12
-        rm=0.04
-        tm=0.04
-        if self.left_margin>0.0:
-            lm=self.left_margin
-        if self.bottom_margin>0.0:
-            bm=self.bottom_margin
-        if self.right_margin>0.0:
-            rm=self.right_margin
-        if self.top_margin>0.0:
-            tm=self.top_margin
         # Default o2mpl plot
-        (self.fig,self.axes)=default_plot(lm,bm,rm,tm,self.font)
+        (self.fig,self.axes)=default_plot(self.left_margin,
+                                          self.bottom_margin,
+                                          self.right_margin,
+                                          self.top_margin,self.font)
         # Plot limits
         if self.xset==1:
             plot.xlim([self.xlo,self.xhi])
@@ -2026,9 +2034,20 @@ class o2graph_plotter(plot_base):
         This is the main function used by the 
         :ref:`O2graph script`
         """
+
+        # Create an acol_manager object and get the pointer
         o2scl_hdf.o2scl_create_acol_manager.restype=ctypes.c_void_p
         amp=o2scl_hdf.o2scl_create_acol_manager()
-                        
+
+        if len(argv)<=1:
+            done_flag=False
+            readline.parse_and_bind('tab: complete')
+            readline.parse_and_bind('set editing-mode emacs')
+            while done_flag==False:
+                line=input('o2graph> ')
+                if line=='quit' or line=='exit':
+                    done_flag=True
+        
         if self.verbose>2:
             print('Number of arguments:',len(argv),'arguments.')
             print('Argument List:', str(argv))
