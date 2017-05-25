@@ -1693,6 +1693,80 @@ class o2graph_plotter(plot_base):
                 
             # End of section for 'table' type
         else:
+            print("Command 'hist' not supported for type",
+                  curr_type,".")
+            return
+        
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+                                 
+        # End of 'hist' function
+                                 
+    def hist2d(self,o2scl_hdf,amp,args):
+        """
+        Plot a two-dimensional histogram
+        """
+
+        # Useful pointer types
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        if curr_type==b'table':
+                            
+            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+
+            failed=False
+
+            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+            if get_ret!=0:
+                print('Failed to get column named "'+args[0]+'".')
+                failed=True
+            
+            coly=ctypes.c_char_p(self.force_bytes(args[1]))
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
+            if get_ret!=0:
+                print('Failed to get column named "'+args[1]+'".')
+                failed=True
+
+            if failed==False:
+                xv=[ptrx[i] for i in range(0,idx.value)]
+                yv=[ptry[i] for i in range(0,idy.value)]
+        
+                if self.canvas_flag==0:
+                    self.canvas()
+                if len(args)<3:
+                    plot.hist2d(xv,yv)
+                else:
+                    plot.hist2d(xv,yv,**string_to_dict(args[2]))
+                
+            # End of section for 'table' type
+        else:
             print("Command 'plot' not supported for type",
                   curr_type,".")
             return
@@ -2203,41 +2277,7 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process hist2d.')
                         
-                    if ix_next-ix<3:
-                        print('Not enough parameters for hist2d option.')
-                    else:
-                        get_fn=o2scl_hdf.o2scl_acol_get_column
-                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                                         int_ptr,double_ptr_ptr]
-
-                        colx=ctypes.c_char_p(self.force_bytes(strlist[ix+1]))
-                        idx=ctypes.c_int(0)
-                        ptrx=double_ptr()
-                        get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
-
-                        coly=ctypes.c_char_p(self.force_bytes(strlist[ix+2]))
-                        idy=ctypes.c_int(0)
-                        ptry=double_ptr()
-                        get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
-
-                        xv=[ptrx[i] for i in range(0,idx.value)]
-                        yv=[ptry[i] for i in range(0,idy.value)]
-
-                        if self.canvas_flag==0:
-                            self.canvas()
-                            
-                        if ix_next-ix<4:
-                            plot.hist2d(xv,yv)
-                        else:
-                            kwargs=string_to_dict(strlist[ix+3])
-                            for key in kwargs:
-                                if key=='bins':
-                                    kwargs[key]=int(kwargs[key])
-                            plot.hist2d(xv,yv,**kwargs)
-                            
-                        if self.colbar>0:
-                            cbar=plot.colorbar()
-                            cbar.ax.tick_params(labelsize=self.font*0.8)
+                    self.hist2d(o2scl_hdf,amp,strlist[ix+1:ix_next])
                             
                 elif cmd_name=='den-plot':
                     
