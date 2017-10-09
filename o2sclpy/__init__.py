@@ -1041,13 +1041,13 @@ class plotter(plot_base):
             plot.ylim([self.ylo,self.yhi])
         return
     
-    def hist(self,col,**kwargs):
+    def histplot(self,col,**kwargs):
         """
         If the current dataset is of type ``hist``, then
         plot the associated histogram.
         """
         if self.verbose>2:
-            print('hist',kwargs)
+            print('histplot',kwargs)
         if self.canvas_flag==0:
             self.canvas()
         for key in kwargs:
@@ -1056,10 +1056,10 @@ class plotter(plot_base):
         if self.force_bytes(self.dtype)==b'table':
             plot.hist(self.dset['data/'+col],**kwargs)
         else:
-            print('Wrong type',self.dtype,'for hist()')
+            print('Wrong type',self.dtype,'for histplot()')
         return
 
-    def hist2d(self,colx,coly,**kwargs):
+    def hist2dplot(self,colx,coly,**kwargs):
         """
         If the current dataset is of type ``hist2d``, then
         plot the associated two-dimensional histogram.
@@ -1640,7 +1640,7 @@ class o2graph_plotter(plot_base):
                                  
         # End of 'plot' function
                                  
-    def hist(self,o2scl_hdf,amp,args):
+    def histplot(self,o2scl_hdf,amp,args):
         """
         Plot a histogram
         """
@@ -1693,7 +1693,7 @@ class o2graph_plotter(plot_base):
                 
             # End of section for 'table' type
         else:
-            print("Command 'hist' not supported for type",
+            print("Command 'histplot' not supported for type",
                   curr_type,".")
             return
         
@@ -1702,9 +1702,9 @@ class o2graph_plotter(plot_base):
         if self.yset==1:
             plot.ylim([self.ylo,self.yhi])
                                  
-        # End of 'hist' function
+        # End of 'histplot' function
                                  
-    def hist2d(self,o2scl_hdf,amp,args):
+    def hist2dplot(self,o2scl_hdf,amp,args):
         """
         Plot a two-dimensional histogram
         """
@@ -2228,7 +2228,7 @@ class o2graph_plotter(plot_base):
                       cmd_name=='fit' or cmd_name=='select-rows' or
                       cmd_name=='function' or cmd_name=='set-data' or
                       cmd_name=='gen3-list' or cmd_name=='set-unit' or
-                      cmd_name=='generic' or cmd_name=='show_units' or
+                      cmd_name=='generic' or cmd_name=='show-units' or
                       cmd_name=='get-conv' or cmd_name=='slice' or
                       cmd_name=='get-row' or cmd_name=='sort' or
                       cmd_name=='get-unit' or cmd_name=='status' or
@@ -2258,12 +2258,12 @@ class o2graph_plotter(plot_base):
 
                     self.plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
-                elif cmd_name=='hist':
+                elif cmd_name=='histplot':
                     
                     if self.verbose>2:
-                        print('Process hist.')
+                        print('Process histplot.')
 
-                    self.hist(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.histplot(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='errorbar':
                     
@@ -2272,12 +2272,12 @@ class o2graph_plotter(plot_base):
 
                     self.errorbar(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
-                elif cmd_name=='hist2d':
+                elif cmd_name=='hist2dplot':
                     
                     if self.verbose>2:
-                        print('Process hist2d.')
+                        print('Process hist2dplot.')
                         
-                    self.hist2d(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.hist2dplot(o2scl_hdf,amp,strlist[ix+1:ix_next])
                             
                 elif cmd_name=='den-plot':
                     
