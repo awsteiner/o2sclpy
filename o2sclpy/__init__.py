@@ -1628,6 +1628,46 @@ class o2graph_plotter(plot_base):
                         else:
                             plot.plot(xv,yv,**string_to_dict(args[0]))
             # End of section for 'vector<contour_line>' type
+        elif curr_type==b'double[]':
+
+            # Get the total number of contour lines
+            double_n_fn=o2scl_hdf.o2scl_acol_double_n
+            double_n_fn.argtypes=[ctypes.c_void_p]
+            double_n_fn.restype=ctypes.c_int
+            n_arr=double_n_fn(amp)
+
+            # Define types for extracting each contour line
+            double_arr_fn=o2scl_hdf.o2scl_acol_double_arr
+            double_arr_fn.argtypes=[ctypes.c_void_p,double_ptr_ptr]
+
+            ptrx=double_ptr()
+            lev=cont_line_fn(amp,ctypes.byref(ptrx))
+                             
+            xv=[ptrx[i] for i in range(0,n_arr)]
+                
+            if self.logx==1:
+                if self.logy==1:
+                    if len(args)<1:
+                        plot.loglog(xv)
+                    else:
+                        plot.loglog(xv,**string_to_dict(args[0]))
+                else:
+                    if len(args)<1:
+                        plot.semilogx(xv)
+                    else:
+                        plot.semilogx(xv,**string_to_dict(args[0]))
+            else:
+                if self.logy==1:
+                    if len(args)<1:
+                        plot.semilogy(xv)
+                    else:
+                        plot.semilogy(xv,**string_to_dict(args[0]))
+                else:
+                    if len(args)<1:
+                        plot.plot(xv)
+                    else:
+                        plot.plot(xv,**string_to_dict(args[0]))
+            # End of section for 'double[]' type
         else:
             print("Command 'plot' not supported for type",
                   curr_type,".")
