@@ -1628,46 +1628,6 @@ class o2graph_plotter(plot_base):
                         else:
                             plot.plot(xv,yv,**string_to_dict(args[0]))
             # End of section for 'vector<contour_line>' type
-        elif curr_type==b'double[]':
-
-            # Get the total number of contour lines
-            double_n_fn=o2scl_hdf.o2scl_acol_double_n
-            double_n_fn.argtypes=[ctypes.c_void_p]
-            double_n_fn.restype=ctypes.c_int
-            n_arr=double_n_fn(amp)
-
-            # Define types for extracting each contour line
-            double_arr_fn=o2scl_hdf.o2scl_acol_double_arr
-            double_arr_fn.argtypes=[ctypes.c_void_p,double_ptr_ptr]
-
-            ptrx=double_ptr()
-            lev=cont_line_fn(amp,ctypes.byref(ptrx))
-                             
-            xv=[ptrx[i] for i in range(0,n_arr)]
-                
-            if self.logx==1:
-                if self.logy==1:
-                    if len(args)<1:
-                        plot.loglog(xv)
-                    else:
-                        plot.loglog(xv,**string_to_dict(args[0]))
-                else:
-                    if len(args)<1:
-                        plot.semilogx(xv)
-                    else:
-                        plot.semilogx(xv,**string_to_dict(args[0]))
-            else:
-                if self.logy==1:
-                    if len(args)<1:
-                        plot.semilogy(xv)
-                    else:
-                        plot.semilogy(xv,**string_to_dict(args[0]))
-                else:
-                    if len(args)<1:
-                        plot.plot(xv)
-                    else:
-                        plot.plot(xv,**string_to_dict(args[0]))
-            # End of section for 'double[]' type
         else:
             print("Command 'plot' not supported for type",
                   curr_type,".")
@@ -1924,29 +1884,69 @@ class o2graph_plotter(plot_base):
         for i in range(0,it.value):
             curr_type=curr_type+type_ptr[i]
                         
-        if curr_type!=b'table':
-            print("Command 'plot1' not supported for type",
-                  curr_type,".")
-            return
+        if curr_type==b'table':
             
-        get_fn=o2scl_hdf.o2scl_acol_get_column
-        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                         int_ptr,double_ptr_ptr]
-        get_fn.restype=ctypes.c_int
+            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr]
+            get_fn.restype=ctypes.c_int
 
-        colx=ctypes.c_char_p(self.force_bytes(args[0]))
-        idx=ctypes.c_int(0)
-        ptrx=double_ptr()
-        get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
-        failed=False
-        if get_ret!=0:
-            print('Failed to get column named "'+args[0]+'".')
-            failed=True
+            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+            failed=False
+            if get_ret!=0:
+                print('Failed to get column named "'+args[0]+'".')
+                failed=True
 
-        if failed==False:
-            xv=[i for i in range(0,idx.value)]
-            yv=[ptrx[i] for i in range(0,idx.value)]
-    
+            if failed==False:
+                xv=[i for i in range(0,idx.value)]
+                yv=[ptrx[i] for i in range(0,idx.value)]
+        
+                if self.canvas_flag==0:
+                    self.canvas()
+                if self.logx==1:
+                    if self.logy==1:
+                        if len(args)<2:
+                            plot.loglog(xv,yv)
+                        else:
+                            plot.loglog(xv,yv,**string_to_dict(args[1]))
+                    else:
+                        if len(args)<2:
+                            plot.semilogx(xv,yv)
+                        else:
+                            plot.semilogx(xv,yv,**string_to_dict(args[1]))
+                else:
+                    if self.logy==1:
+                        if len(args)<2:
+                            plot.semilogy(xv,yv)
+                        else:
+                            plot.semilogy(xv,yv,**string_to_dict(args[1]))
+                    else:
+                        if len(args)<2:
+                            plot.plot(xv,yv)
+                        else:
+                            plot.plot(xv,yv,**string_to_dict(args[1]))
+                                
+                if self.xset==1:
+                    plot.xlim([self.xlo,self.xhi])
+                if self.yset==1:
+                    plot.ylim([self.ylo,self.yhi])
+                    
+        else if (curr_type==b'double[]' or curr_type==b'int[]' or
+                curr_type==b'size_t[]'):
+
+            get_fn=o2scl_hdf.o2scl_acol_get_double_arr
+            get_fn.argtypes=[ctypes.c_void_p,int_ptr,double_ptr_ptr]
+                            
+            id=ctypes.c_int(0)
+            ptr=double_ptr()
+            get_fn(amp,ctypes.byref(id),ctypes.byref(ptr))
+            
+            xv=[i for i in range(0,id.value)]
+            yv=[ptr[i] for i in range(0,id.value)]
+        
             if self.canvas_flag==0:
                 self.canvas()
             if self.logx==1:
@@ -1971,12 +1971,12 @@ class o2graph_plotter(plot_base):
                         plot.plot(xv,yv)
                     else:
                         plot.plot(xv,yv,**string_to_dict(args[1]))
-                                
+                            
             if self.xset==1:
                 plot.xlim([self.xlo,self.xhi])
             if self.yset==1:
                 plot.ylim([self.ylo,self.yhi])
-
+                    
         # End of 'plot1' function
             
     def plotm(self,o2scl_hdf,amp,args):
