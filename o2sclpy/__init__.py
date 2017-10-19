@@ -1934,8 +1934,8 @@ class o2graph_plotter(plot_base):
                 if self.yset==1:
                     plot.ylim([self.ylo,self.yhi])
                     
-        else if (curr_type==b'double[]' or curr_type==b'int[]' or
-                curr_type==b'size_t[]'):
+        elif (curr_type==b'double[]' or curr_type==b'int[]' or
+              curr_type==b'size_t[]'):
 
             get_fn=o2scl_hdf.o2scl_acol_get_double_arr
             get_fn.argtypes=[ctypes.c_void_p,int_ptr,double_ptr_ptr]
@@ -2331,10 +2331,7 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process plot1.')
                         
-                    if ix_next-ix<2:
-                        print('Not enough parameters for plot1 option.')
-                    else:
-                        self.plot1(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.plot1(o2scl_hdf,amp,strlist[ix+1:ix_next])
                             
                 elif cmd_name=='plotm':
                     
