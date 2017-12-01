@@ -30,16 +30,27 @@ O\ :sub:`2`\ scl. The O\ :sub:`2`\ graph script assumes that the O\
 :sub:`2`\ scl library has been installed separately (with HDF5 support
 enabled).
 
-Usage requirements
-------------------
+Installation and Requirements
+-----------------------------
 
-The script attempts to dynamically load the O\ :sub:`2`\ scl libraries
-``libo2scl`` and ``libo2scl_hdf`` using python's ctypes module. If it
-cannot find them, you may need to use the argument ``-o2scl-libdir``
-to specify the proper directory. If you're on OSX and using GCC, the
-script must load the C++ library first, and if necessary you can
-specify its location with the argument ``-o2scl-cpplib`` (on my laptop
-this is ``-o2scl-cpplib /usr/local/lib/gcc/6/libstdc++.dylib``).
+O\ :sub:`2`\ sclpy can be installed with e.g. ``pip3 install
+o2sclpy``. If you want to install the development version, you can
+clone the git repository, change directory to the O\ :sub:`2`\ sclpy
+directory, and then use e.g. ``pip3 install .`` if you want
+to use the pip package manager or ``python3 setup.py install``
+to do a direct installation. O\ :sub:`2`\ sclpy requires
+python3 packages ``h5py``, ``numpy``, ``matplotlib``. and requires
+that 
+
+O\ :sub:`2`\ sclpy also requires that O\ :sub:`2`\ scl is installed on
+your machine. The script attempts to dynamically load the O\ :sub:`2`\
+scl libraries ``libo2scl`` and ``libo2scl_hdf`` using python's ctypes
+module. If it cannot find them, you may need to use the argument
+``-o2scl-libdir`` to specify the proper directory. If you're on OSX
+and using GCC, the script must load the C++ library first, and if
+necessary you can specify its location with the argument
+``-o2scl-cpplib`` (on my laptop this is ``-o2scl-cpplib
+/usr/local/lib/gcc/7/libstdc++.dylib``).
 
 Basic usage
 -----------
