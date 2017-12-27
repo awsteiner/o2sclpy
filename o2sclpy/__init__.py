@@ -21,6 +21,7 @@
 
 import getopt, sys, h5py, math, os, hashlib
 import matplotlib.pyplot as plot
+import matplotlib.patches as patches
 from matplotlib.colors import LinearSegmentedColormap
 import urllib.request
 import numpy
@@ -750,6 +751,47 @@ class plot_base:
         if self.canvas_flag==0:
             self.canvas()
         plot.plot([x1,x2],[y1,y2],**kwargs)
+        return
+
+    def point(self,xval,yval,**kwargs):
+        """
+        Desc
+        """
+        if self.verbose>2:
+            print('point',xval,yval,kwargs)
+        if self.canvas_flag==0:
+            self.canvas()
+        plot.plot([xval],[yval],**kwargs)
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+        return
+
+    def rect(self,x1,y1,x2,y2,**kwargs):
+        """
+        Plot a rectangle from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
+        """
+        if self.verbose>2:
+            print('Rect',x1,y1,x2,y1)
+        if self.canvas_flag==0:
+            self.canvas()
+        fx1=float(x1)
+        fx2=float(x2)
+        fy1=float(y1)
+        fy2=float(y2)
+        left=fx1
+        if fx2<fx1:
+            left=fx2
+        lower=fy1
+        if fy2<fy1:
+            lower=fy2
+        w=abs(fx1-fx2)
+        h=abs(fy1-fy2)
+        if self.canvas_flag==0:
+            self.canvas()
+        r=patches.Rectangle((left,lower),w,h,fill=False,lw=0.5)
+        self.axes.add_patch(r)
         return
 
     def show(self):
@@ -2432,6 +2474,34 @@ class o2graph_plotter(plot_base):
                                   strlist[ix+3],strlist[ix+4])
                     else:
                         self.line(strlist[ix+1],strlist[ix+2],
+                                  strlist[ix+3],strlist[ix+4],
+                                  **string_to_dict(strlist[ix+5]))
+                        
+                elif cmd_name=='point':
+                    
+                    if self.verbose>2:
+                        print('Process point.')
+                        
+                    if ix_next-ix<3:
+                        print('Not enough parameters for point option.')
+                    elif ix_next-ix<4:
+                        self.point(strlist[ix+1],strlist[ix+2])
+                    else:
+                        self.point(strlist[ix+1],strlist[ix+2],
+                                   **string_to_dict(strlist[ix+3]))
+                        
+                elif cmd_name=='rect':
+                    
+                    if self.verbose>2:
+                        print('Process rect.')
+                        
+                    if ix_next-ix<5:
+                        print('Not enough parameters for rect option.')
+                    elif ix_next-ix<6:
+                        self.rect(strlist[ix+1],strlist[ix+2],
+                                  strlist[ix+3],strlist[ix+4])
+                    else:
+                        self.rect(strlist[ix+1],strlist[ix+2],
                                   strlist[ix+3],strlist[ix+4],
                                   **string_to_dict(strlist[ix+5]))
                         
