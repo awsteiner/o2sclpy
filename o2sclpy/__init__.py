@@ -768,7 +768,7 @@ class plot_base:
             plot.ylim([self.ylo,self.yhi])
         return
 
-    def rect(self,x1,y1,x2,y2,**kwargs):
+    def rect(self,x1,y1,x2,y2,angle,**kwargs):
         """
         Plot a rectangle from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
         """
@@ -790,7 +790,7 @@ class plot_base:
         h=abs(fy1-fy2)
         if self.canvas_flag==0:
             self.canvas()
-        r=patches.Rectangle((left,lower),w,h,fill=False,lw=0.5)
+        r=patches.Rectangle((left,lower),w,h,angle,**kwargs)
         self.axes.add_patch(r)
         return
 
@@ -2495,15 +2495,17 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process rect.')
                         
-                    if ix_next-ix<5:
+                    if ix_next-ix<6:
                         print('Not enough parameters for rect option.')
-                    elif ix_next-ix<6:
+                    elif ix_next-ix<7:
                         self.rect(strlist[ix+1],strlist[ix+2],
-                                  strlist[ix+3],strlist[ix+4])
+                                  strlist[ix+3],strlist[ix+4],
+                                  strlist[ix+5])
                     else:
                         self.rect(strlist[ix+1],strlist[ix+2],
                                   strlist[ix+3],strlist[ix+4],
-                                  **string_to_dict(strlist[ix+5]))
+                                  strlist[ix+5],
+                                  **string_to_dict(strlist[ix+6]))
                         
                 elif cmd_name=='move-labels':
                     if self.verbose>2:
