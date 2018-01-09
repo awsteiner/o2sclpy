@@ -826,7 +826,8 @@ class plot_base:
         """
         if self.canvas_flag==0:
             self.canvas()
-        self.axes.text(tx,ty,str,transform=self.axes.transAxes,
+        self.axes.text(float(eval(tx)),float(eval(ty)),
+                       str,transform=self.axes.transAxes,
                        fontsize=self.font,va='center',ha='center',
                        **kwargs)
         return
@@ -837,7 +838,7 @@ class plot_base:
         """
         if self.canvas_flag==0:
             self.canvas()
-        self.axes.text(tx,ty,str,
+        self.axes.text(float(eval(tx)),float(eval(ty)),str,
                        fontsize=self.font,va='center',ha='center',**kwargs)
         return
 
