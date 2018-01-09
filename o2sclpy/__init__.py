@@ -1411,6 +1411,14 @@ class o2graph_plotter(plot_base):
                 ygrid=[math.log(ptry[i],10) for i in
                        range(0,ny.value)]
 
+            if self.zset==1:
+                for i in range(0,ny.value):
+                    for j in range(0,nx.value):
+                        if sl[i][j]>self.zhi:
+                            sl[i][j]=self.zhi
+                        elif sl[i][j]<self.zlo:
+                            sl[i][j]=self.zlo
+
             if self.canvas_flag==0:
                 self.canvas()
 
@@ -1461,6 +1469,14 @@ class o2graph_plotter(plot_base):
                 ygrid=[math.log(ptry[i],10) for i in
                        range(0,ny.value)]
 
+            if self.zset==1:
+                for i in range(0,ny.value):
+                    for j in range(0,nx.value):
+                        if sl[i][j]>self.zhi:
+                            sl[i][j]=self.zhi
+                        elif sl[i][j]<self.zlo:
+                            sl[i][j]=self.zlo
+                            
             if self.canvas_flag==0:
                 self.canvas()
 
