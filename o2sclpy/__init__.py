@@ -2343,7 +2343,8 @@ class o2graph_plotter(plot_base):
                       cmd_name=='N' or cmd_name=='I' or cmd_name=='q' or
                       cmd_name=='i' or cmd_name=='l' or cmd_name=='o' or
                       cmd_name=='P' or cmd_name=='r' or cmd_name=='s' or
-                      cmd_name=='S' or cmd_name=='v'):
+                      cmd_name=='S' or cmd_name=='v' or
+                      cmd_name=='autocorr'):
                     
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')
