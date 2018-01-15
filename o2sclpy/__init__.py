@@ -662,6 +662,14 @@ class plot_base:
             self.top_margin=float(value)
         elif name=='bottom-margin':
             self.bottom_margin=float(value)
+        elif name=='left_margin':
+            self.left_margin=float(value)
+        elif name=='right_margin':
+            self.right_margin=float(value)
+        elif name=='top_margin':
+            self.top_margin=float(value)
+        elif name=='bottom_margin':
+            self.bottom_margin=float(value)
         else:
             print('No variable named',name)
             
@@ -1255,6 +1263,8 @@ class o2graph_plotter(plot_base):
             args[0]=='zset' or args[0]=='colbar' or
             args[0]=='left-margin' or args[0]=='right-margin' or
             args[0]=='top-margin' or args[0]=='bottom-margin' or
+            args[0]=='left_margin' or args[0]=='right_margin' or
+            args[0]=='top_margin' or args[0]=='bottom_margin' or
             args[0]=='verbose' or args[0]=='font'):
                 
             self.set(args[0],args[1])
