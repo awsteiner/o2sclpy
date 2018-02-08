@@ -1,3 +1,6 @@
+parts
+prime
+stage
 dist
 o2sclpy.egg-info
 o2sclpy/__pycache__

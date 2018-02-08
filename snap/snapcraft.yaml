@@ -20,4 +20,9 @@
       - libncurses-dev
       - libhdf5-dev
       - libgsl0-dev
+      python-packages:
+      - h5py
+      - numpy
+      - matplotlib
+      
   
