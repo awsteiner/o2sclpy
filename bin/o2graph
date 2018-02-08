@@ -10,8 +10,6 @@ o2scl_libdir=''
 o2scl_cpplib=''
 backend=''
 
-import o2sclpy
-
 def force_bytes2(obj):
   """
   In cases where we're unsure whether or not obj is
@@ -95,6 +93,7 @@ if backend!='':
   import matplotlib
   matplotlib.use(backend)
 
+import o2sclpy
 gc=o2sclpy.o2graph_plotter()
 gc.parse_argv(sys.argv,o2scl_hdf)
 
