@@ -2,6 +2,7 @@ parts
 prime
 stage
 dist
+*.snap
 o2sclpy.egg-info
 o2sclpy/__pycache__
 *~
