@@ -68,7 +68,7 @@ Intergration with o2scl
 
 The O\ :sub:`2`\ graph script implements all of the commands from the
 ``acol`` executable in O\ :sub:`2`\ scl documented at
-<https://web.utk.edu/~asteine1/o2scl/html/acol_section.html>
+<https://isospin.roam.utk.edu/static/o2scl/html/acol_section.html>
 	     
 Example 1
 ---------
