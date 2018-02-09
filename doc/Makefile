@@ -19,11 +19,8 @@ help:
 %: Makefile
 	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-prerelease-sync-doc:
-	cp -r build/html/* $(HOME)/data/o2sclpy
-
 sync-doc:
-	cp -r build/html/* $(HOME)/wcs/int4/web/utk/o2sclpy
+	cp -r build/html/* $(STATIC_DOC_DIR)/o2sclpy
 
 help.txt:
 	cd static; o2graph -h > o2graph.help.txt
