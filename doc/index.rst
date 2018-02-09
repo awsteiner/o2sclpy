@@ -7,7 +7,7 @@ O2sclpy: v0.921
 
 O\ :sub:`2`\ sclpy: A set of python classes for use with the
 O\ :sub:`2`\ scl C++ library (separately documented
-at <https://web.utk.edu/~asteine1/o2scl>)
+at <https://isospin.roam.utk.edu/static/o2sclpy>)
 
 .. warning:: This python library is highly experimental and under heavy
 	     development.
