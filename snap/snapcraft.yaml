@@ -20,6 +20,7 @@
       - libncurses-dev
       - libhdf5-dev
       - libgsl0-dev
+      - python3-tk
       python-packages:
       - h5py
       - numpy
