@@ -1,4 +1,4 @@
 # o2sclpy
 Python extensions for O2scl
 
-Documentation is available at http://web.utk.edu/~asteine1/o2sclpy .
+Documentation is available at https://isospin.roam.utk.edu/static/o2sclpy .
