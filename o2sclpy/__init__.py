@@ -28,7 +28,7 @@ import numpy
 import ctypes
 import readline
 
-version='0.921'
+version='0.922'
 """
 The version number string
 """
@@ -1709,6 +1709,110 @@ class o2graph_plotter(plot_base):
                                  
         # End of 'plot' function
                                  
+    def rplot(self,o2scl_hdf,amp,args):
+        """
+        Plot a region inside a curve or in between two curves
+        """
+
+        # Useful pointer types
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        if curr_type==b'table':
+                            
+            failed=False
+
+            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+
+            colx1=ctypes.c_char_p(self.force_bytes(args[0]))
+            idx1=ctypes.c_int(0)
+            ptrx1=double_ptr()
+            get_ret=get_fn(amp,colx1,ctypes.byref(idx1),ctypes.byref(ptrx1))
+            if get_ret!=0:
+                print('Failed to get column named "'+args[0]+'".')
+                failed=True
+
+            coly1=ctypes.c_char_p(self.force_bytes(args[1]))
+            idy1=ctypes.c_int(0)
+            ptry1=double_ptr()
+            get_ret=get_fn(amp,coly1,ctypes.byref(idy1),ctypes.byref(ptry1))
+            if get_ret!=0:
+                print('Failed to get column named "'+args[1]+'".')
+                failed=True
+
+            if failed==False:
+                xv=[ptrx1[i] for i in range(0,idx1.value)]
+                yv=[ptry1[i] for i in range(0,idy1.value)]
+                
+            if len(args)>3:
+                colx2=ctypes.c_char_p(self.force_bytes(args[2]))
+                idx2=ctypes.c_int(0)
+                ptrx2=double_ptr()
+                get_ret=get_fn(amp,colx2,ctypes.byref(idx2),ctypes.byref(ptrx2))
+                if get_ret!=0:
+                    print('Failed to get column named "'+args[2]+'".')
+                    failed=True
+
+                coly2=ctypes.c_char_p(self.force_bytes(args[3]))
+                idy2=ctypes.c_int(0)
+                ptry2=double_ptr()
+                get_ret=get_fn(amp,coly2,ctypes.byref(idy2),ctypes.byref(ptry2))
+                if get_ret!=0:
+                    print('Failed to get column named "'+args[3]+'".')
+                    failed=True
+
+                if failed==False:
+                    for i in range(0,idx2.value):
+                        xv.append(ptrx2[idx2.value-1-i])
+                        yv.append(ptry2[idy2.value-1-i])
+
+            if failed==False:
+                
+                # Make sure the loop is closed
+                xv.append(ptrx1[0])
+                yv.append(ptry1[0])
+        
+                if self.canvas_flag==0:
+                    self.canvas()
+                if len(args)==3:
+                    plot.fill(xv,yv,**string_to_dict(args[2]))
+                elif len(args)==5:
+                    plot.fill(xv,yv,**string_to_dict(args[4]))
+                else:
+                    plot.fill(xv,yv)
+
+            # End of section for 'table' type
+        else:
+            print("Command 'rplot' not supported for type",
+                  curr_type,".")
+            return
+        
+        if self.xset==1:
+            plot.xlim([self.xlo,self.xhi])
+        if self.yset==1:
+            plot.ylim([self.ylo,self.yhi])
+                                 
+        # End of 'rplot' function
+                                 
     def histplot(self,o2scl_hdf,amp,args):
         """
         Plot a histogram
@@ -2367,6 +2471,13 @@ class o2graph_plotter(plot_base):
                         print('Process plot.')
 
                     self.plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+
+                elif cmd_name=='rplot':
+                    
+                    if self.verbose>2:
+                        print('Process rplot.')
+
+                    self.rplot(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='histplot':
                     

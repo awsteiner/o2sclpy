@@ -1,4 +1,4 @@
-O2sclpy: v0.921
+O2sclpy: v0.922
 ===============
 
 .. toctree::
@@ -42,14 +42,15 @@ to do a direct installation. O\ :sub:`2`\ sclpy requires
 python3 packages ``h5py``, ``numpy``, ``matplotlib``. and requires
 that 
 
-O\ :sub:`2`\ sclpy also requires that O\ :sub:`2`\ scl is installed on
-your machine. The script attempts to dynamically load the O\ :sub:`2`\
-scl libraries ``libo2scl`` and ``libo2scl_hdf`` using python's ctypes
+O\ :sub:`2`\ sclpy also requires that the most recent version of O\
+:sub:`2`\ scl from the master branch on github is installed on your
+machine. The script attempts to dynamically load the O\ :sub:`2`\ scl
+libraries ``libo2scl`` and ``libo2scl_hdf`` using python's ctypes
 module. If it cannot find them, you may need to use the argument
 ``-o2scl-libdir`` to specify the proper directory. If you're on OSX
 and using GCC, the script must load the C++ library first, and if
 necessary you can specify its location with the argument
-``-o2scl-cpplib`` (on my laptop this is ``-o2scl-cpplib
+``-o2scl-cpplib`` (on my OSX laptop this is ``-o2scl-cpplib
 /usr/local/lib/gcc/7/libstdc++.dylib``).
 
 Basic usage
