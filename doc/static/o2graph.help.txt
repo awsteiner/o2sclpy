@@ -64,7 +64,5 @@ exp(x) log(x) log10(x) sin(x) cos(x) tan(x) sqrt(x) abs(x)
 asin(x) acos(x) atan(x) sinh(x) cosh(x) tanh(x)
 asinh(x) acosh(x) atanh(x)
 
-Compiled at 07:56:29 on Feb 14 2018 for o2scl, version 0.922.
+Compiled at 22:53:18 on Feb 13 2018 for o2scl, version 0.922.
 
-Set o2scl-cpplib to /usr/local/lib/gcc/7/libstdc++.dylib
-Set o2scl-libdir to /Users/awsteiner/install/o2scl-0.921/lib
