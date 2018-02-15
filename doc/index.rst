@@ -33,8 +33,8 @@ enabled).
 Installation and Requirements
 -----------------------------
 
-O\ :sub:`2`\ sclpy can be installed with e.g. ``pip3 install
-o2sclpy``. If you want to install the development version, you can
+O\ :sub:`2`\ sclpy v0.921 can be installed with e.g. ``pip3 install
+o2sclpy``. If you want to install the development version (v0.922), you can
 clone the git repository, change directory to the O\ :sub:`2`\ sclpy
 directory, and then use e.g. ``pip3 install .`` if you want
 to use the pip package manager or ``python3 setup.py install``
@@ -42,9 +42,14 @@ to do a direct installation. O\ :sub:`2`\ sclpy requires
 python3 packages ``h5py``, ``numpy``, ``matplotlib``. and requires
 that 
 
-O\ :sub:`2`\ sclpy also requires that the most recent version of O\
-:sub:`2`\ scl from the master branch on github is installed on your
-machine. The script attempts to dynamically load the O\ :sub:`2`\ scl
+The release version, O\ :sub:`2`\ sclpy 0.921, requires the O\
+:sub:`2`\ scl v0.921 release from
+<https://github.com/awsteiner/o2scl/releases/tag/v0.921> and the
+development version, O\ :sub:`2`\ sclpy 0.922, requires that the most
+recent version of O\ :sub:`2`\ scl from the master branch on github is
+installed on your machine.
+
+The script attempts to dynamically load the O\ :sub:`2`\ scl
 libraries ``libo2scl`` and ``libo2scl_hdf`` using python's ctypes
 module. If it cannot find them, you may need to use the argument
 ``-o2scl-libdir`` to specify the proper directory. If you're on OSX
@@ -56,10 +61,22 @@ necessary you can specify its location with the argument
 Basic usage
 -----------
 
-Basic usage can be inferred from the help screen obtained with
-``o2graph -h`` or ``o2graph -help`` (shown just below). Detailed help
-on all of the individual command-line options can be obtained using,
-e.g. ``o2graph -help plot`` .
+The ``o2graph`` script is formulated along the same lines as the
+``acol`` executable in O\ :sub:`2`\ scl documented at
+<https://isospin.roam.utk.edu/static/o2scl/html/acol_section.html> .
+It operates on one object at a time, and the basic workflow is
+the same: read or create an object, manipulate and/or plot
+that object, and save the object or the plot to a file.
+
+Similar to ``acol``, the ``o2graph`` list of commands and help
+screen changes depending on the type of the current object in
+memory. Commands common to all types are listed in ``o2graph --help``
+or ``o2graph --commands``. Commands applicable to objects of
+O\ :sub:`2`\ scl type ``table`` are listed by ``o2graph --commands
+table``. To obtain the help information on how a particular
+command works with a particular type, add the type and the
+command as arguments to help, e.g. ``o2graph --help table plot``,
+which shows how to plot columns from ``table`` objects.
 
 .. include:: static/o2graph.help.txt
    :literal:
