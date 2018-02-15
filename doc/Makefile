@@ -41,4 +41,5 @@ sync-doc:
 	cp -r build/html/* $(STATIC_DOC_DIR)/o2sclpy
 
 help.txt:
-	cd static; o2graph -h | grep -v "Set o2scl" > o2graph.help.txt
+	cd static; o2graph -h | grep -v "Set o2scl" | \
+		grep -v "Compiled at" > o2graph.help.txt
