@@ -404,9 +404,10 @@ def parse_arguments(argv,verbose=0):
     return (list,unproc_list)
 
 def string_to_dict(s):
-    """ 
-    Convert a string to a dictionary, with extra processing
-    for some matplotlib keyword arguments.
+    """
+    Convert a string to a dictionary, with extra processing for some
+    matplotlib keyword arguments which are expected to have integer or
+    floating point values.
     """
     # First split into keyword = value pairs
     arr=s.split(',')
@@ -423,6 +424,8 @@ def string_to_dict(s):
             arr2[1]=arr2[1][1:len(arr2[1])-1]
         # convert strings to numbers if necessary
         if arr2[0]=='lw':
+            arr2[1]=float(arr2[1])
+        if arr2[0]=='alpha':
             arr2[1]=float(arr2[1])
         if arr2[0]=='bins':
             arr2[1]=int(arr2[1])
@@ -1926,7 +1929,7 @@ class o2graph_plotter(plot_base):
                 else:
                     sv=[ptrs[i] for i in range(0,ids.value)]
 
-            if len(args)>3 and len(args[3])>0:
+            if len(args)>3 and self.force_bytes(args[3])!=b'None':
                 colc=ctypes.c_char_p(self.force_bytes(args[3]))
                 idc=ctypes.c_int(0)
                 ptrc=double_ptr()
