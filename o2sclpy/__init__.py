@@ -1000,6 +1000,47 @@ class plotter(plot_base):
             return
         return
 
+    def scatter(self,colx,coly,cols,colc,**kwargs):
+        """
+        """
+        if self.force_bytes(self.dtype)==b'table':
+            if self.verbose>2:
+                print('plot',colx,coly,kwargs)
+            if self.canvas_flag==0:
+                self.canvas()
+            if self.logx==1:
+                self.axes.set_xscale('log')
+            if self.logy==1:
+                self.axes.set_yscale('log')
+
+            if len(colc)>0:
+                if len(cols)>0:
+                    plot.scatter(self.dset['data/'+colx],
+                                 self.dset['data/'+coly],
+                                 s=self.dset['data/'+cols],
+                                 c=self.dset['data/'+colc],
+                                 **kwargs)
+                else:
+                    plot.scatter(self.dset['data/'+colx],
+                                 self.dset['data/'+coly],
+                                 c=self.dset['data/'+colc],
+                                 **kwargs)
+            else:
+                if len(cols)>0:
+                    plot.scatter(self.dset['data/'+colx],
+                                 self.dset['data/'+coly],
+                                 s=self.dset['data/'+cols],
+                                 **kwargs)
+                else:
+                    plot.scatter(self.dset['data/'+colx],
+                                 self.dset['data/'+coly],
+                                 **kwargs)
+            if self.xset==1:
+                plot.xlim([self.xlo,self.xhi])
+            if self.yset==1:
+                plot.ylim([self.ylo,self.yhi])
+        return
+
     def plot1(self,col,**kwargs):
         """
         If the current dataset is of type ``table``, then
@@ -1800,9 +1841,149 @@ class o2graph_plotter(plot_base):
                 else:
                     plot.fill(xv,yv)
 
+                if self.logx==1:
+                    self.axes.set_xscale('log')
+                if self.logy==1:
+                    self.axes.set_yscale('log')
+                    
+                if self.xset==1:
+                    plot.xlim([self.xlo,self.xhi])
+                if self.yset==1:
+                    plot.ylim([self.ylo,self.yhi])
+                                 
             # End of section for 'table' type
         else:
             print("Command 'rplot' not supported for type",
+                  curr_type,".")
+            return
+        
+        # End of 'rplot' function
+                                 
+    def scatter(self,o2scl_hdf,amp,args):
+        """
+        """
+
+        # Useful pointer types
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        if curr_type==b'table':
+                            
+            failed=False
+
+            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+
+            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+            if get_ret!=0:
+                print('Failed to get column named "'+args[0]+'".')
+                failed=True
+
+            coly=ctypes.c_char_p(self.force_bytes(args[1]))
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
+            if get_ret!=0:
+                print('Failed to get column named "'+args[1]+'".')
+                failed=True
+
+            if failed==False:
+                xv=[ptrx[i] for i in range(0,idx.value)]
+                yv=[ptry[i] for i in range(0,idy.value)]
+
+            sv=[]
+            cv=[]
+                
+            if len(args)>2 and len(args[2])>0:
+                cols=ctypes.c_char_p(self.force_bytes(args[2]))
+                ids=ctypes.c_int(0)
+                ptrs=double_ptr()
+                get_ret=get_fn(amp,cols,ctypes.byref(ids),ctypes.byref(ptrs))
+                if get_ret!=0:
+                    print('Failed to get column named "'+args[2]+'".')
+                    failed=True
+                else:
+                    sv=[ptrs[i] for i in range(0,ids.value)]
+
+            if len(args)>3 and len(args[3])>0:
+                colc=ctypes.c_char_p(self.force_bytes(args[3]))
+                idc=ctypes.c_int(0)
+                ptrc=double_ptr()
+                get_ret=get_fn(amp,colc,ctypes.byref(idc),ctypes.byref(ptrc))
+                if get_ret!=0:
+                    print('Failed to get column named "'+args[3]+'".')
+                    failed=True
+                else:
+                    cv=[ptrc[i] for i in range(0,idc.value)]
+
+            if failed==False:
+                
+                if self.canvas_flag==0:
+                    self.canvas()
+                if len(sv)>0:
+                    if len(cv)>0:
+                        if len(args)>4:
+                            plot.scatter(xv,yv,s=sv,c=cv,
+                                         **string_to_dict(args[4]))
+                        else:
+                            print('xv',xv)
+                            print('yv',yv)
+                            print('sv',sv)
+                            print('cv',cv)
+                            plot.scatter(xv,yv,s=sv,c=cv)
+                    else:
+                        if len(args)>4:
+                            plot.scatter(xv,yv,s=sv,
+                                         **string_to_dict(args[4]))
+                        else:
+                            plot.scatter(xv,yv,s=sv)
+                else:
+                    if len(cv)>0:
+                        if len(args)>4:
+                            plot.scatter(xv,yv,c=cv,
+                                         **string_to_dict(args[4]))
+                        else:
+                            plot.scatter(xv,yv,c=cv)
+                    else:
+                        if len(args)>4:
+                            plot.scatter(xv,yv,**string_to_dict(args[4]))
+                        else:
+                            plot.scatter(xv,yv)
+
+                if self.logx==1:
+                    self.axes.set_xscale('log')
+                if self.logy==1:
+                    self.axes.set_yscale('log')
+                    
+                if self.xset==1:
+                    plot.xlim([self.xlo,self.xhi])
+                if self.yset==1:
+                    plot.ylim([self.ylo,self.yhi])
+                    
+            # End of section for 'table' type
+        else:
+            print("Command 'scatter' not supported for type",
                   curr_type,".")
             return
         
@@ -1811,7 +1992,7 @@ class o2graph_plotter(plot_base):
         if self.yset==1:
             plot.ylim([self.ylo,self.yhi])
                                  
-        # End of 'rplot' function
+        # End of 'scatter' function
                                  
     def histplot(self,o2scl_hdf,amp,args):
         """
@@ -2478,6 +2659,13 @@ class o2graph_plotter(plot_base):
                         print('Process rplot.')
 
                     self.rplot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+
+                elif cmd_name=='scatter':
+                    
+                    if self.verbose>2:
+                        print('Process scatter.')
+
+                    self.scatter(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='histplot':
                     
