@@ -1914,8 +1914,8 @@ class o2graph_plotter(plot_base):
 
             sv=[]
             cv=[]
-                
-            if len(args)>2 and len(args[2])>0:
+
+            if len(args)>2 and self.force_bytes(args[2])!=b'None':
                 cols=ctypes.c_char_p(self.force_bytes(args[2]))
                 ids=ctypes.c_int(0)
                 ptrs=double_ptr()
@@ -1947,10 +1947,6 @@ class o2graph_plotter(plot_base):
                             plot.scatter(xv,yv,s=sv,c=cv,
                                          **string_to_dict(args[4]))
                         else:
-                            print('xv',xv)
-                            print('yv',yv)
-                            print('sv',sv)
-                            print('cv',cv)
                             plot.scatter(xv,yv,s=sv,c=cv)
                     else:
                         if len(args)>4:
@@ -2573,13 +2569,32 @@ class o2graph_plotter(plot_base):
                 while ix_next_done==0:
                     if ix_next==len(strlist):
                         ix_next_done=1
-                    elif strlist[ix_next][0]=='-':
+                    elif len(strlist[ix_next])>0 and strlist[ix_next][0]=='-':
                         ix_next_done=1
                     else:
                         if self.verbose>2:
                             print('Incrementing ix_next')
                         ix_next=ix_next+1
-                        
+
+                # List of 'acol' commands for option processing loop
+                acol_list=['D','I','N','P','S','a','assign','autocorr','c',
+                           'calc','cat','commands','contours','convert-unit'
+                           'convert_unit','create','create3','d','delete-col'
+                           'delete-rows','delete_col','delete_rows','deriv',
+                           'deriv2','entry','f','filelist','find-row',
+                           'find_row''fit','function','g','gen3-list',
+                           'gen3_list','generic','get-conv','get-row',
+                           'get-unit','get_conv','get_row''get_unit',
+                           'h','help','i','index','insert','insert-full',
+                           'insert_full','integ','internal','interp',
+                           'interp-type','interp_type','l','license','list',
+                           'max','min','nlines','o','output','preview','q',
+                           'r','read','rename','s','select','select-rows',
+                           'select_rows','set-data','set-unit','set_data',
+                           'set_unit','show-units','show_units','slice',
+                           'sort','status','sum','to-hist',
+                           'to_hist','type','v','warranty']
+                
                 # Now process the option
                 if cmd_name=='set':
 
@@ -2607,39 +2622,7 @@ class o2graph_plotter(plot_base):
                           'processing program for O2scl.')
                     print(' Version '+version+'.')
 
-                elif (cmd_name=='read' or cmd_name=='list' or
-                      cmd_name=='assign' or cmd_name=='integ' or
-                      cmd_name=='cat' or cmd_name=='internal' or
-                      cmd_name=='commands' or cmd_name=='interp' or
-                      cmd_name=='convert-unit' or cmd_name=='interp-type' or
-                      cmd_name=='create' or cmd_name=='license' or
-                      cmd_name=='delete-col' or cmd_name=='max' or
-                      cmd_name=='delete-rows' or cmd_name=='min' or
-                      cmd_name=='deriv' or cmd_name=='output' or
-                      cmd_name=='deriv2' or cmd_name=='preview' or
-                      cmd_name=='filelist' or cmd_name=='rename' or
-                      cmd_name=='find-row' or cmd_name=='select' or
-                      cmd_name=='fit' or cmd_name=='select-rows' or
-                      cmd_name=='function' or cmd_name=='set-data' or
-                      cmd_name=='gen3-list' or cmd_name=='set-unit' or
-                      cmd_name=='generic' or cmd_name=='show-units' or
-                      cmd_name=='get-conv' or cmd_name=='slice' or
-                      cmd_name=='get-row' or cmd_name=='sort' or
-                      cmd_name=='get-unit' or cmd_name=='status' or
-                      cmd_name=='index' or cmd_name=='sum' or
-                      cmd_name=='insert' or cmd_name=='contours' or
-                      cmd_name=='insert-full' or cmd_name=='warranty' or
-                      cmd_name=='calc' or cmd_name=='help' or
-                      cmd_name=='nlines' or cmd_name=='to-hist' or
-                      cmd_name=='type' or cmd_name=='entry' or
-                      cmd_name=='create3' or cmd_name=='h' or
-                      cmd_name=='a' or cmd_name=='c' or cmd_name=='d' or
-                      cmd_name=='D' or cmd_name=='f' or cmd_name=='g' or
-                      cmd_name=='N' or cmd_name=='I' or cmd_name=='q' or
-                      cmd_name=='i' or cmd_name=='l' or cmd_name=='o' or
-                      cmd_name=='P' or cmd_name=='r' or cmd_name=='s' or
-                      cmd_name=='S' or cmd_name=='v' or
-                      cmd_name=='autocorr'):
+                elif cmd_name in acol_list:
                     
                     if self.verbose>2:
                         print('Process '+cmd_name+'.')
