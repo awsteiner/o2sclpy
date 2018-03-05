@@ -2595,8 +2595,8 @@ class o2graph_plotter(plot_base):
                            'r','read','rename','s','select','select-rows',
                            'select_rows','set-data','set-unit','set_data',
                            'set_unit','show-units','show_units','slice',
-                           'sort','status','sum','to-hist',
-                           'to_hist','type','v','warranty']
+                           'sort','status','sum','to-hist','to-table3d',
+                           'to_hist','type','v','warranty','to_table3d']
                 
                 # Now process the option
                 if cmd_name=='set':
