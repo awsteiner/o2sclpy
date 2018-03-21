@@ -2580,24 +2580,29 @@ class o2graph_plotter(plot_base):
                         ix_next=ix_next+1
 
                 # List of 'acol' commands for option processing loop
-                acol_list=['D','I','N','P','S','a','assign','autocorr','c',
-                           'calc','cat','commands','contours','convert-unit'
-                           'convert_unit','create','create3','d','delete-col'
+                acol_list=['a','alias','assign','autocorr','c',
+                           'calc','cat','commands','contours','convert-unit',
+                           'convert_unit','create','d','D',
+                           'delete-col',
                            'delete-rows','delete_col','delete_rows','deriv',
-                           'deriv2','entry','f','filelist','find-row',
-                           'find_row''fit','function','g','gen3-list',
+                           'deriv2','download','entry','f','filelist',
+                           'find-row',
+                           'find_row','fit','function','g','gen3-list',
                            'gen3_list','generic','get-conv','get-row',
-                           'get-unit','get_conv','get_row''get_unit',
-                           'h','help','i','index','insert','insert-full',
+                           'get-unit','get_conv','get_row','get_unit',
+                           'h','help','i','I','index','insert','insert-full',
                            'insert_full','integ','internal','interp',
                            'interp-type','interp_type','l','license','list',
-                           'max','min','nlines','o','output','preview','q',
-                           'r','read','rename','s','select','select-rows',
-                           'select_rows','set-data','set-unit','set_data',
+                           'max','min','N','nlines','o','output','P',
+                           'preview','q',
+                           'r','read','rename','run',
+                           's','S','select','select-rows',
+                           'select_rows','select-rows2','select_rows2',
+                           'set-data','set_data','set-unit',
                            'set_unit','show-units','show_units','slice',
-                           'sort','status','sum','to-hist','to-table3d',
-                           'to_hist','type','v','warranty','to_table3d',
-                           'to-table','to_table']
+                           'sort','stats','sum','to-hist','to_hist',
+                           'to_table3d','to-table','to_table','to-table3d',
+                           'type','v','warranty']
                 
                 # Now process the option
                 if cmd_name=='set':
