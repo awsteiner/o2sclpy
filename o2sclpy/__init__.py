@@ -2625,18 +2625,51 @@ class o2graph_plotter(plot_base):
                     else:
                         self.get_wrapper(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
+                elif cmd_name=='help':
+                    
+                    if self.verbose>2:
+                        print('Process help.')
+
+                    if (ix_next-ix)==2:
+
+                        # Get current type
+                        int_ptr=ctypes.POINTER(ctypes.c_int)
+                        char_ptr=ctypes.POINTER(ctypes.c_char)
+                        char_ptr_ptr=ctypes.POINTER(char_ptr)
+
+                        # Set up wrapper for type function
+                        type_fn=o2scl_hdf.o2scl_acol_get_type
+                        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+                        # Get current type
+                        it=ctypes.c_int(0)
+                        type_ptr=char_ptr()
+                        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+                        curr_type=b''
+                        for i in range(0,it.value):
+                            curr_type=curr_type+type_ptr[i]
+
+                        print('help for type',curr_type,'command',
+                              strlist[ix+1])
+                    elif (ix_next-ix)==3:
+                        print('help for type',strlist[ix+1],'command',
+                              strlist[ix+2])
+                            
+                    self.gen(o2scl_hdf,amp,cmd_name,strlist[ix+1:ix_next])
+
                 elif cmd_name=='version':
                     
                     print('o2graph: A data table plotting and',
                           'processing program for O2scl.')
                     print(' Version '+version+'.')
 
-                elif cmd_name in acol_list:
-                    
-                    if self.verbose>2:
-                        print('Process '+cmd_name+'.')
-
-                    self.gen(o2scl_hdf,amp,cmd_name,strlist[ix+1:ix_next])
+#                elif cmd_name in acol_list:
+#                    
+#                    if self.verbose>2:
+#                        print('Process '+cmd_name+'.')
+#
+#                    self.gen(o2scl_hdf,amp,cmd_name,strlist[ix+1:ix_next])
 
                 elif cmd_name=='plot':
                     
@@ -2847,9 +2880,14 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process reds2.')
                     self.new_cmaps()
-                elif (cmd_name!='backend' and cmd_name!='o2scl-cpplib' and
-                    cmd_name!='o2scl-libdir'):
-                    print('No option named',cmd_name)
+#                elif (cmd_name!='backend' and cmd_name!='o2scl-cpplib' and
+#                    cmd_name!='o2scl-libdir'):
+#                    print('No option named',cmd_name)
+                else:
+                    if self.verbose>2:
+                        print('Process acol command '+cmd_name+'.')
+                    self.gen(o2scl_hdf,amp,cmd_name,strlist[ix+1:ix_next])
+                    
                 # Increment to the next option
                 ix=ix_next
                 
