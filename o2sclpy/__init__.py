@@ -27,11 +27,26 @@ import urllib.request
 import numpy
 import ctypes
 import readline
+import textwrap
 
 version='0.922'
 """
 The version number string
 """
+
+table_plot_help="Usage: plot <x> <y> [kwargs]\n\
+\n\
+Plot two columns from the table.\n"
+
+table_plot_help2="\
+If the current object is a table, then plot column <y> versus column <x>. If \
+the current object is a one-dimensional histogram, then plot the histogram \
+weights as a function of the bin representative values. If the current object \
+is a set of contour lines, then plot the full set of contour lines. Some \
+useful kwargs are color (c), dashes, linestyle (ls), linewidth (lw), marker, \
+markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), \
+markerfacecoloralt (mfcalt), markersize (ms). For example: o2graph -create x 0 \
+10 0.2 -function sin(x) y -plot x y lw=0,marker='+' -show"
 
 class cloud_file:
     """
@@ -2649,14 +2664,23 @@ class o2graph_plotter(plot_base):
                         curr_type=b''
                         for i in range(0,it.value):
                             curr_type=curr_type+type_ptr[i]
-
+                            
+                        cmd=strlist[ix+1]
                         print('help for type',curr_type,'command',
                               strlist[ix+1])
                     elif (ix_next-ix)==3:
-                        print('help for type',strlist[ix+1],'command',
-                              strlist[ix+2])
-                            
-                    self.gen(o2scl_hdf,amp,cmd_name,strlist[ix+1:ix_next])
+                        curr_type=strlist[ix+1]
+                        cmd=strlist[ix+2]
+
+                    if ((curr_type=='table' or curr_type==b'table') and
+                        cmd=='plot'):
+                        print(table_plot_help)
+                        str_list=textwrap.wrap(table_plot_help2,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    else:
+                        self.gen(o2scl_hdf,amp,cmd_name,
+                                 strlist[ix+1:ix_next])
 
                 elif cmd_name=='version':
                     
