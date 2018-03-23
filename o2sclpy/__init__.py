@@ -2716,6 +2716,40 @@ class o2graph_plotter(plot_base):
                     self.gen(o2scl_hdf,amp,cmd_name,
                              strlist[ix+1:ix_next])
 
+                    if (ix_next-ix)==2:
+                        
+                        curr_type=strlist[ix+1]
+                        
+                    else:
+
+                        # Get current type
+                        int_ptr=ctypes.POINTER(ctypes.c_int)
+                        char_ptr=ctypes.POINTER(ctypes.c_char)
+                        char_ptr_ptr=ctypes.POINTER(char_ptr)
+
+                        # Set up wrapper for type function
+                        type_fn=o2scl_hdf.o2scl_acol_get_type
+                        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+                        # Get current type
+                        it=ctypes.c_int(0)
+                        type_ptr=char_ptr()
+                        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+                        curr_type=b''
+                        for i in range(0,it.value):
+                            curr_type=curr_type+type_ptr[i]
+                            
+                    if (curr_type=='table' or curr_type==b'table'):
+                        print('O2graph commands for type '+
+                              str(curr_type)+':\n')
+                        strout=''
+                        for i in table_list:
+                            strout+=i+' '
+                        str_list=textwrap.wrap(strout,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                            
                 elif cmd_name=='help':
                     
                     if self.verbose>2:
