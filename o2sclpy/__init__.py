@@ -34,6 +34,107 @@ version='0.922'
 The version number string
 """
 
+"""
+This is a list of 4-element entries:
+1: command name
+2: short description
+3: argument list
+4: full help text
+"""
+base_list=[["line","Plot a line.","<x1> <y1> <x2> <y2> [kwargs]",
+            "Plot a line from (x1,y1) to (xy,y2). Some useful \
+            kwargs are color (c), dashes, linestyle (ls), linewidth (lw), \
+            marker, markeredgecolor (mec), markeredgewidth (mew), \
+            markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize \
+            (ms). For example: o2graph -line 0.05 0.05 0.95 0.95 \
+            lw=0,marker='+' -show"],
+           ["rect","Plot a rectangle.",
+            "<x1> <y1> <x2> <y2> <angle> [kwargs]",
+            "Plot a rectange from (x1,y1) to (xy,y2) with \
+            rotation angle <angle>."],
+           ["new-cmaps","Define new color maps.","",
+            "Define new color maps, 'jet2', 'pastel2' \
+            'reds2', 'greens2', and 'blues2'."],
+           ["plotm",
+            "Plot the specified columns from tables in multiple files.",
+            "<x> <y>","After using -plot-files to specify \
+            a list of files, plot column <y> versus column <x> for the first \
+            table object in all of the specified files. Some useful \
+            kwargs are color (c), dashes, linestyle (ls), linewidth (lw), \
+            marker, markeredgecolor (mec), markeredgewidth (mew), \
+            markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize \
+            (ms). For example: o2graph -plot-files file1.o2 file2.o \
+            -plotm xcol ycol lw=0,marker='+' -show"],
+           ["plot1m",
+            "Plot the specified column from tables in multiple files.",
+            "<y>","After using -plot-files to specify \
+            a list of files, plot column <y> versus row number for the first \
+            table object in all of the specified files. Some useful \
+            kwargs are color (c), dashes, linestyle (ls), linewidth (lw), \
+            marker, markeredgecolor (mec), markeredgewidth (mew), \
+            markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize \
+            (ms). For example: o2graph -plot-files file1.o2 file2.o \
+            -plot1m ycol lw=0,marker='+' -show"],
+           ["xlimits","Set the x-axis limits.","<low> <high>",
+            "Set 'xlo' and 'xhi' to the specified limits, \
+            and set 'xset' to true. If a plotting canvas is currently \
+            open, then \
+            the x-limits on that plot are modified. Future plots are also \
+            set with the specified x-limits."],
+           ["reset-xlim","Reset the x-axis limits.","",
+            "This is an alias for 'set xset 0', and indicates \
+            that the values of 'xlo' and 'xhi' are to be ignored until the \
+            next call to 'xlimits'."],
+           ["ylimits","Set the y-axis limits.","<low> <high>",
+            "Set 'ylo' and 'yhi' to the specified limits, \
+            and set 'yset' to true. If a plotting canvas is currently \
+            open, then \
+            the y-limits on that plot are modified. Future plots are also \
+            set with the specified y-limits."],
+           ["reset-ylim","Reset the y-axis limits.","",
+            "This is an alias for 'set yset 0', and indicates \
+            that the values of 'ylo' and 'yhi' are to be ignored until the \
+            next call to 'ylimits'."],
+           ["zlimits","Set the z-azis limits","<low> <high>",
+            "Set 'zlo' and 'zhi' to the specified limits, \
+            and set 'zset' to true. If a plotting canvas is currently \
+            open, then \
+            the z-limits on that plot are modified. Future plots are also \
+            set with the specified z-limits."],
+           ["reset-zlim","Reset the z-azis limits.","",
+            "This is an alias for 'set zset 0', and indicates \
+            that the values of 'zlo' and 'zhi' are to be ignored until the \
+            next call to 'zlimits'."],
+           ["canvas","Create a plotting canvas.","",
+            "Create an empty plotting canvas. For example 'o2graph \
+            -canvas -show'."],
+           ["clf","Clear the current figure.","",
+            "Clear the current figure."],
+           ["backend","Select the matplotlib backend to use.","<backend>",
+            "This selects the matplotlib backend. \
+            Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', 'QT4Agg'. \
+            Use -backend Agg to save the plot to a file without \
+            opening a window."],
+           ["show","Show the current plot.","","Show the current plot \
+           on the screen and begin \
+           the graphical user interface. This is similar to plot.show()."],
+           ["move-labels","Move the labels.","",""],
+           ["text","Plot text in the axis coordinate system.",
+            "<x> <y> <text> [kwargs]",""],
+           ["ttext","Plot text in the canvas default coordinate system.",
+            "<x> <y> <text> [kwargs]",""],
+           ["save","Save the current plot in a file.","<filename>",
+            "Save the current plot in a file similar \
+            to plot.savefig(). The action of this command depends on \
+            which backend was selected. File type depends on the \
+            extension, typically either .png, .pdf, .eps, .jpg, .raw, .svg, \
+            and .tif ."],
+           ["plot-files",
+            "Specify a list of files for 'plotm' and 'plot1m'.",
+            "<file 1> [file 2] ...",""]
+       ]
+           
+
 table_list=['plot','rplot','scatter','errorbar','plot1','histplot',
             'hist2dplot']
 
@@ -2913,6 +3014,8 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process help.')
 
+                    curr_type=''
+                    
                     if (ix_next-ix)==2:
 
                         # Get current type
