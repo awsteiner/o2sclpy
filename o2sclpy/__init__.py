@@ -116,6 +116,100 @@ table_hist2dplot_help2="For a table, create a 2D histogram plot from \
 the specified columns. This command uses matplotlib to construct the \
 histogram rather than using O2scl to create a hist object."
 
+table3d_list=['den-plot']
+
+table3d_den_plot_help="Usage: den-plot <slice name for table3d>\n\
+\n\
+Create a density plot from a table3d object.\n"
+
+table3d_den_plot_help2="Creates a density plot from the specified \
+slice. Logarithmic x- or \
+y-axes are handled by taking the base 10 log of the x- or y-grids \
+specified in the table3d object before plotting. A z-axis density \
+legend is print on the RHS if colbar is set to 1 before plotting. If \
+z-axis limits are specified, then values larger than the upper limit \
+are set equal to the upper limit and values smaller than the lower \
+limit are set equal to the lower limit before plotting."
+
+hist_list=['plot']
+
+hist_plot_help="Usage: plot [kwargs]\n\
+\n\
+Plot the histogram.\n"
+
+hist_plot_help2="Plot the histogram weights as a function \
+ of the bin representative values. \
+Some useful kwargs (which apply for all three object types) are color (c), \
+dashes, linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), \
+markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt (mfcalt), \
+markersize (ms). For example: o2graph -create x 0 10 0.2 -function sin(x) y \
+-plot x y lw=0,marker='+' -show"
+
+doublearr_list=['plot1']
+
+doublearr_plot1_help="Usage: plot1 [kwargs]\n\
+\n\
+Plot the array.\n"
+
+doublearr_plot1_help2="Plot the array. Some useful kwargs \
+(which apply for all three object types) \
+are color (c), dashes, linestyle (ls), linewidth (lw), marker, \
+markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), \
+markerfacecoloralt (mfcalt), markersize (ms)."
+
+intarr_list=['plot1']
+
+intarr_plot1_help="Usage: plot1 [kwargs]\n\
+\n\
+Plot the array.\n"
+
+intarr_plot1_help2="Plot the array. Some useful kwargs \
+(which apply for all three object types) \
+are color (c), dashes, linestyle (ls), linewidth (lw), marker, \
+markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), \
+markerfacecoloralt (mfcalt), markersize (ms)."
+
+size_tarr_list=['plot1']
+
+size_tarr_plot1_help="Usage: plot1 [kwargs]\n\
+\n\
+Plot the array.\n"
+
+size_tarr_plot1_help2="Plot the array. Some useful kwargs \
+(which apply for all three object types) \
+are color (c), dashes, linestyle (ls), linewidth (lw), marker, \
+markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), \
+markerfacecoloralt (mfcalt), markersize (ms)."
+
+contour_lines_list=['plot']
+
+contour_lines_help="Usage: plot [kwargs]\n\
+\n\
+Plot the contour lines\n."
+
+contour_lines_help2="Plot the set of contour lines. Some \
+useful kwargs (which apply for all three \
+object types) are color (c), dashes, linestyle (ls), linewidth (lw), \
+marker, markeredgecolor (mec), markeredgewidth (mew), markerfacecolor \
+(mfc), markerfacecoloralt (mfcalt), markersize (ms). For example: \
+o2graph -create x 0 10 0.2 -function sin(x) y -plot x y \
+lw=0,marker='+' -show"
+
+hist_2d_list=['den-plot','contours']
+
+hist_2d_help="Usage: den-plot <slice name for table3d>\n\
+\n\
+Create a density plot from a hist_2d object.\n"
+
+hist_2d_help2="Create a density plot from the current histogram (assuming \
+equally-spaced bins). Logarithmic x- or y-axes are handled by taking \
+the base 10 log of the x- or y-grids specified in the table3d object \
+before plotting. A z-axis density legend is print on the RHS if colbar \
+is set to 1 before plotting. If z-axis limits are specified, then \
+values larger than the upper limit are set equal to the upper limit \
+and values smaller than the lower limit are set equal to the lower \
+limit before plotting."
+
 class cloud_file:
     """
     A class to manage downloading files from the internet.
@@ -2749,6 +2843,70 @@ class o2graph_plotter(plot_base):
                         str_list=textwrap.wrap(strout,79)
                         for i in range (0,len(str_list)):
                             print(str_list[i])
+                    elif (curr_type=='table3d' or curr_type==b'table3d'):
+                        print('O2graph commands for type '+
+                              str(curr_type)+':\n')
+                        strout=''
+                        for i in table3d_list:
+                            strout+=i+' '
+                        str_list=textwrap.wrap(strout,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif (curr_type=='hist' or curr_type==b'hist'):
+                        print('O2graph commands for type '+
+                              str(curr_type)+':\n')
+                        strout=''
+                        for i in hist_list:
+                            strout+=i+' '
+                        str_list=textwrap.wrap(strout,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif (curr_type=='double[]' or curr_type==b'double[]'):
+                        print('O2graph commands for type '+
+                              str(curr_type)+':\n')
+                        strout=''
+                        for i in doublearr_list:
+                            strout+=i+' '
+                        str_list=textwrap.wrap(strout,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif (curr_type=='int[]' or curr_type==b'int[]'):
+                        print('O2graph commands for type '+
+                              str(curr_type)+':\n')
+                        strout=''
+                        for i in intarr_list:
+                            strout+=i+' '
+                        str_list=textwrap.wrap(strout,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif (curr_type=='size_t[]' or curr_type==b'size_t[]'):
+                        print('O2graph commands for type '+
+                              str(curr_type)+':\n')
+                        strout=''
+                        for i in size_tarr_list:
+                            strout+=i+' '
+                        str_list=textwrap.wrap(strout,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif (curr_type=='vector<contour_line>' or
+                    curr_type==b'vector<contour_line>'):
+                        print('O2graph commands for type '+
+                              str(curr_type)+':\n')
+                        strout=''
+                        for i in contour_lines_list:
+                            strout+=i+' '
+                        str_list=textwrap.wrap(strout,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif (curr_type=='hist_2d' or curr_type==b'hist_2d'):
+                        print('O2graph commands for type '+
+                              str(curr_type)+':\n')
+                        strout=''
+                        for i in hist_2d_list:
+                            strout+=i+' '
+                        str_list=textwrap.wrap(strout,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
                             
                 elif cmd_name=='help':
                     
@@ -2789,33 +2947,76 @@ class o2graph_plotter(plot_base):
                         for i in range (0,len(str_list)):
                             print(str_list[i])
                     elif ((curr_type=='table' or curr_type==b'table') and
-                        cmd=='scatter'):
+                    cmd=='scatter'):
                         print(table_scatter_help)
                         str_list=textwrap.wrap(table_scatter_help2,79)
                         for i in range (0,len(str_list)):
                             print(str_list[i])
                     elif ((curr_type=='table' or curr_type==b'table') and
-                        cmd=='errorbar'):
+                    cmd=='errorbar'):
                         print(table_errorbar_help)
                         str_list=textwrap.wrap(table_errorbar_help2,79)
                         for i in range (0,len(str_list)):
                             print(str_list[i])
                     elif ((curr_type=='table' or curr_type==b'table') and
-                        cmd=='plot1'):
+                    cmd=='plot1'):
                         print(table_plot1_help)
                         str_list=textwrap.wrap(table_plot1_help2,79)
                         for i in range (0,len(str_list)):
                             print(str_list[i])
                     elif ((curr_type=='table' or curr_type==b'table') and
-                        cmd=='histplot'):
+                    cmd=='histplot'):
                         print(table_histplot_help)
                         str_list=textwrap.wrap(table_histplot_help2,79)
                         for i in range (0,len(str_list)):
                             print(str_list[i])
                     elif ((curr_type=='table' or curr_type==b'table') and
-                        cmd=='hist2dplot'):
+                    cmd=='hist2dplot'):
                         print(table_hist2dplot_help)
                         str_list=textwrap.wrap(table_hist2dplot_help2,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif ((curr_type=='table3d' or curr_type==b'table3d') and
+                    (cmd=='den-plot' or cmd=='den_plot')):
+                        print(table3d_den_plot_help)
+                        str_list=textwrap.wrap(table3d_den_plot_help2,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif ((curr_type=='hist' or curr_type==b'hist') and
+                    cmd=='plot'):
+                        print(hist_plot_help)
+                        str_list=textwrap.wrap(hist_plot_help2,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif ((curr_type=='double[]' or curr_type==b'double[]') and
+                    cmd=='plot1'):
+                        print(doublearr_plot1_help)
+                        str_list=textwrap.wrap(doublearr_plot1_help2,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif ((curr_type=='int[]' or curr_type==b'int[]') and
+                    cmd=='plot1'):
+                        print(intarr_plot1_help)
+                        str_list=textwrap.wrap(intarr_plot1_help2,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif ((curr_type=='size_t[]' or curr_type==b'size_t[]') and
+                    cmd=='plot1'):
+                        print(size_tarr_plot1_help)
+                        str_list=textwrap.wrap(size_tarr_plot1_help2,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif ((curr_type=='vector<contour_line>' or
+                    curr_type==b'vector<contour_line>') and
+                    cmd=='plot'):
+                        print(contour_lines_plot_help)
+                        str_list=textwrap.wrap(contour_lines_plot_help2,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                    elif ((curr_type=='hist_2d' or curr_type==b'hist_2d') and
+                          (cmd=='den_plot' or cmd=='den_plot')):
+                        print(hist_2d_den_plot_help)
+                        str_list=textwrap.wrap(hist_2d_den_plot_help2,79)
                         for i in range (0,len(str_list)):
                             print(str_list[i])
                     else:
