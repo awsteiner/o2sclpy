@@ -2,20 +2,20 @@
 #  
 #  Copyright (C) 2006-2018, Andrew W. Steiner
 #  
-#  This file is part of O2scl.
+#  This file is part of O2sclpy.
 #  
-#  O2scl is free software; you can redistribute it and/or modify
+#  O2sclpy is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation; either version 3 of the License, or
 #  (at your option) any later version.
 #  
-#  O2scl is distributed in the hope that it will be useful,
+#  O2sclpy is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #  
 #  You should have received a copy of the GNU General Public License
-#  along with O2scl. If not, see <http://www.gnu.org/licenses/>.
+#  along with O2sclpy. If not, see <http://www.gnu.org/licenses/>.
 #  
 #  -------------------------------------------------------------------
 
@@ -41,275 +41,220 @@ This is a list of 4-element entries:
 3: argument list
 4: full help text
 """
-base_list=[["line","Plot a line.","<x1> <y1> <x2> <y2> [kwargs]",
-            "Plot a line from (x1,y1) to (xy,y2). Some useful \
-            kwargs are color (c), dashes, linestyle (ls), linewidth (lw), \
-            marker, markeredgecolor (mec), markeredgewidth (mew), \
-            markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize \
-            (ms). For example: o2graph -line 0.05 0.05 0.95 0.95 \
-            lw=0,marker='+' -show"],
-           ["rect","Plot a rectangle.",
-            "<x1> <y1> <x2> <y2> <angle> [kwargs]",
-            "Plot a rectange from (x1,y1) to (xy,y2) with \
-            rotation angle <angle>."],
-           ["new-cmaps","Define new color maps.","",
-            "Define new color maps, 'jet2', 'pastel2' \
-            'reds2', 'greens2', and 'blues2'."],
-           ["plotm",
-            "Plot the specified columns from tables in multiple files.",
-            "<x> <y>","After using -plot-files to specify \
-            a list of files, plot column <y> versus column <x> for the first \
-            table object in all of the specified files. Some useful \
-            kwargs are color (c), dashes, linestyle (ls), linewidth (lw), \
-            marker, markeredgecolor (mec), markeredgewidth (mew), \
-            markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize \
-            (ms). For example: o2graph -plot-files file1.o2 file2.o \
-            -plotm xcol ycol lw=0,marker='+' -show"],
-           ["plot1m",
-            "Plot the specified column from tables in multiple files.",
-            "<y>","After using -plot-files to specify \
-            a list of files, plot column <y> versus row number for the first \
-            table object in all of the specified files. Some useful \
-            kwargs are color (c), dashes, linestyle (ls), linewidth (lw), \
-            marker, markeredgecolor (mec), markeredgewidth (mew), \
-            markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize \
-            (ms). For example: o2graph -plot-files file1.o2 file2.o \
-            -plot1m ycol lw=0,marker='+' -show"],
-           ["xlimits","Set the x-axis limits.","<low> <high>",
-            "Set 'xlo' and 'xhi' to the specified limits, \
-            and set 'xset' to true. If a plotting canvas is currently \
-            open, then \
-            the x-limits on that plot are modified. Future plots are also \
-            set with the specified x-limits."],
-           ["reset-xlim","Reset the x-axis limits.","",
-            "This is an alias for 'set xset 0', and indicates \
-            that the values of 'xlo' and 'xhi' are to be ignored until the \
-            next call to 'xlimits'."],
-           ["ylimits","Set the y-axis limits.","<low> <high>",
-            "Set 'ylo' and 'yhi' to the specified limits, \
-            and set 'yset' to true. If a plotting canvas is currently \
-            open, then \
-            the y-limits on that plot are modified. Future plots are also \
-            set with the specified y-limits."],
-           ["reset-ylim","Reset the y-axis limits.","",
-            "This is an alias for 'set yset 0', and indicates \
-            that the values of 'ylo' and 'yhi' are to be ignored until the \
-            next call to 'ylimits'."],
-           ["zlimits","Set the z-azis limits","<low> <high>",
-            "Set 'zlo' and 'zhi' to the specified limits, \
-            and set 'zset' to true. If a plotting canvas is currently \
-            open, then \
-            the z-limits on that plot are modified. Future plots are also \
-            set with the specified z-limits."],
-           ["reset-zlim","Reset the z-azis limits.","",
-            "This is an alias for 'set zset 0', and indicates \
-            that the values of 'zlo' and 'zhi' are to be ignored until the \
-            next call to 'zlimits'."],
-           ["canvas","Create a plotting canvas.","",
-            "Create an empty plotting canvas. For example 'o2graph \
-            -canvas -show'."],
-           ["clf","Clear the current figure.","",
-            "Clear the current figure."],
-           ["backend","Select the matplotlib backend to use.","<backend>",
-            "This selects the matplotlib backend. \
-            Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', 'QT4Agg'. \
-            Use -backend Agg to save the plot to a file without \
-            opening a window."],
-           ["show","Show the current plot.","","Show the current plot \
-           on the screen and begin \
-           the graphical user interface. This is similar to plot.show()."],
-           ["move-labels","Move the labels.","",""],
-           ["text","Plot text in the axis coordinate system.",
-            "<x> <y> <text> [kwargs]",""],
-           ["ttext","Plot text in the canvas default coordinate system.",
-            "<x> <y> <text> [kwargs]",""],
-           ["save","Save the current plot in a file.","<filename>",
-            "Save the current plot in a file similar \
-            to plot.savefig(). The action of this command depends on \
-            which backend was selected. File type depends on the \
-            extension, typically either .png, .pdf, .eps, .jpg, .raw, .svg, \
-            and .tif ."],
-           ["plot-files",
-            "Specify a list of files for 'plotm' and 'plot1m'.",
-            "<file 1> [file 2] ...",""]
-       ]
-           
+base_list=[
+    ["backend","Select the matplotlib backend to use.","<backend>",
+     "This selects the matplotlib backend. "+
+     "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', 'QT4Agg'. "+
+     "Use -backend Agg to save the plot to a file without "+
+     "opening a window."],
+    ["canvas","Create a plotting canvas.","",
+     "Create an empty plotting canvas. For example 'o2graph "+
+     "-canvas -show'."],
+    ["clf","Clear the current figure.","",
+     "Clear the current figure."],
+    ["line","Plot a line.","<x1> <y1> <x2> <y2> [kwargs]",
+     "Plot a line from (x1,y1) to (xy,y2). Some useful "+
+     "kwargs are color (c), dashes, linestyle (ls), linewidth (lw), "+
+     "marker, markeredgecolor (mec), markeredgewidth (mew), "+
+     "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
+     "(ms). For example: o2graph -line 0.05 0.05 0.95 0.95 "+
+     "lw=0,marker='+' -show"],
+    ["move-labels","Move the labels.","",""],
+    ["new-cmaps","Define new color maps.","",
+     "Define new color maps, 'jet2', 'pastel2' "+
+     "'reds2', 'greens2', and 'blues2'."],
+    ["plot-files",
+     "Specify a list of files for 'plotm' and 'plot1m'.",
+     "<file 1> [file 2] ...",""],
+    ["plot1m",
+     "Plot the specified column from tables in multiple files.",
+     "<y>","After using -plot-files to specify "+
+     "a list of files, plot column <y> versus row number for the first "+
+     "table object in all of the specified files. Some useful "+
+     "kwargs are color (c), dashes, linestyle (ls), linewidth (lw), "+
+     "marker, markeredgecolor (mec), markeredgewidth (mew), "+
+     "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
+     "(ms). For example: o2graph -plot-files file1.o2 file2.o "+
+     "-plot1m ycol lw=0,marker='+' -show"],
+    ["plotm",
+     "Plot the specified columns from tables in multiple files.",
+     "<x> <y>","After using -plot-files to specify "+
+     "a list of files, plot column <y> versus column <x> for the first "+
+     "table object in all of the specified files. Some useful "+
+     "kwargs are color (c), dashes, linestyle (ls), linewidth (lw), "+
+     "marker, markeredgecolor (mec), markeredgewidth (mew), "+
+     "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
+     "(ms). For example: o2graph -plot-files file1.o2 file2.o "+
+     "-plotm xcol ycol lw=0,marker='+' -show"],
+    ["rect","Plot a rectangle.",
+     "<x1> <y1> <x2> <y2> <angle> [kwargs]",
+     "Plot a rectange from (x1,y1) to (xy,y2) with "+
+     "rotation angle <angle>."],
+    ["reset-xlim","Reset the x-axis limits.","",
+     "This is an alias for 'set xset 0', and indicates "+
+     "that the values of 'xlo' and 'xhi' are to be ignored until the "+
+     "next call to 'xlimits'."],
+    ["reset-ylim","Reset the y-axis limits.","",
+     "This is an alias for 'set yset 0', and indicates "+
+     "that the values of 'ylo' and 'yhi' are to be ignored until the "+
+     "next call to 'ylimits'."],
+    ["reset-zlim","Reset the z-azis limits.","",
+     "This is an alias for 'set zset 0', and indicates "+
+     "that the values of 'zlo' and 'zhi' are to be ignored until the "+
+     "next call to 'zlimits'."],
+    ["save","Save the current plot in a file.","<filename>",
+     "Save the current plot in a file similar "+
+     "to plot.savefig(). The action of this command depends on "+
+     "which backend was selected. File type depends on the "+
+     "extension, typically either .png, .pdf, .eps, .jpg, .raw, .svg, "+
+     "and .tif ."],
+    ["show","Show the current plot.","","Show the current plot "+
+     "on the screen and begin "+
+     "the graphical user interface. This is similar to plot.show()."],
+    ["text","Plot text in the axis coordinate system.",
+     "<x> <y> <text> [kwargs]",""],
+    ["ttext","Plot text in the canvas default coordinate system.",
+     "<x> <y> <text> [kwargs]",""],
+    ["xlimits","Set the x-axis limits.","<low> <high>",
+     "Set 'xlo' and 'xhi' to the specified limits, "+
+     "and set 'xset' to true. If a plotting canvas is currently "+
+     "open, then "+
+     "the x-limits on that plot are modified. Future plots are also "+
+     "set with the specified x-limits."],
+    ["ylimits","Set the y-axis limits.","<low> <high>",
+     "Set 'ylo' and 'yhi' to the specified limits, "+
+     "and set 'yset' to true. If a plotting canvas is currently "+
+     "open, then "+
+     "the y-limits on that plot are modified. Future plots are also "+
+     "set with the specified y-limits."],
+    ["zlimits","Set the z-azis limits","<low> <high>",
+     "Set 'zlo' and 'zhi' to the specified limits, "+
+     "and set 'zset' to true. If a plotting canvas is currently "+
+     "open, then "+
+     "the z-limits on that plot are modified. Future plots are also "+
+     "set with the specified z-limits."]
+]
 
-table_list=['plot','rplot','scatter','errorbar','plot1','histplot',
-            'hist2dplot']
-
-table_plot_help="Usage: plot <x> <y> [kwargs]\n\
-\n\
-Plot two columns from the table.\n"
-
-table_plot_help2="If the current object is a table, then plot \
-column <y> versus column \
-<x>. If the current object is a one-dimensional histogram, then plot \
-the histogram weights as a function of the bin representative values. \
-If the current object is a set of contour lines, then plot the full \
-set of contour lines. Some useful kwargs are color (c), dashes, \
-linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), \
-markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt \
-(mfcalt), markersize (ms). For example: o2graph -create x 0 10 0.2 \
--function sin(x) y -plot x y lw=0,marker='+' -show"
-
-table_rplot_help="Usage: rplot <x1> <y1> [x2 y2] [kwargs]\n\
-\
-Plot a region inside a column or in between two columns.\n"
-
-table_rplot_help2="If either 2 or 3 arguments are specified, \
-this command plots the \
-region inside the curve defined by the specified set of x and y \
-values. The first point is copied at the end to ensure a closed \
-region. If 4 or 5 arguments are specified, then this command plots the \
-region in between two sets of x and y values, again adding the first \
-point from (x1,y1) to the end to ensure a closed region."
-
-table_scatter_help="Usage: scatter <x> <y> [s] [c] [kwargs]\n\
-\n\
-Create a scatter plot from 2-4 columns.\n"
-
-table_scatter_help2="This command creates a scatter plot form \
-columns <x> and <y>, \
-optionally using column [s] to choose the marker size and optionally \
-using column [c] to choose the marker color. To vary the marker colors \
-while choosing the default marker size just specify 'None' as the \
-argument for [s]. Or, to specify keyword arguments while using the \
-default size and color, specify 'None' as the argument for both [s] \
-and [c]."
-
-table_errorbar_help="Usage: errorbar <x> <y> <xerr> <yerr> [kwargs]\n\
-\n\
-Plot the specified columns with errobars.\n"
-
-table_errorbar_help2="Plot column <y> versus column <x> with \
-symmetric error bars given in \
-column <xerr> and <yerr>. For no uncertainty in either the x or y \
-direction, just use 0 for <xerr> or <yerr>, respectively. New kwargs \
-for the errorbar command are ecolor=None, elinewidth=None, \
-capsize=None, barsabove=False, lolims=False, uplims=False, \
-xlolims=False, xuplims=False, errorevery=1, capthick=None, hold=None"
-
-table_plot1_help="Usage: plot1 <y> [kwargs]\n\
-\n\
-Plot the specified column.\n"
-
-table_plot1_help2="Plot column <y> versus row number. Some \
-useful kwargs are color (c), \
-dashes, linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), \
-markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt \
-(mfcalt), markersize (ms). For example: o2 -create x 0 10 0.2 \
--function sin(x) y -plot1 y ls='--',marker='o' -show"
-
-table_histplot_help="Usage: histplot <col>\n\
-\n\
-Create a histogram plot from column in a table.\n"
-
-table_histplot_help2="For a table, create a histogram plot from the \
-specified column. This command uses matplotlib to construct the \
-histogram rather than using O2scl to create a hist_2d object."
-
-table_hist2dplot_help="Usage: hist2dplot <col x> <col y>\n\
-\n\
-Create a 2-D histogram plot from two columns in a table.\n"
-
-table_hist2dplot_help2="For a table, create a 2D histogram plot from \
-the specified columns. This command uses matplotlib to construct the \
-histogram rather than using O2scl to create a hist object."
-
-table3d_list=['den-plot']
-
-table3d_den_plot_help="Usage: den-plot <slice name for table3d>\n\
-\n\
-Create a density plot from a table3d object.\n"
-
-table3d_den_plot_help2="Creates a density plot from the specified \
-slice. Logarithmic x- or \
-y-axes are handled by taking the base 10 log of the x- or y-grids \
-specified in the table3d object before plotting. A z-axis density \
-legend is print on the RHS if colbar is set to 1 before plotting. If \
-z-axis limits are specified, then values larger than the upper limit \
-are set equal to the upper limit and values smaller than the lower \
-limit are set equal to the lower limit before plotting."
-
-hist_list=['plot']
-
-hist_plot_help="Usage: plot [kwargs]\n\
-\n\
-Plot the histogram.\n"
-
-hist_plot_help2="Plot the histogram weights as a function \
- of the bin representative values. \
-Some useful kwargs (which apply for all three object types) are color (c), \
-dashes, linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), \
-markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt (mfcalt), \
-markersize (ms). For example: o2graph -create x 0 10 0.2 -function sin(x) y \
--plot x y lw=0,marker='+' -show"
-
-doublearr_list=['plot1']
-
-doublearr_plot1_help="Usage: plot1 [kwargs]\n\
-\n\
-Plot the array.\n"
-
-doublearr_plot1_help2="Plot the array. Some useful kwargs \
-(which apply for all three object types) \
-are color (c), dashes, linestyle (ls), linewidth (lw), marker, \
-markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), \
-markerfacecoloralt (mfcalt), markersize (ms)."
-
-intarr_list=['plot1']
-
-intarr_plot1_help="Usage: plot1 [kwargs]\n\
-\n\
-Plot the array.\n"
-
-intarr_plot1_help2="Plot the array. Some useful kwargs \
-(which apply for all three object types) \
-are color (c), dashes, linestyle (ls), linewidth (lw), marker, \
-markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), \
-markerfacecoloralt (mfcalt), markersize (ms)."
-
-size_tarr_list=['plot1']
-
-size_tarr_plot1_help="Usage: plot1 [kwargs]\n\
-\n\
-Plot the array.\n"
-
-size_tarr_plot1_help2="Plot the array. Some useful kwargs \
-(which apply for all three object types) \
-are color (c), dashes, linestyle (ls), linewidth (lw), marker, \
-markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), \
-markerfacecoloralt (mfcalt), markersize (ms)."
-
-contour_lines_list=['plot']
-
-contour_lines_help="Usage: plot [kwargs]\n\
-\n\
-Plot the contour lines\n."
-
-contour_lines_help2="Plot the set of contour lines. Some \
-useful kwargs (which apply for all three \
-object types) are color (c), dashes, linestyle (ls), linewidth (lw), \
-marker, markeredgecolor (mec), markeredgewidth (mew), markerfacecolor \
-(mfc), markerfacecoloralt (mfcalt), markersize (ms). For example: \
-o2graph -create x 0 10 0.2 -function sin(x) y -plot x y \
-lw=0,marker='+' -show"
-
-hist_2d_list=['den-plot','contours']
-
-hist_2d_help="Usage: den-plot <slice name for table3d>\n\
-\n\
-Create a density plot from a hist_2d object.\n"
-
-hist_2d_help2="Create a density plot from the current histogram (assuming \
-equally-spaced bins). Logarithmic x- or y-axes are handled by taking \
-the base 10 log of the x- or y-grids specified in the table3d object \
-before plotting. A z-axis density legend is print on the RHS if colbar \
-is set to 1 before plotting. If z-axis limits are specified, then \
-values larger than the upper limit are set equal to the upper limit \
-and values smaller than the lower limit are set equal to the lower \
-limit before plotting."
+"""
+This is a list of 5-element entries:
+1: object type
+2: command name
+3: short description
+4: argument list
+5: full help text
+"""
+extra_list=[
+    ["table","plot",
+     "Plot two columns from the table.",
+     "<x> <y> [kwargs]",
+     "If the current object is a table, then plot "+
+     "column <y> versus column "+
+     "<x>. If the current object is a one-dimensional histogram, then plot "+
+     "the histogram weights as a function of the bin representative values. "+
+     "If the current object is a set of contour lines, then plot the full "+
+     "set of contour lines. Some useful kwargs are color (c), dashes, "+
+     "linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), "+
+     "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
+     "(mfcalt), markersize (ms). For example: o2graph -create x 0 10 0.2 "+
+     "-function sin(x) y -plot x y lw=0,marker='+' -show"],
+    ["table","rplot",
+     "Plot a region inside a column or in between two columns.",
+     "<x1> <y1> [x2 y2] [kwargs]",
+     "If either 2 or 3 arguments are specified, "+
+     "this command plots the "+
+     "region inside the curve defined by the specified set of x and y "+
+     "values. The first point is copied at the end to ensure a closed "+
+     "region. If 4 or 5 arguments are specified, then this command plots the "+
+     "region in between two sets of x and y values, again adding the first "+
+     "point from (x1,y1) to the end to ensure a closed region."],
+    ["table","scatter","Create a scatter plot from 2-4 columns.",
+     "<x> <y> [s] [c] [kwargs]",
+     "This command creates a scatter plot form "+
+     "columns <x> and <y>, "+
+     "optionally using column [s] to choose the marker size and optionally "+
+     "using column [c] to choose the marker color. To vary the marker colors "+
+     "while choosing the default marker size just specify 'None' as the "+
+     "argument for [s]. Or, to specify keyword arguments while using the "+
+     "default size and color, specify 'None' as the argument for both [s] "+
+     "and [c]."],
+    ["table","errorbar",
+     "Plot the specified columns with errobars.",
+     "<x> <y> <xerr> <yerr> [kwargs]",
+     "Plot column <y> versus column <x> with "+
+     "symmetric error bars given in "+
+     "column <xerr> and <yerr>. For no uncertainty in either the x or y "+
+     "direction, just use 0 for <xerr> or <yerr>, respectively. New kwargs "+
+     "for the errorbar command are ecolor=None, elinewidth=None, "+
+     "capsize=None, barsabove=False, lolims=False, uplims=False, "+
+     "xlolims=False, xuplims=False, errorevery=1, capthick=None, hold=None"],
+    ["table","plot1","Plot the specified column.","<y> [kwargs]",
+     "Plot column <y> versus row number. Some "+
+     "useful kwargs are color (c), "+
+     "dashes, linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), "+
+     "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
+     "(mfcalt), markersize (ms). For example: o2 -create x 0 10 0.2 "+
+     "-function sin(x) y -plot1 y ls='--',marker='o' -show"],
+    ["table","histplot","Create a histogram plot from column in a table.",
+     "<col>","For a table, create a histogram plot from the "+
+     "specified column. This command uses matplotlib to construct the "+
+     "histogram rather than using O2scl to create a hist_2d object."],
+    ["table","hist2dplot",
+     "Create a 2-D histogram plot from two columns in a table.",
+     "<col x> <col y>","For a table, create a 2D histogram plot from "+
+     "the specified columns. This command uses matplotlib to construct the "+
+     "histogram rather than using O2scl to create a hist object."],
+    ["table3d","den-plot","Create a density plot from a table3d object.",
+     "<slice>",
+     "Creates a density plot from the specified "+
+     "slice. Logarithmic x- or "+
+     "y-axes are handled by taking the base 10 log of the x- or y-grids "+
+     "specified in the table3d object before plotting. A z-axis density "+
+     "legend is print on the RHS if colbar is set to 1 before plotting. If "+
+     "z-axis limits are specified, then values larger than the upper limit "+
+     "are set equal to the upper limit and values smaller than the lower "+
+     "limit are set equal to the lower limit before plotting."],
+    ["hist","plot","Plot the histogram.","[kwargs]",
+     "Plot the histogram weights as a function "+
+     "of the bin representative values. "+
+     "Some useful kwargs (which apply for all three object types) are "+
+     "color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
+     "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
+     "markerfacecoloralt (mfcalt), markersize (ms). For example: o2graph "+
+     "-create x 0 10 0.2 -function sin(x) y "+
+     "-plot x y lw=0,marker='+' -show"],
+    ["double[]","plot1","Plot the array.","[kwargs]",
+     "Plot the array. Some useful kwargs "+
+     "are color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
+     "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
+     "markerfacecoloralt (mfcalt), markersize (ms)."],
+    ["int[]","plot1","Plot the array.","[kwargs]",
+     "Plot the array. Some useful kwargs "+
+     "are color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
+     "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
+     "markerfacecoloralt (mfcalt), markersize (ms)."],
+    ["size_t[]","plot1","Plot the array.","[kwargs]",
+     "Plot the array. Some useful kwargs "+
+     "are color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
+     "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
+     "markerfacecoloralt (mfcalt), markersize (ms)."],
+    ["vector<contour_line>","plot","Plot the contour lines.","[kwargs]",
+     "Plot the set of contour lines. Some "+
+     "useful kwargs (which apply for all three "+
+     "object types) are color (c), dashes, linestyle (ls), linewidth (lw), "+
+     "marker, markeredgecolor (mec), markeredgewidth (mew), markerfacecolor "+
+     "(mfc), markerfacecoloralt (mfcalt), markersize (ms). For example: "+
+     "o2graph -create x 0 10 0.2 -function sin(x) y -plot x y "+
+     "lw=0,marker='+' -show"],
+    ["hist_2d","den-plot","Create a density plot from a hist_2d object",
+     "[kwargs]","Create a density plot from the current histogram (assuming "+
+     "equally-spaced bins). Logarithmic x- or y-axes are handled by taking "+
+     "the base 10 log of the x- or y-grids specified in the table3d object "+
+     "before plotting. A z-axis density legend is print on the RHS if colbar "+
+     "is set to 1 before plotting. If z-axis limits are specified, then "+
+     "values larger than the upper limit are set equal to the upper limit "+
+     "and values smaller than the lower limit are set equal to the lower "+
+     "limit before plotting."]
+]
 
 class cloud_file:
     """
@@ -2934,80 +2879,19 @@ class o2graph_plotter(plot_base):
                         curr_type=b''
                         for i in range(0,it.value):
                             curr_type=curr_type+type_ptr[i]
-                            
-                    if (curr_type=='table' or curr_type==b'table'):
-                        print('O2graph commands for type '+
-                              str(curr_type)+':\n')
-                        strout=''
-                        for i in table_list:
-                            strout+=i+' '
-                        str_list=textwrap.wrap(strout,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif (curr_type=='table3d' or curr_type==b'table3d'):
-                        print('O2graph commands for type '+
-                              str(curr_type)+':\n')
-                        strout=''
-                        for i in table3d_list:
-                            strout+=i+' '
-                        str_list=textwrap.wrap(strout,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif (curr_type=='hist' or curr_type==b'hist'):
-                        print('O2graph commands for type '+
-                              str(curr_type)+':\n')
-                        strout=''
-                        for i in hist_list:
-                            strout+=i+' '
-                        str_list=textwrap.wrap(strout,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif (curr_type=='double[]' or curr_type==b'double[]'):
-                        print('O2graph commands for type '+
-                              str(curr_type)+':\n')
-                        strout=''
-                        for i in doublearr_list:
-                            strout+=i+' '
-                        str_list=textwrap.wrap(strout,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif (curr_type=='int[]' or curr_type==b'int[]'):
-                        print('O2graph commands for type '+
-                              str(curr_type)+':\n')
-                        strout=''
-                        for i in intarr_list:
-                            strout+=i+' '
-                        str_list=textwrap.wrap(strout,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif (curr_type=='size_t[]' or curr_type==b'size_t[]'):
-                        print('O2graph commands for type '+
-                              str(curr_type)+':\n')
-                        strout=''
-                        for i in size_tarr_list:
-                            strout+=i+' '
-                        str_list=textwrap.wrap(strout,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif (curr_type=='vector<contour_line>' or
-                    curr_type==b'vector<contour_line>'):
-                        print('O2graph commands for type '+
-                              str(curr_type)+':\n')
-                        strout=''
-                        for i in contour_lines_list:
-                            strout+=i+' '
-                        str_list=textwrap.wrap(strout,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif (curr_type=='hist_2d' or curr_type==b'hist_2d'):
-                        print('O2graph commands for type '+
-                              str(curr_type)+':\n')
-                        strout=''
-                        for i in hist_2d_list:
-                            strout+=i+' '
-                        str_list=textwrap.wrap(strout,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
+
+                    print('O2graph commands for type '+
+                          str(curr_type)+':\n')
+                    strout=''
+                    for line in base_list:
+                        strout+=line[0]+' '
+                    for line in extra_list:
+                        if (curr_type==line[0] or
+                            curr_type==self.force_bytes(line[0])):
+                            strout+=line[1]+' '
+                    str_list=textwrap.wrap(strout,79)
+                    for i in range (0,len(str_list)):
+                        print(str_list[i])
                             
                 elif cmd_name=='help':
                     
@@ -3015,6 +2899,7 @@ class o2graph_plotter(plot_base):
                         print('Process help.')
 
                     curr_type=''
+                    cmd=''
                     
                     if (ix_next-ix)==2:
 
@@ -3025,7 +2910,8 @@ class o2graph_plotter(plot_base):
 
                         # Set up wrapper for type function
                         type_fn=o2scl_hdf.o2scl_acol_get_type
-                        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+                        type_fn.argtypes=[ctypes.c_void_p,int_ptr,
+                                          char_ptr_ptr]
 
                         # Get current type
                         it=ctypes.c_int(0)
@@ -3037,94 +2923,53 @@ class o2graph_plotter(plot_base):
                             curr_type=curr_type+type_ptr[i]
                             
                         cmd=strlist[ix+1]
-                        print('help for type',curr_type,'command',
-                              strlist[ix+1])
+                        
                     elif (ix_next-ix)==3:
+                        
                         curr_type=strlist[ix+1]
                         cmd=strlist[ix+2]
 
-                    if ((curr_type=='table' or curr_type==b'table') and
-                        cmd=='plot'):
-                        print(table_plot_help)
-                        str_list=textwrap.wrap(table_plot_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='table' or curr_type==b'table') and
-                    cmd=='scatter'):
-                        print(table_scatter_help)
-                        str_list=textwrap.wrap(table_scatter_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='table' or curr_type==b'table') and
-                    cmd=='errorbar'):
-                        print(table_errorbar_help)
-                        str_list=textwrap.wrap(table_errorbar_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='table' or curr_type==b'table') and
-                    cmd=='plot1'):
-                        print(table_plot1_help)
-                        str_list=textwrap.wrap(table_plot1_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='table' or curr_type==b'table') and
-                    cmd=='histplot'):
-                        print(table_histplot_help)
-                        str_list=textwrap.wrap(table_histplot_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='table' or curr_type==b'table') and
-                    cmd=='hist2dplot'):
-                        print(table_hist2dplot_help)
-                        str_list=textwrap.wrap(table_hist2dplot_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='table3d' or curr_type==b'table3d') and
-                    (cmd=='den-plot' or cmd=='den_plot')):
-                        print(table3d_den_plot_help)
-                        str_list=textwrap.wrap(table3d_den_plot_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='hist' or curr_type==b'hist') and
-                    cmd=='plot'):
-                        print(hist_plot_help)
-                        str_list=textwrap.wrap(hist_plot_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='double[]' or curr_type==b'double[]') and
-                    cmd=='plot1'):
-                        print(doublearr_plot1_help)
-                        str_list=textwrap.wrap(doublearr_plot1_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='int[]' or curr_type==b'int[]') and
-                    cmd=='plot1'):
-                        print(intarr_plot1_help)
-                        str_list=textwrap.wrap(intarr_plot1_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='size_t[]' or curr_type==b'size_t[]') and
-                    cmd=='plot1'):
-                        print(size_tarr_plot1_help)
-                        str_list=textwrap.wrap(size_tarr_plot1_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='vector<contour_line>' or
-                    curr_type==b'vector<contour_line>') and
-                    cmd=='plot'):
-                        print(contour_lines_plot_help)
-                        str_list=textwrap.wrap(contour_lines_plot_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    elif ((curr_type=='hist_2d' or curr_type==b'hist_2d') and
-                          (cmd=='den_plot' or cmd=='den_plot')):
-                        print(hist_2d_den_plot_help)
-                        str_list=textwrap.wrap(hist_2d_den_plot_help2,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                    else:
+                    # See if we matched an o2graph command
+                    match=False
+                    
+                    # Handle the case of an o2graph command from the
+                    # base list
+                    for line in base_list:
+                        if cmd==line[0]:
+                            match=True
+                            print('Usage: '+cmd+' '+line[2]+'\n\n'+
+                                  line[1]+'\n')
+                            str_list=textwrap.wrap(line[3],79)
+                            for i in range (0,len(str_list)):
+                                print(str_list[i])
+                                
+                    # Handle the case of an o2graph command from the
+                    # extra list
+                    for line in extra_list:
+                        if ((curr_type==line[0] or
+                             curr_type==self.force_bytes(line[0])) and
+                            cmd==line[1]):
+                            match=True
+                            print('Usage: '+cmd+' '+line[3]+'\n\n'+
+                                  line[2]+'\n')
+                            str_list=textwrap.wrap(line[4],79)
+                            for i in range (0,len(str_list)):
+                                print(str_list[i])
+
+                    # Handle the case of an acol command 
+                    if match==False:
                         self.gen(o2scl_hdf,amp,cmd_name,
                                  strlist[ix+1:ix_next])
+
+                    # Provide a command list if no arguments were given
+                    if (ix_next-ix)==1:
+                        print('O2graph command-line options:\n')
+                        for line in base_list:
+                            strt='  -'+line[0]
+                            while len(strt)<16:
+                                strt=strt+' '
+                            strt+=line[1]
+                            print(strt)
 
                 elif cmd_name=='version':
                     
