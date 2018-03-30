@@ -2532,31 +2532,31 @@ class o2graph_plotter(plot_base):
             
             xv=[i for i in range(0,id.value)]
             yv=[ptr[i] for i in range(0,id.value)]
-        
+
             if self.canvas_flag==0:
                 self.canvas()
             if self.logx==1:
                 if self.logy==1:
-                    if len(args)<2:
+                    if len(args)<1:
                         plot.loglog(xv,yv)
                     else:
-                        plot.loglog(xv,yv,**string_to_dict(args[1]))
+                        plot.loglog(xv,yv,**string_to_dict(args[0]))
                 else:
-                    if len(args)<2:
+                    if len(args)<1:
                         plot.semilogx(xv,yv)
                     else:
-                        plot.semilogx(xv,yv,**string_to_dict(args[1]))
+                        plot.semilogx(xv,yv,**string_to_dict(args[0]))
             else:
                 if self.logy==1:
-                    if len(args)<2:
+                    if len(args)<1:
                         plot.semilogy(xv,yv)
                     else:
-                        plot.semilogy(xv,yv,**string_to_dict(args[1]))
+                        plot.semilogy(xv,yv,**string_to_dict(args[0]))
                 else:
-                    if len(args)<2:
+                    if len(args)<1:
                         plot.plot(xv,yv)
                     else:
-                        plot.plot(xv,yv,**string_to_dict(args[1]))
+                        plot.plot(xv,yv,**string_to_dict(args[0]))
                             
             if self.xset==1:
                 plot.xlim([self.xlo,self.xhi])
