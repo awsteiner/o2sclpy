@@ -828,6 +828,8 @@ class plot_base:
             self.logx=int(value)
         elif name=='logy':
             self.logy=int(value)
+        elif name=='logz':
+            self.logz=int(value)
         elif name=='xtitle':
             self.xtitle=value
         elif name=='ytitle':
@@ -914,6 +916,8 @@ class plot_base:
             print('The value of logx is',self.logx,'.')
         if name=='logy' or name=='':
             print('The value of logy is',self.logy,'.')
+        if name=='logz' or name=='':
+            print('The value of logz is',self.logz,'.')
         if name=='verbose' or name=='':
             print('The value of verbose is',self.verbose,'.')
         if name=='xhi' or name=='':
@@ -1488,6 +1492,10 @@ class plotter(plot_base):
             if self.logy==1:
                 for i in range(0,len(ygrid)):
                     ygrid[i]=math.log(ygrid[i],10)
+            if self.logz==1:
+                for i in range(0,len(xgrid)):
+                    for j in range(0,len(ygrid)):
+                        sl[i][j]=math.log10(sl[i][h])
             lx=len(xgrid)
             ly=len(ygrid)
             plot.imshow(sl,interpolation='nearest',
@@ -1532,7 +1540,8 @@ class o2graph_plotter(plot_base):
             args[0]=='top-margin' or args[0]=='bottom-margin' or
             args[0]=='left_margin' or args[0]=='right_margin' or
             args[0]=='top_margin' or args[0]=='bottom_margin' or
-            args[0]=='verbose' or args[0]=='font'):
+            args[0]=='verbose' or args[0]=='font' or
+            args[0]=='logz'):
                 
             self.set(args[0],args[1])
             return
@@ -1566,7 +1575,8 @@ class o2graph_plotter(plot_base):
             args[0]=='xset' or args[0]=='xhi' or
             args[0]=='yhi' or args[0]=='yset' or
             args[0]=='zlo' or args[0]=='zhi' or
-            args[0]=='zset' or args[0]=='colbar'):
+            args[0]=='zset' or args[0]=='colbar' or
+            args[0]=='logz'):
             
             self.get(args[0])
                             
