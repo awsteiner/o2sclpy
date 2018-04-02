@@ -513,7 +513,8 @@ class hdf5_reader:
 #     return clist
 
 def default_plot(left_margin=0.14,bottom_margin=0.12,
-                 right_margin=0.04,top_margin=0.04,font=16):
+                 right_margin=0.04,top_margin=0.04,font=16,
+                 fig_size_x=6.0,fig_size_y=6.0):
     """
     This function sets up my commonly-used ``matplotlib`` defaults.
     It returns a pair of objects, the figure object and axes object.
@@ -521,7 +522,7 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     plot.rc('text',usetex=True)
     plot.rc('font',family='serif')
     plot.rcParams['lines.linewidth']=0.5
-    fig=plot.figure(1,figsize=(6.0,6.0))
+    fig=plot.figure(1,figsize=(fig_size_x,fig_size_y))
     fig.set_facecolor('white')
     ax=plot.axes([left_margin,bottom_margin,
                   1.0-left_margin-right_margin,1.0-top_margin-bottom_margin])
@@ -652,6 +653,11 @@ def string_to_dict(s):
             arr2[1]=float(arr2[1])
         if arr2[0]=='bins':
             arr2[1]=int(arr2[1])
+        if arr2[0]=='fill':
+            if arr2[1]=='True':
+                arr2[1]=True
+            else:
+                arr2[1]=False
 
         # assign to dictionary
         dct[arr2[0]]=arr2[1]
