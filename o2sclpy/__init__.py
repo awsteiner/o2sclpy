@@ -91,15 +91,15 @@ base_list=[
      "Plot a rectange from (x1,y1) to (xy,y2) with "+
      "rotation angle <angle>."],
     ["reset-xlim","Reset the x-axis limits.","",
-     "This is an alias for 'set xset 0', and indicates "+
+     "This is an alias for 'set xset False', and indicates "+
      "that the values of 'xlo' and 'xhi' are to be ignored until the "+
      "next call to 'xlimits'."],
     ["reset-ylim","Reset the y-axis limits.","",
-     "This is an alias for 'set yset 0', and indicates "+
+     "This is an alias for 'set yset False', and indicates "+
      "that the values of 'ylo' and 'yhi' are to be ignored until the "+
      "next call to 'ylimits'."],
     ["reset-zlim","Reset the z-azis limits.","",
-     "This is an alias for 'set zset 0', and indicates "+
+     "This is an alias for 'set zset False', and indicates "+
      "that the values of 'zlo' and 'zhi' are to be ignored until the "+
      "next call to 'zlimits'."],
     ["save","Save the current plot in a file.","<filename>",
@@ -209,7 +209,7 @@ extra_list=[
      "slice. Logarithmic x- or "+
      "y-axes are handled by taking the base 10 log of the x- or y-grids "+
      "specified in the table3d object before plotting. A z-axis density "+
-     "legend is print on the RHS if colbar is set to 1 before plotting. If "+
+     "legend is print on the RHS if colbar is set to True before plotting. If "+
      "z-axis limits are specified, then values larger than the upper limit "+
      "are set equal to the upper limit and values smaller than the lower "+
      "limit are set equal to the lower limit before plotting."],
@@ -742,24 +742,24 @@ class plot_base:
     """ 
     Figure object
     """
-    canvas_flag=0
+    canvas_flag=False
     """
-    If 1, then the default plot canvas has been initiated
+    If True, then the default plot canvas has been initiated
     """
 
     # Quantities modified by set/get
     
-    logx=0
+    logx=False
     """
-    If 1, then use a logarithmic x axis
+    If True, then use a logarithmic x axis
     """
-    logy=0
+    logy=False
     """
-    If 1, then use a logarithmic y axis
+    If True, then use a logarithmic y axis
     """
-    logz=0
+    logz=False
     """
-    If 1, then use a logarithmic z axis
+    If True, then use a logarithmic z axis
     """
     xtitle=''
     """
@@ -777,9 +777,9 @@ class plot_base:
     """
     Upper limit for x axis
     """
-    xset=0
+    xset=False
     """ 
-    If 1, then the x axis limits have been set
+    If True, then the x axis limits have been set
     """
     ylo=0
     """
@@ -789,9 +789,9 @@ class plot_base:
     """
     Upper limit for y axis
     """
-    yset=0
+    yset=False
     """ 
-    If 1, then the y axis limits have been set
+    If True, then the y axis limits have been set
     """
     zlo=0
     """
@@ -801,17 +801,17 @@ class plot_base:
     """
     Upper limit for z axis
     """
-    zset=0
+    zset=False
     """ 
-    If 1, then the z axis limits have been set
+    If True, then the z axis limits have been set
     """
     verbose=1
     """
     Verbosity parameter
     """
-    colbar=0
+    colbar=False
     """
-    If 1, then include a color legend for density plots
+    If True, then include a color legend for density plots
     """
     plotfiles=''
     """
@@ -903,11 +903,20 @@ class plot_base:
         Set the value of parameter named ``name`` to value ``value``
         """
         if name=='logx':
-            self.logx=int(value)
+            if value=='False' or value=='0':
+                self.logx=False
+            else:
+                self.logx=True
         elif name=='logy':
-            self.logy=int(value)
+            if value=='False' or value=='0':
+                self.logy=False
+            else:
+                self.logy=True
         elif name=='logz':
-            self.logz=int(value)
+            if value=='False' or value=='0':
+                self.logz=False
+            else:
+                self.logz=True
         elif name=='xtitle':
             self.xtitle=value
         elif name=='ytitle':
@@ -917,47 +926,59 @@ class plot_base:
                 self.xlo=float(eval(value))
             else:
                 self.xlo=float(value)
-            self.xset=1
+            self.xset=True
         elif name=='xhi':
             if value[0]=='(':
                 self.xhi=float(eval(value))
             else:
                 self.xhi=float(value)
-            self.xset=1
+            self.xset=True
         elif name=='xset':
-            self.xset=int(value)
+            if value=='False' or value=='0':
+                self.xset=False
+            else:
+                self.xset=True
         elif name=='ylo':
             if value[0]=='(':
                 self.ylo=float(eval(value))
             else:
                 self.ylo=float(value)
-            self.yset=1
+            self.yset=True
         elif name=='yhi':
             if value[0]=='(':
                 self.yhi=float(eval(value))
             else:
                 self.yhi=float(value)
-            self.yset=1
+            self.yset=True
         elif name=='yset':
-            self.yset=int(value)
+            if value=='False' or value=='0':
+                self.xset=False
+            else:
+                self.xset=True
         elif name=='zlo':
             if value[0]=='(':
                 self.zlo=float(eval(value))
             else:
                 self.zlo=float(value)
-            self.zset=1
+            self.zset=True
         elif name=='zhi':
             if value[0]=='(':
                 self.zhi=float(eval(value))
             else:
                 self.zhi=float(value)
-            self.zset=1
+            self.zset=True
         elif name=='zset':
-            self.zset=int(value)
+            if value=='False' or value=='0':
+                self.zset=False
+            else:
+                self.zset=True
         elif name=='verbose':
             self.verbose=int(value)
         elif name=='colbar':
-            self.colbar=int(value)
+            if value=='False' or value=='0':
+                self.colbar=False
+            else:
+                self.colbar=True
         elif name=='font':
             self.font=float(value)
         elif name=='left-margin':
@@ -967,14 +988,6 @@ class plot_base:
         elif name=='top-margin':
             self.top_margin=float(value)
         elif name=='bottom-margin':
-            self.bottom_margin=float(value)
-        elif name=='left_margin':
-            self.left_margin=float(value)
-        elif name=='right_margin':
-            self.right_margin=float(value)
-        elif name=='top_margin':
-            self.top_margin=float(value)
-        elif name=='bottom_margin':
             self.bottom_margin=float(value)
         elif name=='fig_size_x':
             self.fig_size_x=float(value)
@@ -1024,13 +1037,25 @@ class plot_base:
             print('The value of zlo is',self.zlo,'.')
         if name=='zset':
             print('The value of zset is',self.zset,'.')
+        if name=='top-margin':
+            print('The value of top-margin is',self.top_margin,'.')
+        if name=='bottom-margin':
+            print('The value of bottom-margin is',self.bottom_margin,'.')
+        if name=='right-margin':
+            print('The value of right-margin is',self.right_margin,'.')
+        if name=='left-margin':
+            print('The value of left-margin is',self.left_margin,'.')
+        if name=='fig-size-x':
+            print('The value of fig-size-x is',self.fig_size_x,'.')
+        if name=='fig-size-y':
+            print('The value of fig-size-y is',self.fig_size_y,'.')
         return
 
     def reset_xlimits(self):
         """
         Reset x axis limits
         """
-        self.xset=0
+        self.xset=False
         return
 
     def xlimits(self,xlo,xhi):
@@ -1039,8 +1064,8 @@ class plot_base:
         """
         self.xlo=xlo
         self.xhi=xhi
-        self.xset=1
-        if self.canvas_flag==1:
+        self.xset=True
+        if self.canvas_flag==True:
             plot.xlim([xlo,xhi])
         return
 
@@ -1048,7 +1073,7 @@ class plot_base:
         """
         Reset y axis limits
         """
-        self.yset=0
+        self.yset=False
         return
 
     def ylimits(self,ylo,yhi):
@@ -1057,9 +1082,27 @@ class plot_base:
         """
         self.ylo=ylo
         self.yhi=yhi
-        self.yset=1
-        if self.canvas_flag==1:
+        self.yset=True
+        if self.canvas_flag==True:
             plot.ylim([ylo,yhi])
+        return
+
+    def reset_zlimits(self):
+        """
+        Reset z axis limits
+        """
+        self.zset=False
+        return
+
+    def zlimits(self,zlo,zhi):
+        """
+        Set the z-axis limits
+        """
+        self.zlo=zlo
+        self.zhi=zhi
+        self.zset=True
+        #if self.canvas_flag==True:
+        #plot.zlim([zlo,zhi])
         return
 
     def line(self,x1,y1,x2,y2,**kwargs):
@@ -1068,7 +1111,7 @@ class plot_base:
         """
         if self.verbose>2:
             print('Line',x1,y1,x2,y1)
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         plot.plot([x1,x2],[y1,y2],**kwargs)
         return
@@ -1079,12 +1122,12 @@ class plot_base:
         """
         if self.verbose>2:
             print('point',xval,yval,kwargs)
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         plot.plot([xval],[yval],**kwargs)
-        if self.xset==1:
+        if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
+        if self.yset==True:
             plot.ylim([self.ylo,self.yhi])
         return
 
@@ -1094,7 +1137,7 @@ class plot_base:
         """
         if self.verbose>2:
             print('Rect',x1,y1,x2,y1)
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         fx1=float(x1)
         fx2=float(x2)
@@ -1108,7 +1151,7 @@ class plot_base:
             lower=fy2
         w=abs(fx1-fx2)
         h=abs(fy1-fy2)
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         r=patches.Rectangle((left,lower),w,h,angle,**kwargs)
         self.axes.add_patch(r)
@@ -1144,7 +1187,7 @@ class plot_base:
         """
         Plot text in the native coordinate system
         """
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         self.axes.text(float(eval(tx)),float(eval(ty)),
                        str,transform=self.axes.transAxes,
@@ -1156,7 +1199,7 @@ class plot_base:
         """
         Plot text in the axis coordinate system
         """
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         self.axes.text(float(eval(tx)),float(eval(ty)),str,
                        fontsize=self.font,va='center',ha='center',**kwargs)
@@ -1176,16 +1219,16 @@ class plot_base:
                                           self.top_margin,self.font,
                                           self.fig_size_x,self.fig_size_y)
         # Plot limits
-        if self.xset==1:
+        if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
+        if self.yset==True:
             plot.ylim([self.ylo,self.yhi])
         # Titles
         if self.xtitle!='':
             plot.xlabel(self.xtitle,fontsize=self.font)
         if self.ytitle!='':
             plot.ylabel(self.ytitle,fontsize=self.font)
-        self.canvas_flag=1
+        self.canvas_flag=True
         return
 
     def move_labels(self):
@@ -1235,21 +1278,21 @@ class plotter(plot_base):
             return
         if self.verbose>2:
             print('contour_plot',level,kwargs)
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         n_lines=self.dset['n_lines'][0]
         for i in range(0,n_lines):
             line_level=self.dset['line_'+str(i)+'/level'][0]
             if abs(level-line_level) < 1.0e-7:
-                if self.logx==1:
-                    if self.logy==1:
+                if self.logx==True:
+                    if self.logy==True:
                         plot.loglog(self.dset['line_'+str(i)+'/x'],
                                     self.dset['line_'+str(i)+'/y'],**kwargs)
                     else:
                         plot.semilogx(self.dset['line_'+str(i)+'/x'],
                                       self.dset['line_'+str(i)+'/y'],**kwargs)
                 else:
-                    if self.logy==1:
+                    if self.logy==True:
                         plot.semilogy(self.dset['line_'+str(i)+'/x'],
                                       self.dset['line_'+str(i)+'/y'],**kwargs)
                     else:
@@ -1268,25 +1311,25 @@ class plotter(plot_base):
         if self.force_bytes(self.dtype)==b'table':
             if self.verbose>2:
                 print('plot',colx,coly,kwargs)
-            if self.canvas_flag==0:
+            if self.canvas_flag==False:
                 self.canvas()
-            if self.logx==1:
-                if self.logy==1:
+            if self.logx==True:
+                if self.logy==True:
                     plot.loglog(self.dset['data/'+colx],
                                 self.dset['data/'+coly],**kwargs)
                 else:
                     plot.semilogx(self.dset['data/'+colx],
                                   self.dset['data/'+coly],**kwargs)
             else:
-                if self.logy==1:
+                if self.logy==True:
                     plot.semilogy(self.dset['data/'+colx],
                                   self.dset['data/'+coly],**kwargs)
                 else:
                     plot.plot(self.dset['data/'+colx],
                               self.dset['data/'+coly],**kwargs)
-            if self.xset==1:
+            if self.xset==True:
                 plot.xlim([self.xlo,self.xhi])
-            if self.yset==1:
+            if self.yset==True:
                 plot.ylim([self.ylo,self.yhi])
         elif self.force_bytes(self.dtype)==b'hist':
             size=dset['size'][0]
@@ -1296,19 +1339,19 @@ class plotter(plot_base):
             reps=bins[0:size-1]
             for i in range(0,size):
                 reps[i]=(bins[i]+bins[i+1])/2
-            if self.logx==1:
-                if self.logy==1:
+            if self.logx==True:
+                if self.logy==True:
                     plot.loglog(reps,weights,**kwargs)
                 else:
                     plot.semilogx(reps,weights,**kwargs)
             else:
-                if self.logy==1:
+                if self.logy==True:
                     plot.semilogy(reps,weights,**kwargs)
                 else:
                     plot.plot(reps,weights,**kwargs)
-            if self.xset==1:
+            if self.xset==True:
                 plot.xlim([self.xlo,self.xhi])
-            if self.yset==1:
+            if self.yset==True:
                 plot.ylim([self.ylo,self.yhi])
             return
         return
@@ -1319,11 +1362,11 @@ class plotter(plot_base):
         if self.force_bytes(self.dtype)==b'table':
             if self.verbose>2:
                 print('plot',colx,coly,kwargs)
-            if self.canvas_flag==0:
+            if self.canvas_flag==False:
                 self.canvas()
-            if self.logx==1:
+            if self.logx==True:
                 self.axes.set_xscale('log')
-            if self.logy==1:
+            if self.logy==True:
                 self.axes.set_yscale('log')
 
             if len(colc)>0:
@@ -1348,9 +1391,9 @@ class plotter(plot_base):
                     plot.scatter(self.dset['data/'+colx],
                                  self.dset['data/'+coly],
                                  **kwargs)
-            if self.xset==1:
+            if self.xset==True:
                 plot.xlim([self.xlo,self.xhi])
-            if self.yset==1:
+            if self.yset==True:
                 plot.ylim([self.ylo,self.yhi])
         return
 
@@ -1364,22 +1407,22 @@ class plotter(plot_base):
             return
         if self.verbose>2:
             print('plot1',col,kwargs)
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         tlist=range(1,len(self.dset['data/'+col])+1)
-        if self.logx==1:
-            if self.logy==1:
+        if self.logx==True:
+            if self.logy==True:
                 plot.loglog(tlist,self.dset['data/'+col],**kwargs)
             else:
                 plot.semilogx(tlist,self.dset['data/'+col],**kwargs)
         else:
-            if self.logy==1:
+            if self.logy==True:
                 plot.semilogy(tlist,self.dset['data/'+col],**kwargs)
             else:
                 plot.plot(tlist,self.dset['data/'+col],**kwargs)
-        if self.xset==1:
+        if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
+        if self.yset==True:
             plot.ylim([self.ylo,self.yhi])
         return
 
@@ -1391,25 +1434,25 @@ class plotter(plot_base):
         """
         if self.verbose>2:
             print('plot1m',col,kwargs)
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         for i in range(0,len(files)):
             self.dset=self.h5r.h5read_first_type(files[i],'table')
             self.dtype='table'
             tlist=range(1,len(self.dset['data/'+col])+1)
-            if self.logx==1:
-                if self.logy==1:
+            if self.logx==True:
+                if self.logy==True:
                     plot.loglog(tlist,self.dset['data/'+col],**kwargs)
                 else:
                     plot.semilogx(tlist,self.dset['data/'+col],**kwargs)
             else:
-                if self.logy==1:
+                if self.logy==True:
                     plot.semilogy(tlist,self.dset['data/'+col],**kwargs)
                 else:
                     plot.plot(tlist,self.dset['data/'+col],**kwargs)
-        if self.xset==1:
+        if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
+        if self.yset==True:
             plot.ylim([self.ylo,self.yhi])
         return
     
@@ -1421,28 +1464,28 @@ class plotter(plot_base):
         """
         if self.verbose>2:
             print('plotm',colx,coly,files,kwargs)
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         for i in range(0,len(files)):
             self.dset=self.h5r.h5read_first_type(files[i],'table')
             self.dtype='table'
-            if self.logx==1:
-                if self.logy==1:
+            if self.logx==True:
+                if self.logy==True:
                     plot.loglog(self.dset['data/'+colx],
                                 self.dset['data/'+coly],**kwargs)
                 else:
                     plot.semilogx(self.dset['data/'+colx],
                                   self.dset['data/'+coly],**kwargs)
             else:
-                if self.logy==1:
+                if self.logy==True:
                     plot.semilogy(self.dset['data/'+colx],
                                   self.dset['data/'+coly],**kwargs)
                 else:
                     plot.plot(self.dset['data/'+colx],
                               self.dset['data/'+coly],**kwargs)
-        if self.xset==1:
+        if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
+        if self.yset==True:
             plot.ylim([self.ylo,self.yhi])
         return
     
@@ -1453,7 +1496,7 @@ class plotter(plot_base):
         """
         if self.verbose>2:
             print('histplot',kwargs)
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         for key in kwargs:
             if key=='bins':
@@ -1471,7 +1514,7 @@ class plotter(plot_base):
         """
         if self.verbose>2:
             print('hist2d',colx,coly,kwargs)
-        if self.canvas_flag==0:
+        if self.canvas_flag==False:
             self.canvas()
         for key in kwargs:
             if key=='bins':
@@ -1567,12 +1610,12 @@ class plotter(plot_base):
             sl=sl.transpose()
             xgrid=self.dset['xval'].value
             ygrid=self.dset['yval'].value
-            if self.canvas_flag==0:
+            if self.canvas_flag==False:
                 self.canvas()
-            if self.logx==1:
+            if self.logx==True:
                 for i in range(0,len(xgrid)):
                     xgrid[i]=math.log(xgrid[i],10)
-            if self.logy==1:
+            if self.logy==True:
                 for i in range(0,len(ygrid)):
                     ygrid[i]=math.log(ygrid[i],10)
             if self.logz==1:
@@ -1588,7 +1631,7 @@ class plotter(plot_base):
                                 ygrid[0]-(ygrid[1]-ygrid[0])/2,
                                 ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2],
                         aspect='auto',**kwargs)
-            if self.colbar>0:
+            if self.colbar==True:
                 cbar=plot.colorbar()
                 cbar.ax.tick_params(labelsize=self.font*0.8)
                 
@@ -1764,14 +1807,14 @@ class o2graph_plotter(plot_base):
             sl=stemp2.reshape(nx.value,ny.value)
             sl=sl.transpose()
 
-            if self.logx==1:
+            if self.logx==True:
                 xgrid=[math.log(ptrx[i],10) for i in
                        range(0,nx.value)]
-            if self.logy==1:
+            if self.logy==True:
                 ygrid=[math.log(ptry[i],10) for i in
                        range(0,ny.value)]
 
-            if self.zset==1:
+            if self.zset==True:
                 for i in range(0,ny.value):
                     for j in range(0,nx.value):
                         if sl[i][j]>self.zhi:
@@ -1779,7 +1822,7 @@ class o2graph_plotter(plot_base):
                         elif sl[i][j]<self.zlo:
                             sl[i][j]=self.zlo
 
-            if self.canvas_flag==0:
+            if self.canvas_flag==False:
                 self.canvas()
 
             extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
@@ -1822,14 +1865,14 @@ class o2graph_plotter(plot_base):
             sl=stemp2.reshape(nx.value,ny.value)
             sl=sl.transpose()
 
-            if self.logx==1:
+            if self.logx==True:
                 xgrid=[math.log(ptrx[i],10) for i in
                        range(0,nx.value)]
-            if self.logy==1:
+            if self.logy==True:
                 ygrid=[math.log(ptry[i],10) for i in
                        range(0,ny.value)]
 
-            if self.zset==1:
+            if self.zset==True:
                 for i in range(0,ny.value):
                     for j in range(0,nx.value):
                         if sl[i][j]>self.zhi:
@@ -1837,7 +1880,7 @@ class o2graph_plotter(plot_base):
                         elif sl[i][j]<self.zlo:
                             sl[i][j]=self.zlo
                             
-            if self.canvas_flag==0:
+            if self.canvas_flag==False:
                 self.canvas()
 
             extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
@@ -1862,7 +1905,7 @@ class o2graph_plotter(plot_base):
                   curr_type,".")
             return
 
-        if self.colbar>0:
+        if self.colbar==True:
             cbar=plot.colorbar()
             cbar.ax.tick_params(labelsize=self.font*0.8)
 
@@ -1920,10 +1963,10 @@ class o2graph_plotter(plot_base):
                 xv=[ptrx[i] for i in range(0,idx.value)]
                 yv=[ptry[i] for i in range(0,idy.value)]
         
-                if self.canvas_flag==0:
+                if self.canvas_flag==False:
                     self.canvas()
-                if self.logx==1:
-                    if self.logy==1:
+                if self.logx==True:
+                    if self.logy==True:
                         if len(args)<3:
                             plot.loglog(xv,yv)
                         else:
@@ -1934,7 +1977,7 @@ class o2graph_plotter(plot_base):
                         else:
                             plot.semilogx(xv,yv,**string_to_dict(args[2]))
                 else:
-                    if self.logy==1:
+                    if self.logy==True:
                         if len(args)<3:
                             plot.semilogy(xv,yv)
                         else:
@@ -1969,10 +2012,10 @@ class o2graph_plotter(plot_base):
             xv=[ptrx[i] for i in range(0,idx.value)]
             yv=[ptry[i] for i in range(0,idy.value)]
     
-            if self.canvas_flag==0:
+            if self.canvas_flag==False:
                 self.canvas()
-            if self.logx==1:
-                if self.logy==1:
+            if self.logx==True:
+                if self.logy==True:
                     if len(args)<1:
                         plot.loglog(xv,yv)
                     else:
@@ -1983,7 +2026,7 @@ class o2graph_plotter(plot_base):
                     else:
                         plot.semilogx(xv,yv,**string_to_dict(args[0]))
             else:
-                if self.logy==1:
+                if self.logy==True:
                     if len(args)<1:
                         plot.semilogy(xv,yv)
                     else:
@@ -2010,7 +2053,7 @@ class o2graph_plotter(plot_base):
                                    double_ptr_ptr]
             cont_line_fn.restype=ctypes.c_double
 
-            if self.canvas_flag==0:
+            if self.canvas_flag==False:
                 self.canvas()
 
             # Loop over all contour lines
@@ -2023,8 +2066,8 @@ class o2graph_plotter(plot_base):
                 xv=[ptrx[i] for i in range(0,idx.value)]
                 yv=[ptry[i] for i in range(0,idx.value)]
                 
-                if self.logx==1:
-                    if self.logy==1:
+                if self.logx==True:
+                    if self.logy==True:
                         if len(args)<1:
                             plot.loglog(xv,yv)
                         else:
@@ -2035,7 +2078,7 @@ class o2graph_plotter(plot_base):
                         else:
                             plot.semilogx(xv,yv,**string_to_dict(args[0]))
                 else:
-                    if self.logy==1:
+                    if self.logy==True:
                         if len(args)<1:
                             plot.semilogy(xv,yv)
                         else:
@@ -2051,9 +2094,9 @@ class o2graph_plotter(plot_base):
                   curr_type,".")
             return
         
-        if self.xset==1:
+        if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
+        if self.yset==True:
             plot.ylim([self.ylo,self.yhi])
                                  
         # End of 'plot' function
@@ -2140,7 +2183,7 @@ class o2graph_plotter(plot_base):
                 xv.append(ptrx1[0])
                 yv.append(ptry1[0])
         
-                if self.canvas_flag==0:
+                if self.canvas_flag==False:
                     self.canvas()
                 if len(args)==3:
                     plot.fill(xv,yv,**string_to_dict(args[2]))
@@ -2149,14 +2192,14 @@ class o2graph_plotter(plot_base):
                 else:
                     plot.fill(xv,yv)
 
-                if self.logx==1:
+                if self.logx==True:
                     self.axes.set_xscale('log')
-                if self.logy==1:
+                if self.logy==True:
                     self.axes.set_yscale('log')
                     
-                if self.xset==1:
+                if self.xset==True:
                     plot.xlim([self.xlo,self.xhi])
-                if self.yset==1:
+                if self.yset==True:
                     plot.ylim([self.ylo,self.yhi])
                                  
             # End of section for 'table' type
@@ -2247,7 +2290,7 @@ class o2graph_plotter(plot_base):
 
             if failed==False:
                 
-                if self.canvas_flag==0:
+                if self.canvas_flag==False:
                     self.canvas()
                 if len(sv)>0:
                     if len(cv)>0:
@@ -2275,14 +2318,14 @@ class o2graph_plotter(plot_base):
                         else:
                             plot.scatter(xv,yv)
 
-                if self.logx==1:
+                if self.logx==True:
                     self.axes.set_xscale('log')
-                if self.logy==1:
+                if self.logy==True:
                     self.axes.set_yscale('log')
                     
-                if self.xset==1:
+                if self.xset==True:
                     plot.xlim([self.xlo,self.xhi])
-                if self.yset==1:
+                if self.yset==True:
                     plot.ylim([self.ylo,self.yhi])
                     
             # End of section for 'table' type
@@ -2291,9 +2334,9 @@ class o2graph_plotter(plot_base):
                   curr_type,".")
             return
         
-        if self.xset==1:
+        if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
+        if self.yset==True:
             plot.ylim([self.ylo,self.yhi])
                                  
         # End of 'scatter' function
@@ -2342,7 +2385,7 @@ class o2graph_plotter(plot_base):
             if failed==False:
                 xv=[ptrx[i] for i in range(0,idx.value)]
         
-                if self.canvas_flag==0:
+                if self.canvas_flag==False:
                     self.canvas()
                 if len(args)<2:
                     plot.hist(xv)
@@ -2355,9 +2398,9 @@ class o2graph_plotter(plot_base):
                   curr_type,".")
             return
         
-        if self.xset==1:
+        if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
+        if self.yset==True:
             plot.ylim([self.ylo,self.yhi])
                                  
         # End of 'histplot' function
@@ -2416,7 +2459,7 @@ class o2graph_plotter(plot_base):
                 xv=[ptrx[i] for i in range(0,idx.value)]
                 yv=[ptry[i] for i in range(0,idy.value)]
         
-                if self.canvas_flag==0:
+                if self.canvas_flag==False:
                     self.canvas()
                 if len(args)<3:
                     plot.hist2d(xv,yv)
@@ -2429,9 +2472,9 @@ class o2graph_plotter(plot_base):
                   curr_type,".")
             return
         
-        if self.xset==1:
+        if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
+        if self.yset==True:
             plot.ylim([self.ylo,self.yhi])
                                  
         # End of 'plot' function
@@ -2497,7 +2540,7 @@ class o2graph_plotter(plot_base):
                 get_fn(amp,colyerr,ctypes.byref(idyerr),ctypes.byref(ptryerr))
                 yerrv=[ptryerr[i] for i in range(0,idyerr.value)]
 
-            if self.canvas_flag==0:
+            if self.canvas_flag==False:
                 self.canvas()
             if len(args)<5:
                 plot.errorbar(xv,yv,yerr=yerrv,xerr=xerrv)
@@ -2511,9 +2554,9 @@ class o2graph_plotter(plot_base):
                   curr_type,".")
             return
         
-        if self.xset==1:
+        if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
-        if self.yset==1:
+        if self.yset==True:
             plot.ylim([self.ylo,self.yhi])
                                  
         # End of 'errorbar' function
@@ -2562,10 +2605,10 @@ class o2graph_plotter(plot_base):
                 xv=[i for i in range(0,idx.value)]
                 yv=[ptrx[i] for i in range(0,idx.value)]
         
-                if self.canvas_flag==0:
+                if self.canvas_flag==False:
                     self.canvas()
-                if self.logx==1:
-                    if self.logy==1:
+                if self.logx==True:
+                    if self.logy==True:
                         if len(args)<2:
                             plot.loglog(xv,yv)
                         else:
@@ -2576,7 +2619,7 @@ class o2graph_plotter(plot_base):
                         else:
                             plot.semilogx(xv,yv,**string_to_dict(args[1]))
                 else:
-                    if self.logy==1:
+                    if self.logy==True:
                         if len(args)<2:
                             plot.semilogy(xv,yv)
                         else:
@@ -2587,9 +2630,9 @@ class o2graph_plotter(plot_base):
                         else:
                             plot.plot(xv,yv,**string_to_dict(args[1]))
                                 
-                if self.xset==1:
+                if self.xset==True:
                     plot.xlim([self.xlo,self.xhi])
-                if self.yset==1:
+                if self.yset==True:
                     plot.ylim([self.ylo,self.yhi])
                     
         elif (curr_type==b'double[]' or curr_type==b'int[]' or
@@ -2605,10 +2648,10 @@ class o2graph_plotter(plot_base):
             xv=[i for i in range(0,id.value)]
             yv=[ptr[i] for i in range(0,id.value)]
 
-            if self.canvas_flag==0:
+            if self.canvas_flag==False:
                 self.canvas()
-            if self.logx==1:
-                if self.logy==1:
+            if self.logx==True:
+                if self.logy==True:
                     if len(args)<1:
                         plot.loglog(xv,yv)
                     else:
@@ -2619,7 +2662,7 @@ class o2graph_plotter(plot_base):
                     else:
                         plot.semilogx(xv,yv,**string_to_dict(args[0]))
             else:
-                if self.logy==1:
+                if self.logy==True:
                     if len(args)<1:
                         plot.semilogy(xv,yv)
                     else:
@@ -2630,9 +2673,9 @@ class o2graph_plotter(plot_base):
                     else:
                         plot.plot(xv,yv,**string_to_dict(args[0]))
                             
-            if self.xset==1:
+            if self.xset==True:
                 plot.xlim([self.xlo,self.xhi])
-            if self.yset==1:
+            if self.yset==True:
                 plot.ylim([self.ylo,self.yhi])
                     
         # End of 'plot1' function
@@ -2695,10 +2738,10 @@ class o2graph_plotter(plot_base):
                 yv=[ptry[i] for i in range(0,idy.value)]
     
                 # Plot
-                if self.canvas_flag==0:
+                if self.canvas_flag==False:
                     self.canvas()
-                if self.logx==1:
-                    if self.logy==1:
+                if self.logx==True:
+                    if self.logy==True:
                         if len(args)<3:
                             plot.loglog(xv,yv)
                         else:
@@ -2709,7 +2752,7 @@ class o2graph_plotter(plot_base):
                         else:
                             plot.semilogx(xv,yv,**string_to_dict(args[2]))
                 else:
-                    if self.logy==1:
+                    if self.logy==True:
                         if len(args)<3:
                             plot.semilogy(xv,yv)
                         else:
@@ -2720,9 +2763,9 @@ class o2graph_plotter(plot_base):
                         else:
                             plot.plot(xv,yv,**string_to_dict(args[2]))
             if ifile==0:                
-                if self.xset==1:
+                if self.xset==True:
                     plot.xlim([self.xlo,self.xhi])
-                if self.yset==1:
+                if self.yset==True:
                     plot.ylim([self.ylo,self.yhi])
 
         # End of 'plotm' function
@@ -2768,10 +2811,10 @@ class o2graph_plotter(plot_base):
             yv=[ptrx[i] for i in range(0,idx.value)]
 
             # Plot
-            if self.canvas_flag==0:
+            if self.canvas_flag==False:
                 self.canvas()
-            if self.logx==1:
-                if self.logy==1:
+            if self.logx==True:
+                if self.logy==True:
                     if len(args)<2:
                         plot.loglog(xv,yv)
                     else:
@@ -2782,7 +2825,7 @@ class o2graph_plotter(plot_base):
                     else:
                         plot.semilogx(xv,yv,**string_to_dict(args[1]))
             else:
-                if self.logy==1:
+                if self.logy==True:
                     if len(args)<2:
                         plot.semilogy(xv,yv)
                     else:
@@ -2793,9 +2836,9 @@ class o2graph_plotter(plot_base):
                     else:
                         plot.plot(xv,yv,**string_to_dict(args[1]))
                         
-            if self.xset==1:
+            if self.xset==True:
                 plot.xlim([self.xlo,self.xhi])
-            if self.yset==1:
+            if self.yset==True:
                 plot.ylim([self.ylo,self.yhi])
                                 
         # End of 'plot1m' function
@@ -3293,7 +3336,7 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process clf.')
                     plot.clf()
-                    self.canvas_flag=0
+                    self.canvas_flag=False
                 elif cmd_name=='new-cmaps':
                     if self.verbose>2:
                         print('Process reds2.')
