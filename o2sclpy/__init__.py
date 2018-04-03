@@ -774,6 +774,14 @@ class plot_base:
     Font size for text(), ttext(), axis titles (default 16). Axis labels
     are set by this size times 0.8 .
     """
+    fig_size_x=6.0
+    """
+    The x-scale for the figure object
+    """
+    fig_size_y=6.0
+    """
+    The y-scale for the figure object
+    """
     
     def new_cmaps(self):
         """
@@ -904,6 +912,10 @@ class plot_base:
             self.top_margin=float(value)
         elif name=='bottom_margin':
             self.bottom_margin=float(value)
+        elif name=='fig_size_x':
+            self.fig_size_x=float(value)
+        elif name=='fig_size_y':
+            self.fig_size_y=float(value)
         else:
             print('No variable named',name)
             
@@ -1097,7 +1109,8 @@ class plot_base:
         (self.fig,self.axes)=default_plot(self.left_margin,
                                           self.bottom_margin,
                                           self.right_margin,
-                                          self.top_margin,self.font)
+                                          self.top_margin,self.font,
+                                          self.fig_size_x,self.fig_size_y)
         # Plot limits
         if self.xset==1:
             plot.xlim([self.xlo,self.xhi])
@@ -1546,6 +1559,7 @@ class o2graph_plotter(plot_base):
             args[0]=='top-margin' or args[0]=='bottom-margin' or
             args[0]=='left_margin' or args[0]=='right_margin' or
             args[0]=='top_margin' or args[0]=='bottom_margin' or
+            args[0]=='fig_size_x' or args[0]=='fig_size_y' or
             args[0]=='verbose' or args[0]=='font' or
             args[0]=='logz'):
                 
@@ -1582,6 +1596,12 @@ class o2graph_plotter(plot_base):
             args[0]=='yhi' or args[0]=='yset' or
             args[0]=='zlo' or args[0]=='zhi' or
             args[0]=='zset' or args[0]=='colbar' or
+            args[0]=='top-margin' or args[0]=='top_margin' or
+            args[0]=='bottom-margin' or args[0]=='bottom_margin' or
+            args[0]=='left-margin' or args[0]=='left_margin' or
+            args[0]=='right-margin' or args[0]=='right_margin' or
+            args[0]=='fig-size-x' or args[0]=='fig_size_x' or
+            args[0]=='fig-size-y' or args[0]=='fig_size_y' or
             args[0]=='logz'):
             
             self.get(args[0])
