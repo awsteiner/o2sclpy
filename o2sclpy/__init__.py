@@ -256,6 +256,70 @@ extra_list=[
      "limit before plotting."]
 ]
 
+param_list=[
+    ["bottom-margin","Size of bottom margin for a new canvas"+
+     " (default 0.12)."],
+    ["colbar","If true, den-plot adds a color legend (default False)."],
+    ["fig-size-x","Horizontal figure size (default 6.0)."],
+    ["fig-size-y","Vertical figure size (default 6.0)."],
+    ["font","Font scaling for text objects (default 16)."],
+    ["left-margin","Size of left margin for a new canvas"+
+     " (default 0.14)."],
+    ["logx","If true, use a logarithmic x-axis (default False)."],
+    ["logy","If true, use a logarithmic y-axis (default False)."],
+    ["logz","If true, use a logarithmic z-axis (default False)."],
+    ["right-margin","Size of right margin for a new canvas"+
+     " (default 0.04)."],
+    ["top-margin","Size of top margin for a new canvas"+
+     " (default 0.04)."],
+    ["verbose","Verbosity parameter (default 1)."],
+    ["xhi","Upper limit for x-axis (function if starts with '(')."],
+    ["xlo","Lower limit for x-axis (function if starts with '(')."],
+    ["xset","If true, x-axis limits have been set (default False)."],
+    ["xtitle","X-axis title. Latex "+
+     "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')"],
+    ["yhi","Upper limit for y-axis (function if starts with '(')."],
+    ["ylo","Lower limit for y-axis (function if starts with '(')."],
+    ["yset","If true, y-axis limits have been set (default False)."],
+    ["ytitle","Y-axis title. Latex "+
+     "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')"],
+    ["zlo","Lower limit for z-axis (function if starts with '(')."],
+    ["zhi","Upper limit for z-axis (function if starts with '(')."],
+    ["zset","If true, z-axis limits have been set (default False)."]
+]
+
+param_dict={
+    "bottom-margin": "Size of bottom margin for a new canvas"+
+    " (default 0.12).",
+    "colbar": "If true, den-plot adds a color legend (default False).",
+    "fig-size-x": "Horizontal figure size (default 6.0).",
+    "fig-size-y": "Vertical figure size (default 6.0).",
+    "font": "Font scaling for text objects (default 16).",
+    "left-margin": "Size of left margin for a new canvas"+
+    " (default 0.14).",
+    "logx": "If true, use a logarithmic x-axis (default False).",
+    "logy": "If true, use a logarithmic y-axis (default False).",
+    "logz": "If true, use a logarithmic z-axis (default False).",
+    "right-margin": "Size of right margin for a new canvas"+
+    " (default 0.04).",
+    "top-margin": "Size of top margin for a new canvas"+
+    " (default 0.04).",
+    "verbose": "Verbosity parameter (default 1).",
+    "xhi": "Upper limit for x-axis (function if starts with '(').",
+    "xlo": "Lower limit for x-axis (function if starts with '(').",
+    "xset": "If true, x-axis limits have been set (default False).",
+    "xtitle": "X-axis title. Latex "+
+    "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')",
+    "yhi": "Upper limit for y-axis (function if starts with '(').",
+    "ylo": "Lower limit for y-axis (function if starts with '(').",
+    "yset": "If true, y-axis limits have been set (default False).",
+    "ytitle": "Y-axis title. Latex "+
+    "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')",
+    "zlo": "Lower limit for z-axis (function if starts with '(').",
+    "zhi": "Upper limit for z-axis (function if starts with '(').",
+    "zset": "If true, z-axis limits have been set (default False)."
+}
+
 class cloud_file:
     """
     A class to manage downloading files from the internet.
@@ -928,37 +992,37 @@ class plot_base:
         """
         Output the value of parameter named ``name``
         """
-        if name=='colbar' or name=='':
+        if name=='colbar':
             print('The value of colbar is',self.colbar,'.')
-        if name=='logx' or name=='':
+        if name=='logx':
             print('The value of logx is',self.logx,'.')
-        if name=='logy' or name=='':
+        if name=='logy':
             print('The value of logy is',self.logy,'.')
-        if name=='logz' or name=='':
+        if name=='logz':
             print('The value of logz is',self.logz,'.')
-        if name=='verbose' or name=='':
+        if name=='verbose':
             print('The value of verbose is',self.verbose,'.')
-        if name=='xhi' or name=='':
+        if name=='xhi':
             print('The value of xhi is',self.xhi,'.')
-        if name=='xlo' or name=='':
+        if name=='xlo':
             print('The value of xlo is',self.xlo,'.')
-        if name=='xset' or name=='':
+        if name=='xset':
             print('The value of xset is',self.xset,'.')
-        if name=='xtitle' or name=='':
+        if name=='xtitle':
             print('The value of xtitle is',self.xtitle,'.')
-        if name=='yhi' or name=='':
+        if name=='yhi':
             print('The value of yhi is',self.yhi,'.')
-        if name=='ylo' or name=='':
+        if name=='ylo':
             print('The value of ylo is',self.ylo,'.')
-        if name=='yset' or name=='':
+        if name=='yset':
             print('The value of yset is',self.yset,'.')
-        if name=='ytitle' or name=='':
+        if name=='ytitle':
             print('The value of ytitle is',self.ytitle,'.')
-        if name=='zhi' or name=='':
+        if name=='zhi':
             print('The value of zhi is',self.zhi,'.')
-        if name=='zlo' or name=='':
+        if name=='zlo':
             print('The value of zlo is',self.zlo,'.')
-        if name=='zset' or name=='':
+        if name=='zset':
             print('The value of zset is',self.zset,'.')
         return
 
@@ -1548,21 +1612,12 @@ class o2graph_plotter(plot_base):
         ``acol_manager``
         """
 
-        if (args[0]=='logx' or args[0]=='xtitle' or
-            args[0]=='logy' or args[0]=='ytitle' or
-            args[0]=='xlo' or args[0]=='ylo' or
-            args[0]=='xset' or args[0]=='xhi' or
-            args[0]=='yhi' or args[0]=='yset' or
-            args[0]=='zlo' or args[0]=='zhi' or
-            args[0]=='zset' or args[0]=='colbar' or
-            args[0]=='left-margin' or args[0]=='right-margin' or
-            args[0]=='top-margin' or args[0]=='bottom-margin' or
-            args[0]=='left_margin' or args[0]=='right_margin' or
-            args[0]=='top_margin' or args[0]=='bottom_margin' or
-            args[0]=='fig_size_x' or args[0]=='fig_size_y' or
-            args[0]=='verbose' or args[0]=='font' or
-            args[0]=='logz'):
+        match=False
+        for line in param_list:
+            if args[0]==line[0]:
+                match=True
                 
+        if match==True:
             self.set(args[0],args[1])
             return
         
@@ -1588,21 +1643,12 @@ class o2graph_plotter(plot_base):
         gets plot-related parameters and gets other parameters
         from ``acol_manager``
         """
+        match=False
+        for line in param_list:
+            if args[0]==line[0]:
+                match=True
         
-        if (args[0]=='logx' or args[0]=='xtitle' or
-            args[0]=='logy' or args[0]=='ytitle' or
-            args[0]=='xlo' or args[0]=='ylo' or
-            args[0]=='xset' or args[0]=='xhi' or
-            args[0]=='yhi' or args[0]=='yset' or
-            args[0]=='zlo' or args[0]=='zhi' or
-            args[0]=='zset' or args[0]=='colbar' or
-            args[0]=='top-margin' or args[0]=='top_margin' or
-            args[0]=='bottom-margin' or args[0]=='bottom_margin' or
-            args[0]=='left-margin' or args[0]=='left_margin' or
-            args[0]=='right-margin' or args[0]=='right_margin' or
-            args[0]=='fig-size-x' or args[0]=='fig_size_x' or
-            args[0]=='fig-size-y' or args[0]=='fig_size_y' or
-            args[0]=='logz'):
+        if match==True:
             
             self.get(args[0])
                             
@@ -2753,7 +2799,22 @@ class o2graph_plotter(plot_base):
                 plot.ylim([self.ylo,self.yhi])
                                 
         # End of 'plot1m' function
-                                 
+
+    def print_param_docs(self):
+        # I don't know why this doesn't work right now
+        # print(plot_base.logz.__doc__)
+        print('O2graph parameter list:')
+        print(' ')
+        for line in param_list:
+            if line[0]=='colbar':
+                print(line[0]+' '+str(self.colbar))
+            elif line[0]=='fig-size-x':
+                print(line[0]+' '+str(self.fig_size_x))
+            else:
+                print(line[0])
+            print(' '+line[1])
+            print(' ')
+        
     def parse_argv(self,argv,o2scl_hdf):
         """
         Parse command-line arguments.
@@ -2936,7 +2997,8 @@ class o2graph_plotter(plot_base):
 
                     curr_type=''
                     cmd=''
-                    
+
+                    # If only a command is specified
                     if (ix_next-ix)==2:
 
                         # Get current type
@@ -2959,8 +3021,9 @@ class o2graph_plotter(plot_base):
                             curr_type=curr_type+type_ptr[i]
                             
                         cmd=strlist[ix+1]
-                        
+
                     elif (ix_next-ix)==3:
+                        # If both a type and command are specified
                         
                         curr_type=strlist[ix+1]
                         cmd=strlist[ix+2]
@@ -2997,7 +3060,13 @@ class o2graph_plotter(plot_base):
                         self.gen(o2scl_hdf,amp,cmd_name,
                                  strlist[ix+1:ix_next])
 
-                    # Provide a command list if no arguments were given
+                    # If the user specified 'help set', then print
+                    # the o2graph parameter documentation
+                    if (cmd=='set' or cmd=='get') and (ix_next-ix)==2:
+                        self.print_param_docs()
+
+                    # If no arguments were given, then give a list of
+                    # o2graph commands in addition to acol commands
                     if (ix_next-ix)==1:
                         print('O2graph command-line options:\n')
                         for line in base_list:
