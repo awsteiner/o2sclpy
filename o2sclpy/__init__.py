@@ -127,7 +127,7 @@ base_list=[
      "open, then "+
      "the y-limits on that plot are modified. Future plots are also "+
      "set with the specified y-limits."],
-    ["zlimits","Set the z-azis limits","<low> <high>",
+    ["zlimits","Set the z-azis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
      "and set 'zset' to true. If a plotting canvas is currently "+
      "open, then "+
@@ -2870,6 +2870,20 @@ class o2graph_plotter(plot_base):
         o2scl_hdf.o2scl_create_acol_manager.restype=ctypes.c_void_p
         amp=o2scl_hdf.o2scl_create_acol_manager()
 
+        names_fn=o2scl_hdf.o2scl_acol_set_names
+        names_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_char_p,
+                           ctypes.c_int,ctypes.c_char_p,ctypes.c_int,
+                           ctypes.c_char_p]
+
+        # Get current type
+        cmd_name=b'o2graph'
+        cmd_desc=(b'o2graph: A data viewing and '+
+                  b'processing program for O2scl.\n')
+        env_var=b'O2GRAPH_DEFAULTS'
+        names_fn(amp,len(cmd_name),ctypes.c_char_p(cmd_name),
+                 len(cmd_desc),ctypes.c_char_p(cmd_desc),
+                 len(env_var),ctypes.c_char_p(env_var))
+        
         if len(argv)<=1:
             done_flag=False
             readline.parse_and_bind('tab: complete')
