@@ -1,0 +1,8 @@
+# errorbar example
+#
+o2graph -create table x 0 1 1.0e-3 \
+	-function "sin(4*x)" y \
+	-function "sqrt(x)+0.1" xe \
+	-function "sin(4*x)+0.3*cos(4*x)" ye \
+	-set xtitle x -set ytitle y \
+	-errorbar x y xe ye -save ex9.png -show

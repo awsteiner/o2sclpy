@@ -115,6 +115,24 @@ Example 4
 
 .. include:: static/ex4.scr
    :literal:
+.. image:: static/ex4.png
+   :width: 70%
+
+Example 5
+---------
+
+.. include:: static/ex5.scr
+   :literal:
+.. image:: static/ex5.png
+   :width: 70%
+
+Example 6
+---------
+
+.. include:: static/ex6.scr
+   :literal:
+.. image:: static/ex6.png
+   :width: 70%
 
 Internal structure
 ------------------

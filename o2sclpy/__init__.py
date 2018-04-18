@@ -3351,6 +3351,9 @@ class o2graph_plotter(plot_base):
                         print('Process clf.')
                     plot.clf()
                     self.canvas_flag=False
+                elif cmd_name=='backend':
+                    if self.verbose>2:
+                        print('Process backend in __init__.py.')
                 elif cmd_name=='new-cmaps':
                     if self.verbose>2:
                         print('Process reds2.')
