@@ -91,47 +91,47 @@ The O\ :sub:`2`\ graph script implements all of the commands from the
 Example 1
 ---------
 
-.. include:: static/ex1.scr
+.. include:: static/table_plot.scr
    :literal:
-.. image:: static/ex1.png
+.. image:: static/table_plot.png
    :width: 70%
 
 Example 2
 ---------
 
-.. include:: static/ex2.scr
+.. include:: static/table_denplot.scr
    :literal:
-.. image:: static/ex2.png
+.. image:: static/table_denplot.png
    :width: 70%
 
 Example 3
 ---------
 
-.. include:: static/ex3.scr
+.. include:: static/backend.scr
    :literal:
 
 Example 4
 ---------
 
-.. include:: static/ex4.scr
+.. include:: static/table_plotm.scr
    :literal:
-.. image:: static/ex4.png
+.. image:: static/table_plotm.png
    :width: 70%
 
 Example 5
 ---------
 
-.. include:: static/ex5.scr
+.. include:: static/table_scatter.scr
    :literal:
-.. image:: static/ex5.png
+.. image:: static/table_scatter.png
    :width: 70%
 
 Example 6
 ---------
 
-.. include:: static/ex6.scr
+.. include:: static/table_rplot.scr
    :literal:
-.. image:: static/ex6.png
+.. image:: static/table_rplot.png
    :width: 70%
 
 Internal structure

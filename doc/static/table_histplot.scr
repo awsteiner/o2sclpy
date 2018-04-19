@@ -2,5 +2,5 @@
 #
 o2graph -create table N 0 10000 1 \
 	-function "sin(1e8*N)" x \
-	-histplot x bins=40 -save ex7a.png -show
+	-histplot x bins=40 -save table_histplot.png -show
 		 

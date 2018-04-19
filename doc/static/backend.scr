@@ -3,5 +3,5 @@
 # o2graph to clear the current figure before starting a new plot
 #
 o2graph -backend Agg -create table x "(-3.14)" 3.14 0.1 \
-	-function "(1+sin(x))/2" y -plot x y -save ex3a.png \
-	-clf -deriv x y yp -plot x yp -save ex3b.png 
+	-function "(1+sin(x))/2" y -plot x y -save backend_a.png \
+	-clf -deriv x y yp -plot x yp -save backend_b.png 

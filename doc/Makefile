@@ -14,8 +14,8 @@ help:
 	@echo "----------------------------------------------------"
 	@echo "  help: Show this list"
 	@echo "  sphinx-help: Show the list of Sphinx commands"
-	@echo "  help.txt: Generate the help.txt file for the docs"
 	@echo "  html: Build the Sphinx docs"
+	@echo "  statfiles: Generate the static doc files."
 	@echo "  sync-doc: Copy to server"
 	@echo "  all: help.txt, html, and sync-doc in that order"
 	@echo "----------------------------------------------------"
@@ -40,6 +40,15 @@ all:
 sync-doc:
 	cp -r build/html/* $(STATIC_DOC_DIR)/o2sclpy
 
-help.txt:
+statfiles:
 	cd static; o2graph -h | grep -v "Set o2scl" | \
 		grep -v "Compiled at" > o2graph.help.txt
+	cd static; source backend.scr
+	cd static; source table3d_den_plot.scr
+	cd static; source table_errorbar.scr
+	cd static; source table_hist2dplot.scr
+	cd static; source table_histplot.scr
+	cd static; source table_plot.scr
+	cd static; source table_plotm.scr
+	cd static; source table_rplot.scr
+	cd static; source table_scatter.scr

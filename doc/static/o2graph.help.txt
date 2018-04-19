@@ -2,49 +2,31 @@ o2graph: A data viewing and processing program for O2scl.
 
 List of command-line options:
 
-   -alias       Create a command alias.                                  
-   -backend     Select the matplotlib backend to use.                    
-   -calc        Compute the value of a constant expression.              
-   -canvas      Create a plotting canvas.                                
-   -clf         Clear the current figure.                                
-   -commands    List commands                                            
--c -create      Create an object                                         
-   -download    Download file from specified URL.                        
-   -exit        Exit (synonymous with 'quit').                           
-   -filelist    List objects in a HDF5 file.                             
--g -generic     Read in a generic text file.                             
-   -get         Get the value of a parameter.                            
-   -get-conv    Get a unit conversion factor.                            
--h -help        Show help information.                                   
--q -interactive Toggle the interactive interface.                        
--i -internal    Output current object in the internal HDF5 format.       
-   -license     Show license information.                                
-   -line        Plot a line.                                             
-   -move-labels Move the labels.                                         
-   -new-cmaps   Define new color maps.                                   
-   -no-intro    Do not print introductory text.                          
--o -output      Output the current object as text.                       
-   -plot-files  Specify a list of files for 'plotm' and 'plot1m'.        
-   -plot1m      Plot the specified column from tables in multiple files. 
-   -plotm       Plot the specified columns from tables in multiple files.
--P -preview     Preview the current object.                              
-   -quit        Quit (synonymous with 'exit').                           
--r -read        Read an object from an O2scl-style HDF5 file.            
-   -rect        Plot a rectangle.                                        
-   -reset-xlim  Reset the x-axis limits.                                 
-   -reset-ylim  Reset the y-axis limits.                                 
-   -run         Run a file containing a list of commands.                
-   -save        Save the current plot in a file.                         
-   -set         Set the value of a parameter.                            
-   -show        Show the current plot.                                   
-   -show-units  Show the unit conversion table.                          
-   -text        Plot text in the axis coordinate system.                 
-   -ttext       Plot text in the canvas default coordinate system.       
-   -type        Show current object type.                                
--v -version     Print version information and O2scl settings.            
-   -warranty    Show warranty information.                               
-   -xlimits     Set the x-axis limits.                                   
-   -ylimits     Set the y-axis limits.                                   
+   -alias       Create a command alias.                           
+   -calc        Compute the value of a constant expression.       
+   -commands    List available commands.                          
+-c -create      Create an object.                                 
+   -download    Download file from specified URL.                 
+   -exit        Exit (synonymous with 'quit').                    
+   -filelist    List objects in a HDF5 file.                      
+-g -generic     Read in a generic text file.                      
+   -get         Get the value of a parameter.                     
+   -get-conv    Get a unit conversion factor.                     
+-h -help        Show help information.                            
+-q -interactive Toggle the interactive interface.                 
+-i -internal    Output current object in the internal HDF5 format.
+   -license     Show license information.                         
+   -no-intro    Do not print introductory text.                   
+-o -output      Output the current object as text.                
+-P -preview     Preview the current object.                       
+   -quit        Quit (synonymous with 'exit').                    
+-r -read        Read an object from an O2scl-style HDF5 file.     
+   -run         Run a file containing a list of commands.         
+   -set         Set the value of a parameter.                     
+   -show-units  Show the unit conversion table.                   
+   -type        Show current object type.                         
+-v -version     Print version information and O2scl settings.     
+   -warranty    Show warranty information.                        
 
 Notes:
 
@@ -64,5 +46,4 @@ exp(x) log(x) log10(x) sin(x) cos(x) tan(x) sqrt(x) abs(x)
 asin(x) acos(x) atan(x) sinh(x) cosh(x) tanh(x)
 asinh(x) acosh(x) atanh(x)
 
-Compiled at 22:53:18 on Feb 13 2018 for o2scl, version 0.922.
 
