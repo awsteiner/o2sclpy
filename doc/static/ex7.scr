@@ -3,7 +3,4 @@
 o2graph -create table N 0 10000 1 \
 	-function "sin(1e8*N)" x \
 	-histplot x bins=40 -save ex7a.png -show
-o2graph -create table N 0 10000 1 \
-	-function "sin(1e8*N)" x -to-hist x \
-	-plot bins=40 -save ex7b.png -show
 		 
