@@ -99,9 +99,9 @@ Example 1
 Example 2
 ---------
 
-.. include:: static/table_denplot.scr
+.. include:: static/table3d_den_plot.scr
    :literal:
-.. image:: static/table_denplot.png
+.. image:: static/table3d_den_plot.png
    :width: 70%
 
 Example 3
