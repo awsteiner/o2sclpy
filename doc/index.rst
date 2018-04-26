@@ -7,7 +7,7 @@ O2sclpy: v0.922
 
 O\ :sub:`2`\ sclpy: A set of python classes for use with the
 O\ :sub:`2`\ scl C++ library (separately documented
-at <https://isospin.roam.utk.edu/static/o2sclpy>)
+at <https://isospin.roam.utk.edu/static/code/o2sclpy>)
 
 .. warning:: This python library is highly experimental and under heavy
 	     development.
@@ -63,7 +63,7 @@ Basic usage
 
 The ``o2graph`` script is formulated along the same lines as the
 ``acol`` executable in O\ :sub:`2`\ scl documented at
-<https://isospin.roam.utk.edu/static/o2scl/html/acol_section.html> .
+<https://isospin.roam.utk.edu/static/code/o2scl/html/acol_section.html> .
 It operates on one object at a time, and the basic workflow is
 the same: read or create an object, manipulate and/or plot
 that object, and save the object or the plot to a file.
@@ -86,7 +86,7 @@ Intergration with o2scl
 
 The O\ :sub:`2`\ graph script implements all of the commands from the
 ``acol`` executable in O\ :sub:`2`\ scl documented at
-<https://isospin.roam.utk.edu/static/o2scl/html/acol_section.html>
+<https://isospin.roam.utk.edu/static/code/o2scl/html/acol_section.html>
 	     
 Example 1
 ---------
@@ -142,7 +142,7 @@ The O\ :sub:`2`\ graph script works by creating an instance of the
 :py:func:`o2sclpy.o2graph_plotter.parse_argv` . Internally, the
 ``o2graph_plotter`` class works by calling the global functions
 mentioned in page
-<https://isospin.roam.utk.edu/data/o2scl/html/o2scl_python_section.html>
+<https://isospin.roam.utk.edu/static/code/o2scl/html/o2scl_python_section.html>
 in the O\ :sub:`2`\ scl documentation.
       
 --------------------------------------------------------------
