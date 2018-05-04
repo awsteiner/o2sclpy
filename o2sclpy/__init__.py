@@ -2978,6 +2978,7 @@ class o2graph_plotter(plot_base):
                            'set-data','set_data','set-unit',
                            'set_unit','show-units','show_units','slice',
                            'sort','stats','sum','to-hist','to_hist',
+                           'to-hist-2d' 'to_hist_2d',
                            'to_table3d','to-table','to_table','to-table3d',
                            'type','v','warranty']
                 
