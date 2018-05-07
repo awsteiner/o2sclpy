@@ -157,9 +157,11 @@ extra_list=[
      "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
      "(mfcalt), markersize (ms). For example: o2graph -create x 0 10 0.2 "+
      "-function sin(x) y -plot x y lw=0,marker='+' -show"],
-    ["table","plot2-ser",
+    ["table","plot-ser",
      "Plot two series from a row in table.",
      "<row> <pattern 1> <pattern 2>",""],
+    ["table","plot1-ser",
+     "Plot a series from a row in table.","<row> <pattern>",""],
     ["table","rplot",
      "Plot a region inside a column or in between two columns.",
      "<x1> <y1> [x2 y2] [kwargs]",
@@ -2301,6 +2303,81 @@ class o2graph_plotter(plot_base):
         
         # End of 'plot_ser' function
                                  
+    def plot1_ser(self,o2scl_hdf,amp,args):
+        """
+        """
+
+        # Useful pointer types
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        if curr_type==b'table':
+                            
+            failed=False
+
+            get_fn=o2scl_hdf.o2scl_acol_get_row_ser
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,
+                             int_ptr,double_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+
+            row_ix=ctypes.c_int(int(args[0]))
+
+            pat_y=ctypes.c_char_p(self.force_bytes(args[1]))
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_ret=get_fn(amp,pat_y,row_ix,ctypes.byref(idy),
+                           ctypes.byref(ptry))
+            if get_ret!=0:
+                print('Failed to get row with index '+args[0]+
+                      ' and pattern "'+args[2]+'".')
+                failed=True
+                
+            if failed==False:
+                yv=[ptry[i] for i in range(0,idy.value)]
+                
+            if failed==False:
+                
+                if self.canvas_flag==False:
+                    self.canvas()
+                if len(args)>=4:
+                    plot.plot(yv,**string_to_dict(args[2]))
+                else:
+                    plot.plot(yv)
+
+                if self.logx==True:
+                    self.axes.set_xscale('log')
+                if self.logy==True:
+                    self.axes.set_yscale('log')
+                    
+                if self.xset==True:
+                    plot.xlim([self.xlo,self.xhi])
+                if self.yset==True:
+                    plot.ylim([self.ylo,self.yhi])
+                                 
+            # End of section for 'table' type
+        else:
+            print("Command 'plot-ser' not supported for type",
+                  curr_type,".")
+            return
+        
+        # End of 'plot1_ser' function
+                                 
     def scatter(self,o2scl_hdf,amp,args):
         """
         """
@@ -3258,6 +3335,13 @@ class o2graph_plotter(plot_base):
                         print('Process plot-ser.')
 
                     self.plot_ser(o2scl_hdf,amp,strlist[ix+1:ix_next])
+
+                elif cmd_name=='plot1-ser' or cmd_name=='plot1_ser':
+                    
+                    if self.verbose>2:
+                        print('Process plot1-ser.')
+
+                    self.plot1_ser(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='scatter':
                     
