@@ -2043,6 +2043,44 @@ class o2graph_plotter(plot_base):
                         plot.plot(xv,yv,**string_to_dict(args[0]))
                             
             # End of section for 'hist' type
+        elif curr_type==b'prob_dens_mdim_amr':
+
+            get_base_fn=o2scl_hdf.o2scl_acol_pdma_get_base
+            get_base_fn.argtypes=[ctypes.c_void_p,int_ptr,
+                                  int_ptr,double_ptr_ptr,double_ptr_ptr]
+                            
+            get_cube_fn=o2scl_hdf.o2scl_acol_pdma_get_cube
+            get_cube_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                                  double_ptr_ptr,double_ptr_ptr,
+                                  double_ptr,double_ptr]
+                            
+            ndimx=ctypes.c_int(0)
+            nx=ctypes.c_int(0)
+            lowx=double_ptr()
+            highx=double_ptr()
+            get_base_fn(amp,ctypes.byref(ndimx),ctypes.byref(nx),
+                        ctypes.byref(lowx),ctypes.byref(highx))
+
+            dimx=int(args[0])
+            dimy=int(args[1])
+            print('dimensions',ndimx,'mesh size',n)
+            print('using coordinates',dimx,'and',dimy)
+
+            if self.canvas_flag==False:
+                self.canvas()
+
+                for i in range(0,nx):
+                    #ixy=ctypes.c_int(i)
+                    #ptry=double_ptr()
+                    #get_wgts_fn(amp,ctypes.byref(idy),
+                    #            ctypes.byref(ptry))
+                
+                if len(args)<1:
+                    plot.loglog(xv,yv)
+                else:
+                    plot.loglog(xv,yv,**string_to_dict(args[0]))
+                            
+            # End of section for 'prob_dens_mdim_amr' type
         elif curr_type==b'vector<contour_line>':
 
             # Get the total number of contour lines
@@ -3128,10 +3166,10 @@ class o2graph_plotter(plot_base):
                 acol_list=['a','alias','assign','autocorr','c',
                            'calc','cat','commands','contours','convert-unit',
                            'convert_unit','create','d','D',
-                           'delete-col',
-                           'delete-rows','delete_col','delete_rows','deriv',
-                           'deriv2','download','entry','f','filelist',
-                           'find-row',
+                           'delete-col','delete-rows','delete-rows-tol',
+                           'delete_col','delete_rows','delete_rows_tol',
+                           'deriv','deriv2',
+                           'download','entry','f','filelist','find-row',
                            'find_row','fit','function','g','gen3-list',
                            'gen3_list','generic','get-conv','get-row',
                            'get-unit','get_conv','get_row','get_unit',
