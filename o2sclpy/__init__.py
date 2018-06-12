@@ -2063,8 +2063,6 @@ class o2graph_plotter(plot_base):
 
             dimx=int(args[0])
             dimy=int(args[1])
-            print(dimx,dimy,'dimensions',ndimx,'mesh size',nx)
-            print('using coordinates',dimx,'and',dimy)
 
             self.xlo=lowx[dimx]
             self.ylo=lowx[dimy]
@@ -2092,15 +2090,16 @@ class o2graph_plotter(plot_base):
                 lower=lowy[dimy]
                 right=highy[dimx]
                 upper=highy[dimy]
-                if fvy.value>0.001:
-                    print(left,right,lower,upper,fvy.value)
                 w=right-left
                 h=upper-lower
                 
                 if len(args)<3:
                     r=patches.Rectangle((left,lower),w,h,0.0,
-                                        alpha=fvy.value)
+                                        alpha=fvy.value*10)
                     self.axes.add_patch(r)
+                    r2=patches.Rectangle((left,lower),w,h,0.0,
+                                         fill=False,lw=1,color='black')
+                    self.axes.add_patch(r2)
                 else:
                     r=patches.Rectangle((left,lower),w,h,0.0,
                                         'alpha='+str(fvy.value)+','+args[2])
