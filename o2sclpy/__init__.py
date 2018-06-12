@@ -2063,22 +2063,48 @@ class o2graph_plotter(plot_base):
 
             dimx=int(args[0])
             dimy=int(args[1])
-            print('dimensions',ndimx,'mesh size',n)
+            print(dimx,dimy,'dimensions',ndimx,'mesh size',nx)
             print('using coordinates',dimx,'and',dimy)
+
+            self.xlo=lowx[dimx]
+            self.ylo=lowx[dimy]
+            self.xset=True
+            self.xhi=highx[dimx]
+            self.yhi=highx[dimy]
+            self.yset=True
 
             if self.canvas_flag==False:
                 self.canvas()
 
-                for i in range(0,nx):
-                    #ixy=ctypes.c_int(i)
-                    #ptry=double_ptr()
-                    #get_wgts_fn(amp,ctypes.byref(idy),
-                    #            ctypes.byref(ptry))
+            for i in range(0,nx.value):
+
+                iy=ctypes.c_int(i)
+                lowy=double_ptr()
+                highy=double_ptr()
+                fvy=ctypes.c_double(0.0)
+                wy=ctypes.c_double(0.0)
+                get_cube_fn(amp,iy,ctypes.byref(lowy),
+                            ctypes.byref(highy),
+                            ctypes.byref(fvy),
+                            ctypes.byref(wy))
                 
-                if len(args)<1:
-                    plot.loglog(xv,yv)
+                left=lowy[dimx]
+                lower=lowy[dimy]
+                right=highy[dimx]
+                upper=highy[dimy]
+                if fvy.value>0.001:
+                    print(left,right,lower,upper,fvy.value)
+                w=right-left
+                h=upper-lower
+                
+                if len(args)<3:
+                    r=patches.Rectangle((left,lower),w,h,0.0,
+                                        alpha=fvy.value)
+                    self.axes.add_patch(r)
                 else:
-                    plot.loglog(xv,yv,**string_to_dict(args[0]))
+                    r=patches.Rectangle((left,lower),w,h,0.0,
+                                        'alpha='+str(fvy.value)+','+args[2])
+                    self.axes.add_patch(r)
                             
             # End of section for 'prob_dens_mdim_amr' type
         elif curr_type==b'vector<contour_line>':
