@@ -2095,7 +2095,7 @@ class o2graph_plotter(plot_base):
                 
                 if len(args)<3:
                     r=patches.Rectangle((left,lower),w,h,0.0,
-                                        alpha=fvy.value*10)
+                                        alpha=fvy.value)
                     self.axes.add_patch(r)
                     r2=patches.Rectangle((left,lower),w,h,0.0,
                                          fill=False,lw=1,color='black')
