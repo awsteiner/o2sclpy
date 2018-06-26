@@ -1827,6 +1827,11 @@ class o2graph_plotter(plot_base):
                         elif sl[i][j]<self.zlo:
                             sl[i][j]=self.zlo
 
+            if self.logz==True:
+                for i in range(0,ny.value):
+                    for j in range(0,nx.value):
+                        sl[i][j]=math.log10(sl[i][j])
+                        
             if self.canvas_flag==False:
                 self.canvas()
 
@@ -1885,6 +1890,11 @@ class o2graph_plotter(plot_base):
                         elif sl[i][j]<self.zlo:
                             sl[i][j]=self.zlo
                             
+            if self.logz==True:
+                for i in range(0,ny.value):
+                    for j in range(0,nx.value):
+                        sl[i][j]=math.log10(sl[i][j])
+                        
             if self.canvas_flag==False:
                 self.canvas()
 
