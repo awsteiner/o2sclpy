@@ -2568,6 +2568,9 @@ class o2graph_plotter(plot_base):
                     plot.xlim([self.xlo,self.xhi])
                 if self.yset==True:
                     plot.ylim([self.ylo,self.yhi])
+                if self.colbar==True and len(cv)>0:
+                    cbar=plot.colorbar()
+                    cbar.ax.tick_params(labelsize=self.font*0.8)
                     
             # End of section for 'table' type
         else:
