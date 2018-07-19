@@ -89,7 +89,9 @@ base_list=[
     ["rect","Plot a rectangle.",
      "<x1> <y1> <x2> <y2> <angle> [kwargs]",
      "Plot a rectange from (x1,y1) to (xy,y2) with "+
-     "rotation angle <angle>."],
+     "rotation angle <angle>. By default, the rectangle has no border, "+
+     "but the linewidth ('lw') and edgecolor kwargs can be used to "+
+     "specify one if desired."],
     ["reset-xlim","Reset the x-axis limits.","",
      "This is an alias for 'set xset False', and indicates "+
      "that the values of 'xlo' and 'xhi' are to be ignored until the "+
@@ -2084,6 +2086,16 @@ class o2graph_plotter(plot_base):
             if self.canvas_flag==False:
                 self.canvas()
 
+            # Need to figure out here how to convert fill function
+            # to a value, keeping in mind it can depend on
+            # fvy.value (fractional volume) or wy.value (weight)
+                
+            fill_fn='None'
+            if len(args)>=3:
+                fill_fn=args[2]
+                
+            print('Fill function',fill_fn)
+                
             for i in range(0,nx.value):
 
                 iy=ctypes.c_int(i)
@@ -2102,17 +2114,15 @@ class o2graph_plotter(plot_base):
                 upper=highy[dimy]
                 w=right-left
                 h=upper-lower
-                
-                if len(args)<3:
+
+                if len(args)<4:
                     r=patches.Rectangle((left,lower),w,h,0.0,
                                         alpha=fvy.value)
                     self.axes.add_patch(r)
-                    r2=patches.Rectangle((left,lower),w,h,0.0,
-                                         fill=False,lw=1,color='black')
-                    self.axes.add_patch(r2)
                 else:
+                    strtemp='alpha='+str(fvy.value)+','+args[3]
                     r=patches.Rectangle((left,lower),w,h,0.0,
-                                        'alpha='+str(fvy.value)+','+args[2])
+                                        **string_to_dict(strtemp))
                     self.axes.add_patch(r)
                             
             # End of section for 'prob_dens_mdim_amr' type
