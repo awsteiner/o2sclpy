@@ -1814,6 +1814,22 @@ class o2graph_plotter(plot_base):
             sl=stemp2.reshape(nx.value,ny.value)
             sl=sl.transpose()
 
+            if self.logz==True:
+                fail_found=False
+                for i in range(0,ny.value):
+                    for j in range(0,nx.value):
+                        if sl[i][j]>0.0:
+                            sl[i][j]=math.log10(sl[i][j])
+                        else:
+                            if fail_found==False:
+                                print('Failed to take log of',sl[i][j],
+                                      'at (i,j)=(',j,',',i,') or (',
+                                      xgrid[j],',',ygrid[i],
+                                      '). Setting point to zero and',
+                                      'suppressing future warnings.')
+                            fail_found=True
+                            sl[i][j]=0.0
+                                
             if self.logx==True:
                 xgrid=[math.log(ptrx[i],10) for i in
                        range(0,nx.value)]
@@ -1829,11 +1845,6 @@ class o2graph_plotter(plot_base):
                         elif sl[i][j]<self.zlo:
                             sl[i][j]=self.zlo
 
-            if self.logz==True:
-                for i in range(0,ny.value):
-                    for j in range(0,nx.value):
-                        sl[i][j]=math.log10(sl[i][j])
-                        
             if self.canvas_flag==False:
                 self.canvas()
 
