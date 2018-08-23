@@ -1,4 +1,11 @@
-doc:
+help:
+	@echo "doc"
+	@echo "sync-doc"
+	@echo "reinstall"
+	@echo "to upload to pypi run 'python3 setup.py sdist bdist_wheel'"
+	@echo "  and then 'twine upload dist/*'."
+
+doc: .empty
 	cd doc; $(MAKE) html
 
 sync-doc:
@@ -7,3 +14,5 @@ sync-doc:
 reinstall:
 	-pip3 uninstall -y o2sclpy
 	pip3 install .
+
+.empty:
