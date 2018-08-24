@@ -2,7 +2,8 @@ help:
 	@echo "doc"
 	@echo "sync-doc"
 	@echo "reinstall"
-	@echo "to upload to pypi run 'python3 setup.py sdist bdist_wheel'"
+	@echo "to upload to pypi run 'rm dist/*',"
+	@echo "'python3 setup.py sdist bdist_wheel'"
 	@echo "  and then 'twine upload dist/*'."
 
 doc: .empty
