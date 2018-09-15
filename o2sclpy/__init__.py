@@ -369,27 +369,17 @@ class cloud_file:
                 hash_md5.update(chunk)
         return hash_md5.hexdigest()
     
-    def download_file_subdir(self,data_dir,subdir_orig,fname_orig,url,
-                             md5sum):
+    def download_file(self,filename,url,md5sum,directory):
         """
         This function proceeds in the following way:
 
-        First, if ``data_dir`` is empty, it attempts to set it
-        equal to the value of the environment variable
-        ``env_var``. If that environment variable is not present, the
-        user is prompted for the correct data directory. If 
-        at this point ``data_dir`` is still empty, then 
-        a ``ValueError`` exception is thrown.
-
-        Next, if ``subdir_orig`` is not empty and 
-        :py:func:`cloud_file.force_subdir` is ``True``, then 
-        the function tries to find the requested subdirectory.
-        If it is not found, then ``mkdir -p`` is used to create
-        the subdirectory. If this doesn't work, then a
+        First, if ``directory`` is not then the function tries to find
+        the requested directory. If it is not found, then ``mkdir -p``
+        is used to create it. If this doesn't work, then a
         ``FileNotFoundError`` exception is thrown.
 
         The function then looks for the requested file in the
-        associated directory (or subdirectory). If the file is found
+        directory. If the file is found
         and ``md5sum`` is not empty, then it compares it to the MD5
         checksum of the file.
 
@@ -404,99 +394,58 @@ class cloud_file:
         (including subdirectory if applicable) is returned.
 
         This function works similarly to the C++ O\ :sub:`2`\ scl
-        function ``o2scl::cloud_file::get_file_hash_subdir()``.
+        function ``o2scl::cloud_file::get_file_hash()``.
         """
-        # First obtain the data directory
-        method=''
-        if data_dir!='':
-            method='arg'
-        else:
-            if self.env_var in os.environ:
-                data_dir=os.environ[self.env_var]
-                method='ev'
-            if data_dir=='':
-                data_dir=input('Data directory not set. Enter data directory: ')
-                if data_dir!='':
-                    method='ui'
-        if data_dir=='' or method=='':
-            raise ValueError('Failed to obtain data directory.')
-        if method=='arg':
-            if verbose>0:
-                print('Data directory set (by function argument) to:',data_dir)
-        elif method=='ev':
-            if verbose>0:
-                print('Data directory set (by environment variable) to:',
-                      data_dir)
-        else:
-            if verbose>0:
-                print('Data directory set (by user input) to:',data_dir)
-    
-        # Now test for the existence of the subdirectory and create it if
+        
+        # Test for the existence of the directory and create it if
         # necessary
-        subdir=''
-        if self.force_subdir==True and subdir_orig!='':
-            subdir=data_dir+'/'+subdir_orig
-            if os.path.isdir(subdir)==False:
+        if directory!='':
+            if os.path.isdir(directory)==False:
                 if verbose>0:
-                    print('Directory not found and force_subdir is true.')
+                    print('Directory '+directory+'not found.')
                     print('Trying to automatically create using "mkdir -p"')
-                cmd='mkdir -p '+subdir
+                cmd='mkdir -p '+directory
                 ret=os.system(cmd)
                 if ret!=0:
-                    raise FileNotFoundError('Correct subdirectory does '+
+                    raise FileNotFoundError('Directory does '+
                                             'not exist and failed to create.')
-        else:
-            subdir=data_dir
-
+                
         # The local filename
-        fname=subdir+'/'+fname_orig
+        full_name=directory+'/'+filename
 
         # Check the hash
         hash_match=False
         if md5sum=='':
             hash_match=True
-        elif os.path.isfile(fname)==True:
-            mhash2=mda5(fname)
+        elif os.path.isfile(full_name)==True:
+            mhash2=mda5(full_name)
             if md5sum==mhash2:
                 hash_match=True
             elif verbose>0:
-                print('Hash of file',fname,'did not match',md5sum)
+                print('Hash of file',full_name,'did not match',md5sum)
         elif verbose>0:
-            print('Could not find file',fname)
+            print('Could not find file',full_name)
             
         # Now download the file if it's not already present
-        if hash_match==False or os.path.isfile(fname)==False:
-            response=input('Hash did not match or data file '+fname+
+        if hash_match==False or os.path.isfile(full_name)==False:
+            response=input('Hash did not match or data file '+full_name+
                            ' not found. Download (y/Y/n/N)? ')
             ret=1
             if response=='y' or response=='Y':
                 if verbose>0:
-                    print('Trying two download:')
-                urllib.request.urlretrieve(url,fname)
+                    print('Trying to download:')
+                urllib.request.urlretrieve(url,full_name)
                 ret=0
             if ret==0:
-                mhash2=mda5(fname)
+                mhash2=mda5(full_name)
                 if md5sum!=mhash2:
                     raise ConnectionError('Downloaded file but '+
                                           'has does not match.')
             if ret!=0:
                 raise ConnectionError('Failed to obtain data file.')
     
-        # Return the final filename
-        return fname
-
-    def download_file(self,data_dir,fname_orig,url,md5sum):
-        """
-        This function is similar to
-        :py:class:`o2sclpy.cloud_file.download_file_subdir()` except
-        that no subdirectory structure is used.
-        """
-        force_subdir_val=self.force_subdir
-        self.force_subdir=False
-        fname=self.download_file_subdir(data_dir,'',fname_orig,url,
-                                        md5sum)
-        self.force_subdir=force_subdir_val
-        return fname
+        # Return 0 for success
+        return 0
 
 class hdf5_reader:
     """
