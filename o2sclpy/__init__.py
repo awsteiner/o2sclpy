@@ -1080,7 +1080,7 @@ class plot_base:
             print('point',xval,yval,kwargs)
         if self.canvas_flag==False:
             self.canvas()
-        plot.plot([xval],[yval],**kwargs)
+        plot.plot([float(xval)],[float(yval)],**kwargs)
         if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
         if self.yset==True:
