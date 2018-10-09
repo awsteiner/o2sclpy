@@ -1145,10 +1145,20 @@ class plot_base:
         """
         if self.canvas_flag==False:
             self.canvas()
-        self.axes.text(float(eval(tx)),float(eval(ty)),
-                       str,transform=self.axes.transAxes,
-                       fontsize=self.font,va='center',ha='center',
-                       **kwargs)
+        ha_present=False
+        for key in kwargs:
+            if key=='ha':
+                ha_present=True
+        if ha_present==False:
+            self.axes.text(float(eval(tx)),float(eval(ty)),
+                           str,transform=self.axes.transAxes,
+                           fontsize=self.font,va='center',ha='center',
+                           **kwargs)
+        else:
+            self.axes.text(float(eval(tx)),float(eval(ty)),
+                           str,transform=self.axes.transAxes,
+                           fontsize=self.font,va='center',
+                           **kwargs)
         return
 
     def text(self,tx,ty,str,**kwargs):
@@ -1157,8 +1167,16 @@ class plot_base:
         """
         if self.canvas_flag==False:
             self.canvas()
-        self.axes.text(float(eval(tx)),float(eval(ty)),str,
-                       fontsize=self.font,va='center',ha='center',**kwargs)
+        ha_present=False
+        for key in kwargs:
+            if key=='ha':
+                ha_present=True
+        if ha_present==False:
+            self.axes.text(float(eval(tx)),float(eval(ty)),str,
+                           fontsize=self.font,va='center',ha='center',**kwargs)
+        else:
+            self.axes.text(float(eval(tx)),float(eval(ty)),str,
+                           fontsize=self.font,va='center',**kwargs)
         return
 
     def canvas(self):
