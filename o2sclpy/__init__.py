@@ -2495,8 +2495,8 @@ class o2graph_plotter(plot_base):
             sv=[]
             cv=[]
 
-            if len(args)>2 and (self.force_bytes(args[2])!=b'None' or
-                                self.force_bytes(args[2])!=b'none'):
+            if (len(args)>2 and self.force_bytes(args[2])!=b'None' and
+                self.force_bytes(args[2])!=b'none'):
                 cols=ctypes.c_char_p(self.force_bytes(args[2]))
                 ids=ctypes.c_int(0)
                 ptrs=double_ptr()
@@ -2507,8 +2507,8 @@ class o2graph_plotter(plot_base):
                 else:
                     sv=[ptrs[i] for i in range(0,ids.value)]
 
-            if len(args)>2 and (self.force_bytes(args[3])!=b'None' or
-                                self.force_bytes(args[3])!=b'none'):
+            if (len(args)>3 and self.force_bytes(args[3])!=b'None' and
+                self.force_bytes(args[3])!=b'none'):
                 colc=ctypes.c_char_p(self.force_bytes(args[3]))
                 idc=ctypes.c_int(0)
                 ptrc=double_ptr()
