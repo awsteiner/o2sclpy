@@ -1069,7 +1069,7 @@ class plot_base:
             print('Line',x1,y1,x2,y1)
         if self.canvas_flag==False:
             self.canvas()
-        plot.plot([x1,x2],[y1,y2],**kwargs)
+        plot.plot([float(x1),float(x2)],[float(y1),float(y2)],**kwargs)
         return
 
     def point(self,xval,yval,**kwargs):
