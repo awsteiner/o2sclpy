@@ -4,7 +4,7 @@ with open("README.md","r") as file_handle:
     long_description=file_handle.read()
 
 setuptools.setup(name='o2sclpy',
-                 version='0.922.0',
+                 version='0.922.1',
                  author='Andrew W. Steiner',
                  author_email='awsteiner@mykolab.com',
                  description='Python extensions for O2scl',
