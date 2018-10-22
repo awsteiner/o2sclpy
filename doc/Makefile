@@ -38,7 +38,7 @@ all:
 	$(MAKE) sync-doc
 
 sync-doc:
-	cp -r build/html/* $(STATIC_DOC_DIR)/o2sclpy
+	rsync -Cavzu build/html/* $(STATIC_DOC_DIR)/o2sclpy
 
 statfiles:
 	cd static; o2graph -h | grep -v "Set o2scl" | \

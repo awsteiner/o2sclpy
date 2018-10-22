@@ -1,0 +1,8 @@
+o2graph -download sfho_oo.o2 \
+https://isospin.roam.utk.edu/public_data/eos_tables/scollapse/Hempel_SFHoEOS_rho222_temp180_ye60_version_1.1_20120817.h5 \
+none ~/.o2scl_data -get verbose -read ~/.o2scl_data/sfho_oo.o2 Xa \
+-get verbose -to-tensor_grid -list -to-table3d 2 1 Xa 1 \
+-list -set logx 1 -set logy 1 -set colbar 1 \
+-set xtitle "$$ \rho~\mathrm{index} $$" \
+-set ytitle "$$ \mathrm{T}~\mathrm{index} $$" \
+-den-plot Xa -show

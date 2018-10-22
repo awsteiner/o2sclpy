@@ -1,8 +1,12 @@
 help:
-	@echo "doc"
-	@echo "sync-doc"
-	@echo "reinstall"
-	@echo "to upload to pypi run 'rm dist/*',"
+	@echo "This the O2sclpy root directory makefile."
+	@echo "-------------------------------------------------------------"
+	@echo "doc:       Make the documentation (requires sphinx & breathe)"
+	@echo "sync-doc:  Copies documentation to webserver"
+	@echo "reinstall: Reinstall o2sclpy using pip3"
+	@echo
+	@echo "-------------------------------------------------------------"
+	@echo "Other notes: to upload to pypi run 'rm dist/*',"
 	@echo "'python3 setup.py sdist bdist_wheel'"
 	@echo "  and then 'twine upload dist/*'."
 

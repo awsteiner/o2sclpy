@@ -1074,7 +1074,7 @@ class plot_base:
 
     def point(self,xval,yval,**kwargs):
         """
-        Desc
+        Plot a point at location (xval,yval)
         """
         if self.verbose>2:
             print('point',xval,yval,kwargs)
@@ -1332,6 +1332,7 @@ class plotter(plot_base):
 
     def scatter(self,colx,coly,cols,colc,**kwargs):
         """
+        Generate a scatter plot.
         """
         if self.force_bytes(self.dtype)==b'table':
             if self.verbose>2:
@@ -2366,6 +2367,7 @@ class o2graph_plotter(plot_base):
                                  
     def plot1_ser(self,o2scl_hdf,amp,args):
         """
+        Perform a series of plots with a table object.
         """
 
         # Useful pointer types
@@ -2441,6 +2443,7 @@ class o2graph_plotter(plot_base):
                                  
     def scatter(self,o2scl_hdf,amp,args):
         """
+        Generate a scatter plot.
         """
 
         # Useful pointer types
@@ -3078,8 +3081,13 @@ class o2graph_plotter(plot_base):
         # End of 'plot1m' function
 
     def print_param_docs(self):
+        """
+        Print parameter documentation.
+        """
+        
         # I don't know why this doesn't work right now
         # print(plot_base.logz.__doc__)
+        
         print('O2graph parameter list:')
         print(' ')
         for line in param_list:
