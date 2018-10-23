@@ -5,7 +5,8 @@ https://isospin.roam.utk.edu/public_data/eos_tables/scollapse/Hempel_SFHoEOS_rho
 -to-tensor_grid file:~/.o2scl_data/sfho_oo.o2:ye \
 file:~/.o2scl_data/sfho_oo.o2:logtemp \
 file:~/.o2scl_data/sfho_oo.o2:logrho \
--list -to-table3d 2 1 Xa 1 -set colbar 1 \
+-to-table3d 2 1 Xa 0.05 -set colbar 1 -set left-margin 0.16 \
 -set xtitle "$ \log_{10} \rho~(\mathrm{g}/\mathrm{cm}^3) $" \
 -set ytitle "$ \log_{10} \mathrm{T}~(\mathrm{MeV}) $" \
--den-plot Xa -show
+-ttext 1.1 "(-0.1)" "$ Y_e = 0.05 $" -den-plot Xa \
+-save eos_sn_plot.png -show
