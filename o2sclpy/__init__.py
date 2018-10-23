@@ -1638,10 +1638,11 @@ class o2graph_plotter(plot_base):
         if match==True:
             self.set(args[0],args[1])
 
-        print('here',self.force_bytes(args[0]),b'verbose')
-        
+        # If we're modifying the verbose parameter, then make
+        # sure both the o2graph and the acol version match. Otherwise,
+        # if it's only an o2graph parameter, then just return.
         if (match==True and 
-            if self.force_bytes(args[0])!=b'verbose'):
+            self.force_bytes(args[0])!=b'verbose'):
             return
         
         str_args='-set'
