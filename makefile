@@ -1,12 +1,15 @@
 help:
-	@echo "This the O2sclpy root directory makefile."
+	@echo "This the O2sclpy root directory makefile. It is not intended"
+	@echo "for the end-user. Use 'python setup.py' for standard "
+	@echo "package setup and installation."
 	@echo "-------------------------------------------------------------"
+	@echo "Developer targets:"
 	@echo "doc:       Make the documentation (requires sphinx & breathe)"
 	@echo "sync-doc:  Copies documentation to webserver"
 	@echo "reinstall: Reinstall o2sclpy using pip3"
 	@echo
 	@echo "-------------------------------------------------------------"
-	@echo "Other notes: to upload to pypi run 'rm dist/*',"
+	@echo "Notes: to upload to pypi run 'rm dist/*',"
 	@echo "'python3 setup.py sdist bdist_wheel'"
 	@echo "  and then 'twine upload dist/*'."
 
@@ -16,8 +19,14 @@ doc: .empty
 sync-doc:
 	cd doc; $(MAKE) sync-doc
 
+ifeq ($(MACHINE),isospin)
+PIP3_CMD = sudo pip3
+else
+PIP3_CMD = pip3 
+endif
+
 reinstall:
-	-pip3 uninstall -y o2sclpy
-	pip3 install .
+	-$(PIP3_CMD) uninstall -y o2sclpy
+	$(PIP3_CMD) install .
 
 .empty:

@@ -1637,6 +1637,11 @@ class o2graph_plotter(plot_base):
                 
         if match==True:
             self.set(args[0],args[1])
+
+        print('here',self.force_bytes(args[0]),b'verbose')
+        
+        if (match==True and 
+            if self.force_bytes(args[0])!=b'verbose'):
             return
         
         str_args='-set'
