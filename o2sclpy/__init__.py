@@ -657,30 +657,45 @@ def string_to_dict(s):
     arr=s.split(',')
     # Create empty dictionary
     dct={}
+    # If we need to skip arguments
+    skip=0
     for i in range(0,len(arr)):
-        # For each pair, split keyword and value.
-        arr2=arr[i].split('=')
 
-        # Remove quotes if necessary
-        if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
-            arr2[1]=arr2[1][1:len(arr2[1])-1]
-        if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
-            arr2[1]=arr2[1][1:len(arr2[1])-1]
-        # convert strings to numbers if necessary
-        if arr2[0]=='lw':
-            arr2[1]=float(arr2[1])
-        if arr2[0]=='alpha':
-            arr2[1]=float(arr2[1])
-        if arr2[0]=='bins':
-            arr2[1]=int(arr2[1])
-        if arr2[0]=='fill':
-            if arr2[1]=='True':
-                arr2[1]=True
-            else:
-                arr2[1]=False
+        if skip>0:
+            skip=skip-1
+        else:
+            # For each pair, split keyword and value.
+            arr2=arr[i].split('=')
+    
+            # Remove quotes if necessary
+            if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
+                arr2[1]=arr2[1][1:len(arr2[1])-1]
+            if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
+                arr2[1]=arr2[1][1:len(arr2[1])-1]
+            # convert strings to numbers if necessary
+            if arr2[0]=='lw':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='alpha':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='bins':
+                arr2[1]=int(arr2[1])
+            if arr2[0]=='fill':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='color' and arr[i][5]=='=' and arr[i][6]=='(':
+                print('In string_to_dict(). Found possible RGB color "'+
+                      arr[i]+'"')
+                arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]
+                skip=2
+                arr2[1]=arr2[1][1:len(arr2[1])-1]
+                arr3=arr2[1].split(',')
+                arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]))
+                print(arr2[1])
 
-        # assign to dictionary
-        dct[arr2[0]]=arr2[1]
+            # assign to dictionary
+            dct[arr2[0]]=arr2[1]
         
     return dct
 
@@ -2251,7 +2266,6 @@ class o2graph_plotter(plot_base):
                         yv.append(ptry2[idy2.value-1-i])
 
             if failed==False:
-                
                 # Make sure the loop is closed
                 xv.append(ptrx1[0])
                 yv.append(ptry1[0])
