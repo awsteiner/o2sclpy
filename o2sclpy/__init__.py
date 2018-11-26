@@ -1110,10 +1110,10 @@ class plot_base:
             print('Rect',x1,y1,x2,y1)
         if self.canvas_flag==False:
             self.canvas()
-        fx1=float(x1)
-        fx2=float(x2)
-        fy1=float(y1)
-        fy2=float(y2)
+        fx1=float(eval(x1))
+        fx2=float(eval(x2))
+        fy1=float(eval(y1))
+        fy2=float(eval(y2))
         left=fx1
         if fx2<fx1:
             left=fx2
