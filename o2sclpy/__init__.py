@@ -28,6 +28,7 @@ import numpy
 import ctypes
 import readline
 import textwrap
+import platform
 
 version='0.922'
 """
@@ -326,6 +327,166 @@ param_dict={
     "zhi": "Upper limit for z-axis (function if starts with '(').",
     "zset": "If true, z-axis limits have been set (default False)."
 }
+
+def force_bytes(obj):
+    """
+    In cases where we're unsure whether or not ``obj`` is a string or
+    bytes object, we ensure it's a bytes object by converting if
+    necessary.
+    """
+    if isinstance(obj,numpy.bytes_)==False and isinstance(obj,bytes)==False:
+        return bytes(obj,'utf-8')
+    return obj
+
+def build_o2scl(verbose=1,release=True):
+    """
+    Automatically build o2scl
+    """
+    
+    print('Would you like to try to automatically install O2scl '+
+          '(requires sudo)?')
+    
+    if platform.system()=='Darwin':
+        ret=os.system('brew doctor')
+        if ret!=0:
+            if verbose>0:
+                print('Homebrew failed ('+ret+').')
+            print('Enter directory')
+            dir=''
+            if release==True:
+                urllib.request.urlretrieve('https://github.com/awsteiner/'+
+                                           'o2scl/releases/download/v'+
+                                           version+'/'+
+                                           'o2scl-'+version+'.tar.gz',
+                                           dir+'/o2scl-'+version+'.tar.gz')
+            else:
+                ret3=os.system('git clone https://github.com/awsteiner/'+
+                               'o2scl.git')
+            os.system('cd '+dir+'; tar xvzf o2scl-'+version+'.tar.gz; '+
+                      './configure; make; make install')
+        else:
+            ret2=os.system('brew install o2scl --HEAD')
+            if ret2==0:
+                return 0
+            else:
+                if verbose>0:
+                    print('Homebrew install failed ('+ret2+').')
+                return 1
+    else:
+        ret=os.system('snap -v')
+        if ret!=0:
+            print('Enter directory')
+            dir=''
+            if release==True:
+                urllib.request.urlretrieve('https://github.com/awsteiner/'+
+                                           'o2scl/releases/download/v'+
+                                           version+'/'+
+                                           'o2scl-'+version+'.tar.gz',
+                                           dir+'/o2scl-'+version+'.tar.gz')
+            else:
+                ret3=os.system('git clone https://github.com/awsteiner/'+
+                               'o2scl.git')
+            os.system('cd '+dir+'; tar xvzf o2scl-'+version+'.tar.gz; '+
+                      './configure; make; sudo make install')
+        else:
+            ret2=os.system('snap install o2scl --devmode --edge')
+                
+def link_o2scl(verbose=1,o2scl_cpplib='',o2scl_libdir=''):
+    """
+    Link o2scl and return objects of type 
+    """
+
+    # Handle OSX and Linux separately
+    if platform.system()=='Darwin':
+    
+        if verbose>=2:
+            print('Using OSX library rules.')
+        
+        if (o2scl_cpplib=='' and os.getenv('O2SCL_CPPLIB') is not None
+            and force_bytes(os.getenv('O2SCL_CPPLIB'))!=b'None'):
+            o2scl_cpplib=os.getenv('O2SCL_CPPLIB')
+            if verbose>0:
+                print('Value of o2scl_cpplib is ',o2scl_cpplib,'.')
+        elif verbose>=2:
+            print('Value of o2scl_cpplib is ',o2scl_cpplib,'.')
+      
+        if o2scl_cpplib!='':
+            systcpp=ctypes.CDLL(o2scl_cpplib,mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded system C++ library.')
+      
+        rl=ctypes.CDLL('/usr/lib/libreadline.dylib',
+                       mode=ctypes.RTLD_GLOBAL)
+        if verbose>0:
+            print('Loaded readline.')
+          
+        if (o2scl_libdir=='' and os.getenv('O2SCL_LIB') is not None and
+            force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
+            o2scl_libdir=os.getenv('O2SCL_LIB')
+            if verbose>0:
+                print('Value of o2scl_libdir is ',o2scl_libdir,'.')
+        elif verbose>=2:
+                print('Value of o2scl_libdir is ',o2scl_libdir,'.')
+          
+        if o2scl_libdir!='':
+            try:
+                o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.dylib',
+                                  mode=ctypes.RTLD_GLOBAL)
+            except:
+                print('O2scl not found.')
+                ret=build_o2scl()
+                if ret==0:
+                    o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.dylib',
+                                      mode=ctypes.RTLD_GLOBAL)
+                else:
+                    return 3
+                
+            if verbose>0:
+                print('Loaded o2scl.')
+            o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.dylib',
+                                  mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded o2scl_hdf.')
+        else:
+            o2scl=ctypes.CDLL('libo2scl.dylib',mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded o2scl.')
+            o2scl_hdf=ctypes.CDLL('libo2scl_hdf.dylib',
+                                  mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded o2scl_hdf.')
+    
+    else:
+    
+        stdcpp=ctypes.CDLL(find_library("stdc++"),mode=ctypes.RTLD_GLOBAL)
+        if verbose>0:
+            print('Loaded system C++ library.')
+        
+        if (o2scl_libdir=='' and os.getenv('O2SCL_LIB') is not None and
+            force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
+            o2scl_libdir=os.getenv('O2SCL_LIB')
+            print('Set o2scl-libdir to',o2scl_libdir)
+          
+        if o2scl_libdir=='':
+            o2scl=ctypes.CDLL(find_library("o2scl"),mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded o2scl.')
+            o2scl_hdf=ctypes.CDLL(find_library("o2scl_hdf"),
+                                mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded o2scl_hdf.')
+        else:
+            o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.so',
+                              mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded o2scl.')
+            o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.so',
+                                  mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded o2scl_hdf.')
+
+    return (o2scl,o2scl_hdf)
+    
 
 class cloud_file:
     """
@@ -1144,16 +1305,6 @@ class plot_base:
         plot.savefig(filename)
         return
 
-    def force_bytes(self,obj):
-        """
-        In cases where we're unsure whether or not ``obj`` is a string or
-        bytes object, we ensure it's a bytes object by converting if
-        necessary.
-        """
-        if isinstance(obj,numpy.bytes_)==False and isinstance(obj,bytes)==False:
-            return bytes(obj,'utf-8')
-        return obj
-    
     def ttext(self,tx,ty,str,**kwargs):
         """
         Plot text in the native coordinate system
@@ -1262,7 +1413,7 @@ class plotter(plot_base):
         plot the contour lines for the contour level specified in
         ``level``.
         """
-        if self.force_bytes(self.dtype)!=b'vector<contour_line>':
+        if force_bytes(self.dtype)!=b'vector<contour_line>':
             print('Wrong type',self.dtype,'for contour_plotx.')
             return
         if self.verbose>2:
@@ -1297,7 +1448,7 @@ class plotter(plot_base):
         ``hist``, then plot the histogram and ignore the
         values of ``colx`` and ``coly``.
         """
-        if self.force_bytes(self.dtype)==b'table':
+        if force_bytes(self.dtype)==b'table':
             if self.verbose>2:
                 print('plot',colx,coly,kwargs)
             if self.canvas_flag==False:
@@ -1320,7 +1471,7 @@ class plotter(plot_base):
                 plot.xlim([self.xlo,self.xhi])
             if self.yset==True:
                 plot.ylim([self.ylo,self.yhi])
-        elif self.force_bytes(self.dtype)==b'hist':
+        elif force_bytes(self.dtype)==b'hist':
             size=dset['size'][0]
             bins=dset['bins']
             weights=dset['weights']
@@ -1349,7 +1500,7 @@ class plotter(plot_base):
         """
         Generate a scatter plot.
         """
-        if self.force_bytes(self.dtype)==b'table':
+        if force_bytes(self.dtype)==b'table':
             if self.verbose>2:
                 print('plot',colx,coly,kwargs)
             if self.canvas_flag==False:
@@ -1392,7 +1543,7 @@ class plotter(plot_base):
         If the current dataset is of type ``table``, then
         plot the column specified in ``col``
         """
-        if self.force_bytes(self.dtype)!=b'table':
+        if force_bytes(self.dtype)!=b'table':
             print('Wrong type',self.dtype,'for plot1.')
             return
         if self.verbose>2:
@@ -1491,7 +1642,7 @@ class plotter(plot_base):
         for key in kwargs:
             if key=='bins':
                 kwargs[key]=int(kwargs[key])
-        if self.force_bytes(self.dtype)==b'table':
+        if force_bytes(self.dtype)==b'table':
             plot.hist(self.dset['data/'+col],**kwargs)
         else:
             print('Wrong type',self.dtype,'for histplot()')
@@ -1549,7 +1700,7 @@ class plotter(plot_base):
         If the current data set is of type ``table``,
         then list the columns.
         """
-        if self.force_bytes(self.dtype)==b'table':
+        if force_bytes(self.dtype)==b'table':
             col_list=get_str_array(self.dset['col_names'])
             if self.verbose>2:
                 print('-----------------------')
@@ -1572,7 +1723,7 @@ class plotter(plot_base):
             print(self.dset['nlines'][0],'lines.')
             if self.verbose>2:
                 print('Done in list')
-        elif self.force_bytes(self.dtype)==b'table3d':
+        elif force_bytes(self.dtype)==b'table3d':
             sl_list=get_str_array(self.dset['slice_names'])
             print(len(sl_list),'slices.')
             for ix in range(0,len(sl_list)):
@@ -1594,7 +1745,7 @@ class plotter(plot_base):
         If the current object is of type ``table3d``, create a density
         plot from the slice named ``slice_name`` .
         """
-        if self.force_bytes(self.dtype)==b'table3d':
+        if force_bytes(self.dtype)==b'table3d':
             name='data/'+slice_name
             sl=self.dset[name].value
             sl=sl.transpose()
@@ -1657,7 +1808,7 @@ class o2graph_plotter(plot_base):
         # sure both the o2graph and the acol version match. Otherwise,
         # if it's only an o2graph parameter, then just return.
         if (match==True and 
-            self.force_bytes(args[0])!=b'verbose'):
+            force_bytes(args[0])!=b'verbose'):
             return
         
         str_args='-set'
@@ -1668,7 +1819,7 @@ class o2graph_plotter(plot_base):
         for i in range(0,len(args)):
             str_args=str_args+args[i]
             sizes[i+1]=len(args[i])
-        ccp=ctypes.c_char_p(self.force_bytes(str_args))
+        ccp=ctypes.c_char_p(force_bytes(str_args))
     
         parse_fn=o2scl_hdf.o2scl_acol_parse
         parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
@@ -1701,7 +1852,7 @@ class o2graph_plotter(plot_base):
             for i in range(0,len(args)):
                 str_args=str_args+args[i]
                 sizes[i+1]=len(args[i])
-            ccp=ctypes.c_char_p(self.force_bytes(str_args))
+            ccp=ctypes.c_char_p(force_bytes(str_args))
         
             parse_fn=o2scl_hdf.o2scl_acol_parse
             parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
@@ -1723,7 +1874,7 @@ class o2graph_plotter(plot_base):
         for i in range(0,len(args)):
             str_args=str_args+args[i]
             sizes[i+1]=len(args[i])
-        ccp=ctypes.c_char_p(self.force_bytes(str_args))
+        ccp=ctypes.c_char_p(force_bytes(str_args))
 
         parse_fn=o2scl_hdf.o2scl_acol_parse
         parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
@@ -1786,7 +1937,7 @@ class o2graph_plotter(plot_base):
                              int_ptr,double_ptr_ptr,
                              int_ptr,double_ptr_ptr,double_ptr_ptr]
 
-            slice=ctypes.c_char_p(self.force_bytes(args[0]))
+            slice=ctypes.c_char_p(force_bytes(args[0]))
             nx=ctypes.c_int(0)
             ptrx=double_ptr()
             ny=ctypes.c_int(0)
@@ -1960,7 +2111,7 @@ class o2graph_plotter(plot_base):
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
 
-            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            colx=ctypes.c_char_p(force_bytes(args[0]))
             idx=ctypes.c_int(0)
             ptrx=double_ptr()
             get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
@@ -1968,7 +2119,7 @@ class o2graph_plotter(plot_base):
                 print('Failed to get column named "'+args[0]+'".')
                 failed=True
 
-            coly=ctypes.c_char_p(self.force_bytes(args[1]))
+            coly=ctypes.c_char_p(force_bytes(args[1]))
             idy=ctypes.c_int(0)
             ptry=double_ptr()
             get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
@@ -2223,7 +2374,7 @@ class o2graph_plotter(plot_base):
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
 
-            colx1=ctypes.c_char_p(self.force_bytes(args[0]))
+            colx1=ctypes.c_char_p(force_bytes(args[0]))
             idx1=ctypes.c_int(0)
             ptrx1=double_ptr()
             get_ret=get_fn(amp,colx1,ctypes.byref(idx1),ctypes.byref(ptrx1))
@@ -2231,7 +2382,7 @@ class o2graph_plotter(plot_base):
                 print('Failed to get column named "'+args[0]+'".')
                 failed=True
 
-            coly1=ctypes.c_char_p(self.force_bytes(args[1]))
+            coly1=ctypes.c_char_p(force_bytes(args[1]))
             idy1=ctypes.c_int(0)
             ptry1=double_ptr()
             get_ret=get_fn(amp,coly1,ctypes.byref(idy1),ctypes.byref(ptry1))
@@ -2244,7 +2395,7 @@ class o2graph_plotter(plot_base):
                 yv=[ptry1[i] for i in range(0,idy1.value)]
                 
             if len(args)>3:
-                colx2=ctypes.c_char_p(self.force_bytes(args[2]))
+                colx2=ctypes.c_char_p(force_bytes(args[2]))
                 idx2=ctypes.c_int(0)
                 ptrx2=double_ptr()
                 get_ret=get_fn(amp,colx2,ctypes.byref(idx2),ctypes.byref(ptrx2))
@@ -2252,7 +2403,7 @@ class o2graph_plotter(plot_base):
                     print('Failed to get column named "'+args[2]+'".')
                     failed=True
 
-                coly2=ctypes.c_char_p(self.force_bytes(args[3]))
+                coly2=ctypes.c_char_p(force_bytes(args[3]))
                 idy2=ctypes.c_int(0)
                 ptry2=double_ptr()
                 get_ret=get_fn(amp,coly2,ctypes.byref(idy2),ctypes.byref(ptry2))
@@ -2332,7 +2483,7 @@ class o2graph_plotter(plot_base):
 
             row_ix=ctypes.c_int(int(args[0]))
 
-            pat_x=ctypes.c_char_p(self.force_bytes(args[1]))
+            pat_x=ctypes.c_char_p(force_bytes(args[1]))
             idx=ctypes.c_int(0)
             ptrx=double_ptr()
             get_ret=get_fn(amp,pat_x,row_ix,ctypes.byref(idx),
@@ -2345,7 +2496,7 @@ class o2graph_plotter(plot_base):
             if failed==False:
                 xv=[ptrx[i] for i in range(0,idx.value)]
 
-            pat_y=ctypes.c_char_p(self.force_bytes(args[2]))
+            pat_y=ctypes.c_char_p(force_bytes(args[2]))
             idy=ctypes.c_int(0)
             ptry=double_ptr()
             get_ret=get_fn(amp,pat_y,row_ix,ctypes.byref(idy),
@@ -2421,7 +2572,7 @@ class o2graph_plotter(plot_base):
 
             row_ix=ctypes.c_int(int(args[0]))
 
-            pat_y=ctypes.c_char_p(self.force_bytes(args[1]))
+            pat_y=ctypes.c_char_p(force_bytes(args[1]))
             idy=ctypes.c_int(0)
             ptry=double_ptr()
             get_ret=get_fn(amp,pat_y,row_ix,ctypes.byref(idy),
@@ -2495,7 +2646,7 @@ class o2graph_plotter(plot_base):
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
 
-            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            colx=ctypes.c_char_p(force_bytes(args[0]))
             idx=ctypes.c_int(0)
             ptrx=double_ptr()
             get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
@@ -2503,7 +2654,7 @@ class o2graph_plotter(plot_base):
                 print('Failed to get column named "'+args[0]+'".')
                 failed=True
 
-            coly=ctypes.c_char_p(self.force_bytes(args[1]))
+            coly=ctypes.c_char_p(force_bytes(args[1]))
             idy=ctypes.c_int(0)
             ptry=double_ptr()
             get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
@@ -2518,9 +2669,9 @@ class o2graph_plotter(plot_base):
             sv=[]
             cv=[]
 
-            if (len(args)>2 and self.force_bytes(args[2])!=b'None' and
-                self.force_bytes(args[2])!=b'none'):
-                cols=ctypes.c_char_p(self.force_bytes(args[2]))
+            if (len(args)>2 and force_bytes(args[2])!=b'None' and
+                force_bytes(args[2])!=b'none'):
+                cols=ctypes.c_char_p(force_bytes(args[2]))
                 ids=ctypes.c_int(0)
                 ptrs=double_ptr()
                 get_ret=get_fn(amp,cols,ctypes.byref(ids),ctypes.byref(ptrs))
@@ -2530,9 +2681,9 @@ class o2graph_plotter(plot_base):
                 else:
                     sv=[ptrs[i] for i in range(0,ids.value)]
 
-            if (len(args)>3 and self.force_bytes(args[3])!=b'None' and
-                self.force_bytes(args[3])!=b'none'):
-                colc=ctypes.c_char_p(self.force_bytes(args[3]))
+            if (len(args)>3 and force_bytes(args[3])!=b'None' and
+                force_bytes(args[3])!=b'none'):
+                colc=ctypes.c_char_p(force_bytes(args[3]))
                 idc=ctypes.c_int(0)
                 ptrc=double_ptr()
                 get_ret=get_fn(amp,colc,ctypes.byref(idc),ctypes.byref(ptrc))
@@ -2630,7 +2781,7 @@ class o2graph_plotter(plot_base):
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
 
-            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            colx=ctypes.c_char_p(force_bytes(args[0]))
             idx=ctypes.c_int(0)
             ptrx=double_ptr()
             get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
@@ -2696,7 +2847,7 @@ class o2graph_plotter(plot_base):
 
             failed=False
 
-            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            colx=ctypes.c_char_p(force_bytes(args[0]))
             idx=ctypes.c_int(0)
             ptrx=double_ptr()
             get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
@@ -2704,7 +2855,7 @@ class o2graph_plotter(plot_base):
                 print('Failed to get column named "'+args[0]+'".')
                 failed=True
             
-            coly=ctypes.c_char_p(self.force_bytes(args[1]))
+            coly=ctypes.c_char_p(force_bytes(args[1]))
             idy=ctypes.c_int(0)
             ptry=double_ptr()
             get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
@@ -2767,13 +2918,13 @@ class o2graph_plotter(plot_base):
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr]
 
-            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            colx=ctypes.c_char_p(force_bytes(args[0]))
             idx=ctypes.c_int(0)
             ptrx=double_ptr()
             get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
             xv=[ptrx[i] for i in range(0,idx.value)]
 
-            coly=ctypes.c_char_p(self.force_bytes(args[1]))
+            coly=ctypes.c_char_p(force_bytes(args[1]))
             idy=ctypes.c_int(0)
             ptry=double_ptr()
             get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
@@ -2782,7 +2933,7 @@ class o2graph_plotter(plot_base):
             if args[2]=='0':
                 xerrv=[0.0 for i in range(0,idx.value)]
             else:
-                colxerr=ctypes.c_char_p(self.force_bytes(args[2]))
+                colxerr=ctypes.c_char_p(force_bytes(args[2]))
                 idxerr=ctypes.c_int(0)
                 ptrxerr=double_ptr()
                 get_fn(amp,colxerr,ctypes.byref(idxerr),ctypes.byref(ptrxerr))
@@ -2791,7 +2942,7 @@ class o2graph_plotter(plot_base):
             if args[3]=='0':
                 yerrv=[0.0 for i in range(0,idy.value)]
             else:
-                colyerr=ctypes.c_char_p(self.force_bytes(args[3]))
+                colyerr=ctypes.c_char_p(force_bytes(args[3]))
                 idyerr=ctypes.c_int(0)
                 ptryerr=double_ptr()
                 get_fn(amp,colyerr,ctypes.byref(idyerr),ctypes.byref(ptryerr))
@@ -2849,7 +3000,7 @@ class o2graph_plotter(plot_base):
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
 
-            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            colx=ctypes.c_char_p(force_bytes(args[0]))
             idx=ctypes.c_int(0)
             ptrx=double_ptr()
             get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
@@ -2963,14 +3114,14 @@ class o2graph_plotter(plot_base):
         for ifile in range(0,len(self.plotfiles)):
             # Read the file
             str_args='-read'+self.plotfiles[ifile]
-            ccp=ctypes.c_char_p(self.force_bytes(str_args))
+            ccp=ctypes.c_char_p(force_bytes(str_args))
             sizes=size_type(5,len(self.plotfiles[ifile]))
             parse_fn(amp,2,sizes,ccp)
 
             failed=False
 
             # Get the x column
-            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            colx=ctypes.c_char_p(force_bytes(args[0]))
             idx=ctypes.c_int(0)
             ptrx=double_ptr()
             get_ret=get_fn(amp,colx,ctypes.byref(idx),
@@ -2980,7 +3131,7 @@ class o2graph_plotter(plot_base):
                 failed=True
 
             # Get the y column
-            coly=ctypes.c_char_p(self.force_bytes(args[1]))
+            coly=ctypes.c_char_p(force_bytes(args[1]))
             idy=ctypes.c_int(0)
             ptry=double_ptr()
             get_ret=get_fn(amp,coly,ctypes.byref(idy),
@@ -3052,12 +3203,12 @@ class o2graph_plotter(plot_base):
         for ifile in range(0,len(self.plotfiles)):
             # Read the file
             str_args='-read'+self.plotfiles[ifile]
-            ccp=ctypes.c_char_p(self.force_bytes(str_args))
+            ccp=ctypes.c_char_p(force_bytes(str_args))
             sizes=size_type(5,len(self.plotfiles[ifile]))
             parse_fn(amp,2,sizes,ccp)
 
             # Get the x column
-            colx=ctypes.c_char_p(self.force_bytes(args[0]))
+            colx=ctypes.c_char_p(force_bytes(args[0]))
             idx=ctypes.c_int(0)
             ptrx=double_ptr()
             get_fn(amp,colx,ctypes.byref(idx),
@@ -3304,7 +3455,7 @@ class o2graph_plotter(plot_base):
                         strout+=line[0]+' '
                     for line in extra_list:
                         if (curr_type==line[0] or
-                            curr_type==self.force_bytes(line[0])):
+                            curr_type==force_bytes(line[0])):
                             strout+=line[1]+' '
                     str_list=textwrap.wrap(strout,79)
                     for i in range (0,len(str_list)):
@@ -3366,7 +3517,7 @@ class o2graph_plotter(plot_base):
                     # extra list
                     for line in extra_list:
                         if ((curr_type==line[0] or
-                             curr_type==self.force_bytes(line[0])) and
+                             curr_type==force_bytes(line[0])) and
                             cmd==line[1]):
                             match=True
                             print('Usage: '+cmd+' '+line[3]+'\n\n'+
