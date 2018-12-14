@@ -14,6 +14,7 @@
     o2sclpy:
       source: https://github.com/awsteiner/o2sclpy.git
       plugin: python
+      python-version: python3
       build-packages: 
       - libboost-all-dev
       - libreadline-dev
@@ -23,7 +24,7 @@
       - python3-tk
       python-packages:
       - h5py
-      - numpy
+      - numpy==1.15.4
       - matplotlib
       
   
