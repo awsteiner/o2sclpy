@@ -19,16 +19,31 @@
 #  
 #  -------------------------------------------------------------------
 
-import getopt, sys, h5py, math, os, hashlib
+import sys
+import h5py
+import math
+import os
+
+# For MD5 hashes
+import hashlib
+
 import matplotlib.pyplot as plot
 import matplotlib.patches as patches
 from matplotlib.colors import LinearSegmentedColormap
 import urllib.request
+
 import numpy
 import ctypes
 import readline
+
+# For wrapping help text
 import textwrap
+
+# For system type detection in build_o2scl() and link_o2scl()
 import platform
+
+# For code.interact() 
+import code 
 
 version='0.922'
 """
@@ -87,6 +102,7 @@ base_list=[
      "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
      "(ms). For example: o2graph -plot-files file1.o2 file2.o "+
      "-plotm xcol ycol lw=0,marker='+' -show"],
+    ["python","Begin a python session.","",""],
     ["rect","Plot a rectangle.",
      "<x1> <y1> <x2> <y2> <angle> [kwargs]",
      "Plot a rectange from (x1,y1) to (xy,y2) with "+
@@ -3745,6 +3761,13 @@ class o2graph_plotter(plot_base):
                         self.point(strlist[ix+1],strlist[ix+2],
                                    **string_to_dict(strlist[ix+3]))
                         
+                elif cmd_name=='python':
+                    
+                    if self.verbose>2:
+                        print('Process python.')
+                        
+                    code.interact(local=locals())
+                    
                 elif cmd_name=='rect':
                     
                     if self.verbose>2:
