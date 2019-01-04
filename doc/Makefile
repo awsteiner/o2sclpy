@@ -40,6 +40,9 @@ all:
 sync-doc:
 	rsync -Cavzu build/html/* $(STATIC_DOC_DIR)/o2sclpy
 
+test-sync:
+	rsync -Cavzun build/html/* $(STATIC_DOC_DIR)/o2sclpy
+
 statfiles:
 	cd static; o2graph -h | grep -v "Set o2scl" | \
 		grep -v "Compiled at" > o2graph.help.txt

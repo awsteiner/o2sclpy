@@ -81,8 +81,8 @@ which shows how to plot columns from ``table`` objects.
 .. include:: static/o2graph.help.txt
    :literal:
 
-Intergration with o2scl
------------------------
+Integration with o2scl
+----------------------
 
 The O\ :sub:`2`\ graph script implements all of the commands from the
 ``acol`` executable in O\ :sub:`2`\ scl documented at
