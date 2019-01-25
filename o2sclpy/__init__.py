@@ -711,7 +711,8 @@ class hdf5_reader:
 
 def default_plot(left_margin=0.14,bottom_margin=0.12,
                  right_margin=0.04,top_margin=0.04,font=16,
-                 fig_size_x=6.0,fig_size_y=6.0):
+                 fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,
+                 rt_ticks=False):
     """
     This function sets up my commonly-used ``matplotlib`` defaults.
     It returns a pair of objects, the figure object and axes object.
@@ -724,10 +725,15 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     ax=plot.axes([left_margin,bottom_margin,
                   1.0-left_margin-right_margin,1.0-top_margin-bottom_margin])
     ax.minorticks_on()
-    ax.tick_params('both',length=12,width=1,which='major',direction='in')
-    ax.tick_params('both',length=5,width=1,which='minor',direction='in')
-    ax.tick_params('x',which='both',top=True,bottom=True)
-    ax.tick_params('y',which='both',left=True,right=True)
+    if ticks_in:
+        ax.tick_params('both',length=12,width=1,which='major',direction='in')
+        ax.tick_params('both',length=5,width=1,which='minor',direction='in')
+    else:
+        ax.tick_params('both',length=12,width=1,which='major')
+        ax.tick_params('both',length=5,width=1,which='minor')
+    if rt_ticks:
+        ax.tick_params('x',which='both',top=True,bottom=True)
+        ax.tick_params('y',which='both',left=True,right=True)
     ax.tick_params('both',length=5,width=1,which='minor')
     ax.tick_params(labelsize=font*0.8)
     plot.grid(False)
