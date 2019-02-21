@@ -1980,6 +1980,7 @@ class o2graph_plotter(plot_base):
         it=ctypes.c_int(0)
         type_ptr=char_ptr()
         type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+        kwstring=''
                 
         curr_type=b''
         for i in range(0,it.value):
@@ -1996,13 +1997,14 @@ class o2graph_plotter(plot_base):
                 index1=0
                 index2=1
                 if len(args)==1:
-                    index1=args[0]
-                    index2=1-index1
+                    kwstring=args[0]
                 if len(args)>=2:
-                    index1=args[0]
-                    index2=args[1]
+                    index1=int(args[0])
+                    index2=int(args[1])
+                if len(args)>=3:
+                    kwstring=args[2]
                 if index1+index2!=1 and index1*index2!=0:
-                    print('Both indices must be 0 or 1 in',
+                    print('Indices must be "0 1" or "1 0" in',
                           'in den-plot.')
                     return
                     
@@ -2017,6 +2019,8 @@ class o2graph_plotter(plot_base):
                 slice_name="tensor"
             else:
                 slice_name=args[0]
+                if len(args)>=2:
+                    kwstring=args[1]
 
             # Now that we are guaranteed to have a table3d
             # object to use, use that to create the density
@@ -2095,7 +2099,7 @@ class o2graph_plotter(plot_base):
             extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
                                        ygrid[ny.value-2])/2
                         
-            if len(args)<2:
+            if len(kwstring)==0:
                 plot.imshow(sl,interpolation='nearest',
                             origin='lower',extent=[extent1,extent2,
                                                    extent3,extent4],
@@ -2104,7 +2108,7 @@ class o2graph_plotter(plot_base):
                 plot.imshow(sl,interpolation='nearest',
                             origin='lower',extent=[extent1,extent2,
                                                    extent3,extent4],
-                            aspect='auto',**string_to_dict(args[1]))
+                            aspect='auto',**string_to_dict(kwstring))
                 
             # The color bar is added later below...
 
