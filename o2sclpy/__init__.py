@@ -1987,7 +1987,7 @@ class o2graph_plotter(plot_base):
 
         # Handle tensor and table3d types
         if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
-            curr_type==b'grid' or curr_type==b'tensor<int>' or
+            curr_type==b'tensor_grid' or curr_type==b'tensor<int>' or
             curr_type==b'table3d'):
 
             # If the object is a tensor, convert to a table3d
