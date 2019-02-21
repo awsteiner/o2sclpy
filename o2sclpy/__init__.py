@@ -79,30 +79,10 @@ base_list=[
     ["new-cmaps","Define new color maps.","",
      "Define new color maps, 'jet2', 'pastel2' "+
      "'reds2', 'greens2', and 'blues2'."],
-    ["plot-files",
-     "Specify a list of files for 'plotm' and 'plot1m'.",
-     "<file 1> [file 2] ...",""],
-    ["plot1m",
-     "Plot the specified column from tables in multiple files.",
-     "<y>","After using -plot-files to specify "+
-     "a list of files, plot column <y> versus row number for the first "+
-     "table object in all of the specified files. Some useful "+
-     "kwargs are color (c), dashes, linestyle (ls), linewidth (lw), "+
-     "marker, markeredgecolor (mec), markeredgewidth (mew), "+
-     "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
-     "(ms). For example: o2graph -plot-files file1.o2 file2.o "+
-     "-plot1m ycol lw=0,marker='+' -show"],
-    ["plotm",
-     "Plot the specified columns from tables in multiple files.",
-     "<x> <y>","After using -plot-files to specify "+
-     "a list of files, plot column <y> versus column <x> for the first "+
-     "table object in all of the specified files. Some useful "+
-     "kwargs are color (c), dashes, linestyle (ls), linewidth (lw), "+
-     "marker, markeredgecolor (mec), markeredgewidth (mew), "+
-     "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
-     "(ms). For example: o2graph -plot-files file1.o2 file2.o "+
-     "-plotm xcol ycol lw=0,marker='+' -show"],
-    ["python","Begin a python session.","",""],
+    ["plotv",
+     "Plot several vector-like data sets.",
+     "[vector spec. for x] <vector spec. for y>",""],
+    ["python","Begin an interactive python session.","",""],
     ["rect","Plot a rectangle.",
      "<x1> <y1> <x2> <y2> <angle> [kwargs]",
      "Plot a rectange from (x1,y1) to (xy,y2) with "+
@@ -153,6 +133,11 @@ base_list=[
      "the z-limits on that plot are modified. Future plots are also "+
      "set with the specified z-limits."]
 ]
+
+# Types which appear in extra_list below
+extra_types=["table","table3d","hist_2d","hist","double[]","int[]",
+             "size_t[]","tensor","tensor<int>","tensor<size_t>",
+             "tensor_grid"]
 
 """
 This is a list of 5-element entries:
@@ -3210,6 +3195,14 @@ class o2graph_plotter(plot_base):
                     
         # End of 'plot1' function
             
+    def plotv(self,o2scl_hdf,amp,args):
+        """
+        Future location of plotv function
+        """
+
+
+        # End of 'plotv' function
+        
     def plotm(self,o2scl_hdf,amp,args):
         """
         Plot the same pair of columns from several files
@@ -3661,13 +3654,31 @@ class o2graph_plotter(plot_base):
                     # If no arguments were given, then give a list of
                     # o2graph commands in addition to acol commands
                     if (ix_next-ix)==1:
-                        print('O2graph command-line options:\n')
+                        print('\nO2graph command-line options:\n')
                         for line in base_list:
                             strt='  -'+line[0]
                             while len(strt)<16:
                                 strt=strt+' '
                             strt+=line[1]
                             print(strt)
+                        print('\nO2graph type-specific commands:\n')
+                        extra_types.sort()
+                        for typename in extra_types:
+                            strt=typename+': '
+                            first=True
+                            for line in extra_list:
+                                if line[0]==typename:
+                                    if first==True:
+                                        strt+=line[1]
+                                        first=False
+                                    else:
+                                        strt+=', '+line[1]
+                            str_list=textwrap.wrap(strt,77)
+                            for i in range (0,len(str_list)):
+                                if i==0:
+                                    print(str_list[i])
+                                else:
+                                    print(' ',str_list[i])
 
                 elif cmd_name=='version':
                     
@@ -3752,7 +3763,7 @@ class o2graph_plotter(plot_base):
                         
                     self.plot1(o2scl_hdf,amp,strlist[ix+1:ix_next])
                             
-                elif cmd_name=='plotm':
+                elif cmd_name=='plotv':
                     
                     if self.verbose>2:
                         print('Process plotm.')
@@ -3760,18 +3771,8 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<3:
                         print('Not enough parameters for plotm option.')
                     else:
-                        self.plotm(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                        self.plotv(o2scl_hdf,amp,strlist[ix+1:ix_next])
                                                     
-                elif cmd_name=='plot1m':
-                    
-                    if self.verbose>2:
-                        print('Process plot1m.')
-                        
-                    if ix_next-ix<2:
-                        print('Not enough parameters for plot1m option.')
-                    else:
-                        self.plot1m(o2scl_hdf,amp,strlist[ix+1:ix_next])
-                        
                 elif cmd_name=='text':
                     
                     if self.verbose>2:
@@ -3784,18 +3785,6 @@ class o2graph_plotter(plot_base):
                     else:
                         self.text(strlist[ix+1],strlist[ix+2],strlist[ix+3],
                                   **string_to_dict(strlist[ix+4]))
-                        
-                elif cmd_name=='plot-files':
-                    
-                    if self.verbose>2:
-                        print('Process plot-files.')
-                        
-                    if ix_next-ix<2:
-                        print('Not enough parameters for plot-files option.')
-                    else:
-                        self.plotfiles=[strlist[i+1] for i in
-                                       range(ix,ix_next-1)]
-                        print('File list is',self.plotfiles)
                         
                 elif cmd_name=='ttext':
                     
