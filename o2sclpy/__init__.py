@@ -2000,33 +2000,48 @@ class o2graph_plotter(plot_base):
         for i in range(0,it.value):
             curr_type=curr_type+type_ptr[i]
 
-        # If the object is a tensor, convert to a table3d
-        # object before plotting
+        # Handle tensor and table3d types
         if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
             curr_type==b'grid' or curr_type==b'tensor<int>' or
             curr_type==b'table3d'):
-            
-            int index1=0
-            int index2=1
-            if len(args)>1:
-                index1=args[0]
-            if len(args)>2:
-                index1=args[1]
-            conv_fn=o2scl_hdf.o2scl_acol_tensor_to_table3d
-            conv_fn.argtypes=[int_ptr,int_ptr]
 
-            index1b=ctypes.c_int(index1)
-            index2b=ctypes.c_int(index2)
-            conv_fn(amp,index1b,index2b)
-            
-        elif curr_type==b'table3d':
-            
+            # If the object is a tensor, convert to a table3d
+            # object before plotting
+            if curr_type!=b'table3d':
+                index1=0
+                index2=1
+                if len(args)==1:
+                    index1=args[0]
+                    index2=1-index1
+                if len(args)>=2:
+                    index1=args[0]
+                    index2=args[1]
+                if index1+index2!=1 and index1*index2!=0:
+                    print('Both indices must be 0 or 1 in',
+                          'in den-plot.')
+                    return
+                    
+                conv_fn=o2scl_hdf.o2scl_acol_tensor_to_table3d
+                conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
+                conv_fn.restype=ctypes.c_int
+                
+                conv_ret=conv_fn(amp,index1,index2)
+                if conv_ret!=0:
+                    print('Automatic conversion to table3d failed.')
+                    return
+                slice_name="tensor"
+            else:
+                slice_name=args[0]
+
+            # Now that we are guaranteed to have a table3d
+            # object to use, use that to create the density
+            # plot
             get_fn=o2scl_hdf.o2scl_acol_get_slice
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr,
                              int_ptr,double_ptr_ptr,double_ptr_ptr]
 
-            slice=ctypes.c_char_p(force_bytes(args[0]))
+            slice=ctypes.c_char_p(force_bytes(slice_name))
             nx=ctypes.c_int(0)
             ptrx=double_ptr()
             ny=ctypes.c_int(0)
@@ -2043,6 +2058,14 @@ class o2graph_plotter(plot_base):
             sl=stemp2.reshape(nx.value,ny.value)
             sl=sl.transpose()
 
+            # If logz was specified, then manually apply the
+            # log to the data. Alternatively, we should consider
+            # using 'LogNorm' here, as suggested in
+            
+            #https://stackoverflow.com/questions/2546475/
+            #how-can-i-draw-a-log-normalized-imshow-plot-
+            #with-a-colorbar-representing-the-raw
+            
             if self.logz==True:
                 fail_found=False
                 for i in range(0,ny.value):
@@ -2066,6 +2089,9 @@ class o2graph_plotter(plot_base):
                 ygrid=[math.log(ptry[i],10) for i in
                        range(0,ny.value)]
 
+            # If the z range was specified, truncate all values
+            # outside that range (this truncation is done after
+            # the application of the log above)
             if self.zset==True:
                 for i in range(0,ny.value):
                     for j in range(0,nx.value):
@@ -2094,7 +2120,10 @@ class o2graph_plotter(plot_base):
                             origin='lower',extent=[extent1,extent2,
                                                    extent3,extent4],
                             aspect='auto',**string_to_dict(args[1]))
+                
+            # The color bar is added later below...
 
+            # End of section for tensor types and table3d
         elif curr_type==b'hist_2d':
 
             get_fn=o2scl_hdf.o2scl_acol_get_hist_2d
@@ -2157,6 +2186,10 @@ class o2graph_plotter(plot_base):
                             origin='lower',extent=[extent1,extent2,
                                                    extent3,extent4],
                             aspect='auto',**string_to_dict(args[0]))
+
+            # The color bar is added later below...
+
+            # End of section for type hist_2d
         else:
             print("Command 'den-plot' not supported for type",
                   curr_type,".")
