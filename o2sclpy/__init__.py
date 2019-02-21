@@ -272,8 +272,52 @@ extra_list=[
     ["hist_2d","den-plot","Create a density plot from a hist_2d object",
      "[kwargs]","Create a density plot from the current histogram (assuming "+
      "equally-spaced bins). Logarithmic x- or y-axes are handled by taking "+
-     "the base 10 log of the x- or y-grids specified in the table3d object "+
+     "the base 10 log of the x- or y-grids specified in the hist_2d object "+
      "before plotting. A z-axis density legend is print on the RHS if colbar "+
+     "is set to 1 before plotting. If z-axis limits are specified, then "+
+     "values larger than the upper limit are set equal to the upper limit "+
+     "and values smaller than the lower limit are set equal to the lower "+
+     "limit before plotting."],
+    ["tensor","den-plot","Create a density plot from a tensor object",
+     "[index_1 index_2] [kwargs]",
+     "Create a density plot from the current tensor. "+
+     "If the tensor has rank 2 and the indices are not specifed, then "+
+     "plot the first index along the x-axis and the second index along "+
+     "the y-axis. "+
+     "A z-axis density legend is print on the RHS if colbar "+
+     "is set to 1 before plotting. If z-axis limits are specified, then "+
+     "values larger than the upper limit are set equal to the upper limit "+
+     "and values smaller than the lower limit are set equal to the lower "+
+     "limit before plotting."],
+    ["tensor<int>","den-plot","Create a density plot from a tensor object",
+     "[index_1 index_2] [kwargs]",
+     "Create a density plot from the current tensor. "+
+     "If the tensor has rank 2 and the indices are not specifed, then "+
+     "plot the first index along the x-axis and the second index along "+
+     "the y-axis. "+
+     "A z-axis density legend is print on the RHS if colbar "+
+     "is set to 1 before plotting. If z-axis limits are specified, then "+
+     "values larger than the upper limit are set equal to the upper limit "+
+     "and values smaller than the lower limit are set equal to the lower "+
+     "limit before plotting."],
+    ["tensor<size_t>","den-plot","Create a density plot from a tensor object",
+     "[index_1 index_2] [kwargs]",
+     "Create a density plot from the current tensor. "+
+     "If the tensor has rank 2 and the indices are not specifed, then "+
+     "plot the first index along the x-axis and the second index along "+
+     "the y-axis. "+
+     "A z-axis density legend is print on the RHS if colbar "+
+     "is set to 1 before plotting. If z-axis limits are specified, then "+
+     "values larger than the upper limit are set equal to the upper limit "+
+     "and values smaller than the lower limit are set equal to the lower "+
+     "limit before plotting."],
+    ["tensor_grid","den-plot","Create a density plot from a tensor object",
+     "[index_1 index_2] [kwargs]",
+     "Create a density plot from the current tensor. "+
+     "If the tensor has rank 2 and the indices are not specifed, then "+
+     "plot the first index along the x-axis and the second index along "+
+     "the y-axis. "+
+     "A z-axis density legend is print on the RHS if colbar "+
      "is set to 1 before plotting. If z-axis limits are specified, then "+
      "values larger than the upper limit are set equal to the upper limit "+
      "and values smaller than the lower limit are set equal to the lower "+
@@ -1955,8 +1999,27 @@ class o2graph_plotter(plot_base):
         curr_type=b''
         for i in range(0,it.value):
             curr_type=curr_type+type_ptr[i]
-                        
-        if curr_type==b'table3d':
+
+        # If the object is a tensor, convert to a table3d
+        # object before plotting
+        if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
+            curr_type==b'grid' or curr_type==b'tensor<int>' or
+            curr_type==b'table3d'):
+            
+            int index1=0
+            int index2=1
+            if len(args)>1:
+                index1=args[0]
+            if len(args)>2:
+                index1=args[1]
+            conv_fn=o2scl_hdf.o2scl_acol_tensor_to_table3d
+            conv_fn.argtypes=[int_ptr,int_ptr]
+
+            index1b=ctypes.c_int(index1)
+            index2b=ctypes.c_int(index2)
+            conv_fn(amp,index1b,index2b)
+            
+        elif curr_type==b'table3d':
             
             get_fn=o2scl_hdf.o2scl_acol_get_slice
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
