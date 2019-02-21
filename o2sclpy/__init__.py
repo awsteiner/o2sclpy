@@ -3576,7 +3576,7 @@ class o2graph_plotter(plot_base):
                     for i in range (0,len(str_list)):
                         print(str_list[i])
                             
-                elif cmd_name=='help':
+                elif cmd_name=='help' or cmd_name=='h':
                     
                     if self.verbose>2:
                         print('Process help.')
