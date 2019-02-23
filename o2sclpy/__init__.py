@@ -2092,6 +2092,23 @@ class o2graph_plotter(plot_base):
             if self.canvas_flag==False:
                 self.canvas()
 
+            diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
+            mean_x=numpy.mean(diffs_x)
+            std_x=numpy.std(diffs_x)
+            diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
+            mean_y=numpy.mean(diffs_y)
+            std_y=numpy.std(diffs_y)
+            
+            if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
+                print('Warning in o2graph::o2graph_plotter::den_plot():')
+                print('  Nonlinearity of x or y grid is greater than '+
+                      '10^{-4}.')
+                print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
+                      (std_x/mean_x))
+                print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
+                      (std_y/mean_y))
+                print('  The density plot may not be properly scaled.')
+                
             extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
             extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
                                        xgrid[nx.value-2])/2
