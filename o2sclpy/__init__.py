@@ -81,7 +81,15 @@ base_list=[
      "'reds2', 'greens2', and 'blues2'."],
     ["plotv",
      "Plot several vector-like data sets.",
-     "[vector spec. for x] <vector spec. for y>",""],
+     "[multiple vector spec. for x] <multiple vector spec. for y>",
+     "The 'plotv' command plots one or several pairs of vectors for x "+
+     "and y. The total number of curves plotted will be the number "+
+     "of vector data sets from the first argument times the number "+
+     "of vector data sets from the second argument. If the x and y "+
+     "vector lengths are not equal, then the longer vector is "+
+     "truncated. Any kwargs are applied to all curves plotted. For "+
+     "details on multiple vector specifications, use "+
+     "'o2graph -help mult-vector-spec'."],
     ["python","Begin an interactive python session.","",""],
     ["rect","Plot a rectangle.",
      "<x1> <y1> <x2> <y2> <angle> [kwargs]",
@@ -3218,9 +3226,13 @@ class o2graph_plotter(plot_base):
             
     def plotv(self,o2scl_hdf,amp,args):
         """
-        Future location of plotv function
+        Plot two multiple vector specifications
         """
 
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        
         conv_fn=o2scl_hdf.o2scl_acol_mult_vectors_to_conts
         conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                           ctypes.c_char_p]
