@@ -3221,7 +3221,68 @@ class o2graph_plotter(plot_base):
         Future location of plotv function
         """
 
+        conv_fn=o2scl_hdf.o2scl_acol_mult_vectors_to_conts
+        conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                          ctypes.c_char_p]
+        conv_fn.restype=ctypes.c_int
+        
+        mvs1=ctypes.c_char_p(force_bytes(args[0]))
+        mvs2=ctypes.c_char_p(force_bytes(args[1]))
+        
+        conv_ret=conv_fn(amp,mvs1,mvs2)
+        if conv_ret!=0:
+            print('Failed to read "'+args[0]+'" and "'+args[1]+'".')
+            failed=True
+        
+        # Get the total number of contour lines
+        cont_n_fn=o2scl_hdf.o2scl_acol_contours_n
+        cont_n_fn.argtypes=[ctypes.c_void_p]
+        cont_n_fn.restype=ctypes.c_int
+        nconts=cont_n_fn(amp)
 
+        # Define types for extracting each contour line
+        cont_line_fn=o2scl_hdf.o2scl_acol_contours_line
+        cont_line_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
+                               int_ptr,double_ptr_ptr,
+                               double_ptr_ptr]
+        cont_line_fn.restype=ctypes.c_double
+
+        if self.canvas_flag==False:
+            self.canvas()
+
+        # Loop over all contour lines
+        for k in range(0,nconts):
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            ptry=double_ptr()
+            lev=cont_line_fn(amp,k,ctypes.byref(idx),
+                             ctypes.byref(ptrx),ctypes.byref(ptry))
+            xv=[ptrx[i] for i in range(0,idx.value)]
+            yv=[ptry[i] for i in range(0,idx.value)]
+                
+            if self.logx==True:
+                if self.logy==True:
+                    if len(args)<3:
+                        plot.loglog(xv,yv)
+                    else:
+                        plot.loglog(xv,yv,**string_to_dict(args[2]))
+                else:
+                    if len(args)<3:
+                        plot.semilogx(xv,yv)
+                    else:
+                        plot.semilogx(xv,yv,**string_to_dict(args[2]))
+            else:
+                if self.logy==True:
+                    if len(args)<3:
+                        plot.semilogy(xv,yv)
+                    else:
+                        plot.semilogy(xv,yv,**string_to_dict(args[2]))
+                else:
+                    if len(args)<3:
+                        plot.plot(xv,yv)
+                    else:
+                        plot.plot(xv,yv,**string_to_dict(args[2]))
+                        
         # End of 'plotv' function
         
     def plotm(self,o2scl_hdf,amp,args):
