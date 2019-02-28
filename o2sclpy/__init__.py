@@ -75,6 +75,9 @@ base_list=[
      "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
      "(ms). For example: o2graph -line 0.05 0.05 0.95 0.95 "+
      "lw=0,marker='+' -show"],
+    ["textbox",
+     "Plot a box with text.","<x1> <y1> <text> <bbox dict> [kwargs]",
+     ""],
     ["arrow","Plot an arrow.","<x1> <y1> <x2> <y2> [kwargs]",
      "Plot an arrow from (x1,y1) to (xy,y2). Some useful "+
      "kwargs are head_width, head_length, color (c), dashes, "+
@@ -1430,6 +1433,28 @@ class plot_base:
         else:
             self.axes.text(float(eval(tx)),float(eval(ty)),str,
                            fontsize=self.font,va='center',**kwargs)
+        return
+
+    def textbox(self,tx,ty,str,boxprops,**kwargs):
+        """
+        Plot text in the axis coordinate system
+        """
+        if self.canvas_flag==False:
+            self.canvas()
+        ha_present=False
+        for key in kwargs:
+            if key=='ha':
+                ha_present=True
+        if ha_present==False:
+            self.axes.text(float(eval(tx)),float(eval(ty)),str,
+                           fontsize=self.font,va='center',ha='center',
+                           transform=self.axes.transAxes,
+                           bbox=string_to_dict(boxprops),**kwargs)
+        else:
+            self.axes.text(float(eval(tx)),float(eval(ty)),str,
+                           fontsize=self.font,va='center',
+                           transform=self.axes.transAxes,
+                           bbox=string_to_dict(boxprops),**kwargs)
         return
 
     def canvas(self):
@@ -3962,6 +3987,21 @@ class o2graph_plotter(plot_base):
                         self.line(strlist[ix+1],strlist[ix+2],
                                   strlist[ix+3],strlist[ix+4],
                                   **string_to_dict(strlist[ix+5]))
+                        
+                elif cmd_name=='textbox':
+                    
+                    if self.verbose>2:
+                        print('Process textbox.')
+                        
+                    if ix_next-ix<5:
+                        print('Not enough parameters for textbox option.')
+                    elif ix_next-ix<6:
+                        self.textbox(strlist[ix+1],strlist[ix+2],
+                                  strlist[ix+3],strlist[ix+4])
+                    else:
+                        self.textbox(strlist[ix+1],strlist[ix+2],
+                                     strlist[ix+3],strlist[ix+4],
+                                     **string_to_dict(strlist[ix+5]))
                         
                 elif cmd_name=='arrow':
                     
