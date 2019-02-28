@@ -75,6 +75,14 @@ base_list=[
      "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
      "(ms). For example: o2graph -line 0.05 0.05 0.95 0.95 "+
      "lw=0,marker='+' -show"],
+    ["arrow","Plot an arrow.","<x1> <y1> <x2> <y2> [kwargs]",
+     "Plot an arrow from (x1,y1) to (xy,y2). Some useful "+
+     "kwargs are head_width, head_length, color (c), dashes, "+
+     "linestyle (ls), linewidth (lw), "+
+     "marker, markeredgecolor (mec), markeredgewidth (mew), "+
+     "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
+     "(ms). For example: o2graph -line 0.05 0.05 0.95 0.95 "+
+     "lw=0,marker='+' -show"],
     ["move-labels","Move the labels.","",""],
     ["new-cmaps","Define new color maps.","",
      "Define new color maps, 'jet2', 'pastel2' "+
@@ -1183,9 +1191,9 @@ class plot_base:
             self.top_margin=float(value)
         elif name=='bottom-margin':
             self.bottom_margin=float(value)
-        elif name=='fig_size_x':
+        elif name=='fig-size-x':
             self.fig_size_x=float(value)
-        elif name=='fig_size_y':
+        elif name=='fig-size-y':
             self.fig_size_y=float(value)
         else:
             print('No variable named',name)
@@ -1309,6 +1317,22 @@ class plot_base:
             self.canvas()
         plot.plot([float(eval(x1)),float(eval(x2))],
                   [float(eval(y1)),float(eval(y2))],**kwargs)
+        return
+
+    def arrow(self,x1,y1,x2,y2,**kwargs):
+        """
+        Plot an arrow from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
+        """
+        if self.verbose>2:
+            print('Arrow',x1,y1,x2,y1)
+        if self.canvas_flag==False:
+            self.canvas()
+        self.axes.annotate("",xy=(float(eval(x2)),float(eval(y2))),
+                           xycoords='data',
+                           xytext=(float(eval(x1)),float(eval(y1))),
+                           textcoords='data',
+                           arrowprops=dict(arrowstyle="->",
+                           connectionstyle="arc3"))
         return
 
     def point(self,xval,yval,**kwargs):
@@ -3475,6 +3499,8 @@ class o2graph_plotter(plot_base):
                 print(line[0]+' '+str(self.colbar))
             elif line[0]=='fig-size-x':
                 print(line[0]+' '+str(self.fig_size_x))
+            elif line[0]=='fig-size-y':
+                print(line[0]+' '+str(self.fig_size_y))
             else:
                 print(line[0])
             print(' '+line[1])
@@ -3937,6 +3963,21 @@ class o2graph_plotter(plot_base):
                                   strlist[ix+3],strlist[ix+4],
                                   **string_to_dict(strlist[ix+5]))
                         
+                elif cmd_name=='arrow':
+                    
+                    if self.verbose>2:
+                        print('Process arrow.')
+                        
+                    if ix_next-ix<5:
+                        print('Not enough parameters for arrow option.')
+                    elif ix_next-ix<6:
+                        self.arrow(strlist[ix+1],strlist[ix+2],
+                                   strlist[ix+3],strlist[ix+4])
+                    else:
+                        self.arrow(strlist[ix+1],strlist[ix+2],
+                                   strlist[ix+3],strlist[ix+4],
+                                   **string_to_dict(strlist[ix+5]))
+                        
                 elif cmd_name=='point':
                     
                     if self.verbose>2:
@@ -3954,7 +3995,8 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process python.')
-                        
+
+                    print("The o2graph_plotter() object is named 'self'.")
                     code.interact(local=locals())
                     
                 elif cmd_name=='rect':
