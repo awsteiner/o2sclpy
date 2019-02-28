@@ -28,8 +28,12 @@ import os
 import hashlib
 
 import matplotlib.pyplot as plot
+
+# For rectangles
 import matplotlib.patches as patches
+# To create new color maps
 from matplotlib.colors import LinearSegmentedColormap
+# For build_o2scl(), link_o2scl() and download_file()
 import urllib.request
 
 import numpy
@@ -42,7 +46,7 @@ import textwrap
 # For system type detection in build_o2scl() and link_o2scl()
 import platform
 
-# For code.interact() 
+# For code.interact() in 'python' command
 import code 
 
 version='0.922'
@@ -85,8 +89,7 @@ base_list=[
     ["new-cmaps","Define new color maps.","",
      "Define new color maps, 'jet2', 'pastel2' "+
      "'reds2', 'greens2', and 'blues2'."],
-    ["plotv",
-     "Plot several vector-like data sets.",
+    ["plotv","Plot several vector-like data sets.",
      "[multiple vector spec. for x] <multiple vector spec. for y>",
      "The 'plotv' command plots one or several pairs of vectors for x "+
      "and y. The total number of curves plotted will be the number "+
@@ -155,7 +158,7 @@ base_list=[
      "set with the specified z-limits."]
 ]
 
-# Types which appear in extra_list below
+# Types which appear in extra_list below (not a list of all acol types)
 extra_types=["table","table3d","hist_2d","hist","double[]","int[]",
              "size_t[]","tensor","tensor<int>","tensor<size_t>",
              "tensor_grid"]
@@ -325,6 +328,7 @@ extra_list=[
      "limit before plotting."]
 ]
 
+# A list of 2-element entries, name and description
 param_list=[
     ["bottom-margin","Size of bottom margin for a new canvas"+
      " (default 0.12)."],
@@ -356,38 +360,6 @@ param_list=[
     ["zhi","Upper limit for z-axis (function if starts with '(')."],
     ["zset","If true, z-axis limits have been set (default False)."]
 ]
-
-param_dict={
-    "bottom-margin": "Size of bottom margin for a new canvas"+
-    " (default 0.12).",
-    "colbar": "If true, den-plot adds a color legend (default False).",
-    "fig-size-x": "Horizontal figure size (default 6.0).",
-    "fig-size-y": "Vertical figure size (default 6.0).",
-    "font": "Font scaling for text objects (default 16).",
-    "left-margin": "Size of left margin for a new canvas"+
-    " (default 0.14).",
-    "logx": "If true, use a logarithmic x-axis (default False).",
-    "logy": "If true, use a logarithmic y-axis (default False).",
-    "logz": "If true, use a logarithmic z-axis (default False).",
-    "right-margin": "Size of right margin for a new canvas"+
-    " (default 0.04).",
-    "top-margin": "Size of top margin for a new canvas"+
-    " (default 0.04).",
-    "verbose": "Verbosity parameter (default 1).",
-    "xhi": "Upper limit for x-axis (function if starts with '(').",
-    "xlo": "Lower limit for x-axis (function if starts with '(').",
-    "xset": "If true, x-axis limits have been set (default False).",
-    "xtitle": "X-axis title. Latex "+
-    "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')",
-    "yhi": "Upper limit for y-axis (function if starts with '(').",
-    "ylo": "Lower limit for y-axis (function if starts with '(').",
-    "yset": "If true, y-axis limits have been set (default False).",
-    "ytitle": "Y-axis title. Latex "+
-    "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')",
-    "zlo": "Lower limit for z-axis (function if starts with '(').",
-    "zhi": "Upper limit for z-axis (function if starts with '(').",
-    "zset": "If true, z-axis limits have been set (default False)."
-}
 
 def force_bytes(obj):
     """
@@ -3066,8 +3038,8 @@ class o2graph_plotter(plot_base):
         for i in range(0,it.value):
             curr_type=curr_type+type_ptr[i]
 
-        if curr_type==b'vector<contour_line>'
-             print('Store and clear vector<contour_line> object '+
+        if curr_type==b'vector<contour_line>':
+             print('Store and clear the vector<contour_line> object '+
                    'before using \'plotv\'.')
              return 1
         
@@ -3146,16 +3118,55 @@ class o2graph_plotter(plot_base):
         print('O2graph parameter list:')
         print(' ')
         for line in param_list:
-            if line[0]=='colbar':
-                print(line[0]+' '+str(self.colbar))
-            elif line[0]=='fig-size-x':
-                print(line[0]+' '+str(self.fig_size_x))
-            elif line[0]=='fig-size-y':
-                print(line[0]+' '+str(self.fig_size_y))
-            else:
-                print(line[0])
-            print(' '+line[1])
-            print(' ')
+            if line[0]!='verbose':
+                if line[0]=='bottom-margin':
+                    print(line[0]+' '+str(self.bottom_margin))
+                elif line[0]=='colbar':
+                    print(line[0]+' '+str(self.colbar))
+                elif line[0]=='fig-size-x':
+                    print(line[0]+' '+str(self.fig_size_x))
+                elif line[0]=='fig-size-y':
+                    print(line[0]+' '+str(self.fig_size_y))
+                elif line[0]=='font':
+                    print(line[0]+' '+str(self.font))
+                elif line[0]=='left-margin':
+                    print(line[0]+' '+str(self.left_margin))
+                elif line[0]=='logx':
+                    print(line[0]+' '+str(self.logx))
+                elif line[0]=='logy':
+                    print(line[0]+' '+str(self.logy))
+                elif line[0]=='logz':
+                    print(line[0]+' '+str(self.logz))
+                elif line[0]=='right-margin':
+                    print(line[0]+' '+str(self.right_margin))
+                elif line[0]=='top-margin':
+                    print(line[0]+' '+str(self.top_margin))
+                elif line[0]=='xhi':
+                    print(line[0]+' '+str(self.xhi))
+                elif line[0]=='xlo':
+                    print(line[0]+' '+str(self.xlo))
+                elif line[0]=='xset':
+                    print(line[0]+' '+str(self.xset))
+                elif line[0]=='xtitle':
+                    print(line[0]+' '+str(self.xtitle))
+                elif line[0]=='yhi':
+                    print(line[0]+' '+str(self.yhi))
+                elif line[0]=='ylo':
+                    print(line[0]+' '+str(self.ylo))
+                elif line[0]=='yset':
+                    print(line[0]+' '+str(self.yset))
+                elif line[0]=='ytitle':
+                    print(line[0]+' '+str(self.ytitle))
+                elif line[0]=='zhi':
+                    print(line[0]+' '+str(self.zhi))
+                elif line[0]=='zlo':
+                    print(line[0]+' '+str(self.zlo))
+                elif line[0]=='zset':
+                    print(line[0]+' '+str(self.zset))
+                else:
+                    print(line[0])
+                print(' '+line[1])
+                print(' ')
         
     def parse_argv(self,argv,o2scl_hdf):
         """
@@ -3651,6 +3662,8 @@ class o2graph_plotter(plot_base):
                         print('Process python.')
 
                     print("The o2graph_plotter() object is named 'self'.")
+                    print("Use help(o2sclpy) for more help on o2sclpy "+
+                          "classes and functions.")
                     code.interact(local=locals())
                     
                 elif cmd_name=='rect':
@@ -3694,9 +3707,6 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process reds2.')
                     self.new_cmaps()
-#                elif (cmd_name!='backend' and cmd_name!='o2scl-cpplib' and
-#                    cmd_name!='o2scl-libdir'):
-#                    print('No option named',cmd_name)
                 else:
                     if self.verbose>2:
                         print('Process acol command '+cmd_name+'.')
