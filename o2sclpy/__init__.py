@@ -885,19 +885,48 @@ def string_to_dict(s):
                 arr2[1]=arr2[1][1:len(arr2[1])-1]
             if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
                 arr2[1]=arr2[1][1:len(arr2[1])-1]
+
+            # If one of the entries is arrowstyle, then combine
+            # it with the head_width, head_length, and tail_width
+            # options if they are present
+            if arr2[0]=='arrowstyle':
+                for j in range(0,len(arr)):
+                    if arr[j].split('=')[0]=='head_width':
+                        arr2[1]=arr2[1]+',head_width='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='head_length':
+                        arr2[1]=arr2[1]+',head_length='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='tail_width':
+                        arr2[1]=arr2[1]+',tail_width='+arr[j].split('=')[1]
+                print('Found arrowstyle option, reprocessed:',arr2[1])
+            if arr2[0]=='connectionstyle':
+                for j in range(0,len(arr)):
+                    if arr[j].split('=')[0]=='angleA':
+                        arr2[1]=arr2[1]+',angleA='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='angleB':
+                        arr2[1]=arr2[1]+',angleB='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='armA':
+                        arr2[1]=arr2[1]+',armA='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='armB':
+                        arr2[1]=arr2[1]+',armB='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='rad':
+                        arr2[1]=arr2[1]+',rad='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='fraction':
+                        arr2[1]=arr2[1]+',fraction='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='angle':
+                        arr2[1]=arr2[1]+',angle='+arr[j].split('=')[1]
+                print('Found connectionstyle option, reprocessed:',arr2[1])
+                
             # convert strings to numbers if necessary
             if arr2[0]=='lw':
                 arr2[1]=float(arr2[1])
             if arr2[0]=='alpha':
                 arr2[1]=float(arr2[1])
+            if arr2[0]=='shrinkA':
+                arr2[1]=int(arr2[1])
+            if arr2[0]=='shrinkB':
+                arr2[1]=int(arr2[1])
             if arr2[0]=='bins':
                 arr2[1]=int(arr2[1])
-            if arr2[0]=='head_length':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='head_width':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='tail_width':
-                arr2[1]=float(arr2[1])
             if arr2[0]=='fill':
                 if arr2[1]=='True':
                     arr2[1]=True
@@ -913,8 +942,15 @@ def string_to_dict(s):
                 arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]))
                 print(arr2[1])
 
-            # assign to dictionary
-            dct[arr2[0]]=arr2[1]
+            # assign to dictionary (except for arrowstyle and
+            # connectionstyle options which are handled separately
+            # above)
+            if (arr2[0]!='head_width' and arr2[0]!='head_length' and
+                arr2[0]!='tail_width' and arr2[0]!='rad' and
+                arr2[0]!='angleA' and arr2[0]!='angleB' and
+                arr2[0]!='armA' and arr2[0]!='armB' and
+                arr2[0]!='angle' and arr2[0]!='fraction'):
+                dct[arr2[0]]=arr2[1]
         
     return dct
 
