@@ -69,7 +69,11 @@ This is a list of 4-element entries:
 base_list=[
     ["arrow","Plot an arrow.",
      "<x1> <y1> <x2> <y2> <arrow properties> [kwargs]",
-     "Plot an arrow from (x1,y1) to (xy,y2)."],
+     "Plot an arrow from (x1,y1) to (x2,y2). This command uses "+
+     "axes.annotate() to generate an arrow with an empty string "+
+     "as the first argument to annotate(). The o2graph argument <arrow "+
+     "properties> is the python dictionary for the 'arrowprops' "+
+     "argument to annotate(). For example..."],
     ["backend","Select the matplotlib backend to use.","<backend>",
      "This selects the matplotlib backend. "+
      "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', 'QT4Agg'. "+
@@ -888,6 +892,12 @@ def string_to_dict(s):
                 arr2[1]=float(arr2[1])
             if arr2[0]=='bins':
                 arr2[1]=int(arr2[1])
+            if arr2[0]=='head_length':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='head_width':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='tail_width':
+                arr2[1]=float(arr2[1])
             if arr2[0]=='fill':
                 if arr2[1]=='True':
                     arr2[1]=True
@@ -1302,7 +1312,7 @@ class plot_base:
         Plot an arrow from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
         """
         if self.verbose>2:
-            print('Arrow',x1,y1,x2,y1)
+            print('Arrow',x1,y1,x2,y1,arrowprops)
         if self.canvas_flag==False:
             self.canvas()
         self.axes.annotate("",xy=(float(eval(x2)),float(eval(y2))),
@@ -3637,9 +3647,9 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process arrow.')
                         
-                    if ix_next-ix<5:
+                    if ix_next-ix<6:
                         print('Not enough parameters for arrow option.')
-                    elif ix_next-ix<6:
+                    elif ix_next-ix<7:
                         self.arrow(strlist[ix+1],strlist[ix+2],
                                    strlist[ix+3],strlist[ix+4],
                                    strlist[ix+5])
