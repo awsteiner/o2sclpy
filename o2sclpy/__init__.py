@@ -174,14 +174,18 @@ base_list=[
     ["show","Show the current plot.","","Show the current plot "+
      "on the screen and begin "+
      "the graphical user interface. This is similar to plot.show()."],
-    ["text","Plot text in the axis coordinate system.",
-     "<x> <y> <text> [kwargs]",""],
+    ["text","Plot text in the data coordinates.",
+     "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
+     "data coordinates defined by the current axes with the font size "+
+     "determined by the value of the parameter 'font'."],
     ["textbox",
      "Plot a box with text.","<x1> <y1> <text> <bbox properties> [kwargs]",
      "Plot text <text> and a box at location <x1> <y1>. For example, "+
      "textbox 0.5 0.5 \"$ f(x) $\" \"alpha=0.8,facecolor=white\" ."],
-    ["ttext","Plot text in the canvas default coordinate system.",
-     "<x> <y> <text> [kwargs]",""],
+    ["ttext","Plot text in window coordinates [(0,0) to (1,1)].",
+     "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
+     "window coordinates [typically (0,0) to (1,1)] with the font size "+
+     "determined by the value of the parameter 'font'."],
     ["xlimits","Set the x-axis limits.","<low> <high>",
      "Set 'xlo' and 'xhi' to the specified limits, "+
      "and set 'xset' to true. If a plotting canvas is currently "+
@@ -1469,20 +1473,25 @@ class plot_base:
         """
         if self.canvas_flag==False:
             self.canvas()
+            
         ha_present=False
         for key in kwargs:
             if key=='ha':
                 ha_present=True
         if ha_present==False:
-            self.axes.text(float(eval(tx)),float(eval(ty)),
-                           str,transform=self.axes.transAxes,
-                           fontsize=self.font,va='center',ha='center',
-                           **kwargs)
-        else:
-            self.axes.text(float(eval(tx)),float(eval(ty)),
-                           str,transform=self.axes.transAxes,
-                           fontsize=self.font,va='center',
-                           **kwargs)
+            kwargs=dict(kwargs,ha='center')
+            
+        va_present=False
+        for key in kwargs:
+            if key=='va':
+                va_present=True
+        if va_present==False:
+            kwargs=dict(kwargs,va='center')
+
+        self.axes.text(float(eval(tx)),float(eval(ty)),
+                       str,transform=self.axes.transAxes,
+                       fontsize=self.font,**kwargs)
+
         return
 
     def text(self,tx,ty,str,**kwargs):
@@ -1491,16 +1500,23 @@ class plot_base:
         """
         if self.canvas_flag==False:
             self.canvas()
+            
         ha_present=False
         for key in kwargs:
             if key=='ha':
                 ha_present=True
         if ha_present==False:
-            self.axes.text(float(eval(tx)),float(eval(ty)),str,
-                           fontsize=self.font,va='center',ha='center',**kwargs)
-        else:
-            self.axes.text(float(eval(tx)),float(eval(ty)),str,
-                           fontsize=self.font,va='center',**kwargs)
+            kwargs=dict(kwargs,ha='center')
+            
+        va_present=False
+        for key in kwargs:
+            if key=='va':
+                va_present=True
+        if va_present==False:
+            kwargs=dict(kwargs,va='center')
+
+        self.axes.text(float(eval(tx)),float(eval(ty)),str,
+                       fontsize=self.font,**kwargs)
         return
 
     def textbox(self,tx,ty,str,boxprops,**kwargs):
@@ -1509,20 +1525,25 @@ class plot_base:
         """
         if self.canvas_flag==False:
             self.canvas()
+            
         ha_present=False
         for key in kwargs:
             if key=='ha':
                 ha_present=True
         if ha_present==False:
-            self.axes.text(float(eval(tx)),float(eval(ty)),str,
-                           fontsize=self.font,va='center',ha='center',
-                           transform=self.axes.transAxes,
-                           bbox=string_to_dict(boxprops),**kwargs)
-        else:
-            self.axes.text(float(eval(tx)),float(eval(ty)),str,
-                           fontsize=self.font,va='center',
-                           transform=self.axes.transAxes,
-                           bbox=string_to_dict(boxprops),**kwargs)
+            kwargs=dict(kwargs,ha='center')
+            
+        va_present=False
+        for key in kwargs:
+            if key=='va':
+                va_present=True
+        if va_present==False:
+            kwargs=dict(kwargs,va='center')
+
+        self.axes.text(float(eval(tx)),float(eval(ty)),str,
+                       fontsize=self.font,
+                       transform=self.axes.transAxes,
+                       bbox=string_to_dict(boxprops),**kwargs)
         return
 
     def canvas(self):
