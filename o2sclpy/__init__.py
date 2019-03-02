@@ -73,7 +73,42 @@ base_list=[
      "axes.annotate() to generate an arrow with an empty string "+
      "as the first argument to annotate(). The o2graph argument <arrow "+
      "properties> is the python dictionary for the 'arrowprops' "+
-     "argument to annotate(). For example..."],
+     "argument to annotate(). The arrowstyle and connectionstyle "+
+     "attributes should be listed along with other arrowprops attributes.\n"+
+     " \nExamples for arrowprops are:\n"+
+     "\"arrowstyle=->,connectionstyle=arc3\"\n"+
+     "\"arrowstyle=-|>,connectionstyle=arc,fc=red,ec=blue\"\n"+
+     "\"arrowstyle=-|>,connectionstyle=arc,head_length=4.0,"+
+     "head_width=1.0\"\n"+
+     "\"arrowstyle=->,connectionstyle=arc3,head_length=4.0,"+
+     "head_width=1.0,rad=-0.1\"\n"+
+     "\"arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,"+
+     "head_width=1.0,rad=-0.1\"\n \n"+
+     "Summary for arrowstyle argument (angleB is renamed to as_angleB):\n"+
+     "Name    Attributes\n"+
+     "-       None\n"+
+     "->      head_length=0.4,head_width=0.2\n"+
+     "-[      widthB=1.0,lengthB=0.2,as_angleB=None\n"+
+     "|-      widthA=1.0,widthB=1.0\n"+
+     "-|      head_length=0.4,head_width=0.2\n"+
+     "<-      head_length=0.4,head_width=0.2\n"+
+     "<-      head_length=0.4,head_width=0.2\n"+
+     "<|      head_length=0.4,head_width=0.2\n"+
+     "<|      head_length=0.4,head_width=0.2\n"+
+     "fancy   head_length=0.4,head_width=0.4,tail_width=0.4\n"+
+     "simple  head_length=0.5,head_width=0.5,tail_width=0.2\n"+
+     "wedge   tail_width=0.3,shrink_factor=0.5\n \n"+
+     "(note that fancy, simple or wedge require arc3 or angle3 connection "+
+     "styles)\n \n"+
+     "Summary for connectionstyle argument (angleB is renamed to "+
+     "cs_angleB):\n"+
+     "Name    Attributes\n"+
+     "angle   angleA=90,cs_angleB=0,rad=0.0\n"+
+     "angle3  angleA=90,cs_angleB=0\n"+
+     "arc     angleA=0,cs_angleB=0,armA=None,armB=None,rad=0.0\n"+
+     "arc3    rad=0.0\n"+
+     "bar     armA=0.0,armB=0.0,fraction=0.3,angle=None\n \n"+
+     "See https://matplotlib.org/2.0.2/users/annotations.html for more."],
     ["backend","Select the matplotlib backend to use.","<backend>",
      "This selects the matplotlib backend. "+
      "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', 'QT4Agg'. "+
@@ -897,12 +932,22 @@ def string_to_dict(s):
                         arr2[1]=arr2[1]+',head_length='+arr[j].split('=')[1]
                     if arr[j].split('=')[0]=='tail_width':
                         arr2[1]=arr2[1]+',tail_width='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='shrink_factor':
+                        arr2[1]=arr2[1]+',shrink_factor='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='widthA':
+                        arr2[1]=arr2[1]+',widthA='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='widthB':
+                        arr2[1]=arr2[1]+',widthB='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='lengthB':
+                        arr2[1]=arr2[1]+',lengthB='+arr[j].split('=')[1]
+                    if arr[j].split('=')[0]=='as_angleB':
+                        arr2[1]=arr2[1]+',angleB='+arr[j].split('=')[1]
                 print('Found arrowstyle option, reprocessed:',arr2[1])
             if arr2[0]=='connectionstyle':
                 for j in range(0,len(arr)):
                     if arr[j].split('=')[0]=='angleA':
                         arr2[1]=arr2[1]+',angleA='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='angleB':
+                    if arr[j].split('=')[0]=='cs_angleB':
                         arr2[1]=arr2[1]+',angleB='+arr[j].split('=')[1]
                     if arr[j].split('=')[0]=='armA':
                         arr2[1]=arr2[1]+',armA='+arr[j].split('=')[1]
@@ -947,9 +992,12 @@ def string_to_dict(s):
             # above)
             if (arr2[0]!='head_width' and arr2[0]!='head_length' and
                 arr2[0]!='tail_width' and arr2[0]!='rad' and
-                arr2[0]!='angleA' and arr2[0]!='angleB' and
+                arr2[0]!='angleA' and arr2[0]!='as_angleB' and
                 arr2[0]!='armA' and arr2[0]!='armB' and
-                arr2[0]!='angle' and arr2[0]!='fraction'):
+                arr2[0]!='angle' and arr2[0]!='fraction' and
+                arr2[0]!='shrink_factor' and arr2[0]!='widthA' and
+                arr2[0]!='lengthB' and arr2[0]!='widthB' and
+                arr2[0]!='cs_angleB'):
                 dct[arr2[0]]=arr2[1]
         
     return dct
@@ -3458,9 +3506,15 @@ class o2graph_plotter(plot_base):
                             match=True
                             print('Usage: '+cmd+' '+line[2]+'\n\n'+
                                   line[1]+'\n')
-                            str_list=textwrap.wrap(line[3],79)
-                            for i in range (0,len(str_list)):
-                                print(str_list[i])
+                            tempx_arr=line[3].split('\n')
+                            for j in range(0,len(tempx_arr)):
+                                #print('here.'+tempx_arr[j]+'.')
+                                if len(tempx_arr[j])<79:
+                                    print(tempx_arr[j])
+                                else:
+                                    str_list=textwrap.wrap(tempx_arr[j],79)
+                                    for i in range (0,len(str_list)):
+                                        print(str_list[i])
                                 
                     # Handle the case of an o2graph command from the
                     # extra list
