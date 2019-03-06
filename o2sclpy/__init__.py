@@ -982,14 +982,11 @@ def string_to_dict(s):
                 else:
                     arr2[1]=False
             if arr2[0]=='color' and arr[i][5]=='=' and arr[i][6]=='(':
-                print('In string_to_dict(). Found possible RGB color "'+
-                      arr[i]+'"')
                 arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]
                 skip=2
                 arr2[1]=arr2[1][1:len(arr2[1])-1]
                 arr3=arr2[1].split(',')
                 arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]))
-                print(arr2[1])
 
             # assign to dictionary (except for arrowstyle and
             # connectionstyle options which are handled separately
