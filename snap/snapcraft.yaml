@@ -22,6 +22,8 @@
       - libhdf5-dev
       - libgsl0-dev
       - python3-tk
+      - libfreetype6-dev
+      - libpng12-dev
       - pkg-config
       python-packages:
       - h5py
