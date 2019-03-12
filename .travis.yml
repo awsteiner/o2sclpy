@@ -1,64 +1,31 @@
-#
-#
-# Linux seems to work. OSX has trouble with timing out, and I'm
-# not sure for some packages if it's faster to use homebrew or
-# pip3? It might also be better to install dependencies manually
-# so that the installation proceeds in smaller chunks.
-#
-language: cpp
+language: python
 
 os:
   - linux
   - osx
 
-dist: trusty
+dist: xenial
 sudo: required
 
-# 
-# Prepare autotools and install dependencies before installation
-#
-before_install:
-  # The ubuntu HDF5 package cannot be used because it is configured to
-  # be compatibile only the with older API. Newer versions of the
-  # Ubuntu HDF5 package do not seem to have this problem. For now, the
-  # script compiles HDF5 manually from source.
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-
-patch1/src/hdf5-1.10.0-patch1.tar.gz ;
-      tar -xzf hdf5-1.10.0-patch1.tar.gz ;
-      cd hdf5-1.10.0-patch1 && ./configure --build=x86_64-unknown-linux-gnu --pr
-efix=/usr && make > /dev/null 2> /dev/null && sudo make install && cd .. ;
-    fi
-  # 
-  # Install GSL, Boost, readline, ncurses, python3, h5py, and matplotlib
-  # 
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      sudo apt-get install libgsl0-dev && sudo apt-get install libboost-all-dev libreadline-dev libncurses-dev python3-pip python3-h5py python3-matplotlib ;
-    fi
+addons:
+  snaps:
+  - name: o2scl
+    classic: true
+    channel: latest/edge
 
-#
-# Installation script
-#
-# On Mac, using "install:" doesn't work here b/c it additionally
-# tries to run ./configure after doing the homebrew installation,
-# so we use "script:" here instead
-#
+addons:
+  homebrew:
+    taps: awsteiner/science
+    packages:
+    - o2scl
+
 script:
-  # 
-  # Perform the installation on linux. Since there is no documentation,
-  # 'make blank-doc' is used to create dummy documentation so that
-  # 'make install' does not fail. 
-  # 
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      git clone https://github.com/awsteiner/o2scl && cd o2scl && mkdir m4 && autoreconf -i && ./configure && make blank-doc && sudo make install && cd .. && sudo pip3 install o2sclpy && o2graph -help ;
-    fi
-  # 
-  # Use homebrew to install the HEAD version on OSX. At the end,
-  # 'acol --version' is used to double check that the install worked.
-  # We need to use '-v' for brew install so that the build doesn't timeout.
-  # 
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+      rvm use 2.3 --install --binary    
       brew update && brew install homebrew/science/hdf5 && brew tap awsteiner/science && which autoconf && brew install o2scl --HEAD -v && brew install python3 && pip3 install h5py && brew install freetype && brew install libpng && pip3 install matplotlib && pip3 install o2sclpy && o2graph -help ;
+    fi
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+       pip install o2sclpy
     fi
 
 notifications:
