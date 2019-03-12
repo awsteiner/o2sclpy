@@ -9,17 +9,12 @@ os:
 dist: xenial
 sudo: required
 
+# This doesn't appear to work yet. It skips the snap install.
 addons:
   snaps:
   - name: o2scl
     classic: true
     channel: latest/edge
-
-addons:
-  homebrew:
-    taps: awsteiner/science
-    packages:
-    - o2scl
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
