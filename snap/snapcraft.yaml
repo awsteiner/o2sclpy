@@ -25,6 +25,8 @@
       python-packages:
       - h5py
       - numpy==1.15.4
+      - freetype
+      - png
       - matplotlib
       
   
