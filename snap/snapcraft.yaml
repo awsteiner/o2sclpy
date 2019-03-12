@@ -22,11 +22,10 @@
       - libhdf5-dev
       - libgsl0-dev
       - python3-tk
+      - pkg-config
       python-packages:
       - h5py
       - numpy==1.15.4
-      - freetype
-      - png
       - matplotlib
       
   
