@@ -3560,11 +3560,12 @@ class o2graph_plotter(plot_base):
                     # If no arguments were given, then give a list of
                     # o2graph commands in addition to acol commands
                     if (ix_next-ix)==1:
-                        #str_temp=b'\e(0'
-                        #for jj in range(0,78):
-                        #    str_temp+=b'q'
-                        #str_temp+=b'\e(B'
-                        #print(str_temp)
+                        str_line=''
+                        str_line=str_line+chr(27)+'(0'
+                        for jj in range(0,78):
+                           str_line+='q'
+                        str_line=str_line+chr(27)+'(B'
+                        print(str_line)
                         print('\nO2graph command-line options:\n')
                         for line in base_list:
                             strt='  -'+line[0]
@@ -3572,8 +3573,8 @@ class o2graph_plotter(plot_base):
                                 strt=strt+' '
                             strt+=line[1]
                             print(strt)
-                        print('\nO2graph type-specific commands:\n')
-                        #print(str_temp)
+                        print('\n'+str_line)
+                        print('O2graph type-specific commands:\n')
                         extra_types.sort()
                         for typename in extra_types:
                             strt=typename+': '
