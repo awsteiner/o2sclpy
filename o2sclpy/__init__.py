@@ -2043,7 +2043,8 @@ class o2graph_plotter(plot_base):
         
     def den_plot(self,o2scl_hdf,amp,args):
         """
-        Density plot from a ``table3d`` or ``hist_2d`` object
+        Density plot from a ``table3d``, ``hist_2d`` ``tensor_grid``,
+        ``tensor``, ``tensor<int>`` or ``tensor<size_t>`` object
         """
 
         int_ptr=ctypes.POINTER(ctypes.c_int)
