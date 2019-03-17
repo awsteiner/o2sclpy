@@ -122,6 +122,8 @@ base_list=[
      "-canvas -show'."],
     ["clf","Clear the current figure.","",
      "Clear the current figure."],
+    ["eval","Run the python eval() function.","<source code>",
+     "Long desc."],
     ["line","Plot a line.","<x1> <y1> <x2> <y2> [kwargs]",
      "Plot a line from (x1,y1) to (xy,y2). Some useful "+
      "kwargs are color (c), dashes, linestyle (ls), linewidth (lw), "+
@@ -1120,6 +1122,26 @@ class plot_base:
     fig_size_y=6.0
     """
     The y-scale for the figure object
+    """
+    yt_axis=True
+    """ 
+    If true, plot the axis in yt visualizations
+    """
+    yt_axis_labels_flat=True
+    """ 
+    If true, axis labels are always parallel to the camera
+    """
+    yt_resolution=(512,512)
+    """
+    Resolution for yt rendering
+    """
+    yt_focus=(0.5,0.5,0.5)
+    """
+    Focus
+    """
+    yt_position=(0.5,0.5,0.5)
+    """
+    Position
     """
     
     def new_cmaps(self):
@@ -3798,6 +3820,13 @@ class o2graph_plotter(plot_base):
                           "for more help on o2sclpy "+
                           "classes and functions.")
                     code.interact(local=locals())
+                    
+                elif cmd_name=='eval':
+                    
+                    if self.verbose>2:
+                        print('Process eval.')
+
+                    eval(strlist[ix+1],None,locals())
                     
                 elif cmd_name=='rect':
                     
