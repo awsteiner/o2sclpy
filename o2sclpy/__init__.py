@@ -200,6 +200,12 @@ base_list=[
      "open, then "+
      "the y-limits on that plot are modified. Future plots are also "+
      "set with the specified y-limits."],
+    ["yt-add-vol","Add a tensor_grid object as a yt volume source",
+     "<color 1> <width 1>","Long desc."],
+    ["yt-path","Set yt animation path","",
+     "Long desc."],
+    ["yt-render","Render the yt visualization",
+     "<filename pattern>","Long desc."],
     ["zlimits","Set the z-azis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
      "and set 'zset' to true. If a plotting canvas is currently "+
@@ -1022,77 +1028,74 @@ class plot_base:
     canvas_flag=False
     """
     If True, then the default plot canvas has been initiated
+    (default False)
     """
 
     # Quantities modified by set/get
     
     logx=False
     """
-    If True, then use a logarithmic x axis
+    If True, then use a logarithmic x axis (default False)
     """
     logy=False
     """
-    If True, then use a logarithmic y axis
+    If True, then use a logarithmic y axis (default False)
     """
     logz=False
     """
-    If True, then use a logarithmic z axis
+    If True, then use a logarithmic z axis (default False)
     """
     xtitle=''
     """
-    Title for x axis
+    Title for x axis (default '')
     """
     ytitle=''
     """
-    Title for y axis
+    Title for y axis (default '')
     """
     xlo=0
     """
-    Lower limit for x axis
+    Lower limit for x axis (default 0)
     """
     xhi=0
     """
-    Upper limit for x axis
+    Upper limit for x axis (default 0)
     """
     xset=False
     """ 
-    If True, then the x axis limits have been set
+    If True, then the x axis limits have been set (default False)
     """
     ylo=0
     """
-    Lower limit for y axis
+    Lower limit for y axis (default 0)
     """
     yhi=0
     """
-    Upper limit for y axis
+    Upper limit for y axis (default 0)
     """
     yset=False
     """ 
-    If True, then the y axis limits have been set
+    If True, then the y axis limits have been set (default False)
     """
     zlo=0
     """
-    Lower limit for z axis
+    Lower limit for z axis (default 0)
     """
     zhi=0
     """
-    Upper limit for z axis
+    Upper limit for z axis (default 0)
     """
     zset=False
     """ 
-    If True, then the z axis limits have been set
+    If True, then the z axis limits have been set (default False)
     """
     verbose=1
     """
-    Verbosity parameter
+    Verbosity parameter (default 1)
     """
     colbar=False
     """
-    If True, then include a color legend for density plots
-    """
-    plotfiles=''
-    """
-    List of filenames for multiplots
+    If True, then include a color legend for density plots (default False)
     """
     left_margin=0.14
     """
@@ -1117,31 +1120,39 @@ class plot_base:
     """
     fig_size_x=6.0
     """
-    The x-scale for the figure object
+    The x-scale for the figure object (default 6.0)
     """
     fig_size_y=6.0
     """
-    The y-scale for the figure object
+    The y-scale for the figure object (default 6.0)
     """
     yt_axis=True
+    """
+    If true, include an axis in yt visualizations (default True)
+    """
+    yt_axis_color=[1.0,1.0,1.0,0.5]
     """ 
-    If true, plot the axis in yt visualizations
+    Color and alpha for the yt axis (default [1.0,1.0,1.0,0.5])
     """
     yt_axis_labels_flat=True
     """ 
-    If true, axis labels are always parallel to the camera
+    If true, axis labels are always parallel to the camera (default True)
     """
-    yt_resolution=(512,512)
+    yt_resolution=[512,512]
     """
-    Resolution for yt rendering
+    Resolution for yt rendering (default [512,512])
     """
-    yt_focus=(0.5,0.5,0.5)
+    yt_focus=[0.5,0.5,0.5]
     """
-    Focus
+    yt camera focus (default [1.5,0.6,0.7])
     """
-    yt_position=(0.5,0.5,0.5)
+    yt_position=[1.5,0.6,0.7]
     """
-    Position
+    yt camera position
+    """
+    yt_path=['','','']
+    """
+    yt camera path (default ['','',''])
     """
     
     def new_cmaps(self):
