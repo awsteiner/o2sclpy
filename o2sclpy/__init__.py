@@ -2952,6 +2952,10 @@ class o2graph_plotter(plot_base):
                 else:
                     plot.hist2d(xv,yv,**string_to_dict(args[2]))
                 
+                if self.colbar==True:
+                    cbar=plot.colorbar()
+                    cbar.ax.tick_params(labelsize=self.font*0.8)
+                    
             # End of section for 'table' type
         else:
             print("Command 'plot' not supported for type",
