@@ -10,15 +10,16 @@ dist: xenial
 sudo: required
 
 # This doesn't appear to work yet. It skips the snap install.
-addons:
-  snaps:
-  - name: o2scl
-    devmode: true
-    channel: latest/edge
+# I don't know how to force the add on to select devmode
+#
+# addons:
+#  snaps:
+#  - name: o2scl
+#    channel: latest/edge
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-       pip install . && o2graph -help ;
+       sudo snap install o2scl --devmode --edge && pip install . && o2graph -help ;
     fi
 
 notifications:
