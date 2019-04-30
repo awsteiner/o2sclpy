@@ -2,7 +2,7 @@ language: python
 python:
   - "3.6"
 
-# Note that travis doesn't support python on osx yet
+# Note that travis doesn't support python on osx yet?!
 os:
   - linux
 
@@ -17,9 +17,11 @@ sudo: required
 #  - name: o2scl
 #    channel: latest/edge
 
+# We use 'acol --version' to verify the o2scl installation and
+# then install o2graph
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-       sudo snap install o2scl --devmode --edge && pip install . && o2graph -help ;
+       sudo snap install o2scl --devmode --edge && acol --version && pip install . && o2graph -help ;
     fi
 
 notifications:
