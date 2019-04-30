@@ -13,7 +13,6 @@ sudo: required
 addons:
   snaps:
   - name: o2scl
-    classic: true
     channel: latest/edge
 
 install:
