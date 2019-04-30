@@ -4,7 +4,7 @@ with open("README.md","r") as file_handle:
     long_description=file_handle.read()
 
 setuptools.setup(name='o2sclpy',
-                 version='0.923.1',
+                 version='0.923.2',
                  author='Andrew W. Steiner',
                  author_email='awsteiner@mykolab.com',
                  description='Python extensions for O2scl',
@@ -13,7 +13,7 @@ setuptools.setup(name='o2sclpy',
                  url='https://neutronstars.utk.edu/code/o2sclpy',
                  license='GPLv3',
                  packages=['o2sclpy'],
-                 install_requires=['h5py','numpy','matplotlib'],
+                 install_requires=['h5py','numpy','matplotlib','requests'],
                  zip_safe=False,scripts=['bin/o2graph'],
                  classifiers=[
                      'Development Status :: 4 - Beta',
