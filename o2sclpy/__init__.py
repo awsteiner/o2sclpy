@@ -3265,14 +3265,22 @@ class o2graph_plotter(plot_base):
         conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                           ctypes.c_char_p]
         conv_fn.restype=ctypes.c_int
+
+        if len(args)>2:
+            mvs1=ctypes.c_char_p(force_bytes(args[0]))
+            mvs2=ctypes.c_char_p(force_bytes(args[1]))
+            conv_ret=conv_fn(amp,mvs1,mvs2)
+            if conv_ret!=0:
+                print('Failed to read "'+args[0]+'" and "'+args[1]+'".')
+                return 2
+        else:
+            mvs1=ctypes.c_char_p(0)
+            mvs2=ctypes.c_char_p(force_bytes(args[0]))
+            conv_ret=conv_fn(amp,mvs1,mvs2)
+            if conv_ret!=0:
+                print('Failed to read "'+args[0])
+                return 2
         
-        mvs1=ctypes.c_char_p(force_bytes(args[0]))
-        mvs2=ctypes.c_char_p(force_bytes(args[1]))
-        
-        conv_ret=conv_fn(amp,mvs1,mvs2)
-        if conv_ret!=0:
-            print('Failed to read "'+args[0]+'" and "'+args[1]+'".')
-            return 2
         
         # Get the total number of contour lines
         cont_n_fn=o2scl_hdf.o2scl_acol_contours_n
@@ -3767,7 +3775,7 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process plotv.')
                         
-                    if ix_next-ix<3:
+                    if ix_next-ix<2:
                         print('Not enough parameters for plotv option.')
                     else:
                         self.plotv(o2scl_hdf,amp,strlist[ix+1:ix_next])
