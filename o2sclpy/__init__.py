@@ -153,6 +153,7 @@ base_list=[
      "the vector<contour_line> object as temporary storage, so if "+
      "the current object has type vector<contour_line> then you "+
      "will need to save that object to a file and use 'clear' first."],
+    ["point","Plot a single point.","",""],
     ["python","Begin an interactive python session.","",""],
     ["rect","Plot a rectangle.",
      "<x1> <y1> <x2> <y2> <angle> [kwargs]",
@@ -1510,7 +1511,7 @@ class plot_base:
             print('point',xval,yval,kwargs)
         if self.canvas_flag==False:
             self.canvas()
-        plot.plot([float(xval)],[float(yval)],**kwargs)
+        plot.plot([float(eval(xval))],[float(eval(yval))],**kwargs)
         if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
         if self.yset==True:
