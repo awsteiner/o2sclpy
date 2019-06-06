@@ -59,6 +59,29 @@ import json
 import requests
 import socket
 
+cmaps = [('Perceptually Uniform Sequential', [
+    'viridis', 'plasma', 'inferno', 'magma']),
+         ('Sequential', [
+             'Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
+             'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu',
+             'GnBu', 'PuBu', 'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn']),
+         ('Sequential (2)', [
+             'binary', 'gist_yarg', 'gist_gray', 'gray', 'bone', 'pink',
+             'spring', 'summer', 'autumn', 'winter', 'cool', 'Wistia',
+             'hot', 'afmhot', 'gist_heat', 'copper']),
+         ('Diverging', [
+             'PiYG', 'PRGn', 'BrBG', 'PuOr', 'RdGy', 'RdBu',
+             'RdYlBu', 'RdYlGn', 'Spectral', 'coolwarm', 'bwr', 'seismic']),
+         ('Qualitative', [
+             'Pastel1', 'Pastel2', 'Paired', 'Accent',
+             'Dark2', 'Set1', 'Set2', 'Set3',
+             'tab10', 'tab20', 'tab20b', 'tab20c']),
+         ('Miscellaneous', [
+             'flag', 'prism', 'ocean', 'gist_earth', 'terrain', 'gist_stern',
+             'gnuplot', 'gnuplot2', 'CMRmap', 'cubehelix', 'brg', 'hsv',
+             'gist_rainbow', 'rainbow', 'jet', 'nipy_spectral', 'gist_ncar'])]
+
+
 """
 The version number string
 """
@@ -3593,6 +3616,12 @@ class o2graph_plotter(plot_base):
                     curr_type=''
                     cmd=''
 
+                    str_line=''
+                    str_line=str_line+chr(27)+'(0'
+                    for jj in range(0,78):
+                       str_line+='q'
+                    str_line=str_line+chr(27)+'(B'
+                        
                     # If only a command is specified
                     if (ix_next-ix)==2:
 
@@ -3656,8 +3685,72 @@ class o2graph_plotter(plot_base):
                             for i in range (0,len(str_list)):
                                 print(str_list[i])
 
+                    finished=False
+                    if (cmd=='cmaps') and (ix_next-ix)==2:
+                        print('Matplotlib colormaps:')
+                        print(str_line)
+                        for category, cmap_list in cmaps:
+                            list2=''
+                            for name in cmap_list:
+                                list2+=name+' '
+                            str_list=textwrap.wrap(category+': '+list2,79)
+                            for i in range (0,len(str_list)):
+                                print(str_list[i])
+                            print(' ')
+                        finished=True
+
+                    if (cmd=='colors') and (ix_next-ix)==2:
+                        from matplotlib import colors as mcolors
+                        print('Matplotlib colors supported by O2graph:')
+                        print(str_line)
+                        base_dict=dict(mcolors.BASE_COLORS)
+                        css4_dict=dict(**mcolors.CSS4_COLORS)
+                        print(len(base_dict),'base colors:')
+                        for col in base_dict:
+                            print(col,base_dict[col])
+                        print(' ')                            
+                        print(len(css4_dict),'CSS4 colors:')
+                        for col in css4_dict:
+                            print(col,css4_dict[col])
+                        print(' ')
+                        print('O2graph also supports the (r,g,b) format',
+                              'where r, g, and b')
+                        print('  are numbers from 0 to 1.') 
+                        finished=True
+
+                    if (cmd=='markers') and (ix_next-ix)==2:
+                        print('Matplotlib markers supported by O2graph:')
+                        print(str_line)
+                        print('"." point')
+                        print('"," pixel')
+                        print('"o" circle')
+                        print('"v" triangle_down')
+                        print('"^" triangle_up')
+                        print('"<" triangle_left')
+                        print('">" triangle_right')
+                        print('"1" tri_down')
+                        print('"2" tri_up')
+                        print('"3" tri_left')
+                        print('"4" tri_right')
+                        print('"8" octagon')
+                        print('"s" square')
+                        print('"p" pentagon')
+                        print('"P" plus (filled)')
+                        print('"*" star')
+                        print('"h" hexagon1')
+                        print('"H" hexagon2')
+                        print('"+" plus')
+                        print('"x" x')
+                        print('"X" x (filled)')
+                        print('"D" diamond')
+                        print('"d" thin_diamond')
+                        print('"|" vline')
+                        print('"_" hline')
+                        print('"$...$" mathtext string')
+                        finished=True
+
                     # Handle the case of an acol command 
-                    if match==False:
+                    if match==False and finished==False:
                         self.gen(o2scl_hdf,amp,cmd_name,
                                  strlist[ix+1:ix_next])
 
@@ -3669,11 +3762,6 @@ class o2graph_plotter(plot_base):
                     # If no arguments were given, then give a list of
                     # o2graph commands in addition to acol commands
                     if (ix_next-ix)==1:
-                        str_line=''
-                        str_line=str_line+chr(27)+'(0'
-                        for jj in range(0,78):
-                           str_line+='q'
-                        str_line=str_line+chr(27)+'(B'
                         print(str_line)
                         print('\nO2graph command-line options:\n')
                         for line in base_list:
@@ -3701,6 +3789,9 @@ class o2graph_plotter(plot_base):
                                     print(str_list[i])
                                 else:
                                     print(' ',str_list[i])
+                        print('\n'+str_line)
+                        print('Additional o2graph help topics:',
+                              'markers, cmaps, colors')
 
                 elif cmd_name=='version':
                     
