@@ -33,7 +33,9 @@
 #
 # Next things to do:
 # 1) Put tensor_grid data into a numpy array
+#    (using numpy.ctypeslib.as_array?)
 # 2) Figure out how to implement transfer functions
+# 3) Create yt-surface
 
 import sys
 import h5py
@@ -467,13 +469,14 @@ param_list=[
 
 # A list of 2-element entries, name and description
 yt_param_list=[
-    ["yt-axis","desc."],
-    ["yt-axis-color","desc."],
-    ["yt-axis-labels-flat","desc."],
-    ["yt-resolution","desc."],
-    ["yt-focus","desc."],
-    ["yt-position","desc."],
-    ["yt-path","desc."]
+    ["yt-axis","If true, plot a 3D axis."],
+    ["yt-axis-color","Color for the 3D axis."],
+    ["yt-axis-labels-flat",
+     "If true, force the axis labels to be parallel to the camera."],
+    ["yt-resolution","The rendering resolution (default [512,512])."],
+    ["yt-focus","The camera focus (default [0.5,0.5,0.5])."],
+    ["yt-position","The camera position."],
+    ["yt-path","The animation path."]
 ]
 
 def slack_notify(webhook_url,channel_name,title,
@@ -3996,14 +3999,51 @@ class o2graph_plotter(plot_base):
                         print(str_line)
                         base_dict=dict(mcolors.BASE_COLORS)
                         css4_dict=dict(**mcolors.CSS4_COLORS)
+                        xkcd_dict=dict(**mcolors.XKCD_COLORS)
                         print(len(base_dict),'base colors:')
+                        outs=''
+                        ctr=0
                         for col in base_dict:
-                            print(col,base_dict[col])
-                        print(' ')                            
+                            outs=outs+(col+' '+str(base_dict[col])).ljust(20)
+                            if ctr%4==3:
+                                outs=outs+'\n'
+                            ctr=ctr+1
+                        print(outs)
                         print(len(css4_dict),'CSS4 colors:')
+                        outs=''
+                        ctr=0
                         for col in css4_dict:
-                            print(col,css4_dict[col])
+                            if ctr%3==0:
+                                outs=outs+(col+' '+
+                                           str(css4_dict[col])).ljust(26)
+                            elif ctr%3==1:
+                                outs=outs+(col+' '+
+                                           str(css4_dict[col])).ljust(28)
+                            else:
+                                outs=outs+(col+' '+
+                                           str(css4_dict[col])).ljust(26)
+                                outs=outs+'\n'
+                            ctr=ctr+1
+                        print(outs)
                         print(' ')
+                        if False:
+                            # These are commented out for now because
+                            # o2graph has a hard time with spaces in
+                            # color names
+                            print(len(xkcd_dict),'XKCD colors:')
+                            outs=''
+                            ctr=0
+                            for col in xkcd_dict:
+                                if ctr%2==0:
+                                    outs=outs+(col+' '+
+                                               str(xkcd_dict[col])).ljust(40)
+                                else:
+                                    outs=outs+(col+' '+
+                                               str(xkcd_dict[col])).ljust(39)
+                                    outs=outs+'\n'
+                                ctr=ctr+1
+                            print(outs)
+                            print(' ')
                         print('O2graph also supports the (r,g,b) format',
                               'where r, g, and b')
                         print('  are numbers from 0 to 1.') 
@@ -4012,32 +4052,33 @@ class o2graph_plotter(plot_base):
                     if (cmd=='markers') and (ix_next-ix)==2:
                         print('Matplotlib markers supported by O2graph:')
                         print(str_line)
-                        print('"." point')
-                        print('"," pixel')
-                        print('"o" circle')
-                        print('"v" triangle_down')
-                        print('"^" triangle_up')
-                        print('"<" triangle_left')
-                        print('">" triangle_right')
-                        print('"1" tri_down')
-                        print('"2" tri_up')
-                        print('"3" tri_left')
-                        print('"4" tri_right')
-                        print('"8" octagon')
-                        print('"s" square')
-                        print('"p" pentagon')
-                        print('"P" plus (filled)')
-                        print('"*" star')
-                        print('"h" hexagon1')
-                        print('"H" hexagon2')
-                        print('"+" plus')
-                        print('"x" x')
-                        print('"X" x (filled)')
-                        print('"D" diamond')
-                        print('"d" thin_diamond')
-                        print('"|" vline')
-                        print('"_" hline')
-                        print('"$...$" mathtext string')
+                        outs='. point'.ljust(20)
+                        outs=outs+', pixel'.ljust(20)
+                        outs=outs+'o circle'.ljust(20)
+                        outs=outs+'v triangle_down'.ljust(20)+'\n'
+                        outs=outs+'^ triangle_up'.ljust(20)
+                        outs=outs+'< triangle_left'.ljust(20)
+                        outs=outs+'> triangle_right'.ljust(20)
+                        outs=outs+'1 tri_down'.ljust(20)+'\n'
+                        outs=outs+'2 tri_up'.ljust(20)
+                        outs=outs+'3 tri_left'.ljust(20)
+                        outs=outs+'4 tri_right'.ljust(20)
+                        outs=outs+'8 octagon'.ljust(20)+'\n'
+                        outs=outs+'s square'.ljust(20)
+                        outs=outs+'p pentagon'.ljust(20)
+                        outs=outs+'P plus (filled)'.ljust(20)
+                        outs=outs+'* star'.ljust(20)+'\n'
+                        outs=outs+'h hexagon1'.ljust(20)
+                        outs=outs+'H hexagon2'.ljust(20)
+                        outs=outs+'+ plus'.ljust(20)
+                        outs=outs+'x x'.ljust(20)+'\n'
+                        outs=outs+'X x (filled)'.ljust(20)
+                        outs=outs+'D diamond'.ljust(20)
+                        outs=outs+'d thin_diamond'.ljust(20)
+                        outs=outs+'| vline'.ljust(20)+'\n'
+                        outs=outs+'_ hline'.ljust(20)
+                        outs=outs+'$...$ mathtext string'.ljust(20)
+                        print(outs)
                         finished=True
 
                     # Handle the case of an acol command 
