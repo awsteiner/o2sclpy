@@ -26,11 +26,10 @@
 
 # Current state of yt integration:
 # 
-# Created parameters yt_axis (t/f), yt_axis_color, yt_axis_labels_flat (t/f)
+# Created parameters  yt_axis_color, yt_axis_labels_flat (t/f)
 # yt_resolution [x,y], yt_focus, yt_position, yt_path
-# Created new blank functions yt-add-vol yt-path yt-render
-#
-# Started work on yt-add-vol.
+# Created new blank functions yt-add-vol (for tensor_grid), yt-path,
+# yt-render, yt-scatter (for table)
 #
 # Next things to do:
 # 1) Put tensor_grid data into a numpy array
@@ -243,8 +242,6 @@ base_list=[
      "open, then "+
      "the y-limits on that plot are modified. Future plots are also "+
      "set with the specified y-limits."],
-    ["yt-add-vol","Add a tensor_grid object as a yt volume source",
-     "<color 1> <width 1>","Long desc."],
     ["yt-path","Set yt animation path","",
      "Long desc."],
     ["yt-render","Render the yt visualization",
@@ -314,6 +311,9 @@ extra_list=[
      "for the errorbar command are ecolor=None, elinewidth=None, "+
      "capsize=None, barsabove=False, lolims=False, uplims=False, "+
      "xlolims=False, xuplims=False, errorevery=1, capthick=None, hold=None"],
+    ["table","yt-scatter","Add scattered points to a yt scene",
+     "<x column> <y column> <z column> [color column] [size column]",
+     "Long desc."],
     ["table","plot1","Plot the specified column.","<y> [kwargs]",
      "Plot column <y> versus row number. Some "+
      "useful kwargs are color (c), "+
@@ -424,7 +424,10 @@ extra_list=[
      "is set to 1 before plotting. If z-axis limits are specified, then "+
      "values larger than the upper limit are set equal to the upper limit "+
      "and values smaller than the lower limit are set equal to the lower "+
-     "limit before plotting."]
+     "limit before plotting."],
+    ["tensor_grid","yt-add-vol",
+     "Add a tensor_grid object as a yt volume source",
+     "","Long desc."]
 ]
 
 # A list of 2-element entries, name and description
@@ -457,7 +460,9 @@ param_list=[
      "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')"],
     ["zlo","Lower limit for z-axis (function if starts with '(')."],
     ["zhi","Upper limit for z-axis (function if starts with '(')."],
-    ["zset","If true, z-axis limits have been set (default False)."]
+    ["zset","If true, z-axis limits have been set (default False)."],
+    ["ztitle","Z-axis title. Latex "+
+     "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')"],
 ]
 
 # A list of 2-element entries, name and description
@@ -1164,6 +1169,10 @@ class plot_base:
     """
     Title for y axis (default '')
     """
+    ztitle=''
+    """
+    Title for z axis (default '')
+    """
     xlo=0
     """
     Lower limit for x axis (default 0)
@@ -1236,10 +1245,6 @@ class plot_base:
     fig_size_y=6.0
     """
     The y-scale for the figure object (default 6.0)
-    """
-    yt_axis=True
-    """
-    If true, include an axis in yt visualizations (default True)
     """
     yt_axis_color=[1.0,1.0,1.0,0.5]
     """ 
@@ -1340,6 +1345,8 @@ class plot_base:
             self.xtitle=value
         elif name=='ytitle':
             self.ytitle=value
+        elif name=='ztitle':
+            self.ztitle=value
         elif name=='xlo':
             if value[0]=='(':
                 self.xlo=float(eval(value))
@@ -1464,6 +1471,8 @@ class plot_base:
             print('The value of yset is',self.yset,'.')
         if name=='ytitle':
             print('The value of ytitle is',self.ytitle,'.')
+        if name=='ztitle':
+            print('The value of ztitle is',self.ztitle,'.')
         if name=='zhi':
             print('The value of zhi is',self.zhi,'.')
         if name=='zlo':
@@ -2082,6 +2091,22 @@ class o2graph_plotter(plot_base):
     end user.
     """
 
+    yt_scene=0
+    yt_camera=0
+    yt_init_called=False
+
+    def yt_init(self,ds):
+        from yt.visualization.volume_rendering.api import Scene
+        yt_scene=Scene()
+        yt_camera=yt_scene.add_camera()
+        sc_camera.resolution=self.yt_resolution
+        yt_camera.width=1.5*ds.domain_width[0]
+        yt_camera.position=self.yt_position
+        yt_camera.focus=self.yt_focus
+        yt_camera.north_vector=[0.0,0.0,1.0]
+        yt_camera.switch_orientation()
+        yt_init_called=True
+    
     def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=20,
                           show=False):
         """
@@ -2113,12 +2138,17 @@ class o2graph_plotter(plot_base):
                                1.0-X[i,j,2]/255.0,alpha])
         return(np.array(Y),np.array(Y2))
 
-    def yt_text_to_scene(self,sc,cam,loc,text,scale=0.6,
+    def yt_text_to_scene(self,loc,text,scale=0.6,
                          keyname='o2graph_text'):
+        """
+        At location 'loc' put text 'text' into the scene using
+        specified scale parameter and keyname.
+        """
         
         # Construct orientation vectors
-        view_y=cam.north_vector
-        view_x=-np.cross(view_y,cam.focus-cam.position)
+        view_y=self.yt_camera.north_vector
+        view_x=-np.cross(view_y,self.yt_camera.focus-
+                         self.yt_camera.position)
         # Normalize view_x and view_y
         view_x=view_x/np.sqrt(view_x[0]**2+view_x[1]**2+view_x[2]**2)
         view_y=view_y/np.sqrt(view_y[0]**2+view_y[1]**2+view_y[2]**2)
@@ -2132,14 +2162,14 @@ class o2graph_plotter(plot_base):
     
         # Add the point source
         points_xalabels=PointSource(Y,colors=Y2)
-        sc.add_source(points_xalabels,keyname=keyname)
+        yt_scene.add_source(points_xalabels,keyname=keyname)
 
-    def yt_plot_axes(self,sc,color=[1.0,1.0,1.0,0.5]):
+    def yt_plot_axes(self,color=[1.0,1.0,1.0,0.5]):
         # Point at origin
         vertex_origin=np.array([[0.0,0.0,0.0]])
         color_origin=np.array([color])
         points=PointSource(vertex_origin,colors=color_origin,radii=3)
-        sc.add_source(points,keyname='o2graph_origin')
+        yt_scene.add_source(points,keyname='o2graph_origin')
     
         # Create axis lines
         vertices_axis=np.array([[[0.0,0.0,0.0],[1.0,0.0,0.0]],
@@ -2147,7 +2177,7 @@ class o2graph_plotter(plot_base):
                                 [[0.0,0.0,0.0],[0.0,0.0,1.0]]])
         colors_axis=np.array([color,color,color])
         axis=LineSource(vertices_axis,colors_axis)
-        sc.add_source(axis,keyname='o2graph_axis_lines')
+        yt_scene.add_source(axis,keyname='o2graph_axis_lines')
         
         # Create arrow heads
         list2=[]
@@ -2173,7 +2203,7 @@ class o2graph_plotter(plot_base):
                 clist2.append(color)
                 clist2.append(color)
         points_aheads2=LineSource(np.array(list2),np.array(clist2))
-        sc.add_source(points_aheads2,keyname='o2graph_axis_arrows')
+        yt_scene.add_source(points_aheads2,keyname='o2graph_axis_arrows')
         
     def check_backend(self):
         import matplotlib
@@ -3551,6 +3581,8 @@ class o2graph_plotter(plot_base):
                     print(line[0]+' '+str(self.yset))
                 elif line[0]=='ytitle':
                     print(line[0]+' '+str(self.ytitle))
+                elif line[0]=='ztitle':
+                    print(line[0]+' '+str(self.ztitle))
                 elif line[0]=='zhi':
                     print(line[0]+' '+str(self.zhi))
                 elif line[0]=='zlo':
@@ -3564,8 +3596,6 @@ class o2graph_plotter(plot_base):
         print('yt-related settings:')
         print(' ')
         for line in yt_param_list:
-            if line[0]=='yt-axis':
-                print(line[0]+' '+str(self.yt_axis))
             if line[0]=='yt-axis-color':
                 print(line[0]+' '+str(self.yt_axis_color))
             if line[0]=='yt-axis-labels-flat':
@@ -3801,7 +3831,74 @@ class o2graph_plotter(plot_base):
                                                 bbox=bbox)
                         vol=VolumeSource(ds,field='d')
                         vol.log_field=False
+                        # Setup the transfer function
+                        tf=yt.ColorTransferFunction((0.0,1.0),
+                                                    grey_opacity=False)
+                        wid=0.01
+                        tf.add_gaussian(0.9,wid,[1.0,0.0,0.0,1.0])
+                        tf.add_gaussian(0.5,wid,[0.0,1.0,0.0,1.0])
+                        tf.add_gaussian(0.1,wid,[0.0,0.0,1.0,1.0])
+                        vol.set_transfer_function(tf)
+
+                        if yt_init_called==False:
+                            self.yt_init(ds)
                             
+                elif cmd_name=='yt-scatter':
+
+                    int_ptr=ctypes.POINTER(ctypes.c_int)
+                    char_ptr=ctypes.POINTER(ctypes.c_char)
+                    char_ptr_ptr=ctypes.POINTER(char_ptr)
+                    
+                    # Set up wrapper for type function
+                    type_fn=o2scl_hdf.o2scl_acol_get_type
+                    type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+                    
+                    # Get current type
+                    it=ctypes.c_int(0)
+                    type_ptr=char_ptr()
+                    type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                    
+                    curr_type=b''
+                    for i in range(0,it.value):
+                        curr_type=curr_type+type_ptr[i]
+
+                    if curr_type==b'table':
+                        self.check_backend()
+                        import yt
+                        from yt.visualization.volume_rendering.api \
+                            import PointSource
+
+                        point_temp=np.array([[0.2,0.2,0.2],
+                                             [0.8,0.8,0.8]])
+                        color_temp=np.array([[1.0,1.0,1.0],
+                                             [1.0,1.0,1.0]])
+                        print(point_temp.shape)
+                        print(color_temp.shape)
+                        ps=pointSource(point_temp,colors=color_temp,
+                                       radii=3)
+                        yt_scene.add_source(ps,keyname='o2graph_point')
+                        
+                        if yt_init_called==False:
+                            self.yt_init(ps)
+                            
+                elif cmd_name=='yt-render':
+                    
+                    if self.xtitle!='':
+                        yt_text_to_scene([0.5,-0.05,-0.05],
+                                         self.xtitle,
+                                         keyname='o2graph_x_axis')
+                    if self.ytitle!='':
+                        yt_text_to_scene([-0.05,0.5,-0.05],
+                                         self.ytitle,
+                                         keyname='o2graph_y_axis')
+                    if self.ztitle!='':
+                        yt_text_to_scene([-0.05,-0.05,0.5],
+                                         self.ztitle,
+                                         keyname='o2graph_z_axis')
+                        
+                    yt_scene.render()
+                    yt_scene.save('test.png')
+                    
                 elif cmd_name=='help' or cmd_name=='h':
                     
                     if self.verbose>2:
