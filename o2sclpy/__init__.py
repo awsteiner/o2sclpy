@@ -3809,6 +3809,8 @@ class o2graph_plotter(plot_base):
                     int_ptr=ctypes.POINTER(ctypes.c_int)
                     char_ptr=ctypes.POINTER(ctypes.c_char)
                     char_ptr_ptr=ctypes.POINTER(char_ptr)
+                    double_ptr=ctypes.POINTER(ctypes.c_double)
+                    double_ptr_ptr=ctypes.POINTER(double_ptr)
                     
                     # Set up wrapper for type function
                     type_fn=o2scl_hdf.o2scl_acol_get_type
@@ -3828,6 +3830,39 @@ class o2graph_plotter(plot_base):
                         import yt
                         from yt.visualization.volume_rendering.api \
                             import VolumeSource
+
+                        # Set up wrapper for get function
+                        get_fn=o2scl_hdf.o2scl_acol_get_tensor_grid3
+                        get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr,
+                                         int_ptr,double_ptr_ptr,
+                                         double_ptr_ptr,double_ptr_ptr,
+                                         double_ptr_ptr]
+                        get_fn.restype=ctypes.c_int
+
+                        # Call get function
+                        nx=ctypes.c_int(0)
+                        ny=ctypes.c_int(0)
+                        nz=ctypes.c_int(0)
+                        ret=ctypes.c_int(0)
+                        gridx=double_ptr()
+                        gridy=double_ptr()
+                        gridz=double_ptr()
+                        data=double_ptr()
+                        ret=get_fn(amp,ctypes.byref(nx),ctypes.byref(ny),
+                                   ctypes.byref(nz),ctypes.byref(gridx),
+                                   ctypes.byref(gridy),ctypes.byref(gridz),
+                                   ctypes.byref(data))
+
+                        total_size=nx*ny*nz
+                        maxval=data[0]
+                        minval=data[0]
+                        for ij in range(0,total_size):
+                            if data[ij]>maxval:
+                                maxval=data[ij]
+                            if data[ij]<minval:
+                                minval=data[ij]
+                        drange=maxval-minval
+                        
                         arr=numpy.zeros(shape=(4,4,4))
                         bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
                         ds=yt.load_uniform_grid(dict(d=arr),arr.shape,
@@ -3835,12 +3870,15 @@ class o2graph_plotter(plot_base):
                         vol=VolumeSource(ds,field='d')
                         vol.log_field=False
                         # Setup the transfer function
-                        tf=yt.ColorTransferFunction((0.0,1.0),
+                        tf=yt.ColorTransferFunction((minval,maxval),
                                                     grey_opacity=False)
                         wid=0.01
-                        tf.add_gaussian(0.9,wid,[1.0,0.0,0.0,1.0])
-                        tf.add_gaussian(0.5,wid,[0.0,1.0,0.0,1.0])
-                        tf.add_gaussian(0.1,wid,[0.0,0.0,1.0,1.0])
+                        tf.add_gaussian(minval+drange*0.9,wid,
+                                        [1.0,0.0,0.0,1.0])
+                        tf.add_gaussian(minval+drange*0.5,wid,
+                                        [0.0,1.0,0.0,1.0])
+                        tf.add_gaussian(minval+drange*0.1,wid,
+                                        [0.0,0.0,1.0,1.0])
                         vol.set_transfer_function(tf)
 
                         if yt_init_called==False:
