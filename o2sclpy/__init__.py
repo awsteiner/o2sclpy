@@ -1257,7 +1257,7 @@ class plot_base:
     """ 
     If true, axis labels are always parallel to the camera (default True)
     """
-    yt_resolution=[512,512]
+    yt_resolution=(512,512)
     """
     Resolution for yt rendering (default [512,512])
     """
@@ -2099,16 +2099,25 @@ class o2graph_plotter(plot_base):
     yt_init_called=False
 
     def yt_init(self,ds):
+        """
+        Documentation for yt_init()
+        """
+        
         from yt.visualization.volume_rendering.api import Scene
-        yt_scene=Scene()
-        yt_camera=yt_scene.add_camera()
-        sc_camera.resolution=self.yt_resolution
-        yt_camera.width=1.5*ds.domain_width[0]
-        yt_camera.position=self.yt_position
-        yt_camera.focus=self.yt_focus
-        yt_camera.north_vector=[0.0,0.0,1.0]
-        yt_camera.switch_orientation()
-        yt_init_called=True
+        
+        self.yt_scene=Scene()
+        self.yt_camera=self.yt_scene.add_camera()
+        print('1',self.yt_resolution)
+        self.yt_camera.resolution=self.yt_resolution
+        print('2')
+        print(ds)
+        self.yt_camera.width=1.5*ds.domain_width[0]
+        print('3')
+        self.yt_camera.position=self.yt_position
+        self.yt_camera.focus=self.yt_focus
+        self.yt_camera.north_vector=[0.0,0.0,1.0]
+        self.yt_camera.switch_orientation()
+        self.yt_init_called=True
     
     def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=20,
                           show=False):
@@ -3853,6 +3862,9 @@ class o2graph_plotter(plot_base):
                                    ctypes.byref(gridy),ctypes.byref(gridz),
                                    ctypes.byref(data))
 
+                        nx=nx.value
+                        ny=ny.value
+                        nz=nz.value
                         total_size=nx*ny*nz
                         maxval=data[0]
                         minval=data[0]
@@ -3862,13 +3874,24 @@ class o2graph_plotter(plot_base):
                             if data[ij]<minval:
                                 minval=data[ij]
                         drange=maxval-minval
+
+                        if self.xset==False:
+                            self.xlo=gridx[0]
+                            self.xhi=gridx[nx-1]
+                        if self.yset==False:
+                            self.ylo=gridy[0]
+                            self.yhi=gridy[ny-1]
+                        if self.zset==False:
+                            self.zlo=gridz[0]
+                            self.zhi=gridz[nz-1]
                         
-                        arr=numpy.zeros(shape=(4,4,4))
+                        arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
                         bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
-                        ds=yt.load_uniform_grid(dict(d=arr),arr.shape,
+                        ds=yt.load_uniform_grid(dict(density=arr),arr.shape,
                                                 bbox=bbox)
-                        vol=VolumeSource(ds,field='d')
+                        vol=VolumeSource(ds,field='density')
                         vol.log_field=False
+                        
                         # Setup the transfer function
                         tf=yt.ColorTransferFunction((minval,maxval),
                                                     grey_opacity=False)
@@ -3881,7 +3904,7 @@ class o2graph_plotter(plot_base):
                                         [0.0,0.0,1.0,1.0])
                         vol.set_transfer_function(tf)
 
-                        if yt_init_called==False:
+                        if self.yt_init_called==False:
                             self.yt_init(ds)
                             
                 elif cmd_name=='yt-scatter':
