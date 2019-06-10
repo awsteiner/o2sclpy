@@ -34,3 +34,8 @@ reinstall:
 	$(PIP3_CMD) install .
 
 .empty:
+
+yt-test:
+	o2graph -backend Agg -set verbose 2 -create tensor_grid 3 10 10 10 \
+		-entry 1 1 1 -function "i0*sin(i1)*i2" -entry 1 1 1 \
+		-list -yt-add-vol

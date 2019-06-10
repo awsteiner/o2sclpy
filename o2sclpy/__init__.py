@@ -3887,8 +3887,15 @@ class o2graph_plotter(plot_base):
                         
                         arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
                         bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
-                        ds=yt.load_uniform_grid(dict(density=arr),arr.shape,
-                                                bbox=bbox)
+                        print('arr',arr)
+                        ds=yt.load_uniform_grid(dict(density=arr),
+                                                arr.shape,bbox=bbox)
+                        print('ds',ds)
+
+                        from yt.visualization.volume_rendering.api import Scene
+                        
+                        self.yt_scene=Scene()
+                        
                         vol=VolumeSource(ds,field='density')
                         vol.log_field=False
                         
@@ -3904,9 +3911,25 @@ class o2graph_plotter(plot_base):
                                         [0.0,0.0,1.0,1.0])
                         vol.set_transfer_function(tf)
 
-                        if self.yt_init_called==False:
-                            self.yt_init(ds)
-                            
+                        self.yt_scene.add_source(vol,keyname='vol1')
+                        
+                        self.yt_camera=self.yt_scene.add_camera()
+                        print('1',self.yt_resolution)
+                        self.yt_camera.resolution=self.yt_resolution
+                        print('2')
+                        print(ds.domain_width[0])
+                        print('2b')
+                        self.yt_camera.width=1.5*ds.domain_width[0]
+                        print('3')
+                        self.yt_camera.position=self.yt_position
+                        self.yt_camera.focus=self.yt_focus
+                        self.yt_camera.north_vector=[0.0,0.0,1.0]
+                        self.yt_camera.switch_orientation()
+                        self.yt_init_called=True
+
+                        self.yt_scene.render()
+                        self.yt_scene.save('test.png',sigma_clip=1.0)
+                        
                 elif cmd_name=='yt-scatter':
 
                     int_ptr=ctypes.POINTER(ctypes.c_int)
