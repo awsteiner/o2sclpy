@@ -2096,28 +2096,29 @@ class o2graph_plotter(plot_base):
 
     yt_scene=0
     yt_camera=0
-    yt_init_called=False
+    yt_created_scene=False
+    yt_created_camera=False
 
-    def yt_init(self,ds):
+    def yt_create_scene(self):
         """
-        Documentation for yt_init()
+        Documentation for yt_create_scene()
         """
-        
         from yt.visualization.volume_rendering.api import Scene
-        
         self.yt_scene=Scene()
+        self.yt_created_scene=True
+        
+    def yt_create_camera(self,ds):
+        """
+        Documentation for yt_create_camera()
+        """
         self.yt_camera=self.yt_scene.add_camera()
-        print('1',self.yt_resolution)
         self.yt_camera.resolution=self.yt_resolution
-        print('2')
-        print(ds)
         self.yt_camera.width=1.5*ds.domain_width[0]
-        print('3')
         self.yt_camera.position=self.yt_position
         self.yt_camera.focus=self.yt_focus
         self.yt_camera.north_vector=[0.0,0.0,1.0]
         self.yt_camera.switch_orientation()
-        self.yt_init_called=True
+        self.yt_created_camera=True
     
     def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=20,
                           show=False):
@@ -3839,6 +3840,8 @@ class o2graph_plotter(plot_base):
                         import yt
                         from yt.visualization.volume_rendering.api \
                             import VolumeSource
+                        from yt.visualization.volume_rendering.transfer_function_helper \
+    import TransferFunctionHelper
 
                         # Set up wrapper for get function
                         get_fn=o2scl_hdf.o2scl_acol_get_tensor_grid3
@@ -3887,49 +3890,46 @@ class o2graph_plotter(plot_base):
                         
                         arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
                         bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
-                        print('arr',arr)
                         ds=yt.load_uniform_grid(dict(density=arr),
                                                 arr.shape,bbox=bbox)
-                        print('ds',ds)
 
-                        from yt.visualization.volume_rendering.api import Scene
-                        
-                        self.yt_scene=Scene()
-                        
                         vol=VolumeSource(ds,field='density')
                         vol.log_field=False
-                        
+
                         # Setup the transfer function
-                        tf=yt.ColorTransferFunction((minval,maxval),
-                                                    grey_opacity=False)
-                        wid=0.01
-                        tf.add_gaussian(minval+drange*0.9,wid,
-                                        [1.0,0.0,0.0,1.0])
-                        tf.add_gaussian(minval+drange*0.5,wid,
-                                        [0.0,1.0,0.0,1.0])
-                        tf.add_gaussian(minval+drange*0.1,wid,
-                                        [0.0,0.0,1.0,1.0])
-                        vol.set_transfer_function(tf)
+                        if True:
+                            tf=yt.ColorTransferFunction((minval,maxval),
+                                                        grey_opacity=False)
+                            wid=0.012
+                            tf.add_gaussian(minval+drange*0.9,wid,
+                                            [1.0,0.0,0.0,1.0])
+                            wid=0.01
+                            tf.add_gaussian(minval+drange*0.5,wid,
+                                            [0.0,1.0,0.0,1.0])
+                            wid=0.012
+                            tf.add_gaussian(minval+drange*0.1,wid,
+                                            [0.0,0.0,1.0,1.0])
+                            vol.set_transfer_function(tf)
+                            print(tf)
+                        else:
+                            tfh=TransferFunctionHelper(ds)
+                            tfh.set_field('density')
+                            tfh.set_log(False)
+                            tfh.set_bounds()
+                            tfh.build_transfer_function()
+                            tfh.tf.add_layers(3)
+                            #tfh.plot('tf.png')
+                            vol.set_transfer_function(tfh.tf)
+                            print(tfh.tf)
+                        
+                        if self.yt_created_scene==False:
+                            self.yt_create_scene()
 
                         self.yt_scene.add_source(vol,keyname='vol1')
-                        
-                        self.yt_camera=self.yt_scene.add_camera()
-                        print('1',self.yt_resolution)
-                        self.yt_camera.resolution=self.yt_resolution
-                        print('2')
-                        print(ds.domain_width[0])
-                        print('2b')
-                        self.yt_camera.width=1.5*ds.domain_width[0]
-                        print('3')
-                        self.yt_camera.position=self.yt_position
-                        self.yt_camera.focus=self.yt_focus
-                        self.yt_camera.north_vector=[0.0,0.0,1.0]
-                        self.yt_camera.switch_orientation()
-                        self.yt_init_called=True
+                            
+                        if self.yt_created_camera==False:
+                            self.yt_create_camera(ds)
 
-                        self.yt_scene.render()
-                        self.yt_scene.save('test.png',sigma_clip=1.0)
-                        
                 elif cmd_name=='yt-scatter':
 
                     int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -3983,9 +3983,9 @@ class o2graph_plotter(plot_base):
                                          self.ztitle,
                                          keyname='o2graph_z_axis')
                         
-                    yt_scene.render()
-                    yt_scene.save('test.png')
-                    
+                    self.yt_scene.render()
+                    self.yt_scene.save(strlist[ix+1],sigma_clip=1.0)
+
                 elif cmd_name=='help' or cmd_name=='h':
                     
                     if self.verbose>2:
