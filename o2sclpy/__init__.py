@@ -4080,6 +4080,8 @@ class o2graph_plotter(plot_base):
                             for i in range (0,len(str_list)):
                                 print(str_list[i])
                             print(' ')
+                        print('Remember that colormaps can all be',
+                              'reversed by using a "_r" suffix.')
                         finished=True
 
                     if (cmd=='cmaps') and (ix_next-ix)==2:
@@ -4171,13 +4173,56 @@ class o2graph_plotter(plot_base):
                                              ha='center',va='center',fontsize=16,
                                              transform=self.axes[0][0].transAxes)
                         plot.savefig('o2graph_cmaps.png')
-                        print('Created file o2graph_cmaps.png')
+                        print('Created file o2graph_cmaps.png.')
+                        print('Remember that colormaps can all be',
+                              'reversed by using a "_r" suffix.')
                         plot.show()
                         finished=True
 
                     if (cmd=='colors') and (ix_next-ix)==2:
                         from matplotlib import colors as mcolors
-                        print('Matplotlib colors supported by O2graph:')
+
+                        colors = dict(**mcolors.CSS4_COLORS)
+                        by_hsv = sorted((tuple(mcolors.rgb_to_hsv(mcolors.to_rgba(color)[:3])), name)
+                                        for name, color in colors.items())
+                        sorted_names = [name for hsv, name in by_hsv]
+                        n=len(sorted_names)
+                        ncols=4
+                        nrows=n//ncols
+                        plot.rc('text',usetex=True)
+                        plot.rc('font',family='serif')
+                        self.fig,self.axes=plot.subplots(figsize=(12,10))
+                        # Get height and width
+                        X, Y = self.fig.get_dpi()*self.fig.get_size_inches()
+                        h=Y/(nrows+1)
+                        w=X/ncols
+
+                        ax=self.axes
+                        for i, name in enumerate(sorted_names):
+                            row=i%nrows
+                            col=i//nrows
+                            y=Y-(row*h)-h
+                            xi_line=w*(col+0.05)
+                            xf_line=w*(col+0.25)
+                            xi_text=w*(col+0.3)
+                            ax.text(xi_text,y,name,fontsize=(h*0.6),
+                                    ha='left',va='center')
+
+                            ax.hlines(y+h*0.1,xi_line,xf_line,
+                                      color=colors[name],linewidth=(h*0.8))
+
+                            ax.set_xlim(0,X)
+                            ax.set_ylim(0,Y)
+                            ax.set_axis_off()
+                            
+                            self.fig.subplots_adjust(left=0,right=1,
+                                                     top=1,bottom=0,
+                                                     hspace=0,wspace=0)
+                        plot.show()
+                        
+                    if (cmd=='color-list') and (ix_next-ix)==2:
+                        from matplotlib import colors as mcolors
+                        print('Matplotlib colors:')
                         print(str_line)
                         base_dict=dict(mcolors.BASE_COLORS)
                         css4_dict=dict(**mcolors.CSS4_COLORS)
@@ -4208,27 +4253,30 @@ class o2graph_plotter(plot_base):
                             ctr=ctr+1
                         print(outs)
                         print(' ')
-                        if False:
-                            # These are commented out for now because
-                            # o2graph has a hard time with spaces in
-                            # color names
-                            print(len(xkcd_dict),'XKCD colors:')
-                            outs=''
-                            ctr=0
-                            for col in xkcd_dict:
-                                if ctr%2==0:
-                                    outs=outs+(col+' '+
-                                               str(xkcd_dict[col])).ljust(40)
-                                else:
-                                    outs=outs+(col+' '+
-                                               str(xkcd_dict[col])).ljust(39)
-                                    outs=outs+'\n'
-                                ctr=ctr+1
-                            print(outs)
-                            print(' ')
-                        print('O2graph also supports the (r,g,b) format',
-                              'where r, g, and b')
-                        print('  are numbers from 0 to 1.') 
+                        # These are commented out for now because
+                        # o2graph has a hard time with spaces in
+                        # color names
+                        print(len(xkcd_dict),'XKCD colors:')
+                        outs=''
+                        ctr=0
+                        for col in xkcd_dict:
+                            if ctr%2==0:
+                                outs=outs+(col+' '+
+                                           str(xkcd_dict[col])).ljust(40)
+                            else:
+                                outs=outs+(col+' '+
+                                           str(xkcd_dict[col])).ljust(39)
+                                outs=outs+'\n'
+                            ctr=ctr+1
+                        print(outs)
+                        print(' ')
+                        outs=('O2graph also supports the (r,g,b) format '+
+                              'and the HTML format. For (r,g,b) colors, '+
+                              'the r, g, and b numbers should be from '+
+                              '0.0 to 1.0. The HTML format is #RRGGBB '+
+                              'where RR, GG, and BB are two-digit '+
+                              'hexadecimal values.')
+                        print(outs)
                         finished=True
 
                     if (cmd=='markers') and (ix_next-ix)==2:
