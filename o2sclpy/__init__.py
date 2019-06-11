@@ -4082,10 +4082,12 @@ class o2graph_plotter(plot_base):
                             print(' ')
                         finished=True
 
-                    if (cmd=='cmaps') and (ix_next-ix)==2:
+                    if (cmd=='cmaps' or cmd=='cmap') and (ix_next-ix)==2:
 
                         if self.new_cmaps_defined==False:
                             self.new_cmaps()
+
+                        print('Generating colormap summary figure.')
                         
                         # An internal implementation of
                         # https://matplotlib.org/3.1.0/gallery/
@@ -4112,7 +4114,7 @@ class o2graph_plotter(plot_base):
 
                         # Manually create figure and axes 
                         fig_x=7.0
-                        fig_y=1.0*(0.35+0.15+(nrows+(nrows-1)*0.1)*0.22)
+                        fig_y=0.95*(0.35+0.15+(nrows+(nrows-1)*0.1)*0.22)
                         (self.fig,self.axes)=plot.subplots(nrows=nrows,ncols=ncols,
                                                            figsize=(fig_x,fig_y))
                         self.fig.subplots_adjust(top=1.0-0.35/fig_y,
