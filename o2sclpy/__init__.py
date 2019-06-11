@@ -97,6 +97,9 @@ cmaps=[('Perceptually Uniform Sequential',
          'gnuplot','gnuplot2','CMRmap','cubehelix','brg','hsv',
          'gist_rainbow','rainbow','jet','nipy_spectral','gist_ncar'])]
 
+new_cmaps=[('O2sclpy cmaps',
+            ['jet2','pastel2','reds2','greens2','blues2'])]
+
 """
 The version number string
 """
@@ -1273,6 +1276,7 @@ class plot_base:
     """
     yt camera path (default ['','',''])
     """
+    new_cmaps_defined=False
     
     def new_cmaps(self):
         """
@@ -1324,6 +1328,7 @@ class plot_base:
                'blue': ((0.0,1.0,1.0),(1.0,1.0,1.0))}
         blues2=LinearSegmentedColormap('blues2',cdict)
         plot.register_cmap(cmap=blues2)
+        new_cmaps_defined=True
         
     def set(self,name,value):
         """
@@ -4079,6 +4084,9 @@ class o2graph_plotter(plot_base):
 
                     if (cmd=='cmaps') and (ix_next-ix)==2:
 
+                        if self.new_cmaps_defined==False:
+                            self.new_cmaps()
+                        
                         # An internal implementation of
                         # https://matplotlib.org/3.1.0/gallery/
                         # color/colormap_reference.html
@@ -4092,6 +4100,9 @@ class o2graph_plotter(plot_base):
                         
                         nrows=0
                         for category, cmap_list in cmaps:
+                            for name in cmap_list:
+                                nrows=nrows+1
+                        for category, cmap_list in new_cmaps:
                             for name in cmap_list:
                                 nrows=nrows+1
                         ncols=3
@@ -4135,9 +4146,28 @@ class o2graph_plotter(plot_base):
                                 if row_ctr>=nrows:
                                     row_ctr=0
                                     col_ctr=col_ctr+1
-
+                        for category, cmap_list in new_cmaps:
+                            for name in cmap_list:
+                                name2=name.replace('_','\_')
+                                ax=self.axes[row_ctr][col_ctr]
+                                ax.imshow(gradient,aspect='auto',
+                                                 cmap=plot.get_cmap(name))
+                                r=patches.Rectangle((0.32,0.1),0.36,0.8,0,
+                                                    fc=(1,1,1,0.7),lw=0,
+                                                    fill=True,
+                                                    transform=ax.transAxes)
+                                ax.add_patch(r)
+                                ax.text(0.5,0.45,name2,
+                                        va='center',ha='center',
+                                        fontsize=8,color=(0,0,0),
+                                        transform=ax.transAxes)
+                                row_ctr=row_ctr+1
+                                if row_ctr>=nrows:
+                                    row_ctr=0
+                                    col_ctr=col_ctr+1
+    
                         self.axes[0][0].text(1.5,1.7,
-                                             r'$ \mathrm{O}_2\mathrm{graph~colormap~reference} $',
+                                             r'$ \mathrm{O}_2\mathrm{sclpy~colormap~reference} $',
                                              ha='center',va='center',fontsize=16,
                                              transform=self.axes[0][0].transAxes)
                         plot.savefig('o2graph_cmaps.png')
