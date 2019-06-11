@@ -4064,7 +4064,7 @@ class o2graph_plotter(plot_base):
                                 print(str_list[i])
 
                     finished=False
-                    if (cmd=='cmaps') and (ix_next-ix)==2:
+                    if (cmd=='cmaps_list') and (ix_next-ix)==2:
                         print('Matplotlib colormaps:')
                         print(str_line)
                         for category, cmap_list in cmaps:
@@ -4075,6 +4075,74 @@ class o2graph_plotter(plot_base):
                             for i in range (0,len(str_list)):
                                 print(str_list[i])
                             print(' ')
+                        finished=True
+
+                    if (cmd=='cmaps') and (ix_next-ix)==2:
+
+                        # An internal implementation of
+                        # https://matplotlib.org/3.1.0/gallery/
+                        # color/colormap_reference.html
+                        
+                        self.left_margin=0.01
+                        self.right_margin=0.01
+                        self.top_margin=0.01
+                        self.bottom_margin=0.01
+                        gradient=numpy.linspace(0,1,256)
+                        gradient=numpy.vstack((gradient,gradient))
+                        
+                        nrows=0
+                        for category, cmap_list in cmaps:
+                            for name in cmap_list:
+                                nrows=nrows+1
+                        ncols=3
+                        while nrows%ncols!=0:
+                            nrows=nrows+1
+                        nrows=int((nrows)/ncols)
+
+                        # Manually create figure and axes 
+                        fig_x=7.0
+                        fig_y=1.0*(0.35+0.15+(nrows+(nrows-1)*0.1)*0.22)
+                        (self.fig,self.axes)=plot.subplots(nrows=nrows,ncols=ncols,
+                                                           figsize=(fig_x,fig_y))
+                        self.fig.subplots_adjust(top=1.0-0.35/fig_y,
+                                                 bottom=0.15/fig_y,
+                                                 left=0.01,right=0.99,wspace=0.01)
+                        plot.rc('text',usetex=True)
+                        plot.rc('font',family='serif')
+
+                        for i in range(0,nrows):
+                            for j in range(0,ncols):
+                                self.axes[i][j].set_axis_off()
+                        
+                        row_ctr=0
+                        col_ctr=0
+                        for category, cmap_list in cmaps:
+                            for name in cmap_list:
+                                name2=name.replace('_','\_')
+                                ax=self.axes[row_ctr][col_ctr]
+                                ax.imshow(gradient,aspect='auto',
+                                                 cmap=plot.get_cmap(name))
+                                r=patches.Rectangle((0.32,0.1),0.36,0.8,0,
+                                                    fc=(1,1,1,0.7),lw=0,
+                                                    fill=True,
+                                                    transform=ax.transAxes)
+                                ax.add_patch(r)
+                                ax.text(0.5,0.45,name2,
+                                                    va='center',ha='center',
+                                                    fontsize=8,color=(0,0,0),
+                                                    transform=ax.transAxes)
+                                row_ctr=row_ctr+1
+                                if row_ctr>=nrows:
+                                    row_ctr=0
+                                    col_ctr=col_ctr+1
+
+                        self.axes[0][0].text(1.5,1.7,
+                                             r'$ \mathrm{O}_2\mathrm{graph~colormap~reference} $',
+                                             ha='center',va='center',fontsize=16,
+                                             transform=self.axes[0][0].transAxes)
+                        plot.savefig('o2graph_cmaps.png')
+                        print('Created file o2graph_cmaps.png')
+                        plot.show()
                         finished=True
 
                     if (cmd=='colors') and (ix_next-ix)==2:
