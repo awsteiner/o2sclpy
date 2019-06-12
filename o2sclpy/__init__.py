@@ -4341,7 +4341,7 @@ class o2graph_plotter(plot_base):
                         print(outs)
                         finished=True
 
-                    if (cmd=='markers') and (ix_next-ix)==2:
+                    if (cmd=='marker-list') and (ix_next-ix)==2:
                         print('Matplotlib markers supported by O2graph:')
                         print(str_line)
                         outs='. point'.ljust(20)
@@ -4373,6 +4373,59 @@ class o2graph_plotter(plot_base):
                         print(outs)
                         finished=True
 
+                    if (cmd=='markers') and (ix_next-ix)==2:
+                        mlist=[[',','pixel'],
+                               ['o','circle'],
+                               ['v','triangle_down'],
+                               ['\^','triangle_up'],
+                               ['<','triangle_left'],
+                               ['>','triangle_right'],
+                               ['1','tri_down'],
+                               ['2','tri_up'],
+                               ['3','tri_left'],
+                               ['4','tri_right'],
+                               ['8','octagon'],
+                               ['s','square'],
+                               ['p','pentagon'],
+                               ['P','plus (filled)'],
+                               ['*','star'],
+                               ['h','hexagon1'],
+                               ['H','hexagon2'],
+                               ['+','plus'],
+                               ['x','x'],
+                               ['X','x (filled)'],
+                               ['D','diamond'],
+                               ['d','thin_diamond'],
+                               ['|','vline'],
+                               ['_','hline'],
+                               ['$...$','mathtext string']]
+                        nmark=len(mlist)
+                        ncols=2
+                        nrows=(nmark+1)/ncols
+                        self.left_margin=0.01
+                        self.right_margin=0.01
+                        self.top_margin=0.01
+                        self.bottom_margin=0.01
+                        self.canvas()
+                        self.axes.set_axis_off()
+                        row_ctr=0
+                        col_ctr=0
+                        for entry in mlist:
+                            self.text(str((col_ctr+0.1)/(ncols)),
+                                      str((nrows-row_ctr)/(nrows+1)),
+                                      entry[0],
+                                      va='center',ha='center')
+                            self.text(str((col_ctr+0.2)/(ncols)),
+                                      str((nrows-row_ctr)/(nrows+1)),
+                                      entry[1].replace('_','\_'),
+                                      va='center',ha='left')
+                            row_ctr=row_ctr+1
+                            if row_ctr>=nrows:
+                                row_ctr=0
+                                col_ctr=col_ctr+1
+                        plot.show()
+                        finished=True
+                        
                     # Handle the case of an acol command 
                     if match==False and finished==False:
                         self.gen(o2scl_hdf,amp,cmd_name,
