@@ -4117,11 +4117,14 @@ class o2graph_plotter(plot_base):
                         # Manually create figure and axes 
                         fig_x=7.0
                         fig_y=0.95*(0.35+0.15+(nrows+(nrows-1)*0.1)*0.22)
-                        (self.fig,self.axes)=plot.subplots(nrows=nrows,ncols=ncols,
-                                                           figsize=(fig_x,fig_y))
+                        (self.fig,self.axes)=plot.subplots(nrows=nrows,
+                                                           ncols=ncols,
+                                                           figsize=(fig_x,
+                                                                    fig_y))
                         self.fig.subplots_adjust(top=1.0-0.35/fig_y,
                                                  bottom=0.15/fig_y,
-                                                 left=0.01,right=0.99,wspace=0.01)
+                                                 left=0.01,right=0.99,
+                                                 wspace=0.01)
                         plot.rc('text',usetex=True)
                         plot.rc('font',family='serif')
 
@@ -4169,11 +4172,13 @@ class o2graph_plotter(plot_base):
                                 if row_ctr>=nrows:
                                     row_ctr=0
                                     col_ctr=col_ctr+1
-    
-                        self.axes[0][0].text(1.5,1.7,
-                                             r'$ \mathrm{O}_2\mathrm{sclpy~colormap~reference} $',
-                                             ha='center',va='center',fontsize=16,
-                                             transform=self.axes[0][0].transAxes)
+
+                        ax=self.axes[0][0]
+                        ax.text(1.5,1.7,
+                                (r'$ \mathrm{O}_2\mathrm{sc'+
+                                 'lpy~colormap~reference} $'),
+                                ha='center',va='center',fontsize=16,
+                                transform=ax.transAxes)
                         plot.savefig('o2graph_cmaps.png')
                         print('Created file o2graph_cmaps.png.')
                         print('Remember that colormaps can all be',
@@ -4182,20 +4187,20 @@ class o2graph_plotter(plot_base):
                         finished=True
 
                     if (cmd=='colors') and (ix_next-ix)==2:
-                        from matplotlib import colors as mcolors
+                        from matplotlib import colors as mc
 
-                        colors = dict(**mcolors.CSS4_COLORS)
-                        by_hsv = sorted((tuple(mcolors.rgb_to_hsv(mcolors.to_rgba(color)[:3])), name)
+                        colors=dict(**mc.CSS4_COLORS)
+                        by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
                                         for name, color in colors.items())
-                        sorted_names = [name for hsv, name in by_hsv]
+                        sorted_names=[name for hsv, name in by_hsv]
                         n=len(sorted_names)
                         ncols=4
                         nrows=n//ncols
                         plot.rc('text',usetex=True)
                         plot.rc('font',family='serif')
-                        self.fig,self.axes=plot.subplots(figsize=(12,10))
+                        self.fig,self.axes=plot.subplots(figsize=(8,6.4))
                         # Get height and width
-                        X, Y = self.fig.get_dpi()*self.fig.get_size_inches()
+                        X,Y=self.fig.get_dpi()*self.fig.get_size_inches()
                         h=Y/(nrows+1)
                         w=X/ncols
 
@@ -4220,7 +4225,54 @@ class o2graph_plotter(plot_base):
                             self.fig.subplots_adjust(left=0,right=1,
                                                      top=1,bottom=0,
                                                      hspace=0,wspace=0)
+                        plot.savefig('o2graph_colors.png')
+                        print('Created file o2graph_colors.png.')
                         plot.show()
+                        finished=True
+                        
+                    if (cmd=='xkcd-colors') and (ix_next-ix)==2:
+                        from matplotlib import colors as mc
+
+                        colors=dict(**mc.XKCD_COLORS)
+                        by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
+                                        for name, color in colors.items())
+                        sorted_names=[name for hsv, name in by_hsv]
+                        n=len(sorted_names)
+                        ncols=4
+                        nrows=n//ncols
+                        plot.rc('text',usetex=True)
+                        plot.rc('font',family='serif')
+                        self.fig,self.axes=plot.subplots(figsize=(8,6.4))
+                        # Get height and width
+                        X,Y=self.fig.get_dpi()*self.fig.get_size_inches()
+                        h=Y/(nrows+1)
+                        w=X/ncols
+
+                        ax=self.axes
+                        for i, name in enumerate(sorted_names):
+                            row=i%nrows
+                            col=i//nrows
+                            y=Y-(row*h)-h
+                            xi_line=w*(col+0.05)
+                            xf_line=w*(col+0.25)
+                            xi_text=w*(col+0.3)
+                            ax.text(xi_text,y,name,fontsize=(h*0.6),
+                                    ha='left',va='center')
+
+                            ax.hlines(y+h*0.1,xi_line,xf_line,
+                                      color=colors[name],linewidth=(h*0.8))
+
+                            ax.set_xlim(0,X)
+                            ax.set_ylim(0,Y)
+                            ax.set_axis_off()
+                            
+                            self.fig.subplots_adjust(left=0,right=1,
+                                                     top=1,bottom=0,
+                                                     hspace=0,wspace=0)
+                        plot.savefig('o2graph_colors.png')
+                        print('Created file o2graph_colors.png.')
+                        plot.show()
+                        finished=True
                         
                     if (cmd=='color-list') and (ix_next-ix)==2:
                         from matplotlib import colors as mcolors
@@ -4228,7 +4280,6 @@ class o2graph_plotter(plot_base):
                         print(str_line)
                         base_dict=dict(mcolors.BASE_COLORS)
                         css4_dict=dict(**mcolors.CSS4_COLORS)
-                        xkcd_dict=dict(**mcolors.XKCD_COLORS)
                         print(len(base_dict),'base colors:')
                         outs=''
                         ctr=0
@@ -4255,6 +4306,23 @@ class o2graph_plotter(plot_base):
                             ctr=ctr+1
                         print(outs)
                         print(' ')
+                        outs=('O2graph also supports the (r,g,b) format '+
+                              'the HTML format, and the XKCD colors. '+
+                              'For (r,g,b) colors, '+
+                              'the r, g, and b numbers should be from '+
+                              '0.0 to 1.0. The HTML format is #RRGGBB '+
+                              'where RR, GG, and BB are two-digit '+
+                              'hexadecimal values.')
+                        str_list=textwrap.wrap(outs,79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                        finished=True
+                        
+                    if (cmd=='xkcd-color-list') and (ix_next-ix)==2:
+                        from matplotlib import colors as mcolors
+                        xkcd_dict=dict(**mcolors.XKCD_COLORS)
+                        print('XKCD colors:')
+                        print(str_line)
                         # These are commented out for now because
                         # o2graph has a hard time with spaces in
                         # color names
@@ -4270,14 +4338,6 @@ class o2graph_plotter(plot_base):
                                            str(xkcd_dict[col])).ljust(39)
                                 outs=outs+'\n'
                             ctr=ctr+1
-                        print(outs)
-                        print(' ')
-                        outs=('O2graph also supports the (r,g,b) format '+
-                              'and the HTML format. For (r,g,b) colors, '+
-                              'the r, g, and b numbers should be from '+
-                              '0.0 to 1.0. The HTML format is #RRGGBB '+
-                              'where RR, GG, and BB are two-digit '+
-                              'hexadecimal values.')
                         print(outs)
                         finished=True
 
