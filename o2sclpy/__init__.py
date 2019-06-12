@@ -4374,31 +4374,33 @@ class o2graph_plotter(plot_base):
                         finished=True
 
                     if (cmd=='markers') and (ix_next-ix)==2:
-                        mlist=[[',','pixel'],
-                               ['o','circle'],
-                               ['v','triangle_down'],
-                               ['\^','triangle_up'],
-                               ['<','triangle_left'],
-                               ['>','triangle_right'],
-                               ['1','tri_down'],
-                               ['2','tri_up'],
-                               ['3','tri_left'],
-                               ['4','tri_right'],
-                               ['8','octagon'],
-                               ['s','square'],
-                               ['p','pentagon'],
-                               ['P','plus (filled)'],
-                               ['*','star'],
-                               ['h','hexagon1'],
-                               ['H','hexagon2'],
-                               ['+','plus'],
-                               ['x','x'],
-                               ['X','x (filled)'],
-                               ['D','diamond'],
-                               ['d','thin_diamond'],
-                               ['|','vline'],
-                               ['_','hline'],
-                               ['$...$','mathtext string']]
+                        mlist=[['.','.','point'],
+                               [',',',','pixel'],
+                               ['o','o','circle'],
+                               ['v','v','down triangle'],
+                               ['^','$\wedge$','up triangle'],
+                               ['<','$<$','left triangle'],
+                               ['>','$>$','right triangle'],
+                               ['1','1','down tri'],
+                               ['2','2','up tri'],
+                               ['3','3','left tri'],
+                               ['4','4','right tri'],
+                               ['8','8','octagon'],
+                               ['s','s','square'],
+                               ['p','p','pentagon'],
+                               ['P','P','plus (filled)'],
+                               ['*','*','star'],
+                               ['h','h','hexagon 1'],
+                               ['H','H','hexagon 2'],
+                               ['+','+','plus'],
+                               ['x','x','x'],
+                               ['X','X','filled x'],
+                               ['D','D','diamond'],
+                               ['d','d','thin diamond'],
+                               ['|','|','vertical line'],
+                               ['_','\_','horizontal line']]
+#                               ['\${\ldots}\$','\${\ldots}\$',
+#                                'mathtext string']]
                         nmark=len(mlist)
                         ncols=2
                         nrows=(nmark+1)/ncols
@@ -4406,24 +4408,31 @@ class o2graph_plotter(plot_base):
                         self.right_margin=0.01
                         self.top_margin=0.01
                         self.bottom_margin=0.01
+                        self.xlo=0
+                        self.xhi=1
+                        self.xset=True
                         self.canvas()
                         self.axes.set_axis_off()
                         row_ctr=0
                         col_ctr=0
                         for entry in mlist:
-                            self.text(str((col_ctr+0.1)/(ncols)),
-                                      str((nrows-row_ctr)/(nrows+1)),
-                                      entry[0],
-                                      va='center',ha='center')
+                            self.point(str((col_ctr+0.1)/(ncols)),
+                                       str((nrows-row_ctr)/(nrows+1)),
+                                       marker=entry[0],color='black',
+                                       markersize=10)
                             self.text(str((col_ctr+0.2)/(ncols)),
                                       str((nrows-row_ctr)/(nrows+1)),
-                                      entry[1].replace('_','\_'),
+                                      entry[1],
+                                      va='center',ha='center')
+                            self.text(str((col_ctr+0.3)/(ncols)),
+                                      str((nrows-row_ctr)/(nrows+1)),
+                                      entry[2].replace('_','\_'),
                                       va='center',ha='left')
                             row_ctr=row_ctr+1
                             if row_ctr>=nrows:
                                 row_ctr=0
                                 col_ctr=col_ctr+1
-                        plot.show()
+                        plot.savefig('o2graph_markers.png')
                         finished=True
                         
                     # Handle the case of an acol command 
