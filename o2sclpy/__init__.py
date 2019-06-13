@@ -450,8 +450,10 @@ param_list=[
     ["logz","If true, use a logarithmic z-axis (default False)."],
     ["right-margin","Size of right margin for a new canvas"+
      " (default 0.04)."],
+    ["rt-ticks","If true, include ticks on right and top (default false)."],
     ["top-margin","Size of top margin for a new canvas"+
      " (default 0.04)."],
+    ["ticks-in","If true, move ticks inside (default false)."],
     ["verbose","Verbosity parameter (default 1)."],
     ["xhi","Upper limit for x-axis (function if starts with '(')."],
     ["xlo","Lower limit for x-axis (function if starts with '(')."],
@@ -1252,6 +1254,14 @@ class plot_base:
     """
     The y-scale for the figure object (default 6.0)
     """
+    ticks_in=False
+    """
+    If true, move the ticks inside (default False)
+    """
+    rt_ticks=False
+    """
+    If true, include ticks on right side and top (default False)
+    """
     yt_axis_color=[1.0,1.0,1.0,0.5]
     """ 
     Color and alpha for the yt axis (default [1.0,1.0,1.0,0.5])
@@ -1427,6 +1437,16 @@ class plot_base:
             self.fig_size_x=float(value)
         elif name=='fig-size-y':
             self.fig_size_y=float(value)
+        elif name=='ticks-in':
+            if value=='False' or value=='0':
+                self.ticks_in=False
+            else:
+                self.ticks_in=True
+        elif name=='rt-ticks':
+            if value=='False' or value=='0':
+                self.rt_ticks=False
+            else:
+                self.rt_ticks=True
         elif name=='yt-axis':
             print('set')
         elif name=='yt-axis-color':
@@ -1499,6 +1519,10 @@ class plot_base:
             print('The value of fig-size-x is',self.fig_size_x,'.')
         if name=='fig-size-y':
             print('The value of fig-size-y is',self.fig_size_y,'.')
+        if name=='ticks-in':
+            print('The value of ticks-in is',self.ticks_in,'.')
+        if name=='rt-ticks':
+            print('The value of rt-ticks is',self.rt_ticks,'.')
         return
 
     def reset_xlimits(self):
@@ -1641,59 +1665,95 @@ class plot_base:
 
     def ttext(self,tx,ty,str,**kwargs):
         """
-        Plot text in the native coordinate system
+        Plot text in the native coordinate system using 
+        a transAxes transformation using the class font size and and
+        centering in the horizontal and vertical directions by
+        default. A figure and axes are created if they have not been
+        created already.
         """
         if self.canvas_flag==False:
             self.canvas()
             
         ha_present=False
         for key in kwargs:
-            if key=='ha':
+            if key=='ha' or key=='horizontalalignment':
                 ha_present=True
         if ha_present==False:
             kwargs=dict(kwargs,ha='center')
             
         va_present=False
         for key in kwargs:
-            if key=='va':
+            if key=='va' or key=='verticalalignment':
                 va_present=True
         if va_present==False:
             kwargs=dict(kwargs,va='center')
 
-        self.axes.text(float(eval(tx)),float(eval(ty)),
-                       str,transform=self.axes.transAxes,
-                       fontsize=self.font,**kwargs)
+        fontsize_present=False
+        for key in kwargs:
+            if key=='fontsize':
+                fontsize_present=True
+        if fontsize_present==False:
+            kwargs=dict(kwargs,fontsize=self.font)
+
+        transform_present=False
+        for key in kwargs:
+            if key=='transform':
+                transform_present=True
+        if transform_present==False:
+            kwargs=dict(kwargs,transform=self.axes.transAxes)
+
+        if type(tx)=='str':
+            tx=float(eval(tx))
+        if type(ty)=='str':
+            ty=float(eval(ty))
+
+        self.axes.text(tx,ty,str,**kwargs)
 
         return
 
-    def text(self,tx,ty,str,**kwargs):
+    def text(self,tx,ty,textstr,**kwargs):
         """
-        Plot text in the axis coordinate system
+        Plot text in the axis coordinate system transforming using the
+        class font size and and centering in the horizontal and
+        vertical directions by default. A figure and axes are created
+        if they have not been created already.
         """
         if self.canvas_flag==False:
             self.canvas()
             
         ha_present=False
         for key in kwargs:
-            if key=='ha':
+            if key=='ha' or key=='horizontalalignment':
                 ha_present=True
         if ha_present==False:
             kwargs=dict(kwargs,ha='center')
             
         va_present=False
         for key in kwargs:
-            if key=='va':
+            if key=='va' or key=='verticalalignment':
                 va_present=True
         if va_present==False:
             kwargs=dict(kwargs,va='center')
 
-        self.axes.text(float(eval(tx)),float(eval(ty)),str,
-                       fontsize=self.font,**kwargs)
+        fontsize_present=False
+        for key in kwargs:
+            if key=='fontsize':
+                fontsize_present=True
+        if fontsize_present==False:
+            kwargs=dict(kwargs,fontsize=self.font)
+
+        if isinstance(tx,str):
+            tx=float(eval(tx))
+        if isinstance(ty,str):
+            ty=float(eval(ty))
+
+        self.axes.text(tx,ty,textstr,**kwargs)
+        
         return
 
     def textbox(self,tx,ty,str,boxprops,**kwargs):
         """
-        Plot text in the axis coordinate system
+        Plot text in the axis coordinate system with a box
         """
         if self.canvas_flag==False:
             self.canvas()
@@ -1721,16 +1781,17 @@ class plot_base:
     def canvas(self):
         """
         Create a default figure and axis object with specified
-        titles and limits .
+        x and y-title and x- and y-limits .
         """
         if self.verbose>2:
             print('Canvas')
-        # Default o2mpl plot
+        # Default o2sclpy plot
         (self.fig,self.axes)=default_plot(self.left_margin,
                                           self.bottom_margin,
                                           self.right_margin,
                                           self.top_margin,self.font,
-                                          self.fig_size_x,self.fig_size_y)
+                                          self.fig_size_x,self.fig_size_y,
+                                          self.ticks_in,self.rt_ticks)
         # Plot limits
         if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
@@ -3569,6 +3630,10 @@ class o2graph_plotter(plot_base):
                     print(line[0]+' '+str(self.fig_size_x))
                 elif line[0]=='fig-size-y':
                     print(line[0]+' '+str(self.fig_size_y))
+                elif line[0]=='ticks-in':
+                    print(line[0]+' '+str(self.ticks_in))
+                elif line[0]=='rt-ticks':
+                    print(line[0]+' '+str(self.rt_ticks))
                 elif line[0]=='font':
                     print(line[0]+' '+str(self.font))
                 elif line[0]=='left-margin':
@@ -4422,25 +4487,34 @@ class o2graph_plotter(plot_base):
                         self.xlo=0
                         self.xhi=1
                         self.xset=True
-                        self.canvas()
+                        if True:
+                            self.canvas()
+                        else:
+                            (self.fig,self.axes)=default_plot(left_margin=0.1,
+                                                              top_margin=0.01,
+                                                              font=10,
+                                                              ticks_in=False,
+                                                              rt_ticks=False)
+                        self.canvas_flag=True
                         self.axes.set_axis_off()
                         row_ctr=0
                         col_ctr=0
                         for entry in mlist:
-                            plot.rc('text',usetex=False)
-                            self.point(str((col_ctr+0.1)/(ncols)),
-                                       str((nrows-row_ctr)/(nrows+1)),
-                                       marker=entry[0],color='black',
-                                       markersize=10)
-                            self.text(str((col_ctr+0.25)/(ncols)),
-                                      str((nrows-row_ctr)/(nrows+1)),
-                                      entry[1],family='monospace',
-                                      va='center',ha='center')
-                            plot.rc('text',usetex=True)
-                            self.text(str((col_ctr+0.37)/(ncols)),
-                                      str((nrows-row_ctr)/(nrows+1)),
-                                      entry[2].replace('_','\_'),
-                                      va='center',ha='left')
+                            if row_ctr>2:
+                                plot.rc('text',usetex=False)
+                                self.point(str((col_ctr+0.1)/(ncols)),
+                                           str((nrows-row_ctr)/(nrows+1)),
+                                           marker=entry[0],color='black',
+                                           markersize=10)
+                                self.text(str((col_ctr+0.25)/(ncols)),
+                                          str((nrows-row_ctr)/(nrows+1)),
+                                          entry[1],family='monospace',
+                                          va='center',ha='center')
+                                plot.rc('text',usetex=True)
+                                self.text(str((col_ctr+0.37)/(ncols)),
+                                          str((nrows-row_ctr)/(nrows+1)),
+                                          entry[2].replace('_','\_'),
+                                          va='center',ha='left')
                             row_ctr=row_ctr+1
                             if row_ctr>=nrows:
                                 row_ctr=0
@@ -4730,6 +4804,10 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process show.')
                     self.show()
+                elif cmd_name=='move-labels':
+                    if self.verbose>2:
+                        print('Process move-labels.')
+                    self.move_labels()
                 elif cmd_name=='canvas':
                     if self.verbose>2:
                         print('Process canvas.')
