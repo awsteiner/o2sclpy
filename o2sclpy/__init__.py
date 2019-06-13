@@ -1138,7 +1138,9 @@ def string_to_dict(s):
 class plot_base:
     """
     A base class for plotting classes :py:class:`o2sclpy.plotter` and
-    :py:class:`o2sclpy.o2graph_plotter` .    
+    :py:class:`o2sclpy.o2graph_plotter` . The principal purpose
+    of this class is just to provide some additional simplification
+    to python code which makes plots using matplotlib.
     """
 
     axes=0
@@ -1151,7 +1153,7 @@ class plot_base:
     """
     canvas_flag=False
     """
-    If True, then the default plot canvas has been initiated
+    If True, then the figure and axes objects have been created
     (default False)
     """
 
@@ -1243,8 +1245,9 @@ class plot_base:
     """
     font=16
     """
-    Font size for text(), ttext(), axis titles (default 16). Axis labels
-    are set by this size times 0.8 .
+    Font size for :py:func:`o2sclpy.plot_base.text()`,
+    :py:func:`o2sclpy.plot_base.ttext()`, and axis titles (default
+    16). Axis labels are set by this size times 0.8 .
     """
     fig_size_x=6.0
     """
@@ -1252,7 +1255,9 @@ class plot_base:
     """
     fig_size_y=6.0
     """
-    The y-scale for the figure object (default 6.0)
+    The y-scale for the figure object (default 6.0). This 
+    size is chosen because larger sizes tend to lead to windows
+    which are too tall for OSX laptops.
     """
     ticks_in=False
     """
@@ -1670,9 +1675,11 @@ class plot_base:
         Plot text in the native coordinate system using a transAxes
         transformation. This function uses the class font size and and
         centering in the horizontal and vertical directions by
-        default. A figure and axes are created using canvas() if they
+        default. A figure and axes are created using 
+        :py:func:`o2sclpy.plot_base.canvas()`,
+        if they
         have not been created already. If ``tx`` and ``ty`` are strings, then
-        they are passed through the eval() function and converted to
+        they are passed through the ``eval()`` function and converted to
         floating-point numbers.
         """
         if self.canvas_flag==False:
@@ -1716,13 +1723,13 @@ class plot_base:
         return
 
     def text(self,tx,ty,textstr,**kwargs):
-        """
-        Plot text in the axis coordinate system transforming using the
+        """Plot text in the axis coordinate system transforming using the
         class font size and and centering in the horizontal and
         vertical directions by default. A figure and axes are created
-        using canvas() if they have not been created already. If tx
-        and ty are strings, then they are passed through the eval()
-        function and converted to floating-point numbers.
+        using :py:func:`o2sclpy.plot_base.canvas()`, if they have not
+        been created already. If ``tx`` and ``ty`` are strings, then
+        they are passed through the ``eval()`` function and converted
+        to floating-point numbers.
         """
         if self.canvas_flag==False:
             self.canvas()
