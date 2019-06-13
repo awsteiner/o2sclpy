@@ -1656,20 +1656,24 @@ class plot_base:
 
     def save(self,filename):
         """
-        Save plot to file named ``filename``
+        Save plot to file named ``filename``. If the verbose parameter is
+        greater than zero, then this function prints the filename to
+        the screen.
         """
         if self.verbose>0:
             print('Saving as',filename,'.')
         plot.savefig(filename)
         return
 
-    def ttext(self,tx,ty,str,**kwargs):
+    def ttext(self,tx,ty,textstr,**kwargs):
         """
-        Plot text in the native coordinate system using 
-        a transAxes transformation using the class font size and and
+        Plot text in the native coordinate system using a transAxes
+        transformation. This function uses the class font size and and
         centering in the horizontal and vertical directions by
-        default. A figure and axes are created if they have not been
-        created already.
+        default. A figure and axes are created using canvas() if they
+        have not been created already. If ``tx`` and ``ty`` are strings, then
+        they are passed through the eval() function and converted to
+        floating-point numbers.
         """
         if self.canvas_flag==False:
             self.canvas()
@@ -1702,12 +1706,12 @@ class plot_base:
         if transform_present==False:
             kwargs=dict(kwargs,transform=self.axes.transAxes)
 
-        if type(tx)=='str':
+        if isinstance(tx,str):
             tx=float(eval(tx))
-        if type(ty)=='str':
+        if isinstance(ty,str):
             ty=float(eval(ty))
 
-        self.axes.text(tx,ty,str,**kwargs)
+        self.axes.text(tx,ty,textstr,**kwargs)
 
         return
 
@@ -1716,7 +1720,9 @@ class plot_base:
         Plot text in the axis coordinate system transforming using the
         class font size and and centering in the horizontal and
         vertical directions by default. A figure and axes are created
-        if they have not been created already.
+        using canvas() if they have not been created already. If tx
+        and ty are strings, then they are passed through the eval()
+        function and converted to floating-point numbers.
         """
         if self.canvas_flag==False:
             self.canvas()
@@ -1780,18 +1786,22 @@ class plot_base:
 
     def canvas(self):
         """
-        Create a default figure and axis object with specified
-        x and y-title and x- and y-limits .
+        This function creates a default figure using default_plot()
+        and axis object using the xtitle and ytitle for the
+        axis titles and xlo, xhi, ylo, and yhi for the axis limits.
         """
         if self.verbose>2:
             print('Canvas')
         # Default o2sclpy plot
-        (self.fig,self.axes)=default_plot(self.left_margin,
-                                          self.bottom_margin,
-                                          self.right_margin,
-                                          self.top_margin,self.font,
-                                          self.fig_size_x,self.fig_size_y,
-                                          self.ticks_in,self.rt_ticks)
+        (self.fig,self.axes)=default_plot(left_margin=self.left_margin,
+                                          bottom_margin=self.bottom_margin,
+                                          right_margin=self.right_margin,
+                                          top_margin=self.top_margin,
+                                          font=self.font,
+                                          fig_size_x=self.fig_size_x,
+                                          fig_size_y=self.fig_size_y,
+                                          ticks_in=self.ticks_in,
+                                          rt_ticks=self.rt_ticks)
         # Plot limits
         if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
@@ -2161,13 +2171,25 @@ class o2graph_plotter(plot_base):
     """
 
     yt_scene=0
-    yt_camera=0
+    """ 
+    The yt scene object
+    """
     yt_created_scene=False
+    """
+    If true, then the yt scene object has been created
+    """
+    yt_camera=0
+    """ 
+    The yt camera object
+    """
     yt_created_camera=False
+    """
+    If true, then the yt camera object has been created
+    """
 
     def yt_create_scene(self):
         """
-        Documentation for yt_create_scene()
+        Create the yt scene object and set yt_created_scene to True
         """
         from yt.visualization.volume_rendering.api import Scene
         self.yt_scene=Scene()
@@ -2175,7 +2197,9 @@ class o2graph_plotter(plot_base):
         
     def yt_create_camera(self,ds):
         """
-        Documentation for yt_create_camera()
+        Create the yt camera object using the class variables
+        ``yt_resolution``, ``yt_position``, and ``yt_focus``, with a
+        camera width based on the domain width of ``ds``.
         """
         self.yt_camera=self.yt_scene.add_camera()
         self.yt_camera.resolution=self.yt_resolution
