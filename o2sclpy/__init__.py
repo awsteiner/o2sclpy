@@ -4115,11 +4115,19 @@ class o2graph_plotter(plot_base):
                     curr_type=''
                     cmd=''
 
+                    redirected=False
+                    if sys.stdout.isatty()==False:
+                        redirected=True
+                    
                     str_line=''
-                    str_line=str_line+chr(27)+'(0'
-                    for jj in range(0,78):
-                       str_line+='q'
-                    str_line=str_line+chr(27)+'(B'
+                    if redirected:
+                        for jj in range(0,78):
+                            str_line+='-'
+                    else:
+                        str_line=str_line+chr(27)+'(0'
+                        for jj in range(0,78):
+                            str_line+='q'
+                        str_line=str_line+chr(27)+'(B'
                         
                     # If only a command is specified
                     if (ix_next-ix)==2:
