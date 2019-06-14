@@ -9,35 +9,6 @@ to enable quick analysis with text files or with HDF5 files
 graph script assumes that the O\ :sub:`2`\ scl library has been
 installed separately (with HDF5 support enabled).
 
-Installation and Requirements
------------------------------
-
-O\ :sub:`2`\ sclpy v0.923 can be installed with e.g. ``pip3 install
-o2sclpy``. If you want to install the development version (v0.924),
-you can clone the git repository, change directory to the O\ :sub:`2`\
-sclpy directory, and then use e.g. ``pip3 install .`` if you want to
-use the pip package manager or ``python3 setup.py install`` to do a
-direct installation. O\ :sub:`2`\ sclpy requires python3 packages
-`h5py <https://www.h5py.org/>`_, `numpy <https://www.numpy.org>`_,
-and `matplotlib <https://matplotlib.org>`_. O\ :sub:`2`\ sclpy
-also assumes latex is installed on your system.
-
-The release version, O\ :sub:`2`\ sclpy 0.923, requires the O\
-:sub:`2`\ scl v0.923 release from
-<https://github.com/awsteiner/o2scl/releases/tag/v0.923> and the
-development version, O\ :sub:`2`\ sclpy 0.923, requires that the most
-recent version of O\ :sub:`2`\ scl from the master branch on github is
-installed on your machine.
-
-The script attempts to dynamically load the O\ :sub:`2`\ scl
-libraries ``libo2scl`` and ``libo2scl_hdf`` using python's ctypes
-module. If it cannot find them, you may need to use the argument
-``-o2scl-libdir`` to specify the proper directory. If you're on OSX
-and using GCC, the script must load the C++ library first, and if
-necessary you can specify its location with the argument
-``-o2scl-cpplib`` (on my OSX laptop this is ``-o2scl-cpplib
-/usr/local/lib/gcc/9/libstdc++.dylib``).
-
 Basic usage
 -----------
 

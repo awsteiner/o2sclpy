@@ -72,9 +72,6 @@ import json
 import requests
 import socket
 
-"""
-List of cmaps for 'help cmaps'
-"""
 cmaps=[('Perceptually Uniform Sequential',
         ['viridis','plasma','inferno','magma']),
        ('Sequential', 
@@ -96,22 +93,18 @@ cmaps=[('Perceptually Uniform Sequential',
         ['flag','prism','ocean','gist_earth','terrain','gist_stern',
          'gnuplot','gnuplot2','CMRmap','cubehelix','brg','hsv',
          'gist_rainbow','rainbow','jet','nipy_spectral','gist_ncar'])]
+"""
+List of cmaps for 'help cmaps'
+"""
 
 new_cmaps=[('O2sclpy cmaps',
             ['jet2','pastel2','reds2','greens2','blues2'])]
 
+version='0.923.2'
 """
 The version number string
 """
-version='0.923.2'
 
-"""
-This is a list of 4-element entries:
-1: command name
-2: short description
-3: argument list
-4: full help text
-"""
 base_list=[
     ["arrow","Plot an arrow.",
      "<x1> <y1> <x2> <y2> <arrow properties> [kwargs]",
@@ -258,20 +251,19 @@ base_list=[
      "the z-limits on that plot are modified. Future plots are also "+
      "set with the specified z-limits."]
 ]
+"""
+This is a list of 4-element entries:
+1: command name
+2: short description
+3: argument list
+4: full help text
+"""
 
 # Types which appear in extra_list below (not a list of all acol types)
 extra_types=["table","table3d","hist_2d","hist","double[]","int[]",
              "size_t[]","tensor","tensor<int>","tensor<size_t>",
              "tensor_grid"]
 
-"""
-This is a list of 5-element entries:
-1: object type
-2: command name
-3: short description
-4: argument list
-5: full help text
-"""
 extra_list=[
     ["table","plot",
      "Plot two columns from the table.",
@@ -434,6 +426,14 @@ extra_list=[
      "Add a tensor_grid object as a yt volume source",
      "","Long desc."]
 ]
+"""
+This is a list of 5-element entries:
+1: object type
+2: command name
+3: short description
+4: argument list
+5: full help text
+"""
 
 # A list of 2-element entries, name and description
 param_list=[
@@ -2316,6 +2316,9 @@ class o2graph_plotter(plot_base):
         yt_scene.add_source(points_aheads2,keyname='o2graph_axis_arrows')
         
     def check_backend(self):
+        """
+        For yt, check that we're using the Agg backend.
+        """
         import matplotlib
         if (matplotlib.get_backend()!='Agg' and 
             matplotlib.get_backend()!='agg'):
