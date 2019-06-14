@@ -8,6 +8,7 @@ help:
 	@echo "sync-doc:  Copies documentation to webserver"
 	@echo "test-sync:"
 	@echo "reinstall: Reinstall o2sclpy using pip3"
+	@echo "statfiles: Make the images and extra files for the docs"
 	@echo
 	@echo "-------------------------------------------------------------"
 	@echo "Notes: to upload to pypi run 'rm dist/*',"
@@ -47,3 +48,6 @@ yt-test2:
 		-clear -create tensor_grid 3 10 10 10 \
 		-entry 1 1 1 -function "i0*cos(i1)*i2" -entry 1 1 1 \
 		-yt-add-vol -yt-render test.png
+
+statfiles:
+	cd doc; $(MAKE) statfiles

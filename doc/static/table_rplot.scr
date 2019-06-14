@@ -6,4 +6,4 @@ o2graph -create table x 0 1 1.0e-3 \
 	-function "sin(4*x)" y1 \
 	-function "sin(4*x)+0.3*cos(4*x)" y2 \
 	-set xtitle x -set ytitle y -set left-margin 0.15 \
-	-rplot x y1 x y2 -save table_rplot.png -show
+	-rplot x y1 x y2 -save table_rplot.png

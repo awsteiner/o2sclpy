@@ -24,6 +24,13 @@ Class plotter
 	:members:
 	:undoc-members:
 
+Class plot_base
+---------------
+ 
+.. autoclass:: plot_base
+	:members:
+	:undoc-members:
+
 --------------------------------------------------------------
 	     
 Other O2sclpy objects
@@ -40,18 +47,16 @@ Other O2sclpy objects
 .. autodata:: version		  
 .. autodata:: cmaps
 .. autodata:: new_cmaps
+.. autodata:: base_list
+.. autodata:: param_list
+.. autodata:: yt_param_list
+.. autodata:: extra_list
+.. autodata:: extra_types
 
 --------------------------------------------------------------
 
 Internal classes
 ================
-
-Class plot_base
----------------------
- 
-.. autoclass:: plot_base
-	:members:
-	:undoc-members:
 
 Class o2graph_plotter
 ---------------------

@@ -9,4 +9,4 @@ o2graph -create table x "(-3.14)" 3.14 0.1 \
 	-create table x "(-3.14)" 3.14 0.1 \
 	-function "cos(x+acos(-1))" y -internal table_plotm_c.o2 \
 	-plot-files table_plotm_a.o2 table_plotm_b.o2 table_plotm_c.o2 \
-	-plotm x y -save table_plotm.png -show
+	-plotm x y -save table_plotm.png

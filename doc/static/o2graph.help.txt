@@ -3,7 +3,9 @@ o2graph: A data viewing and processing program for O2scl.
 List of command-line options:
 
    -alias       Create a command alias.                           
+   -autocorr    Compute the autocorrelation coefficients.         
    -calc        Compute the value of a constant expression.       
+   -clear       Clear the current object.                         
    -commands    List available commands.                          
 -c -create      Create an object.                                 
    -download    Download file from specified URL.                 
@@ -23,27 +25,107 @@ List of command-line options:
 -r -read        Read an object from an O2scl-style HDF5 file.     
    -run         Run a file containing a list of commands.         
    -set         Set the value of a parameter.                     
+   -shell       Run a shell command.                              
    -show-units  Show the unit conversion table.                   
    -type        Show current object type.                         
 -v -version     Print version information and O2scl settings.     
    -warranty    Show warranty information.                        
 
+(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq(B
 Notes:
 
-1. Help for individual commands may be obtained with 'help command'.
+1. Help for general commands may be obtained with 'help <command>'. Help
+   for type-specific commands can be obtained by 'help <type> <command>'. A
+   list of commands for each type can be obtained with 'commands <type>'.
    Required arguments are surrounded by <>'s and optional arguments are
    surrounded by []'s.
 2. Options may also be specified in the environment variable ACOL_DEFAULTS.
 3. Long options may be preceeded by two dashes.
-4. In order to avoid confusion between arguments and functions,
-   use "(-x*2)" not "-x*2"
+4. In order to avoid confusion between arguments and functions, use
+   parenthesis and quotes, i.e. (-x*2) instead of -x*2.
+5. Also, do not use a unary minus next to a binary operator, i.e. use
+   a>(-1) instead of a>-1". "a>-1".
 
-Known operators:
-() ^ * / % + - == != < > && || << >> >= <=
+(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq(B
+List of additional type-specific commands
+(use 'help <type> <command>' for more info):
 
-Known functions:
-exp(x) log(x) log10(x) sin(x) cos(x) tan(x) sqrt(x) abs(x)
-asin(x) acos(x) atan(x) sinh(x) cosh(x) tanh(x)
-asinh(x) acosh(x) atanh(x)
+char: value
+double: value
+double[]: deriv, interp, max, min, sort, to-table, function, sum
+hist: to-table, function
+hist_2d: max, min, contours
+int: value
+int[]: deriv, interp, max, min, sort, to-table, function, sum
+prob_dens_mdim_amr: to-table3d
+size_t: value
+size_t[]: deriv, interp, max, min, sort, to-table, function, sum
+string: value
+table: assign, delete-col, delete-rows, delete-rows-tol, deriv, deriv2, cat,
+  convert-unit, entry-grid, find-row, fit, function, get-row, get-unit, entry,
+  index, insert, insert-full, integ, interp, list, max, min, nlines, rename,
+  select, select-rows, select-rows2, set-data, set-unit, sort, stats, sum,
+  to-hist, to-hist-2d, to-table3d, wstats
+table3d: cat, contours, deriv-x, deriv-y, function, entry, entry-grid,
+  insert, interp, stats, list, max, min, rename, set-data, slice, sum, x-name,
+  y-name
+tensor: list, diag, to-table3d, to-table3d-sum, max, min, to-tensor-grid,
+  rearrange, entry, function, sum, stats
+tensor<int>: list, min, max, to-table3d, rearrange
+tensor<size_t>: list, min, max, to-table3d, rearrange
+tensor_grid: list, to-table3d, slice, to-table, set-grid, max, min,
+  rearrange, get-grid, interp, entry, to-tensor, entry-grid, function, sum,
+  stats
 
+(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq(B
+List of additional help topics (e.g. "acol -help <topic>"): functions,
+mult-vector-spec, types, value-spec, and vector-spec.
 
+(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq(B
+
+O2graph command-line options:
+
+  -arrow        Plot an arrow.
+  -backend      Select the matplotlib backend to use.
+  -canvas       Create a plotting canvas.
+  -clf          Clear the current figure.
+  -eval         Run the python eval() function.
+  -line         Plot a line.
+  -move-labels  Move the labels.
+  -new-cmaps    Define new color maps.
+  -plotv        Plot several vector-like data sets.
+  -point        Plot a single point.
+  -python       Begin an interactive python session.
+  -rect         Plot a rectangle.
+  -reset-xlim   Reset the x-axis limits.
+  -reset-ylim   Reset the y-axis limits.
+  -reset-zlim   Reset the z-azis limits.
+  -save         Save the current plot in a file.
+  -show         Show the current plot.
+  -text         Plot text in the data coordinates.
+  -textbox      Plot a box with text.
+  -ttext        Plot text in window coordinates [(0,0) to (1,1)].
+  -xlimits      Set the x-axis limits.
+  -ylimits      Set the y-axis limits.
+  -yt-path      Set yt animation path
+  -yt-render    Render the yt visualization
+  -zlimits      Set the z-azis limits.
+
+(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq(B
+O2graph type-specific commands:
+
+double[]: plot1
+hist: plot
+hist_2d: den-plot
+int[]: plot1
+size_t[]: plot1
+table: plot, rplot, scatter, errorbar, yt-scatter, plot1, histplot,
+  hist2dplot
+table3d: den-plot
+tensor: den-plot
+tensor<int>: den-plot
+tensor<size_t>: den-plot
+tensor_grid: den-plot, yt-add-vol
+
+(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq(B
+Additional o2graph help topics: markers, cmaps, colors

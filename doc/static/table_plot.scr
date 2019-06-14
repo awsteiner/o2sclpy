@@ -12,4 +12,4 @@ o2graph -create table x "(-acos(-1))" "acos(-1)" 0.1 \
 	-set xlo "(-3.14)" -set xhi 3.14 -set xtitle "$ x$" -deriv x y yp \
 	-preview 20 -internal ex1.o2 -plot x y marker=.,color=blue \
 	-plot x yp lw=2,color=red -text 0.5 0.95 "$ f(x)$" \
-	-text 1 0.05 "$ f^{\prime}(x)$" -save table_plot.png -show
+	-text 1 0.05 "$ f^{\prime}(x)$" -save table_plot.png

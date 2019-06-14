@@ -99,6 +99,9 @@ List of cmaps for 'help cmaps'
 
 new_cmaps=[('O2sclpy cmaps',
             ['jet2','pastel2','reds2','greens2','blues2'])]
+"""
+List of new o2sclpy cmaps
+"""
 
 version='0.923.2'
 """
@@ -263,6 +266,9 @@ This is a list of 4-element entries:
 extra_types=["table","table3d","hist_2d","hist","double[]","int[]",
              "size_t[]","tensor","tensor<int>","tensor<size_t>",
              "tensor_grid"]
+"""
+List of types which have additional plotting commands
+"""
 
 extra_list=[
     ["table","plot",
@@ -435,7 +441,6 @@ This is a list of 5-element entries:
 5: full help text
 """
 
-# A list of 2-element entries, name and description
 param_list=[
     ["bottom-margin","Size of bottom margin for a new canvas"+
      " (default 0.12)."],
@@ -471,8 +476,12 @@ param_list=[
     ["ztitle","Z-axis title. Latex "+
      "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')"],
 ]
+"""
+List of o2sclpy parameters
 
-# A list of 2-element entries, name and description
+A list of 2-element entries, name and description
+"""
+
 yt_param_list=[
     ["yt-axis","If true, plot a 3D axis."],
     ["yt-axis-color","Color for the 3D axis."],
@@ -483,13 +492,21 @@ yt_param_list=[
     ["yt-position","The camera position."],
     ["yt-path","The animation path."]
 ]
+"""
+List of yt parameters for o2sclpy
+
+A list of 2-element entries, name and description
+"""
 
 def slack_notify(webhook_url,channel_name,title,
                  message,subtitle='',emoji=':computer:'):
     """
+    A function which sends a slack notification
+
+    Based in part on:
     https://www.amphioxus.org/content/slack-notifications-scripts#python
-    https://www.webpagefx.com/tools/emoji-cheat-sheet/
-    JSON format found in https://github.com/sulhome/bash-slack
+    https://www.webpagefx.com/tools/emoji-cheat-sheet/ , and
+    https://github.com/sulhome/bash-slack
     """
 
     # Formulate message
@@ -912,7 +929,7 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
                  fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,
                  rt_ticks=False):
     """
-    This function sets up my commonly-used ``matplotlib`` defaults.
+    This function sets up the o2sclpy ``matplotlib`` defaults.
     It returns a pair of objects, the figure object and axes object.
     """
     plot.rc('text',usetex=True)

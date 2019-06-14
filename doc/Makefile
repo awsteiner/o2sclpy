@@ -46,12 +46,12 @@ test-sync:
 statfiles:
 	cd static; o2graph -h | grep -v "Set o2scl" | \
 		grep -v "Compiled at" > o2graph.help.txt
-	cd static; source backend.scr
-	cd static; source table3d_den_plot.scr
-	cd static; source table_errorbar.scr
-	cd static; source table_hist2dplot.scr
-	cd static; source table_histplot.scr
-	cd static; source table_plot.scr
-	cd static; source table_plotm.scr
-	cd static; source table_rplot.scr
-	cd static; source table_scatter.scr
+	cd static; ./backend.scr
+	cd static; ./table3d_den_plot.scr
+	cd static; ./table_errorbar.scr
+	cd static; ./table_hist2dplot.scr
+	cd static; ./table_histplot.scr
+	cd static; ./table_plot.scr
+	cd static; ./table_plotm.scr
+	cd static; ./table_rplot.scr
+	cd static; ./table_scatter.scr
