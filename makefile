@@ -9,6 +9,7 @@ help:
 	@echo "test-sync:"
 	@echo "reinstall: Reinstall o2sclpy using pip3"
 	@echo "statfiles: Make the images and extra files for the docs"
+	@echo "           (to be run before 'make doc')"
 	@echo
 	@echo "-------------------------------------------------------------"
 	@echo "Notes: to upload to pypi run 'rm dist/*',"

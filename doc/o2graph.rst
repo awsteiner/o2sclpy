@@ -64,9 +64,9 @@ Example 3
 Example 4
 ---------
 
-.. include:: static/table_plotm.scr
+.. include:: static/table_plotv.scr
    :literal:
-.. image:: static/table_plotm.png
+.. image:: static/table_plotv.png
    :width: 70%
 
 Example 5
