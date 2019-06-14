@@ -52,6 +52,6 @@ statfiles:
 	cd static; ./table_hist2dplot.scr
 	cd static; ./table_histplot.scr
 	cd static; ./table_plot.scr
-	cd static; ./table_plotm.scr
+	cd static; ./table_plotv.scr
 	cd static; ./table_rplot.scr
 	cd static; ./table_scatter.scr
