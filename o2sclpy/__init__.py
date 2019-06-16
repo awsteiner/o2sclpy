@@ -445,6 +445,7 @@ param_list=[
     ["bottom-margin","Size of bottom margin for a new canvas"+
      " (default 0.12)."],
     ["colbar","If true, den-plot adds a color legend (default False)."],
+    ["fig-dict","Dictionary for figure properties."],
     ["fig-size-x","Horizontal figure size (default 6.0)."],
     ["fig-size-y","Vertical figure size (default 6.0)."],
     ["font","Font scaling for text objects (default 16)."],
@@ -925,7 +926,7 @@ class hdf5_reader:
 #     return clist
 
 def default_plot(left_margin=0.14,bottom_margin=0.12,
-                 right_margin=0.04,top_margin=0.04,font=16,
+                 right_margin=0.04,top_margin=0.04,fontsize=16,
                  fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,
                  rt_ticks=False):
     """
@@ -950,7 +951,7 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
         ax.tick_params('x',which='both',top=True,bottom=True)
         ax.tick_params('y',which='both',left=True,right=True)
     ax.tick_params('both',length=5,width=1,which='minor')
-    ax.tick_params(labelsize=font*0.8)
+    ax.tick_params(labelsize=fontsize*0.8)
     plot.grid(False)
     return (fig,ax)
     
@@ -1125,7 +1126,31 @@ def string_to_dict(s):
                 arr2[1]=int(arr2[1])
             if arr2[0]=='bins':
                 arr2[1]=int(arr2[1])
+            if arr2[0]=='fig_size_x':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='fig_size_y':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='left_margin':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='right_margin':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='top_margin':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='bottom_margin':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='fontsize':
+                arr2[1]=float(arr2[1])
             if arr2[0]=='fill':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='ticks_in':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='rt_ticks':
                 if arr2[1]=='True':
                     arr2[1]=True
                 else:
@@ -1265,6 +1290,12 @@ class plot_base:
     Font size for :py:func:`o2sclpy.plot_base.text()`,
     :py:func:`o2sclpy.plot_base.ttext()`, and axis titles (default
     16). Axis labels are set by this size times 0.8 .
+    """
+    fig_dict=('fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,'+
+              'rt_ticks=False,left_margin=0.14,right_margin=0.04,'+
+              'bottom_margin=0.12,top_margin=0.04,fontsize=16')
+    """
+    Test for new dictionary
     """
     fig_size_x=6.0
     """
@@ -1457,6 +1488,8 @@ class plot_base:
             self.bottom_margin=float(value)
         elif name=='fig-size-x':
             self.fig_size_x=float(value)
+        elif name=='fig-dict':
+            self.fig_dict=value
         elif name=='fig-size-y':
             self.fig_size_y=float(value)
         elif name=='ticks-in':
@@ -1533,6 +1566,8 @@ class plot_base:
             print('The value of top-margin is',self.top_margin,'.')
         if name=='bottom-margin':
             print('The value of bottom-margin is',self.bottom_margin,'.')
+        if name=='fig-dict':
+            print('The value of fig-dict is',self.fig_dict,'.')
         if name=='right-margin':
             print('The value of right-margin is',self.right_margin,'.')
         if name=='left-margin':
@@ -1816,16 +1851,20 @@ class plot_base:
         """
         if self.verbose>2:
             print('Canvas')
-        # Default o2sclpy plot
-        (self.fig,self.axes)=default_plot(left_margin=self.left_margin,
-                                          bottom_margin=self.bottom_margin,
-                                          right_margin=self.right_margin,
-                                          top_margin=self.top_margin,
-                                          font=self.font,
-                                          fig_size_x=self.fig_size_x,
-                                          fig_size_y=self.fig_size_y,
-                                          ticks_in=self.ticks_in,
-                                          rt_ticks=self.rt_ticks)
+            
+        dct=string_to_dict(self.fig_dict)
+        (self.fig,self.axes)=default_plot(**dct)
+        
+        # (self.fig,self.axes)=default_plot(left_margin=self.left_margin,
+        #                                   bottom_margin=self.bottom_margin,
+        #                                   right_margin=self.right_margin,
+        #                                   top_margin=self.top_margin,
+        #                                   fontsize=self.font,
+        #                                   fig_size_x=self.fig_size_x,
+        #                                   fig_size_y=self.fig_size_y,
+        #                                   ticks_in=self.ticks_in,
+        #                                   rt_ticks=self.rt_ticks)
+        
         # Plot limits
         if self.xset==True:
             plot.xlim([self.xlo,self.xhi])
@@ -3679,6 +3718,8 @@ class o2graph_plotter(plot_base):
                     print(line[0]+' '+str(self.colbar))
                 elif line[0]=='fig-size-x':
                     print(line[0]+' '+str(self.fig_size_x))
+                elif line[0]=='fig-dict':
+                    print(line[0]+' '+str(self.fig_dict))
                 elif line[0]=='fig-size-y':
                     print(line[0]+' '+str(self.fig_size_y))
                 elif line[0]=='ticks-in':
@@ -4354,48 +4395,134 @@ class o2graph_plotter(plot_base):
                         plot.show()
                         finished=True
                         
-                    if (cmd=='xkcd-colors') and (ix_next-ix)==2:
+                    if strlist[ix+1]=='colors2':
                         from matplotlib import colors as mc
 
-                        colors=dict(**mc.XKCD_COLORS)
+                        colors=dict(**mc.CSS4_COLORS,**mc.XKCD_COLORS)
                         by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
                                         for name, color in colors.items())
-                        sorted_names=[name for hsv, name in by_hsv]
-                        n=len(sorted_names)
-                        ncols=4
-                        nrows=n//ncols
-                        plot.rc('text',usetex=True)
-                        plot.rc('font',family='serif')
-                        self.fig,self.axes=plot.subplots(figsize=(8,6.4))
-                        # Get height and width
-                        X,Y=self.fig.get_dpi()*self.fig.get_size_inches()
-                        h=Y/(nrows+1)
-                        w=X/ncols
-
-                        ax=self.axes
-                        for i, name in enumerate(sorted_names):
-                            row=i%nrows
-                            col=i//nrows
-                            y=Y-(row*h)-h
-                            xi_line=w*(col+0.05)
-                            xf_line=w*(col+0.25)
-                            xi_text=w*(col+0.3)
-                            ax.text(xi_text,y,name,fontsize=(h*0.6),
-                                    ha='left',va='center')
-
-                            ax.hlines(y+h*0.1,xi_line,xf_line,
-                                      color=colors[name],linewidth=(h*0.8))
-
-                            ax.set_xlim(0,X)
-                            ax.set_ylim(0,Y)
-                            ax.set_axis_off()
+                        sorted_names=[(hsv, name) for hsv, name in by_hsv]
+                        selected=[]
+                        if (ix_next-ix)==3 and strlist[ix+2]=='greys':
+                            for i in range(0,len(sorted_names)):
+                                if (sorted_names[i][0][1]<0.2):
+                                    selected.append((sorted_names[i][0][0],
+                                                     sorted_names[i][0][1],
+                                                     sorted_names[i][0][2],
+                                                     sorted_names[i][1]))
+                        elif (ix_next-ix)==3 and strlist[ix+2]=='reds':
+                            for i in range(0,len(sorted_names)):
+                                if (sorted_names[i][0][0]>0.0 and
+                                    sorted_names[i][0][0]<0.05 and
+                                    sorted_names[i][0][1]>0.2):
+                                    selected.append((sorted_names[i][0][0],
+                                                     sorted_names[i][0][1],
+                                                     sorted_names[i][0][2],
+                                                     sorted_names[i][1]))
+                        elif (ix_next-ix)==3 and strlist[ix+2]=='oranges':
+                            for i in range(0,len(sorted_names)):
+                                if (sorted_names[i][0][0]>0.05 and
+                                    sorted_names[i][0][0]<0.105 and
+                                    sorted_names[i][0][1]>0.2):
+                                    selected.append((sorted_names[i][0][0],
+                                                     sorted_names[i][0][1],
+                                                     sorted_names[i][0][2],
+                                                     sorted_names[i][1]))
+                        elif (ix_next-ix)==3 and strlist[ix+2]=='yellows':
+                            for i in range(0,len(sorted_names)):
+                                if (sorted_names[i][0][0]>0.105 and
+                                    sorted_names[i][0][0]<0.17 and
+                                    sorted_names[i][0][1]>0.2):
+                                    selected.append((sorted_names[i][0][0],
+                                                     sorted_names[i][0][1],
+                                                     sorted_names[i][0][2],
+                                                     sorted_names[i][1]))
+                        elif (ix_next-ix)==3 and strlist[ix+2]=='greens':
+                            for i in range(0,len(sorted_names)):
+                                if (sorted_names[i][0][0]>0.17 and
+                                    sorted_names[i][0][0]<0.25 and
+                                    sorted_names[i][0][1]>0.2):
+                                    selected.append((sorted_names[i][0][0],
+                                                     sorted_names[i][0][1],
+                                                     sorted_names[i][0][2],
+                                                     sorted_names[i][1]))
+                        elif (ix_next-ix)==3 and strlist[ix+2]=='blues':
+                            for i in range(0,len(sorted_names)):
+                                if (sorted_names[i][0][0]>0.0 and
+                                    sorted_names[i][0][0]<0.05 and
+                                    sorted_names[i][0][1]>0.2):
+                                    selected.append((sorted_names[i][0][0],
+                                                     sorted_names[i][0][1],
+                                                     sorted_names[i][0][2],
+                                                     sorted_names[i][1]))
+                        elif (ix_next-ix)==3 and strlist[ix+2]=='purples':
+                            for i in range(0,len(sorted_names)):
+                                if (sorted_names[i][0][0]>0.0 and
+                                    sorted_names[i][0][0]<0.05 and
+                                    sorted_names[i][0][1]>0.2):
+                                    selected.append((sorted_names[i][0][0],
+                                                     sorted_names[i][0][1],
+                                                     sorted_names[i][0][2],
+                                                     sorted_names[i][1]))
+                        elif (ix_next-ix)==3 and strlist[ix+2]=='pinks':
+                            for i in range(0,len(sorted_names)):
+                                if (sorted_names[i][0][0]>0.0 and
+                                    sorted_names[i][0][0]<0.05 and
+                                    sorted_names[i][0][1]>0.2):
+                                    selected.append((sorted_names[i][0][0],
+                                                     sorted_names[i][0][1],
+                                                     sorted_names[i][0][2],
+                                                     sorted_names[i][1]))
+                        else:
+                            print('Hue          Saturation',
+                                  '  Value        name')
+                            for i in range(0,len(sorted_names)):
+                                print('%7.6e %7.6e %7.6e %s' %
+                                      (sorted_names[i][0][0],
+                                       sorted_names[i][0][1],
+                                       sorted_names[i][0][2],
+                                       sorted_names[i][1]))
+                                
+                        if len(selected)>0:
+                            n=len(selected)
+                            ncols=4
+                            nrows=n//ncols
+                            plot.rc('text',usetex=True)
+                            plot.rc('font',family='serif')
+                            self.fig,self.axes=plot.subplots(figsize=(8,6.4))
+                            # Get height and width
+                            X,Y=self.fig.get_dpi()*self.fig.get_size_inches()
+                            h=Y/(nrows+1)
+                            w=X/ncols
+    
+                            ax=self.axes
+                            for i in range(0,n):
+                                row=i%nrows
+                                col=i//nrows
+                                y=Y-(row*h)-h
+                                xi_line=w*(col+0.05)
+                                xf_line=w*(col+0.25)
+                                xi_text=w*(col+0.3)
+                                ax.text(xi_text,y,
+                                        selected[i][3]+str(selected[i][0]),
+                                        fontsize=(h*0.2),
+                                        ha='left',va='center')
+    
+                                ax.hlines(y+h*0.1,xi_line,xf_line,
+                                          color=selected[i][3],
+                                          linewidth=(h*0.8))
+    
+                                ax.set_xlim(0,X)
+                                ax.set_ylim(0,Y)
+                                ax.set_axis_off()
+                                
+                                self.fig.subplots_adjust(left=0,right=1,
+                                                         top=1,bottom=0,
+                                                         hspace=0,wspace=0)
+                            plot.savefig('o2graph_colors2.png')
+                            print('Created file o2graph_colors2.png.')
+                            plot.show()
                             
-                            self.fig.subplots_adjust(left=0,right=1,
-                                                     top=1,bottom=0,
-                                                     hspace=0,wspace=0)
-                        plot.savefig('o2graph_colors.png')
-                        print('Created file o2graph_colors.png.')
-                        plot.show()
                         finished=True
                         
                     if (cmd=='color-list') and (ix_next-ix)==2:
