@@ -32,8 +32,9 @@
 # yt-render, yt-scatter (for table)
 #
 # Next things to do:
-# 1) Put tensor_grid data into a numpy array
-#    (using numpy.ctypeslib.as_array?)
+# 1) The yt-tf mechanism is ok, but we need to figure out
+#    how to distinguish between absolute and arbitrary values
+#    for tf limits
 # 2) Figure out how to implement transfer functions
 # 3) Create yt-surface
 
@@ -252,7 +253,8 @@ base_list=[
      "and set 'zset' to true. If a plotting canvas is currently "+
      "open, then "+
      "the z-limits on that plot are modified. Future plots are also "+
-     "set with the specified z-limits."]
+     "set with the specified z-limits."],
+    ["yt-tf","Edit the yt transfer function","","Long desc."]
 ]
 """
 This is a list of 4-element entries:
@@ -1291,9 +1293,10 @@ class plot_base:
     :py:func:`o2sclpy.plot_base.ttext()`, and axis titles (default
     16). Axis labels are set by this size times 0.8 .
     """
-    fig_dict=('fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,'+
-              'rt_ticks=False,left_margin=0.14,right_margin=0.04,'+
-              'bottom_margin=0.12,top_margin=0.04,fontsize=16')
+    #fig_dict=('fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,'+
+    #'rt_ticks=False,left_margin=0.14,right_margin=0.04,'+
+    #'bottom_margin=0.12,top_margin=0.04,fontsize=16')
+    fig_dict=''
     """
     Test for new dictionary
     """
@@ -1338,6 +1341,14 @@ class plot_base:
     yt_path=['','','']
     """
     yt camera path (default ['','',''])
+    """
+    yt_tf=0
+    """
+    The yt transfer function
+    """
+    yt_limits=[1,1,1,1,1,1]
+    """
+    The current yt axis limits
     """
     new_cmaps_defined=False
     
@@ -4060,19 +4071,21 @@ class o2graph_plotter(plot_base):
 
                         # Setup the transfer function
                         if True:
-                            tf=yt.ColorTransferFunction((minval,maxval),
-                                                        grey_opacity=False)
-                            wid=0.012
-                            tf.add_gaussian(minval+drange*0.9,wid,
-                                            [1.0,0.0,0.0,1.0])
-                            wid=0.01
-                            tf.add_gaussian(minval+drange*0.5,wid,
-                                            [0.0,1.0,0.0,1.0])
-                            wid=0.012
-                            tf.add_gaussian(minval+drange*0.1,wid,
-                                            [0.0,0.0,1.0,1.0])
-                            vol.set_transfer_function(tf)
-                            print(tf)
+                            vol.set_transfer_function(self.yt_tf)
+                            print(self.yt_tf)
+                            # tf=yt.ColorTransferFunction((minval,maxval),
+                            #                             grey_opacity=False)
+                            # wid=0.012
+                            # tf.add_gaussian(minval+drange*0.9,wid,
+                            #                 [1.0,0.0,0.0,1.0])
+                            # wid=0.01
+                            # tf.add_gaussian(minval+drange*0.5,wid,
+                            #                 [0.0,1.0,0.0,1.0])
+                            # wid=0.012
+                            # tf.add_gaussian(minval+drange*0.1,wid,
+                            #                 [0.0,0.0,1.0,1.0])
+                            # vol.set_transfer_function(tf)
+                            # print(tf)
                         else:
                             tfh=TransferFunctionHelper(ds)
                             tfh.set_field('density')
@@ -4097,6 +4110,8 @@ class o2graph_plotter(plot_base):
                     int_ptr=ctypes.POINTER(ctypes.c_int)
                     char_ptr=ctypes.POINTER(ctypes.c_char)
                     char_ptr_ptr=ctypes.POINTER(char_ptr)
+                    double_ptr=ctypes.POINTER(ctypes.c_double)
+                    double_ptr_ptr=ctypes.POINTER(double_ptr)
                     
                     # Set up wrapper for type function
                     type_fn=o2scl_hdf.o2scl_acol_get_type
@@ -4116,19 +4131,61 @@ class o2graph_plotter(plot_base):
                         import yt
                         from yt.visualization.volume_rendering.api \
                             import PointSource
+                        
+                        get_fn=o2scl_hdf.o2scl_acol_get_column
+                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                                         int_ptr,double_ptr_ptr]
+                        get_fn.restype=ctypes.c_int
+                        
+                        colx=ctypes.c_char_p(force_bytes(strlist[ix+1]))
+                        idx=ctypes.c_int(0)
+                        ptrx=double_ptr()
+                        get_ret=get_fn(amp,colx,ctypes.byref(idx),
+                                       ctypes.byref(ptrx))
+                        if get_ret!=0:
+                            print('Failed to get column named "'+
+                                  strlist[ix+1]+'".')
+                            failed=True
+                            
+                        coly=ctypes.c_char_p(force_bytes(strlist[ix+2]))
+                        idy=ctypes.c_int(0)
+                        ptry=double_ptr()
+                        get_ret=get_fn(amp,coly,ctypes.byref(idy),
+                                       ctypes.byref(ptry))
+                        if get_ret!=0:
+                            print('Failed to get column named "'+
+                                  strlist[ix+3]+'".')
+                            failed=True
 
-                        point_temp=np.array([[0.2,0.2,0.2],
-                                             [0.8,0.8,0.8]])
-                        color_temp=np.array([[1.0,1.0,1.0],
-                                             [1.0,1.0,1.0]])
-                        print(point_temp.shape)
-                        print(color_temp.shape)
-                        ps=pointSource(point_temp,colors=color_temp,
-                                       radii=3)
+                        colz=ctypes.c_char_p(force_bytes(strlist[ix+2]))
+                        idz=ctypes.c_int(0)
+                        ptrz=double_ptr()
+                        get_ret=get_fn(amp,colz,ctypes.byref(idz),
+                                       ctypes.byref(ptrz))
+                        if get_ret!=0:
+                            print('Failed to get column named "'+
+                                  strlist[ix+3]+'".')
+                            failed=True
+
+                        for i in range(0,idx.value)
+                        print('ptrx min:',min(ptrx))
+                        quit()
+                            
+                        pts=[]
+                        cols=[]
+                        for i in range(0,idx.value):
+                            pts.append([ptrx[i],ptry[i],ptrz[i]])
+                            cols.append([1,1,1])
+
+                        ps=pointSource(pts,colors=cols,radii=3)
+                        
+                        if self.yt_created_scene==False:
+                            self.yt_create_scene()
+
                         yt_scene.add_source(ps,keyname='o2graph_point')
                         
-                        if yt_init_called==False:
-                            self.yt_init(ps)
+                        if self.yt_created_camera==False:
+                            self.yt_create_camera(ps)
                             
                 elif cmd_name=='yt-render':
                     
@@ -4147,6 +4204,26 @@ class o2graph_plotter(plot_base):
                         
                     self.yt_scene.render()
                     self.yt_scene.save(strlist[ix+1],sigma_clip=1.0)
+
+                elif cmd_name=='yt-tf':
+
+                    if strlist[ix+1]=='new':
+                        print('New transfer function')
+                        print('min:',strlist[ix+2],'max:',strlist[ix+3])
+                        self.yt_tf=yt.ColorTransferFunction((float(strlist[ix+2]),
+                                                             float(strlist[ix+3])),
+                                                            grey_opacity=False)
+                    elif strlist[ix+1]=='gauss':
+                        print('Add Gaussian')
+                        print('loc:',strlist[ix+2],'wid:',strlist[ix+3])
+                        print('r:',strlist[ix+4],'g:',strlist[ix+5])
+                        print('b:',strlist[ix+6],'alpha:',strlist[ix+7])
+                        self.yt_tf.add_gaussian(float(strlist[ix+2]),
+                                                float(strlist[ix+3]),
+                                                [float(strlist[ix+4]),
+                                                 float(strlist[ix+5]),
+                                                 float(strlist[ix+6]),
+                                                 float(strlist[ix+7])])
 
                 elif cmd_name=='help' or cmd_name=='h':
                     

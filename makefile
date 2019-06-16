@@ -40,7 +40,7 @@ reinstall:
 yt-test1:
 	o2graph -backend Agg -set verbose 2 -create tensor_grid 3 10 10 10 \
 		-entry 1 1 1 -function "i0*sin(i1)*i2" -entry 1 1 1 \
-		-yt-add-vol -yt-render test.png
+		-yt-add-vol tf1 tf2 -yt-render test.png
 
 yt-test2:
 	o2graph -backend Agg -set verbose 2 -create tensor_grid 3 10 10 10 \
