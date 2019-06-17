@@ -1285,22 +1285,19 @@ class plot_base:
     :py:func:`o2sclpy.plot_base.ttext()`, and axis titles (default
     16). Axis labels are set by this size times 0.8 .
     """
-    #fig_dict=('fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,'+
-    #'rt_ticks=False,left_margin=0.14,right_margin=0.04,'+
-    #'bottom_margin=0.12,top_margin=0.04,fontsize=16')
     fig_dict=''
     """
-    Test for new dictionary
-    """
-    fig_size_x=6.0
-    """
-    The x-scale for the figure object (default 6.0)
-    """
-    fig_size_y=6.0
-    """
-    The y-scale for the figure object (default 6.0). This 
-    size is chosen because larger sizes tend to lead to windows
-    which are too tall for OSX laptops.
+    A dictionary which refers to the figure and axis defaults for
+    :py:func:`o2sclpy.default_plot()`. The default value is
+    ``('fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,'+
+    'rt_ticks=False,left_margin=0.14,right_margin=0.04,'+
+    'bottom_margin=0.12,top_margin=0.04,fontsize=16')`` . The x and y
+    sizes of the figure object are in fig_size_x and fig_size_y. The
+    value ticks_in refers to whether or not the ticks are inside or
+    outside the plot. The value of rt_ticks refers to whether or not
+    tick marks are plotted on the right and top sides of the plot. The
+    font size parameter is multiplied by 0.8 and then used for the
+    axis labels.
     """
     ticks_in=False
     """
