@@ -4362,7 +4362,10 @@ class o2graph_plotter(plot_base):
                         print('Created file o2graph_cmaps.png.')
                         print('Remember that colormaps can all be',
                               'reversed by using a "_r" suffix.')
-                        plot.show()
+                        import matplotlib
+                        if (matplotlib.get_backend()!='Agg' and 
+                            matplotlib.get_backend()!='agg'):
+                            plot.show()
                         finished=True
 
                     if (cmd=='colors') and (ix_next-ix)==2:
@@ -4406,10 +4409,13 @@ class o2graph_plotter(plot_base):
                                                      hspace=0,wspace=0)
                         plot.savefig('o2graph_colors.png')
                         print('Created file o2graph_colors.png.')
-                        plot.show()
+                        import matplotlib
+                        if (matplotlib.get_backend()!='Agg' and 
+                            matplotlib.get_backend()!='agg'):
+                            plot.show()
                         finished=True
                         
-                    if strlist[ix+1]=='colors2':
+                    if len(strlist)>ix+1 and strlist[ix+1]=='colors2':
                         from matplotlib import colors as mc
 
                         colors=dict(**mc.CSS4_COLORS,**mc.XKCD_COLORS)
@@ -4535,7 +4541,10 @@ class o2graph_plotter(plot_base):
                                                          hspace=0,wspace=0)
                             plot.savefig('o2graph_colors2.png')
                             print('Created file o2graph_colors2.png.')
-                            plot.show()
+                            import matplotlib
+                            if (matplotlib.get_backend()!='Agg' and 
+                                matplotlib.get_backend()!='agg'):
+                                plot.show()
                             
                         finished=True
                         
@@ -4680,21 +4689,15 @@ class o2graph_plotter(plot_base):
                         nmark=len(mlist)
                         ncols=2
                         nrows=(nmark+(nmark%2))/ncols
-                        self.left_margin=0.01
-                        self.right_margin=0.01
-                        self.top_margin=0.01
-                        self.bottom_margin=0.01
                         self.xlo=0
                         self.xhi=1
                         self.xset=True
-                        if True:
-                            self.canvas()
-                        else:
-                            (self.fig,self.axes)=default_plot(left_margin=0.1,
-                                                              top_margin=0.01,
-                                                              font=10,
-                                                              ticks_in=False,
-                                                              rt_ticks=False)
+                        self.fig_dict=('left_margin=0.01,top_margin=0.01,'+
+                                       'right_margin=0.01,'+
+                                       'bottom_margin=0.01,'+
+                                       'fontsize=10,ticks_in=False,'+
+                                       'rt_ticks=False')
+                        self.canvas()
                         self.canvas_flag=True
                         self.axes.set_axis_off()
                         row_ctr=0
@@ -4720,7 +4723,10 @@ class o2graph_plotter(plot_base):
                                 row_ctr=0
                                 col_ctr=col_ctr+1
                         plot.savefig('o2graph_markers.png')
-                        plot.show()
+                        import matplotlib
+                        if (matplotlib.get_backend()!='Agg' and 
+                            matplotlib.get_backend()!='agg'):
+                            plot.show()
                         finished=True
                         
                     # Handle the case of an acol command 
@@ -4772,13 +4778,6 @@ class o2graph_plotter(plot_base):
                     print('o2graph: A data table plotting and',
                           'processing program for O2scl.')
                     print(' Version '+version+'.')
-
-#                elif cmd_name in acol_list:
-#                    
-#                    if self.verbose>2:
-#                        print('Process '+cmd_name+'.')
-#
-#                    self.gen(o2scl_hdf,amp,cmd_name,strlist[ix+1:ix_next])
 
                 elif cmd_name=='plot':
                     
