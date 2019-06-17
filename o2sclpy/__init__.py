@@ -444,24 +444,12 @@ This is a list of 5-element entries:
 """
 
 param_list=[
-    ["bottom-margin","Size of bottom margin for a new canvas"+
-     " (default 0.12)."],
     ["colbar","If true, den-plot adds a color legend (default False)."],
     ["fig-dict","Dictionary for figure properties."],
-    ["fig-size-x","Horizontal figure size (default 6.0)."],
-    ["fig-size-y","Vertical figure size (default 6.0)."],
     ["font","Font scaling for text objects (default 16)."],
-    ["left-margin","Size of left margin for a new canvas"+
-     " (default 0.14)."],
     ["logx","If true, use a logarithmic x-axis (default False)."],
     ["logy","If true, use a logarithmic y-axis (default False)."],
     ["logz","If true, use a logarithmic z-axis (default False)."],
-    ["right-margin","Size of right margin for a new canvas"+
-     " (default 0.04)."],
-    ["rt-ticks","If true, include ticks on right and top (default false)."],
-    ["top-margin","Size of top margin for a new canvas"+
-     " (default 0.04)."],
-    ["ticks-in","If true, move ticks inside (default false)."],
     ["verbose","Verbosity parameter (default 1)."],
     ["xhi","Upper limit for x-axis (function if starts with '(')."],
     ["xlo","Lower limit for x-axis (function if starts with '(')."],
@@ -1063,6 +1051,10 @@ def string_to_dict(s):
     dct={}
     # If we need to skip arguments
     skip=0
+
+    if len(s)==0:
+        return dct
+    
     for i in range(0,len(arr)):
 
         if skip>0:
@@ -1489,30 +1481,8 @@ class plot_base:
                 self.colbar=True
         elif name=='font':
             self.font=float(value)
-        elif name=='left-margin':
-            self.left_margin=float(value)
-        elif name=='right-margin':
-            self.right_margin=float(value)
-        elif name=='top-margin':
-            self.top_margin=float(value)
-        elif name=='bottom-margin':
-            self.bottom_margin=float(value)
-        elif name=='fig-size-x':
-            self.fig_size_x=float(value)
         elif name=='fig-dict':
             self.fig_dict=value
-        elif name=='fig-size-y':
-            self.fig_size_y=float(value)
-        elif name=='ticks-in':
-            if value=='False' or value=='0':
-                self.ticks_in=False
-            else:
-                self.ticks_in=True
-        elif name=='rt-ticks':
-            if value=='False' or value=='0':
-                self.rt_ticks=False
-            else:
-                self.rt_ticks=True
         elif name=='yt-axis':
             print('set')
         elif name=='yt-axis-color':
@@ -1573,24 +1543,8 @@ class plot_base:
             print('The value of zlo is',self.zlo,'.')
         if name=='zset':
             print('The value of zset is',self.zset,'.')
-        if name=='top-margin':
-            print('The value of top-margin is',self.top_margin,'.')
-        if name=='bottom-margin':
-            print('The value of bottom-margin is',self.bottom_margin,'.')
         if name=='fig-dict':
             print('The value of fig-dict is',self.fig_dict,'.')
-        if name=='right-margin':
-            print('The value of right-margin is',self.right_margin,'.')
-        if name=='left-margin':
-            print('The value of left-margin is',self.left_margin,'.')
-        if name=='fig-size-x':
-            print('The value of fig-size-x is',self.fig_size_x,'.')
-        if name=='fig-size-y':
-            print('The value of fig-size-y is',self.fig_size_y,'.')
-        if name=='ticks-in':
-            print('The value of ticks-in is',self.ticks_in,'.')
-        if name=='rt-ticks':
-            print('The value of rt-ticks is',self.rt_ticks,'.')
         return
 
     def reset_xlimits(self):
@@ -3723,34 +3677,18 @@ class o2graph_plotter(plot_base):
         print(' ')
         for line in param_list:
             if line[0]!='verbose':
-                if line[0]=='bottom-margin':
-                    print(line[0]+' '+str(self.bottom_margin))
-                elif line[0]=='colbar':
+                if line[0]=='colbar':
                     print(line[0]+' '+str(self.colbar))
-                elif line[0]=='fig-size-x':
-                    print(line[0]+' '+str(self.fig_size_x))
                 elif line[0]=='fig-dict':
                     print(line[0]+' '+str(self.fig_dict))
-                elif line[0]=='fig-size-y':
-                    print(line[0]+' '+str(self.fig_size_y))
-                elif line[0]=='ticks-in':
-                    print(line[0]+' '+str(self.ticks_in))
-                elif line[0]=='rt-ticks':
-                    print(line[0]+' '+str(self.rt_ticks))
                 elif line[0]=='font':
                     print(line[0]+' '+str(self.font))
-                elif line[0]=='left-margin':
-                    print(line[0]+' '+str(self.left_margin))
                 elif line[0]=='logx':
                     print(line[0]+' '+str(self.logx))
                 elif line[0]=='logy':
                     print(line[0]+' '+str(self.logy))
                 elif line[0]=='logz':
                     print(line[0]+' '+str(self.logz))
-                elif line[0]=='right-margin':
-                    print(line[0]+' '+str(self.right_margin))
-                elif line[0]=='top-margin':
-                    print(line[0]+' '+str(self.top_margin))
                 elif line[0]=='xhi':
                     print(line[0]+' '+str(self.xhi))
                 elif line[0]=='xlo':
@@ -4167,7 +4105,6 @@ class o2graph_plotter(plot_base):
                                   strlist[ix+3]+'".')
                             failed=True
 
-                        for i in range(0,idx.value)
                         print('ptrx min:',min(ptrx))
                         quit()
                             
