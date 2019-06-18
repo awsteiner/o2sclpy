@@ -445,7 +445,18 @@ This is a list of 5-element entries:
 
 param_list=[
     ["colbar","If true, den-plot adds a color legend (default False)."],
-    ["fig-dict","Dictionary for figure properties."],
+    ["fig-dict",("Dictionary for figure properties. The default value is "+
+                 "blank and implies ('fig_size_x=6.0, fig_size_y=6.0, "+
+                 "ticks_in=False, "+
+                 "rt_ticks=False, left_margin=0.14, right_margin=0.04, "+
+                 "bottom_margin=0.12, top_margin=0.04, fontsize=16') ."+
+                 "The x and y sizes of the figure object are in "+
+                 "fig_size_x and fig_size_y. The value ticks_in refers "+
+                 "to whether or not the ticks are inside or outside the "+
+                 "plot. The value of rt_ticks refers to whether or not "+
+                 "tick marks are plotted on the right and top sides of "+
+                 "the plot. The font size parameter is multiplied by 0.8 "+
+                 "and then used for the axis labels.")],
     ["font","Font scaling for text objects (default 16)."],
     ["logx","If true, use a logarithmic x-axis (default False)."],
     ["logy","If true, use a logarithmic y-axis (default False)."],
