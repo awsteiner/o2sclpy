@@ -1346,11 +1346,10 @@ class plot_base:
     """
     The yt transfer function
     """
-    yt_limits=[1,1,1,1,1,1]
-    """
-    The current yt axis limits
-    """
     new_cmaps_defined=False
+    """
+    True if new colormaps were defined with 'new-cmaps'
+    """
     
     def new_cmaps(self):
         """
@@ -4113,21 +4112,50 @@ class o2graph_plotter(plot_base):
                                   strlist[ix+3]+'".')
                             failed=True
 
-                        print('ptrx min:',min(ptrx))
-                        quit()
-                            
+                        if self.xset==False:
+                            self.xlo=ptrx[0]
+                            self.xhi=ptrx[0]
+                            for i in range(0,idx.value):
+                                if ptrx[i]<self.xlo:
+                                    self.xlo=ptrx[i]
+                                if ptrx[i]>self.xhi:
+                                    self.xhi=ptrx[i]
+                        if self.yset==False:
+                            self.ylo=ptry[0]
+                            self.yhi=ptry[0]
+                            for i in range(0,idy.value):
+                                if ptry[i]<self.ylo:
+                                    self.ylo=ptry[i]
+                                if ptry[i]>self.yhi:
+                                    self.yhi=ptry[i]
+                        if self.zset==False:
+                            self.zlo=ptrz[0]
+                            self.zhi=ptrz[0]
+                            for i in range(0,idz.value):
+                                if ptrz[i]<self.zlo:
+                                    self.zlo=ptrz[i]
+                                if ptrz[i]>self.zhi:
+                                    self.zhi=ptrz[i]
+                        x_range=self.xhi-self.xlo
+                        y_range=self.yhi-self.ylo
+                        z_range=self.zhi-self.zlo
+
                         pts=[]
                         cols=[]
                         for i in range(0,idx.value):
-                            pts.append([ptrx[i],ptry[i],ptrz[i]])
-                            cols.append([1,1,1])
+                            pts.append([(ptrx[i]-self.xlo)/x_range,
+                                        (ptry[i]-self.ylo)/y_range,
+                                        (ptrz[i]-self.zlo)/z_range])
+                            cols.append([1,1,1,1])
+                        pts2=numpy.array(pts)
+                        cols2=numpy.array(cols)
 
-                        ps=pointSource(pts,colors=cols,radii=3)
-                        
+                        ps=PointSource(pts2,colors=cols2,radii=3)
+                                       
                         if self.yt_created_scene==False:
                             self.yt_create_scene()
 
-                        yt_scene.add_source(ps,keyname='o2graph_point')
+                        self.yt_scene.add_source(ps,keyname='o2graph_point')
                         
                         if self.yt_created_camera==False:
                             self.yt_create_camera(ps)

@@ -50,5 +50,10 @@ yt-test2:
 		-entry 1 1 1 -function "i0*cos(i1)*i2" -entry 1 1 1 \
 		-yt-add-vol -yt-render test.png
 
+yt-test3:
+	o2graph -backend Agg -set verbose 2 -create table z 0 20 0.1 \
+		-function "sin(z)" x -function "cos(z)" y -list \
+		-yt-scatter x y z -yt-render test.png
+
 statfiles:
 	cd doc; $(MAKE) statfiles
