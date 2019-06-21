@@ -3605,7 +3605,10 @@ class o2graph_plotter(plot_base):
                           ctypes.c_char_p]
         conv_fn.restype=ctypes.c_int
 
-        if len(args)>2:
+        if len(args)>=2:
+            if self.verbose>1:
+                print('Calling mult_vectors_to_conts() with',
+                      args[0],'and',args[1])
             mvs1=ctypes.c_char_p(force_bytes(args[0]))
             mvs2=ctypes.c_char_p(force_bytes(args[1]))
             conv_ret=conv_fn(amp,mvs1,mvs2)
@@ -3613,6 +3616,9 @@ class o2graph_plotter(plot_base):
                 print('Failed to read "'+args[0]+'" and "'+args[1]+'".')
                 return 2
         else:
+            if self.verbose>1:
+                print('Calling mult_vectors_to_conts() with',
+                      args[0])
             mvs1=ctypes.c_char_p(0)
             mvs2=ctypes.c_char_p(force_bytes(args[0]))
             conv_ret=conv_fn(amp,mvs1,mvs2)

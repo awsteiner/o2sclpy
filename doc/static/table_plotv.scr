@@ -8,6 +8,7 @@ o2graph -create table x "(-3.14)" 3.14 0.1 \
 	-function "cos(x)" y -internal table_plotv_b.o2 \
 	-create table x "(-3.14)" 3.14 0.1 \
 	-function "cos(x+acos(-1))" y -internal table_plotv_c.o2 \
+	-set verbose 3 \
 	-plotv hdf5:table_plotv_?.o2:acol:x \
 	hdf5:table_plotv_?.o2:acol:y \
 	-save table_plotv.png
