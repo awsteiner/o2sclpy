@@ -1121,6 +1121,8 @@ def string_to_dict(s):
                 print('Found connectionstyle option, reprocessed:',arr2[1])
                 
             # convert strings to numbers if necessary
+            if arr2[0]=='zorder':
+                arr2[1]=float(arr2[1])
             if arr2[0]=='lw':
                 arr2[1]=float(arr2[1])
             if arr2[0]=='alpha':
