@@ -254,7 +254,10 @@ base_list=[
      "open, then "+
      "the z-limits on that plot are modified. Future plots are also "+
      "set with the specified z-limits."],
-    ["yt-tf","Edit the yt transfer function","","Long desc."]
+    ["yt-tf","Edit the yt transfer function","","Long desc."],
+    ["subplots","Create subplots.","<nrows> <ncols>","Long desc."],
+    ["selsub","Select subplot.","<row> <col>","Long desc."],
+    ["subadj","Adjust subplots","<kwargs>","Long desc."]
 ]
 """
 This is a list of 4-element entries:
@@ -1145,8 +1148,35 @@ def string_to_dict(s):
                 arr2[1]=float(arr2[1])
             if arr2[0]=='bottom_margin':
                 arr2[1]=float(arr2[1])
+            if arr2[0]=='left':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='right':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='top':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='bottom':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='wspace':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='hspace':
+                arr2[1]=float(arr2[1])
             if arr2[0]=='fontsize':
                 arr2[1]=float(arr2[1])
+            if arr2[0]=='sharex':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='sharey':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='squeeze':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
             if arr2[0]=='fill':
                 if arr2[1]=='True':
                     arr2[1]=True
@@ -1195,6 +1225,10 @@ class plot_base:
     axes=0
     """ 
     Axis object
+    """
+    axis_list=0
+    """
+    2D array of axis objects when subplots is used
     """
     fig=0
     """ 
@@ -1815,6 +1849,26 @@ class plot_base:
                        fontsize=self.font,
                        transform=self.axes.transAxes,
                        bbox=string_to_dict(boxprops),**kwargs)
+        return
+
+    def subplots(self,nr,nc=0,**kwargs):
+        plot.rc('text',usetex=True)
+        plot.rc('font',family='serif')
+        plot.rcParams['lines.linewidth']=0.5
+        self.fig,self.axis_list=plot.subplots(nrows=nr,ncols=nc,**kwargs)
+        self.canvas_flag=True
+        return
+
+    def selsub(self,nr,nc=0):
+        nr_temp=len(self.axis_list)
+        try:
+            nc_temp=len(self.axis_list[0])
+        except:
+            nc_temp=1
+        if nc_temp==1:
+            self.axes=self.axis_list[nr]
+        else:
+            self.axes=self.axis_list[nr][nc]
         return
 
     def canvas(self):
@@ -4943,6 +4997,44 @@ class o2graph_plotter(plot_base):
                         print('Not enough parameters for save option.')
                     else:
                         plot.savefig(strlist[ix+1])
+                        
+                elif cmd_name=='subplots':
+                    
+                    if self.verbose>2:
+                        print('Process subplots.')
+                        
+                    if ix_next-ix<2:
+                        print('Not enough parameters for subplots option.')
+                    elif ix_next-ix<3:
+                        self.subplots(int(strlist[ix+1]))
+                    elif ix_next-ix<4:
+                        self.subplots(int(strlist[ix+1]),int(strlist[ix+2]))
+                    else:
+                        self.subplots(int(strlist[ix+1]),int(strlist[ix+2]),
+                                      **string_to_dict(strlist[ix+3]))
+                        
+                elif cmd_name=='selsub':
+                    
+                    if self.verbose>2:
+                        print('Process selsub.')
+                        
+                    if ix_next-ix<2:
+                        print('Not enough parameters for selsub option.')
+                    elif ix_next-ix<3:
+                        self.selsub(int(strlist[ix+1]))
+                    else:
+                        self.selsub(int(strlist[ix+1]),int(strlist[ix+2]))
+                        
+                elif cmd_name=='subadj':
+                    
+                    if self.verbose>2:
+                        print('Process subadj.')
+
+                    if ix_next-ix<2:
+                        print('Not enough parameters for subadj option.')
+                    else:
+                        print('here',strlist[ix+1])
+                        plot.subplots_adjust(**string_to_dict(strlist[ix+1]))
                         
                 elif cmd_name=='line':
                     
