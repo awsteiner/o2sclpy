@@ -244,9 +244,9 @@ base_list=[
      "open, then "+
      "the y-limits on that plot are modified. Future plots are also "+
      "set with the specified y-limits."],
-    ["yt-path","Set yt animation path","",
+    ["yt-path","Set yt animation path.","",
      "Long desc."],
-    ["yt-render","Render the yt visualization",
+    ["yt-render","Render the yt visualization.",
      "<filename pattern>","Long desc."],
     ["zlimits","Set the z-azis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
@@ -254,10 +254,11 @@ base_list=[
      "open, then "+
      "the z-limits on that plot are modified. Future plots are also "+
      "set with the specified z-limits."],
-    ["yt-tf","Edit the yt transfer function","","Long desc."],
+    ["yt-tf","Edit the yt transfer function.","","Long desc."],
     ["subplots","Create subplots.","<nrows> <ncols>","Long desc."],
-    ["selsub","Select subplot.","<row> <col>","Long desc."],
-    ["subadj","Adjust subplots","<kwargs>","Long desc."]
+    ["selsub","Select subplot.","1D: <row or col> 2D: <row> <col>",
+     "Long desc."],
+    ["subadj","Adjust subplots.","<kwargs>","Long desc."]
 ]
 """
 This is a list of 4-element entries:
