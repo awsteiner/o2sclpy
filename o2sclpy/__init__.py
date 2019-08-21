@@ -2699,15 +2699,15 @@ class o2graph_plotter(plot_base):
                                        ygrid[ny.value-2])/2
                         
             if len(kwstring)==0:
-                plot.imshow(sl,interpolation='nearest',
+                self.axes.imshow(sl,interpolation='nearest',
                             origin='lower',extent=[extent1,extent2,
                                                    extent3,extent4],
                             aspect='auto')
             else:
-                plot.imshow(sl,interpolation='nearest',
-                            origin='lower',extent=[extent1,extent2,
-                                                   extent3,extent4],
-                            aspect='auto',**string_to_dict(kwstring))
+                self.axes.imshow(sl,interpolation='nearest',
+                                 origin='lower',extent=[extent1,extent2,
+                                                        extent3,extent4],
+                                 aspect='auto',**string_to_dict(kwstring))
                 
             # The color bar is added later below...
 
@@ -2846,25 +2846,25 @@ class o2graph_plotter(plot_base):
                 if self.logx==True:
                     if self.logy==True:
                         if len(args)<3:
-                            plot.loglog(xv,yv)
+                            self.axes.loglog(xv,yv)
                         else:
-                            plot.loglog(xv,yv,**string_to_dict(args[2]))
+                            self.axes.loglog(xv,yv,**string_to_dict(args[2]))
                     else:
                         if len(args)<3:
-                            plot.semilogx(xv,yv)
+                            self.axes.semilogx(xv,yv)
                         else:
-                            plot.semilogx(xv,yv,**string_to_dict(args[2]))
+                            self.axes.semilogx(xv,yv,**string_to_dict(args[2]))
                 else:
                     if self.logy==True:
                         if len(args)<3:
-                            plot.semilogy(xv,yv)
+                            self.axes.semilogy(xv,yv)
                         else:
-                            plot.semilogy(xv,yv,**string_to_dict(args[2]))
+                            self.axes.semilogy(xv,yv,**string_to_dict(args[2]))
                     else:
                         if len(args)<3:
-                            plot.plot(xv,yv)
+                            self.axes.plot(xv,yv)
                         else:
-                            plot.plot(xv,yv,**string_to_dict(args[2]))
+                            self.axes.plot(xv,yv,**string_to_dict(args[2]))
 
             # End of section for 'table' type
         elif curr_type==b'hist':
@@ -2895,25 +2895,25 @@ class o2graph_plotter(plot_base):
             if self.logx==True:
                 if self.logy==True:
                     if len(args)<1:
-                        plot.loglog(xv,yv)
+                        self.axes.loglog(xv,yv)
                     else:
-                        plot.loglog(xv,yv,**string_to_dict(args[0]))
+                        self.axes.loglog(xv,yv,**string_to_dict(args[0]))
                 else:
                     if len(args)<1:
-                        plot.semilogx(xv,yv)
+                        self.axes.semilogx(xv,yv)
                     else:
-                        plot.semilogx(xv,yv,**string_to_dict(args[0]))
+                        self.axes.semilogx(xv,yv,**string_to_dict(args[0]))
             else:
                 if self.logy==True:
                     if len(args)<1:
-                        plot.semilogy(xv,yv)
+                        self.axes.semilogy(xv,yv)
                     else:
-                        plot.semilogy(xv,yv,**string_to_dict(args[0]))
+                        self.axes.semilogy(xv,yv,**string_to_dict(args[0]))
                 else:
                     if len(args)<1:
-                        plot.plot(xv,yv)
+                        self.axes.plot(xv,yv)
                     else:
-                        plot.plot(xv,yv,**string_to_dict(args[0]))
+                        self.axes.plot(xv,yv,**string_to_dict(args[0]))
                             
             # End of section for 'hist' type
         elif curr_type==b'prob_dens_mdim_amr':
@@ -3018,25 +3018,25 @@ class o2graph_plotter(plot_base):
                 if self.logx==True:
                     if self.logy==True:
                         if len(args)<1:
-                            plot.loglog(xv,yv)
+                            self.axes.loglog(xv,yv)
                         else:
-                            plot.loglog(xv,yv,**string_to_dict(args[0]))
+                            self.axes.loglog(xv,yv,**string_to_dict(args[0]))
                     else:
                         if len(args)<1:
-                            plot.semilogx(xv,yv)
+                            self.axes.semilogx(xv,yv)
                         else:
-                            plot.semilogx(xv,yv,**string_to_dict(args[0]))
+                            self.axes.semilogx(xv,yv,**string_to_dict(args[0]))
                 else:
                     if self.logy==True:
                         if len(args)<1:
-                            plot.semilogy(xv,yv)
+                            self.axes.semilogy(xv,yv)
                         else:
-                            plot.semilogy(xv,yv,**string_to_dict(args[0]))
+                            self.axes.semilogy(xv,yv,**string_to_dict(args[0]))
                     else:
                         if len(args)<1:
-                            plot.plot(xv,yv)
+                            self.axes.plot(xv,yv)
                         else:
-                            plot.plot(xv,yv,**string_to_dict(args[0]))
+                            self.axes.plot(xv,yv,**string_to_dict(args[0]))
             # End of section for 'vector<contour_line>' type
         else:
             print("Command 'plot' not supported for type",
@@ -3044,9 +3044,9 @@ class o2graph_plotter(plot_base):
             return
         
         if self.xset==True:
-            plot.xlim([self.xlo,self.xhi])
+            self.axes.xlim(self.xlo,self.xhi)
         if self.yset==True:
-            plot.ylim([self.ylo,self.yhi])
+            self.axes.ylim(self.ylo,self.yhi)
                                  
         # End of 'plot' function
                                  
