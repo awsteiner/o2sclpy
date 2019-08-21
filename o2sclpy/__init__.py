@@ -255,10 +255,20 @@ base_list=[
      "the z-limits on that plot are modified. Future plots are also "+
      "set with the specified z-limits."],
     ["yt-tf","Edit the yt transfer function.","","Long desc."],
-    ["subplots","Create subplots.","<nrows> <ncols>","Long desc."],
+    ["subplots","Create subplots.","<nrows> <ncols> [kwargs]",
+     "Create a grid of <nrows> by <ncols> subplots. "+
+     "The kwargs currently supported are 'sharex', 'sharey', "+
+     "and 'squeeze'."],
     ["selsub","Select subplot.","1D: <row or col> 2D: <row> <col>",
-     "Long desc."],
-    ["subadj","Adjust subplots.","<kwargs>","Long desc."]
+     "Select which subplot to use for subsequent plotting commands. "+
+     "If there is only one row, then 'selsub' needs only the column "+
+     "arugment, and if there is only one column, then 'selsub' needs "+
+     "only the row argument. Otherwise, two arguments are needed to "+
+     "specify the row and column. The rows and columns begin with "+
+     "zero and start in the upper left."],
+    ["subadj","Adjust subplots.","<kwargs>",
+     "The kwargs for 'subadj' are left, right, bottom, top, "+
+     "wspace, and hspace."]
 ]
 """
 This is a list of 4-element entries:
