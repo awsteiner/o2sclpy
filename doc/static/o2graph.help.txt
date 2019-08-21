@@ -27,6 +27,7 @@ List of command-line options:
    -set         Set the value of a parameter.                     
    -shell       Run a shell command.                              
    -show-units  Show the unit conversion table.                   
+   -slack       Send a slack message.                             
    -type        Show current object type.                         
 -v -version     Print version information and O2scl settings.     
    -warranty    Show warranty information.                        
@@ -104,9 +105,13 @@ O2graph command-line options:
   -ttext        Plot text in window coordinates [(0,0) to (1,1)].
   -xlimits      Set the x-axis limits.
   -ylimits      Set the y-axis limits.
-  -yt-path      Set yt animation path
-  -yt-render    Render the yt visualization
+  -yt-path      Set yt animation path.
+  -yt-render    Render the yt visualization.
   -zlimits      Set the z-azis limits.
+  -yt-tf        Edit the yt transfer function.
+  -subplots     Create subplots.
+  -selsub       Select subplot.
+  -subadj       Adjust subplots.
 
 ------------------------------------------------------------------------------
 O2graph type-specific commands:
