@@ -459,7 +459,7 @@ This is a list of 5-element entries:
 
 param_list=[
     ["colbar","If true, den-plot adds a color legend (default False)."],
-    ["fig-dict",("Dictionary for figure properties. The default value is "+
+    ["fig_dict",("Dictionary for figure properties. The default value is "+
                  "blank and implies ('fig_size_x=6.0, fig_size_y=6.0, "+
                  "ticks_in=False, "+
                  "rt_ticks=False, left_margin=0.14, right_margin=0.04, "+
@@ -499,14 +499,14 @@ A list of 2-element entries, name and description
 """
 
 yt_param_list=[
-    ["yt-axis","If true, plot a 3D axis."],
-    ["yt-axis-color","Color for the 3D axis."],
-    ["yt-axis-labels-flat",
+    ["yt_axis","If true, plot a 3D axis."],
+    ["yt_axis_color","Color for the 3D axis."],
+    ["yt_axis_labels_flat",
      "If true, force the axis labels to be parallel to the camera."],
-    ["yt-resolution","The rendering resolution (default [512,512])."],
-    ["yt-focus","The camera focus (default [0.5,0.5,0.5])."],
-    ["yt-position","The camera position."],
-    ["yt-path","The animation path."]
+    ["yt_resolution","The rendering resolution (default [512,512])."],
+    ["yt_focus","The camera focus (default [0.5,0.5,0.5])."],
+    ["yt_position","The camera position."],
+    ["yt_path","The animation path."]
 ]
 """
 List of yt parameters for o2sclpy
@@ -1535,21 +1535,21 @@ class plot_base:
                 self.colbar=True
         elif name=='font':
             self.font=float(value)
-        elif name=='fig-dict':
+        elif name=='fig_dict':
             self.fig_dict=value
-        elif name=='yt-axis':
+        elif name=='yt_axis':
             print('set')
-        elif name=='yt-axis-color':
+        elif name=='yt_axis_color':
             print('set')
-        elif name=='yt-axis-labels-flat':
+        elif name=='yt_axis_labels_flat':
             print('set')
-        elif name=='yt-axis-resolution':
+        elif name=='yt_axis_resolution':
             print('set')
-        elif name=='yt-focus':
+        elif name=='yt_focus':
             print('set')
-        elif name=='yt-position':
+        elif name=='yt_position':
             print('set')
-        elif name=='yt-path':
+        elif name=='yt_path':
             print('set')
         else:
             print('No variable named',name)
