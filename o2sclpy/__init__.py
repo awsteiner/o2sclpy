@@ -2256,7 +2256,7 @@ class plotter(plot_base):
                                 ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2],
                         aspect='auto',**kwargs)
             if self.colbar==True:
-                cbar=self.axes.colorbar()
+                cbar=plot.colorbar()
                 cbar.ax.tick_params(labelsize=self.font*0.8)
                 
         else:
@@ -2784,7 +2784,7 @@ class o2graph_plotter(plot_base):
             return
 
         if self.colbar==True:
-            cbar=self.axes.colorbar()
+            cbar=plot.colorbar()
             cbar.ax.tick_params(labelsize=self.font*0.8)
 
     def plot(self,o2scl_hdf,amp,args):
@@ -3279,7 +3279,7 @@ class o2graph_plotter(plot_base):
                 if self.yset==True:
                     self.axes.set_ylim(self.ylo,self.yhi)
                 if self.colbar==True and len(cv)>0:
-                    cbar=self.axes.colorbar()
+                    cbar=plot.colorbar()
                     cbar.ax.tick_params(labelsize=self.font*0.8)
                     
             # End of section for 'table' type
@@ -3421,7 +3421,7 @@ class o2graph_plotter(plot_base):
                     self.axes.hist2d(xv,yv,**string_to_dict(args[2]))
                 
                 if self.colbar==True:
-                    cbar=self.axes.colorbar()
+                    cbar=plot.colorbar()
                     cbar.ax.tick_params(labelsize=self.font*0.8)
                     
             # End of section for 'table' type
