@@ -1,19 +1,18 @@
 # Docs
 #
-o2graph -set font 16 -create table x 0 10 0.1 \
+o2graph -set font 16 -create table x func:1001:i/100.0 \
 	-function "sin(x)" y1 \
 	-function "cos(x)" y2 \
 	-function "tan(x)" y3 \
 	-function "atan(x)" y4 \
-	-set xtitle xtest -set ytitle ytest \
 	-subplots 2 2 sharex=True \
 	-selsub 0 0 -set ylo "(-1)" -set yhi 1.0 -plot x y1 \
-	-subtitles none "y=sin(x)" \
+	-ytitle "y=sin(x)" \
 	-selsub 0 1 -set ylo "(-1)" -set yhi 1.0 -plot x y2 \
-	-subtitles none "y=cos(x)" \
+	-ytitle "y=cos(x)" \
 	-selsub 1 0 -set ylo "(-20)" -set yhi 19.9 -plot x y3 \
-	-subtitles x "y=tan(x)" \
+	-xtitle x -ytitle "y=tan(x)" \
 	-selsub 1 1 -set ylo "(0)" -set yhi 1.49 -plot x y4 \
-	-subtitles x "y=atan(x)" \
+	-xtitle x -ytitle "y=atan(x)" \
 	-subadj hspace=0,left=0.12,right=0.98,top=0.98,bottom=0.11,wspace=0.33 \
 	-save subplots1.pdf -show

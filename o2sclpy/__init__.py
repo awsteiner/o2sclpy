@@ -266,7 +266,8 @@ base_list=[
      "only the row argument. Otherwise, two arguments are needed to "+
      "specify the row and column. The rows and columns begin with "+
      "zero and start in the upper left."],
-    ["subtitles","Add titles to subplots.","",""],
+    ["xtitle","Add x title to plot (or subplot).","",""],
+    ["ytitle","Add y title to plot (or subplot).","",""],
     ["subadj","Adjust subplots.","<kwargs>",
      "The kwargs for 'subadj' are left, right, bottom, top, "+
      "wspace, and hspace."]
@@ -1888,9 +1889,11 @@ class plot_base:
         self.canvas_flag=True
         return
 
-    def subtitles(self,xt,yt):
+    def xtitle(self,xt):
         if xt!='' and xt!='none':
             self.axes.set_xlabel(xt,fontsize=self.font)
+            
+    def ytitle(self,yt):
         if yt!='' and yt!='none':
             self.axes.set_ylabel(yt,fontsize=self.font)
         
@@ -2272,7 +2275,7 @@ class plotter(plot_base):
                         sl[i][j]=math.log10(sl[i][h])
             lx=len(xgrid)
             ly=len(ygrid)
-            self.axes.imshow(sl,interpolation='nearest',
+            im=self.axes.imshow(sl,interpolation='nearest',
                         origin='lower',
                         extent=[xgrid[0]-(xgrid[1]-xgrid[0])/2,
                                 xgrid[lx-1]+(xgrid[lx-1]-xgrid[lx-2])/2,
@@ -2280,7 +2283,7 @@ class plotter(plot_base):
                                 ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2],
                         aspect='auto',**kwargs)
             if self.colbar==True:
-                cbar=plot.colorbar()
+                cbar=self.fig.colorbar(im)
                 cbar.ax.tick_params(labelsize=self.font*0.8)
                 
         else:
@@ -2723,12 +2726,12 @@ class o2graph_plotter(plot_base):
                                        ygrid[ny.value-2])/2
                         
             if len(kwstring)==0:
-                self.axes.imshow(sl,interpolation='nearest',
+                im=self.axes.imshow(sl,interpolation='nearest',
                             origin='lower',extent=[extent1,extent2,
                                                    extent3,extent4],
                             aspect='auto')
             else:
-                self.axes.imshow(sl,interpolation='nearest',
+                im=self.axes.imshow(sl,interpolation='nearest',
                                  origin='lower',extent=[extent1,extent2,
                                                         extent3,extent4],
                                  aspect='auto',**string_to_dict(kwstring))
@@ -2789,12 +2792,12 @@ class o2graph_plotter(plot_base):
                                        ygrid[ny.value-2])/2
                         
             if len(args)<1:
-                self.axes.imshow(sl,interpolation='nearest',
+                im=self.axes.imshow(sl,interpolation='nearest',
                             origin='lower',extent=[extent1,extent2,
                                                    extent3,extent4],
                             aspect='auto')
             else:
-                self.axes.imshow(sl,interpolation='nearest',
+                im=self.axes.imshow(sl,interpolation='nearest',
                             origin='lower',extent=[extent1,extent2,
                                                    extent3,extent4],
                             aspect='auto',**string_to_dict(args[0]))
@@ -2808,7 +2811,7 @@ class o2graph_plotter(plot_base):
             return
 
         if self.colbar==True:
-            cbar=plot.colorbar()
+            cbar=self.fig.colorbar(im)
             cbar.ax.tick_params(labelsize=self.font*0.8)
 
     def plot(self,o2scl_hdf,amp,args):
@@ -5068,18 +5071,27 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for subadj option.')
                     else:
-                        print('here',strlist[ix+1])
                         plot.subplots_adjust(**string_to_dict(strlist[ix+1]))
                         
-                elif cmd_name=='subtitles':
+                elif cmd_name=='xtitle':
                     
                     if self.verbose>2:
-                        print('Process subtitles.')
+                        print('Process xtitle.')
 
-                    if ix_next-ix<2:
-                        print('Not enough parameters for subtitles option.')
+                    if ix_next-ix<1:
+                        print('Not enough parameters for xtitle option.')
                     else:
-                        self.subtitles(strlist[ix+1],strlist[ix+2])
+                        self.xtitle(strlist[ix+1])
+                        
+                elif cmd_name=='ytitle':
+                    
+                    if self.verbose>2:
+                        print('Process ytitle.')
+
+                    if ix_next-ix<1:
+                        print('Not enough parameters for ytitle option.')
+                    else:
+                        self.ytitle(strlist[ix+1])
                         
                 elif cmd_name=='line':
                     
