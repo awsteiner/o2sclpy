@@ -266,6 +266,7 @@ base_list=[
      "only the row argument. Otherwise, two arguments are needed to "+
      "specify the row and column. The rows and columns begin with "+
      "zero and start in the upper left."],
+    ["subtitles","Add titles to subplots.","",""],
     ["subadj","Adjust subplots.","<kwargs>",
      "The kwargs for 'subadj' are left, right, bottom, top, "+
      "wspace, and hspace."]
@@ -1867,9 +1868,32 @@ class plot_base:
         plot.rc('font',family='serif')
         plot.rcParams['lines.linewidth']=0.5
         self.fig,self.axis_list=plot.subplots(nrows=nr,ncols=nc,**kwargs)
+        # Count rows and columns to modify axes
+        nr_temp=len(self.axis_list)
+        try:
+            nc_temp=len(self.axis_list[0])
+        except:
+            nc_temp=1
+        if nc_temp==1:
+            for i in range(0,nr_temp):
+                self.axis_list[i].tick_params('both',length=5,
+                                              width=1,which='minor')
+                self.axis_list[i].tick_params(labelsize=self.font*0.8)
+        else:
+            for i in range(0,nr_temp):
+                for j in range(0,nc_temp):
+                    self.axis_list[i][j].tick_params('both',length=5,
+                                                     width=1,which='minor')
+                    self.axis_list[i][j].tick_params(labelsize=self.font*0.8)
         self.canvas_flag=True
         return
 
+    def subtitles(self,xt,yt):
+        if xt!='' and xt!='none':
+            self.axes.set_xlabel(xt,fontsize=self.font)
+        if yt!='' and yt!='none':
+            self.axes.set_ylabel(yt,fontsize=self.font)
+        
     def selsub(self,nr,nc=0):
         nr_temp=len(self.axis_list)
         try:
@@ -5046,6 +5070,16 @@ class o2graph_plotter(plot_base):
                     else:
                         print('here',strlist[ix+1])
                         plot.subplots_adjust(**string_to_dict(strlist[ix+1]))
+                        
+                elif cmd_name=='subtitles':
+                    
+                    if self.verbose>2:
+                        print('Process subtitles.')
+
+                    if ix_next-ix<2:
+                        print('Not enough parameters for subtitles option.')
+                    else:
+                        self.subtitles(strlist[ix+1],strlist[ix+2])
                         
                 elif cmd_name=='line':
                     
