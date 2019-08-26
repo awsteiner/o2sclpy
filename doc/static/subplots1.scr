@@ -1,4 +1,4 @@
-# Docs
+# Subplot example with simple 'plot' functions
 #
 o2graph -set font 16 -create table x func:1001:i/100.0 \
 	-function "sin(x)" y1 \
@@ -6,13 +6,13 @@ o2graph -set font 16 -create table x func:1001:i/100.0 \
 	-function "tan(x)" y3 \
 	-function "atan(x)" y4 \
 	-subplots 2 2 sharex=True \
-	-selsub 0 0 -set ylo "(-1)" -set yhi 1.0 -plot x y1 \
+	-selax 0 -set ylo "(-1)" -set yhi 1.0 -plot x y1 \
 	-ytitle "y=sin(x)" \
-	-selsub 0 1 -set ylo "(-1)" -set yhi 1.0 -plot x y2 \
+	-selax 1 -set ylo "(-1)" -set yhi 1.0 -plot x y2 \
 	-ytitle "y=cos(x)" \
-	-selsub 1 0 -set ylo "(-20)" -set yhi 19.9 -plot x y3 \
+	-selax 2 -set ylo "(-20)" -set yhi 19.9 -plot x y3 \
 	-xtitle x -ytitle "y=tan(x)" \
-	-selsub 1 1 -set ylo "(0)" -set yhi 1.49 -plot x y4 \
+	-selax 3 -set ylo "(0)" -set yhi 1.49 -plot x y4 \
 	-xtitle x -ytitle "y=atan(x)" \
 	-subadj hspace=0,left=0.12,right=0.98,top=0.98,bottom=0.11,wspace=0.33 \
-	-save subplots1.pdf -show
+	-save subplots1.png -show

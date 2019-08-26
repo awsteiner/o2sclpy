@@ -2,13 +2,12 @@
 # HDF5 files using the 'internal' command, then uses 'plotv' to
 # plot the 'x' and 'y' columns from all three files together
 #
-o2graph -create table x "(-3.14)" 3.14 0.1 \
+o2graph -create table x "grid:(-3.14),3.14,0.1" \
 	-function "sin(x)" y -internal table_plotv_a.o2 \
-	-create table x "(-3.14)" 3.14 0.1 \
+	-create table x "grid:(-3.14),3.14,0.1" \
 	-function "cos(x)" y -internal table_plotv_b.o2 \
-	-create table x "(-3.14)" 3.14 0.1 \
+	-create table x "grid:(-3.14),3.14,0.1" \
 	-function "cos(x+acos(-1))" y -internal table_plotv_c.o2 \
-	-set verbose 3 \
 	-plotv hdf5:table_plotv_?.o2:acol:x \
 	hdf5:table_plotv_?.o2:acol:y \
 	-save table_plotv.png

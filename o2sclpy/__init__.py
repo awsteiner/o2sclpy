@@ -259,15 +259,13 @@ base_list=[
      "Create a grid of <nrows> by <ncols> subplots. "+
      "The kwargs currently supported are 'sharex', 'sharey', "+
      "and 'squeeze'."],
-    ["selsub","Select subplot.","1D: <row or col> 2D: <row> <col>",
-     "Select which subplot to use for subsequent plotting commands. "+
-     "If there is only one row, then 'selsub' needs only the column "+
-     "arugment, and if there is only one column, then 'selsub' needs "+
-     "only the row argument. Otherwise, two arguments are needed to "+
-     "specify the row and column. The rows and columns begin with "+
-     "zero and start in the upper left."],
+    ["selax","Select axis.","<index>",
+     "Select which axis to use for subsequent plotting commands."],
+    ["addcbar","Add color bar.","<left> <bottom> <width> <height>",
+     "Add axis"],
     ["xtitle","Add x title to plot (or subplot).","",""],
     ["ytitle","Add y title to plot (or subplot).","",""],
+    ["inset","Add an inset (unfinished).","",""],
     ["subadj","Adjust subplots.","<kwargs>",
      "The kwargs for 'subadj' are left, right, bottom, top, "+
      "wspace, and hspace."]
@@ -1235,11 +1233,15 @@ class plot_base:
     to python code which makes plots using matplotlib.
     """
 
+    last_image=0
+    """
+    The last image object created (used for addcbar)
+    """
     axes=0
     """ 
     Axis object
     """
-    axis_list=0
+    axis_list=[]
     """
     2D array of axis objects when subplots is used
     """
@@ -1266,14 +1268,6 @@ class plot_base:
     logz=False
     """
     If True, then use a logarithmic z axis (default False)
-    """
-    xtitle=''
-    """
-    Title for x axis (default '')
-    """
-    ytitle=''
-    """
-    Title for y axis (default '')
     """
     ztitle=''
     """
@@ -1471,10 +1465,6 @@ class plot_base:
                 self.logz=False
             else:
                 self.logz=True
-        elif name=='xtitle':
-            self.xtitle=value
-        elif name=='ytitle':
-            self.ytitle=value
         elif name=='ztitle':
             self.ztitle=value
         elif name=='xlo':
@@ -1581,16 +1571,12 @@ class plot_base:
             print('The value of xlo is',self.xlo,'.')
         if name=='xset':
             print('The value of xset is',self.xset,'.')
-        if name=='xtitle':
-            print('The value of xtitle is',self.xtitle,'.')
         if name=='yhi':
             print('The value of yhi is',self.yhi,'.')
         if name=='ylo':
             print('The value of ylo is',self.ylo,'.')
         if name=='yset':
             print('The value of yset is',self.yset,'.')
-        if name=='ytitle':
-            print('The value of ytitle is',self.ytitle,'.')
         if name=='ztitle':
             print('The value of ztitle is',self.ztitle,'.')
         if name=='zhi':
@@ -1864,40 +1850,39 @@ class plot_base:
                        bbox=string_to_dict(boxprops),**kwargs)
         return
 
-    def subplots(self,nr,nc=0,**kwargs):
+    def subplots(self,nr,nc=1,**kwargs):
         plot.rc('text',usetex=True)
         plot.rc('font',family='serif')
         plot.rcParams['lines.linewidth']=0.5
-        self.fig,self.axis_list=plot.subplots(nrows=nr,ncols=nc,**kwargs)
-        # Count rows and columns to modify axes
-        nr_temp=len(self.axis_list)
-        try:
-            nc_temp=len(self.axis_list[0])
-        except:
-            nc_temp=1
-        if nc_temp==1:
-            for i in range(0,nr_temp):
-                self.axis_list[i].tick_params('both',length=5,
-                                              width=1,which='minor')
-                self.axis_list[i].tick_params(labelsize=self.font*0.8)
+        self.fig,axis_temp=plot.subplots(nrows=nr,ncols=nc,**kwargs)
+        if nr==1 and nc==1:
+            self.axis_list.append(axis_temp)
+        elif nr==1:
+            for i in range(0,nc):
+                self.axis_list.append(axis_temp[i])
+        elif nc==1:
+            for i in range(0,nr):
+                self.axis_list.append(axis_temp[i])
         else:
-            for i in range(0,nr_temp):
-                for j in range(0,nc_temp):
-                    self.axis_list[i][j].tick_params('both',length=5,
-                                                     width=1,which='minor')
-                    self.axis_list[i][j].tick_params(labelsize=self.font*0.8)
+            for i in range(0,nr):
+                for j in range(0,nc):
+                    self.axis_list.append(axis_temp[i][j])
         self.canvas_flag=True
         return
 
     def xtitle(self,xt):
         if xt!='' and xt!='none':
+            if self.canvas_flag==False:
+                self.canvas()
             self.axes.set_xlabel(xt,fontsize=self.font)
             
     def ytitle(self,yt):
         if yt!='' and yt!='none':
+            if self.canvas_flag==False:
+                self.canvas()
             self.axes.set_ylabel(yt,fontsize=self.font)
         
-    def selsub(self,nr,nc=0):
+    def selax(self,nr,nc=0):
         nr_temp=len(self.axis_list)
         try:
             nc_temp=len(self.axis_list[0])
@@ -1907,6 +1892,13 @@ class plot_base:
             self.axes=self.axis_list[nr]
         else:
             self.axes=self.axis_list[nr][nc]
+        return
+
+    def addcbar(self,left,bottom,width,height):
+        axis_temp=self.fig.add_axes([left,bottom,width,height])
+        self.axis_list.append(axis_temp)
+        self.axes=axis_temp
+        cbar=self.fig.colorbar(self.last_image,ax=self.axes)
         return
 
     def canvas(self):
@@ -1936,11 +1928,6 @@ class plot_base:
             self.axes.set_xlim(self.xlo,self.xhi)
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
-        # Titles
-        if self.xtitle!='':
-            plot.xlabel(self.xtitle,fontsize=self.font)
-        if self.ytitle!='':
-            plot.ylabel(self.ytitle,fontsize=self.font)
         self.canvas_flag=True
         return
 
@@ -2275,15 +2262,15 @@ class plotter(plot_base):
                         sl[i][j]=math.log10(sl[i][h])
             lx=len(xgrid)
             ly=len(ygrid)
-            im=self.axes.imshow(sl,interpolation='nearest',
-                        origin='lower',
-                        extent=[xgrid[0]-(xgrid[1]-xgrid[0])/2,
-                                xgrid[lx-1]+(xgrid[lx-1]-xgrid[lx-2])/2,
-                                ygrid[0]-(ygrid[1]-ygrid[0])/2,
-                                ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2],
-                        aspect='auto',**kwargs)
+            self.last_image=self.axes.imshow(sl,interpolation='nearest',
+                                        origin='lower',
+                                        extent=[xgrid[0]-(xgrid[1]-xgrid[0])/2,
+                                                xgrid[lx-1]+(xgrid[lx-1]-xgrid[lx-2])/2,
+                                                ygrid[0]-(ygrid[1]-ygrid[0])/2,
+                                                ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2],
+                                        aspect='auto',**kwargs)
             if self.colbar==True:
-                cbar=self.fig.colorbar(im)
+                cbar=self.fig.colorbar(self.last_image,ax=self.axes)
                 cbar.ax.tick_params(labelsize=self.font*0.8)
                 
         else:
@@ -2726,15 +2713,15 @@ class o2graph_plotter(plot_base):
                                        ygrid[ny.value-2])/2
                         
             if len(kwstring)==0:
-                im=self.axes.imshow(sl,interpolation='nearest',
-                            origin='lower',extent=[extent1,extent2,
-                                                   extent3,extent4],
-                            aspect='auto')
+                self.last_image=self.axes.imshow(sl,interpolation='nearest',
+                                    origin='lower',extent=[extent1,extent2,
+                                                           extent3,extent4],
+                                    aspect='auto')
             else:
-                im=self.axes.imshow(sl,interpolation='nearest',
-                                 origin='lower',extent=[extent1,extent2,
-                                                        extent3,extent4],
-                                 aspect='auto',**string_to_dict(kwstring))
+                self.last_image=self.axes.imshow(sl,interpolation='nearest',
+                                    origin='lower',extent=[extent1,extent2,
+                                                           extent3,extent4],
+                                    aspect='auto',**string_to_dict(kwstring))
                 
             # The color bar is added later below...
 
@@ -2792,12 +2779,12 @@ class o2graph_plotter(plot_base):
                                        ygrid[ny.value-2])/2
                         
             if len(args)<1:
-                im=self.axes.imshow(sl,interpolation='nearest',
+                self.last_image=self.axes.imshow(sl,interpolation='nearest',
                             origin='lower',extent=[extent1,extent2,
                                                    extent3,extent4],
                             aspect='auto')
             else:
-                im=self.axes.imshow(sl,interpolation='nearest',
+                self.last_image=self.axes.imshow(sl,interpolation='nearest',
                             origin='lower',extent=[extent1,extent2,
                                                    extent3,extent4],
                             aspect='auto',**string_to_dict(args[0]))
@@ -2811,7 +2798,7 @@ class o2graph_plotter(plot_base):
             return
 
         if self.colbar==True:
-            cbar=self.fig.colorbar(im)
+            cbar=self.fig.colorbar(self.last_image,ax=self.axes)
             cbar.ax.tick_params(labelsize=self.font*0.8)
 
     def plot(self,o2scl_hdf,amp,args):
@@ -3306,7 +3293,7 @@ class o2graph_plotter(plot_base):
                 if self.yset==True:
                     self.axes.set_ylim(self.ylo,self.yhi)
                 if self.colbar==True and len(cv)>0:
-                    cbar=plot.colorbar()
+                    cbar=plot.colorbar(ax=self.axes)
                     cbar.ax.tick_params(labelsize=self.font*0.8)
                     
             # End of section for 'table' type
@@ -3448,7 +3435,7 @@ class o2graph_plotter(plot_base):
                     self.axes.hist2d(xv,yv,**string_to_dict(args[2]))
                 
                 if self.colbar==True:
-                    cbar=plot.colorbar()
+                    cbar=plot.colorbar(ax=self.axes)
                     cbar.ax.tick_params(labelsize=self.font*0.8)
                     
             # End of section for 'table' type
@@ -3802,16 +3789,12 @@ class o2graph_plotter(plot_base):
                     print(line[0]+' '+str(self.xlo))
                 elif line[0]=='xset':
                     print(line[0]+' '+str(self.xset))
-                elif line[0]=='xtitle':
-                    print(line[0]+' '+str(self.xtitle))
                 elif line[0]=='yhi':
                     print(line[0]+' '+str(self.yhi))
                 elif line[0]=='ylo':
                     print(line[0]+' '+str(self.ylo))
                 elif line[0]=='yset':
                     print(line[0]+' '+str(self.yset))
-                elif line[0]=='ytitle':
-                    print(line[0]+' '+str(self.ytitle))
                 elif line[0]=='ztitle':
                     print(line[0]+' '+str(self.ztitle))
                 elif line[0]=='zhi':
@@ -4262,14 +4245,6 @@ class o2graph_plotter(plot_base):
                             
                 elif cmd_name=='yt-render':
                     
-                    if self.xtitle!='':
-                        yt_text_to_scene([0.5,-0.05,-0.05],
-                                         self.xtitle,
-                                         keyname='o2graph_x_axis')
-                    if self.ytitle!='':
-                        yt_text_to_scene([-0.05,0.5,-0.05],
-                                         self.ytitle,
-                                         keyname='o2graph_y_axis')
                     if self.ztitle!='':
                         yt_text_to_scene([-0.05,-0.05,0.5],
                                          self.ztitle,
@@ -5051,17 +5026,28 @@ class o2graph_plotter(plot_base):
                         self.subplots(int(strlist[ix+1]),int(strlist[ix+2]),
                                       **string_to_dict(strlist[ix+3]))
                         
-                elif cmd_name=='selsub':
+                elif cmd_name=='selax':
                     
                     if self.verbose>2:
-                        print('Process selsub.')
+                        print('Process selax.')
                         
                     if ix_next-ix<2:
-                        print('Not enough parameters for selsub option.')
-                    elif ix_next-ix<3:
-                        self.selsub(int(strlist[ix+1]))
+                        print('Not enough parameters for selax option.')
                     else:
-                        self.selsub(int(strlist[ix+1]),int(strlist[ix+2]))
+                        self.selax(int(strlist[ix+1]))
+                        
+                elif cmd_name=='addcbar':
+                    
+                    if self.verbose>5:
+                        print('Process addcbar.')
+                        
+                    if ix_next-ix<5:
+                        print('Not enough parameters for selax option.')
+                    else:
+                        self.addcbar(float(strlist[ix+1]),
+                                     float(strlist[ix+2]),
+                                     float(strlist[ix+3]),
+                                     float(strlist[ix+4]))
                         
                 elif cmd_name=='subadj':
                     
@@ -5074,11 +5060,11 @@ class o2graph_plotter(plot_base):
                         plot.subplots_adjust(**string_to_dict(strlist[ix+1]))
                         
                 elif cmd_name=='xtitle':
-                    
+
                     if self.verbose>2:
                         print('Process xtitle.')
 
-                    if ix_next-ix<1:
+                    if ix_next-ix<2:
                         print('Not enough parameters for xtitle option.')
                     else:
                         self.xtitle(strlist[ix+1])
@@ -5088,7 +5074,7 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process ytitle.')
 
-                    if ix_next-ix<1:
+                    if ix_next-ix<2:
                         print('Not enough parameters for ytitle option.')
                     else:
                         self.ytitle(strlist[ix+1])

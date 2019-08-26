@@ -110,7 +110,11 @@ O2graph command-line options:
   -zlimits      Set the z-azis limits.
   -yt-tf        Edit the yt transfer function.
   -subplots     Create subplots.
-  -selsub       Select subplot.
+  -selax        Select axis.
+  -addcbar      Add color bar.
+  -xtitle       Add x title to plot (or subplot).
+  -ytitle       Add y title to plot (or subplot).
+  -inset        Add an inset (unfinished).
   -subadj       Adjust subplots.
 
 ------------------------------------------------------------------------------

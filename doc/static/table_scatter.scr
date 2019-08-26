@@ -4,7 +4,7 @@
 # size or color, the string 'None' can be used in place of the name of
 # the third or fourth column argument to the scatter command.
 #
-o2graph -create table N 0 10000 1 \
+o2graph -create table N grid:0,10000,1 \
 	-function "sin(1e8*N)" x -function "cos(1.001e8*N)*sqrt(1-x*x)" y \
 	-function "4*abs(x)" s -function "abs(y)" c \
 	-scatter x y s c -save table_scatter.png
