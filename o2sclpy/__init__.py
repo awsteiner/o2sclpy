@@ -965,7 +965,7 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     if rt_ticks:
         ax.tick_params('x',which='both',top=True,bottom=True)
         ax.tick_params('y',which='both',left=True,right=True)
-    ax.tick_params('both',length=5,width=1,which='minor')
+    #ax.tick_params('both',length=5,width=1,which='minor')
     ax.tick_params(labelsize=fontsize*0.8)
     plot.grid(False)
     return (fig,ax)
@@ -1854,8 +1854,14 @@ class plot_base:
         plot.rc('text',usetex=True)
         plot.rc('font',family='serif')
         plot.rcParams['lines.linewidth']=0.5
+        dct=string_to_dict(self.fig_dict)
+        if not('fig_size_x' in dct):
+            dct['fig_size_x']=6.0
+        if not('fig_size_y' in dct):
+            dct['fig_size_y']=6.0
         self.fig,axis_temp=plot.subplots(nrows=nr,ncols=nc,
-                                         figsize=(6.0,6.0))
+                                         figsize=(dct["fig_size_x"],
+                                                  dct["fig_size_y"]))
         if nr==1 and nc==1:
             self.axis_list.append(axis_temp)
         elif nr==1:
@@ -1868,6 +1874,13 @@ class plot_base:
             for i in range(0,nr):
                 for j in range(0,nc):
                     self.axis_list.append(axis_temp[i][j])
+        for i in range(0,len(self.axis_list)):
+            self.axis_list[i].minorticks_on()
+            self.axis_list[i].tick_params('both',length=12,width=1,
+                                          which='major')
+            self.axis_list[i].tick_params('both',length=5,width=1,
+                                          which='minor')
+            self.axis_list[i].tick_params(labelsize=self.font*0.8)
         self.canvas_flag=True
         return
 
@@ -1900,6 +1913,7 @@ class plot_base:
         self.axis_list.append(axis_temp)
         self.axes=axis_temp
         cbar=self.fig.colorbar(self.last_image,cax=self.axes)
+        cbar.ax.tick_params(labelsize=self.font*0.8)
         return
 
     def canvas(self):
