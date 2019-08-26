@@ -55,3 +55,5 @@ statfiles:
 	cd static; ./table_plotv.scr
 	cd static; ./table_rplot.scr
 	cd static; ./table_scatter.scr
+	cd static; o2graph -help cmaps
+	cd static; o2graph -help markers

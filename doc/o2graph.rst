@@ -39,46 +39,46 @@ The O\ :sub:`2`\ graph script implements all of the commands from the
 ``acol`` executable in O\ :sub:`2`\ scl documented at
 <https://neutronstars.utk.edu/code/o2scl/html/acol_section.html>
 	     
-Example 1
----------
+First plot example
+------------------
 
 .. include:: static/table_plot.scr
    :literal:
 .. image:: static/table_plot.png
    :width: 70%
 
-Example 2
----------
+Density plot and contour line example
+-------------------------------------
 
 .. include:: static/table3d_den_plot.scr
    :literal:
 .. image:: static/table3d_den_plot.png
    :width: 70%
 
-Example 3
----------
+Agg backend example
+-------------------
 
 .. include:: static/backend.scr
    :literal:
 
-Example 4
----------
+'plotv' example
+---------------
 
 .. include:: static/table_plotv.scr
    :literal:
 .. image:: static/table_plotv.png
    :width: 70%
 
-Example 5
----------
+Scatter plot example
+--------------------
 
 .. include:: static/table_scatter.scr
    :literal:
 .. image:: static/table_scatter.png
    :width: 70%
 
-Example 6
----------
+Region plot example
+-------------------
 
 .. include:: static/table_rplot.scr
    :literal:
