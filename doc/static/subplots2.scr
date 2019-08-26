@@ -1,5 +1,9 @@
 # Subplot example mixing 'plot' and 'den-plot' commands, with
-# colorbars for the density plots
+# colorbars for the density plots. Setting colorbar to 1 implies that
+# all future density plots will contain their own colorbar. The 'eval'
+# command can be used to execute python code which isn't easily done
+# with o2graph commands. One of the axes is not needed, so the 'eval'
+# command is used to make it invisible.
 #
 o2graph -create table x func:1001:i/100.0 \
 	-function "sin(x)" y1 \

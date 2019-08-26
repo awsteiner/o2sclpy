@@ -1,4 +1,6 @@
-# Subplots sharing a colorbar
+# Subplots sharing a colorbar. In this example, the 'addcbar' command
+# is used to create a independent color bar based on the last image
+# plotted.
 #
 o2graph -create table x func:1001:i/100.0 \
 	-function "sin(x)" y1 \

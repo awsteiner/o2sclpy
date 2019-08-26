@@ -260,7 +260,10 @@ base_list=[
      "The kwargs currently supported are 'sharex', 'sharey', "+
      "and 'squeeze'."],
     ["selax","Select axis.","<index>",
-     "Select which axis to use for subsequent plotting commands."],
+     "Select which axis to use for subsequent plotting commands. "+
+     "If a two-dimesional grid is made with 'subplots', then the "+
+     "index starts at zero and goes to the right before proceeding "+
+     "to the next row."],
     ["addcbar","Add color bar.","<left> <bottom> <width> <height>",
      "Add axis"],
     ["xtitle","Add x title to plot (or subplot).","",""],

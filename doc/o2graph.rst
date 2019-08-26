@@ -85,6 +85,30 @@ Example 6
 .. image:: static/table_rplot.png
    :width: 70%
 
+Subplot example 1
+-----------------
+
+.. include:: static/subplots1.scr
+   :literal:
+.. image:: static/subplots1.png
+   :width: 70%
+
+Subplot example 2
+-----------------
+
+.. include:: static/subplots2.scr
+   :literal:
+.. image:: static/subplots2.png
+   :width: 70%
+
+Subplot example 3
+-----------------
+
+.. include:: static/subplots3.scr
+   :literal:
+.. image:: static/subplots3.png
+   :width: 70%
+
 Internal structure
 ------------------
 

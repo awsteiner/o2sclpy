@@ -1,4 +1,6 @@
-# Subplot example with simple 'plot' functions
+# Subplot example with simple 'plot' functions. A two-by-two grid of
+# subplots is created, sharing the x-axis between the first and
+# second rows, and 'selax' is used to select the subplots.
 #
 o2graph -create table x func:1001:i/100.0 \
 	-function "sin(x)" y1 \
