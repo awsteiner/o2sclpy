@@ -1854,7 +1854,8 @@ class plot_base:
         plot.rc('text',usetex=True)
         plot.rc('font',family='serif')
         plot.rcParams['lines.linewidth']=0.5
-        self.fig,axis_temp=plot.subplots(nrows=nr,ncols=nc,**kwargs)
+        self.fig,axis_temp=plot.subplots(nrows=nr,ncols=nc,
+                                         figsize=(6.0,6.0))
         if nr==1 and nc==1:
             self.axis_list.append(axis_temp)
         elif nr==1:
@@ -1898,7 +1899,7 @@ class plot_base:
         axis_temp=self.fig.add_axes([left,bottom,width,height])
         self.axis_list.append(axis_temp)
         self.axes=axis_temp
-        cbar=self.fig.colorbar(self.last_image,ax=self.axes)
+        cbar=self.fig.colorbar(self.last_image,cax=self.axes)
         return
 
     def canvas(self):
@@ -2722,7 +2723,7 @@ class o2graph_plotter(plot_base):
                                     origin='lower',extent=[extent1,extent2,
                                                            extent3,extent4],
                                     aspect='auto',**string_to_dict(kwstring))
-                
+
             # The color bar is added later below...
 
             # End of section for tensor types and table3d
