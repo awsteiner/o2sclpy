@@ -3868,6 +3868,24 @@ class o2graph_plotter(plot_base):
         names_fn(amp,len(cmd_name),ctypes.c_char_p(cmd_name),
                  len(cmd_desc),ctypes.c_char_p(cmd_desc),
                  len(env_var),ctypes.c_char_p(env_var))
+
+        # Apply aliases before parsing
+        if False:
+            int_ptr=ctypes.POINTER(ctypes.c_int)
+            char_ptr=ctypes.POINTER(ctypes.c_char)
+            int_ptr_ptr=ctypes.POINTER(int_ptr)
+            char_ptr_ptr=ctypes.POINTER(char_ptr)
+            tiarr=int_ptr(len_argv)
+            ttot=0
+            for i in range(0,len(argv)):
+                ttot+=len(argv[i])
+            tcarr=char_ptr(ttot)
+            tcnt=0
+            for i in range(0,len(argv)):
+                tiarr[i]=len(argv)
+                for j in range(0,len(argv[i])):
+                    tcarr[tcnt]=argv[i][j]
+                    tcnt=tcnt+1
         
         if len(argv)<=1:
             done_flag=False
