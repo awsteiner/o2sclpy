@@ -3875,18 +3875,36 @@ class o2graph_plotter(plot_base):
             char_ptr=ctypes.POINTER(ctypes.c_char)
             int_ptr_ptr=ctypes.POINTER(int_ptr)
             char_ptr_ptr=ctypes.POINTER(char_ptr)
-            tiarr=int_ptr(len_argv)
+
+            # Allocate space for arrays
+            tiarr=(ctypes.c_int*len(argv))()
             ttot=0
             for i in range(0,len(argv)):
                 ttot+=len(argv[i])
-            tcarr=char_ptr(ttot)
+            tcarr=(ctypes.c_char*ttot)()
+
+            # Fill arrays with data
             tcnt=0
             for i in range(0,len(argv)):
                 tiarr[i]=len(argv)
                 for j in range(0,len(argv[i])):
                     tcarr[tcnt]=argv[i][j]
                     tcnt=tcnt+1
-        
+
+            # Setup pointers
+            tiarrp=tiarr.ctypes.data_as(int_ptr)
+            tcarrp=tcarr.ctypes.data_as(char_ptr)
+
+            # Setup and call alias function
+            alias_fn=o2scl_hdf.o2scl_acol_apply_aliases
+            alias_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int_p,
+                               ctypes.c_char_p,int_ptr_ptr,
+                               char_ptr_ptr]
+            uiarr=int_ptr()
+            ucarr=char_ptr()
+            alias_fn(amp,len(argv),tiarrp,tcarrp,
+                     ctypes.byref(uiarr),ctypes.byref(ucarr))
+            
         if len(argv)<=1:
             done_flag=False
             readline.parse_and_bind('tab: complete')
