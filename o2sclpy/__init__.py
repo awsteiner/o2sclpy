@@ -3869,7 +3869,9 @@ class o2graph_plotter(plot_base):
                  len(cmd_desc),ctypes.c_char_p(cmd_desc),
                  len(env_var),ctypes.c_char_p(env_var))
 
-        # Apply aliases before parsing
+        # Apply aliases before parsing. We convert argv 
+        # to a set of integer and character arrays, then
+        # pass them to o2scl_acol_apply_aliases()
         if False:
             int_ptr=ctypes.POINTER(ctypes.c_int)
             char_ptr=ctypes.POINTER(ctypes.c_char)
@@ -3887,22 +3889,25 @@ class o2graph_plotter(plot_base):
             tcnt=0
             for i in range(0,len(argv)):
                 tiarr[i]=len(argv)
+                print(i,tiarr[i])
                 for j in range(0,len(argv[i])):
-                    tcarr[tcnt]=argv[i][j]
+                    tcarr[tcnt]=bytes(argv[i][j],'utf8')
+                    print(j,tcarr[tcnt])
                     tcnt=tcnt+1
 
             # Setup pointers
-            tiarrp=tiarr.ctypes.data_as(int_ptr)
-            tcarrp=tcarr.ctypes.data_as(char_ptr)
+            tiarrp=ctypes.data_as(int_ptr)
+            tcarrp=ctypes.data_as(char_ptr)
 
             # Setup and call alias function
             alias_fn=o2scl_hdf.o2scl_acol_apply_aliases
             alias_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int_p,
-                               ctypes.c_char_p,int_ptr_ptr,
+                               ctypes.c_char_p,int_ptr,int_ptr_ptr,
                                char_ptr_ptr]
             uiarr=int_ptr()
             ucarr=char_ptr()
-            alias_fn(amp,len(argv),tiarrp,tcarrp,
+            nnew=ctypes.c_int(0)
+            alias_fn(amp,len(argv),tiarrp,tcarrp,ctypes.byref(nnew),
                      ctypes.byref(uiarr),ctypes.byref(ucarr))
             
         if len(argv)<=1:
