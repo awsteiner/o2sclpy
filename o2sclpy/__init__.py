@@ -3872,7 +3872,7 @@ class o2graph_plotter(plot_base):
         # Apply aliases before parsing. We convert argv 
         # to a set of integer and character arrays, then
         # pass them to o2scl_acol_apply_aliases()
-        if False:
+        if True:
             int_ptr=ctypes.POINTER(ctypes.c_int)
             char_ptr=ctypes.POINTER(ctypes.c_char)
             int_ptr_ptr=ctypes.POINTER(int_ptr)
@@ -3888,27 +3888,54 @@ class o2graph_plotter(plot_base):
             # Fill arrays with data
             tcnt=0
             for i in range(0,len(argv)):
-                tiarr[i]=len(argv)
-                print(i,tiarr[i])
+                tiarr[i]=len(argv[i])
+                #print(i,tiarr[i])
                 for j in range(0,len(argv[i])):
                     tcarr[tcnt]=bytes(argv[i][j],'utf8')
-                    print(j,tcarr[tcnt])
+                    #print(j,tcarr[tcnt])
                     tcnt=tcnt+1
 
-            # Setup pointers
-            tiarrp=ctypes.data_as(int_ptr)
-            tcarrp=ctypes.data_as(char_ptr)
+            # Call the alias_counts() function to find out how big the
+            # destination arrays need to be. This two step-process
+            # allows python to handle the memory allocation.
+            count_fn=o2scl_hdf.o2scl_acol_alias_counts
+            count_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,int_ptr,
+                               ctypes.c_char_p,int_ptr,int_ptr]
+            n_new=ctypes.c_int(0)
+            s_new=ctypes.c_int(0)
+            count_fn(amp,len(argv),tiarr,tcarr,ctypes.byref(n_new),
+                     ctypes.byref(s_new))
+
+            # Allocate the new integer and string arrays
+            tiarr2=(ctypes.c_int*n_new.value)()
+            tcarr2=(ctypes.c_char*s_new.value)()
 
             # Setup and call alias function
             alias_fn=o2scl_hdf.o2scl_acol_apply_aliases
-            alias_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int_p,
-                               ctypes.c_char_p,int_ptr,int_ptr_ptr,
-                               char_ptr_ptr]
-            uiarr=int_ptr()
-            ucarr=char_ptr()
-            nnew=ctypes.c_int(0)
-            alias_fn(amp,len(argv),tiarrp,tcarrp,ctypes.byref(nnew),
-                     ctypes.byref(uiarr),ctypes.byref(ucarr))
+            alias_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,int_ptr,
+                               ctypes.c_char_p,int_ptr,ctypes.c_char_p]
+            alias_fn(amp,len(argv),tiarr,tcarr,tiarr2,tcarr2)
+
+            # Construct the new argv list. We skip alias
+            # definitions because they are already taken care of
+            argv=[]
+            icnt=0
+            cnt=0
+            iskip=0
+            print('After2:')
+            for i in range(0,n_new.value):
+                tstr=''
+                for j in range(0,tiarr2[i]):
+                    tstr=tstr+tcarr2[cnt].decode('utf-8')
+                    cnt=cnt+1
+                if tstr=='-alias':
+                    iskip=2
+                elif iskip==0:
+                    argv.append(tstr)
+                    print(icnt,argv[icnt])
+                    icnt=icnt+1
+                else:
+                    iskip=iskip-1
             
         if len(argv)<=1:
             done_flag=False
