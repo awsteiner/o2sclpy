@@ -3873,6 +3873,9 @@ class o2graph_plotter(plot_base):
         # to a set of integer and character arrays, then
         # pass them to o2scl_acol_apply_aliases()
         if True:
+
+            orig_len=len(argv)
+            
             int_ptr=ctypes.POINTER(ctypes.c_int)
             char_ptr=ctypes.POINTER(ctypes.c_char)
             int_ptr_ptr=ctypes.POINTER(int_ptr)
@@ -3922,7 +3925,8 @@ class o2graph_plotter(plot_base):
             icnt=0
             cnt=0
             iskip=0
-            print('After2:')
+            if len(tiarr2)!=orig_len:
+                print('After applying alias,',orig_len,'->',len(tiarr2))
             for i in range(0,n_new.value):
                 tstr=''
                 for j in range(0,tiarr2[i]):
@@ -3932,7 +3936,8 @@ class o2graph_plotter(plot_base):
                     iskip=2
                 elif iskip==0:
                     argv.append(tstr)
-                    print(icnt,argv[icnt])
+                    if len(tiarr2)!=orig_len:
+                        print(icnt,argv[icnt])
                     icnt=icnt+1
                 else:
                     iskip=iskip-1
