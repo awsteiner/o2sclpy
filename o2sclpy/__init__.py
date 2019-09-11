@@ -264,7 +264,7 @@ base_list=[
      "If a two-dimesional grid is made with 'subplots', then the "+
      "index starts at zero and goes to the right before proceeding "+
      "to the next row."],
-    ["addcbar","Add color bar.","<left> <bottom> <width> <height>",
+    ["addcbar","Add color bar.","<left> <bottom> <width> <height> [kwargs]",
      "Add axis"],
     ["xtitle","Add x title to plot (or subplot).","",""],
     ["ytitle","Add y title to plot (or subplot).","",""],
@@ -1911,11 +1911,11 @@ class plot_base:
             self.axes=self.axis_list[nr][nc]
         return
 
-    def addcbar(self,left,bottom,width,height):
+    def addcbar(self,left,bottom,width,height,**kwargs):
         axis_temp=self.fig.add_axes([left,bottom,width,height])
         self.axis_list.append(axis_temp)
         self.axes=axis_temp
-        cbar=self.fig.colorbar(self.last_image,cax=self.axes)
+        cbar=self.fig.colorbar(self.last_image,cax=self.axes,**kwargs)
         cbar.ax.tick_params(labelsize=self.font*0.8)
         return
 
@@ -5134,11 +5134,17 @@ class o2graph_plotter(plot_base):
                         
                     if ix_next-ix<5:
                         print('Not enough parameters for selax option.')
-                    else:
+                    elif ix_next-ix<6:
                         self.addcbar(float(strlist[ix+1]),
                                      float(strlist[ix+2]),
                                      float(strlist[ix+3]),
                                      float(strlist[ix+4]))
+                    else:
+                        self.addcbar(float(strlist[ix+1]),
+                                     float(strlist[ix+2]),
+                                     float(strlist[ix+3]),
+                                     float(strlist[ix+4]),
+                                     **string_to_dict(strlist[ix+5]))
                         
                 elif cmd_name=='subadj':
                     
