@@ -3448,12 +3448,12 @@ class o2graph_plotter(plot_base):
                 if self.canvas_flag==False:
                     self.canvas()
                 if len(args)<3:
-                    self.axes.hist2d(xv,yv)
+                    c,x,y,self.last_image=self.axes.hist2d(xv,yv)
                 else:
-                    self.axes.hist2d(xv,yv,**string_to_dict(args[2]))
+                    c,x,y,self.last_image=self.axes.hist2d(xv,yv,**string_to_dict(args[2]))
                 
                 if self.colbar==True:
-                    cbar=plot.colorbar(ax=self.axes)
+                    cbar=plot.colorbar(self.last_image,ax=self.axes)
                     cbar.ax.tick_params(labelsize=self.font*0.8)
                     
             # End of section for 'table' type
