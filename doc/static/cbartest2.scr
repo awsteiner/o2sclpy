@@ -1,0 +1,4 @@
+o2graph -create table x "func:1000:exp(-(i/400)^2)*sin(i)" \
+	-function x^2 y -function "x^2-x" z \
+	-subplots 2 2 -set colbar 0 -selax 0 -hist2dplot x y -set colbar 0 \
+	-selax 3 -hist2dplot x z -addcbar 0.9 0.1 0.04 0.8 -show
