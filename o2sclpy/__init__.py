@@ -104,7 +104,7 @@ new_cmaps=[('O2sclpy cmaps',
 List of new o2sclpy cmaps
 """
 
-version='0.923.2'
+version='0.924.dev1'
 """
 The version number string
 """
@@ -506,10 +506,10 @@ yt_param_list=[
     ["yt_axis_color","Color for the 3D axis."],
     ["yt_axis_labels_flat",
      "If true, force the axis labels to be parallel to the camera."],
-    ["yt_resolution","The rendering resolution (default [512,512])."],
     ["yt_focus","The camera focus (default [0.5,0.5,0.5])."],
     ["yt_position","The camera position."],
-    ["yt_path","The animation path."]
+    ["yt_path","The animation path."],
+    ["yt_resolution","The rendering resolution (default [512,512])."]
 ]
 """
 List of yt parameters for o2sclpy
@@ -1363,6 +1363,10 @@ class plot_base:
     rt_ticks=False
     """
     If true, include ticks on right side and top (default False)
+    """
+    yt_axis=True
+    """
+    If true, draw an axis in the yt plot
     """
     yt_axis_color=[1.0,1.0,1.0,0.5]
     """ 
@@ -3828,18 +3832,20 @@ class o2graph_plotter(plot_base):
         print('yt-related settings:')
         print(' ')
         for line in yt_param_list:
-            if line[0]=='yt-axis-color':
+            if line[0]=='yt_axis':
+                print(line[0]+' '+str(self.yt_axis))
+            if line[0]=='yt_axis_color':
                 print(line[0]+' '+str(self.yt_axis_color))
-            if line[0]=='yt-axis-labels-flat':
+            if line[0]=='yt_axis_labels_flat':
                 print(line[0]+' '+str(self.yt_axis_labels_flat))
-            if line[0]=='yt-resolution':
-                print(line[0]+' '+str(self.yt_resolution))
-            if line[0]=='yt-position':
-                print(line[0]+' '+str(self.yt_position))
-            if line[0]=='yt-path':
-                print(line[0]+' '+str(self.yt_path))
-            if line[0]=='yt-focus':
+            if line[0]=='yt_focus':
                 print(line[0]+' '+str(self.yt_focus))
+            if line[0]=='yt_position':
+                print(line[0]+' '+str(self.yt_position))
+            if line[0]=='yt_path':
+                print(line[0]+' '+str(self.yt_path))
+            if line[0]=='yt_resolution':
+                print(line[0]+' '+str(self.yt_resolution))
             print(' '+line[1])
             print(' ')
         
@@ -4325,24 +4331,31 @@ class o2graph_plotter(plot_base):
                         cols2=numpy.array(cols)
 
                         ps=PointSource(pts2,colors=cols2,radii=3)
-                                       
+
+                        print('here')
                         if self.yt_created_scene==False:
                             self.yt_create_scene()
 
+                        print('here2')
                         self.yt_scene.add_source(ps,keyname='o2graph_point')
                         
+                        print('here3')
                         if self.yt_created_camera==False:
                             self.yt_create_camera(ps)
+                        print('here4')
                             
                 elif cmd_name=='yt-render':
                     
+                    print('here5')
                     if self.ztitle!='':
                         yt_text_to_scene([-0.05,-0.05,0.5],
                                          self.ztitle,
                                          keyname='o2graph_z_axis')
                         
                     self.yt_scene.render()
+                    print('here6')
                     self.yt_scene.save(strlist[ix+1],sigma_clip=1.0)
+                    print('here7')
 
                 elif cmd_name=='yt-tf':
 
