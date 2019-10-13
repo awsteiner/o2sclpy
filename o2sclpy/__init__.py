@@ -4348,6 +4348,7 @@ class o2graph_plotter(plot_base):
                     
                     print('here5')
                     if self.ztitle!='':
+                        print('adding ztitle: ',self.ztitle)
                         yt_text_to_scene([-0.05,-0.05,0.5],
                                          self.ztitle,
                                          keyname='o2graph_z_axis')
@@ -4360,13 +4361,14 @@ class o2graph_plotter(plot_base):
                 elif cmd_name=='yt-tf':
 
                     if strlist[ix+1]=='new':
+                        import yt
                         print('New transfer function')
                         print('min:',strlist[ix+2],'max:',strlist[ix+3])
                         self.yt_tf=yt.ColorTransferFunction((float(strlist[ix+2]),
                                                              float(strlist[ix+3])),
                                                             grey_opacity=False)
                     elif strlist[ix+1]=='gauss':
-                        print('Add Gaussian')
+                        print('Adding Gaussian to transfer function.')
                         print('loc:',strlist[ix+2],'wid:',strlist[ix+3])
                         print('r:',strlist[ix+4],'g:',strlist[ix+5])
                         print('b:',strlist[ix+6],'alpha:',strlist[ix+7])

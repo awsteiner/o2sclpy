@@ -1,0 +1,5 @@
+#
+#
+o2graph -backend Agg -create table x "grid:0,5,0.01" \
+	-function "sin(x)" y -function "cos(x)" z \
+	-yt-scatter x y z -yt-render
