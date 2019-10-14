@@ -26,17 +26,29 @@
 
 # Current state of yt integration:
 # 
-# Created parameters  yt_axis_color, yt_axis_labels_flat (t/f)
-# yt_resolution [x,y], yt_focus, yt_position, yt_path
-# Created new blank functions yt-add-vol (for tensor_grid), yt-path,
-# yt-render, yt-scatter (for table)
-#
+# Created parameters:
+# 
+# yt_axis (T/F),
+# yt_axis_color,
+# yt_axis_labels_flat (t/f)
+# yt_resolution [x,y],
+# yt_focus,
+# yt_position,
+# yt_path
+# 
+# Created new functions 
+# yt-add-vol (for tensor_grid),
+# yt-render, 
+# yt-scatter (for table)
+# 
 # Next things to do:
 # 1) The yt-tf mechanism is ok, but we need to figure out
 #    how to distinguish between absolute and arbitrary values
 #    for tf limits
 # 2) Figure out how to implement transfer functions
 # 3) Create yt-surface
+# 4) Anti-aliasing the axis would be nice
+#
 
 import sys
 import h5py
@@ -244,10 +256,8 @@ base_list=[
      "open, then "+
      "the y-limits on that plot are modified. Future plots are also "+
      "set with the specified y-limits."],
-    ["yt-path","Set yt animation path.","",
-     "Long desc."],
     ["yt-render","Render the yt visualization.",
-     "<filename pattern>","Long desc."],
+     "<filename or pattern> [movie output filename]","Long desc."],
     ["zlimits","Set the z-azis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
      "and set 'zset' to true. If a plotting canvas is currently "+
@@ -268,6 +278,7 @@ base_list=[
      "Add axis"],
     ["xtitle","Add x title to plot (or subplot).","",""],
     ["ytitle","Add y title to plot (or subplot).","",""],
+    ["ztitle","Add z title to plot (yt only).","",""],
     ["inset","Add an inset (unfinished).","",""],
     ["subadj","Adjust subplots.","<kwargs>",
      "The kwargs for 'subadj' are left, right, bottom, top, "+
@@ -482,18 +493,12 @@ param_list=[
     ["xhi","Upper limit for x-axis (function if starts with '(')."],
     ["xlo","Lower limit for x-axis (function if starts with '(')."],
     ["xset","If true, x-axis limits have been set (default False)."],
-    ["xtitle","X-axis title. Latex "+
-     "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')"],
     ["yhi","Upper limit for y-axis (function if starts with '(')."],
     ["ylo","Lower limit for y-axis (function if starts with '(')."],
     ["yset","If true, y-axis limits have been set (default False)."],
-    ["ytitle","Y-axis title. Latex "+
-     "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')"],
     ["zlo","Lower limit for z-axis (function if starts with '(')."],
     ["zhi","Upper limit for z-axis (function if starts with '(')."],
-    ["zset","If true, z-axis limits have been set (default False)."],
-    ["ztitle","Z-axis title. Latex "+
-     "works, e.g. '$\\phi$' and '$\\hat{x}$' (default '')"],
+    ["zset","If true, z-axis limits have been set (default False)."]
 ]
 """
 List of o2sclpy parameters
@@ -1257,7 +1262,7 @@ class plot_base:
     If True, then the figure and axes objects have been created
     (default False)
     """
-
+    
     # Quantities modified by set/get
     
     logx=False
@@ -1388,9 +1393,9 @@ class plot_base:
     """
     yt camera position
     """
-    yt_path=['','','']
+    yt_path=''
     """
-    yt camera path (default ['','',''])
+    yt camera path (default '')
     """
     yt_tf=0
     """
@@ -1472,8 +1477,6 @@ class plot_base:
                 self.logz=False
             else:
                 self.logz=True
-        elif name=='ztitle':
-            self.ztitle=value
         elif name=='xlo':
             if value[0]=='(':
                 self.xlo=float(eval(value))
@@ -1584,8 +1587,6 @@ class plot_base:
             print('The value of ylo is',self.ylo,'.')
         if name=='yset':
             print('The value of yset is',self.yset,'.')
-        if name=='ztitle':
-            print('The value of ztitle is',self.ztitle,'.')
         if name=='zhi':
             print('The value of zhi is',self.zhi,'.')
         if name=='zlo':
@@ -1891,17 +1892,30 @@ class plot_base:
         self.canvas_flag=True
         return
 
-    def xtitle(self,xt):
-        if xt!='' and xt!='none':
+    def xtitle(self,xtitle):
+        if self.yt_scene!=0:
+            self.yt_text_to_scene([0.5,-0.05,-0.05],
+                                  xtitle,keyname='o2graph_x_axis')
+        elif xtitle!='' and xtitle!='none':
             if self.canvas_flag==False:
                 self.canvas()
-            self.axes.set_xlabel(xt,fontsize=self.font)
+            self.axes.set_xlabel(xtitle,fontsize=self.font)
             
-    def ytitle(self,yt):
-        if yt!='' and yt!='none':
+    def ytitle(self,ytitle):
+        if self.yt_scene!=0:
+            self.yt_text_to_scene([0.5,-0.05,-0.05],
+                                  ytitle,keyname='o2graph_y_axis')
+        elif ytitle!='' and ytitle!='none':
             if self.canvas_flag==False:
                 self.canvas()
-            self.axes.set_ylabel(yt,fontsize=self.font)
+            self.axes.set_ylabel(ytitle,fontsize=self.font)
+        
+    def ztitle(self,ztitle):
+        if self.yt_scene!=0:
+            self.yt_text_to_scene([0.5,-0.05,-0.05],
+                                  ztitle,keyname='o2graph_z_axis')
+        else:
+            print('No yt scene has been created for ztitle.')
         
     def selax(self,nr,nc=0):
         nr_temp=len(self.axis_list)
@@ -2330,6 +2344,7 @@ class o2graph_plotter(plot_base):
         Create the yt scene object and set yt_created_scene to True
         """
         from yt.visualization.volume_rendering.api import Scene
+        print('o2graph_plotter:yt_create_scene: Creating scene.')
         self.yt_scene=Scene()
         self.yt_created_scene=True
         
@@ -2339,6 +2354,7 @@ class o2graph_plotter(plot_base):
         ``yt_resolution``, ``yt_position``, and ``yt_focus``, with a
         camera width based on the domain width of ``ds``.
         """
+        print('o2graph_plotter:yt_create_camera: Creating camera.')
         self.yt_camera=self.yt_scene.add_camera()
         self.yt_camera.resolution=self.yt_resolution
         self.yt_camera.width=1.5*ds.domain_width[0]
@@ -2363,7 +2379,7 @@ class o2graph_plotter(plot_base):
         fig.canvas.draw()
         if show:
             plot.show()
-        X=np.array(fig.canvas.renderer._renderer)
+        X=numpy.array(fig.canvas.renderer._renderer)
         Y=[]
         Y2=[]
         for i in range(0,480):
@@ -2377,7 +2393,7 @@ class o2graph_plotter(plot_base):
                     Y.append([vecnew[0],vecnew[1],vecnew[2]])
                     Y2.append([1.0-X[i,j,0]/255.0,1.0-X[i,j,1]/255.0,
                                1.0-X[i,j,2]/255.0,alpha])
-        return(np.array(Y),np.array(Y2))
+        return(numpy.array(Y),numpy.array(Y2))
 
     def yt_text_to_scene(self,loc,text,scale=0.6,
                          keyname='o2graph_text'):
@@ -2386,41 +2402,52 @@ class o2graph_plotter(plot_base):
         specified scale parameter and keyname.
         """
         
+        # Imports
+        from yt.visualization.volume_rendering.api \
+            import PointSource
+        
         # Construct orientation vectors
         view_y=self.yt_camera.north_vector
-        view_x=-np.cross(view_y,self.yt_camera.focus-
+        view_x=-numpy.cross(view_y,self.yt_camera.focus-
                          self.yt_camera.position)
         # Normalize view_x and view_y
-        view_x=view_x/np.sqrt(view_x[0]**2+view_x[1]**2+view_x[2]**2)
-        view_y=view_y/np.sqrt(view_y[0]**2+view_y[1]**2+view_y[2]**2)
+        view_x=view_x/numpy.sqrt(view_x[0]**2+view_x[1]**2+view_x[2]**2)
+        view_y=view_y/numpy.sqrt(view_y[0]**2+view_y[1]**2+view_y[2]**2)
     
         # Choose scale
         view_x=view_x*scale
         view_y=view_y*scale
         
         # Convert text to points
-        (Y,Y2)=text_to_points(loc,view_x,view_y,text)
+        (Y,Y2)=self.yt_text_to_points(loc,view_x,view_y,text)
     
         # Add the point source
         points_xalabels=PointSource(Y,colors=Y2)
-        yt_scene.add_source(points_xalabels,keyname=keyname)
+        self.yt_scene.add_source(points_xalabels,keyname=keyname)
 
-    def yt_plot_axes(self,color=[1.0,1.0,1.0,0.5]):
+    def yt_plot_axis(self,color=[1.0,1.0,1.0,0.5]):
+
+        print('o2graph_plotter:yt_plot_axis(): Adding axis.')
+        
+        # Imports
+        from yt.visualization.volume_rendering.api \
+            import PointSource, LineSource
+        
         # Point at origin
-        vertex_origin=np.array([[0.0,0.0,0.0]])
-        color_origin=np.array([color])
+        vertex_origin=numpy.array([[0.0,0.0,0.0]])
+        color_origin=numpy.array([color])
         points=PointSource(vertex_origin,colors=color_origin,radii=3)
-        yt_scene.add_source(points,keyname='o2graph_origin')
+        self.yt_scene.add_source(points,keyname='o2graph_origin')
     
-        # Create axis lines
-        vertices_axis=np.array([[[0.0,0.0,0.0],[1.0,0.0,0.0]],
+        # Axis lines
+        vertices_axis=numpy.array([[[0.0,0.0,0.0],[1.0,0.0,0.0]],
                                 [[0.0,0.0,0.0],[0.0,1.0,0.0]],
                                 [[0.0,0.0,0.0],[0.0,0.0,1.0]]])
-        colors_axis=np.array([color,color,color])
+        colors_axis=numpy.array([color,color,color])
         axis=LineSource(vertices_axis,colors_axis)
-        yt_scene.add_source(axis,keyname='o2graph_axis_lines')
+        self.yt_scene.add_source(axis,keyname='o2graph_axis_lines')
         
-        # Create arrow heads
+        # Arrow heads
         list2=[]
         clist2=[]
         for theta in range(0,20):
@@ -2443,8 +2470,8 @@ class o2graph_plotter(plot_base):
                 clist2.append(color)
                 clist2.append(color)
                 clist2.append(color)
-        points_aheads2=LineSource(np.array(list2),np.array(clist2))
-        yt_scene.add_source(points_aheads2,keyname='o2graph_axis_arrows')
+        points_aheads2=LineSource(numpy.array(list2),numpy.array(clist2))
+        self.yt_scene.add_source(points_aheads2,keyname='o2graph_axis_arrows')
         
     def check_backend(self):
         """
@@ -3817,8 +3844,6 @@ class o2graph_plotter(plot_base):
                     print(line[0]+' '+str(self.ylo))
                 elif line[0]=='yset':
                     print(line[0]+' '+str(self.yset))
-                elif line[0]=='ztitle':
-                    print(line[0]+' '+str(self.ztitle))
                 elif line[0]=='zhi':
                     print(line[0]+' '+str(self.zhi))
                 elif line[0]=='zlo':
@@ -3843,7 +3868,7 @@ class o2graph_plotter(plot_base):
             if line[0]=='yt_position':
                 print(line[0]+' '+str(self.yt_position))
             if line[0]=='yt_path':
-                print(line[0]+' '+str(self.yt_path))
+                print(line[0]+' '+self.yt_path)
             if line[0]=='yt_resolution':
                 print(line[0]+' '+str(self.yt_resolution))
             print(' '+line[1])
@@ -4167,14 +4192,14 @@ class o2graph_plotter(plot_base):
                         ny=ny.value
                         nz=nz.value
                         total_size=nx*ny*nz
-                        maxval=data[0]
-                        minval=data[0]
-                        for ij in range(0,total_size):
-                            if data[ij]>maxval:
-                                maxval=data[ij]
-                            if data[ij]<minval:
-                                minval=data[ij]
-                        drange=maxval-minval
+                        #maxval=data[0]
+                        #minval=data[0]
+                        #for ij in range(0,total_size):
+                        #    if data[ij]>maxval:
+                        #        maxval=data[ij]
+                        #    if data[ij]<minval:
+                        #        minval=data[ij]
+                        #drange=maxval-minval
 
                         if self.xset==False:
                             self.xlo=gridx[0]
@@ -4185,6 +4210,8 @@ class o2graph_plotter(plot_base):
                         if self.zset==False:
                             self.zlo=gridz[0]
                             self.zhi=gridz[nz-1]
+                        print('axis limits:',self.xlo,self.xhi,
+                              self.ylo,self.yhi,self.zlo,self.zhi)
                         
                         arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
                         bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
@@ -4332,46 +4359,67 @@ class o2graph_plotter(plot_base):
 
                         ps=PointSource(pts2,colors=cols2,radii=3)
 
-                        print('here')
                         if self.yt_created_scene==False:
                             self.yt_create_scene()
 
-                        print('here2')
+                        print('o2graph:yt-scatter: Adding volume source.')
                         self.yt_scene.add_source(ps,keyname='o2graph_point')
                         
-                        print('here3')
                         if self.yt_created_camera==False:
                             self.yt_create_camera(ps)
-                        print('here4')
                             
                 elif cmd_name=='yt-render':
-                    
-                    print('here5')
-                    if self.ztitle!='':
-                        print('adding ztitle: ',self.ztitle)
-                        yt_text_to_scene([-0.05,-0.05,0.5],
-                                         self.ztitle,
-                                         keyname='o2graph_z_axis')
+
+                    if self.yt_axis==True:
+                        self.yt_plot_axis()
+
+                    # AWS 10/14/19 the call to save() below does
+                    # the render() so I don't think I need this
+                    #self.yt_scene.render()
+
+                    fname=strlist[ix+1]
+                    print('here',ix,ix_next)
+                    #fname2=strlist[ix+2]
+                    fname2='test.mp4'
+                    if yt_path!='':
+                        print('o2graph:yt-render: Calling yt_scene.save().')
+                        self.yt_scene.save(fname,sigma_clip=1.0)
+                    elif yt_path=='yaw':
+                        asterisk=fname.find('*')
+                        prefix=fname[0:asterisk-1]
+                        suffix=fname[asterisk:len(fname)-1]
+                        print('fname,prefix,suffix:',fname,prefix,
+                              suffix)
+                        for i in range(0,30):
+                            if i+1<10:
+                                fname2=prefix+'0'+str(i+1)+suffix
+                            else:
+                                fname2=prefix+str(i+1)+suffix
+                            self.yt_scene.save(fname,sigma_clip=1.0)
+                            self.yt_camera.yaw(numpy.pi/40.0)
+                        os.system('ffmpeg -r 10 -f image2 -i '+
+                                  prefix+'%02d.png -vcodec libx264 '+
+                                  '-crf 25 -pix_fmt yuv420p '+fname2)
                         
-                    self.yt_scene.render()
-                    print('here6')
-                    self.yt_scene.save(strlist[ix+1],sigma_clip=1.0)
-                    print('here7')
 
                 elif cmd_name=='yt-tf':
 
                     if strlist[ix+1]=='new':
                         import yt
-                        print('New transfer function')
-                        print('min:',strlist[ix+2],'max:',strlist[ix+3])
+                        print('o2graph:yt-tf: New transfer function.')
+                        print('o2graph:yt-tf: min:',strlist[ix+2],
+                              'max:',strlist[ix+3])
                         self.yt_tf=yt.ColorTransferFunction((float(strlist[ix+2]),
                                                              float(strlist[ix+3])),
                                                             grey_opacity=False)
                     elif strlist[ix+1]=='gauss':
-                        print('Adding Gaussian to transfer function.')
-                        print('loc:',strlist[ix+2],'wid:',strlist[ix+3])
-                        print('r:',strlist[ix+4],'g:',strlist[ix+5])
-                        print('b:',strlist[ix+6],'alpha:',strlist[ix+7])
+                        print('o2graph:yt-tf: Adding Gaussian to',
+                              'transfer function.')
+                        print('o2graph:yt-tf: location:',strlist[ix+2],
+                              'width:',strlist[ix+3])
+                        print('o2graph:yt-tf: r,g,b,a:',
+                              strlist[ix+4],strlist[ix+5],
+                              strlist[ix+6],strlist[ix+7])
                         self.yt_tf.add_gaussian(float(strlist[ix+2]),
                                                 float(strlist[ix+3]),
                                                 [float(strlist[ix+4]),
@@ -5190,6 +5238,16 @@ class o2graph_plotter(plot_base):
                         print('Not enough parameters for ytitle option.')
                     else:
                         self.ytitle(strlist[ix+1])
+                        
+                elif cmd_name=='ztitle':
+                    
+                    if self.verbose>2:
+                        print('Process ztitle.')
+
+                    if ix_next-ix<2:
+                        print('Not enough parameters for ztitle option.')
+                    else:
+                        self.ztitle(strlist[ix+1])
                         
                 elif cmd_name=='line':
                     
