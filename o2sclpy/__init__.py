@@ -1552,7 +1552,7 @@ class plot_base:
         elif name=='yt_position':
             print('set')
         elif name=='yt_path':
-            print('set')
+            self.yt_path=value
         else:
             print('No variable named',name)
             
@@ -1903,7 +1903,7 @@ class plot_base:
             
     def ytitle(self,ytitle):
         if self.yt_scene!=0:
-            self.yt_text_to_scene([0.5,-0.05,-0.05],
+            self.yt_text_to_scene([-0.05,0.5,-0.05],
                                   ytitle,keyname='o2graph_y_axis')
         elif ytitle!='' and ytitle!='none':
             if self.canvas_flag==False:
@@ -4378,28 +4378,33 @@ class o2graph_plotter(plot_base):
                     #self.yt_scene.render()
 
                     fname=strlist[ix+1]
-                    print('here',ix,ix_next)
-                    #fname2=strlist[ix+2]
-                    fname2='test.mp4'
-                    if yt_path!='':
+                    fname2=''
+                    if ix_next-ix>=3:
+                        fname2=strlist[ix+2]
+                    print('herex',self.yt_path)
+                    if self.yt_path=='':
                         print('o2graph:yt-render: Calling yt_scene.save().')
                         self.yt_scene.save(fname,sigma_clip=1.0)
-                    elif yt_path=='yaw':
+                    elif self.yt_path=='yaw':
+                        if fname2=='':
+                            fname2='test.mp4'
                         asterisk=fname.find('*')
-                        prefix=fname[0:asterisk-1]
-                        suffix=fname[asterisk:len(fname)-1]
+                        prefix=fname[0:asterisk]
+                        suffix=fname[asterisk+1:len(fname)]
                         print('fname,prefix,suffix:',fname,prefix,
                               suffix)
-                        for i in range(0,30):
+                        for i in range(0,80):
                             if i+1<10:
                                 fname2=prefix+'0'+str(i+1)+suffix
                             else:
                                 fname2=prefix+str(i+1)+suffix
-                            self.yt_scene.save(fname,sigma_clip=1.0)
+                            self.yt_scene.save(fname2,sigma_clip=1.0)
                             self.yt_camera.yaw(numpy.pi/40.0)
-                        os.system('ffmpeg -r 10 -f image2 -i '+
-                                  prefix+'%02d.png -vcodec libx264 '+
+                        cmd=('ffmpeg -r 10 -f image2 -i '+
+                                  prefix+'%02d'+suffix+' -vcodec libx264 '+
                                   '-crf 25 -pix_fmt yuv420p '+fname2)
+                        print('ffmpeg command:',cmd)
+                        os.system(cmd)
                         
 
                 elif cmd_name=='yt-tf':
