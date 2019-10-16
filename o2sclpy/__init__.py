@@ -258,6 +258,7 @@ base_list=[
      "set with the specified y-limits."],
     ["yt-render","Render the yt visualization.",
      "<filename or pattern> [movie output filename]","Long desc."],
+    ["yt-source-list","Source list.","","Long desc."],
     ["zlimits","Set the z-azis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
      "and set 'zset' to true. If a plotting canvas is currently "+
@@ -514,7 +515,7 @@ yt_param_list=[
     ["yt_focus","The camera focus (default [0.5,0.5,0.5])."],
     ["yt_position","The camera position."],
     ["yt_path","The animation path."],
-    ["yt_resolution","The rendering resolution (default [512,512])."]
+    ["yt_resolution","The rendering resolution (default (512,512))."]
 ]
 """
 List of yt parameters for o2sclpy
@@ -1383,7 +1384,7 @@ class plot_base:
     """
     yt_resolution=(512,512)
     """
-    Resolution for yt rendering (default [512,512])
+    Resolution for yt rendering (default (512,512))
     """
     yt_focus=[0.5,0.5,0.5]
     """
@@ -1540,17 +1541,23 @@ class plot_base:
         elif name=='fig_dict':
             self.fig_dict=value
         elif name=='yt_axis':
-            print('set')
+            if value=='False' or value=='0':
+                self.yt_axis=False
+            else:
+                self.yt_axis=True
         elif name=='yt_axis_color':
-            print('set')
+            self.yt_axis_color=value
         elif name=='yt_axis_labels_flat':
-            print('set')
+            if value=='False' or value=='0':
+                self.yt_axis_labels_flat=False
+            else:
+                self.yt_axis_labels_flat=True
         elif name=='yt_axis_resolution':
-            print('set')
+            self.yt_axis_resolution=value
         elif name=='yt_focus':
-            print('set')
+            self.yt_focus=value
         elif name=='yt_position':
-            print('set')
+            self.yt_position=value
         elif name=='yt_path':
             self.yt_path=value
         else:
@@ -1593,8 +1600,24 @@ class plot_base:
             print('The value of zlo is',self.zlo,'.')
         if name=='zset':
             print('The value of zset is',self.zset,'.')
-        if name=='fig-dict':
-            print('The value of fig-dict is',self.fig_dict,'.')
+        if name=='fig_dict':
+            print('The value of fig_dict is',self.fig_dict,'.')
+        if name=='yt_axis':
+            print('The value of yt_axis is',self.yt_axis,'.')
+        if name=='yt_axis_color':
+            print('The value of yt_axis_color is',self.yt_axis_color,'.')
+        if name=='yt_axis_labels_flat':
+            print('The value of yt_axis_labels_flat is',
+                  self.yt_axis_labels_flat,'.')
+        if name=='yt_axis_resolution':
+            print('The value of yt_axis_resolution is',
+                  self.yt_axis_resolution,'.')
+        if name=='yt_focus':
+            print('The value of yt_focus is',self.yt_focus,'.')
+        if name=='yt_position':
+            print('The value of yt_position is',self.yt_position,'.')
+        if name=='yt_path':
+            print('The value of yt_path is',self.yt_path,'.')
         return
 
     def reset_xlimits(self):
@@ -1895,7 +1918,7 @@ class plot_base:
     def xtitle(self,xtitle):
         if self.yt_scene!=0:
             self.yt_text_to_scene([0.5,-0.05,-0.05],
-                                  xtitle,keyname='o2graph_x_axis')
+                                  xtitle,keyname='o2graph_x_title')
         elif xtitle!='' and xtitle!='none':
             if self.canvas_flag==False:
                 self.canvas()
@@ -1904,7 +1927,7 @@ class plot_base:
     def ytitle(self,ytitle):
         if self.yt_scene!=0:
             self.yt_text_to_scene([-0.05,0.5,-0.05],
-                                  ytitle,keyname='o2graph_y_axis')
+                                  ytitle,keyname='o2graph_y_title')
         elif ytitle!='' and ytitle!='none':
             if self.canvas_flag==False:
                 self.canvas()
@@ -1913,7 +1936,7 @@ class plot_base:
     def ztitle(self,ztitle):
         if self.yt_scene!=0:
             self.yt_text_to_scene([0.5,-0.05,-0.05],
-                                  ztitle,keyname='o2graph_z_axis')
+                                  ztitle,keyname='o2graph_z_title')
         else:
             print('No yt scene has been created for ztitle.')
         
@@ -2344,7 +2367,7 @@ class o2graph_plotter(plot_base):
         Create the yt scene object and set yt_created_scene to True
         """
         from yt.visualization.volume_rendering.api import Scene
-        print('o2graph_plotter:yt_create_scene: Creating scene.')
+        print('o2graph_plotter:yt_create_scene(): Creating scene.')
         self.yt_scene=Scene()
         self.yt_created_scene=True
         
@@ -2354,7 +2377,7 @@ class o2graph_plotter(plot_base):
         ``yt_resolution``, ``yt_position``, and ``yt_focus``, with a
         camera width based on the domain width of ``ds``.
         """
-        print('o2graph_plotter:yt_create_camera: Creating camera.')
+        print('o2graph_plotter:yt_create_camera(): Creating camera.')
         self.yt_camera=self.yt_scene.add_camera()
         self.yt_camera.resolution=self.yt_resolution
         self.yt_camera.width=1.5*ds.domain_width[0]
@@ -2536,7 +2559,11 @@ class o2graph_plotter(plot_base):
         for line in param_list:
             if args[0]==line[0]:
                 match=True
-        
+
+        for line in yt_param_list:
+            if args[0]==line[0]:
+                match=True
+                
         if match==True:
             
             self.get(args[0])
@@ -4210,7 +4237,8 @@ class o2graph_plotter(plot_base):
                         if self.zset==False:
                             self.zlo=gridz[0]
                             self.zhi=gridz[nz-1]
-                        print('axis limits:',self.xlo,self.xhi,
+                        print('o2graph_plotter:yt-add-vol: axis limits:',
+                              self.xlo,self.xhi,
                               self.ylo,self.yhi,self.zlo,self.zhi)
                         
                         arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
@@ -4368,6 +4396,11 @@ class o2graph_plotter(plot_base):
                         if self.yt_created_camera==False:
                             self.yt_create_camera(ps)
                             
+                elif cmd_name=='yt-source-list':
+
+                    for key, value in self.yt_scene.sources.items():
+                        print('x',key,type(value))
+                    
                 elif cmd_name=='yt-render':
 
                     if self.yt_axis==True:
@@ -4381,18 +4414,19 @@ class o2graph_plotter(plot_base):
                     fname2=''
                     if ix_next-ix>=3:
                         fname2=strlist[ix+2]
-                    print('herex',self.yt_path)
                     if self.yt_path=='':
                         print('o2graph:yt-render: Calling yt_scene.save().')
                         self.yt_scene.save(fname,sigma_clip=1.0)
-                    elif self.yt_path=='yaw':
+                    else:
+                        path_arr=self.yt_path.split(' ')
+                        n_frames=int(path_arr[0])
                         if fname2=='':
                             fname2='test.mp4'
                         asterisk=fname.find('*')
                         prefix=fname[0:asterisk]
                         suffix=fname[asterisk+1:len(fname)]
-                        print('fname,prefix,suffix:',fname,prefix,
-                              suffix)
+                        print('o2graph:yt-render: fname,prefix,suffix:',
+                              fname,prefix,suffix)
                         for i in range(0,80):
                             if i+1<10:
                                 fname2=prefix+'0'+str(i+1)+suffix
@@ -4405,7 +4439,6 @@ class o2graph_plotter(plot_base):
                                   '-crf 25 -pix_fmt yuv420p '+fname2)
                         print('ffmpeg command:',cmd)
                         os.system(cmd)
-                        
 
                 elif cmd_name=='yt-tf':
 
