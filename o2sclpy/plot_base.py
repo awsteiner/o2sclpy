@@ -742,16 +742,6 @@ class plot_base:
         dct=string_to_dict(self.fig_dict)
         (self.fig,self.axes)=default_plot(**dct)
         
-        # (self.fig,self.axes)=default_plot(left_margin=self.left_margin,
-        #                                   bottom_margin=self.bottom_margin,
-        #                                   right_margin=self.right_margin,
-        #                                   top_margin=self.top_margin,
-        #                                   fontsize=self.font,
-        #                                   fig_size_x=self.fig_size_x,
-        #                                   fig_size_y=self.fig_size_y,
-        #                                   ticks_in=self.ticks_in,
-        #                                   rt_ticks=self.rt_ticks)
-        
         # Plot limits
         if self.xset==True:
             self.axes.set_xlim(self.xlo,self.xhi)

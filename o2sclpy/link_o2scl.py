@@ -1,7 +1,9 @@
+import ctypes
+
 # For system type detection in build_o2scl() and link_o2scl()
 import platform
 
-# For build_o2scl(), link_o2scl() and download_file()
+# For build_o2scl(), link_o2scl()
 import urllib.request
 
 def build_o2scl(verbose=1,release=True):

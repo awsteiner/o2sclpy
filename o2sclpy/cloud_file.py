@@ -1,3 +1,6 @@
+# For download_file()
+import urllib.request
+
 # For MD5 hashes
 import hashlib
 
