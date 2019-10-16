@@ -5,6 +5,12 @@ import numpy
 # For wrapping help text
 import textwrap
 
+# For code.interact() in 'python' command
+import code 
+
+# For rectangles
+import matplotlib.patches as patches
+
 from o2sclpy.doc_data import cmaps, new_cmaps, base_list
 from o2sclpy.doc_data import extra_types, extra_list, param_list
 from o2sclpy.doc_data import yt_param_list

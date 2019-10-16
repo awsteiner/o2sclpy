@@ -1,3 +1,6 @@
+# For MD5 hashes
+import hashlib
+
 class cloud_file:
     """
     A class to manage downloading files from the internet.

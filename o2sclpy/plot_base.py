@@ -1,3 +1,9 @@
+# To create new color maps
+from matplotlib.colors import LinearSegmentedColormap
+
+# For rectangles
+import matplotlib.patches as patches
+
 class plot_base:
     """
     A base class for plotting classes :py:class:`o2sclpy.plotter` and

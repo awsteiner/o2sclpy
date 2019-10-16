@@ -55,30 +55,16 @@ import h5py
 import math
 import os
 
-# For MD5 hashes
-import hashlib
-
 import matplotlib.pyplot as plot
-
-# For rectangles
-import matplotlib.patches as patches
-# To create new color maps
-from matplotlib.colors import LinearSegmentedColormap
-# For build_o2scl(), link_o2scl() and download_file()
-import urllib.request
 
 import numpy
 import ctypes
 import readline
 
-# For wrapping help text
-import textwrap
-
-# For system type detection in build_o2scl() and link_o2scl()
-import platform
-
-# For code.interact() in 'python' command
-import code 
+version='0.924.dev1'
+"""
+The version number string
+"""
 
 from o2sclpy.doc_data import cmaps, new_cmaps, base_list
 from o2sclpy.doc_data import extra_types, extra_list, param_list
@@ -93,8 +79,4 @@ from o2sclpy.plot_base import plot_base
 from o2sclpy.plotter import plotter
 from o2sclpy.o2graph_plotter import o2graph_plotter
 
-version='0.924.dev1'
-"""
-The version number string
-"""
 
