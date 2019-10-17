@@ -1,3 +1,5 @@
+import math
+import os
 import sys
 import ctypes
 import numpy
@@ -2079,8 +2081,10 @@ class o2graph_plotter(plot_base):
                             
                 elif cmd_name=='yt-source-list':
 
+                    icnt=0
                     for key, value in self.yt_scene.sources.items():
-                        print('x',key,type(value))
+                        print('yt-source-list',icnt,key,type(value))
+                        icnt=icnt+1
                     
                 elif cmd_name=='yt-render':
 
@@ -2730,7 +2734,7 @@ class o2graph_plotter(plot_base):
                         print('\nO2graph command-line options:\n')
                         for line in base_list:
                             strt='  -'+line[0]
-                            while len(strt)<16:
+                            while len(strt)<18:
                                 strt=strt+' '
                             strt+=line[1]
                             print(strt)

@@ -30,6 +30,8 @@ List of new o2sclpy cmaps
 """
 
 base_list=[
+    ["addcbar","Add color bar.","<left> <bottom> <width> <height> [kwargs]",
+     "Add axis"],
     ["arrow","Plot an arrow.",
      "<x1> <y1> <x2> <y2> <arrow properties> [kwargs]",
      "Plot an arrow from (x1,y1) to (x2,y2). This command uses "+
@@ -87,6 +89,7 @@ base_list=[
      "Clear the current figure."],
     ["eval","Run the python eval() function.","<source code>",
      "Long desc."],
+    ["inset","Add an inset (unfinished).","",""],
     ["line","Plot a line.","<x1> <y1> <x2> <y2> [kwargs]",
      "Plot a line from (x1,y1) to (xy,y2). Some useful "+
      "kwargs are color (c), dashes, linestyle (ls), linewidth (lw), "+
@@ -137,9 +140,21 @@ base_list=[
      "which backend was selected. File type depends on the "+
      "extension, typically either .png, .pdf, .eps, .jpg, .raw, .svg, "+
      "and .tif ."],
+    ["selax","Select axis.","<index>",
+     "Select which axis to use for subsequent plotting commands. "+
+     "If a two-dimesional grid is made with 'subplots', then the "+
+     "index starts at zero and goes to the right before proceeding "+
+     "to the next row."],
     ["show","Show the current plot.","","Show the current plot "+
      "on the screen and begin "+
      "the graphical user interface. This is similar to plot.show()."],
+    ["subadj","Adjust subplots.","<kwargs>",
+     "The kwargs for 'subadj' are left, right, bottom, top, "+
+     "wspace, and hspace."],
+    ["subplots","Create subplots.","<nrows> <ncols> [kwargs]",
+     "Create a grid of <nrows> by <ncols> subplots. "+
+     "The kwargs currently supported are 'sharex', 'sharey', "+
+     "and 'squeeze'."],
     ["text","Plot text in the data coordinates.",
      "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
      "data coordinates defined by the current axes with the font size "+
@@ -158,40 +173,25 @@ base_list=[
      "open, then "+
      "the x-limits on that plot are modified. Future plots are also "+
      "set with the specified x-limits."],
+    ["xtitle","Add x title to plot (or subplot).","",""],
     ["ylimits","Set the y-axis limits.","<low> <high>",
      "Set 'ylo' and 'yhi' to the specified limits, "+
      "and set 'yset' to true. If a plotting canvas is currently "+
      "open, then "+
      "the y-limits on that plot are modified. Future plots are also "+
      "set with the specified y-limits."],
+    ["ytitle","Add y title to plot (or subplot).","",""],
     ["yt-render","Render the yt visualization.",
      "<filename or pattern> [movie output filename]","Long desc."],
     ["yt-source-list","Source list.","","Long desc."],
+    ["yt-tf","Edit the yt transfer function.","","Long desc."],
     ["zlimits","Set the z-azis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
      "and set 'zset' to true. If a plotting canvas is currently "+
      "open, then "+
      "the z-limits on that plot are modified. Future plots are also "+
      "set with the specified z-limits."],
-    ["yt-tf","Edit the yt transfer function.","","Long desc."],
-    ["subplots","Create subplots.","<nrows> <ncols> [kwargs]",
-     "Create a grid of <nrows> by <ncols> subplots. "+
-     "The kwargs currently supported are 'sharex', 'sharey', "+
-     "and 'squeeze'."],
-    ["selax","Select axis.","<index>",
-     "Select which axis to use for subsequent plotting commands. "+
-     "If a two-dimesional grid is made with 'subplots', then the "+
-     "index starts at zero and goes to the right before proceeding "+
-     "to the next row."],
-    ["addcbar","Add color bar.","<left> <bottom> <width> <height> [kwargs]",
-     "Add axis"],
-    ["xtitle","Add x title to plot (or subplot).","",""],
-    ["ytitle","Add y title to plot (or subplot).","",""],
-    ["ztitle","Add z title to plot (yt only).","",""],
-    ["inset","Add an inset (unfinished).","",""],
-    ["subadj","Adjust subplots.","<kwargs>",
-     "The kwargs for 'subadj' are left, right, bottom, top, "+
-     "wspace, and hspace."]
+    ["ztitle","Add z title to plot (yt only).","",""]
 ]
 """
 This is a list of 4-element entries:

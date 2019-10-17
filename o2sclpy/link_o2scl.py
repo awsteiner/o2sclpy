@@ -1,4 +1,5 @@
 import ctypes
+import os
 
 # For system type detection in build_o2scl() and link_o2scl()
 import platform
