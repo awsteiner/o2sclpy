@@ -8,5 +8,5 @@ o2graph -backend Agg  -create tensor_grid 3 2 2 2 \
 	-yt-tf new 0 1 -yt-tf gauss 2.0 0.05 0.8 0.0 0.0 0.5 \
 	-yt-add-vol \
 	-create table x "grid:0,5,0.01" \
-	-function "sin(x)" y -function "cos(x)" z \
+	-function "sin(4*x)" y -function "cos(4*x)" z \
 	-yt-scatter x y z -yt-render ys.png

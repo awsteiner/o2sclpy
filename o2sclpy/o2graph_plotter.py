@@ -49,26 +49,32 @@ class o2graph_plotter(plot_base):
     This class is not necessarily intended to be instantiated by the 
     end user. 
 
-    yt-related todo list:
+    Todo list:
      
-    - Simplify this class somehow to make the source file smaller,
-      possibly by separating out the yt part or moving the o2scl
-      integration somewhere else
-    - Make yt_scatter.scr work
-    - Finish setting up -set yt_resolution so it parses the
-      two numerical values
-    - Move yt-axis to a command so that we can place the
-      axis at an arbitrary location in either coordinate system.
-      This would also allow removing all the yt_axis parameters.
-    - Create a list of yt objects so that we can manipulate them
-      in the middle of an animation
-    - Figure out how to place 2d plot elements on top of the render
-    - Figure out how to allow user to specify focus and position in
-      both coordinate systems
-    - Create yt-box command for BoxSource
-    - More yt-path options
-    - Create yt-surface
-    - Anti-aliasing the axis would be nice
+    .. todo:: Move code out of parse_string_list() to separate functions
+    .. todo:: Simplify some of the larger functions like plot()
+    .. todo:: Simplify this class somehow to make the source file smaller,
+       possibly by separating out the yt part or moving the o2scl
+       integration somewhere else
+    .. todo:: Create a default volume in yt-scatter if one hasn't already
+       been specified
+    .. todo:: Allow the user to modify sigma_clip
+    .. todo:: Fix colors and sizes for yt-scatter
+    .. todo:: Finish setting up -set yt_resolution so it parses the
+       two numerical values
+    .. todo:: Move yt-axis to a command so that we can place the
+       axis at an arbitrary location in either coordinate system.
+       This would also allow removing all the yt_axis parameters.
+    .. todo:: Ensure the 'clf' command clears the yt objects
+    .. todo:: Create a list of yt objects so that we can manipulate them
+       in the middle of an animation
+    .. todo:: Figure out how to place 2d plot elements on top of the render
+    .. todo:: Figure out how to allow user to specify focus and position in
+       both coordinate systems
+    .. todo:: Create yt-box command for BoxSource
+    .. todo:: More yt-path options
+    .. todo:: Create yt-surface
+    .. todo:: Anti-aliasing the axis would be nice
     
     """
 
@@ -117,10 +123,11 @@ class o2graph_plotter(plot_base):
     def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=20,
                           show=False):
         """
-        Take two 3D vectors x ('vecx' and 'vecy'), and a string of text
-        ('text'), and return a numpy array of shape (6,npoints) which has
-        entries (x,y,z,r,g,b). The values r, g,
-        and b are between 0 and 1.
+        Take three 3D vectors 'veco' (origin), 'vecx' (x direction) and
+        'vecy' (y direction), and a string of text ('text'), and
+        return a numpy array of shape (6,npoints) which has entries
+        (x,y,z,r,g,b). The values r, g, and b are between 0 and 1.
+
         """
         fig, axes = plot.subplots()
         plot.rc('text',usetex=True)
@@ -223,7 +230,7 @@ class o2graph_plotter(plot_base):
         points_aheads2=LineSource(numpy.array(list2),numpy.array(clist2))
         self.yt_scene.add_source(points_aheads2,keyname='o2graph_axis_arrows')
         
-    def check_backend(self):
+    def yt_check_backend(self):
         """
         For yt, check that we're using the Agg backend.
         """
@@ -313,7 +320,7 @@ class o2graph_plotter(plot_base):
         
             parse_fn(amp,len(args)+1,sizes,ccp)
 
-    def gen(self,o2scl_hdf,amp,cmd_name,args):
+    def gen_acol(self,o2scl_hdf,amp,cmd_name,args):
         """
         Run a general ``acol`` command named ``cmd_name`` with arguments
         stored in ``args``.
@@ -1632,8 +1639,9 @@ class o2graph_plotter(plot_base):
         """
         Parse command-line arguments.
 
-        This is the main function used by the 
-        :ref:`O2graph script`
+        This is the main function used by the :ref:`O2graph script` .
+        Once it has created a list of strings from argv, it calls
+        parse_string_list() to call the proper functions.
         """
 
         # Create an acol_manager object and get the pointer
@@ -1851,7 +1859,7 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process commands.')
                         
-                    self.gen(o2scl_hdf,amp,cmd_name,
+                    self.gen_acol(o2scl_hdf,amp,cmd_name,
                              strlist[ix+1:ix_next])
 
                     if (ix_next-ix)==2:
@@ -1913,7 +1921,7 @@ class o2graph_plotter(plot_base):
                         curr_type=curr_type+type_ptr[i]
 
                     if curr_type==b'tensor_grid':
-                        self.check_backend()
+                        self.yt_check_backend()
                         import yt
                         from yt.visualization.volume_rendering.api \
                             import VolumeSource
@@ -2034,7 +2042,7 @@ class o2graph_plotter(plot_base):
                         curr_type=curr_type+type_ptr[i]
 
                     if curr_type==b'table':
-                        self.check_backend()
+                        self.yt_check_backend()
                         import yt
                         from yt.visualization.volume_rendering.api \
                             import PointSource
@@ -2108,7 +2116,7 @@ class o2graph_plotter(plot_base):
                             pts.append([(ptrx[i]-self.xlo)/x_range,
                                         (ptry[i]-self.ylo)/y_range,
                                         (ptrz[i]-self.zlo)/z_range])
-                            cols.append([1,1,1,1])
+                            cols.append([1.0,1.0,1.0,1.0])
                         pts2=numpy.array(pts)
                         cols2=numpy.array(cols)
 
@@ -2117,7 +2125,7 @@ class o2graph_plotter(plot_base):
                         if self.yt_created_scene==False:
                             self.yt_create_scene()
 
-                        print('o2graph:yt-scatter: Adding volume source.')
+                        print('o2graph:yt-scatter: Adding point source.')
                         self.yt_scene.add_source(ps,keyname='o2graph_point')
                         
                         if self.yt_created_camera==False:
@@ -2763,7 +2771,7 @@ class o2graph_plotter(plot_base):
                         
                     # Handle the case of an acol command 
                     if match==False and finished==False:
-                        self.gen(o2scl_hdf,amp,cmd_name,
+                        self.gen_acol(o2scl_hdf,amp,cmd_name,
                                  strlist[ix+1:ix_next])
 
                     # If the user specified 'help set', then print
@@ -3142,7 +3150,8 @@ class o2graph_plotter(plot_base):
                 else:
                     if self.verbose>2:
                         print('Process acol command '+cmd_name+'.')
-                    self.gen(o2scl_hdf,amp,cmd_name,strlist[ix+1:ix_next])
+                    self.gen_acol(o2scl_hdf,amp,cmd_name,
+                                  strlist[ix+1:ix_next])
                     
                 # Increment to the next option
                 ix=ix_next
