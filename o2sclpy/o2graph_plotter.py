@@ -1,3 +1,25 @@
+#  -------------------------------------------------------------------
+#  
+#  Copyright (C) 2006-2019, Andrew W. Steiner
+#  
+#  This file is part of O2sclpy.
+#  
+#  O2sclpy is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#  
+#  O2sclpy is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with O2sclpy. If not, see <http://www.gnu.org/licenses/>.
+#  
+#  -------------------------------------------------------------------
+#
+
 import math
 import os
 import sys
@@ -26,6 +48,28 @@ class o2graph_plotter(plot_base):
 
     This class is not necessarily intended to be instantiated by the 
     end user. 
+
+    yt-related todo list:
+     
+    - Simplify this class somehow to make the source file smaller,
+      possibly by separating out the yt part or moving the o2scl
+      integration somewhere else
+    - Make yt_scatter.scr work
+    - Finish setting up -set yt_resolution so it parses the
+      two numerical values
+    - Move yt-axis to a command so that we can place the
+      axis at an arbitrary location in either coordinate system.
+      This would also allow removing all the yt_axis parameters.
+    - Create a list of yt objects so that we can manipulate them
+      in the middle of an animation
+    - Figure out how to place 2d plot elements on top of the render
+    - Figure out how to allow user to specify focus and position in
+      both coordinate systems
+    - Create yt-box command for BoxSource
+    - More yt-path options
+    - Create yt-surface
+    - Anti-aliasing the axis would be nice
+    
     """
 
     yt_scene=0
