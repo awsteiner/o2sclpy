@@ -22,6 +22,8 @@
 
 import numpy
 
+import matplotlib.pyplot as plot
+
 def force_bytes(obj):
     """
     This function returns the bytes object corresponding to ``obj``

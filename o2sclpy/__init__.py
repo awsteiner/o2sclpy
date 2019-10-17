@@ -30,8 +30,6 @@ import h5py
 import math
 import os
 
-import matplotlib.pyplot as plot
-
 import numpy
 import ctypes
 import readline

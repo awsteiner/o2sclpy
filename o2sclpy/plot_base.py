@@ -20,6 +20,8 @@
 #  -------------------------------------------------------------------
 #
 
+import matplotlib.pyplot as plot
+
 # To create new color maps
 from matplotlib.colors import LinearSegmentedColormap
 

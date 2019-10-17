@@ -26,6 +26,8 @@ import sys
 import ctypes
 import numpy
 
+import matplotlib.pyplot as plot
+
 # For wrapping help text
 import textwrap
 
@@ -3101,6 +3103,20 @@ class o2graph_plotter(plot_base):
                         print('Process eval.')
 
                     eval(strlist[ix+1],None,locals())
+                    
+                elif cmd_name=='image':
+                    
+                    if self.verbose>2:
+                        print('Process image.')
+
+                    import matplotlib.image as img
+                    if '*' in strlist[ix+1] or '?' in strlist[ix+1]:
+                        print('follow image list here, animation API?')
+                    else:
+                        im = img.imread(strlist[ix+1])
+                        default_plot(0.0,0.0,0.0,0.0)
+                        plot.imshow(im)
+                        plot.show()
                     
                 elif cmd_name=='rect':
                     

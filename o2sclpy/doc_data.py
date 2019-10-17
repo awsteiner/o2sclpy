@@ -89,6 +89,7 @@ base_list=[
      "Clear the current figure."],
     ["eval","Run the python eval() function.","<source code>",
      "Long desc."],
+    ["image","Plot an image.","<file>",""],
     ["inset","Add an inset (unfinished).","",""],
     ["line","Plot a line.","<x1> <y1> <x2> <y2> [kwargs]",
      "Plot a line from (x1,y1) to (xy,y2). Some useful "+
