@@ -28,6 +28,9 @@ from matplotlib.colors import LinearSegmentedColormap
 # For rectangles
 import matplotlib.patches as patches
 
+from o2sclpy.utils import parse_arguments, string_to_dict
+from o2sclpy.utils import force_bytes, default_plot, get_str_array
+
 class plot_base:
     """
     A base class for plotting classes :py:class:`o2sclpy.plotter` and

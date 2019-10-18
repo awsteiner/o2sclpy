@@ -39,7 +39,8 @@ Notes:
    list of commands for each type can be obtained with 'commands <type>'.
    Required arguments are surrounded by <>'s and optional arguments are
    surrounded by []'s.
-2. Options may also be specified in the environment variable ACOL_DEFAULTS.
+2. Options may also be specified in the environment variable
+   O2GRAPH_DEFAULTS.
 3. Long options may be preceeded by two dashes.
 4. In order to avoid confusion between arguments and functions, use
    parenthesis and quotes, i.e. (-x*2) instead of -x*2.
@@ -83,39 +84,42 @@ mult-vector-spec, types, value-spec, and vector-spec.
 
 O2graph command-line options:
 
-  -arrow        Plot an arrow.
-  -backend      Select the matplotlib backend to use.
-  -canvas       Create a plotting canvas.
-  -clf          Clear the current figure.
-  -eval         Run the python eval() function.
-  -line         Plot a line.
-  -move-labels  Move the labels.
-  -new-cmaps    Define new color maps.
-  -plotv        Plot several vector-like data sets.
-  -point        Plot a single point.
-  -python       Begin an interactive python session.
-  -rect         Plot a rectangle.
-  -reset-xlim   Reset the x-axis limits.
-  -reset-ylim   Reset the y-axis limits.
-  -reset-zlim   Reset the z-azis limits.
-  -save         Save the current plot in a file.
-  -show         Show the current plot.
-  -text         Plot text in the data coordinates.
-  -textbox      Plot a box with text.
-  -ttext        Plot text in window coordinates [(0,0) to (1,1)].
-  -xlimits      Set the x-axis limits.
-  -ylimits      Set the y-axis limits.
-  -yt-path      Set yt animation path.
-  -yt-render    Render the yt visualization.
-  -zlimits      Set the z-azis limits.
-  -yt-tf        Edit the yt transfer function.
-  -subplots     Create subplots.
-  -selax        Select axis.
-  -addcbar      Add color bar.
-  -xtitle       Add x title to plot (or subplot).
-  -ytitle       Add y title to plot (or subplot).
-  -inset        Add an inset (unfinished).
-  -subadj       Adjust subplots.
+  -addcbar        Add color bar.
+  -arrow          Plot an arrow.
+  -backend        Select the matplotlib backend to use.
+  -canvas         Create a plotting canvas.
+  -clf            Clear the current figure.
+  -eval           Run the python eval() function.
+  -image          Plot an image.
+  -inset          Add an inset (unfinished).
+  -line           Plot a line.
+  -move-labels    Move the labels.
+  -new-cmaps      Define new color maps.
+  -plotv          Plot several vector-like data sets.
+  -point          Plot a single point.
+  -python         Begin an interactive python session.
+  -rect           Plot a rectangle.
+  -reset-xlim     Reset the x-axis limits.
+  -reset-ylim     Reset the y-axis limits.
+  -reset-zlim     Reset the z-azis limits.
+  -save           Save the current plot in a file.
+  -selax          Select axis.
+  -show           Show the current plot.
+  -subadj         Adjust subplots.
+  -subplots       Create subplots.
+  -text           Plot text in the data coordinates.
+  -textbox        Plot a box with text.
+  -ttext          Plot text in window coordinates [(0,0) to (1,1)].
+  -xlimits        Set the x-axis limits.
+  -xtitle         Add x title to plot (or subplot).
+  -ylimits        Set the y-axis limits.
+  -ytitle         Add y title to plot (or subplot).
+  -yt-axis        Add an axis to the yt volume.
+  -yt-render      Render the yt visualization.
+  -yt-source-list Source list.
+  -yt-tf          Edit the yt transfer function.
+  -zlimits        Set the z-azis limits.
+  -ztitle         Add z title to plot (yt only).
 
 ------------------------------------------------------------------------------
 O2graph type-specific commands:
