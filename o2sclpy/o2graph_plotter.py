@@ -2239,6 +2239,13 @@ class o2graph_plotter(plot_base):
                                     if first:
                                         os.system('eog /tmp/o2graph_temp.png &')
                                         first=False
+                                else:
+                                    os.system('cp '+fname2+
+                                              ' /tmp/o2graph_temp.png')
+                                    if first:
+                                        os.system('open /tmp/o2gr'+
+                                                  'aph_temp.png &')
+                                        first=False
                                 self.yt_camera.yaw(angle)
 
                         # -r is rate, -f is format, -vcodec is video
