@@ -25,11 +25,11 @@ import os
 import sys
 import ctypes
 import numpy
-import time
-import glob
 
 import matplotlib.pyplot as plot
-import matplotlib.animation as animation
+
+# For system type detection
+import platform
 
 # For wrapping help text
 import textwrap
@@ -2223,6 +2223,7 @@ class o2graph_plotter(plot_base):
                         # Read yaw arguments
                         path_arr=self.yt_path.split(' ')
                         if path_arr[0]=='yaw':
+                            first=True
                             n_frames=int(path_arr[1])
                             angle=float(path_arr[2])*numpy.pi*2.0
                             
@@ -2232,6 +2233,12 @@ class o2graph_plotter(plot_base):
                                 else:
                                     fname2=prefix+str(i+1)+suffix
                                 self.yt_scene.save(fname2,sigma_clip=1.0)
+                                if platform.system()!='Darwin':
+                                    os.system('cp '+fname2+
+                                              ' /tmp/o2graph_temp.png')
+                                    if first:
+                                        os.system('eog /tmp/o2graph_temp.png &')
+                                        first=False
                                 self.yt_camera.yaw(angle)
 
                         # -r is rate, -f is format, -vcodec is video
@@ -3176,43 +3183,11 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process image.')
 
-                    print('h0')
                     import matplotlib.image as img
-                    print('h1')
-                    ims=[]
-                    
-                    if '*' in strlist[ix+1] or '?' in strlist[ix+1]:
-
-                        print('follow image list here, animation API?')
-                        filelist=[]
-                        pattern=strlist[ix+1]
-                        asterisk=pattern.find('*')
-                        prefix=pattern[0:asterisk]
-                        suffix=pattern[asterisk+1:len(pattern)]
-
-                        print('pattern',pattern)
-                        filelist=glob.glob(pattern)
-                        print('filelist',filelist)
-                        (fig,ax)=default_plot(0.0,0.0,0.0,0.0)
-                        for i in range(0,len(filelist)):
-                            print('filelist[i]',filelist[i])
-                            im=img.imread(filelist[i])
-                            im2=plot.imshow(im,animated=True)
-                            ims.append([im2])
-                        ani = animation.ArtistAnimation(fig, ims,
-                                                        interval=50,
-                                                        blit=True,
-                                                        repeat=False)
-                        print('sleeping')
-                        time.sleep(5)
-                        print('done sleeping')
-                        plot.show()
-                        quit()
-                    else:
-                        im = img.imread(strlist[ix+1])
-                        default_plot(0.0,0.0,0.0,0.0)
-                        plot.imshow(im)
-                        plot.show()
+                    im = img.imread(strlist[ix+1])
+                    default_plot(0.0,0.0,0.0,0.0)
+                    plot.imshow(im)
+                    plot.show()
                     
                 elif cmd_name=='rect':
                     
