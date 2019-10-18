@@ -182,6 +182,9 @@ base_list=[
      "the y-limits on that plot are modified. Future plots are also "+
      "set with the specified y-limits."],
     ["ytitle","Add y title to plot (or subplot).","",""],
+    ["yt-axis","Add an axis to the yt volume.",
+     "<x0> <y0> <z0> [r g b a] ['flat'] [x1 y1 z1] [x2 y2 z2] [x3 y3 z3]",
+     ""],
     ["yt-render","Render the yt visualization.",
      "<filename or pattern> [movie output filename]","Long desc."],
     ["yt-source-list","Source list.","","Long desc."],
@@ -417,10 +420,6 @@ A list of 2-element entries, name and description
 """
 
 yt_param_list=[
-    ["yt_axis","If true, plot a 3D axis."],
-    ["yt_axis_color","Color for the 3D axis."],
-    ["yt_axis_labels_flat",
-     "If true, force the axis labels to be parallel to the camera."],
     ["yt_focus","The camera focus (default [0.5,0.5,0.5])."],
     ["yt_position","The camera position."],
     ["yt_path","The animation path."],

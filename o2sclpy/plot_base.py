@@ -729,7 +729,7 @@ class plot_base:
         
     def ztitle(self,ztitle):
         if self.yt_scene!=0:
-            self.yt_text_to_scene([0.5,-0.05,-0.05],
+            self.yt_text_to_scene([-0.05,-0.05,0.5],
                                   ztitle,keyname='o2graph_z_title')
         else:
             print('No yt scene has been created for ztitle.')

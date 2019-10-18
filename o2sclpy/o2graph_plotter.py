@@ -184,7 +184,9 @@ class o2graph_plotter(plot_base):
         points_xalabels=PointSource(Y,colors=Y2)
         self.yt_scene.add_source(points_xalabels,keyname=keyname)
 
-    def yt_plot_axis(self,color=[1.0,1.0,1.0,0.5]):
+    def yt_plot_axis(self,origin=[0.0,0.0,0.0],color=[1.0,1.0,1.0,0.5],
+                     ihat=[1.0,0.0,0.0],jhat=[0.0,1.0,0.0],
+                     khat=[0.0,0.0,1.0]):
 
         print('o2graph_plotter:yt_plot_axis(): Adding axis.')
         
@@ -193,15 +195,15 @@ class o2graph_plotter(plot_base):
             import PointSource, LineSource
         
         # Point at origin
-        vertex_origin=numpy.array([[0.0,0.0,0.0]])
+        vertex_origin=numpy.array([origin])
         color_origin=numpy.array([color])
         points=PointSource(vertex_origin,colors=color_origin,radii=3)
         self.yt_scene.add_source(points,keyname='o2graph_origin')
     
         # Axis lines
-        vertices_axis=numpy.array([[[0.0,0.0,0.0],[1.0,0.0,0.0]],
-                                [[0.0,0.0,0.0],[0.0,1.0,0.0]],
-                                [[0.0,0.0,0.0],[0.0,0.0,1.0]]])
+        vertices_axis=numpy.array([[origin,ihat],
+                                   [origin,jhat],
+                                   [origin,khat]])
         colors_axis=numpy.array([color,color,color])
         axis=LineSource(vertices_axis,colors_axis)
         self.yt_scene.add_source(axis,keyname='o2graph_axis_lines')
@@ -1620,12 +1622,6 @@ class o2graph_plotter(plot_base):
         print('yt-related settings:')
         print(' ')
         for line in yt_param_list:
-            if line[0]=='yt_axis':
-                print(line[0]+' '+str(self.yt_axis))
-            if line[0]=='yt_axis_color':
-                print(line[0]+' '+str(self.yt_axis_color))
-            if line[0]=='yt_axis_labels_flat':
-                print(line[0]+' '+str(self.yt_axis_labels_flat))
             if line[0]=='yt_focus':
                 print(line[0]+' '+str(self.yt_focus))
             if line[0]=='yt_position':
@@ -1636,7 +1632,7 @@ class o2graph_plotter(plot_base):
                 print(line[0]+' '+str(self.yt_resolution))
             print(' '+line[1])
             print(' ')
-        
+
     def parse_argv(self,argv,o2scl_hdf):
         """
         Parse command-line arguments.
@@ -1758,7 +1754,50 @@ class o2graph_plotter(plot_base):
 
         # End of function parse_argv
         return
+
+    def command_func(self,o2scl_hdf,amp,args):
+
+        self.gen_acol(o2scl_hdf,amp,'commands',args)
+                    
+        if len(args)>0:
             
+            curr_type=args[0]
+                        
+        else:
+
+            # Get current type
+            int_ptr=ctypes.POINTER(ctypes.c_int)
+            char_ptr=ctypes.POINTER(ctypes.c_char)
+            char_ptr_ptr=ctypes.POINTER(char_ptr)
+            
+            # Set up wrapper for type function
+            type_fn=o2scl_hdf.o2scl_acol_get_type
+            type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+            
+            # Get current type
+            it=ctypes.c_int(0)
+            type_ptr=char_ptr()
+            type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+            
+            curr_type=b''
+            for i in range(0,it.value):
+                curr_type=curr_type+type_ptr[i]
+                
+        print('O2graph commands for type '+
+              str(curr_type)+':\n')
+        strout=''
+        for line in base_list:
+            strout+=line[0]+' '
+        for line in extra_list:
+            if (curr_type==line[0] or
+                curr_type==force_bytes(line[0])):
+                strout+=line[1]+' '
+        str_list=textwrap.wrap(strout,79)
+        for i in range (0,len(str_list)):
+            print(str_list[i])
+
+        return
+    
     def parse_string_list(self,strlist,o2scl_hdf,amp):
         """
         Parse a list of strings
@@ -1860,10 +1899,16 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process commands.')
-                        
-                    self.gen_acol(o2scl_hdf,amp,cmd_name,
-                             strlist[ix+1:ix_next])
 
+                    # This doesn't work yet, it segfaults on osx
+                    #print('here1')
+                    #self.command_func(o2scl_hdf,amp,
+                    #                  strlist[ix+1:ix_next])
+                    #print('here2')
+                    
+                    self.gen_acol(o2scl_hdf,amp,cmd_name,
+                                  strlist[ix+1:ix_next])
+                    
                     if (ix_next-ix)==2:
                         
                         curr_type=strlist[ix+1]
@@ -2140,42 +2185,60 @@ class o2graph_plotter(plot_base):
                         print('yt-source-list',icnt,key,type(value))
                         icnt=icnt+1
                     
-                elif cmd_name=='yt-render':
+                elif cmd_name=='yt-axis':
 
-                    if self.yt_axis==True:
-                        self.yt_plot_axis()
+                    self.yt_plot_axis()
+
+                elif cmd_name=='yt-render':
 
                     # AWS 10/14/19 the call to save() below does
                     # the render() so I don't think I need this
                     #self.yt_scene.render()
 
                     fname=strlist[ix+1]
-                    fname2=''
+                    mov_fname=''
                     if ix_next-ix>=3:
-                        fname2=strlist[ix+2]
+                        mov_fname=strlist[ix+2]
                     if self.yt_path=='':
                         print('o2graph:yt-render: Calling yt_scene.save().')
                         self.yt_scene.save(fname,sigma_clip=1.0)
                     else:
-                        path_arr=self.yt_path.split(' ')
-                        n_frames=int(path_arr[0])
-                        if fname2=='':
-                            fname2='test.mp4'
+
+                        # Setup destination filename
+                        if mov_fname=='':
+                            mov_fname='o2graph.mp4'
+
+                        # Parse image file pattern
                         asterisk=fname.find('*')
                         prefix=fname[0:asterisk]
                         suffix=fname[asterisk+1:len(fname)]
-                        print('o2graph:yt-render: fname,prefix,suffix:',
-                              fname,prefix,suffix)
-                        for i in range(0,80):
-                            if i+1<10:
-                                fname2=prefix+'0'+str(i+1)+suffix
-                            else:
-                                fname2=prefix+str(i+1)+suffix
-                            self.yt_scene.save(fname2,sigma_clip=1.0)
-                            self.yt_camera.yaw(numpy.pi/40.0)
-                        cmd=('ffmpeg -r 10 -f image2 -i '+
+                        print('o2graph:yt-render:',
+                              'fname,prefix,suffix,mov_fname:',
+                              fname,prefix,suffix,mov_fname)
+                            
+                        # Read yaw arguments
+                        path_arr=self.yt_path.split(' ')
+                        if path_arr[0]=='yaw':
+                            n_frames=int(path_arr[1])
+                            angle=float(path_arr[2])*numpy.pi*2.0
+                            
+                            for i in range(0,n_frames):
+                                if i+1<10:
+                                    fname2=prefix+'0'+str(i+1)+suffix
+                                else:
+                                    fname2=prefix+str(i+1)+suffix
+                                self.yt_scene.save(fname2,sigma_clip=1.0)
+                                self.yt_camera.yaw(angle)
+
+                        # -r is rate, -f is format, -vcodec is video
+                        # codec (apparently 420p works well with
+                        # quicktime), -pix_fmt sepcifies the pixel format,
+                        # -crf is the quality (15-25 recommended)
+                        # -y forces overwrite of the movie file
+                        
+                        cmd=('ffmpeg -y -r 10 -f image2 -i '+
                                   prefix+'%02d'+suffix+' -vcodec libx264 '+
-                                  '-crf 25 -pix_fmt yuv420p '+fname2)
+                                  '-crf 25 -pix_fmt yuv420p '+mov_fname)
                         print('ffmpeg command:',cmd)
                         os.system(cmd)
 
