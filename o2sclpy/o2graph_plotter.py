@@ -1759,7 +1759,134 @@ class o2graph_plotter(plot_base):
         # End of function parse_argv
         return
 
-    def command_func(self,o2scl_hdf,amp,args):
+    def yt_add_vol(self,o2scl_hdf,amp):
+        """
+        Function documentation
+        """
+
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+        
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+        
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+
+        if curr_type==b'tensor_grid':
+            self.yt_check_backend()
+            import yt
+            from yt.visualization.volume_rendering.api \
+                import VolumeSource
+            from yt.visualization.volume_rendering.transfer_function_helper \
+                import TransferFunctionHelper
+
+            # Set up wrapper for get function
+            get_fn=o2scl_hdf.o2scl_acol_get_tensor_grid3
+            get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr,
+                             int_ptr,double_ptr_ptr,
+                             double_ptr_ptr,double_ptr_ptr,
+                             double_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+             # Call get function
+            nx=ctypes.c_int(0)
+            ny=ctypes.c_int(0)
+            nz=ctypes.c_int(0)
+            ret=ctypes.c_int(0)
+            gridx=double_ptr()
+            gridy=double_ptr()
+            gridz=double_ptr()
+            data=double_ptr()
+            ret=get_fn(amp,ctypes.byref(nx),ctypes.byref(ny),
+                       ctypes.byref(nz),ctypes.byref(gridx),
+                       ctypes.byref(gridy),ctypes.byref(gridz),
+                       ctypes.byref(data))
+
+            nx=nx.value
+            ny=ny.value
+            nz=nz.value
+            total_size=nx*ny*nz
+            #maxval=data[0]
+            #minval=data[0]
+            #for ij in range(0,total_size):
+            #    if data[ij]>maxval:
+            #        maxval=data[ij]
+            #    if data[ij]<minval:
+            #        minval=data[ij]
+            #drange=maxval-minval
+
+            if self.xset==False:
+                self.xlo=gridx[0]
+                self.xhi=gridx[nx-1]
+            if self.yset==False:
+                self.ylo=gridy[0]
+                self.yhi=gridy[ny-1]
+            if self.zset==False:
+                self.zlo=gridz[0]
+                self.zhi=gridz[nz-1]
+            print('o2graph_plotter:yt-add-vol: axis limits:',
+                  self.xlo,self.xhi,
+                  self.ylo,self.yhi,self.zlo,self.zhi)
+                        
+            arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
+            bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
+            ds=yt.load_uniform_grid(dict(density=arr),
+                                    arr.shape,bbox=bbox)
+
+            vol=VolumeSource(ds,field='density')
+            vol.log_field=False
+
+            # Setup the transfer function
+            if True:
+                vol.set_transfer_function(self.yt_tf)
+                print(self.yt_tf)
+                # tf=yt.ColorTransferFunction((minval,maxval),
+                #                             grey_opacity=False)
+                # wid=0.012
+                # tf.add_gaussian(minval+drange*0.9,wid,
+                #                 [1.0,0.0,0.0,1.0])
+                # wid=0.01
+                # tf.add_gaussian(minval+drange*0.5,wid,
+                #                 [0.0,1.0,0.0,1.0])
+                # wid=0.012
+                # tf.add_gaussian(minval+drange*0.1,wid,
+                #                 [0.0,0.0,1.0,1.0])
+                # vol.set_transfer_function(tf)
+                # print(tf)
+            else:
+                tfh=TransferFunctionHelper(ds)
+                tfh.set_field('density')
+                tfh.set_log(False)
+                tfh.set_bounds()
+                tfh.build_transfer_function()
+                tfh.tf.add_layers(3)
+                #tfh.plot('tf.png')
+                vol.set_transfer_function(tfh.tf)
+                print(tfh.tf)
+                        
+            if self.yt_created_scene==False:
+                self.yt_create_scene()
+
+            self.yt_scene.add_source(vol,keyname='vol1')
+                            
+            if self.yt_created_camera==False:
+                self.yt_create_camera(ds)
+        return
+        
+    def commands(self,o2scl_hdf,amp,args):
+        """
+        Function documentation
+        """
 
         self.gen_acol(o2scl_hdf,amp,'commands',args)
                     
@@ -1904,173 +2031,16 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process commands.')
 
-                    # This doesn't work yet, it segfaults on osx
-                    #print('here1')
-                    #self.command_func(o2scl_hdf,amp,
-                    #                  strlist[ix+1:ix_next])
-                    #print('here2')
-                    
-                    self.gen_acol(o2scl_hdf,amp,cmd_name,
+                    self.commands(o2scl_hdf,amp,
                                   strlist[ix+1:ix_next])
                     
-                    if (ix_next-ix)==2:
-                        
-                        curr_type=strlist[ix+1]
-                        
-                    else:
-
-                        # Get current type
-                        int_ptr=ctypes.POINTER(ctypes.c_int)
-                        char_ptr=ctypes.POINTER(ctypes.c_char)
-                        char_ptr_ptr=ctypes.POINTER(char_ptr)
-
-                        # Set up wrapper for type function
-                        type_fn=o2scl_hdf.o2scl_acol_get_type
-                        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-                        # Get current type
-                        it=ctypes.c_int(0)
-                        type_ptr=char_ptr()
-                        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-                        curr_type=b''
-                        for i in range(0,it.value):
-                            curr_type=curr_type+type_ptr[i]
-
-                    print('O2graph commands for type '+
-                          str(curr_type)+':\n')
-                    strout=''
-                    for line in base_list:
-                        strout+=line[0]+' '
-                    for line in extra_list:
-                        if (curr_type==line[0] or
-                            curr_type==force_bytes(line[0])):
-                            strout+=line[1]+' '
-                    str_list=textwrap.wrap(strout,79)
-                    for i in range (0,len(str_list)):
-                        print(str_list[i])
-                            
                 elif cmd_name=='yt-add-vol':
 
-                    int_ptr=ctypes.POINTER(ctypes.c_int)
-                    char_ptr=ctypes.POINTER(ctypes.c_char)
-                    char_ptr_ptr=ctypes.POINTER(char_ptr)
-                    double_ptr=ctypes.POINTER(ctypes.c_double)
-                    double_ptr_ptr=ctypes.POINTER(double_ptr)
+                    if self.verbose>2:
+                        print('Process yt-add-vol.')
+
+                    self.yt_add_vol(o2scl_hdf,amp)
                     
-                    # Set up wrapper for type function
-                    type_fn=o2scl_hdf.o2scl_acol_get_type
-                    type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-                    
-                    # Get current type
-                    it=ctypes.c_int(0)
-                    type_ptr=char_ptr()
-                    type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                    
-                    curr_type=b''
-                    for i in range(0,it.value):
-                        curr_type=curr_type+type_ptr[i]
-
-                    if curr_type==b'tensor_grid':
-                        self.yt_check_backend()
-                        import yt
-                        from yt.visualization.volume_rendering.api \
-                            import VolumeSource
-                        from yt.visualization.volume_rendering.transfer_function_helper \
-    import TransferFunctionHelper
-
-                        # Set up wrapper for get function
-                        get_fn=o2scl_hdf.o2scl_acol_get_tensor_grid3
-                        get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr,
-                                         int_ptr,double_ptr_ptr,
-                                         double_ptr_ptr,double_ptr_ptr,
-                                         double_ptr_ptr]
-                        get_fn.restype=ctypes.c_int
-
-                        # Call get function
-                        nx=ctypes.c_int(0)
-                        ny=ctypes.c_int(0)
-                        nz=ctypes.c_int(0)
-                        ret=ctypes.c_int(0)
-                        gridx=double_ptr()
-                        gridy=double_ptr()
-                        gridz=double_ptr()
-                        data=double_ptr()
-                        ret=get_fn(amp,ctypes.byref(nx),ctypes.byref(ny),
-                                   ctypes.byref(nz),ctypes.byref(gridx),
-                                   ctypes.byref(gridy),ctypes.byref(gridz),
-                                   ctypes.byref(data))
-
-                        nx=nx.value
-                        ny=ny.value
-                        nz=nz.value
-                        total_size=nx*ny*nz
-                        #maxval=data[0]
-                        #minval=data[0]
-                        #for ij in range(0,total_size):
-                        #    if data[ij]>maxval:
-                        #        maxval=data[ij]
-                        #    if data[ij]<minval:
-                        #        minval=data[ij]
-                        #drange=maxval-minval
-
-                        if self.xset==False:
-                            self.xlo=gridx[0]
-                            self.xhi=gridx[nx-1]
-                        if self.yset==False:
-                            self.ylo=gridy[0]
-                            self.yhi=gridy[ny-1]
-                        if self.zset==False:
-                            self.zlo=gridz[0]
-                            self.zhi=gridz[nz-1]
-                        print('o2graph_plotter:yt-add-vol: axis limits:',
-                              self.xlo,self.xhi,
-                              self.ylo,self.yhi,self.zlo,self.zhi)
-                        
-                        arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
-                        bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
-                        ds=yt.load_uniform_grid(dict(density=arr),
-                                                arr.shape,bbox=bbox)
-
-                        vol=VolumeSource(ds,field='density')
-                        vol.log_field=False
-
-                        # Setup the transfer function
-                        if True:
-                            vol.set_transfer_function(self.yt_tf)
-                            print(self.yt_tf)
-                            # tf=yt.ColorTransferFunction((minval,maxval),
-                            #                             grey_opacity=False)
-                            # wid=0.012
-                            # tf.add_gaussian(minval+drange*0.9,wid,
-                            #                 [1.0,0.0,0.0,1.0])
-                            # wid=0.01
-                            # tf.add_gaussian(minval+drange*0.5,wid,
-                            #                 [0.0,1.0,0.0,1.0])
-                            # wid=0.012
-                            # tf.add_gaussian(minval+drange*0.1,wid,
-                            #                 [0.0,0.0,1.0,1.0])
-                            # vol.set_transfer_function(tf)
-                            # print(tf)
-                        else:
-                            tfh=TransferFunctionHelper(ds)
-                            tfh.set_field('density')
-                            tfh.set_log(False)
-                            tfh.set_bounds()
-                            tfh.build_transfer_function()
-                            tfh.tf.add_layers(3)
-                            #tfh.plot('tf.png')
-                            vol.set_transfer_function(tfh.tf)
-                            print(tfh.tf)
-                        
-                        if self.yt_created_scene==False:
-                            self.yt_create_scene()
-
-                        self.yt_scene.add_source(vol,keyname='vol1')
-                            
-                        if self.yt_created_camera==False:
-                            self.yt_create_camera(ds)
-
                 elif cmd_name=='yt-scatter':
 
                     int_ptr=ctypes.POINTER(ctypes.c_int)
