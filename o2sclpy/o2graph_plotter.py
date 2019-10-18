@@ -25,8 +25,11 @@ import os
 import sys
 import ctypes
 import numpy
+import time
+import glob
 
 import matplotlib.pyplot as plot
+import matplotlib.animation as animation
 
 # For wrapping help text
 import textwrap
@@ -3173,9 +3176,38 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process image.')
 
+                    print('h0')
                     import matplotlib.image as img
+                    print('h1')
+                    ims=[]
+                    
                     if '*' in strlist[ix+1] or '?' in strlist[ix+1]:
+
                         print('follow image list here, animation API?')
+                        filelist=[]
+                        pattern=strlist[ix+1]
+                        asterisk=pattern.find('*')
+                        prefix=pattern[0:asterisk]
+                        suffix=pattern[asterisk+1:len(pattern)]
+
+                        print('pattern',pattern)
+                        filelist=glob.glob(pattern)
+                        print('filelist',filelist)
+                        (fig,ax)=default_plot(0.0,0.0,0.0,0.0)
+                        for i in range(0,len(filelist)):
+                            print('filelist[i]',filelist[i])
+                            im=img.imread(filelist[i])
+                            im2=plot.imshow(im,animated=True)
+                            ims.append([im2])
+                        ani = animation.ArtistAnimation(fig, ims,
+                                                        interval=50,
+                                                        blit=True,
+                                                        repeat=False)
+                        print('sleeping')
+                        time.sleep(5)
+                        print('done sleeping')
+                        plot.show()
+                        quit()
                     else:
                         im = img.imread(strlist[ix+1])
                         default_plot(0.0,0.0,0.0,0.0)
