@@ -191,7 +191,10 @@ class o2graph_plotter(plot_base):
     def yt_plot_axis(self,origin=[0.0,0.0,0.0],color=[1.0,1.0,1.0,0.5],
                      ihat=[1.0,0.0,0.0],jhat=[0.0,1.0,0.0],
                      khat=[0.0,0.0,1.0]):
-
+        """
+        Function documentation
+        """
+        
         print('o2graph_plotter:yt_plot_axis(): Adding axis.')
         
         # Imports
@@ -1883,7 +1886,7 @@ class o2graph_plotter(plot_base):
                 self.yt_create_camera(ds)
         return
         
-    def yt_render(self,o2scl_hdf,amp,fname,mov_fname=''):
+    def yt_render(self,fname,mov_fname=''):
         """
         Function documentation
         """
@@ -1916,6 +1919,7 @@ class o2graph_plotter(plot_base):
             path_arr=self.yt_path.split(' ')
             
             if path_arr[0]=='yaw':
+
                 first=True
                 n_frames=int(path_arr[1])
                 angle=float(path_arr[2])*numpy.pi*2.0
@@ -1940,30 +1944,25 @@ class o2graph_plotter(plot_base):
                                       'aph_temp.png &')
                             first=False
                     self.yt_camera.yaw(angle)
+                    
             elif path_arr[0]=='move':
+                
                 first=True
                 n_frames=int(path_arr[1])
-                            
+                xfunc=path_arr[2]
+                yfunc=path_arr[3]
+                zfunc=path_arr[4]
+
                 for i in range(0,n_frames):
                     if i+1<10:
                         fname2=prefix+'0'+str(i+1)+suffix
                     else:
                         fname2=prefix+str(i+1)+suffix
+                    x=float(i)/float(n_frames-1)
+                    self.yt_position=[eval(xfunc,None,locals()),
+                                      eval(yfunc,None,locals()),
+                                      eval(zfunc,None,locals())]
                     self.yt_scene.save(fname2,sigma_clip=1.0)
-                    if platform.system()!='Darwin':
-                        os.system('cp '+fname2+
-                                  ' /tmp/o2graph_temp.png')
-                        if first:
-                            os.system('eog /tmp/o2graph_temp.png &')
-                            first=False
-                    else:
-                        os.system('cp '+fname2+
-                                  ' /tmp/o2graph_temp.png')
-                        if first:
-                            os.system('open /tmp/o2gr'+
-                                      'aph_temp.png &')
-                            first=False
-                    self.yt_camera.yaw(angle)
 
             # -r is rate, -f is format, -vcodec is video
             # codec (apparently 420p works well with
@@ -1976,6 +1975,36 @@ class o2graph_plotter(plot_base):
                       '-crf 25 -pix_fmt yuv420p '+mov_fname)
             print('ffmpeg command:',cmd)
             os.system(cmd)
+        return
+
+    def yt_tf_func(self,args):
+        """
+        Function documentation
+        """
+
+        if args[0]=='new':
+            import yt
+            print('o2graph:yt-tf: New transfer function.')
+            print('o2graph:yt-tf: min:',args[1],
+                  'max:',args[2])
+            self.yt_tf=yt.ColorTransferFunction((float(args[1]),
+                                                 float(args[2])),
+                                                grey_opacity=False)
+        elif args[0]=='gauss':
+            print('o2graph:yt-tf: Adding Gaussian to',
+                  'transfer function.')
+            print('o2graph:yt-tf: location:',args[1],
+                  'width:',args[2])
+            print('o2graph:yt-tf: r,g,b,a:',
+                  args[3],args[4],
+                  args[5],args[6])
+            self.yt_tf.add_gaussian(float(args[1]),
+                                    float(args[2]),
+                                    [float(args[3]),
+                                     float(args[4]),
+                                     float(args[5]),
+                                     float(args[6])])
+
         return
 
     def yt_scatter(self,o2scl_hdf,amp,column_x,column_y,column_z):
@@ -2255,7 +2284,7 @@ class o2graph_plotter(plot_base):
                 elif cmd_name=='yt-scatter':
 
                     if ix_next-ix<4:
-                        print('Not enough parameters for text option.')
+                        print('Not enough parameters for yt-scatter.')
                     else:
                         self.yt_scatter(o2scl_hdf,amp,
                                         strlist[ix+1],strlist[ix+2],
@@ -2275,39 +2304,20 @@ class o2graph_plotter(plot_base):
                 elif cmd_name=='yt-render':
 
                     if ix_next-ix<2:
-                        print('Not enough parameters for text option.')
+                        print('Not enough parameters for yt-render.')
                     elif ix_next-ix<3:
-                        self.yt_render(o2scl_hdf,amp,strlist[ix+1])
+                        self.yt_render(strlist[ix+1])
                     else:
-                        self.yt_render(o2scl_hdf,amp,
-                                       strlist[ix+1],mov_fname=strlist[ix+2])
-                    
+                        self.yt_render(strlist[ix+1],
+                                       mov_fname=strlist[ix+2])
 
                 elif cmd_name=='yt-tf':
 
-                    if strlist[ix+1]=='new':
-                        import yt
-                        print('o2graph:yt-tf: New transfer function.')
-                        print('o2graph:yt-tf: min:',strlist[ix+2],
-                              'max:',strlist[ix+3])
-                        self.yt_tf=yt.ColorTransferFunction((float(strlist[ix+2]),
-                                                             float(strlist[ix+3])),
-                                                            grey_opacity=False)
-                    elif strlist[ix+1]=='gauss':
-                        print('o2graph:yt-tf: Adding Gaussian to',
-                              'transfer function.')
-                        print('o2graph:yt-tf: location:',strlist[ix+2],
-                              'width:',strlist[ix+3])
-                        print('o2graph:yt-tf: r,g,b,a:',
-                              strlist[ix+4],strlist[ix+5],
-                              strlist[ix+6],strlist[ix+7])
-                        self.yt_tf.add_gaussian(float(strlist[ix+2]),
-                                                float(strlist[ix+3]),
-                                                [float(strlist[ix+4]),
-                                                 float(strlist[ix+5]),
-                                                 float(strlist[ix+6]),
-                                                 float(strlist[ix+7])])
+                    if self.verbose>2:
+                        print('Process commands.')
 
+                    self.yt_tf_func(strlist[ix+1:ix_next])
+                    
                 elif cmd_name=='help' or cmd_name=='h':
                     
                     if self.verbose>2:
