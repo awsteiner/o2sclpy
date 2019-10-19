@@ -167,18 +167,6 @@ class plot_base:
     """
     If true, include ticks on right side and top (default False)
     """
-    yt_axis=True
-    """
-    If true, draw an axis in the yt plot
-    """
-    yt_axis_color=[1.0,1.0,1.0,0.5]
-    """ 
-    Color and alpha for the yt axis (default [1.0,1.0,1.0,0.5])
-    """
-    yt_axis_labels_flat=True
-    """ 
-    If true, axis labels are always parallel to the camera (default True)
-    """
     yt_resolution=(512,512)
     """
     Resolution for yt rendering (default (512,512))
@@ -337,24 +325,26 @@ class plot_base:
             self.font=float(value)
         elif name=='fig_dict':
             self.fig_dict=value
-        elif name=='yt_axis':
-            if value=='False' or value=='0':
-                self.yt_axis=False
-            else:
-                self.yt_axis=True
-        elif name=='yt_axis_color':
-            self.yt_axis_color=value
-        elif name=='yt_axis_labels_flat':
-            if value=='False' or value=='0':
-                self.yt_axis_labels_flat=False
-            else:
-                self.yt_axis_labels_flat=True
-        elif name=='yt_axis_resolution':
-            self.yt_axis_resolution=value
+        elif name=='yt_resolution':
+            left_paren=value.find('(')
+            right_paren=value.find(')')
+            value=value[left_paren+1:right_paren]
+            value=value.split(',')
+            self.yt_resolution=(float(value[0]),float(value[1]))
         elif name=='yt_focus':
-            self.yt_focus=value
+            left_brace=value.find('[')
+            right_brace=value.find(']')
+            value=value[left_brace+1:right_brace]
+            value=value.split(',')
+            self.yt_focus=[float(value[0]),float(value[1]),
+                           float(value[2])]
         elif name=='yt_position':
-            self.yt_position=value
+            left_brace=value.find('[')
+            right_brace=value.find(']')
+            value=value[left_brace+1:right_brace]
+            value=value.split(',')
+            self.yt_position=[float(value[0]),float(value[1]),
+                              float(value[2])]
         elif name=='yt_path':
             self.yt_path=value
         else:
