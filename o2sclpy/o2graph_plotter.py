@@ -1883,6 +1883,217 @@ class o2graph_plotter(plot_base):
                 self.yt_create_camera(ds)
         return
         
+    def yt_render(self,o2scl_hdf,amp,fname,mov_fname=''):
+        """
+        Function documentation
+        """
+
+        # AWS 10/14/19 the call to save() below does
+        # the render() so I don't think I need this
+        #self.yt_scene.render()
+
+        if self.yt_path=='':
+
+            # No path, so just call save and finish
+            print('o2graph:yt-render: Calling yt_scene.save().')
+            self.yt_scene.save(fname,sigma_clip=1.0)
+            
+        else:
+
+            # Setup destination filename
+            if mov_fname=='':
+                mov_fname='o2graph.mp4'
+
+            # Parse image file pattern
+            asterisk=fname.find('*')
+            prefix=fname[0:asterisk]
+            suffix=fname[asterisk+1:len(fname)]
+            print('o2graph:yt-render:',
+                  'fname,prefix,suffix,mov_fname:',
+                  fname,prefix,suffix,mov_fname)
+                            
+            # Read path 
+            path_arr=self.yt_path.split(' ')
+            
+            if path_arr[0]=='yaw':
+                first=True
+                n_frames=int(path_arr[1])
+                angle=float(path_arr[2])*numpy.pi*2.0
+                            
+                for i in range(0,n_frames):
+                    if i+1<10:
+                        fname2=prefix+'0'+str(i+1)+suffix
+                    else:
+                        fname2=prefix+str(i+1)+suffix
+                    self.yt_scene.save(fname2,sigma_clip=1.0)
+                    if platform.system()!='Darwin':
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('eog /tmp/o2graph_temp.png &')
+                            first=False
+                    else:
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('open /tmp/o2gr'+
+                                      'aph_temp.png &')
+                            first=False
+                    self.yt_camera.yaw(angle)
+            elif path_arr[0]=='move':
+                first=True
+                n_frames=int(path_arr[1])
+                            
+                for i in range(0,n_frames):
+                    if i+1<10:
+                        fname2=prefix+'0'+str(i+1)+suffix
+                    else:
+                        fname2=prefix+str(i+1)+suffix
+                    self.yt_scene.save(fname2,sigma_clip=1.0)
+                    if platform.system()!='Darwin':
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('eog /tmp/o2graph_temp.png &')
+                            first=False
+                    else:
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('open /tmp/o2gr'+
+                                      'aph_temp.png &')
+                            first=False
+                    self.yt_camera.yaw(angle)
+
+            # -r is rate, -f is format, -vcodec is video
+            # codec (apparently 420p works well with
+            # quicktime), -pix_fmt sepcifies the pixel format,
+            # -crf is the quality (15-25 recommended)
+            # -y forces overwrite of the movie file
+                        
+            cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                      prefix+'%02d'+suffix+' -vcodec libx264 '+
+                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
+            print('ffmpeg command:',cmd)
+            os.system(cmd)
+        return
+
+    def yt_scatter(self,o2scl_hdf,amp,column_x,column_y,column_z):
+        """
+        Function documentation
+        """
+
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+                    
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+                    
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                    
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+
+        if curr_type==b'table':
+            self.yt_check_backend()
+            import yt
+            from yt.visualization.volume_rendering.api \
+                import PointSource
+                        
+            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+                        
+            colx=ctypes.c_char_p(force_bytes(column_x))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_ret=get_fn(amp,colx,ctypes.byref(idx),
+                           ctypes.byref(ptrx))
+            if get_ret!=0:
+                print('Failed to get column named "'+
+                      column_x+'".')
+                failed=True
+                            
+            coly=ctypes.c_char_p(force_bytes(column_y))
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_ret=get_fn(amp,coly,ctypes.byref(idy),
+                           ctypes.byref(ptry))
+            if get_ret!=0:
+                print('Failed to get column named "'+
+                      column_y+'".')
+                failed=True
+
+            colz=ctypes.c_char_p(force_bytes(column_z))
+            idz=ctypes.c_int(0)
+            ptrz=double_ptr()
+            get_ret=get_fn(amp,colz,ctypes.byref(idz),
+                           ctypes.byref(ptrz))
+            if get_ret!=0:
+                print('Failed to get column named "'+
+                      column_z+'".')
+                failed=True
+
+            if self.xset==False:
+                self.xlo=ptrx[0]
+                self.xhi=ptrx[0]
+                for i in range(0,idx.value):
+                    if ptrx[i]<self.xlo:
+                        self.xlo=ptrx[i]
+                    if ptrx[i]>self.xhi:
+                        self.xhi=ptrx[i]
+            if self.yset==False:
+                self.ylo=ptry[0]
+                self.yhi=ptry[0]
+                for i in range(0,idy.value):
+                    if ptry[i]<self.ylo:
+                        self.ylo=ptry[i]
+                    if ptry[i]>self.yhi:
+                        self.yhi=ptry[i]
+            if self.zset==False:
+                self.zlo=ptrz[0]
+                self.zhi=ptrz[0]
+                for i in range(0,idz.value):
+                    if ptrz[i]<self.zlo:
+                        self.zlo=ptrz[i]
+                    if ptrz[i]>self.zhi:
+                        self.zhi=ptrz[i]
+            x_range=self.xhi-self.xlo
+            y_range=self.yhi-self.ylo
+            z_range=self.zhi-self.zlo
+
+            pts=[]
+            cols=[]
+            for i in range(0,idx.value):
+                pts.append([(ptrx[i]-self.xlo)/x_range,
+                            (ptry[i]-self.ylo)/y_range,
+                            (ptrz[i]-self.zlo)/z_range])
+                cols.append([1.0,1.0,1.0,1.0])
+            pts2=numpy.array(pts)
+            cols2=numpy.array(cols)
+
+            ps=PointSource(pts2,colors=cols2,radii=3)
+
+            if self.yt_created_scene==False:
+                self.yt_create_scene()
+
+            print('o2graph:yt-scatter: Adding point source.')
+            self.yt_scene.add_source(ps,keyname='o2graph_point')
+                        
+            if self.yt_created_camera==False:
+                self.yt_create_camera(ps)
+                
+        return
+        
     def commands(self,o2scl_hdf,amp,args):
         """
         Function documentation
@@ -2043,115 +2254,13 @@ class o2graph_plotter(plot_base):
                     
                 elif cmd_name=='yt-scatter':
 
-                    int_ptr=ctypes.POINTER(ctypes.c_int)
-                    char_ptr=ctypes.POINTER(ctypes.c_char)
-                    char_ptr_ptr=ctypes.POINTER(char_ptr)
-                    double_ptr=ctypes.POINTER(ctypes.c_double)
-                    double_ptr_ptr=ctypes.POINTER(double_ptr)
-                    
-                    # Set up wrapper for type function
-                    type_fn=o2scl_hdf.o2scl_acol_get_type
-                    type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-                    
-                    # Get current type
-                    it=ctypes.c_int(0)
-                    type_ptr=char_ptr()
-                    type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                    
-                    curr_type=b''
-                    for i in range(0,it.value):
-                        curr_type=curr_type+type_ptr[i]
-
-                    if curr_type==b'table':
-                        self.yt_check_backend()
-                        import yt
-                        from yt.visualization.volume_rendering.api \
-                            import PointSource
-                        
-                        get_fn=o2scl_hdf.o2scl_acol_get_column
-                        get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                                         int_ptr,double_ptr_ptr]
-                        get_fn.restype=ctypes.c_int
-                        
-                        colx=ctypes.c_char_p(force_bytes(strlist[ix+1]))
-                        idx=ctypes.c_int(0)
-                        ptrx=double_ptr()
-                        get_ret=get_fn(amp,colx,ctypes.byref(idx),
-                                       ctypes.byref(ptrx))
-                        if get_ret!=0:
-                            print('Failed to get column named "'+
-                                  strlist[ix+1]+'".')
-                            failed=True
-                            
-                        coly=ctypes.c_char_p(force_bytes(strlist[ix+2]))
-                        idy=ctypes.c_int(0)
-                        ptry=double_ptr()
-                        get_ret=get_fn(amp,coly,ctypes.byref(idy),
-                                       ctypes.byref(ptry))
-                        if get_ret!=0:
-                            print('Failed to get column named "'+
-                                  strlist[ix+3]+'".')
-                            failed=True
-
-                        colz=ctypes.c_char_p(force_bytes(strlist[ix+2]))
-                        idz=ctypes.c_int(0)
-                        ptrz=double_ptr()
-                        get_ret=get_fn(amp,colz,ctypes.byref(idz),
-                                       ctypes.byref(ptrz))
-                        if get_ret!=0:
-                            print('Failed to get column named "'+
-                                  strlist[ix+3]+'".')
-                            failed=True
-
-                        if self.xset==False:
-                            self.xlo=ptrx[0]
-                            self.xhi=ptrx[0]
-                            for i in range(0,idx.value):
-                                if ptrx[i]<self.xlo:
-                                    self.xlo=ptrx[i]
-                                if ptrx[i]>self.xhi:
-                                    self.xhi=ptrx[i]
-                        if self.yset==False:
-                            self.ylo=ptry[0]
-                            self.yhi=ptry[0]
-                            for i in range(0,idy.value):
-                                if ptry[i]<self.ylo:
-                                    self.ylo=ptry[i]
-                                if ptry[i]>self.yhi:
-                                    self.yhi=ptry[i]
-                        if self.zset==False:
-                            self.zlo=ptrz[0]
-                            self.zhi=ptrz[0]
-                            for i in range(0,idz.value):
-                                if ptrz[i]<self.zlo:
-                                    self.zlo=ptrz[i]
-                                if ptrz[i]>self.zhi:
-                                    self.zhi=ptrz[i]
-                        x_range=self.xhi-self.xlo
-                        y_range=self.yhi-self.ylo
-                        z_range=self.zhi-self.zlo
-
-                        pts=[]
-                        cols=[]
-                        for i in range(0,idx.value):
-                            pts.append([(ptrx[i]-self.xlo)/x_range,
-                                        (ptry[i]-self.ylo)/y_range,
-                                        (ptrz[i]-self.zlo)/z_range])
-                            cols.append([1.0,1.0,1.0,1.0])
-                        pts2=numpy.array(pts)
-                        cols2=numpy.array(cols)
-
-                        ps=PointSource(pts2,colors=cols2,radii=3)
-
-                        if self.yt_created_scene==False:
-                            self.yt_create_scene()
-
-                        print('o2graph:yt-scatter: Adding point source.')
-                        self.yt_scene.add_source(ps,keyname='o2graph_point')
-                        
-                        if self.yt_created_camera==False:
-                            self.yt_create_camera(ps)
-                            
+                    if ix_next-ix<4:
+                        print('Not enough parameters for text option.')
+                    else:
+                        self.yt_scatter(o2scl_hdf,amp,
+                                        strlist[ix+1],strlist[ix+2],
+                                        strlist[ix+3])
+                                                    
                 elif cmd_name=='yt-source-list':
 
                     icnt=0
@@ -2165,70 +2274,14 @@ class o2graph_plotter(plot_base):
 
                 elif cmd_name=='yt-render':
 
-                    # AWS 10/14/19 the call to save() below does
-                    # the render() so I don't think I need this
-                    #self.yt_scene.render()
-
-                    fname=strlist[ix+1]
-                    mov_fname=''
-                    if ix_next-ix>=3:
-                        mov_fname=strlist[ix+2]
-                    if self.yt_path=='':
-                        print('o2graph:yt-render: Calling yt_scene.save().')
-                        self.yt_scene.save(fname,sigma_clip=1.0)
+                    if ix_next-ix<2:
+                        print('Not enough parameters for text option.')
+                    elif ix_next-ix<3:
+                        self.yt_render(o2scl_hdf,amp,strlist[ix+1])
                     else:
-
-                        # Setup destination filename
-                        if mov_fname=='':
-                            mov_fname='o2graph.mp4'
-
-                        # Parse image file pattern
-                        asterisk=fname.find('*')
-                        prefix=fname[0:asterisk]
-                        suffix=fname[asterisk+1:len(fname)]
-                        print('o2graph:yt-render:',
-                              'fname,prefix,suffix,mov_fname:',
-                              fname,prefix,suffix,mov_fname)
-                            
-                        # Read yaw arguments
-                        path_arr=self.yt_path.split(' ')
-                        if path_arr[0]=='yaw':
-                            first=True
-                            n_frames=int(path_arr[1])
-                            angle=float(path_arr[2])*numpy.pi*2.0
-                            
-                            for i in range(0,n_frames):
-                                if i+1<10:
-                                    fname2=prefix+'0'+str(i+1)+suffix
-                                else:
-                                    fname2=prefix+str(i+1)+suffix
-                                self.yt_scene.save(fname2,sigma_clip=1.0)
-                                if platform.system()!='Darwin':
-                                    os.system('cp '+fname2+
-                                              ' /tmp/o2graph_temp.png')
-                                    if first:
-                                        os.system('eog /tmp/o2graph_temp.png &')
-                                        first=False
-                                else:
-                                    os.system('cp '+fname2+
-                                              ' /tmp/o2graph_temp.png')
-                                    if first:
-                                        os.system('open /tmp/o2gr'+
-                                                  'aph_temp.png &')
-                                        first=False
-                                self.yt_camera.yaw(angle)
-
-                        # -r is rate, -f is format, -vcodec is video
-                        # codec (apparently 420p works well with
-                        # quicktime), -pix_fmt sepcifies the pixel format,
-                        # -crf is the quality (15-25 recommended)
-                        # -y forces overwrite of the movie file
-                        
-                        cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                                  prefix+'%02d'+suffix+' -vcodec libx264 '+
-                                  '-crf 25 -pix_fmt yuv420p '+mov_fname)
-                        print('ffmpeg command:',cmd)
-                        os.system(cmd)
+                        self.yt_render(o2scl_hdf,amp,
+                                       strlist[ix+1],mov_fname=strlist[ix+2])
+                    
 
                 elif cmd_name=='yt-tf':
 
