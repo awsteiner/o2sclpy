@@ -1637,6 +1637,8 @@ class o2graph_plotter(plot_base):
                 print(line[0]+' '+self.yt_path)
             if line[0]=='yt_resolution':
                 print(line[0]+' '+str(self.yt_resolution))
+            if line[0]=='yt_sigma_clip':
+                print(line[0]+' '+str(self.yt_sigma_clip))
             print(' '+line[1])
             print(' ')
 
@@ -1899,7 +1901,7 @@ class o2graph_plotter(plot_base):
 
             # No path, so just call save and finish
             print('o2graph:yt-render: Calling yt_scene.save().')
-            self.yt_scene.save(fname,sigma_clip=1.0)
+            self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
             
         else:
 
@@ -1929,7 +1931,7 @@ class o2graph_plotter(plot_base):
                         fname2=prefix+'0'+str(i+1)+suffix
                     else:
                         fname2=prefix+str(i+1)+suffix
-                    self.yt_scene.save(fname2,sigma_clip=1.0)
+                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
                     if platform.system()!='Darwin':
                         os.system('cp '+fname2+
                                   ' /tmp/o2graph_temp.png')
@@ -1945,30 +1947,40 @@ class o2graph_plotter(plot_base):
                             first=False
                     self.yt_camera.yaw(angle)
                     
-            elif path_arr[0]=='move':
+            elif path_arr[0]=='zoom':
                 
                 first=True
                 n_frames=int(path_arr[1])
-                xfunc=path_arr[2]
-                yfunc=path_arr[3]
-                zfunc=path_arr[4]
+                factor=float(path_arr[2])
 
                 for i in range(0,n_frames):
                     if i+1<10:
                         fname2=prefix+'0'+str(i+1)+suffix
                     else:
                         fname2=prefix+str(i+1)+suffix
-                    x=float(i)/float(n_frames-1)
-                    self.yt_position=[eval(xfunc,None,locals()),
-                                      eval(yfunc,None,locals()),
-                                      eval(zfunc,None,locals())]
-                    self.yt_scene.save(fname2,sigma_clip=1.0)
+                    ifactor=factor**(float(i)/(float(n_frames)-1))
+                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
+                    if platform.system()!='Darwin':
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('eog /tmp/o2graph_temp.png &')
+                            first=False
+                    else:
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('open /tmp/o2gr'+
+                                      'aph_temp.png &')
+                            first=False
+                    self.yt_camera.zoom(ifactor)
 
             # -r is rate, -f is format, -vcodec is video
             # codec (apparently 420p works well with
             # quicktime), -pix_fmt sepcifies the pixel format,
             # -crf is the quality (15-25 recommended)
-            # -y forces overwrite of the movie file
+            # -y forces overwrite of the movie file if it
+            # already exists
                         
             cmd=('ffmpeg -y -r 10 -f image2 -i '+
                       prefix+'%02d'+suffix+' -vcodec libx264 '+

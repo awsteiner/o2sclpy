@@ -187,6 +187,10 @@ class plot_base:
     """
     The yt transfer function
     """
+    yt_sigma_clip=4.0
+    """
+    The sigma_clip parameter for yt (default 4.0)
+    """
     new_cmaps_defined=False
     """
     True if new colormaps were defined with 'new-cmaps'
@@ -338,6 +342,8 @@ class plot_base:
             value=value.split(',')
             self.yt_focus=[float(value[0]),float(value[1]),
                            float(value[2])]
+        elif name=='yt_sigma_clip':
+            self.yt_sigma_clip=float(value)
         elif name=='yt_position':
             left_brace=value.find('[')
             right_brace=value.find(']')
@@ -401,6 +407,8 @@ class plot_base:
                   self.yt_axis_resolution,'.')
         if name=='yt_focus':
             print('The value of yt_focus is',self.yt_focus,'.')
+        if name=='yt_sigma_clip':
+            print('The value of yt_sigma_clip is',self.yt_sigma_clip,'.')
         if name=='yt_position':
             print('The value of yt_position is',self.yt_position,'.')
         if name=='yt_path':
