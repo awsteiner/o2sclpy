@@ -46,7 +46,7 @@ from o2sclpy.doc_data import yt_param_list
 from o2sclpy.utils import parse_arguments, string_to_dict
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.plot_base import plot_base
-from o2sclpy.plot_info import marker_list, markers_plot
+from o2sclpy.plot_info import marker_list, markers_plot, colors_plot2
 
 class o2graph_plotter(plot_base):
     """
@@ -2246,137 +2246,11 @@ class o2graph_plotter(plot_base):
                 plot.show()
             finished=True
                         
-        if len(args)==1 and args[0]=='colors-plot2':
-            from matplotlib import colors as mc
-
-            colors=dict(**mc.CSS4_COLORS,**mc.XKCD_COLORS)
-            by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
-                            for name, color in colors.items())
-            sorted_names=[(hsv, name) for hsv, name in by_hsv]
-            selected=[]
-            if len(args)==2 and args[1]=='greys':
-                for i in range(0,len(sorted_names)):
-                    if (sorted_names[i][0][1]<0.2):
-                        selected.append((sorted_names[i][0][0],
-                                         sorted_names[i][0][1],
-                                         sorted_names[i][0][2],
-                                         sorted_names[i][1]))
-            elif len(args)==2 and args[1]=='reds':
-                for i in range(0,len(sorted_names)):
-                    if (sorted_names[i][0][0]>0.0 and
-                        sorted_names[i][0][0]<0.05 and
-                        sorted_names[i][0][1]>0.2):
-                        selected.append((sorted_names[i][0][0],
-                                         sorted_names[i][0][1],
-                                         sorted_names[i][0][2],
-                                         sorted_names[i][1]))
-            elif len(args)==2 and args[1]=='oranges':
-                for i in range(0,len(sorted_names)):
-                    if (sorted_names[i][0][0]>0.05 and
-                        sorted_names[i][0][0]<0.105 and
-                        sorted_names[i][0][1]>0.2):
-                        selected.append((sorted_names[i][0][0],
-                                         sorted_names[i][0][1],
-                                         sorted_names[i][0][2],
-                                         sorted_names[i][1]))
-            elif len(args)==2 and args[1]=='yellows':
-                for i in range(0,len(sorted_names)):
-                    if (sorted_names[i][0][0]>0.105 and
-                        sorted_names[i][0][0]<0.17 and
-                        sorted_names[i][0][1]>0.2):
-                        selected.append((sorted_names[i][0][0],
-                                         sorted_names[i][0][1],
-                                         sorted_names[i][0][2],
-                                         sorted_names[i][1]))
-            elif len(args)==2 and args[1]=='greens':
-                for i in range(0,len(sorted_names)):
-                    if (sorted_names[i][0][0]>0.17 and
-                        sorted_names[i][0][0]<0.25 and
-                        sorted_names[i][0][1]>0.2):
-                        selected.append((sorted_names[i][0][0],
-                                         sorted_names[i][0][1],
-                                         sorted_names[i][0][2],
-                                         sorted_names[i][1]))
-            elif len(args)==2 and args[1]=='blues':
-                for i in range(0,len(sorted_names)):
-                    if (sorted_names[i][0][0]>0.0 and
-                        sorted_names[i][0][0]<0.05 and
-                        sorted_names[i][0][1]>0.2):
-                        selected.append((sorted_names[i][0][0],
-                                         sorted_names[i][0][1],
-                                         sorted_names[i][0][2],
-                                         sorted_names[i][1]))
-            elif len(args)==2 and args[1]=='purples':
-                for i in range(0,len(sorted_names)):
-                    if (sorted_names[i][0][0]>0.0 and
-                        sorted_names[i][0][0]<0.05 and
-                        sorted_names[i][0][1]>0.2):
-                        selected.append((sorted_names[i][0][0],
-                                         sorted_names[i][0][1],
-                                         sorted_names[i][0][2],
-                                         sorted_names[i][1]))
-            elif len(args)==2 and args[1]=='pinks':
-                for i in range(0,len(sorted_names)):
-                    if (sorted_names[i][0][0]>0.0 and
-                        sorted_names[i][0][0]<0.05 and
-                        sorted_names[i][0][1]>0.2):
-                        selected.append((sorted_names[i][0][0],
-                                         sorted_names[i][0][1],
-                                         sorted_names[i][0][2],
-                                         sorted_names[i][1]))
+        if (len(args)==2 or len(args)==1) and args[0]=='colors-plot2':
+            if len(args)==2:
+                colors_plot2(args[1])
             else:
-                print('Hue          Saturation',
-                      '  Value        name')
-                for i in range(0,len(sorted_names)):
-                    print('%7.6e %7.6e %7.6e %s' %
-                          (sorted_names[i][0][0],
-                           sorted_names[i][0][1],
-                           sorted_names[i][0][2],
-                           sorted_names[i][1]))
-                                
-            if len(selected)>0:
-                n=len(selected)
-                ncols=4
-                nrows=n//ncols
-                plot.rc('text',usetex=True)
-                plot.rc('font',family='serif')
-                self.fig,self.axes=plot.subplots(figsize=(8,6.4))
-                # Get height and width
-                X,Y=self.fig.get_dpi()*self.fig.get_size_inches()
-                h=Y/(nrows+1)
-                w=X/ncols
-    
-                ax=self.axes
-                for i in range(0,n):
-                    row=i%nrows
-                    col=i//nrows
-                    y=Y-(row*h)-h
-                    xi_line=w*(col+0.05)
-                    xf_line=w*(col+0.25)
-                    xi_text=w*(col+0.3)
-                    ax.text(xi_text,y,
-                            selected[i][3]+str(selected[i][0]),
-                            fontsize=(h*0.2),
-                            ha='left',va='center')
-    
-                    ax.hlines(y+h*0.1,xi_line,xf_line,
-                              color=selected[i][3],
-                              linewidth=(h*0.8))
-    
-                    ax.set_xlim(0,X)
-                    ax.set_ylim(0,Y)
-                    ax.set_axis_off()
-                                
-                    self.fig.subplots_adjust(left=0,right=1,
-                                             top=1,bottom=0,
-                                             hspace=0,wspace=0)
-                plot.savefig('o2graph_colors2.png')
-                print('Created file o2graph_colors2.png.')
-                import matplotlib
-                if (matplotlib.get_backend()!='Agg' and 
-                    matplotlib.get_backend()!='agg'):
-                    plot.show()
-                            
+                colors_plot2()
             finished=True
                         
         if (cmd=='colors') and len(args)==1:
