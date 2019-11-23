@@ -46,7 +46,7 @@ from o2sclpy.doc_data import yt_param_list
 from o2sclpy.utils import parse_arguments, string_to_dict
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.plot_base import plot_base
-from o2sclpy.plot_info import marker_list
+from o2sclpy.plot_info import marker_list, markers_plot
 
 class o2graph_plotter(plot_base):
     """
@@ -2456,88 +2456,10 @@ class o2graph_plotter(plot_base):
             finished=True
             
         if (len(args)==1 or len(args)==2) and args[0]=='markers-plot':
-            mlist=[['.',"'.'",'point'],
-                   [',',"','",'pixel'],
-                   ['o',"'o'",'circle'],
-                   ['v',"'v'",'down triangle'],
-                   ['^',"'^'",'up triangle'],
-                   ['<',"'<'",'left triangle'],
-                   ['>',"'>'",'right triangle'],
-                   ['1',"'1'",'down tri'],
-                   ['2',"'2'",'up tri'],
-                   ['3',"'3'",'left tri'],
-                   ['4',"'4'",'right tri'],
-                   ['8',"'8'",'octagon'],
-                   ['s',"'s'",'square'],
-                   ['p',"'p'",'pentagon'],
-                   ['P',"'P'",'plus (filled)'],
-                   ['*',"'*'",'star'],
-                   ['h',"'h'",'hexagon 1'],
-                   ['H',"'H'",'hexagon 2'],
-                   ['+',"'+'",'plus'],
-                   ['x',"'x'",'x'],
-                   ['X',"'X'",'filled x'],
-                   ['D',"'D'",'diamond'],
-                   ['d',"'d'",'thin diamond'],
-                   ['|',"'|'",'vertical line'],
-                   ['_',"'_'",'horizontal line'],
-                   [0,"0",'left tick'],
-                   [1,"1",'right tick'],
-                   [2,"2",'up tick'],
-                   [3,"3",'down tick'],
-                   [4,"4",'left caret'],
-                   [5,"5",'right caret'],
-                   [6,"6",'up caret'],
-                   [7,"7",'down caret'],
-                   [8,"8",'left shifted caret'],
-                   [9,"9",'right shifted caret'],
-                   [10,"10",'up shifted caret'],
-                   [11,"11",'down shifted caret'],
-                   ['$x^2$',"\$x^2\$",'math example']]
-            nmark=len(mlist)
-            ncols=2
-            nrows=(nmark+(nmark%2))/ncols
-            self.xlo=0
-            self.xhi=1
-            self.xset=True
-            self.fig_dict=('left_margin=0.01,top_margin=0.01,'+
-                           'right_margin=0.01,'+
-                           'bottom_margin=0.01,'+
-                           'fontsize=10,ticks_in=False,'+
-                           'rt_ticks=False')
-            self.canvas()
-            self.canvas_flag=True
-            self.axes.set_axis_off()
-            row_ctr=0
-            col_ctr=0
-            for entry in mlist:
-                if row_ctr>2:
-                    plot.rc('text',usetex=False)
-                    self.point(str((col_ctr+0.1)/(ncols)),
-                               str((nrows-row_ctr)/(nrows+1)),
-                               marker=entry[0],color='black',
-                               markersize=10)
-                    self.text(str((col_ctr+0.25)/(ncols)),
-                              str((nrows-row_ctr)/(nrows+1)),
-                              entry[1],family='monospace',
-                              va='center',ha='center')
-                    plot.rc('text',usetex=True)
-                    self.text(str((col_ctr+0.37)/(ncols)),
-                              str((nrows-row_ctr)/(nrows+1)),
-                              entry[2].replace('_','\_'),
-                              va='center',ha='left')
-                row_ctr=row_ctr+1
-                if row_ctr>=nrows:
-                    row_ctr=0
-                    col_ctr=col_ctr+1
             if len(args)==2:
-                tfilename=args[1]
-                plot.savefig(tfilename)
-                print("Saved image in file",(tfilename+"."))
-            import matplotlib
-            if (matplotlib.get_backend()!='Agg' and 
-                matplotlib.get_backend()!='agg'):
-                plot.show()
+                markers_plot(args[1])
+            else:
+                markers_plot()
             finished=True
                         
         # Handle the case of an acol command 
