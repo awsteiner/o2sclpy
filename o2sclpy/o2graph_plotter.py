@@ -46,6 +46,7 @@ from o2sclpy.doc_data import yt_param_list
 from o2sclpy.utils import parse_arguments, string_to_dict
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.plot_base import plot_base
+from o2sclpy.plot_info import marker_list
 
 class o2graph_plotter(plot_base):
     """
@@ -1989,6 +1990,602 @@ class o2graph_plotter(plot_base):
             os.system(cmd)
         return
 
+    def help_func(self,o2scl_hdf,amp,args):
+        curr_type=''
+        cmd=''
+
+        redirected=False
+        if sys.stdout.isatty()==False:
+            redirected=True
+                    
+        str_line=''
+        if redirected:
+            for jj in range(0,78):
+                str_line+='-'
+        else:
+            str_line=str_line+chr(27)+'(0'
+            for jj in range(0,78):
+                str_line+='q'
+            str_line=str_line+chr(27)+'(B'
+
+        # If only a command is specified
+        if len(args)==1:
+
+            # Get current type
+            int_ptr=ctypes.POINTER(ctypes.c_int)
+            char_ptr=ctypes.POINTER(ctypes.c_char)
+            char_ptr_ptr=ctypes.POINTER(char_ptr)
+
+            # Set up wrapper for type function
+            type_fn=o2scl_hdf.o2scl_acol_get_type
+            type_fn.argtypes=[ctypes.c_void_p,int_ptr,
+                              char_ptr_ptr]
+
+            # Get current type
+            it=ctypes.c_int(0)
+            type_ptr=char_ptr()
+            type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+            curr_type=b''
+            for i in range(0,it.value):
+                curr_type=curr_type+type_ptr[i]
+                            
+            cmd=args[0]
+
+        elif len(args)==2:
+            # If both a type and command are specified
+                        
+            curr_type=args[0]
+            cmd=args[1]
+
+        # See if we matched an o2graph command
+        match=False
+                    
+        # Handle the case of an o2graph command from the
+        # base list
+        for line in base_list:
+            if cmd==line[0]:
+                match=True
+                print('Usage: '+cmd+' '+line[2]+'\n\n'+
+                      line[1]+'\n')
+                tempx_arr=line[3].split('\n')
+                for j in range(0,len(tempx_arr)):
+                    #print('here.'+tempx_arr[j]+'.')
+                    if len(tempx_arr[j])<79:
+                        print(tempx_arr[j])
+                    else:
+                        str_list=textwrap.wrap(tempx_arr[j],79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
+                                
+        # Handle the case of an o2graph command from the
+        # extra list
+        for line in extra_list:
+            if ((curr_type==line[0] or
+                 curr_type==force_bytes(line[0])) and
+                cmd==line[1]):
+                match=True
+                print('Usage: '+cmd+' '+line[3]+'\n\n'+
+                      line[2]+'\n')
+                str_list=textwrap.wrap(line[4],79)
+                for i in range (0,len(str_list)):
+                    print(str_list[i])
+
+        finished=False
+        
+        if cmd=='cmaps' and len(args)==1:
+            print('Matplotlib colormaps:')
+            print(str_line)
+            for category, cmap_list in cmaps:
+                list2=''
+                for name in cmap_list:
+                    list2+=name+' '
+                str_list=textwrap.wrap(category+': '+list2,79)
+                for i in range (0,len(str_list)):
+                    print(str_list[i])
+                print(' ')
+            print('Remember that colormaps can all be',
+                  'reversed by using a "_r" suffix.')
+            print(' ')
+            print("To create a plot of the colormaps, use",
+                  "'o2graph -help cmaps-plot' or")
+            print("'o2graph -help cmaps-plot plot_file.png'")
+            finished=True
+
+        if (len(args)==1 or len(args)==2) and args[0]=='cmaps-plot':
+
+            if self.new_cmaps_defined==False:
+                self.new_cmaps()
+
+            print('Generating colormap summary figure.')
+                        
+            # An internal implementation of
+            # https://matplotlib.org/3.1.0/gallery/
+            # color/colormap_reference.html
+                        
+            self.left_margin=0.01
+            self.right_margin=0.01
+            self.top_margin=0.01
+            self.bottom_margin=0.01
+            gradient=numpy.linspace(0,1,256)
+            gradient=numpy.vstack((gradient,gradient))
+                        
+            nrows=0
+            for category, cmap_list in cmaps:
+                for name in cmap_list:
+                    nrows=nrows+1
+            for category, cmap_list in new_cmaps:
+                for name in cmap_list:
+                    nrows=nrows+1
+            ncols=3
+            while nrows%ncols!=0:
+                nrows=nrows+1
+            nrows=int((nrows)/ncols)
+
+            # Manually create figure and axes 
+            fig_x=7.0
+            fig_y=0.95*(0.35+0.15+(nrows+(nrows-1)*0.1)*0.22)
+            (self.fig,self.axes)=plot.subplots(nrows=nrows,
+                                               ncols=ncols,
+                                               figsize=(fig_x,
+                                                        fig_y))
+            self.fig.subplots_adjust(top=1.0-0.35/fig_y,
+                                     bottom=0.15/fig_y,
+                                     left=0.01,right=0.99,
+                                     wspace=0.01)
+            plot.rc('text',usetex=True)
+            plot.rc('font',family='serif')
+
+            for i in range(0,nrows):
+                for j in range(0,ncols):
+                    self.axes[i][j].set_axis_off()
+                        
+            row_ctr=0
+            col_ctr=0
+            for category, cmap_list in cmaps:
+                for name in cmap_list:
+                    name2=name.replace('_','\_')
+                    ax=self.axes[row_ctr][col_ctr]
+                    ax.imshow(gradient,aspect='auto',
+                                     cmap=plot.get_cmap(name))
+                    r=patches.Rectangle((0.32,0.1),0.36,0.8,0,
+                                        fc=(1,1,1,0.7),lw=0,
+                                        fill=True,
+                                        transform=ax.transAxes)
+                    ax.add_patch(r)
+                    ax.text(0.5,0.45,name2,
+                                        va='center',ha='center',
+                                        fontsize=8,color=(0,0,0),
+                                        transform=ax.transAxes)
+                    row_ctr=row_ctr+1
+                    if row_ctr>=nrows:
+                        row_ctr=0
+                        col_ctr=col_ctr+1
+            for category, cmap_list in new_cmaps:
+                for name in cmap_list:
+                    name2=name.replace('_','\_')
+                    ax=self.axes[row_ctr][col_ctr]
+                    ax.imshow(gradient,aspect='auto',
+                                     cmap=plot.get_cmap(name))
+                    r=patches.Rectangle((0.32,0.1),0.36,0.8,0,
+                                        fc=(1,1,1,0.7),lw=0,
+                                        fill=True,
+                                        transform=ax.transAxes)
+                    ax.add_patch(r)
+                    ax.text(0.5,0.45,name2,
+                            va='center',ha='center',
+                            fontsize=8,color=(0,0,0),
+                            transform=ax.transAxes)
+                    row_ctr=row_ctr+1
+                    if row_ctr>=nrows:
+                        row_ctr=0
+                        col_ctr=col_ctr+1
+
+            ax=self.axes[0][0]
+            ax.text(1.5,1.7,
+                    (r'$ \mathrm{O}_2\mathrm{sc'+
+                     'lpy~colormap~reference} $'),
+                    ha='center',va='center',fontsize=16,
+                    transform=ax.transAxes)
+            if len(args)==2:
+                plot.savefig(args[1])
+                print('Created image file '+args[1]+'.')
+            print('Remember that colormaps can all be',
+                  'reversed by using a "_r" suffix.')
+            import matplotlib
+            if (matplotlib.get_backend()!='Agg' and 
+                matplotlib.get_backend()!='agg'):
+                plot.show()
+            finished=True
+
+        if (len(args)==1 or len(args)==2) and args[0]=='colors-plot':
+            from matplotlib import colors as mc
+
+            colors=dict(**mc.CSS4_COLORS)
+            by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
+                            for name, color in colors.items())
+            sorted_names=[name for hsv, name in by_hsv]
+            n=len(sorted_names)
+            ncols=4
+            nrows=n//ncols
+            plot.rc('text',usetex=True)
+            plot.rc('font',family='serif')
+            self.fig,self.axes=plot.subplots(figsize=(8,6.4))
+            # Get height and width
+            X,Y=self.fig.get_dpi()*self.fig.get_size_inches()
+            h=Y/(nrows+1)
+            w=X/ncols
+
+            ax=self.axes
+            for i, name in enumerate(sorted_names):
+                row=i%nrows
+                col=i//nrows
+                y=Y-(row*h)-h
+                xi_line=w*(col+0.05)
+                xf_line=w*(col+0.25)
+                xi_text=w*(col+0.3)
+                ax.text(xi_text,y,name,fontsize=(h*0.6),
+                        ha='left',va='center')
+
+                ax.hlines(y+h*0.1,xi_line,xf_line,
+                          color=colors[name],linewidth=(h*0.8))
+
+                ax.set_xlim(0,X)
+                ax.set_ylim(0,Y)
+                ax.set_axis_off()
+                            
+                self.fig.subplots_adjust(left=0,right=1,
+                                         top=1,bottom=0,
+                                         hspace=0,wspace=0)
+            if len(args)==2:
+                plot.savefig(args[1])
+                print('Created image file '+args[1]+'.')
+            import matplotlib
+            if (matplotlib.get_backend()!='Agg' and 
+                matplotlib.get_backend()!='agg'):
+                plot.show()
+            finished=True
+                        
+        if len(args)==1 and args[0]=='colors-plot2':
+            from matplotlib import colors as mc
+
+            colors=dict(**mc.CSS4_COLORS,**mc.XKCD_COLORS)
+            by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
+                            for name, color in colors.items())
+            sorted_names=[(hsv, name) for hsv, name in by_hsv]
+            selected=[]
+            if len(args)==2 and args[1]=='greys':
+                for i in range(0,len(sorted_names)):
+                    if (sorted_names[i][0][1]<0.2):
+                        selected.append((sorted_names[i][0][0],
+                                         sorted_names[i][0][1],
+                                         sorted_names[i][0][2],
+                                         sorted_names[i][1]))
+            elif len(args)==2 and args[1]=='reds':
+                for i in range(0,len(sorted_names)):
+                    if (sorted_names[i][0][0]>0.0 and
+                        sorted_names[i][0][0]<0.05 and
+                        sorted_names[i][0][1]>0.2):
+                        selected.append((sorted_names[i][0][0],
+                                         sorted_names[i][0][1],
+                                         sorted_names[i][0][2],
+                                         sorted_names[i][1]))
+            elif len(args)==2 and args[1]=='oranges':
+                for i in range(0,len(sorted_names)):
+                    if (sorted_names[i][0][0]>0.05 and
+                        sorted_names[i][0][0]<0.105 and
+                        sorted_names[i][0][1]>0.2):
+                        selected.append((sorted_names[i][0][0],
+                                         sorted_names[i][0][1],
+                                         sorted_names[i][0][2],
+                                         sorted_names[i][1]))
+            elif len(args)==2 and args[1]=='yellows':
+                for i in range(0,len(sorted_names)):
+                    if (sorted_names[i][0][0]>0.105 and
+                        sorted_names[i][0][0]<0.17 and
+                        sorted_names[i][0][1]>0.2):
+                        selected.append((sorted_names[i][0][0],
+                                         sorted_names[i][0][1],
+                                         sorted_names[i][0][2],
+                                         sorted_names[i][1]))
+            elif len(args)==2 and args[1]=='greens':
+                for i in range(0,len(sorted_names)):
+                    if (sorted_names[i][0][0]>0.17 and
+                        sorted_names[i][0][0]<0.25 and
+                        sorted_names[i][0][1]>0.2):
+                        selected.append((sorted_names[i][0][0],
+                                         sorted_names[i][0][1],
+                                         sorted_names[i][0][2],
+                                         sorted_names[i][1]))
+            elif len(args)==2 and args[1]=='blues':
+                for i in range(0,len(sorted_names)):
+                    if (sorted_names[i][0][0]>0.0 and
+                        sorted_names[i][0][0]<0.05 and
+                        sorted_names[i][0][1]>0.2):
+                        selected.append((sorted_names[i][0][0],
+                                         sorted_names[i][0][1],
+                                         sorted_names[i][0][2],
+                                         sorted_names[i][1]))
+            elif len(args)==2 and args[1]=='purples':
+                for i in range(0,len(sorted_names)):
+                    if (sorted_names[i][0][0]>0.0 and
+                        sorted_names[i][0][0]<0.05 and
+                        sorted_names[i][0][1]>0.2):
+                        selected.append((sorted_names[i][0][0],
+                                         sorted_names[i][0][1],
+                                         sorted_names[i][0][2],
+                                         sorted_names[i][1]))
+            elif len(args)==2 and args[1]=='pinks':
+                for i in range(0,len(sorted_names)):
+                    if (sorted_names[i][0][0]>0.0 and
+                        sorted_names[i][0][0]<0.05 and
+                        sorted_names[i][0][1]>0.2):
+                        selected.append((sorted_names[i][0][0],
+                                         sorted_names[i][0][1],
+                                         sorted_names[i][0][2],
+                                         sorted_names[i][1]))
+            else:
+                print('Hue          Saturation',
+                      '  Value        name')
+                for i in range(0,len(sorted_names)):
+                    print('%7.6e %7.6e %7.6e %s' %
+                          (sorted_names[i][0][0],
+                           sorted_names[i][0][1],
+                           sorted_names[i][0][2],
+                           sorted_names[i][1]))
+                                
+            if len(selected)>0:
+                n=len(selected)
+                ncols=4
+                nrows=n//ncols
+                plot.rc('text',usetex=True)
+                plot.rc('font',family='serif')
+                self.fig,self.axes=plot.subplots(figsize=(8,6.4))
+                # Get height and width
+                X,Y=self.fig.get_dpi()*self.fig.get_size_inches()
+                h=Y/(nrows+1)
+                w=X/ncols
+    
+                ax=self.axes
+                for i in range(0,n):
+                    row=i%nrows
+                    col=i//nrows
+                    y=Y-(row*h)-h
+                    xi_line=w*(col+0.05)
+                    xf_line=w*(col+0.25)
+                    xi_text=w*(col+0.3)
+                    ax.text(xi_text,y,
+                            selected[i][3]+str(selected[i][0]),
+                            fontsize=(h*0.2),
+                            ha='left',va='center')
+    
+                    ax.hlines(y+h*0.1,xi_line,xf_line,
+                              color=selected[i][3],
+                              linewidth=(h*0.8))
+    
+                    ax.set_xlim(0,X)
+                    ax.set_ylim(0,Y)
+                    ax.set_axis_off()
+                                
+                    self.fig.subplots_adjust(left=0,right=1,
+                                             top=1,bottom=0,
+                                             hspace=0,wspace=0)
+                plot.savefig('o2graph_colors2.png')
+                print('Created file o2graph_colors2.png.')
+                import matplotlib
+                if (matplotlib.get_backend()!='Agg' and 
+                    matplotlib.get_backend()!='agg'):
+                    plot.show()
+                            
+            finished=True
+                        
+        if (cmd=='colors') and len(args)==1:
+            from matplotlib import colors as mcolors
+            print('Matplotlib colors:')
+            print(str_line)
+            base_dict=dict(mcolors.BASE_COLORS)
+            css4_dict=dict(**mcolors.CSS4_COLORS)
+            print(len(base_dict),'base colors:')
+            outs=''
+            ctr=0
+            for col in base_dict:
+                outs=outs+(col+' '+str(base_dict[col])).ljust(20)
+                if ctr%4==3:
+                    outs=outs+'\n'
+                ctr=ctr+1
+            print(outs)
+            print(len(css4_dict),'CSS4 colors:')
+            outs=''
+            ctr=0
+            for col in css4_dict:
+                if ctr%3==0:
+                    outs=outs+(col+' '+
+                               str(css4_dict[col])).ljust(26)
+                elif ctr%3==1:
+                    outs=outs+(col+' '+
+                               str(css4_dict[col])).ljust(28)
+                else:
+                    outs=outs+(col+' '+
+                               str(css4_dict[col])).ljust(26)
+                    outs=outs+'\n'
+                ctr=ctr+1
+            print(outs)
+            print(' ')
+            outs=('O2graph also supports the (r,g,b) format '+
+                  'the HTML format, and the XKCD colors '+
+                  "(see '-help xkcd-colors' for a list). "+
+                  'For (r,g,b) colors, '+
+                  'the r, g, and b numbers should be from '+
+                  '0.0 to 1.0. The HTML format is #RRGGBB '+
+                  'where RR, GG, and BB are two-digit '+
+                  'hexadecimal values.')
+            str_list=textwrap.wrap(outs,79)
+            for i in range (0,len(str_list)):
+                print(str_list[i])
+            print(' ')
+            print("To create a plot of colors, use",
+                  "'o2graph -help colors-plot' or")
+            print("'o2graph -help colors-plot plot_file.png'")
+            finished=True
+                        
+        if (cmd=='xkcd-colors') and len(args)==1:
+            from matplotlib import colors as mcolors
+            xkcd_dict=dict(**mcolors.XKCD_COLORS)
+            print('XKCD colors:')
+            print(str_line)
+            # These are commented out for now because
+            # o2graph has a hard time with spaces in
+            # color names
+            print(len(xkcd_dict),'XKCD colors:')
+            outs=''
+            ctr=0
+            for col in xkcd_dict:
+                if ctr%2==0:
+                    outs=outs+(col+' '+
+                               str(xkcd_dict[col])).ljust(40)
+                else:
+                    outs=outs+(col+' '+
+                               str(xkcd_dict[col])).ljust(39)
+                    outs=outs+'\n'
+                ctr=ctr+1
+            print(outs)
+            finished=True
+
+        if (cmd=='markers') and len(args)==1:
+            marker_list()
+            finished=True
+            
+        if (len(args)==1 or len(args)==2) and args[0]=='markers-plot':
+            mlist=[['.',"'.'",'point'],
+                   [',',"','",'pixel'],
+                   ['o',"'o'",'circle'],
+                   ['v',"'v'",'down triangle'],
+                   ['^',"'^'",'up triangle'],
+                   ['<',"'<'",'left triangle'],
+                   ['>',"'>'",'right triangle'],
+                   ['1',"'1'",'down tri'],
+                   ['2',"'2'",'up tri'],
+                   ['3',"'3'",'left tri'],
+                   ['4',"'4'",'right tri'],
+                   ['8',"'8'",'octagon'],
+                   ['s',"'s'",'square'],
+                   ['p',"'p'",'pentagon'],
+                   ['P',"'P'",'plus (filled)'],
+                   ['*',"'*'",'star'],
+                   ['h',"'h'",'hexagon 1'],
+                   ['H',"'H'",'hexagon 2'],
+                   ['+',"'+'",'plus'],
+                   ['x',"'x'",'x'],
+                   ['X',"'X'",'filled x'],
+                   ['D',"'D'",'diamond'],
+                   ['d',"'d'",'thin diamond'],
+                   ['|',"'|'",'vertical line'],
+                   ['_',"'_'",'horizontal line'],
+                   [0,"0",'left tick'],
+                   [1,"1",'right tick'],
+                   [2,"2",'up tick'],
+                   [3,"3",'down tick'],
+                   [4,"4",'left caret'],
+                   [5,"5",'right caret'],
+                   [6,"6",'up caret'],
+                   [7,"7",'down caret'],
+                   [8,"8",'left shifted caret'],
+                   [9,"9",'right shifted caret'],
+                   [10,"10",'up shifted caret'],
+                   [11,"11",'down shifted caret'],
+                   ['$x^2$',"\$x^2\$",'math example']]
+            nmark=len(mlist)
+            ncols=2
+            nrows=(nmark+(nmark%2))/ncols
+            self.xlo=0
+            self.xhi=1
+            self.xset=True
+            self.fig_dict=('left_margin=0.01,top_margin=0.01,'+
+                           'right_margin=0.01,'+
+                           'bottom_margin=0.01,'+
+                           'fontsize=10,ticks_in=False,'+
+                           'rt_ticks=False')
+            self.canvas()
+            self.canvas_flag=True
+            self.axes.set_axis_off()
+            row_ctr=0
+            col_ctr=0
+            for entry in mlist:
+                if row_ctr>2:
+                    plot.rc('text',usetex=False)
+                    self.point(str((col_ctr+0.1)/(ncols)),
+                               str((nrows-row_ctr)/(nrows+1)),
+                               marker=entry[0],color='black',
+                               markersize=10)
+                    self.text(str((col_ctr+0.25)/(ncols)),
+                              str((nrows-row_ctr)/(nrows+1)),
+                              entry[1],family='monospace',
+                              va='center',ha='center')
+                    plot.rc('text',usetex=True)
+                    self.text(str((col_ctr+0.37)/(ncols)),
+                              str((nrows-row_ctr)/(nrows+1)),
+                              entry[2].replace('_','\_'),
+                              va='center',ha='left')
+                row_ctr=row_ctr+1
+                if row_ctr>=nrows:
+                    row_ctr=0
+                    col_ctr=col_ctr+1
+            if len(args)==2:
+                tfilename=args[1]
+                plot.savefig(tfilename)
+                print("Saved image in file",(tfilename+"."))
+            import matplotlib
+            if (matplotlib.get_backend()!='Agg' and 
+                matplotlib.get_backend()!='agg'):
+                plot.show()
+            finished=True
+                        
+        # Handle the case of an acol command 
+        if match==False and finished==False:
+            self.gen_acol(o2scl_hdf,amp,'help',args)
+
+        # If the user specified 'help set', then print
+        # the o2graph parameter documentation
+        if (cmd=='set' or cmd=='get') and len(args)==1:
+            self.print_param_docs()
+
+        # If no arguments were given, then give a list of
+        # o2graph commands in addition to acol commands
+        if len(args)==0:
+            print(str_line)
+            print('\nO2graph command-line options:\n')
+            for line in base_list:
+                strt='  -'+line[0]
+                while len(strt)<18:
+                    strt=strt+' '
+                strt+=line[1]
+                print(strt)
+            print('\n'+str_line)
+            print('O2graph type-specific commands:\n')
+            extra_types.sort()
+            for typename in extra_types:
+                strt=typename+': '
+                first=True
+                for line in extra_list:
+                    if line[0]==typename:
+                        if first==True:
+                            strt+=line[1]
+                            first=False
+                        else:
+                            strt+=', '+line[1]
+                str_list=textwrap.wrap(strt,77)
+                for i in range (0,len(str_list)):
+                    if i==0:
+                        print(str_list[i])
+                    else:
+                        print(' ',str_list[i])
+            print('\n'+str_line)
+            print('Additional o2graph help topics:',
+                  'cmaps, cmaps-plot, colors, colors-plot,')
+            print('\tmarkers, markers-plot, xkcd-colors')
+        # End of function o2graph_plotter::help_func()
+        return
+        
     def yt_tf_func(self,args):
         """
         Function documentation
@@ -2016,7 +2613,7 @@ class o2graph_plotter(plot_base):
                                      float(args[4]),
                                      float(args[5]),
                                      float(args[6])])
-
+        # End of function o2graph_plotter::yt_tf_func()
         return
 
     def yt_scatter(self,o2scl_hdf,amp,column_x,column_y,column_z):
@@ -2335,611 +2932,7 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process help.')
 
-                    curr_type=''
-                    cmd=''
-
-                    redirected=False
-                    if sys.stdout.isatty()==False:
-                        redirected=True
-                    
-                    str_line=''
-                    if redirected:
-                        for jj in range(0,78):
-                            str_line+='-'
-                    else:
-                        str_line=str_line+chr(27)+'(0'
-                        for jj in range(0,78):
-                            str_line+='q'
-                        str_line=str_line+chr(27)+'(B'
-                        
-                    # If only a command is specified
-                    if (ix_next-ix)==2:
-
-                        # Get current type
-                        int_ptr=ctypes.POINTER(ctypes.c_int)
-                        char_ptr=ctypes.POINTER(ctypes.c_char)
-                        char_ptr_ptr=ctypes.POINTER(char_ptr)
-
-                        # Set up wrapper for type function
-                        type_fn=o2scl_hdf.o2scl_acol_get_type
-                        type_fn.argtypes=[ctypes.c_void_p,int_ptr,
-                                          char_ptr_ptr]
-
-                        # Get current type
-                        it=ctypes.c_int(0)
-                        type_ptr=char_ptr()
-                        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-                        curr_type=b''
-                        for i in range(0,it.value):
-                            curr_type=curr_type+type_ptr[i]
-                            
-                        cmd=strlist[ix+1]
-
-                    elif (ix_next-ix)==3:
-                        # If both a type and command are specified
-                        
-                        curr_type=strlist[ix+1]
-                        cmd=strlist[ix+2]
-
-                    # See if we matched an o2graph command
-                    match=False
-                    
-                    # Handle the case of an o2graph command from the
-                    # base list
-                    for line in base_list:
-                        if cmd==line[0]:
-                            match=True
-                            print('Usage: '+cmd+' '+line[2]+'\n\n'+
-                                  line[1]+'\n')
-                            tempx_arr=line[3].split('\n')
-                            for j in range(0,len(tempx_arr)):
-                                #print('here.'+tempx_arr[j]+'.')
-                                if len(tempx_arr[j])<79:
-                                    print(tempx_arr[j])
-                                else:
-                                    str_list=textwrap.wrap(tempx_arr[j],79)
-                                    for i in range (0,len(str_list)):
-                                        print(str_list[i])
-                                
-                    # Handle the case of an o2graph command from the
-                    # extra list
-                    for line in extra_list:
-                        if ((curr_type==line[0] or
-                             curr_type==force_bytes(line[0])) and
-                            cmd==line[1]):
-                            match=True
-                            print('Usage: '+cmd+' '+line[3]+'\n\n'+
-                                  line[2]+'\n')
-                            str_list=textwrap.wrap(line[4],79)
-                            for i in range (0,len(str_list)):
-                                print(str_list[i])
-
-                    finished=False
-                    if (cmd=='cmaps_list') and (ix_next-ix)==2:
-                        print('Matplotlib colormaps:')
-                        print(str_line)
-                        for category, cmap_list in cmaps:
-                            list2=''
-                            for name in cmap_list:
-                                list2+=name+' '
-                            str_list=textwrap.wrap(category+': '+list2,79)
-                            for i in range (0,len(str_list)):
-                                print(str_list[i])
-                            print(' ')
-                        print('Remember that colormaps can all be',
-                              'reversed by using a "_r" suffix.')
-                        finished=True
-
-                    if (cmd=='cmaps' or cmd=='cmap') and (ix_next-ix)==2:
-
-                        if self.new_cmaps_defined==False:
-                            self.new_cmaps()
-
-                        print('Generating colormap summary figure.')
-                        
-                        # An internal implementation of
-                        # https://matplotlib.org/3.1.0/gallery/
-                        # color/colormap_reference.html
-                        
-                        self.left_margin=0.01
-                        self.right_margin=0.01
-                        self.top_margin=0.01
-                        self.bottom_margin=0.01
-                        gradient=numpy.linspace(0,1,256)
-                        gradient=numpy.vstack((gradient,gradient))
-                        
-                        nrows=0
-                        for category, cmap_list in cmaps:
-                            for name in cmap_list:
-                                nrows=nrows+1
-                        for category, cmap_list in new_cmaps:
-                            for name in cmap_list:
-                                nrows=nrows+1
-                        ncols=3
-                        while nrows%ncols!=0:
-                            nrows=nrows+1
-                        nrows=int((nrows)/ncols)
-
-                        # Manually create figure and axes 
-                        fig_x=7.0
-                        fig_y=0.95*(0.35+0.15+(nrows+(nrows-1)*0.1)*0.22)
-                        (self.fig,self.axes)=plot.subplots(nrows=nrows,
-                                                           ncols=ncols,
-                                                           figsize=(fig_x,
-                                                                    fig_y))
-                        self.fig.subplots_adjust(top=1.0-0.35/fig_y,
-                                                 bottom=0.15/fig_y,
-                                                 left=0.01,right=0.99,
-                                                 wspace=0.01)
-                        plot.rc('text',usetex=True)
-                        plot.rc('font',family='serif')
-
-                        for i in range(0,nrows):
-                            for j in range(0,ncols):
-                                self.axes[i][j].set_axis_off()
-                        
-                        row_ctr=0
-                        col_ctr=0
-                        for category, cmap_list in cmaps:
-                            for name in cmap_list:
-                                name2=name.replace('_','\_')
-                                ax=self.axes[row_ctr][col_ctr]
-                                ax.imshow(gradient,aspect='auto',
-                                                 cmap=plot.get_cmap(name))
-                                r=patches.Rectangle((0.32,0.1),0.36,0.8,0,
-                                                    fc=(1,1,1,0.7),lw=0,
-                                                    fill=True,
-                                                    transform=ax.transAxes)
-                                ax.add_patch(r)
-                                ax.text(0.5,0.45,name2,
-                                                    va='center',ha='center',
-                                                    fontsize=8,color=(0,0,0),
-                                                    transform=ax.transAxes)
-                                row_ctr=row_ctr+1
-                                if row_ctr>=nrows:
-                                    row_ctr=0
-                                    col_ctr=col_ctr+1
-                        for category, cmap_list in new_cmaps:
-                            for name in cmap_list:
-                                name2=name.replace('_','\_')
-                                ax=self.axes[row_ctr][col_ctr]
-                                ax.imshow(gradient,aspect='auto',
-                                                 cmap=plot.get_cmap(name))
-                                r=patches.Rectangle((0.32,0.1),0.36,0.8,0,
-                                                    fc=(1,1,1,0.7),lw=0,
-                                                    fill=True,
-                                                    transform=ax.transAxes)
-                                ax.add_patch(r)
-                                ax.text(0.5,0.45,name2,
-                                        va='center',ha='center',
-                                        fontsize=8,color=(0,0,0),
-                                        transform=ax.transAxes)
-                                row_ctr=row_ctr+1
-                                if row_ctr>=nrows:
-                                    row_ctr=0
-                                    col_ctr=col_ctr+1
-
-                        ax=self.axes[0][0]
-                        ax.text(1.5,1.7,
-                                (r'$ \mathrm{O}_2\mathrm{sc'+
-                                 'lpy~colormap~reference} $'),
-                                ha='center',va='center',fontsize=16,
-                                transform=ax.transAxes)
-                        plot.savefig('o2graph_cmaps.png')
-                        print('Created file o2graph_cmaps.png.')
-                        print('Remember that colormaps can all be',
-                              'reversed by using a "_r" suffix.')
-                        import matplotlib
-                        if (matplotlib.get_backend()!='Agg' and 
-                            matplotlib.get_backend()!='agg'):
-                            plot.show()
-                        finished=True
-
-                    if (cmd=='colors') and (ix_next-ix)==2:
-                        from matplotlib import colors as mc
-
-                        colors=dict(**mc.CSS4_COLORS)
-                        by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
-                                        for name, color in colors.items())
-                        sorted_names=[name for hsv, name in by_hsv]
-                        n=len(sorted_names)
-                        ncols=4
-                        nrows=n//ncols
-                        plot.rc('text',usetex=True)
-                        plot.rc('font',family='serif')
-                        self.fig,self.axes=plot.subplots(figsize=(8,6.4))
-                        # Get height and width
-                        X,Y=self.fig.get_dpi()*self.fig.get_size_inches()
-                        h=Y/(nrows+1)
-                        w=X/ncols
-
-                        ax=self.axes
-                        for i, name in enumerate(sorted_names):
-                            row=i%nrows
-                            col=i//nrows
-                            y=Y-(row*h)-h
-                            xi_line=w*(col+0.05)
-                            xf_line=w*(col+0.25)
-                            xi_text=w*(col+0.3)
-                            ax.text(xi_text,y,name,fontsize=(h*0.6),
-                                    ha='left',va='center')
-
-                            ax.hlines(y+h*0.1,xi_line,xf_line,
-                                      color=colors[name],linewidth=(h*0.8))
-
-                            ax.set_xlim(0,X)
-                            ax.set_ylim(0,Y)
-                            ax.set_axis_off()
-                            
-                            self.fig.subplots_adjust(left=0,right=1,
-                                                     top=1,bottom=0,
-                                                     hspace=0,wspace=0)
-                        plot.savefig('o2graph_colors.png')
-                        print('Created file o2graph_colors.png.')
-                        import matplotlib
-                        if (matplotlib.get_backend()!='Agg' and 
-                            matplotlib.get_backend()!='agg'):
-                            plot.show()
-                        finished=True
-                        
-                    if len(strlist)>ix+1 and strlist[ix+1]=='colors2':
-                        from matplotlib import colors as mc
-
-                        colors=dict(**mc.CSS4_COLORS,**mc.XKCD_COLORS)
-                        by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
-                                        for name, color in colors.items())
-                        sorted_names=[(hsv, name) for hsv, name in by_hsv]
-                        selected=[]
-                        if (ix_next-ix)==3 and strlist[ix+2]=='greys':
-                            for i in range(0,len(sorted_names)):
-                                if (sorted_names[i][0][1]<0.2):
-                                    selected.append((sorted_names[i][0][0],
-                                                     sorted_names[i][0][1],
-                                                     sorted_names[i][0][2],
-                                                     sorted_names[i][1]))
-                        elif (ix_next-ix)==3 and strlist[ix+2]=='reds':
-                            for i in range(0,len(sorted_names)):
-                                if (sorted_names[i][0][0]>0.0 and
-                                    sorted_names[i][0][0]<0.05 and
-                                    sorted_names[i][0][1]>0.2):
-                                    selected.append((sorted_names[i][0][0],
-                                                     sorted_names[i][0][1],
-                                                     sorted_names[i][0][2],
-                                                     sorted_names[i][1]))
-                        elif (ix_next-ix)==3 and strlist[ix+2]=='oranges':
-                            for i in range(0,len(sorted_names)):
-                                if (sorted_names[i][0][0]>0.05 and
-                                    sorted_names[i][0][0]<0.105 and
-                                    sorted_names[i][0][1]>0.2):
-                                    selected.append((sorted_names[i][0][0],
-                                                     sorted_names[i][0][1],
-                                                     sorted_names[i][0][2],
-                                                     sorted_names[i][1]))
-                        elif (ix_next-ix)==3 and strlist[ix+2]=='yellows':
-                            for i in range(0,len(sorted_names)):
-                                if (sorted_names[i][0][0]>0.105 and
-                                    sorted_names[i][0][0]<0.17 and
-                                    sorted_names[i][0][1]>0.2):
-                                    selected.append((sorted_names[i][0][0],
-                                                     sorted_names[i][0][1],
-                                                     sorted_names[i][0][2],
-                                                     sorted_names[i][1]))
-                        elif (ix_next-ix)==3 and strlist[ix+2]=='greens':
-                            for i in range(0,len(sorted_names)):
-                                if (sorted_names[i][0][0]>0.17 and
-                                    sorted_names[i][0][0]<0.25 and
-                                    sorted_names[i][0][1]>0.2):
-                                    selected.append((sorted_names[i][0][0],
-                                                     sorted_names[i][0][1],
-                                                     sorted_names[i][0][2],
-                                                     sorted_names[i][1]))
-                        elif (ix_next-ix)==3 and strlist[ix+2]=='blues':
-                            for i in range(0,len(sorted_names)):
-                                if (sorted_names[i][0][0]>0.0 and
-                                    sorted_names[i][0][0]<0.05 and
-                                    sorted_names[i][0][1]>0.2):
-                                    selected.append((sorted_names[i][0][0],
-                                                     sorted_names[i][0][1],
-                                                     sorted_names[i][0][2],
-                                                     sorted_names[i][1]))
-                        elif (ix_next-ix)==3 and strlist[ix+2]=='purples':
-                            for i in range(0,len(sorted_names)):
-                                if (sorted_names[i][0][0]>0.0 and
-                                    sorted_names[i][0][0]<0.05 and
-                                    sorted_names[i][0][1]>0.2):
-                                    selected.append((sorted_names[i][0][0],
-                                                     sorted_names[i][0][1],
-                                                     sorted_names[i][0][2],
-                                                     sorted_names[i][1]))
-                        elif (ix_next-ix)==3 and strlist[ix+2]=='pinks':
-                            for i in range(0,len(sorted_names)):
-                                if (sorted_names[i][0][0]>0.0 and
-                                    sorted_names[i][0][0]<0.05 and
-                                    sorted_names[i][0][1]>0.2):
-                                    selected.append((sorted_names[i][0][0],
-                                                     sorted_names[i][0][1],
-                                                     sorted_names[i][0][2],
-                                                     sorted_names[i][1]))
-                        else:
-                            print('Hue          Saturation',
-                                  '  Value        name')
-                            for i in range(0,len(sorted_names)):
-                                print('%7.6e %7.6e %7.6e %s' %
-                                      (sorted_names[i][0][0],
-                                       sorted_names[i][0][1],
-                                       sorted_names[i][0][2],
-                                       sorted_names[i][1]))
-                                
-                        if len(selected)>0:
-                            n=len(selected)
-                            ncols=4
-                            nrows=n//ncols
-                            plot.rc('text',usetex=True)
-                            plot.rc('font',family='serif')
-                            self.fig,self.axes=plot.subplots(figsize=(8,6.4))
-                            # Get height and width
-                            X,Y=self.fig.get_dpi()*self.fig.get_size_inches()
-                            h=Y/(nrows+1)
-                            w=X/ncols
-    
-                            ax=self.axes
-                            for i in range(0,n):
-                                row=i%nrows
-                                col=i//nrows
-                                y=Y-(row*h)-h
-                                xi_line=w*(col+0.05)
-                                xf_line=w*(col+0.25)
-                                xi_text=w*(col+0.3)
-                                ax.text(xi_text,y,
-                                        selected[i][3]+str(selected[i][0]),
-                                        fontsize=(h*0.2),
-                                        ha='left',va='center')
-    
-                                ax.hlines(y+h*0.1,xi_line,xf_line,
-                                          color=selected[i][3],
-                                          linewidth=(h*0.8))
-    
-                                ax.set_xlim(0,X)
-                                ax.set_ylim(0,Y)
-                                ax.set_axis_off()
-                                
-                                self.fig.subplots_adjust(left=0,right=1,
-                                                         top=1,bottom=0,
-                                                         hspace=0,wspace=0)
-                            plot.savefig('o2graph_colors2.png')
-                            print('Created file o2graph_colors2.png.')
-                            import matplotlib
-                            if (matplotlib.get_backend()!='Agg' and 
-                                matplotlib.get_backend()!='agg'):
-                                plot.show()
-                            
-                        finished=True
-                        
-                    if (cmd=='color-list') and (ix_next-ix)==2:
-                        from matplotlib import colors as mcolors
-                        print('Matplotlib colors:')
-                        print(str_line)
-                        base_dict=dict(mcolors.BASE_COLORS)
-                        css4_dict=dict(**mcolors.CSS4_COLORS)
-                        print(len(base_dict),'base colors:')
-                        outs=''
-                        ctr=0
-                        for col in base_dict:
-                            outs=outs+(col+' '+str(base_dict[col])).ljust(20)
-                            if ctr%4==3:
-                                outs=outs+'\n'
-                            ctr=ctr+1
-                        print(outs)
-                        print(len(css4_dict),'CSS4 colors:')
-                        outs=''
-                        ctr=0
-                        for col in css4_dict:
-                            if ctr%3==0:
-                                outs=outs+(col+' '+
-                                           str(css4_dict[col])).ljust(26)
-                            elif ctr%3==1:
-                                outs=outs+(col+' '+
-                                           str(css4_dict[col])).ljust(28)
-                            else:
-                                outs=outs+(col+' '+
-                                           str(css4_dict[col])).ljust(26)
-                                outs=outs+'\n'
-                            ctr=ctr+1
-                        print(outs)
-                        print(' ')
-                        outs=('O2graph also supports the (r,g,b) format '+
-                              'the HTML format, and the XKCD colors. '+
-                              'For (r,g,b) colors, '+
-                              'the r, g, and b numbers should be from '+
-                              '0.0 to 1.0. The HTML format is #RRGGBB '+
-                              'where RR, GG, and BB are two-digit '+
-                              'hexadecimal values.')
-                        str_list=textwrap.wrap(outs,79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
-                        finished=True
-                        
-                    if (cmd=='xkcd-color-list') and (ix_next-ix)==2:
-                        from matplotlib import colors as mcolors
-                        xkcd_dict=dict(**mcolors.XKCD_COLORS)
-                        print('XKCD colors:')
-                        print(str_line)
-                        # These are commented out for now because
-                        # o2graph has a hard time with spaces in
-                        # color names
-                        print(len(xkcd_dict),'XKCD colors:')
-                        outs=''
-                        ctr=0
-                        for col in xkcd_dict:
-                            if ctr%2==0:
-                                outs=outs+(col+' '+
-                                           str(xkcd_dict[col])).ljust(40)
-                            else:
-                                outs=outs+(col+' '+
-                                           str(xkcd_dict[col])).ljust(39)
-                                outs=outs+'\n'
-                            ctr=ctr+1
-                        print(outs)
-                        finished=True
-
-                    if (cmd=='marker-list') and (ix_next-ix)==2:
-                        print('Matplotlib markers supported by O2graph:')
-                        print(str_line)
-                        outs='. point'.ljust(20)
-                        outs=outs+', pixel'.ljust(20)
-                        outs=outs+'o circle'.ljust(20)
-                        outs=outs+'v triangle_down'.ljust(20)+'\n'
-                        outs=outs+'^ triangle_up'.ljust(20)
-                        outs=outs+'< triangle_left'.ljust(20)
-                        outs=outs+'> triangle_right'.ljust(20)
-                        outs=outs+'1 tri_down'.ljust(20)+'\n'
-                        outs=outs+'2 tri_up'.ljust(20)
-                        outs=outs+'3 tri_left'.ljust(20)
-                        outs=outs+'4 tri_right'.ljust(20)
-                        outs=outs+'8 octagon'.ljust(20)+'\n'
-                        outs=outs+'s square'.ljust(20)
-                        outs=outs+'p pentagon'.ljust(20)
-                        outs=outs+'P plus (filled)'.ljust(20)
-                        outs=outs+'* star'.ljust(20)+'\n'
-                        outs=outs+'h hexagon1'.ljust(20)
-                        outs=outs+'H hexagon2'.ljust(20)
-                        outs=outs+'+ plus'.ljust(20)
-                        outs=outs+'x x'.ljust(20)+'\n'
-                        outs=outs+'X x (filled)'.ljust(20)
-                        outs=outs+'D diamond'.ljust(20)
-                        outs=outs+'d thin_diamond'.ljust(20)
-                        outs=outs+'| vline'.ljust(20)+'\n'
-                        outs=outs+'_ hline'.ljust(20)
-                        outs=outs+'$...$ mathtext string'.ljust(20)
-                        print(outs)
-                        finished=True
-
-                    if (cmd=='markers') and (ix_next-ix)==2:
-                        mlist=[['.',"'.'",'point'],
-                               [',',"','",'pixel'],
-                               ['o',"'o'",'circle'],
-                               ['v',"'v'",'down triangle'],
-                               ['^',"'^'",'up triangle'],
-                               ['<',"'<'",'left triangle'],
-                               ['>',"'>'",'right triangle'],
-                               ['1',"'1'",'down tri'],
-                               ['2',"'2'",'up tri'],
-                               ['3',"'3'",'left tri'],
-                               ['4',"'4'",'right tri'],
-                               ['8',"'8'",'octagon'],
-                               ['s',"'s'",'square'],
-                               ['p',"'p'",'pentagon'],
-                               ['P',"'P'",'plus (filled)'],
-                               ['*',"'*'",'star'],
-                               ['h',"'h'",'hexagon 1'],
-                               ['H',"'H'",'hexagon 2'],
-                               ['+',"'+'",'plus'],
-                               ['x',"'x'",'x'],
-                               ['X',"'X'",'filled x'],
-                               ['D',"'D'",'diamond'],
-                               ['d',"'d'",'thin diamond'],
-                               ['|',"'|'",'vertical line'],
-                               ['_',"'_'",'horizontal line'],
-                               [0,"0",'left tick'],
-                               [1,"1",'right tick'],
-                               [2,"2",'up tick'],
-                               [3,"3",'down tick'],
-                               [4,"4",'left caret'],
-                               [5,"5",'right caret'],
-                               [6,"6",'up caret'],
-                               [7,"7",'down caret'],
-                               [8,"8",'left shifted caret'],
-                               [9,"9",'right shifted caret'],
-                               [10,"10",'up shifted caret'],
-                               [11,"11",'down shifted caret'],
-                               ['$x^2$',"\$x^2\$",'math example']]
-                        nmark=len(mlist)
-                        ncols=2
-                        nrows=(nmark+(nmark%2))/ncols
-                        self.xlo=0
-                        self.xhi=1
-                        self.xset=True
-                        self.fig_dict=('left_margin=0.01,top_margin=0.01,'+
-                                       'right_margin=0.01,'+
-                                       'bottom_margin=0.01,'+
-                                       'fontsize=10,ticks_in=False,'+
-                                       'rt_ticks=False')
-                        self.canvas()
-                        self.canvas_flag=True
-                        self.axes.set_axis_off()
-                        row_ctr=0
-                        col_ctr=0
-                        for entry in mlist:
-                            if row_ctr>2:
-                                plot.rc('text',usetex=False)
-                                self.point(str((col_ctr+0.1)/(ncols)),
-                                           str((nrows-row_ctr)/(nrows+1)),
-                                           marker=entry[0],color='black',
-                                           markersize=10)
-                                self.text(str((col_ctr+0.25)/(ncols)),
-                                          str((nrows-row_ctr)/(nrows+1)),
-                                          entry[1],family='monospace',
-                                          va='center',ha='center')
-                                plot.rc('text',usetex=True)
-                                self.text(str((col_ctr+0.37)/(ncols)),
-                                          str((nrows-row_ctr)/(nrows+1)),
-                                          entry[2].replace('_','\_'),
-                                          va='center',ha='left')
-                            row_ctr=row_ctr+1
-                            if row_ctr>=nrows:
-                                row_ctr=0
-                                col_ctr=col_ctr+1
-                        plot.savefig('o2graph_markers.png')
-                        import matplotlib
-                        if (matplotlib.get_backend()!='Agg' and 
-                            matplotlib.get_backend()!='agg'):
-                            plot.show()
-                        finished=True
-                        
-                    # Handle the case of an acol command 
-                    if match==False and finished==False:
-                        self.gen_acol(o2scl_hdf,amp,cmd_name,
-                                 strlist[ix+1:ix_next])
-
-                    # If the user specified 'help set', then print
-                    # the o2graph parameter documentation
-                    if (cmd=='set' or cmd=='get') and (ix_next-ix)==2:
-                        self.print_param_docs()
-
-                    # If no arguments were given, then give a list of
-                    # o2graph commands in addition to acol commands
-                    if (ix_next-ix)==1:
-                        print(str_line)
-                        print('\nO2graph command-line options:\n')
-                        for line in base_list:
-                            strt='  -'+line[0]
-                            while len(strt)<18:
-                                strt=strt+' '
-                            strt+=line[1]
-                            print(strt)
-                        print('\n'+str_line)
-                        print('O2graph type-specific commands:\n')
-                        extra_types.sort()
-                        for typename in extra_types:
-                            strt=typename+': '
-                            first=True
-                            for line in extra_list:
-                                if line[0]==typename:
-                                    if first==True:
-                                        strt+=line[1]
-                                        first=False
-                                    else:
-                                        strt+=', '+line[1]
-                            str_list=textwrap.wrap(strt,77)
-                            for i in range (0,len(str_list)):
-                                if i==0:
-                                    print(str_list[i])
-                                else:
-                                    print(' ',str_list[i])
-                        print('\n'+str_line)
-                        print('Additional o2graph help topics:',
-                              'markers, cmaps, colors')
+                    self.help_func(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='version':
                     

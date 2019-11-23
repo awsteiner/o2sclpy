@@ -37,23 +37,5 @@ reinstall:
 
 .empty:
 
-yt-test1:
-	o2graph -backend Agg -set verbose 2 -create tensor_grid 3 10 10 10 \
-		-entry 1 1 1 -function "i0*sin(i1)*i2" -entry 1 1 1 \
-		-yt-add-vol tf1 tf2 -yt-render test.png
-
-yt-test2:
-	o2graph -backend Agg -set verbose 2 -create tensor_grid 3 10 10 10 \
-		-entry 1 1 1 -function "i0*sin(i1)*i2" -entry 1 1 1 \
-		-yt-add-vol \
-		-clear -create tensor_grid 3 10 10 10 \
-		-entry 1 1 1 -function "i0*cos(i1)*i2" -entry 1 1 1 \
-		-yt-add-vol -yt-render test.png
-
-yt-test3:
-	o2graph -backend Agg -set verbose 2 -create table z 0 20 0.1 \
-		-function "sin(z)" x -function "cos(z)" y -list \
-		-yt-scatter x y z -yt-render test.png
-
 statfiles:
 	cd doc; $(MAKE) statfiles
