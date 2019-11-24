@@ -44,7 +44,7 @@ First plot example
 
 .. include:: static/table_plot.scr
    :literal:
-.. image:: static/table_plot.png
+.. image:: static/table_plot_doc.png
    :width: 70%
 
 Density plot and contour line example
@@ -52,7 +52,7 @@ Density plot and contour line example
 
 .. include:: static/table3d_den_plot.scr
    :literal:
-.. image:: static/table3d_den_plot.png
+.. image:: static/table3d_den_plot_doc.png
    :width: 70%
 
 Agg backend example
@@ -66,7 +66,7 @@ Agg backend example
 
 .. include:: static/table_plotv.scr
    :literal:
-.. image:: static/table_plotv.png
+.. image:: static/table_plotv_doc.png
    :width: 70%
 
 Scatter plot example
@@ -74,7 +74,7 @@ Scatter plot example
 
 .. include:: static/table_scatter.scr
    :literal:
-.. image:: static/table_scatter.png
+.. image:: static/table_scatter_doc.png
    :width: 70%
 
 Region plot example
@@ -82,7 +82,7 @@ Region plot example
 
 .. include:: static/table_rplot.scr
    :literal:
-.. image:: static/table_rplot.png
+.. image:: static/table_rplot_doc.png
    :width: 70%
 
 Subplot example 1
@@ -90,7 +90,7 @@ Subplot example 1
 
 .. include:: static/subplots1.scr
    :literal:
-.. image:: static/subplots1.png
+.. image:: static/subplots1_doc.png
    :width: 70%
 
 Subplot example 2
@@ -98,7 +98,7 @@ Subplot example 2
 
 .. include:: static/subplots2.scr
    :literal:
-.. image:: static/subplots2.png
+.. image:: static/subplots2_doc.png
    :width: 70%
 
 Subplot example 3
@@ -106,7 +106,7 @@ Subplot example 3
 
 .. include:: static/subplots3.scr
    :literal:
-.. image:: static/subplots3.png
+.. image:: static/subplots3_doc.png
    :width: 70%
 
 Internal structure
