@@ -28,13 +28,16 @@ import matplotlib.pyplot as plot
 # For rectangles
 import matplotlib.patches as patches
 
-from o2sclpy.utils import default_plot, string_to_dict
+from o2sclpy.utils import default_plot, string_to_dict, horiz_line
 from o2sclpy.doc_data import cmaps, new_cmaps
 
-def marker_list(str_line):
-            
+def marker_list():
+    """ 
+    Print a list of matplotlib markers which work in o2graph
+    command-line arguments.
+    """
     print('Matplotlib markers supported by O2graph:')
-    print(str_line)
+    print(horiz_line())
     outs='. point'.ljust(20)
     outs=outs+', pixel'.ljust(20)
     outs=outs+'o circle'.ljust(20)
@@ -69,6 +72,10 @@ def marker_list(str_line):
     return
 
 def markers_plot(fname=''):
+    """ 
+    Plot the matplotlib markers which work in o2graph
+    command-line arguments.
+    """
     mlist=[['.',"'.'",'point'],
            [',',"','",'pixel'],
            ['o',"'o'",'circle'],
@@ -149,10 +156,18 @@ def markers_plot(fname=''):
     if (matplotlib.get_backend()!='Agg' and 
         matplotlib.get_backend()!='agg'):
         plot.show()
-        
+    elif fname=='':
+        print('Backend is Agg but no filename is specified',
+              'so no output was created.')
     return
 
 def colors_near(col='',fname=''):
+    """
+    Create a plot of all colors near a specified colors, and
+    optionally, store the plot in file named 'fname'.
+    Possible values of 'col' are red, orange, yellow, green,
+    cyan, blue, purple, magenta, pink, grey, and gray.
+    """
     from matplotlib import colors as mc
 
     colors=dict(**mc.CSS4_COLORS,**mc.XKCD_COLORS)
@@ -270,19 +285,24 @@ def colors_near(col='',fname=''):
             fig.subplots_adjust(left=0,right=1,
                                      top=1,bottom=0,
                                      hspace=0,wspace=0)
-        #plot.savefig('o2graph_colors2.png')
-        #print('Created file o2graph_colors2.png.')
+        if fname!='':
+            plot.savefig(fname)
+            print('Created file '+fname+'.')
         import matplotlib
         if (matplotlib.get_backend()!='Agg' and 
             matplotlib.get_backend()!='agg'):
             plot.show()
-                            
+        elif fname=='':
+            print('Backend is Agg but no filename is specified',
+                  'so no output was created.')                            
     return
 
-def cmap_list_func(str_line):
-
+def cmap_list_func():
+    """ 
+    List the matplotlib and o2sclpy colormaps.
+    """
     print('Matplotlib colormaps:')
-    print(str_line)
+    print(horiz_line())
     for category, cmap_list in cmaps:
         list2=''
         for name in cmap_list:
@@ -300,7 +320,9 @@ def cmap_list_func(str_line):
     return
 
 def cmaps_plot(fname=''):
-
+    """ 
+    Create a plot of matplotlib and o2sclpy colormaps.
+    """
     print('Generating colormap summary figure.')
                         
     # An internal implementation of
@@ -400,9 +422,16 @@ def cmaps_plot(fname=''):
     if (matplotlib.get_backend()!='Agg' and 
         matplotlib.get_backend()!='agg'):
         plot.show()
+    elif fname=='':
+        print('Backend is Agg but no filename is specified',
+              'so no output was created.')
     return
 
 def colors_plot(fname=''):
+    """
+    Create a plot of the matplotlib CSS4 colors and, optionally,
+    store the plot in file named 'fname'.
+    """
     from matplotlib import colors as mc
 
     colors=dict(**mc.CSS4_COLORS)
@@ -447,12 +476,19 @@ def colors_plot(fname=''):
     if (matplotlib.get_backend()!='Agg' and 
         matplotlib.get_backend()!='agg'):
         plot.show()
+    elif fname=='':
+        print('Backend is Agg but no filename is specified',
+              'so no output was created.')
     return
 
 def color_list():
+    """
+    List matplotlib base and CSS4 colors along with their
+    values in #RRGGBB hexadecimal format.
+    """
     from matplotlib import colors as mcolors
     print('Matplotlib colors:')
-    print(str_line)
+    print(horiz_line())
     base_dict=dict(mcolors.BASE_COLORS)
     css4_dict=dict(**mcolors.CSS4_COLORS)
     print(len(base_dict),'base colors:')
@@ -498,11 +534,15 @@ def color_list():
     print("'o2graph -help colors-plot plot_file.png'")
     return
 
-def xkcd_colors_list(str_line):
+def xkcd_colors_list():
+    """
+    List all of the XKCD colors along with their 
+    values in #RRGGBB hexadecimal format.
+    """
     from matplotlib import colors as mcolors
     xkcd_dict=dict(**mcolors.XKCD_COLORS)
     print('XKCD colors:')
-    print(str_line)
+    print(horiz_line())
     # These are commented out for now because
     # o2graph has a hard time with spaces in
     # color names

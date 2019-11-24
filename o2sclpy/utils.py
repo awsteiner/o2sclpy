@@ -19,7 +19,7 @@
 #  
 #  -------------------------------------------------------------------
 #
-
+import sys
 import numpy
 
 import matplotlib.pyplot as plot
@@ -335,3 +335,22 @@ def string_to_dict(s):
         
     return dct
 
+def horiz_line():
+    """
+    Return a string which represents a horizontal line. If possible,
+    vt100-like terminal sequences are used to create a line.
+    Otherwise, dashes are used.
+    """
+    redirected=False
+    if sys.stdout.isatty()==False:
+        redirected=True
+    str_line=''
+    if redirected:
+        for jj in range(0,78):
+            str_line+='-'
+    else:
+        str_line=str_line+chr(27)+'(0'
+        for jj in range(0,78):
+            str_line+='q'
+        str_line=str_line+chr(27)+'(B'
+    return str_line

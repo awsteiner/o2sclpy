@@ -48,7 +48,7 @@ from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.plot_base import plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
-from o2sclpy.plot_info import colors_plot
+from o2sclpy.plot_info import colors_plot, color_list
 
 class o2graph_plotter(plot_base):
     """
@@ -2076,7 +2076,7 @@ class o2graph_plotter(plot_base):
         finished=False
         
         if cmd=='cmaps' and len(args)==1:
-            cmap_list_func(str_line)
+            cmap_list_func()
             finished=True
 
         if (len(args)==1 or len(args)==2) and args[0]=='cmaps-plot':
@@ -2109,11 +2109,11 @@ class o2graph_plotter(plot_base):
             finished=True
                         
         if (cmd=='xkcd-colors') and len(args)==1:
-            xkcd_colors_list(str_line)
+            xkcd_colors_list()
             finished=True
 
         if (cmd=='markers') and len(args)==1:
-            marker_list(str_line)
+            marker_list()
             finished=True
             
         if (len(args)==1 or len(args)==2) and args[0]=='markers-plot':
