@@ -46,7 +46,9 @@ from o2sclpy.doc_data import yt_param_list
 from o2sclpy.utils import parse_arguments, string_to_dict
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.plot_base import plot_base
-from o2sclpy.plot_info import marker_list, markers_plot, colors_plot2
+from o2sclpy.plot_info import marker_list, markers_plot, colors_near
+from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
+from o2sclpy.plot_info import colors_plot
 
 class o2graph_plotter(plot_base):
     """
@@ -2074,259 +2076,44 @@ class o2graph_plotter(plot_base):
         finished=False
         
         if cmd=='cmaps' and len(args)==1:
-            print('Matplotlib colormaps:')
-            print(str_line)
-            for category, cmap_list in cmaps:
-                list2=''
-                for name in cmap_list:
-                    list2+=name+' '
-                str_list=textwrap.wrap(category+': '+list2,79)
-                for i in range (0,len(str_list)):
-                    print(str_list[i])
-                print(' ')
-            print('Remember that colormaps can all be',
-                  'reversed by using a "_r" suffix.')
-            print(' ')
-            print("To create a plot of the colormaps, use",
-                  "'o2graph -help cmaps-plot' or")
-            print("'o2graph -help cmaps-plot plot_file.png'")
+            cmap_list_func(str_line)
             finished=True
 
         if (len(args)==1 or len(args)==2) and args[0]=='cmaps-plot':
-
             if self.new_cmaps_defined==False:
                 self.new_cmaps()
-
-            print('Generating colormap summary figure.')
-                        
-            # An internal implementation of
-            # https://matplotlib.org/3.1.0/gallery/
-            # color/colormap_reference.html
-                        
-            self.left_margin=0.01
-            self.right_margin=0.01
-            self.top_margin=0.01
-            self.bottom_margin=0.01
-            gradient=numpy.linspace(0,1,256)
-            gradient=numpy.vstack((gradient,gradient))
-                        
-            nrows=0
-            for category, cmap_list in cmaps:
-                for name in cmap_list:
-                    nrows=nrows+1
-            for category, cmap_list in new_cmaps:
-                for name in cmap_list:
-                    nrows=nrows+1
-            ncols=3
-            while nrows%ncols!=0:
-                nrows=nrows+1
-            nrows=int((nrows)/ncols)
-
-            # Manually create figure and axes 
-            fig_x=7.0
-            fig_y=0.95*(0.35+0.15+(nrows+(nrows-1)*0.1)*0.22)
-            (self.fig,self.axes)=plot.subplots(nrows=nrows,
-                                               ncols=ncols,
-                                               figsize=(fig_x,
-                                                        fig_y))
-            self.fig.subplots_adjust(top=1.0-0.35/fig_y,
-                                     bottom=0.15/fig_y,
-                                     left=0.01,right=0.99,
-                                     wspace=0.01)
-            plot.rc('text',usetex=True)
-            plot.rc('font',family='serif')
-
-            for i in range(0,nrows):
-                for j in range(0,ncols):
-                    self.axes[i][j].set_axis_off()
-                        
-            row_ctr=0
-            col_ctr=0
-            for category, cmap_list in cmaps:
-                for name in cmap_list:
-                    name2=name.replace('_','\_')
-                    ax=self.axes[row_ctr][col_ctr]
-                    ax.imshow(gradient,aspect='auto',
-                                     cmap=plot.get_cmap(name))
-                    r=patches.Rectangle((0.32,0.1),0.36,0.8,0,
-                                        fc=(1,1,1,0.7),lw=0,
-                                        fill=True,
-                                        transform=ax.transAxes)
-                    ax.add_patch(r)
-                    ax.text(0.5,0.45,name2,
-                                        va='center',ha='center',
-                                        fontsize=8,color=(0,0,0),
-                                        transform=ax.transAxes)
-                    row_ctr=row_ctr+1
-                    if row_ctr>=nrows:
-                        row_ctr=0
-                        col_ctr=col_ctr+1
-            for category, cmap_list in new_cmaps:
-                for name in cmap_list:
-                    name2=name.replace('_','\_')
-                    ax=self.axes[row_ctr][col_ctr]
-                    ax.imshow(gradient,aspect='auto',
-                                     cmap=plot.get_cmap(name))
-                    r=patches.Rectangle((0.32,0.1),0.36,0.8,0,
-                                        fc=(1,1,1,0.7),lw=0,
-                                        fill=True,
-                                        transform=ax.transAxes)
-                    ax.add_patch(r)
-                    ax.text(0.5,0.45,name2,
-                            va='center',ha='center',
-                            fontsize=8,color=(0,0,0),
-                            transform=ax.transAxes)
-                    row_ctr=row_ctr+1
-                    if row_ctr>=nrows:
-                        row_ctr=0
-                        col_ctr=col_ctr+1
-
-            ax=self.axes[0][0]
-            ax.text(1.5,1.7,
-                    (r'$ \mathrm{O}_2\mathrm{sc'+
-                     'lpy~colormap~reference} $'),
-                    ha='center',va='center',fontsize=16,
-                    transform=ax.transAxes)
             if len(args)==2:
-                plot.savefig(args[1])
-                print('Created image file '+args[1]+'.')
-            print('Remember that colormaps can all be',
-                  'reversed by using a "_r" suffix.')
-            import matplotlib
-            if (matplotlib.get_backend()!='Agg' and 
-                matplotlib.get_backend()!='agg'):
-                plot.show()
+                cmaps_plot(args[1])
+            else:
+                cmaps_plot()
             finished=True
 
         if (len(args)==1 or len(args)==2) and args[0]=='colors-plot':
-            from matplotlib import colors as mc
-
-            colors=dict(**mc.CSS4_COLORS)
-            by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
-                            for name, color in colors.items())
-            sorted_names=[name for hsv, name in by_hsv]
-            n=len(sorted_names)
-            ncols=4
-            nrows=n//ncols
-            plot.rc('text',usetex=True)
-            plot.rc('font',family='serif')
-            self.fig,self.axes=plot.subplots(figsize=(8,6.4))
-            # Get height and width
-            X,Y=self.fig.get_dpi()*self.fig.get_size_inches()
-            h=Y/(nrows+1)
-            w=X/ncols
-
-            ax=self.axes
-            for i, name in enumerate(sorted_names):
-                row=i%nrows
-                col=i//nrows
-                y=Y-(row*h)-h
-                xi_line=w*(col+0.05)
-                xf_line=w*(col+0.25)
-                xi_text=w*(col+0.3)
-                ax.text(xi_text,y,name,fontsize=(h*0.6),
-                        ha='left',va='center')
-
-                ax.hlines(y+h*0.1,xi_line,xf_line,
-                          color=colors[name],linewidth=(h*0.8))
-
-                ax.set_xlim(0,X)
-                ax.set_ylim(0,Y)
-                ax.set_axis_off()
-                            
-                self.fig.subplots_adjust(left=0,right=1,
-                                         top=1,bottom=0,
-                                         hspace=0,wspace=0)
             if len(args)==2:
-                plot.savefig(args[1])
-                print('Created image file '+args[1]+'.')
-            import matplotlib
-            if (matplotlib.get_backend()!='Agg' and 
-                matplotlib.get_backend()!='agg'):
-                plot.show()
-            finished=True
-                        
-        if (len(args)==2 or len(args)==1) and args[0]=='colors-plot2':
-            if len(args)==2:
-                colors_plot2(args[1])
+                colors_plot(args[1])
             else:
-                colors_plot2()
+                colors_plot()
+            finished=True
+
+        if (len(args)==2 or len(args)==1) and args[0]=='colors-near':
+            if len(args)==3:
+                colors_near(col=args[1],fname=args[2])
+            elif len(args)==2:
+                colors_near(col=args[1])
+            else:
+                colors_near()
             finished=True
                         
         if (cmd=='colors') and len(args)==1:
-            from matplotlib import colors as mcolors
-            print('Matplotlib colors:')
-            print(str_line)
-            base_dict=dict(mcolors.BASE_COLORS)
-            css4_dict=dict(**mcolors.CSS4_COLORS)
-            print(len(base_dict),'base colors:')
-            outs=''
-            ctr=0
-            for col in base_dict:
-                outs=outs+(col+' '+str(base_dict[col])).ljust(20)
-                if ctr%4==3:
-                    outs=outs+'\n'
-                ctr=ctr+1
-            print(outs)
-            print(len(css4_dict),'CSS4 colors:')
-            outs=''
-            ctr=0
-            for col in css4_dict:
-                if ctr%3==0:
-                    outs=outs+(col+' '+
-                               str(css4_dict[col])).ljust(26)
-                elif ctr%3==1:
-                    outs=outs+(col+' '+
-                               str(css4_dict[col])).ljust(28)
-                else:
-                    outs=outs+(col+' '+
-                               str(css4_dict[col])).ljust(26)
-                    outs=outs+'\n'
-                ctr=ctr+1
-            print(outs)
-            print(' ')
-            outs=('O2graph also supports the (r,g,b) format '+
-                  'the HTML format, and the XKCD colors '+
-                  "(see '-help xkcd-colors' for a list). "+
-                  'For (r,g,b) colors, '+
-                  'the r, g, and b numbers should be from '+
-                  '0.0 to 1.0. The HTML format is #RRGGBB '+
-                  'where RR, GG, and BB are two-digit '+
-                  'hexadecimal values.')
-            str_list=textwrap.wrap(outs,79)
-            for i in range (0,len(str_list)):
-                print(str_list[i])
-            print(' ')
-            print("To create a plot of colors, use",
-                  "'o2graph -help colors-plot' or")
-            print("'o2graph -help colors-plot plot_file.png'")
+            color_list()
             finished=True
                         
         if (cmd=='xkcd-colors') and len(args)==1:
-            from matplotlib import colors as mcolors
-            xkcd_dict=dict(**mcolors.XKCD_COLORS)
-            print('XKCD colors:')
-            print(str_line)
-            # These are commented out for now because
-            # o2graph has a hard time with spaces in
-            # color names
-            print(len(xkcd_dict),'XKCD colors:')
-            outs=''
-            ctr=0
-            for col in xkcd_dict:
-                if ctr%2==0:
-                    outs=outs+(col+' '+
-                               str(xkcd_dict[col])).ljust(40)
-                else:
-                    outs=outs+(col+' '+
-                               str(xkcd_dict[col])).ljust(39)
-                    outs=outs+'\n'
-                ctr=ctr+1
-            print(outs)
+            xkcd_colors_list(str_line)
             finished=True
 
         if (cmd=='markers') and len(args)==1:
-            marker_list()
+            marker_list(str_line)
             finished=True
             
         if (len(args)==1 or len(args)==2) and args[0]=='markers-plot':
@@ -2378,7 +2165,7 @@ class o2graph_plotter(plot_base):
             print('\n'+str_line)
             print('Additional o2graph help topics:',
                   'cmaps, cmaps-plot, colors, colors-plot,')
-            print('\tmarkers, markers-plot, xkcd-colors')
+            print('\tcolors-near, markers, markers-plot, xkcd-colors')
         # End of function o2graph_plotter::help_func()
         return
         
