@@ -1,3 +1,9 @@
+help:
+	@echo help
+
+all: subplots1 subplots2 subplots3 table_plot table3d_den_plot \
+	table_plotv table_rplot table_scatter
+
 subplots1:
 	./subplots1.scr
 	convert +append subplots1_doc.png subplots1.png \
@@ -37,6 +43,12 @@ table_plotv:
 table_rplot:
 	./table_rplot.scr
 	convert +append table_rplot_doc.png table_rplot.png \
+		temp.png
+	open temp.png
+
+table_scatter:
+	./table_scatter.scr
+	convert +append table_scatter_doc.png table_scatter.png \
 		temp.png
 	open temp.png
 
