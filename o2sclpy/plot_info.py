@@ -125,7 +125,7 @@ def markers_plot(fname=''):
     dct=string_to_dict(fig_dict)
     (fig,axes)=default_plot(**dct)
     axes.set_xlim(0,1)
-    axes.set_ylim(0,0.84)
+    axes.set_ylim(0,0.86)
     axes.set_axis_off()
     row_ctr=0
     col_ctr=0
@@ -149,6 +149,9 @@ def markers_plot(fname=''):
         if row_ctr>=nrows:
             row_ctr=0
             col_ctr=col_ctr+1
+        axes.text(0.5,0.835,r'$ \mathrm{O}_2\mathrm{sc'+
+                  'lpy~markers~summary} $',
+                  fontsize=16,ha='center')
     if fname is not '':
         plot.savefig(fname)
         print("Saved image in file",(fname+"."))
@@ -196,10 +199,7 @@ def colors_near(col='',fname=''):
     if col=='grey' or col=='gray':
         for i in range(0,len(sorted_names)):
             if (sorted_names[i][0][1]<0.2):
-                selected.append((sorted_names[i][0][0],
-                                 sorted_names[i][0][1],
-                                 sorted_names[i][0][2],
-                                 sorted_names[i][1]))
+                selected.append((sorted_names[i][1]))
     elif (col=='red' or col=='yellow' or col=='green' or col=='cyan' or
             col=='blue' or col=='magenta' or col=='orange' or
             col=='pink' or col=='purple'):
@@ -224,13 +224,12 @@ def colors_near(col='',fname=''):
                         sorted_names[i][0][0]<high) or
                         (sorted_names[i][0][0]>low2 and
                          sorted_names[i][0][0]<high2)):
-                        selected.append((sorted_names[i][0][0],
-                                         sorted_names[i][0][1],
-                                         sorted_names[i][0][2],
-                                         sorted_names[i][1]))
+                        selected.append((sorted_names[i][1],))
             #print(low,high,low2,high2,len(selected))
             if len(selected)<80:
                 hrange=hrange+0.001
+        title=(r'$ \mathrm{O}_2\mathrm{sc'+
+               'lpy~color summary: '+col+'} $')
     elif col=='all':
         print('Hue          Saturation',
               '  Value        name')
@@ -268,7 +267,8 @@ def colors_near(col='',fname=''):
             selected2=sorted(selected,key=lambda x: x[1])
             print(selected2)
             print('Found list with range ',crange)
-            quit()
+        title=(r'$ \mathrm{O}_2\mathrm{sc'+
+               'lpy~colors near '+col+'} $')
     else:
         print("'-help colors-near <color>' shows a",
               'plot of colors near <color>')
@@ -281,6 +281,7 @@ def colors_near(col='',fname=''):
         selected=selected[0:80]
     
     if len(selected)>0:
+        print('selected',selected)
         n=len(selected)
         header=1
         ncols=4
@@ -291,31 +292,31 @@ def colors_near(col='',fname=''):
         fig,axes=plot.subplots(figsize=(9.5,6.4))
         # Get height and width
         X,Y=fig.get_dpi()*fig.get_size_inches()
-        h=Y/(nrows+header)
+        h=Y/(nrows+header+1)
         w=X/ncols
     
         for i in range(0,n):
             row=i%nrows
             col=i//nrows
-            y=Y-((row+1)*h)-h
+            y=Y-((row+header)*h)-h
             xi_line=w*(col+0.05)
             xf_line=w*(col+0.25)
             xi_text=w*(col+0.3)
-            axes.text(xi_text,y,selected[i][3],
+            
+            axes.text(xi_text,y,selected[i][0],
                       fontsize=(h*0.4),
                       ha='left',va='center')
-    
-            axes.hlines(y+h*0.1,xi_line,xf_line,
-                      color=selected[i][3],
-                      linewidth=(h*0.8))
 
-            axes.set_xlim(0,X)
-            axes.set_ylim(0,Y+header)
-            axes.set_axis_off()
+            axes.hlines(y+h*0.1,xi_line,xf_line,
+                      color=selected[i][0],
+                      linewidth=(h*0.8))
+            
+        axes.set_xlim(0,X)
+        axes.set_ylim(0,Y+header)
+        axes.set_axis_off()
                                 
-            fig.subplots_adjust(left=0,right=1,
-                                top=1,bottom=0,
-                                hspace=0,wspace=0)
+        fig.subplots_adjust(left=0,right=1,top=1,bottom=0,
+                            hspace=0,wspace=0)
         if fname!='':
             plot.savefig(fname)
             print('Created file '+fname+'.')
@@ -441,7 +442,7 @@ def cmaps_plot(fname=''):
     ax=axes[0][0]
     ax.text(1.5,1.7,
             (r'$ \mathrm{O}_2\mathrm{sc'+
-             'lpy~colormap~reference} $'),
+             'lpy~colormap~summary} $'),
             ha='center',va='center',fontsize=16,
             transform=ax.transAxes)
     if fname!='':
@@ -470,20 +471,21 @@ def colors_plot(fname=''):
                     for name, color in colors.items())
     sorted_names=[name for hsv, name in by_hsv]
     n=len(sorted_names)
+    header=1
     ncols=4
     nrows=n//ncols
     plot.rc('text',usetex=True)
     plot.rc('font',family='serif')
-    fig,axes=plot.subplots(figsize=(8,6.4))
+    fig,axes=plot.subplots(figsize=(8,6.6))
     # Get height and width
     X,Y=fig.get_dpi()*fig.get_size_inches()
-    h=Y/(nrows+1)
+    h=Y/(nrows+1+header)
     w=X/ncols
 
     for i, name in enumerate(sorted_names):
         row=i%nrows
         col=i//nrows
-        y=Y-(row*h)-h
+        y=Y-((row+header)*h)-h
         xi_line=w*(col+0.05)
         xf_line=w*(col+0.25)
         xi_text=w*(col+0.3)
@@ -494,12 +496,14 @@ def colors_plot(fname=''):
                   color=colors[name],linewidth=(h*0.8))
 
         axes.set_xlim(0,X)
-        axes.set_ylim(0,Y)
+        axes.set_ylim(0,Y+header)
         axes.set_axis_off()
                             
-        fig.subplots_adjust(left=0,right=1,
-                                 top=1,bottom=0,
-                                 hspace=0,wspace=0)
+    fig.subplots_adjust(left=0,right=1,top=1,bottom=0,
+                        hspace=0,wspace=0)
+    axes.text(X*0.5,(Y+header)*0.965,r'$ \mathrm{O}_2\mathrm{sc'+
+              'lpy~colors~summary} $',
+              fontsize=16,ha='center')
     if fname!='':
         plot.savefig(fname)
         print('Created image file '+fname+'.')
