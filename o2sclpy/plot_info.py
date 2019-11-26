@@ -192,7 +192,7 @@ def colors_near(col='',fname=''):
               'green': 120.0/360.0, 'cyan': 180.0/360.0, 
               'blue': 240.0/360.0, 'purple': 270.0/360.0,
               'magenta': 300.0/360.0, 'pink': 330.0/360.0}
-    
+
     if col=='grey' or col=='gray':
         for i in range(0,len(sorted_names)):
             if (sorted_names[i][0][1]<0.2):
@@ -240,6 +240,35 @@ def colors_near(col='',fname=''):
                    sorted_names[i][0][1],
                    sorted_names[i][0][2],
                    sorted_names[i][1]))
+    elif len(col)>=1 and col[0]=='(':
+        print('col start',col)
+        col=col[1:len(col)-1]
+        col=col[0:col.find(')')]
+        print('col end',col)
+    elif len(col)>=1 and col[0]=='#':
+        ir=float(int(col[1]+col[2],16))/255.0
+        ig=float(int(col[3]+col[4],16))/255.0
+        ib=float(int(col[5]+col[6],16))/255.0
+        crange=0.100
+        while len(selected)<80:
+            selected=[]
+            for key in colors:
+                hexc=colors[key]
+                jr=float(int(hexc[1]+hexc[2],16))/255.0
+                jg=float(int(hexc[3]+hexc[4],16))/255.0
+                jb=float(int(hexc[5]+hexc[6],16))/255.0
+                diff=abs(jr-ir)+abs(jg-ig)+abs(jb-ib)
+                if diff<crange:
+                    selected.append((key,diff))
+            if len(selected)<80:
+                crange=crange+0.002
+        if len(selected)>=80:
+            def sort_first(val):
+                return val[0]
+            selected2=sorted(selected,key=lambda x: x[1])
+            print(selected2)
+            print('Found list with range ',crange)
+            quit()
     else:
         print("'-help colors-near <color>' shows a",
               'plot of colors near <color>')
@@ -253,20 +282,22 @@ def colors_near(col='',fname=''):
     
     if len(selected)>0:
         n=len(selected)
+        header=1
         ncols=4
         nrows=n//ncols
+        print('ncols,nrows',ncols,nrows)
         plot.rc('text',usetex=True)
         plot.rc('font',family='serif')
         fig,axes=plot.subplots(figsize=(9.5,6.4))
         # Get height and width
         X,Y=fig.get_dpi()*fig.get_size_inches()
-        h=Y/(nrows+1)
+        h=Y/(nrows+header)
         w=X/ncols
     
         for i in range(0,n):
             row=i%nrows
             col=i//nrows
-            y=Y-(row*h)-h
+            y=Y-((row+1)*h)-h
             xi_line=w*(col+0.05)
             xf_line=w*(col+0.25)
             xi_text=w*(col+0.3)
@@ -279,12 +310,12 @@ def colors_near(col='',fname=''):
                       linewidth=(h*0.8))
 
             axes.set_xlim(0,X)
-            axes.set_ylim(0,Y)
+            axes.set_ylim(0,Y+header)
             axes.set_axis_off()
                                 
             fig.subplots_adjust(left=0,right=1,
-                                     top=1,bottom=0,
-                                     hspace=0,wspace=0)
+                                top=1,bottom=0,
+                                hspace=0,wspace=0)
         if fname!='':
             plot.savefig(fname)
             print('Created file '+fname+'.')
