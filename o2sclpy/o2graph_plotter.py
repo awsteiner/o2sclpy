@@ -2171,8 +2171,16 @@ class o2graph_plotter(plot_base):
         
     def yt_tf_func(self,args):
         """
-        Function documentation
+        Update yt transfer function
         """
+
+        if len(args)==0:
+            print('Function yt_tf_func() requires arguments.')
+            print('  For a new transfer function, args should be '+
+                  "('new','min','max').")
+            print('  To add a Gaussian, args should be '+
+                  "('gauss','loc','width','red','green','blue','alpha')")
+            return
 
         if args[0]=='new':
             import yt
@@ -2201,9 +2209,41 @@ class o2graph_plotter(plot_base):
 
     def yt_scatter(self,o2scl_hdf,amp,column_x,column_y,column_z):
         """
-        Function documentation
+        Create a 3D scatter plot with yt using data from an
+        o2scl table object
         """
 
+        icnt=0
+        if self.yt_scene!=0:
+            for key, value in self.yt_scene.sources.items():
+                print('yt-source-list',icnt,key,type(value))
+                icnt=icnt+1
+        if icnt==0:
+            import yt
+            from yt.visualization.volume_rendering.api \
+                import VolumeSource
+            
+            print('No volume object, adding yt volume.')
+            
+            self.yt_tf=yt.ColorTransferFunction((0,1),grey_opacity=False)
+            self.yt_tf.add_gaussian(0,0,[0,0,0,0])
+            
+            arr=numpy.zeros(shape=(2,2,2))
+            bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
+            ds=yt.load_uniform_grid(dict(density=arr),
+                                    arr.shape,bbox=bbox)
+            vol=VolumeSource(ds,field='density')
+            vol.log_field=False
+            
+            vol.set_transfer_function(self.yt_tf)
+            if self.yt_created_scene==False:
+                self.yt_create_scene()
+
+            self.yt_scene.add_source(vol,keyname='vol1')
+                            
+            if self.yt_created_camera==False:
+                self.yt_create_camera(ds)
+        
         int_ptr=ctypes.POINTER(ctypes.c_int)
         char_ptr=ctypes.POINTER(ctypes.c_char)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
@@ -2488,6 +2528,8 @@ class o2graph_plotter(plot_base):
                     for key, value in self.yt_scene.sources.items():
                         print('yt-source-list',icnt,key,type(value))
                         icnt=icnt+1
+                    if icnt==0:
+                        print('No yt sources.')
                     
                 elif cmd_name=='yt-axis':
 
