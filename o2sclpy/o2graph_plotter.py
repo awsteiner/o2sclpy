@@ -195,7 +195,7 @@ class o2graph_plotter(plot_base):
                      ihat=[1.0,0.0,0.0],jhat=[0.0,1.0,0.0],
                      khat=[0.0,0.0,1.0]):
         """
-        Function documentation
+        Plot an axis in a yt volume
         """
         
         print('o2graph_plotter:yt_plot_axis(): Adding axis.')
@@ -1769,7 +1769,8 @@ class o2graph_plotter(plot_base):
 
     def yt_add_vol(self,o2scl_hdf,amp):
         """
-        Function documentation
+        Add a volume source to a yt visualization from a
+        tensor_grid object.
         """
 
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -1893,7 +1894,10 @@ class o2graph_plotter(plot_base):
         
     def yt_render(self,fname,mov_fname=''):
         """
-        Function documentation
+        Complete the yt render and save the image to a file. If necessary,
+        compile the images into a movie and save into the specified
+        file name.
+
         """
 
         # AWS 10/14/19 the call to save() below does
@@ -2207,7 +2211,8 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::yt_tf_func()
         return
 
-    def yt_scatter(self,o2scl_hdf,amp,column_x,column_y,column_z):
+    def yt_scatter(self,o2scl_hdf,amp,column_x,column_y,column_z,
+                   size_column='',color_column='',**kwargs):
         """
         Create a 3D scatter plot with yt using data from an
         o2scl table object
@@ -2226,7 +2231,7 @@ class o2graph_plotter(plot_base):
             print('No volume object, adding yt volume.')
             
             self.yt_tf=yt.ColorTransferFunction((0,1),grey_opacity=False)
-            self.yt_tf.add_gaussian(0,0,[0,0,0,0])
+            self.yt_tf.add_gaussian(2,0,[0,0,0,0])
             
             arr=numpy.zeros(shape=(2,2,2))
             bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
@@ -2304,6 +2309,20 @@ class o2graph_plotter(plot_base):
                       column_z+'".')
                 failed=True
 
+            if size_column!='':
+                cols=ctypes.c_char_p(force_bytes(column_s))
+                ids=ctypes.c_int(0)
+                ptrs=double_ptr()
+                get_ret=get_fn(amp,cols,ctypes.byref(ids),
+                               ctypes.byref(ptrs))
+                
+            if color_column!='':
+                colc=ctypes.c_char_p(force_bytes(column_c))
+                idc=ctypes.c_int(0)
+                ptrc=double_ptr()
+                get_ret=get_fn(amp,colc,ctypes.byref(idc),
+                               ctypes.byref(ptrc))
+                
             if self.xset==False:
                 self.xlo=ptrx[0]
                 self.xhi=ptrx[0]
@@ -2334,15 +2353,24 @@ class o2graph_plotter(plot_base):
 
             pts=[]
             cols=[]
+            sizes=[]
             for i in range(0,idx.value):
                 pts.append([(ptrx[i]-self.xlo)/x_range,
                             (ptry[i]-self.ylo)/y_range,
                             (ptrz[i]-self.zlo)/z_range])
-                cols.append([1.0,1.0,1.0,1.0])
+                if color_column=='':
+                    cols.append([1.0,1.0,1.0,1.0])
+                else:
+                    cols.append(ptrc[i])
+                if size_column=='':
+                    sizes.append(3)
+                else:
+                    sizes.append(ptrs[i])
             pts2=numpy.array(pts)
             cols2=numpy.array(cols)
+            sizes2=numpy.array(sizes)
 
-            ps=PointSource(pts2,colors=cols2,radii=3)
+            ps=PointSource(pts2,colors=cols2,radii=sizes2,**kwargs)
 
             if self.yt_created_scene==False:
                 self.yt_create_scene()
@@ -2352,12 +2380,15 @@ class o2graph_plotter(plot_base):
                         
             if self.yt_created_camera==False:
                 self.yt_create_camera(ps)
-                
+
+        else:
+            print('Command yt-scatter does not work with type',
+                  curr_type+'.')
         return
         
     def commands(self,o2scl_hdf,amp,args):
         """
-        Function documentation
+        Output the currently available commands
         """
 
         self.gen_acol(o2scl_hdf,amp,'commands',args)
