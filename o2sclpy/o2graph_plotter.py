@@ -60,13 +60,7 @@ class o2graph_plotter(plot_base):
 
     Todo list:
      
-    .. todo:: Move code out of parse_string_list() to separate functions
     .. todo:: Simplify some of the larger functions like plot()
-    .. todo:: Simplify this class somehow to make the source file smaller,
-       possibly by separating out the yt part or moving the o2scl
-       integration somewhere else
-    .. todo:: Create a default volume in yt-scatter if one hasn't already
-       been specified
     .. todo:: Allow the user to modify sigma_clip
     .. todo:: Fix colors and sizes for yt-scatter
     .. todo:: Finish setting up -set yt_resolution so it parses the
@@ -2211,13 +2205,36 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::yt_tf_func()
         return
 
-    def yt_scatter(self,o2scl_hdf,amp,column_x,column_y,column_z,
-                   size_column='',color_column='',**kwargs):
+    def yt_scatter(self,o2scl_hdf,amp,args):
         """
         Create a 3D scatter plot with yt using data from an
         o2scl table object
         """
 
+        if len(args)<3:
+            print('Function yt_scatter() requires three ',
+                  'column arguments.')
+            return
+
+        column_x=args[0]
+        column_y=args[1]
+        column_z=args[2]
+        size_column=''
+        red_column=''
+        green_column=''
+        blue_column=''
+        alpha_column=''
+        if len(args)>=4:
+            size_column=args[3]
+        if len(args)>=5:
+            red_column=args[4]
+        if len(args)>=6:
+            green_column=args[5]
+        if len(args)>=7:
+            blue_column=args[6]
+        if len(args)>=8:
+            alpha_column=args[7]
+        
         icnt=0
         if self.yt_scene!=0:
             for key, value in self.yt_scene.sources.items():
@@ -2309,19 +2326,56 @@ class o2graph_plotter(plot_base):
                       column_z+'".')
                 failed=True
 
+            if (force_bytes(size_column)==b'None' and
+                force_bytes(size_column)==b'none'):
+                size_column=''
+            if (force_bytes(red_column)==b'None' and
+                force_bytes(red_column)==b'none'):
+                red_column=''
+            if (force_bytes(green_column)==b'None' and
+                force_bytes(green_column)==b'none'):
+                green_column=''
+            if (force_bytes(blue_column)==b'None' and
+                force_bytes(blue_column)==b'none'):
+                blue_column=''
+            if (force_bytes(alpha_column)==b'None' and
+                force_bytes(alpha_column)==b'none'):
+                alpha_column=''
+                
             if size_column!='':
-                cols=ctypes.c_char_p(force_bytes(column_s))
+                cols=ctypes.c_char_p(force_bytes(size_column))
                 ids=ctypes.c_int(0)
                 ptrs=double_ptr()
                 get_ret=get_fn(amp,cols,ctypes.byref(ids),
                                ctypes.byref(ptrs))
                 
-            if color_column!='':
-                colc=ctypes.c_char_p(force_bytes(column_c))
-                idc=ctypes.c_int(0)
-                ptrc=double_ptr()
-                get_ret=get_fn(amp,colc,ctypes.byref(idc),
-                               ctypes.byref(ptrc))
+            if red_column!='':
+                colr=ctypes.c_char_p(force_bytes(red_column))
+                idr=ctypes.c_int(0)
+                ptrr=double_ptr()
+                get_ret=get_fn(amp,colr,ctypes.byref(idr),
+                               ctypes.byref(ptrr))
+                
+            if green_column!='':
+                colg=ctypes.c_char_p(force_bytes(green_column))
+                idg=ctypes.c_int(0)
+                ptrg=double_ptr()
+                get_ret=get_fn(amp,colg,ctypes.byref(idg),
+                               ctypes.byref(ptrg))
+                
+            if blue_column!='':
+                colb=ctypes.c_char_p(force_bytes(blue_column))
+                idb=ctypes.c_int(0)
+                ptrb=double_ptr()
+                get_ret=get_fn(amp,colb,ctypes.byref(idb),
+                               ctypes.byref(ptrb))
+                
+            if alpha_column!='':
+                cola=ctypes.c_char_p(force_bytes(alpha_column))
+                ida=ctypes.c_int(0)
+                ptra=double_ptr()
+                get_ret=get_fn(amp,cola,ctypes.byref(ida),
+                               ctypes.byref(ptra))
                 
             if self.xset==False:
                 self.xlo=ptrx[0]
@@ -2358,25 +2412,34 @@ class o2graph_plotter(plot_base):
                 pts.append([(ptrx[i]-self.xlo)/x_range,
                             (ptry[i]-self.ylo)/y_range,
                             (ptrz[i]-self.zlo)/z_range])
-                if color_column=='':
+                if red_column=='' or blue_column=='' or green_column=='':
                     cols.append([1.0,1.0,1.0,1.0])
                 else:
-                    cols.append(ptrc[i])
+                    if alpha_column=='':
+                        cols.append([ptrr[i],ptrg[i],ptrb[i],1.0])
+                    else:
+                        cols.append([ptrr[i],ptrg[i],ptrb[i],ptra[i]])
                 if size_column=='':
                     sizes.append(3)
                 else:
-                    sizes.append(ptrs[i])
+                    sizes.append(int(ptrs[i]))
             pts2=numpy.array(pts)
             cols2=numpy.array(cols)
             sizes2=numpy.array(sizes)
+            print('cols2:',cols2[0],cols2[1],cols2[len(cols2)-1])
+            print('sizes2:',sizes2[0],sizes2[1],sizes2[len(sizes2)-1])
 
-            ps=PointSource(pts2,colors=cols2,radii=sizes2,**kwargs)
+            if len(args)>=9:
+                ps=PointSource(pts2,colors=cols2,radii=sizes2,
+                               **string_to_dict(args[8]))
+            else:
+                ps=PointSource(pts2,colors=cols2,radii=sizes2)
 
             if self.yt_created_scene==False:
                 self.yt_create_scene()
 
             print('o2graph:yt-scatter: Adding point source.')
-            self.yt_scene.add_source(ps,keyname='o2graph_point')
+            self.yt_scene.add_source(ps,keyname='o2graph_yt_scatter')
                         
             if self.yt_created_camera==False:
                 self.yt_create_camera(ps)
@@ -2549,9 +2612,7 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-scatter.')
                     else:
-                        self.yt_scatter(o2scl_hdf,amp,
-                                        strlist[ix+1],strlist[ix+2],
-                                        strlist[ix+3])
+                        self.yt_scatter(o2scl_hdf,amp,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-source-list':
 
