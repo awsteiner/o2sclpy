@@ -59,15 +59,11 @@ class o2graph_plotter(plot_base):
     end user. 
 
     Todo list:
-     
+
+    .. todo:: Allow user to change key names for all yt objects
     .. todo:: Simplify some of the larger functions like plot()
-    .. todo:: Allow the user to modify sigma_clip
-    .. todo:: Fix colors and sizes for yt-scatter
     .. todo:: Finish setting up -set yt_resolution so it parses the
        two numerical values
-    .. todo:: Move yt-axis to a command so that we can place the
-       axis at an arbitrary location in either coordinate system.
-       This would also allow removing all the yt_axis parameters.
     .. todo:: Ensure the 'clf' command clears the yt objects
     .. todo:: Create a list of yt objects so that we can manipulate them
        in the middle of an animation
@@ -76,7 +72,7 @@ class o2graph_plotter(plot_base):
        both coordinate systems
     .. todo:: Create yt-box command for BoxSource
     .. todo:: More yt-path options
-    .. todo:: Create yt-surface
+    .. todo:: Create yt-surface?
     .. todo:: Anti-aliasing the axis would be nice
     
     """
@@ -98,6 +94,25 @@ class o2graph_plotter(plot_base):
     If true, then the yt camera object has been created
     """
 
+    def yt_unique_keyname(self,prefix):
+        if self.yt_scene==0:
+            return(prefix)
+        current=prefix
+        unique=False
+        count=1
+        while unique==False:
+            unique=True
+            if count>1:
+                current=prefix+str(count)
+            for key, value in self.yt_scene.sources.items():
+                if key==current:
+                    unique=False
+            if unique==False:
+                count=count+1
+        if self.verbose>0 and count>1:
+            print('Key name',prefix,'changed to unique name',current)
+        return(current)
+    
     def yt_create_scene(self):
         """
         Create the yt scene object and set yt_created_scene to True
@@ -106,6 +121,7 @@ class o2graph_plotter(plot_base):
         print('o2graph_plotter:yt_create_scene(): Creating scene.')
         self.yt_scene=Scene()
         self.yt_created_scene=True
+        return
         
     def yt_create_camera(self,ds):
         """
@@ -122,6 +138,7 @@ class o2graph_plotter(plot_base):
         self.yt_camera.north_vector=[0.0,0.0,1.0]
         self.yt_camera.switch_orientation()
         self.yt_created_camera=True
+        return
     
     def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=20,
                           show=False):
@@ -183,7 +200,8 @@ class o2graph_plotter(plot_base):
     
         # Add the point source
         points_xalabels=PointSource(Y,colors=Y2)
-        self.yt_scene.add_source(points_xalabels,keyname=keyname)
+        kname=self.yt_unique_keyname(keyname)
+        self.yt_scene.add_source(points_xalabels,keyname=kname)
 
     def yt_plot_axis(self,origin=[0.0,0.0,0.0],color=[1.0,1.0,1.0,0.5],
                      ihat=[1.0,0.0,0.0],jhat=[0.0,1.0,0.0],
@@ -202,7 +220,8 @@ class o2graph_plotter(plot_base):
         vertex_origin=numpy.array([origin])
         color_origin=numpy.array([color])
         points=PointSource(vertex_origin,colors=color_origin,radii=3)
-        self.yt_scene.add_source(points,keyname='o2graph_origin')
+        kname=self.yt_unique_keyname('o2graph_origin')
+        self.yt_scene.add_source(points,keyname=kname)
     
         # Axis lines
         vertices_axis=numpy.array([[origin,ihat],
@@ -210,7 +229,8 @@ class o2graph_plotter(plot_base):
                                    [origin,khat]])
         colors_axis=numpy.array([color,color,color])
         axis=LineSource(vertices_axis,colors_axis)
-        self.yt_scene.add_source(axis,keyname='o2graph_axis_lines')
+        kname=self.yt_unique_keyname('o2graph_axis_lines')
+        self.yt_scene.add_source(axis,keyname=kname)
         
         # Arrow heads
         list2=[]
@@ -236,7 +256,8 @@ class o2graph_plotter(plot_base):
                 clist2.append(color)
                 clist2.append(color)
         points_aheads2=LineSource(numpy.array(list2),numpy.array(clist2))
-        self.yt_scene.add_source(points_aheads2,keyname='o2graph_axis_arrows')
+        kname=self.yt_unique_keyname('o2graph_axis_arrows')
+        self.yt_scene.add_source(points_aheads2,keyname=kname)
         
     def yt_check_backend(self):
         """
@@ -1880,7 +1901,8 @@ class o2graph_plotter(plot_base):
             if self.yt_created_scene==False:
                 self.yt_create_scene()
 
-            self.yt_scene.add_source(vol,keyname='vol1')
+            kname=self.yt_unique_keyname('o2graph_vol')
+            self.yt_scene.add_source(vol,keyname=kname)
                             
             if self.yt_created_camera==False:
                 self.yt_create_camera(ds)
@@ -2261,7 +2283,8 @@ class o2graph_plotter(plot_base):
             if self.yt_created_scene==False:
                 self.yt_create_scene()
 
-            self.yt_scene.add_source(vol,keyname='vol1')
+            kname=self.yt_unique_keyname('o2graph_vol')
+            self.yt_scene.add_source(vol,keyname=kname)
                             
             if self.yt_created_camera==False:
                 self.yt_create_camera(ds)
@@ -2426,8 +2449,8 @@ class o2graph_plotter(plot_base):
             pts2=numpy.array(pts)
             cols2=numpy.array(cols)
             sizes2=numpy.array(sizes)
-            print('cols2:',cols2[0],cols2[1],cols2[len(cols2)-1])
-            print('sizes2:',sizes2[0],sizes2[1],sizes2[len(sizes2)-1])
+            #print('cols2:',cols2[0],cols2[1],cols2[len(cols2)-1])
+            #print('sizes2:',sizes2[0],sizes2[1],sizes2[len(sizes2)-1])
 
             if len(args)>=9:
                 ps=PointSource(pts2,colors=cols2,radii=sizes2,
@@ -2439,7 +2462,8 @@ class o2graph_plotter(plot_base):
                 self.yt_create_scene()
 
             print('o2graph:yt-scatter: Adding point source.')
-            self.yt_scene.add_source(ps,keyname='o2graph_yt_scatter')
+            kname=self.yt_unique_keyname('o2graph_yt_scatter')
+            self.yt_scene.add_source(ps,keyname=kname)
                         
             if self.yt_created_camera==False:
                 self.yt_create_camera(ps)

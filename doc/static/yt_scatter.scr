@@ -2,6 +2,8 @@
 #
 o2graph -backend Agg -create table x "grid:0,5,0.01" \
 	-function "sin(4*x)" y -function "cos(4*x)" z \
-	-function "1+x" size -yt-scatter x y z size x x x \
+	-function "sin(3*x)" r -function "sin(2*x)" g \
+	-function "sin(x)" b -function "1+x" size \
+	-yt-scatter x y z size r g b \
 	-yt-axis -yt-source-list -xtitle "$ x $" -ytitle "$ y $" \
-	-ztitle "$ z $" -yt-render yt_scatter.png
+	-ztitle "$ z $" -set yt_sigma_clip 1.0 -yt-render yt_scatter.png
