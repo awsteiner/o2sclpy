@@ -1,0 +1,13 @@
+# This example demonstrates the use of scatter to plot points in a 3D
+# volume using yt. At the end, yt-source-list lists all of the yt
+# objects in the scene, including the default volume, the point source
+# for the scatter plot, the origin, the axis lines, the axis arrows,
+# and the three axis titles.
+# 
+o2graph -backend Agg -read peano3.o2 \
+	-set yt_position [1.5,1.1,0.7] \
+	-yt-vertex-list c4 c5 c6 \
+	-yt-axis -xtitle "$ x $" -ytitle "$ y $" \
+	-ztitle "$ z $" "(-0.15)" "(-0.05)" 0.5 -yt-source-list \
+	-set yt_sigma_clip 4.0 -set yt_path "yaw 100 0.01" \
+	-yt-render "/tmp/yp_*.png" yp.mp4

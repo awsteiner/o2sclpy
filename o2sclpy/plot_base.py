@@ -214,6 +214,7 @@ class plot_base:
                 count=count+1
         if self.verbose>0 and count>1:
             print('Key name',prefix,'changed to unique name',current)
+        # End of function plot_base::yt_unique_keyname()
         return(current)
     
     def new_cmaps(self):
@@ -267,6 +268,8 @@ class plot_base:
         blues2=LinearSegmentedColormap('blues2',cdict)
         plot.register_cmap(cmap=blues2)
         new_cmaps_defined=True
+        # End of function plot_base::new_cmaps()
+        return
         
     def set(self,name,value):
         """
@@ -379,6 +382,7 @@ class plot_base:
         if self.verbose>0:
             print('Set',name,'to',value)
             
+        # End of function plot_base::set()
         return
 
     def yt_def_vol(self):
@@ -412,7 +416,7 @@ class plot_base:
         if self.yt_created_camera==False:
             self.yt_create_camera(ds)
             
-        # End of function o2graph_plotter::yt_def_vol()
+        # End of function plot_base::yt_def_vol()
         return
             
     def get(self,name):
@@ -467,6 +471,7 @@ class plot_base:
             print('The value of yt_position is',self.yt_position,'.')
         if name=='yt_path':
             print('The value of yt_path is',self.yt_path,'.')
+        # End of function plot_base::get()
         return
 
     def reset_xlimits(self):
@@ -474,6 +479,7 @@ class plot_base:
         Reset x axis limits
         """
         self.xset=False
+        # End of function plot_base::reset_xlimits()
         return
 
     def xlimits(self,xlo,xhi):
@@ -485,6 +491,7 @@ class plot_base:
         self.xset=True
         if self.canvas_flag==True:
             self.axes.set_xlim(self.xlo,self.xhi)
+        # End of function plot_base::xlimits()
         return
 
     def reset_ylimits(self):
@@ -492,6 +499,7 @@ class plot_base:
         Reset y axis limits
         """
         self.yset=False
+        # End of function plot_base::reset_ylimits()
         return
 
     def ylimits(self,ylo,yhi):
@@ -503,6 +511,7 @@ class plot_base:
         self.yset=True
         if self.canvas_flag==True:
             self.axes.set_ylim(self.ylo,self.yhi)
+        # End of function plot_base::ylimits()
         return
 
     def reset_zlimits(self):
@@ -510,6 +519,7 @@ class plot_base:
         Reset z axis limits
         """
         self.zset=False
+        # End of function plot_base::reset_zlimits()
         return
 
     def zlimits(self,zlo,zhi):
@@ -521,6 +531,7 @@ class plot_base:
         self.zset=True
         #if self.canvas_flag==True:
         #plot.zlim([zlo,zhi])
+        # End of function plot_base::zlimits()
         return
 
     def line(self,x1,y1,x2,y2,**kwargs):
@@ -533,6 +544,7 @@ class plot_base:
             self.canvas()
         self.axes.plot([float(eval(x1)),float(eval(x2))],
                        [float(eval(y1)),float(eval(y2))],**kwargs)
+        # End of function plot_base::line()
         return
 
     def arrow(self,x1,y1,x2,y2,arrowprops,**kwargs):
@@ -548,6 +560,7 @@ class plot_base:
                            xytext=(float(eval(x1)),float(eval(y1))),
                            textcoords='data',
                            arrowprops=string_to_dict(arrowprops))
+        # End of function plot_base::arrow()
         return
 
     def point(self,xval,yval,**kwargs):
@@ -563,6 +576,7 @@ class plot_base:
             self.axes.set_xlim(self.xlo,self.xhi)
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
+        # End of function plot_base::point()
         return
 
     def rect(self,x1,y1,x2,y2,angle,**kwargs):
@@ -589,6 +603,7 @@ class plot_base:
             self.canvas()
         r=patches.Rectangle((left,lower),w,h,angle,**kwargs)
         self.axes.add_patch(r)
+        # End of function plot_base::rect()
         return
 
     def show(self):
@@ -596,6 +611,7 @@ class plot_base:
         Call the ``matplotlib`` show function.
         """
         plot.show()
+        # End of function plot_base::show()
         return
 
     def save(self,filename):
@@ -607,6 +623,7 @@ class plot_base:
         if self.verbose>0:
             print('Saving as',filename,'.')
         plot.savefig(filename)
+        # End of function plot_base::save()
         return
 
     def ttext(self,tx,ty,textstr,**kwargs):
@@ -659,6 +676,7 @@ class plot_base:
 
         self.axes.text(tx,ty,textstr,**kwargs)
 
+        # End of function plot_base::ttext()
         return
 
     def text(self,tx,ty,textstr,**kwargs):
@@ -701,6 +719,7 @@ class plot_base:
 
         self.axes.text(tx,ty,textstr,**kwargs)
         
+        # End of function plot_base::text()
         return
 
     def textbox(self,tx,ty,str,boxprops,**kwargs):
@@ -728,6 +747,7 @@ class plot_base:
                        fontsize=self.font,
                        transform=self.axes.transAxes,
                        bbox=string_to_dict(boxprops),**kwargs)
+        # End of function plot_base::textbox()
         return
 
     def subplots(self,nr,nc=1,**kwargs):
@@ -762,6 +782,7 @@ class plot_base:
                                           which='minor')
             self.axis_list[i].tick_params(labelsize=self.font*0.8)
         self.canvas_flag=True
+        # End of function plot_base::subplots()
         return
 
     def xtitle(self,xtitle):
@@ -773,6 +794,8 @@ class plot_base:
             if self.canvas_flag==False:
                 self.canvas()
             self.axes.set_xlabel(xtitle,fontsize=self.font)
+        # End of function plot_base::xtitle()
+        return
             
     def ytitle(self,ytitle):
         if self.yt_scene!=0:
@@ -783,6 +806,8 @@ class plot_base:
             if self.canvas_flag==False:
                 self.canvas()
             self.axes.set_ylabel(ytitle,fontsize=self.font)
+        # End of function plot_base::ytitle()
+        return
         
     def ztitle(self,args):
         if self.yt_scene!=0:
@@ -800,7 +825,9 @@ class plot_base:
                                   args[0],keyname=kname)
         else:
             print('No yt scene has been created for ztitle.')
-        
+        # End of function plot_base::ztitle()
+        return
+    
     def selax(self,nr,nc=0):
         nr_temp=len(self.axis_list)
         try:
@@ -811,6 +838,7 @@ class plot_base:
             self.axes=self.axis_list[nr]
         else:
             self.axes=self.axis_list[nr][nc]
+        # End of function plot_base::selax()
         return
 
     def addcbar(self,left,bottom,width,height,**kwargs):
@@ -819,6 +847,7 @@ class plot_base:
         self.axes=axis_temp
         cbar=self.fig.colorbar(self.last_image,cax=self.axes,**kwargs)
         cbar.ax.tick_params(labelsize=self.font*0.8)
+        # End of function plot_base::addcbar()
         return
 
     def canvas(self):
@@ -839,6 +868,7 @@ class plot_base:
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
         self.canvas_flag=True
+        # End of function plot_base::canvas()
         return
 
     def move_labels(self):
@@ -855,4 +885,5 @@ class plot_base:
             t2=t[0]-0.01,t[1]
             label.set_position(t2)
             label.set_fontsize(16)
+        # End of function plot_base::move_labels()
         return

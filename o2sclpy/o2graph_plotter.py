@@ -2543,12 +2543,12 @@ class o2graph_plotter(plot_base):
             cols=[]
             sizes=[]
             for i in range(0,idx.value-1):
-                pts.append([[[(ptrx[i]-self.xlo)/x_range,
-                              (ptry[i]-self.ylo)/y_range,
-                              (ptrz[i]-self.zlo)/z_range],
-                             [(ptrx[i+1]-self.xlo)/x_range,
-                              (ptry[i+1]-self.ylo)/y_range,
-                              (ptrz[i+1]-self.zlo)/z_range]]])
+                pts.append([[(ptrx[i]-self.xlo)/x_range,
+                             (ptry[i]-self.ylo)/y_range,
+                             (ptrz[i]-self.zlo)/z_range],
+                            [(ptrx[i+1]-self.xlo)/x_range,
+                             (ptry[i+1]-self.ylo)/y_range,
+                             (ptrz[i+1]-self.zlo)/z_range]])
                 cols.append([1.0,1.0,1.0,1.0])
             pts2=numpy.array(pts)
             cols2=numpy.array(cols)
@@ -2580,7 +2580,7 @@ class o2graph_plotter(plot_base):
             return
 
         from yt.visualization.volume_rendering.api \
-            import PointSource, LineSource
+            import LineSource
         
         x1=float(eval(args[0]))
         y1=float(eval(args[1]))
@@ -2589,19 +2589,113 @@ class o2graph_plotter(plot_base):
         y2=float(eval(args[4]))
         z2=float(eval(args[5]))
         
+        if self.xset==False:
+            if x1<x2:
+                self.xlo=x1
+                self.xhi=x2
+            else:
+                self.xlo=x2
+                self.xhi=x1
+            self.xset=True
+        if self.yset==False:
+            if y1<y2:
+                self.ylo=y1
+                self.yhi=y2
+            else:
+                self.ylo=y2
+                self.yhi=y1
+            self.yset=True
+        if self.zset==False:
+            if z1<z2:
+                self.zlo=z1
+                self.zhi=z2
+            else:
+                self.zlo=z2
+                self.zhi=z1
+            self.zset=True
+        
         icnt=0
         if self.yt_scene!=0:
             for key, value in self.yt_scene.sources.items():
-                print('yt-source-list',icnt,key,type(value))
                 icnt=icnt+1
         if icnt==0:
             self.yt_def_vol()
 
-        vertices=numpy.array([[[x1,y1,z1],[x2,y2,z2]]])
+        vertices=numpy.array([[[(x1-self.xlo)/(self.xhi-self.xlo),
+                                (y1-self.ylo)/(self.yhi-self.ylo),
+                                (z1-self.zlo)/(self.zhi-self.zlo)],
+                               [(x2-self.xlo)/(self.xhi-self.xlo),
+                                (y2-self.ylo)/(self.yhi-self.ylo),
+                                (z2-self.zlo)/(self.zhi-self.zlo)]]])
         colors=numpy.array([[1.0,1.0,1.0,0.5]])
         ls=LineSource(vertices,colors)
         print('o2graph:yt-line: Adding line source.')
         kname=self.yt_unique_keyname('o2graph_line')
+        self.yt_scene.add_source(ls,keyname=kname)
+
+        return
+        
+    def yt_box(self,o2scl_hdf,amp,args):
+        """
+        """
+
+        if len(args)<6:
+            print('Function yt_box() requires six ',
+                  'arguments.')
+            return
+
+        from yt.visualization.volume_rendering.api \
+            import BoxSource
+        
+        x1=float(eval(args[0]))
+        y1=float(eval(args[1]))
+        z1=float(eval(args[2]))
+        x2=float(eval(args[3]))
+        y2=float(eval(args[4]))
+        z2=float(eval(args[5]))
+
+        if self.xset==False:
+            if x1<x2:
+                self.xlo=x1
+                self.xhi=x2
+            else:
+                self.xlo=x2
+                self.xhi=x1
+            self.xset=True
+        if self.yset==False:
+            if y1<y2:
+                self.ylo=y1
+                self.yhi=y2
+            else:
+                self.ylo=y2
+                self.yhi=y1
+            self.yset=True
+        if self.zset==False:
+            if z1<z2:
+                self.zlo=z1
+                self.zhi=z2
+            else:
+                self.zlo=z2
+                self.zhi=z1
+            self.zset=True
+        
+        icnt=0
+        if self.yt_scene!=0:
+            for key, value in self.yt_scene.sources.items():
+                icnt=icnt+1
+        if icnt==0:
+            self.yt_def_vol()
+
+        colors=numpy.array([[1.0,1.0,1.0,0.5]])
+        ls=BoxSource([(x1-self.xlo)/(self.xhi-self.xlo),
+                      (y1-self.ylo)/(self.yhi-self.ylo),
+                      (z1-self.zlo)/(self.zhi-self.zlo)],
+                     [(x2-self.xlo)/(self.xhi-self.xlo),
+                      (y2-self.ylo)/(self.yhi-self.ylo),
+                      (z2-self.zlo)/(self.zhi-self.zlo)],
+                     colors)
+        print('o2graph:yt-box: Adding box source.')
+        kname=self.yt_unique_keyname('o2graph_box')
         self.yt_scene.add_source(ls,keyname=kname)
 
         return
@@ -2777,6 +2871,14 @@ class o2graph_plotter(plot_base):
                         print('Not enough parameters for yt-line.')
                     else:
                         self.yt_line(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                                                    
+                elif cmd_name=='yt-vertex-list':
+
+                    if ix_next-ix<4:
+                        print('Not enough parameters for yt-vertex-list.')
+                    else:
+                        self.yt_vertex_list(o2scl_hdf,amp,
+                                            strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-source-list':
 

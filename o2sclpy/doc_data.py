@@ -185,6 +185,8 @@ base_list=[
     ["yt-axis","Add an axis to the yt volume.",
      "<x0> <y0> <z0> [r g b a] ['flat'] [x1 y1 z1] [x2 y2 z2] [x3 y3 z3]",
      ""],
+    ["yt-box","Draw a box in yt.",
+     "<x1> <y1> <z1> <x2> <y2> <z2>","Long desc."],
     ["yt-line","Draw a line in yt.",
      "<x1> <y1> <z1> <x2> <y2> <z2>","Long desc."],
     ["yt-vertex-list","Draw a line from a series of vertices in a table.",
@@ -267,6 +269,8 @@ extra_list=[
       "has not yet been added, then a default volume is added. "+
       "If the x, y-, or z-axis limits have not yet been set, then "+
       "they are set by the limits of the data.")],
+    ["table","yt-vertex-list","",
+     "<x column> <y column> <z column>",""],
     ["table","plot1","Plot the specified column.","<y> [kwargs]",
      "Plot column <y> versus row number. Some "+
      "useful kwargs are color (c), "+
