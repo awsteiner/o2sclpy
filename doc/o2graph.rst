@@ -109,6 +109,14 @@ Subplot example 3
 .. image:: static/subplots3_doc.png
    :width: 70%
 
+yt scatter example
+------------------
+
+.. include:: static/yt_scatter.scr
+   :literal:
+.. image:: static/yt_scatter_doc.png
+   :width: 70%
+
 Internal structure
 ------------------
 

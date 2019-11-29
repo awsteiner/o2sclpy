@@ -63,3 +63,9 @@ table3d_den_plot:
 		temp.png
 	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
 
+yt_scatter:
+	./yt_scatter.scr
+	convert +append yt_scatter_doc.png yt_scatter.png \
+		temp.png
+	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+

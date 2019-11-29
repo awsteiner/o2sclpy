@@ -19,6 +19,7 @@
 #  
 #  -------------------------------------------------------------------
 #
+import numpy
 
 import matplotlib.pyplot as plot
 
@@ -196,6 +197,25 @@ class plot_base:
     True if new colormaps were defined with 'new-cmaps'
     """
     
+    def yt_unique_keyname(self,prefix):
+        if self.yt_scene==0:
+            return(prefix)
+        current=prefix
+        unique=False
+        count=1
+        while unique==False:
+            unique=True
+            if count>1:
+                current=prefix+str(count)
+            for key, value in self.yt_scene.sources.items():
+                if key==current:
+                    unique=False
+            if unique==False:
+                count=count+1
+        if self.verbose>0 and count>1:
+            print('Key name',prefix,'changed to unique name',current)
+        return(current)
+    
     def new_cmaps(self):
         """
         Add a few new colormaps
@@ -361,6 +381,40 @@ class plot_base:
             
         return
 
+    def yt_def_vol(self):
+        """
+        Create a default yt volume source for rendering other objects
+        """
+        import yt
+        from yt.visualization.volume_rendering.api \
+            import VolumeSource
+
+        if self.verbose>0:
+            print('No volume object, adding yt volume.')
+            
+        self.yt_tf=yt.ColorTransferFunction((0,1),grey_opacity=False)
+        self.yt_tf.add_gaussian(2,0,[0,0,0,0])
+            
+        arr=numpy.zeros(shape=(2,2,2))
+        bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
+        ds=yt.load_uniform_grid(dict(density=arr),
+                                arr.shape,bbox=bbox)
+        vol=VolumeSource(ds,field='density')
+        vol.log_field=False
+            
+        vol.set_transfer_function(self.yt_tf)
+        if self.yt_created_scene==False:
+            self.yt_create_scene()
+
+        kname=self.yt_unique_keyname('o2graph_vol')
+        self.yt_scene.add_source(vol,keyname=kname)
+                            
+        if self.yt_created_camera==False:
+            self.yt_create_camera(ds)
+            
+        # End of function o2graph_plotter::yt_def_vol()
+        return
+            
     def get(self,name):
         """
         Output the value of parameter named ``name``
@@ -712,8 +766,9 @@ class plot_base:
 
     def xtitle(self,xtitle):
         if self.yt_scene!=0:
+            kname=self.yt_unique_keyname('o2graph_x_title')
             self.yt_text_to_scene([0.5,-0.05,-0.05],
-                                  xtitle,keyname='o2graph_x_title')
+                                  xtitle,keyname=kname)
         elif xtitle!='' and xtitle!='none':
             if self.canvas_flag==False:
                 self.canvas()
@@ -721,17 +776,28 @@ class plot_base:
             
     def ytitle(self,ytitle):
         if self.yt_scene!=0:
+            kname=self.yt_unique_keyname('o2graph_y_title')
             self.yt_text_to_scene([-0.05,0.5,-0.05],
-                                  ytitle,keyname='o2graph_y_title')
+                                  ytitle,keyname=kname)
         elif ytitle!='' and ytitle!='none':
             if self.canvas_flag==False:
                 self.canvas()
             self.axes.set_ylabel(ytitle,fontsize=self.font)
         
-    def ztitle(self,ztitle):
+    def ztitle(self,args):
         if self.yt_scene!=0:
-            self.yt_text_to_scene([-0.05,-0.05,0.5],
-                                  ztitle,keyname='o2graph_z_title')
+            xval=-0.05
+            yval=-0.05
+            zval=0.5
+            if len(args)>2:
+                xval=float(eval(args[1]))
+            if len(args)>3:
+                yval=float(eval(args[2]))
+            if len(args)>4:
+                zval=float(eval(args[3]))
+            kname=self.yt_unique_keyname('o2graph_z_title')
+            self.yt_text_to_scene([xval,yval,zval],
+                                  args[0],keyname=kname)
         else:
             print('No yt scene has been created for ztitle.')
         

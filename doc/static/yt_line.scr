@@ -1,0 +1,8 @@
+# 
+o2graph -backend Agg \
+	-set yt_position [1.5,1.1,0.7] \
+	-yt-line 0.1 0.1 0.1 0.9 0.9 0.9 \
+	-yt-axis -xtitle "$ x $" -ytitle "$ y $" \
+	-ztitle "$ z $" "(-0.15)" "(-0.05)" 0.5 -yt-source-list \
+	-set yt_sigma_clip 1.0 -yt-render yt_line.png
+

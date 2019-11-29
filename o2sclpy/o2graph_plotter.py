@@ -94,25 +94,6 @@ class o2graph_plotter(plot_base):
     If true, then the yt camera object has been created
     """
 
-    def yt_unique_keyname(self,prefix):
-        if self.yt_scene==0:
-            return(prefix)
-        current=prefix
-        unique=False
-        count=1
-        while unique==False:
-            unique=True
-            if count>1:
-                current=prefix+str(count)
-            for key, value in self.yt_scene.sources.items():
-                if key==current:
-                    unique=False
-            if unique==False:
-                count=count+1
-        if self.verbose>0 and count>1:
-            print('Key name',prefix,'changed to unique name',current)
-        return(current)
-    
     def yt_create_scene(self):
         """
         Create the yt scene object and set yt_created_scene to True
@@ -2263,31 +2244,7 @@ class o2graph_plotter(plot_base):
                 print('yt-source-list',icnt,key,type(value))
                 icnt=icnt+1
         if icnt==0:
-            import yt
-            from yt.visualization.volume_rendering.api \
-                import VolumeSource
-            
-            print('No volume object, adding yt volume.')
-            
-            self.yt_tf=yt.ColorTransferFunction((0,1),grey_opacity=False)
-            self.yt_tf.add_gaussian(2,0,[0,0,0,0])
-            
-            arr=numpy.zeros(shape=(2,2,2))
-            bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
-            ds=yt.load_uniform_grid(dict(density=arr),
-                                    arr.shape,bbox=bbox)
-            vol=VolumeSource(ds,field='density')
-            vol.log_field=False
-            
-            vol.set_transfer_function(self.yt_tf)
-            if self.yt_created_scene==False:
-                self.yt_create_scene()
-
-            kname=self.yt_unique_keyname('o2graph_vol')
-            self.yt_scene.add_source(vol,keyname=kname)
-                            
-            if self.yt_created_camera==False:
-                self.yt_create_camera(ds)
+            self.yt_def_vol()
         
         int_ptr=ctypes.POINTER(ctypes.c_int)
         char_ptr=ctypes.POINTER(ctypes.c_char)
@@ -2458,19 +2415,195 @@ class o2graph_plotter(plot_base):
             else:
                 ps=PointSource(pts2,colors=cols2,radii=sizes2)
 
-            if self.yt_created_scene==False:
-                self.yt_create_scene()
+            #if self.yt_created_scene==False:
+            #self.yt_create_scene()
 
             print('o2graph:yt-scatter: Adding point source.')
-            kname=self.yt_unique_keyname('o2graph_yt_scatter')
+            kname=self.yt_unique_keyname('o2graph_scatter')
             self.yt_scene.add_source(ps,keyname=kname)
                         
-            if self.yt_created_camera==False:
-                self.yt_create_camera(ps)
+            #if self.yt_created_camera==False:
+            #self.yt_create_camera(ps)
 
         else:
             print('Command yt-scatter does not work with type',
                   curr_type+'.')
+        return
+        
+    def yt_vertex_list(self,o2scl_hdf,amp,args):
+        """
+        """
+
+        if len(args)<3:
+            print('Function yt_vertex_list() requires three ',
+                  'column arguments.')
+            return
+
+        column_x=args[0]
+        column_y=args[1]
+        column_z=args[2]
+        
+        icnt=0
+        if self.yt_scene!=0:
+            for key, value in self.yt_scene.sources.items():
+                print('yt-source-list',icnt,key,type(value))
+                icnt=icnt+1
+        if icnt==0:
+            self.yt_def_vol()
+        
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+                    
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+                    
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                    
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+
+        if curr_type==b'table':
+            self.yt_check_backend()
+            import yt
+            from yt.visualization.volume_rendering.api \
+                import LineSource
+                        
+            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+                        
+            colx=ctypes.c_char_p(force_bytes(column_x))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_ret=get_fn(amp,colx,ctypes.byref(idx),
+                           ctypes.byref(ptrx))
+            if get_ret!=0:
+                print('Failed to get column named "'+
+                      column_x+'".')
+                failed=True
+                            
+            coly=ctypes.c_char_p(force_bytes(column_y))
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_ret=get_fn(amp,coly,ctypes.byref(idy),
+                           ctypes.byref(ptry))
+            if get_ret!=0:
+                print('Failed to get column named "'+
+                      column_y+'".')
+                failed=True
+
+            colz=ctypes.c_char_p(force_bytes(column_z))
+            idz=ctypes.c_int(0)
+            ptrz=double_ptr()
+            get_ret=get_fn(amp,colz,ctypes.byref(idz),
+                           ctypes.byref(ptrz))
+            if get_ret!=0:
+                print('Failed to get column named "'+
+                      column_z+'".')
+                failed=True
+
+            if self.xset==False:
+                self.xlo=ptrx[0]
+                self.xhi=ptrx[0]
+                for i in range(0,idx.value):
+                    if ptrx[i]<self.xlo:
+                        self.xlo=ptrx[i]
+                    if ptrx[i]>self.xhi:
+                        self.xhi=ptrx[i]
+            if self.yset==False:
+                self.ylo=ptry[0]
+                self.yhi=ptry[0]
+                for i in range(0,idy.value):
+                    if ptry[i]<self.ylo:
+                        self.ylo=ptry[i]
+                    if ptry[i]>self.yhi:
+                        self.yhi=ptry[i]
+            if self.zset==False:
+                self.zlo=ptrz[0]
+                self.zhi=ptrz[0]
+                for i in range(0,idz.value):
+                    if ptrz[i]<self.zlo:
+                        self.zlo=ptrz[i]
+                    if ptrz[i]>self.zhi:
+                        self.zhi=ptrz[i]
+            x_range=self.xhi-self.xlo
+            y_range=self.yhi-self.ylo
+            z_range=self.zhi-self.zlo
+
+            pts=[]
+            cols=[]
+            sizes=[]
+            for i in range(0,idx.value-1):
+                pts.append([[[(ptrx[i]-self.xlo)/x_range,
+                              (ptry[i]-self.ylo)/y_range,
+                              (ptrz[i]-self.zlo)/z_range],
+                             [(ptrx[i+1]-self.xlo)/x_range,
+                              (ptry[i+1]-self.ylo)/y_range,
+                              (ptrz[i+1]-self.zlo)/z_range]]])
+                cols.append([1.0,1.0,1.0,1.0])
+            pts2=numpy.array(pts)
+            cols2=numpy.array(cols)
+
+            ls=LineSource(pts2,cols2)
+
+            #if self.yt_created_scene==False:
+            #self.yt_create_scene()
+
+            print('o2graph:yt-vertex-list: Adding point source.')
+            kname=self.yt_unique_keyname('o2graph_vertex_list')
+            self.yt_scene.add_source(ls,keyname=kname)
+                        
+            #if self.yt_created_camera==False:
+            #self.yt_create_camera(ps)
+
+        else:
+            print('Command yt-vertex-list does not work with type',
+                  curr_type+'.')
+        return
+        
+    def yt_line(self,o2scl_hdf,amp,args):
+        """
+        """
+
+        if len(args)<6:
+            print('Function yt_line() requires six ',
+                  'arguments.')
+            return
+
+        from yt.visualization.volume_rendering.api \
+            import PointSource, LineSource
+        
+        x1=float(eval(args[0]))
+        y1=float(eval(args[1]))
+        z1=float(eval(args[2]))
+        x2=float(eval(args[3]))
+        y2=float(eval(args[4]))
+        z2=float(eval(args[5]))
+        
+        icnt=0
+        if self.yt_scene!=0:
+            for key, value in self.yt_scene.sources.items():
+                print('yt-source-list',icnt,key,type(value))
+                icnt=icnt+1
+        if icnt==0:
+            self.yt_def_vol()
+
+        vertices=numpy.array([[[x1,y1,z1],[x2,y2,z2]]])
+        colors=numpy.array([[1.0,1.0,1.0,0.5]])
+        ls=LineSource(vertices,colors)
+        print('o2graph:yt-line: Adding line source.')
+        kname=self.yt_unique_keyname('o2graph_line')
+        self.yt_scene.add_source(ls,keyname=kname)
+
         return
         
     def commands(self,o2scl_hdf,amp,args):
@@ -2637,6 +2770,13 @@ class o2graph_plotter(plot_base):
                         print('Not enough parameters for yt-scatter.')
                     else:
                         self.yt_scatter(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                                                    
+                elif cmd_name=='yt-line':
+
+                    if ix_next-ix<6:
+                        print('Not enough parameters for yt-line.')
+                    else:
+                        self.yt_line(o2scl_hdf,amp,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-source-list':
 
@@ -2884,7 +3024,7 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for ztitle option.')
                     else:
-                        self.ztitle(strlist[ix+1])
+                        self.ztitle(strlist[ix+1:ix_next])
                         
                 elif cmd_name=='line':
                     
