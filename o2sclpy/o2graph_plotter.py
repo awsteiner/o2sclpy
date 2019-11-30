@@ -1821,14 +1821,6 @@ class o2graph_plotter(plot_base):
             ny=ny.value
             nz=nz.value
             total_size=nx*ny*nz
-            #maxval=data[0]
-            #minval=data[0]
-            #for ij in range(0,total_size):
-            #    if data[ij]>maxval:
-            #        maxval=data[ij]
-            #    if data[ij]<minval:
-            #        minval=data[ij]
-            #drange=maxval-minval
 
             if self.xset==False:
                 self.xlo=gridx[0]
@@ -1852,22 +1844,9 @@ class o2graph_plotter(plot_base):
             vol.log_field=False
 
             # Setup the transfer function
-            if True:
+            if self.yt_tf!=0:
                 vol.set_transfer_function(self.yt_tf)
                 print(self.yt_tf)
-                # tf=yt.ColorTransferFunction((minval,maxval),
-                #                             grey_opacity=False)
-                # wid=0.012
-                # tf.add_gaussian(minval+drange*0.9,wid,
-                #                 [1.0,0.0,0.0,1.0])
-                # wid=0.01
-                # tf.add_gaussian(minval+drange*0.5,wid,
-                #                 [0.0,1.0,0.0,1.0])
-                # wid=0.012
-                # tf.add_gaussian(minval+drange*0.1,wid,
-                #                 [0.0,0.0,1.0,1.0])
-                # vol.set_transfer_function(tf)
-                # print(tf)
             else:
                 tfh=TransferFunctionHelper(ds)
                 tfh.set_field('density')
@@ -2637,6 +2616,7 @@ class o2graph_plotter(plot_base):
         
     def yt_box(self,o2scl_hdf,amp,args):
         """
+        Create a box in a yt visualization
         """
 
         if len(args)<6:
@@ -2687,13 +2667,13 @@ class o2graph_plotter(plot_base):
             self.yt_def_vol()
 
         colors=numpy.array([[1.0,1.0,1.0,0.5]])
-        ls=BoxSource([(x1-self.xlo)/(self.xhi-self.xlo),
-                      (y1-self.ylo)/(self.yhi-self.ylo),
-                      (z1-self.zlo)/(self.zhi-self.zlo)],
-                     [(x2-self.xlo)/(self.xhi-self.xlo),
-                      (y2-self.ylo)/(self.yhi-self.ylo),
-                      (z2-self.zlo)/(self.zhi-self.zlo)],
-                     colors)
+        left=numpy.array([(x1-self.xlo)/(self.xhi-self.xlo),
+                          (y1-self.ylo)/(self.yhi-self.ylo),
+                          (z1-self.zlo)/(self.zhi-self.zlo)])
+        right=numpy.array([(x2-self.xlo)/(self.xhi-self.xlo),
+                           (y2-self.ylo)/(self.yhi-self.ylo),
+                           (z2-self.zlo)/(self.zhi-self.zlo)])
+        ls=BoxSource(left,right,colors)
         print('o2graph:yt-box: Adding box source.')
         kname=self.yt_unique_keyname('o2graph_box')
         self.yt_scene.add_source(ls,keyname=kname)
@@ -2871,6 +2851,13 @@ class o2graph_plotter(plot_base):
                         print('Not enough parameters for yt-line.')
                     else:
                         self.yt_line(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                                                    
+                elif cmd_name=='yt-box':
+
+                    if ix_next-ix<6:
+                        print('Not enough parameters for yt-box.')
+                    else:
+                        self.yt_box(o2scl_hdf,amp,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-vertex-list':
 

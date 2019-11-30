@@ -4,9 +4,11 @@
 # for the scatter plot, the origin, the axis lines, the axis arrows,
 # and the three axis titles.
 # 
-o2graph -backend Agg -read peano3.o2 \
+o2graph -backend Agg -read peano3.o2 -set xlo "(-1)" -set xhi 8 \
+	-set ylo "(-1)" -set yhi 8 -set zlo "(-1)" -set zhi 8 \
 	-set yt_position [1.5,1.1,0.7] \
 	-yt-vertex-list c4 c5 c6 \
+	-yt-box "(-1)" "(-1)" "(-1)" 8 8 8 \
 	-yt-axis -xtitle "$ x $" -ytitle "$ y $" \
 	-ztitle "$ z $" "(-0.15)" "(-0.05)" 0.5 -yt-source-list \
 	-set yt_sigma_clip 4.0 -set yt_path "yaw 100 0.01" \
