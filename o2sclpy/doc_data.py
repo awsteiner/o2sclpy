@@ -432,8 +432,8 @@ A list of 2-element entries, name and description
 
 yt_param_list=[
     ["yt_focus","The camera focus (default [0.5,0.5,0.5])."],
-    ["yt_position","The camera position."],
-    ["yt_path","The animation path."],
+    ["yt_position","The camera position (default [1.5,0.6,0.7])."],
+    ["yt_path","The animation path (default '')."],
     ["yt_resolution","The rendering resolution (default (512,512))."],
     ["yt_sigma_clip","Sigma clipping parameter (default 4.0)."]
 ]

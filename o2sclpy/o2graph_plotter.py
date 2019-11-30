@@ -43,7 +43,7 @@ import matplotlib.patches as patches
 from o2sclpy.doc_data import cmaps, new_cmaps, base_list
 from o2sclpy.doc_data import extra_types, extra_list, param_list
 from o2sclpy.doc_data import yt_param_list
-from o2sclpy.utils import parse_arguments, string_to_dict
+from o2sclpy.utils import parse_arguments, string_to_dict, horiz_line
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.plot_base import plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
@@ -121,18 +121,26 @@ class o2graph_plotter(plot_base):
         self.yt_created_camera=True
         return
     
-    def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=20,
-                          show=False):
+    def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=30,
+                          textcolor=(0,0,0),show=False):
         """
         Take three 3D vectors 'veco' (origin), 'vecx' (x direction) and
         'vecy' (y direction), and a string of text ('text'), and
         return a numpy array of shape (6,npoints) which has entries
         (x,y,z,r,g,b). The values r, g, and b are between 0 and 1.
 
+        Currently, textcolor is unused.
         """
         fig, axes = plot.subplots()
         plot.rc('text',usetex=True)
-        axes.text(0.5,0.5,text,fontsize=font,ha='center',va='center')
+        
+        # FIXME: The text color is messed up here because the
+        # Latex rendering is done on a white background and the
+        # default 3d yt volume is a black background, so we
+        # have to invert the colors below. 
+        axes.text(0.5,0.5,text,fontsize=font,ha='center',va='center',
+                  color=textcolor)
+        
         plot.axis('off')
         fig.canvas.draw()
         if show:
@@ -140,11 +148,15 @@ class o2graph_plotter(plot_base):
         X=numpy.array(fig.canvas.renderer._renderer)
         Y=[]
         Y2=[]
-        for i in range(0,480):
-            for j in range(0,640):
+        # FIXME: we should obtain these values from the properties
+        # of the fig object rather than hard coding them
+        xmax=480
+        ymax=640
+        for i in range(0,xmax):
+            for j in range(0,ymax):
                 if X[i,j,0]!=255 or X[i,j,1]!=255 or X[i,j,2]!=255:
-                    xold=(i-240)/240.0
-                    yold=(j-320)/320.0
+                    xold=2.0*(i-float(xmax)/2)/float(xmax)
+                    yold=2.0*(j-float(ymax)/2)/float(ymax)
                     vecnew=[veco[0]-vecy[0]*xold+vecx[0]*yold,
                             veco[1]-vecy[1]*xold+vecx[1]*yold,
                             veco[2]-vecy[2]*xold+vecx[2]*yold]
@@ -153,11 +165,15 @@ class o2graph_plotter(plot_base):
                                1.0-X[i,j,2]/255.0,alpha])
         return(numpy.array(Y),numpy.array(Y2))
 
-    def yt_text_to_scene(self,loc,text,scale=0.6,
+    def yt_text_to_scene(self,loc,text,scale=0.6,font=30,
                          keyname='o2graph_text'):
         """
-        At location 'loc' put text 'text' into the scene using
-        specified scale parameter and keyname.
+        At location 'loc' put text 'text' into the scene using specified
+        scale parameter and keyname. This function uses the current yt
+        camera to orient the text so that it is upright and parallel
+        to the camera. Increasing 'scale' increase the size of the
+        text and the 'font' parameter is passed on to the
+        yt_text_to_points() function.
         """
         
         # Imports
@@ -177,7 +193,7 @@ class o2graph_plotter(plot_base):
         view_y=view_y*scale
         
         # Convert text to points
-        (Y,Y2)=self.yt_text_to_points(loc,view_x,view_y,text)
+        (Y,Y2)=self.yt_text_to_points(loc,view_x,view_y,text,font=font)
     
         # Add the point source
         points_xalabels=PointSource(Y,colors=Y2)
@@ -1583,11 +1599,10 @@ class o2graph_plotter(plot_base):
         """
         Print parameter documentation.
         """
-        
-        # I don't know why this doesn't work right now
-        # print(plot_base.logz.__doc__)
-        
-        print('O2graph parameter list:')
+
+        str_line=horiz_line()
+        print('\n'+str_line)
+        print('\nO2graph parameter list:')
         print(' ')
         for line in param_list:
             if line[0]!='verbose':
@@ -1625,7 +1640,8 @@ class o2graph_plotter(plot_base):
                     print(line[0])
                 print(' '+line[1])
                 print(' ')
-        print('yt-related settings:')
+        print(str_line)
+        print('\nyt-related settings:')
         print(' ')
         for line in yt_param_list:
             if line[0]=='yt_focus':
@@ -1825,22 +1841,39 @@ class o2graph_plotter(plot_base):
             if self.xset==False:
                 self.xlo=gridx[0]
                 self.xhi=gridx[nx-1]
+                self.xset=True
             if self.yset==False:
                 self.ylo=gridy[0]
                 self.yhi=gridy[ny-1]
+                self.yset=True
             if self.zset==False:
                 self.zlo=gridz[0]
                 self.zhi=gridz[nz-1]
+                self.zset=True
             print('o2graph_plotter:yt-add-vol: axis limits:',
                   self.xlo,self.xhi,
                   self.ylo,self.yhi,self.zlo,self.zhi)
-                        
+            
             arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
-            bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
-            ds=yt.load_uniform_grid(dict(density=arr),
-                                    arr.shape,bbox=bbox)
+            self.yt_volume_data.append(numpy.copy(arr))
+            # Rescale to the internal coordinate system
+            bbox=numpy.array([[(gridx[0]-self.xlo)/(self.xhi-self.xlo),
+                               (gridx[nx-1]-self.xlo)/(self.xhi-self.xlo)],
+                              [(gridy[0]-self.ylo)/(self.yhi-self.ylo),
+                               (gridy[ny-1]-self.ylo)/(self.yhi-self.ylo)],
+                              [(gridz[0]-self.zlo)/(self.zhi-self.zlo),
+                               (gridz[nz-1]-self.zlo)/(self.zhi-self.zlo)]])
+            self.yt_volume_bbox.append(numpy.copy(bbox))
+            arr2=self.yt_volume_data[len(self.yt_volume_data)-1]
+            bbox2=self.yt_volume_bbox[len(self.yt_volume_bbox)-1]
 
-            vol=VolumeSource(ds,field='density')
+            func=yt.load_uniform_grid
+            self.yt_data_sources.append(func(dict(density=arr2),
+                                             arr2.shape,bbox=bbox2))
+            ds=self.yt_data_sources[len(self.yt_data_sources)-1]
+
+            self.yt_vols.append(VolumeSource(ds,field='density'))
+            vol=self.yt_vols[len(self.yt_vols)-1]
             vol.log_field=False
 
             # Setup the transfer function
@@ -1980,15 +2013,7 @@ class o2graph_plotter(plot_base):
         if sys.stdout.isatty()==False:
             redirected=True
                     
-        str_line=''
-        if redirected:
-            for jj in range(0,78):
-                str_line+='-'
-        else:
-            str_line=str_line+chr(27)+'(0'
-            for jj in range(0,78):
-                str_line+='q'
-            str_line=str_line+chr(27)+'(B'
+        str_line=horiz_line()
 
         # If only a command is specified
         if len(args)==1:
@@ -2344,6 +2369,7 @@ class o2graph_plotter(plot_base):
                         self.xlo=ptrx[i]
                     if ptrx[i]>self.xhi:
                         self.xhi=ptrx[i]
+                self.xset=True
             if self.yset==False:
                 self.ylo=ptry[0]
                 self.yhi=ptry[0]
@@ -2352,6 +2378,7 @@ class o2graph_plotter(plot_base):
                         self.ylo=ptry[i]
                     if ptry[i]>self.yhi:
                         self.yhi=ptry[i]
+                self.yset=True
             if self.zset==False:
                 self.zlo=ptrz[0]
                 self.zhi=ptrz[0]
@@ -2360,6 +2387,7 @@ class o2graph_plotter(plot_base):
                         self.zlo=ptrz[i]
                     if ptrz[i]>self.zhi:
                         self.zhi=ptrz[i]
+                self.zset=True
             x_range=self.xhi-self.xlo
             y_range=self.yhi-self.ylo
             z_range=self.zhi-self.zlo
@@ -2498,6 +2526,7 @@ class o2graph_plotter(plot_base):
                         self.xlo=ptrx[i]
                     if ptrx[i]>self.xhi:
                         self.xhi=ptrx[i]
+                self.xset=True
             if self.yset==False:
                 self.ylo=ptry[0]
                 self.yhi=ptry[0]
@@ -2506,6 +2535,7 @@ class o2graph_plotter(plot_base):
                         self.ylo=ptry[i]
                     if ptry[i]>self.yhi:
                         self.yhi=ptry[i]
+                self.yset=True
             if self.zset==False:
                 self.zlo=ptrz[0]
                 self.zhi=ptrz[0]
@@ -2514,6 +2544,7 @@ class o2graph_plotter(plot_base):
                         self.zlo=ptrz[i]
                     if ptrz[i]>self.zhi:
                         self.zhi=ptrz[i]
+                self.zset=True
             x_range=self.xhi-self.xlo
             y_range=self.yhi-self.ylo
             z_range=self.zhi-self.zlo
@@ -3093,7 +3124,7 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for xtitle option.')
                     else:
-                        self.xtitle(strlist[ix+1])
+                        self.xtitle(strlist[ix+1:ix_next])
                         
                 elif cmd_name=='ytitle':
                     
@@ -3103,7 +3134,7 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for ytitle option.')
                     else:
-                        self.ytitle(strlist[ix+1])
+                        self.ytitle(strlist[ix+1:ix_next])
                         
                 elif cmd_name=='ztitle':
                     

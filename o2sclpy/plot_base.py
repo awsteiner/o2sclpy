@@ -174,15 +174,15 @@ class plot_base:
     """
     yt_focus=[0.5,0.5,0.5]
     """
-    yt camera focus (default [1.5,0.6,0.7])
+    yt camera focus (default [0.5,0.5,0.5])
     """
     yt_position=[1.5,0.6,0.7]
     """
-    yt camera position
+    yt camera position (default [1.5,0.6,0.7])
     """
     yt_path=''
     """
-    yt camera path (default '')
+    yt animation path (default '')
     """
     yt_tf=0
     """
@@ -195,6 +195,22 @@ class plot_base:
     new_cmaps_defined=False
     """
     True if new colormaps were defined with 'new-cmaps'
+    """
+    yt_volume_data=[]
+    """
+    Current list of data objects for volume sources
+    """
+    yt_volume_bbox=[]
+    """
+    Current list of bbox arrays for volume sources
+    """
+    yt_vols=[]
+    """
+    Current list of volume source objects
+    """
+    yt_data_sources=[]
+    """
+    Current list of yt data source objects
     """
     
     def yt_unique_keyname(self,prefix):
@@ -785,44 +801,93 @@ class plot_base:
         # End of function plot_base::subplots()
         return
 
-    def xtitle(self,xtitle):
+    def xtitle(self,args,scale=0.6,font=30,color=(1,1,1,1),
+               keyname='o2graph_x_title'):
+        """
+        Add a title for the x-axis
+
+        yt-mode: <text> [x loc] [y loc] [z loc]
+        """
         if self.yt_scene!=0:
-            kname=self.yt_unique_keyname('o2graph_x_title')
-            self.yt_text_to_scene([0.5,-0.05,-0.05],
-                                  xtitle,keyname=kname)
-        elif xtitle!='' and xtitle!='none':
+            if (self.xset==False or self.yset==False or
+                self.zset==False):
+                print('Cannot place xtitle before limits set.')
+                return
+            xval=0.5
+            yval=-0.1
+            zval=-0.1
+            if len(args)>2:
+                xval=(float(eval(args[1]))-self.xlo)/(self.xhi-self.xlo)
+            if len(args)>3:
+                yval=(float(eval(args[2]))-self.ylo)/(self.yhi-self.ylo)
+            if len(args)>4:
+                zval=(float(eval(args[3]))-self.zlo)/(self.zhi-self.zlo)
+            kname=self.yt_unique_keyname(keyname)
+            self.yt_text_to_scene([xval,yval,zval],
+                                  args[0],scale=scale,font=font,keyname=kname)
+        elif args[0]!='' and args[0]!='none':
             if self.canvas_flag==False:
                 self.canvas()
-            self.axes.set_xlabel(xtitle,fontsize=self.font)
+            self.axes.set_xlabel(args[0],fontsize=self.font)
         # End of function plot_base::xtitle()
         return
             
-    def ytitle(self,ytitle):
+    def ytitle(self,args,scale=0.6,font=30,color=(1,1,1,1),
+               keyname='o2graph_y_title'):
+        """
+        Add a title for the y-axis
+
+        yt-mode: <text> [x loc] [y loc] [z loc]
+        """
         if self.yt_scene!=0:
-            kname=self.yt_unique_keyname('o2graph_y_title')
-            self.yt_text_to_scene([-0.05,0.5,-0.05],
-                                  ytitle,keyname=kname)
-        elif ytitle!='' and ytitle!='none':
+            if (self.xset==False or self.yset==False or
+                self.zset==False):
+                print('Cannot place ytitle before limits set.')
+                return
+            xval=-0.1
+            yval=0.5
+            zval=-0.1
+            if len(args)>2:
+                xval=(float(eval(args[1]))-self.xlo)/(self.xhi-self.xlo)
+            if len(args)>3:
+                yval=(float(eval(args[2]))-self.ylo)/(self.yhi-self.ylo)
+            if len(args)>4:
+                zval=(float(eval(args[3]))-self.zlo)/(self.zhi-self.zlo)
+            kname=self.yt_unique_keyname(keyname)
+            self.yt_text_to_scene([xval,yval,zval],
+                                  args[0],scale=scale,font=font,keyname=kname)
+        elif args[0]!='' and args[0]!='none':
             if self.canvas_flag==False:
                 self.canvas()
-            self.axes.set_ylabel(ytitle,fontsize=self.font)
+            self.axes.set_ylabel(args[0],fontsize=self.font)
         # End of function plot_base::ytitle()
         return
         
-    def ztitle(self,args):
+    def ztitle(self,args,scale=0.6,font=30,color=(1,1,1,1),
+               keyname='o2graph_z_title'):
+        """
+        Add a title for the z-axis
+
+        yt-mode: <text> [x loc] [y loc] [z loc]
+        """
         if self.yt_scene!=0:
-            xval=-0.05
-            yval=-0.05
+            if (self.xset==False or self.yset==False or
+                self.zset==False):
+                print('Cannot place ztitle before limits set.')
+                return
+            xval=-0.1
+            yval=-0.1
             zval=0.5
             if len(args)>2:
-                xval=float(eval(args[1]))
+                xval=(float(eval(args[1]))-self.xlo)/(self.xhi-self.xlo)
             if len(args)>3:
-                yval=float(eval(args[2]))
+                yval=(float(eval(args[2]))-self.ylo)/(self.yhi-self.ylo)
             if len(args)>4:
-                zval=float(eval(args[3]))
-            kname=self.yt_unique_keyname('o2graph_z_title')
+                zval=(float(eval(args[3]))-self.zlo)/(self.zhi-self.zlo)
+            kname=self.yt_unique_keyname(keyname)
             self.yt_text_to_scene([xval,yval,zval],
-                                  args[0],keyname=kname)
+                                  args[0],scale=scale,font=font,
+                                  keyname=kname)
         else:
             print('No yt scene has been created for ztitle.')
         # End of function plot_base::ztitle()
