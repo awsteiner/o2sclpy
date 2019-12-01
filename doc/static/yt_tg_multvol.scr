@@ -16,9 +16,17 @@ o2graph -backend Agg \
 	-function "(x0-0.2)^2+(x1-0.8)^2+(x2-0.8)^2" \
 	-yt-tf new 0 1 \
 	-yt-tf gauss 0.01 0.001 0.0 0.0 1.0 0.5 \
-	-yt-add-vol \
-	-yt-axis -xtitle "$ x $" -ytitle "$ y $" \
-	-ztitle "$ z $" -yt-source-list \
-	-yt-render yt_tg_multvol.png 
+	-yt-add-vol -yt-axis \
+	-xtitle "$ x $" \
+	-ytitle "$ y $" "(-0.01)" 0.8 "(-0.02)" \
+	-ztitle "$ z $" \
+	-yt-text 0.2 0.2 0.05 "$ \mathrm{Volume}~1 $" \
+	-yt-text 1.0 0.6 0.05 "$ \mathrm{Volume}~2 $" \
+	-yt-text 0.2 0.8 0.65 "$ \mathrm{Volume}~3 $" \
+	-yt-source-list \
+	-set yt_path "yaw 100 0.01" \
+	-yt-render "/tmp/yt_*.png" yt_tg_multvol.mp4
+	
+#	-yt-render yt_tg_multvol.png 
 
 

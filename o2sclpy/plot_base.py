@@ -19,6 +19,7 @@
 #  
 #  -------------------------------------------------------------------
 #
+import math
 import numpy
 
 import matplotlib.pyplot as plot
@@ -172,11 +173,12 @@ class plot_base:
     """
     Resolution for yt rendering (default (512,512))
     """
-    yt_focus=[0.5,0.5,0.5]
+    yt_focus='default'
     """
     yt camera focus (default [0.5,0.5,0.5])
     """
-    yt_position=[1.5,0.6,0.7]
+    yt_position='default'
+    #[1.5,0.6,0.7]
     """
     yt camera position (default [1.5,0.6,0.7])
     """
@@ -401,6 +403,214 @@ class plot_base:
         # End of function plot_base::set()
         return
 
+    def yt_create_scene(self):
+        """
+        Create the yt scene object and set yt_created_scene to True.
+        """
+        from yt.visualization.volume_rendering.api import Scene
+        print('o2graph_plotter:yt_create_scene(): Creating scene.')
+        self.yt_scene=Scene()
+        self.yt_created_scene=True
+        # End of function o2graph_plotter::yt_create_scene()
+        return
+        
+    def yt_create_camera(self,ds):
+        """
+        Create the yt camera object using the class variables
+        ``yt_resolution``, ``yt_position``, and ``yt_focus``, with a
+        camera width based on the domain width of ``ds``.
+        """
+        print('o2graph_plotter:yt_create_camera(): Creating camera.')
+        self.yt_camera=self.yt_scene.add_camera()
+        self.yt_camera.resolution=self.yt_resolution
+        self.yt_camera.width=1.5*ds.domain_width[0]
+        if self.yt_position=='default':
+            self.yt_camera.position=[1.5,0.6,0.7]
+        else:
+            self.yt_camera.position=[(self.yt_position[0]-self.xlo)/
+                                     (self.xhi-self.xlo),
+                                     (self.yt_position[1]-self.ylo)/
+                                     (self.yhi-self.ylo),
+                                     (self.yt_position[2]-self.zlo)/
+                                     (self.zhi-self.zlo)]
+        if self.yt_focus=='default':
+            self.yt_camera.focus=[0.5,0.5,0.5]
+        else:
+            self.yt_camera.focus=[(self.yt_focus[0]-self.xlo)/
+                                  (self.xhi-self.xlo),
+                                  (self.yt_focus[1]-self.ylo)/
+                                  (self.yhi-self.ylo),
+                                  (self.yt_focus[2]-self.zlo)/
+                                  (self.zhi-self.zlo)]
+        self.yt_camera.north_vector=[0.0,0.0,1.0]
+        self.yt_camera.switch_orientation()
+        self.yt_created_camera=True
+        # End of function o2graph_plotter::yt_create_camera()
+        return
+    
+    def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=30,
+                          textcolor=(0,0,0),show=False):
+        """
+        Take three 3D vectors 'veco' (origin), 'vecx' (x direction) and
+        'vecy' (y direction), and a string of text ('text'), and
+        return a numpy array of shape (6,npoints) which has entries
+        (x,y,z,r,g,b). The values r, g, and b are between 0 and 1.
+
+        Currently, textcolor is unused.
+        """
+        fig, axes = plot.subplots()
+        plot.rc('text',usetex=True)
+        
+        # FIXME: The text color is messed up here because the
+        # Latex rendering is done on a white background and the
+        # default 3d yt volume is a black background, so we
+        # have to invert the colors below. 
+        axes.text(0.5,0.5,text,fontsize=font,ha='center',va='center',
+                  color=textcolor)
+        
+        plot.axis('off')
+        fig.canvas.draw()
+        if show:
+            plot.show()
+        X=numpy.array(fig.canvas.renderer._renderer)
+        Y=[]
+        Y2=[]
+        # FIXME: we should obtain these values from the properties
+        # of the fig object rather than hard coding them
+        xmax=480
+        ymax=640
+        for i in range(0,xmax):
+            for j in range(0,ymax):
+                if X[i,j,0]!=255 or X[i,j,1]!=255 or X[i,j,2]!=255:
+                    xold=2.0*(i-float(xmax)/2)/float(xmax)
+                    yold=2.0*(j-float(ymax)/2)/float(ymax)
+                    vecnew=[veco[0]-vecy[0]*xold+vecx[0]*yold,
+                            veco[1]-vecy[1]*xold+vecx[1]*yold,
+                            veco[2]-vecy[2]*xold+vecx[2]*yold]
+                    Y.append([vecnew[0],vecnew[1],vecnew[2]])
+                    Y2.append([1.0-X[i,j,0]/255.0,1.0-X[i,j,1]/255.0,
+                               1.0-X[i,j,2]/255.0,alpha])
+        # End of function o2graph_plotter::yt_text_to_points()
+        return(numpy.array(Y),numpy.array(Y2))
+
+    def yt_text_to_scene(self,loc,text,scale=0.6,font=30,
+                         keyname='o2graph_text'):
+        """
+        At location 'loc' put text 'text' into the scene using specified
+        scale parameter and keyname. This function uses the current yt
+        camera to orient the text so that it is upright and parallel
+        to the camera. Increasing 'scale' increase the size of the
+        text and the 'font' parameter is passed on to the
+        yt_text_to_points() function.
+        """
+        
+        # Imports
+        from yt.visualization.volume_rendering.api \
+            import PointSource
+        
+        # Construct orientation vectors
+        view_y=self.yt_camera.north_vector
+        view_x=-numpy.cross(view_y,self.yt_camera.focus-
+                         self.yt_camera.position)
+        # Normalize view_x and view_y
+        view_x=view_x/numpy.sqrt(view_x[0]**2+view_x[1]**2+view_x[2]**2)
+        view_y=view_y/numpy.sqrt(view_y[0]**2+view_y[1]**2+view_y[2]**2)
+    
+        # Choose scale. The factor of 0.8 for y seems to be required
+        # to make the text look correctly scaled.
+        view_x=view_x*scale
+        view_y=view_y*scale*0.8
+        
+        # Convert text to points
+        (Y,Y2)=self.yt_text_to_points(loc,view_x,view_y,text,font=font)
+    
+        # Add the point source
+        points_xalabels=PointSource(Y,colors=Y2)
+        kname=self.yt_unique_keyname(keyname)
+        self.yt_scene.add_source(points_xalabels,keyname=kname)
+
+        # End of function o2graph_plotter::yt_text_to_scene()
+        return
+
+    def yt_plot_axis(self,origin=[0.0,0.0,0.0],color=[1.0,1.0,1.0,0.5],
+                     ihat=[1.0,0.0,0.0],jhat=[0.0,1.0,0.0],
+                     khat=[0.0,0.0,1.0]):
+        """
+        Plot an axis in a yt volume consisting a PointSource for
+        the origin and then three arrows pointing from ``origin``
+        to ``ihat``, ``jhat``, and ``khat``. The specified color
+        is used for the origin and all three arrows. The
+        arrows are constructed with one main LineSource and
+        then several smaller LineSource objects in a conical
+        shape to create the arrow heads. 
+        """
+        
+        print('o2graph_plotter:yt_plot_axis(): Adding axis.')
+        
+        # Imports
+        from yt.visualization.volume_rendering.api \
+            import PointSource, LineSource
+        
+        # Point at origin
+        vertex_origin=numpy.array([origin])
+        color_origin=numpy.array([color])
+        points=PointSource(vertex_origin,colors=color_origin,radii=3)
+        kname=self.yt_unique_keyname('o2graph_origin')
+        self.yt_scene.add_source(points,keyname=kname)
+    
+        # Axis lines
+        vertices_axis=numpy.array([[origin,ihat],
+                                   [origin,jhat],
+                                   [origin,khat]])
+        colors_axis=numpy.array([color,color,color])
+        axis=LineSource(vertices_axis,colors_axis)
+        kname=self.yt_unique_keyname('o2graph_axis_lines')
+        self.yt_scene.add_source(axis,keyname=kname)
+        
+        # Arrow heads
+        list2=[]
+        clist2=[]
+        for theta in range(0,20):
+            for z in range(0,10):
+                xloc=1.0-z/200.0
+                r=z/800.0
+                yloc=r*math.cos(theta/10.0*math.pi)
+                zloc=r*math.sin(theta/10.0*math.pi)
+                list2.append([[1,0,0],[xloc,yloc,zloc]])
+                yloc=1.0-z/200.0
+                r=z/800.0
+                xloc=r*math.cos(theta/10.0*math.pi)
+                zloc=r*math.sin(theta/10.0*math.pi)
+                list2.append([[0,1,0],[xloc,yloc,zloc]])
+                zloc=1.0-z/200.0
+                r=z/800.0
+                xloc=r*math.cos(theta/10.0*math.pi)
+                yloc=r*math.sin(theta/10.0*math.pi)
+                list2.append([[0,0,1],[xloc,yloc,zloc]])
+                clist2.append(color)
+                clist2.append(color)
+                clist2.append(color)
+        points_aheads2=LineSource(numpy.array(list2),numpy.array(clist2))
+        kname=self.yt_unique_keyname('o2graph_axis_arrows')
+        self.yt_scene.add_source(points_aheads2,keyname=kname)
+
+        # End of function o2graph_plotter::yt_plot_axis()
+        return
+        
+    def yt_check_backend(self):
+        """
+        For yt, check that we're using the Agg backend, and
+        print out an error message if we are not.
+        """
+        import matplotlib
+        if (matplotlib.get_backend()!='Agg' and 
+            matplotlib.get_backend()!='agg'):
+            print('yt integration only works with Agg.')
+            print('Current backend is',matplotlib.get_backend())
+            
+        # End of function o2graph_plotter::yt_check_backend()
+        return
+    
     def yt_def_vol(self):
         """
         Create a default yt volume source for rendering other objects
@@ -801,14 +1011,16 @@ class plot_base:
         # End of function plot_base::subplots()
         return
 
-    def xtitle(self,args,scale=0.6,font=30,color=(1,1,1,1),
+    def xtitle(self,textstr,loc='default',scale=0.6,font=30,color=(1,1,1,1),
                keyname='o2graph_x_title'):
         """
         Add a title for the x-axis
 
         yt-mode: <text> [x loc] [y loc] [z loc]
         """
+        
         if self.yt_scene!=0:
+            
             if (self.xset==False or self.yset==False or
                 self.zset==False):
                 print('Cannot place xtitle before limits set.')
@@ -816,23 +1028,24 @@ class plot_base:
             xval=0.5
             yval=-0.1
             zval=-0.1
-            if len(args)>2:
-                xval=(float(eval(args[1]))-self.xlo)/(self.xhi-self.xlo)
-            if len(args)>3:
-                yval=(float(eval(args[2]))-self.ylo)/(self.yhi-self.ylo)
-            if len(args)>4:
-                zval=(float(eval(args[3]))-self.zlo)/(self.zhi-self.zlo)
+            if loc!='default':
+                xval=(loc[0]-self.xlo)/(self.xhi-self.xlo)
+                yval=(loc[1]-self.ylo)/(self.yhi-self.ylo)
+                zval=(loc[2]-self.zlo)/(self.zhi-self.zlo)
             kname=self.yt_unique_keyname(keyname)
             self.yt_text_to_scene([xval,yval,zval],
-                                  args[0],scale=scale,font=font,keyname=kname)
-        elif args[0]!='' and args[0]!='none':
+                                  textstr,scale=scale,font=font,keyname=kname)
+            
+        elif textstr!='' and textstr!='none':
+            
             if self.canvas_flag==False:
                 self.canvas()
-            self.axes.set_xlabel(args[0],fontsize=self.font)
+            self.axes.set_xlabel(textstr,fontsize=self.font)
+            
         # End of function plot_base::xtitle()
         return
             
-    def ytitle(self,args,scale=0.6,font=30,color=(1,1,1,1),
+    def ytitle(self,textstr,loc='default',scale=0.6,font=30,color=(1,1,1,1),
                keyname='o2graph_y_title'):
         """
         Add a title for the y-axis
@@ -847,23 +1060,24 @@ class plot_base:
             xval=-0.1
             yval=0.5
             zval=-0.1
-            if len(args)>2:
-                xval=(float(eval(args[1]))-self.xlo)/(self.xhi-self.xlo)
-            if len(args)>3:
-                yval=(float(eval(args[2]))-self.ylo)/(self.yhi-self.ylo)
-            if len(args)>4:
-                zval=(float(eval(args[3]))-self.zlo)/(self.zhi-self.zlo)
+            if loc!='default':
+                xval=(loc[0]-self.xlo)/(self.xhi-self.xlo)
+                yval=(loc[1]-self.ylo)/(self.yhi-self.ylo)
+                zval=(loc[2]-self.zlo)/(self.zhi-self.zlo)
             kname=self.yt_unique_keyname(keyname)
             self.yt_text_to_scene([xval,yval,zval],
-                                  args[0],scale=scale,font=font,keyname=kname)
-        elif args[0]!='' and args[0]!='none':
+                                  textstr,scale=scale,font=font,keyname=kname)
+            
+        elif textstr!='' and textstr!='none':
+            
             if self.canvas_flag==False:
                 self.canvas()
-            self.axes.set_ylabel(args[0],fontsize=self.font)
+            self.axes.set_ylabel(textstr,fontsize=self.font)
+            
         # End of function plot_base::ytitle()
         return
         
-    def ztitle(self,args,scale=0.6,font=30,color=(1,1,1,1),
+    def ztitle(self,textstr,loc='default',scale=0.6,font=30,color=(1,1,1,1),
                keyname='o2graph_z_title'):
         """
         Add a title for the z-axis
@@ -878,15 +1092,13 @@ class plot_base:
             xval=-0.1
             yval=-0.1
             zval=0.5
-            if len(args)>2:
-                xval=(float(eval(args[1]))-self.xlo)/(self.xhi-self.xlo)
-            if len(args)>3:
-                yval=(float(eval(args[2]))-self.ylo)/(self.yhi-self.ylo)
-            if len(args)>4:
-                zval=(float(eval(args[3]))-self.zlo)/(self.zhi-self.zlo)
+            if loc!='default':
+                xval=(loc[0]-self.xlo)/(self.xhi-self.xlo)
+                yval=(loc[1]-self.ylo)/(self.yhi-self.ylo)
+                zval=(loc[2]-self.zlo)/(self.zhi-self.zlo)
             kname=self.yt_unique_keyname(keyname)
             self.yt_text_to_scene([xval,yval,zval],
-                                  args[0],scale=scale,font=font,
+                                  textstr,scale=scale,font=font,
                                   keyname=kname)
         else:
             print('No yt scene has been created for ztitle.')

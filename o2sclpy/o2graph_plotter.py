@@ -94,186 +94,14 @@ class o2graph_plotter(plot_base):
     If true, then the yt camera object has been created
     """
 
-    def yt_create_scene(self):
-        """
-        Create the yt scene object and set yt_created_scene to True
-        """
-        from yt.visualization.volume_rendering.api import Scene
-        print('o2graph_plotter:yt_create_scene(): Creating scene.')
-        self.yt_scene=Scene()
-        self.yt_created_scene=True
-        return
-        
-    def yt_create_camera(self,ds):
-        """
-        Create the yt camera object using the class variables
-        ``yt_resolution``, ``yt_position``, and ``yt_focus``, with a
-        camera width based on the domain width of ``ds``.
-        """
-        print('o2graph_plotter:yt_create_camera(): Creating camera.')
-        self.yt_camera=self.yt_scene.add_camera()
-        self.yt_camera.resolution=self.yt_resolution
-        self.yt_camera.width=1.5*ds.domain_width[0]
-        self.yt_camera.position=self.yt_position
-        self.yt_camera.focus=self.yt_focus
-        self.yt_camera.north_vector=[0.0,0.0,1.0]
-        self.yt_camera.switch_orientation()
-        self.yt_created_camera=True
-        return
-    
-    def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=30,
-                          textcolor=(0,0,0),show=False):
-        """
-        Take three 3D vectors 'veco' (origin), 'vecx' (x direction) and
-        'vecy' (y direction), and a string of text ('text'), and
-        return a numpy array of shape (6,npoints) which has entries
-        (x,y,z,r,g,b). The values r, g, and b are between 0 and 1.
-
-        Currently, textcolor is unused.
-        """
-        fig, axes = plot.subplots()
-        plot.rc('text',usetex=True)
-        
-        # FIXME: The text color is messed up here because the
-        # Latex rendering is done on a white background and the
-        # default 3d yt volume is a black background, so we
-        # have to invert the colors below. 
-        axes.text(0.5,0.5,text,fontsize=font,ha='center',va='center',
-                  color=textcolor)
-        
-        plot.axis('off')
-        fig.canvas.draw()
-        if show:
-            plot.show()
-        X=numpy.array(fig.canvas.renderer._renderer)
-        Y=[]
-        Y2=[]
-        # FIXME: we should obtain these values from the properties
-        # of the fig object rather than hard coding them
-        xmax=480
-        ymax=640
-        for i in range(0,xmax):
-            for j in range(0,ymax):
-                if X[i,j,0]!=255 or X[i,j,1]!=255 or X[i,j,2]!=255:
-                    xold=2.0*(i-float(xmax)/2)/float(xmax)
-                    yold=2.0*(j-float(ymax)/2)/float(ymax)
-                    vecnew=[veco[0]-vecy[0]*xold+vecx[0]*yold,
-                            veco[1]-vecy[1]*xold+vecx[1]*yold,
-                            veco[2]-vecy[2]*xold+vecx[2]*yold]
-                    Y.append([vecnew[0],vecnew[1],vecnew[2]])
-                    Y2.append([1.0-X[i,j,0]/255.0,1.0-X[i,j,1]/255.0,
-                               1.0-X[i,j,2]/255.0,alpha])
-        return(numpy.array(Y),numpy.array(Y2))
-
-    def yt_text_to_scene(self,loc,text,scale=0.6,font=30,
-                         keyname='o2graph_text'):
-        """
-        At location 'loc' put text 'text' into the scene using specified
-        scale parameter and keyname. This function uses the current yt
-        camera to orient the text so that it is upright and parallel
-        to the camera. Increasing 'scale' increase the size of the
-        text and the 'font' parameter is passed on to the
-        yt_text_to_points() function.
-        """
-        
-        # Imports
-        from yt.visualization.volume_rendering.api \
-            import PointSource
-        
-        # Construct orientation vectors
-        view_y=self.yt_camera.north_vector
-        view_x=-numpy.cross(view_y,self.yt_camera.focus-
-                         self.yt_camera.position)
-        # Normalize view_x and view_y
-        view_x=view_x/numpy.sqrt(view_x[0]**2+view_x[1]**2+view_x[2]**2)
-        view_y=view_y/numpy.sqrt(view_y[0]**2+view_y[1]**2+view_y[2]**2)
-    
-        # Choose scale
-        view_x=view_x*scale
-        view_y=view_y*scale
-        
-        # Convert text to points
-        (Y,Y2)=self.yt_text_to_points(loc,view_x,view_y,text,font=font)
-    
-        # Add the point source
-        points_xalabels=PointSource(Y,colors=Y2)
-        kname=self.yt_unique_keyname(keyname)
-        self.yt_scene.add_source(points_xalabels,keyname=kname)
-
-    def yt_plot_axis(self,origin=[0.0,0.0,0.0],color=[1.0,1.0,1.0,0.5],
-                     ihat=[1.0,0.0,0.0],jhat=[0.0,1.0,0.0],
-                     khat=[0.0,0.0,1.0]):
-        """
-        Plot an axis in a yt volume
-        """
-        
-        print('o2graph_plotter:yt_plot_axis(): Adding axis.')
-        
-        # Imports
-        from yt.visualization.volume_rendering.api \
-            import PointSource, LineSource
-        
-        # Point at origin
-        vertex_origin=numpy.array([origin])
-        color_origin=numpy.array([color])
-        points=PointSource(vertex_origin,colors=color_origin,radii=3)
-        kname=self.yt_unique_keyname('o2graph_origin')
-        self.yt_scene.add_source(points,keyname=kname)
-    
-        # Axis lines
-        vertices_axis=numpy.array([[origin,ihat],
-                                   [origin,jhat],
-                                   [origin,khat]])
-        colors_axis=numpy.array([color,color,color])
-        axis=LineSource(vertices_axis,colors_axis)
-        kname=self.yt_unique_keyname('o2graph_axis_lines')
-        self.yt_scene.add_source(axis,keyname=kname)
-        
-        # Arrow heads
-        list2=[]
-        clist2=[]
-        for theta in range(0,20):
-            for z in range(0,10):
-                xloc=1.0-z/200.0
-                r=z/800.0
-                yloc=r*math.cos(theta/10.0*math.pi)
-                zloc=r*math.sin(theta/10.0*math.pi)
-                list2.append([[1,0,0],[xloc,yloc,zloc]])
-                yloc=1.0-z/200.0
-                r=z/800.0
-                xloc=r*math.cos(theta/10.0*math.pi)
-                zloc=r*math.sin(theta/10.0*math.pi)
-                list2.append([[0,1,0],[xloc,yloc,zloc]])
-                zloc=1.0-z/200.0
-                r=z/800.0
-                xloc=r*math.cos(theta/10.0*math.pi)
-                yloc=r*math.sin(theta/10.0*math.pi)
-                list2.append([[0,0,1],[xloc,yloc,zloc]])
-                clist2.append(color)
-                clist2.append(color)
-                clist2.append(color)
-        points_aheads2=LineSource(numpy.array(list2),numpy.array(clist2))
-        kname=self.yt_unique_keyname('o2graph_axis_arrows')
-        self.yt_scene.add_source(points_aheads2,keyname=kname)
-        
-    def yt_check_backend(self):
-        """
-        For yt, check that we're using the Agg backend.
-        """
-        import matplotlib
-        if (matplotlib.get_backend()!='Agg' and 
-            matplotlib.get_backend()!='agg'):
-            print('yt integration only works with Agg.')
-            print('Current backend is',matplotlib.get_backend())
-            return
-    
     def set_wrapper(self,o2scl_hdf,amp,args):
         """
-        Wrapper for :py:func:`o2sclpy.plot_base.set` which sets
+        Wrapper around :py:func:`o2sclpy.plot_base.set` which sets
         plot-related parameters and sends other parameters to
-        ``acol_manager``
+        ``acol_manager``.
         """
 
+        # First determine if it's an o2graph or yt parameter
         match=False
         for line in param_list:
             if args[0]==line[0]:
@@ -282,17 +110,20 @@ class o2graph_plotter(plot_base):
         for line in yt_param_list:
             if args[0]==line[0]:
                 match=True
-                
+
+        # If it's an o2graph or yt parameter, then call the parent
+        # set() function
         if match==True:
             self.set(args[0],args[1])
 
-        # If we're modifying the verbose parameter, then make
-        # sure both the o2graph and the acol version match. Otherwise,
-        # if it's only an o2graph parameter, then just return.
+        # If we're modifying the verbose parameter, then make sure
+        # both the o2graph and the acol version match. Otherwise, if
+        # it's only an o2graph or yt parameter, then just return.
         if (match==True and 
             force_bytes(args[0])!=b'verbose'):
             return
-        
+
+        # Call the acol 'set' function
         str_args='-set'
         size_type=ctypes.c_int * (len(args)+1)
         sizes=size_type()
@@ -309,11 +140,14 @@ class o2graph_plotter(plot_base):
             
         parse_fn(amp,len(args)+1,sizes,ccp)
 
+        # End of function o2graph_plotter::set_wrapper()
+        return
+
     def get_wrapper(self,o2scl_hdf,amp,args):
         """
-        Wrapper for :py:func:`o2sclpy.plot_base.get` which
+        Wrapper around :py:func:`o2sclpy.plot_base.get` which
         gets plot-related parameters and gets other parameters
-        from ``acol_manager``
+        from ``acol_manager``.
         """
         match=False
         for line in param_list:
@@ -346,10 +180,14 @@ class o2graph_plotter(plot_base):
         
             parse_fn(amp,len(args)+1,sizes,ccp)
 
+        # End of function o2graph_plotter::get_wrapper()
+        return
+            
     def gen_acol(self,o2scl_hdf,amp,cmd_name,args):
         """
         Run a general ``acol`` command named ``cmd_name`` with arguments
-        stored in ``args``.
+        stored in ``args``. This funciton uses the O\ :sub:`2`\ scl function
+        ``o2scl_acol_parse()``.
         """
 
         str_args='-'+cmd_name
@@ -368,9 +206,12 @@ class o2graph_plotter(plot_base):
         
         parse_fn(amp,len(args)+1,sizes,ccp)
 
+        # End of function o2graph_plotter::gen_acol()
+        return
+
     def get_type(self,o2scl_hdf,amp):
         """
-        Get the current O\ :sub:`2`\ scl object type
+        Get the current O\ :sub:`2`\ scl object type.
         """
         
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -898,7 +739,8 @@ class o2graph_plotter(plot_base):
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
                                  
-        # End of 'plot' function
+        # End of function o2graph_plotter::plot()
+        return
                                  
     def rplot(self,o2scl_hdf,amp,args):
         """
@@ -1006,7 +848,8 @@ class o2graph_plotter(plot_base):
                   curr_type,".")
             return
         
-        # End of 'rplot' function
+        # End of function o2graph_plotter::rplot()
+        return
                                  
     def scatter(self,o2scl_hdf,amp,args):
         """
@@ -1143,7 +986,8 @@ class o2graph_plotter(plot_base):
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
                                  
-        # End of 'scatter' function
+        # End of function o2graph_plotter::scatter()
+        return
                                  
     def histplot(self,o2scl_hdf,amp,args):
         """
@@ -1207,7 +1051,8 @@ class o2graph_plotter(plot_base):
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
                                  
-        # End of 'histplot' function
+        # End of function o2graph_plotter::histplot()
+        return
                                  
     def hist2dplot(self,o2scl_hdf,amp,args):
         """
@@ -1285,7 +1130,8 @@ class o2graph_plotter(plot_base):
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
                                  
-        # End of 'plot' function
+        # End of function o2graph_plotter::hist2dplot()
+        return
                                  
     def errorbar(self,o2scl_hdf,amp,args):
         """
@@ -1367,7 +1213,8 @@ class o2graph_plotter(plot_base):
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
                                  
-        # End of 'errorbar' function
+        # End of function o2graph_plotter::errorbar()
+        return
                                  
     def plot1(self,o2scl_hdf,amp,args):
         """
@@ -1486,7 +1333,8 @@ class o2graph_plotter(plot_base):
             if self.yset==True:
                 self.axes.set_ylim(self.ylo,self.yhi)
                     
-        # End of 'plot1' function
+        # End of function o2graph_plotter::plot1()
+        return
             
     def plotv(self,o2scl_hdf,amp,args):
         """
@@ -1593,7 +1441,8 @@ class o2graph_plotter(plot_base):
                     else:
                         self.axes.plot(xv,yv,**string_to_dict(args[2]))
                         
-        # End of 'plotv' function
+        # End of function o2graph_plotter::plotv()
+        return
         
     def print_param_docs(self):
         """
@@ -1657,6 +1506,9 @@ class o2graph_plotter(plot_base):
             print(' '+line[1])
             print(' ')
 
+        # End of function o2graph_plotter::print_param_docs()
+        return
+            
     def parse_argv(self,argv,o2scl_hdf):
         """
         Parse command-line arguments.
@@ -1776,7 +1628,7 @@ class o2graph_plotter(plot_base):
                 print('Argument List:',strlist)
             self.parse_string_list(strlist,o2scl_hdf,amp)
 
-        # End of function parse_argv
+        # End of function o2graph_plotter::parse_argv()
         return
 
     def yt_add_vol(self,o2scl_hdf,amp):
@@ -1899,6 +1751,8 @@ class o2graph_plotter(plot_base):
                             
             if self.yt_created_camera==False:
                 self.yt_create_camera(ds)
+                
+        # End of function o2graph_plotter::yt_add_vol()
         return
         
     def yt_render(self,fname,mov_fname=''):
@@ -2003,6 +1857,8 @@ class o2graph_plotter(plot_base):
                       '-crf 25 -pix_fmt yuv420p '+mov_fname)
             print('ffmpeg command:',cmd)
             os.system(cmd)
+            
+        # End of function o2graph_plotter::yt_render()
         return
 
     def help_func(self,o2scl_hdf,amp,args):
@@ -2171,6 +2027,7 @@ class o2graph_plotter(plot_base):
             print('Additional o2graph help topics:',
                   'cmaps, cmaps-plot, colors, colors-plot,')
             print('\tcolors-near, markers, markers-plot, xkcd-colors')
+
         # End of function o2graph_plotter::help_func()
         return
         
@@ -2209,7 +2066,33 @@ class o2graph_plotter(plot_base):
                                      float(args[4]),
                                      float(args[5]),
                                      float(args[6])])
+
         # End of function o2graph_plotter::yt_tf_func()
+        return
+
+    def yt_text(self,o2scl_hdf,amp,args):
+        """
+        """
+
+        if len(args)<4:
+            print('Function yt_text() requires four ',
+                  'arguments.')
+            return
+
+        if (self.xset==False or self.yset==False or
+            self.zset==False):
+            print('Cannot place text before limits set.')
+            return
+        
+        xval=(float(eval(args[0]))-self.xlo)/(self.xhi-self.xlo)
+        yval=(float(eval(args[1]))-self.ylo)/(self.yhi-self.ylo)
+        zval=(float(eval(args[2]))-self.zlo)/(self.zhi-self.zlo)
+        
+        kname=self.yt_unique_keyname('o2graph_text')
+        self.yt_text_to_scene([xval,yval,zval],
+                              args[3],scale=0.6,font=30,keyname=kname)
+
+        # End of function o2graph_plotter::yt_text()
         return
 
     def yt_scatter(self,o2scl_hdf,amp,args):
@@ -2435,6 +2318,8 @@ class o2graph_plotter(plot_base):
         else:
             print('Command yt-scatter does not work with type',
                   curr_type+'.')
+            
+        # End of function o2graph_plotter::yt_scatter()
         return
         
     def yt_vertex_list(self,o2scl_hdf,amp,args):
@@ -2578,6 +2463,8 @@ class o2graph_plotter(plot_base):
         else:
             print('Command yt-vertex-list does not work with type',
                   curr_type+'.')
+            
+        # End of function o2graph_plotter::yt_vertex_list()
         return
         
     def yt_line(self,o2scl_hdf,amp,args):
@@ -2643,6 +2530,7 @@ class o2graph_plotter(plot_base):
         kname=self.yt_unique_keyname('o2graph_line')
         self.yt_scene.add_source(ls,keyname=kname)
 
+        # End of function o2graph_plotter::yt_line()
         return
         
     def yt_box(self,o2scl_hdf,amp,args):
@@ -2709,6 +2597,7 @@ class o2graph_plotter(plot_base):
         kname=self.yt_unique_keyname('o2graph_box')
         self.yt_scene.add_source(ls,keyname=kname)
 
+        # End of function o2graph_plotter::yt_box()
         return
         
     def commands(self,o2scl_hdf,amp,args):
@@ -2755,6 +2644,7 @@ class o2graph_plotter(plot_base):
         for i in range (0,len(str_list)):
             print(str_list[i])
 
+        # End of function o2graph_plotter::commands()
         return
     
     def parse_string_list(self,strlist,o2scl_hdf,amp):
@@ -2875,6 +2765,13 @@ class o2graph_plotter(plot_base):
                         print('Not enough parameters for yt-scatter.')
                     else:
                         self.yt_scatter(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                                                    
+                elif cmd_name=='yt-text':
+
+                    if ix_next-ix<4:
+                        print('Not enough parameters for yt-text.')
+                    else:
+                        self.yt_text(o2scl_hdf,amp,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-line':
 
@@ -3041,7 +2938,8 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<3:
                         print('Not enough parameters for xlimits option.')
                     else:
-                        self.xlimits(float(strlist[ix+1]),float(strlist[ix+2]))
+                        self.xlimits(float(eval(strlist[ix+1])),
+                                     float(eval(strlist[ix+2])))
                         
                 elif cmd_name=='ylimits':
                     
@@ -3051,7 +2949,8 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<3:
                         print('Not enough parameters for ylimits option.')
                     else:
-                        self.ylimits(float(strlist[ix+1]),float(strlist[ix+2]))
+                        self.ylimits(float(eval(strlist[ix+1])),
+                                     float(eval(strlist[ix+2])))
                         
                 elif cmd_name=='save':
                     if self.verbose>2:
@@ -3095,15 +2994,15 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<5:
                         print('Not enough parameters for selax option.')
                     elif ix_next-ix<6:
-                        self.addcbar(float(strlist[ix+1]),
-                                     float(strlist[ix+2]),
-                                     float(strlist[ix+3]),
-                                     float(strlist[ix+4]))
+                        self.addcbar(float(eval(strlist[ix+1])),
+                                     float(eval(strlist[ix+2])),
+                                     float(eval(strlist[ix+3])),
+                                     float(eval(strlist[ix+4])))
                     else:
-                        self.addcbar(float(strlist[ix+1]),
-                                     float(strlist[ix+2]),
-                                     float(strlist[ix+3]),
-                                     float(strlist[ix+4]),
+                        self.addcbar(float(eval(strlist[ix+1])),
+                                     float(eval(strlist[ix+2])),
+                                     float(eval(strlist[ix+3])),
+                                     float(eval(strlist[ix+4])),
                                      **string_to_dict(strlist[ix+5]))
                         
                 elif cmd_name=='subadj':
@@ -3123,8 +3022,15 @@ class o2graph_plotter(plot_base):
 
                     if ix_next-ix<2:
                         print('Not enough parameters for xtitle option.')
-                    else:
-                        self.xtitle(strlist[ix+1:ix_next])
+                    elif ix_next-ix==2:
+                        self.xtitle(strlist[ix+1])
+                    elif ix_next-ix>2 and ix_next-ix<5:
+                        print('All three location parameters needed.')
+                    elif ix_next-ix==5:
+                        self.xtitle(strlist[ix+1],
+                                    loc=[float(eval(strlist[ix+2])),
+                                         float(eval(strlist[ix+3])),
+                                         float(eval(strlist[ix+4]))])
                         
                 elif cmd_name=='ytitle':
                     
@@ -3133,8 +3039,15 @@ class o2graph_plotter(plot_base):
 
                     if ix_next-ix<2:
                         print('Not enough parameters for ytitle option.')
-                    else:
-                        self.ytitle(strlist[ix+1:ix_next])
+                    elif ix_next-ix==2:
+                        self.ytitle(strlist[ix+1])
+                    elif ix_next-ix>2 and ix_next-ix<5:
+                        print('All three location parameters needed.')
+                    elif ix_next-ix==5:
+                        self.ytitle(strlist[ix+1],
+                                    loc=[float(eval(strlist[ix+2])),
+                                         float(eval(strlist[ix+3])),
+                                         float(eval(strlist[ix+4]))])
                         
                 elif cmd_name=='ztitle':
                     
@@ -3143,8 +3056,15 @@ class o2graph_plotter(plot_base):
 
                     if ix_next-ix<2:
                         print('Not enough parameters for ztitle option.')
-                    else:
-                        self.ztitle(strlist[ix+1:ix_next])
+                    elif ix_next-ix==2:
+                        self.ztitle(strlist[ix+1])
+                    elif ix_next-ix>2 and ix_next-ix<5:
+                        print('All three location parameters needed.')
+                    elif ix_next-ix==5:
+                        self.ztitle(strlist[ix+1],
+                                    loc=[float(eval(strlist[ix+2])),
+                                         float(eval(strlist[ix+3])),
+                                         float(eval(strlist[ix+4]))])
                         
                 elif cmd_name=='line':
                     
@@ -3170,7 +3090,7 @@ class o2graph_plotter(plot_base):
                         print('Not enough parameters for textbox option.')
                     elif ix_next-ix<6:
                         self.textbox(strlist[ix+1],strlist[ix+2],
-                                  strlist[ix+3],strlist[ix+4])
+                                     strlist[ix+3],strlist[ix+4])
                     else:
                         self.textbox(strlist[ix+1],strlist[ix+2],
                                      strlist[ix+3],strlist[ix+4],
@@ -3292,6 +3212,6 @@ class o2graph_plotter(plot_base):
             if self.verbose>2:
                 print('Going to next.')
                 
-        # End of function parse_string_list()
+        # End of function o2graph_plotter::parse_string_list()
         return
     

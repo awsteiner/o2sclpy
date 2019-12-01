@@ -185,6 +185,8 @@ base_list=[
     ["yt-axis","Add an axis to the yt volume.",
      "<x0> <y0> <z0> [r g b a] ['flat'] [x1 y1 z1] [x2 y2 z2] [x3 y3 z3]",
      ""],
+    ["yt-text","Add text to the yt volume.",
+     "<x> <y> <z> <text>",""],
     ["yt-box","Draw a box in yt.",
      "<x1> <y1> <z1> <x2> <y2> <z2>","Long desc."],
     ["yt-line","Draw a line in yt.",
