@@ -214,6 +214,10 @@ class plot_base:
     """
     Current list of yt data source objects
     """
+    yt_text_objects=[]
+    """
+    Current list of yt data source objects
+    """
     
     def yt_unique_keyname(self,prefix):
         if self.yt_scene==0:
@@ -289,6 +293,136 @@ class plot_base:
         # End of function plot_base::new_cmaps()
         return
         
+    def yt_render(self,fname,mov_fname=''):
+        """
+        Complete the yt render and save the image to a file. If necessary,
+        compile the images into a movie and save into the specified
+        file name.
+        """
+
+        # AWS 10/14/19 the call to save() below does
+        # the render() so I don't think I need this
+        #self.yt_scene.render()
+
+        if self.yt_path=='':
+
+            # No path, so just call save and finish
+            print('o2graph:yt-render: Calling yt_scene.save().')
+            self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
+            
+        else:
+
+            # Setup destination filename
+            if mov_fname=='':
+                mov_fname='o2graph.mp4'
+
+            # Parse image file pattern
+            asterisk=fname.find('*')
+            prefix=fname[0:asterisk]
+            suffix=fname[asterisk+1:len(fname)]
+            print('o2graph:yt-render:',
+                  'fname,prefix,suffix,mov_fname:',
+                  fname,prefix,suffix,mov_fname)
+                            
+            # Read path 
+            path_arr=self.yt_path.split(' ')
+            
+            if path_arr[0]=='yaw':
+
+                first=True
+                n_frames=int(path_arr[1])
+                angle=float(path_arr[2])*numpy.pi*2.0
+                            
+                for i in range(0,n_frames):
+                    if i+1<10:
+                        fname2=prefix+'0'+str(i+1)+suffix
+                    else:
+                        fname2=prefix+str(i+1)+suffix
+                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
+                    if platform.system()!='Darwin':
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('eog /tmp/o2graph_temp.png &')
+                            first=False
+                    else:
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('open /tmp/o2gr'+
+                                      'aph_temp.png &')
+                            first=False
+                    self.yt_camera.yaw(angle)
+                    
+            elif path_arr[0]=='zoom':
+                
+                first=True
+                n_frames=int(path_arr[1])
+                factor=float(path_arr[2])
+
+                for i in range(0,n_frames):
+                    if i+1<10:
+                        fname2=prefix+'0'+str(i+1)+suffix
+                    else:
+                        fname2=prefix+str(i+1)+suffix
+                    ifactor=factor**(float(i)/(float(n_frames)-1))
+                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
+                    if platform.system()!='Darwin':
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('eog /tmp/o2graph_temp.png &')
+                            first=False
+                    else:
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('open /tmp/o2gr'+
+                                      'aph_temp.png &')
+                            first=False
+                    self.yt_camera.zoom(ifactor)
+
+            # -r is rate, -f is format, -vcodec is video
+            # codec (apparently 420p works well with
+            # quicktime), -pix_fmt sepcifies the pixel format,
+            # -crf is the quality (15-25 recommended)
+            # -y forces overwrite of the movie file if it
+            # already exists
+                        
+            cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                      prefix+'%02d'+suffix+' -vcodec libx264 '+
+                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
+            print('ffmpeg command:',cmd)
+            os.system(cmd)
+            
+        # End of function plot_base::yt_render()
+        return
+
+    def yt_text(self,tx,ty,tz,textstr,reorient=False,scale=0.6,font=30,
+                keyname='o2graph_text'):
+        """
+        """
+
+        if (self.xset==False or self.yset==False or
+            self.zset==False):
+            print('Cannot place text before limits set.')
+            return
+        
+        xval=(tx-self.xlo)/(self.xhi-self.xlo)
+        yval=(ty-self.ylo)/(self.yhi-self.ylo)
+        zval=(tz-self.zlo)/(self.zhi-self.zlo)
+        
+        kname=self.yt_unique_keyname(keyname)
+        
+        self.yt_text_objects.append([kname,reorient,xval,yval,zval,textstr,
+                                     scale,font])
+        
+        self.yt_text_to_scene([xval,yval,zval],
+                              textstr,scale=scale,font=font,keyname=kname)
+
+        # End of function plot_base::yt_text()
+        return
+
     def set(self,name,value):
         """
         Set the value of parameter named ``name`` to value ``value``
@@ -420,6 +554,11 @@ class plot_base:
         ``yt_resolution``, ``yt_position``, and ``yt_focus``, with a
         camera width based on the domain width of ``ds``.
         """
+        if (self.xset==False or self.yset==False or
+            self.zset==False):
+            print('Cannot create camera before x, y, and z limits are set.')
+                return
+            
         print('o2graph_plotter:yt_create_camera(): Creating camera.')
         self.yt_camera=self.yt_scene.add_camera()
         self.yt_camera.resolution=self.yt_resolution

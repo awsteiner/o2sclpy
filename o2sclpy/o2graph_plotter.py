@@ -1755,112 +1755,6 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::yt_add_vol()
         return
         
-    def yt_render(self,fname,mov_fname=''):
-        """
-        Complete the yt render and save the image to a file. If necessary,
-        compile the images into a movie and save into the specified
-        file name.
-
-        """
-
-        # AWS 10/14/19 the call to save() below does
-        # the render() so I don't think I need this
-        #self.yt_scene.render()
-
-        if self.yt_path=='':
-
-            # No path, so just call save and finish
-            print('o2graph:yt-render: Calling yt_scene.save().')
-            self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
-            
-        else:
-
-            # Setup destination filename
-            if mov_fname=='':
-                mov_fname='o2graph.mp4'
-
-            # Parse image file pattern
-            asterisk=fname.find('*')
-            prefix=fname[0:asterisk]
-            suffix=fname[asterisk+1:len(fname)]
-            print('o2graph:yt-render:',
-                  'fname,prefix,suffix,mov_fname:',
-                  fname,prefix,suffix,mov_fname)
-                            
-            # Read path 
-            path_arr=self.yt_path.split(' ')
-            
-            if path_arr[0]=='yaw':
-
-                first=True
-                n_frames=int(path_arr[1])
-                angle=float(path_arr[2])*numpy.pi*2.0
-                            
-                for i in range(0,n_frames):
-                    if i+1<10:
-                        fname2=prefix+'0'+str(i+1)+suffix
-                    else:
-                        fname2=prefix+str(i+1)+suffix
-                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
-                    if platform.system()!='Darwin':
-                        os.system('cp '+fname2+
-                                  ' /tmp/o2graph_temp.png')
-                        if first:
-                            os.system('eog /tmp/o2graph_temp.png &')
-                            first=False
-                    else:
-                        os.system('cp '+fname2+
-                                  ' /tmp/o2graph_temp.png')
-                        if first:
-                            os.system('open /tmp/o2gr'+
-                                      'aph_temp.png &')
-                            first=False
-                    self.yt_camera.yaw(angle)
-                    
-            elif path_arr[0]=='zoom':
-                
-                first=True
-                n_frames=int(path_arr[1])
-                factor=float(path_arr[2])
-
-                for i in range(0,n_frames):
-                    if i+1<10:
-                        fname2=prefix+'0'+str(i+1)+suffix
-                    else:
-                        fname2=prefix+str(i+1)+suffix
-                    ifactor=factor**(float(i)/(float(n_frames)-1))
-                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
-                    if platform.system()!='Darwin':
-                        os.system('cp '+fname2+
-                                  ' /tmp/o2graph_temp.png')
-                        if first:
-                            os.system('eog /tmp/o2graph_temp.png &')
-                            first=False
-                    else:
-                        os.system('cp '+fname2+
-                                  ' /tmp/o2graph_temp.png')
-                        if first:
-                            os.system('open /tmp/o2gr'+
-                                      'aph_temp.png &')
-                            first=False
-                    self.yt_camera.zoom(ifactor)
-
-            # -r is rate, -f is format, -vcodec is video
-            # codec (apparently 420p works well with
-            # quicktime), -pix_fmt sepcifies the pixel format,
-            # -crf is the quality (15-25 recommended)
-            # -y forces overwrite of the movie file if it
-            # already exists
-                        
-            cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                      prefix+'%02d'+suffix+' -vcodec libx264 '+
-                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
-            print('ffmpeg command:',cmd)
-            os.system(cmd)
-            
-        # End of function o2graph_plotter::yt_render()
-        return
-
     def help_func(self,o2scl_hdf,amp,args):
         curr_type=''
         cmd=''
@@ -2068,31 +1962,6 @@ class o2graph_plotter(plot_base):
                                      float(args[6])])
 
         # End of function o2graph_plotter::yt_tf_func()
-        return
-
-    def yt_text(self,o2scl_hdf,amp,args):
-        """
-        """
-
-        if len(args)<4:
-            print('Function yt_text() requires four ',
-                  'arguments.')
-            return
-
-        if (self.xset==False or self.yset==False or
-            self.zset==False):
-            print('Cannot place text before limits set.')
-            return
-        
-        xval=(float(eval(args[0]))-self.xlo)/(self.xhi-self.xlo)
-        yval=(float(eval(args[1]))-self.ylo)/(self.yhi-self.ylo)
-        zval=(float(eval(args[2]))-self.zlo)/(self.zhi-self.zlo)
-        
-        kname=self.yt_unique_keyname('o2graph_text')
-        self.yt_text_to_scene([xval,yval,zval],
-                              args[3],scale=0.6,font=30,keyname=kname)
-
-        # End of function o2graph_plotter::yt_text()
         return
 
     def yt_scatter(self,o2scl_hdf,amp,args):
@@ -2761,6 +2630,9 @@ class o2graph_plotter(plot_base):
                     
                 elif cmd_name=='yt-scatter':
 
+                    if self.verbose>2:
+                        print('Process yt-scatter.')
+
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-scatter.')
                     else:
@@ -2768,12 +2640,27 @@ class o2graph_plotter(plot_base):
                                                     
                 elif cmd_name=='yt-text':
 
-                    if ix_next-ix<4:
+                    if self.verbose>2:
+                        print('Process yt-text.')
+
+                    if ix_next-ix<5:
                         print('Not enough parameters for yt-text.')
+                    elif ix_next-ix>5:
+                        self.yt_text(float(eval(strlist[ix+1])),
+                                     float(eval(strlist[ix+2])),
+                                     float(eval(strlist[ix+3])),
+                                     strlist[ix+4],
+                                     **string_to_dict(strlist[ix+5]))
                     else:
-                        self.yt_text(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                        self.yt_text(float(eval(strlist[ix+1])),
+                                     float(eval(strlist[ix+2])),
+                                     float(eval(strlist[ix+3])),
+                                     strlist[ix+4])
                                                     
                 elif cmd_name=='yt-line':
+
+                    if self.verbose>2:
+                        print('Process yt-line.')
 
                     if ix_next-ix<6:
                         print('Not enough parameters for yt-line.')
@@ -2782,12 +2669,18 @@ class o2graph_plotter(plot_base):
                                                     
                 elif cmd_name=='yt-box':
 
+                    if self.verbose>2:
+                        print('Process yt-box.')
+
                     if ix_next-ix<6:
                         print('Not enough parameters for yt-box.')
                     else:
                         self.yt_box(o2scl_hdf,amp,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-vertex-list':
+
+                    if self.verbose>2:
+                        print('Process yt-vertex-list.')
 
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-vertex-list.')
@@ -2797,6 +2690,9 @@ class o2graph_plotter(plot_base):
                                                     
                 elif cmd_name=='yt-source-list':
 
+                    if self.verbose>2:
+                        print('Process yt-source-list.')
+                        
                     icnt=0
                     for key, value in self.yt_scene.sources.items():
                         print('yt-source-list',icnt,key,type(value))
@@ -2806,10 +2702,16 @@ class o2graph_plotter(plot_base):
                     
                 elif cmd_name=='yt-axis':
 
+                    if self.verbose>2:
+                        print('Process yt-axis.')
+                        
                     self.yt_plot_axis()
 
                 elif cmd_name=='yt-render':
 
+                    if self.verbose>2:
+                        print('Process render.')
+                        
                     if ix_next-ix<2:
                         print('Not enough parameters for yt-render.')
                     elif ix_next-ix<3:
@@ -2821,7 +2723,7 @@ class o2graph_plotter(plot_base):
                 elif cmd_name=='yt-tf':
 
                     if self.verbose>2:
-                        print('Process commands.')
+                        print('Process yt-tf.')
 
                     self.yt_tf_func(strlist[ix+1:ix_next])
                     
@@ -2834,6 +2736,9 @@ class o2graph_plotter(plot_base):
 
                 elif cmd_name=='version':
                     
+                    if self.verbose>2:
+                        print('Process version.')
+
                     print('o2graph: A data table plotting and',
                           'processing program for O2scl.')
                     print(' Version '+version+'.')

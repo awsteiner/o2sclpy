@@ -180,6 +180,7 @@ def string_to_dict(s):
     matplotlib keyword arguments which are expected to have integer or
     floating point values.
     """
+
     # First split into keyword = value pairs
     arr=s.split(',')
     # Create empty dictionary
@@ -226,6 +227,9 @@ def string_to_dict(s):
                     if arr[j].split('=')[0]=='as_angleB':
                         arr2[1]=arr2[1]+',angleB='+arr[j].split('=')[1]
                 print('Found arrowstyle option, reprocessed:',arr2[1])
+
+            # If one of the entries is connection style, then process
+            # accordingly
             if arr2[0]=='connectionstyle':
                 for j in range(0,len(arr)):
                     if arr[j].split('=')[0]=='angleA':
@@ -283,7 +287,18 @@ def string_to_dict(s):
                 arr2[1]=float(arr2[1])
             if arr2[0]=='fontsize':
                 arr2[1]=float(arr2[1])
+            if arr2[0]=='font':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='scale':
+                arr2[1]=float(arr2[1])
+
+            # Convert strings to bool values
             if arr2[0]=='sharex':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='reorient':
                 if arr2[1]=='True':
                     arr2[1]=True
                 else:
@@ -313,6 +328,8 @@ def string_to_dict(s):
                     arr2[1]=True
                 else:
                     arr2[1]=False
+
+            # Process color entries
             if arr2[0]=='color' and arr[i][5]=='=' and arr[i][6]=='(':
                 arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]
                 skip=2
