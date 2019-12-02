@@ -19,17 +19,12 @@
 #  
 #  -------------------------------------------------------------------
 #
-
 import math
-import os
 import sys
 import ctypes
 import numpy
 
 import matplotlib.pyplot as plot
-
-# For system type detection
-import platform
 
 # For wrapping help text
 import textwrap

@@ -21,6 +21,10 @@
 #
 import math
 import numpy
+import os
+
+# For system type detection
+import platform
 
 import matplotlib.pyplot as plot
 
@@ -306,6 +310,8 @@ class plot_base:
         for i in range(0,len(self.yt_text_objects)):
             if self.yt_text_objects[i][1]==True:
                 # Remove previous object
+                del self.yt_scene.sources[self.yt_text_objects[i][0]]
+                # Now add it back
                 self.yt_text_to_scene([self.yt_text_objects[i][2],
                                        self.yt_text_objects[i][3],
                                        self.yt_text_objects[i][4]],
@@ -376,7 +382,9 @@ class plot_base:
                             os.system('open /tmp/o2gr'+
                                       'aph_temp.png &')
                             first=False
+                    self.yt_update_text()
                     self.yt_camera.yaw(angle)
+                    
                     
             elif path_arr[0]=='zoom':
                 
