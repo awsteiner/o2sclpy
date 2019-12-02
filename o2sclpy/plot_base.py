@@ -384,6 +384,7 @@ class plot_base:
                             first=False
                     self.yt_update_text()
                     self.yt_camera.yaw(angle)
+                    print(self.yt_camera)
                     
                     
             elif path_arr[0]=='zoom':
@@ -670,6 +671,11 @@ class plot_base:
                     Y.append([vecnew[0],vecnew[1],vecnew[2]])
                     Y2.append([1.0-X[i,j,0]/255.0,1.0-X[i,j,1]/255.0,
                                1.0-X[i,j,2]/255.0,alpha])
+
+        # Close the figure so that the memory is released now
+        # that we have the point data
+        plot.close(fig)
+        
         # End of function o2graph_plotter::yt_text_to_points()
         return(numpy.array(Y),numpy.array(Y2))
 
