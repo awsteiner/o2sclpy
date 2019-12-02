@@ -82,7 +82,8 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     
 def get_str_array(dset):
     """
-    Extract a string array from O2scl HDF5 dataset ``dset`` as a list
+    Extract a string array from O\ :sub:`2`\ scl 
+    HDF5 dataset ``dset`` as a list
     """
     nw=dset['nw'][0]
     nc=dset['nc'][0]

@@ -30,7 +30,7 @@ import urllib.request
 
 def build_o2scl(verbose=1,release=True):
     """
-    This function attempts to automatically build O2scl using 
+    This function attempts to automatically build O\ :sub:`2`\ scl using 
     homebrew on OSX and snap on Linux.
     """
     
@@ -84,8 +84,8 @@ def build_o2scl(verbose=1,release=True):
                 
 def link_o2scl(verbose=1,o2scl_cpplib='',o2scl_libdir=''):
     """
-    This function attempts to automatically load O2scl as a 
-    DLL and returns the O2scl and O2scl_hdf DLL pointers.
+    This function attempts to automatically load O\ :sub:`2`\ scl as a 
+    DLL and returns the ``o2scl`` and ``o2scl_hdf`` DLL pointers.
     """
 
     # Handle OSX and Linux separately

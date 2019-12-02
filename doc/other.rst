@@ -1,21 +1,23 @@
 Other O2sclpy objects
 =====================
 
-.. autofunction:: build_o2scl
-.. autofunction:: link_o2scl
-.. autofunction:: default_plot
-.. autofunction:: get_str_array
-.. autofunction:: string_to_dict
-.. autofunction:: parse_arguments
-.. autofunction:: slack_notify
-.. autofunction:: force_bytes
-.. autodata:: version		  
-.. autodata:: cmaps
-.. autodata:: new_cmaps
-.. autodata:: base_list
-.. autodata:: param_list
-.. autodata:: yt_param_list
-.. autodata:: extra_list
-.. autodata:: extra_types
+Variables base_list, param_list, yt_param_list, extra_list are not
+listed here because there auto-docs are too long.
+
+.. autofunction:: o2sclpy.build_o2scl
+.. autofunction:: o2sclpy.link_o2scl
+.. autofunction:: o2sclpy.default_plot
+.. autofunction:: o2sclpy.get_str_array
+.. autofunction:: o2sclpy.string_to_dict
+.. autofunction:: o2sclpy.parse_arguments
+.. autofunction:: o2sclpy.slack_notify
+.. autofunction:: o2sclpy.force_bytes
+.. autodata:: o2sclpy.version		  
+.. autodata:: o2sclpy.cmaps
+.. autodata:: o2sclpy.new_cmaps
+.. autodata:: o2sclpy.extra_types
+
+
+
 
 
