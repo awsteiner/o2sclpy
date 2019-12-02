@@ -1756,6 +1756,10 @@ class o2graph_plotter(plot_base):
         return
         
     def help_func(self,o2scl_hdf,amp,args):
+        """
+        Function to process the help command.
+        """
+        
         curr_type=''
         cmd=''
 
@@ -1967,7 +1971,7 @@ class o2graph_plotter(plot_base):
     def yt_scatter(self,o2scl_hdf,amp,args):
         """
         Create a 3D scatter plot with yt using data from an
-        o2scl table object
+        O\ :sub:`2`\ scl table object
         """
 
         if len(args)<3:
@@ -2193,6 +2197,8 @@ class o2graph_plotter(plot_base):
         
     def yt_vertex_list(self,o2scl_hdf,amp,args):
         """
+        Plot a series of line segments between a list of
+        vertices specified in an O\ :sub:`2`\ scl table
         """
 
         if len(args)<3:
@@ -2338,6 +2344,7 @@ class o2graph_plotter(plot_base):
         
     def yt_line(self,o2scl_hdf,amp,args):
         """
+        Plot a line in a yt volume visualization.
         """
 
         if len(args)<6:

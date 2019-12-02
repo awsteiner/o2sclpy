@@ -220,6 +220,10 @@ class plot_base:
     """
     
     def yt_unique_keyname(self,prefix):
+        """
+        Construct a unique yt keyname by adding integers (beginning with
+        the number 2) to the user-specified ``prefix``.
+        """
         if self.yt_scene==0:
             return(prefix)
         current=prefix
@@ -292,7 +296,27 @@ class plot_base:
         new_cmaps_defined=True
         # End of function plot_base::new_cmaps()
         return
+
+    def yt_update_text(self):
+        """
+        Update the text objects during an animation by removing them from
+        the scene and adding them back.
+        """
+
+        for i in range(0,len(self.yt_text_objects)):
+            if self.yt_text_objects[i][1]==True:
+                # Remove previous object
+                self.yt_text_to_scene([self.yt_text_objects[i][2],
+                                       self.yt_text_objects[i][3],
+                                       self.yt_text_objects[i][4]],
+                                      self.yt_text_objects[i][5],
+                                      scale=self.yt_text_objects[i][6],
+                                      font=self.yt_text_objects[i][7],
+                                      keyname=self.yt_text_objects[i][0])
         
+        # End of function plot_base::yt_update_text()
+        return
+    
     def yt_render(self,fname,mov_fname=''):
         """
         Complete the yt render and save the image to a file. If necessary,
@@ -401,6 +425,15 @@ class plot_base:
     def yt_text(self,tx,ty,tz,textstr,reorient=False,scale=0.6,font=30,
                 keyname='o2graph_text'):
         """
+        Plot text given in ``textstr`` in a yt volume visualization at
+        location ``(tx,ty,tz)``. If reorient is ``True``, then 
+        the during an animation, the text will be redrawn so that
+        it is parallel to the camera. The ``scale`` and ``font``
+        parameters are passed on to the yt_text_to_scene() function.
+
+        In the future, the plan is to allow tx, ty, and tz to be
+        functions of 'i', so the text can be moved. For now tx, ty,
+        and tz are just floating point numbers.
         """
 
         if (self.xset==False or self.yset==False or
@@ -557,7 +590,7 @@ class plot_base:
         if (self.xset==False or self.yset==False or
             self.zset==False):
             print('Cannot create camera before x, y, and z limits are set.')
-                return
+            return
             
         print('o2graph_plotter:yt_create_camera(): Creating camera.')
         self.yt_camera=self.yt_scene.add_camera()
@@ -1116,6 +1149,9 @@ class plot_base:
         return
 
     def subplots(self,nr,nc=1,**kwargs):
+        """
+        Create ``nr`` rows and ``nc`` columns of subplots.
+        """
         plot.rc('text',usetex=True)
         plot.rc('font',family='serif')
         plot.rcParams['lines.linewidth']=0.5
@@ -1245,6 +1281,9 @@ class plot_base:
         return
     
     def selax(self,nr,nc=0):
+        """
+        Select an axis from the current list of axes
+        """
         nr_temp=len(self.axis_list)
         try:
             nc_temp=len(self.axis_list[0])
@@ -1258,6 +1297,11 @@ class plot_base:
         return
 
     def addcbar(self,left,bottom,width,height,**kwargs):
+        """
+        Add a colorbar from the most recently created image
+        at the location specified by ``left``, ``bottom``, ``width`` and
+        ``height``. 
+        """
         axis_temp=self.fig.add_axes([left,bottom,width,height])
         self.axis_list.append(axis_temp)
         self.axes=axis_temp
