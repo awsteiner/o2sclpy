@@ -1,38 +1,3 @@
-Other O2sclpy classes
-=====================
-
-.. module:: o2sclpy
-
-Class cloud_file
-----------------
-	    
-.. autoclass:: cloud_file
-	:members:
-	:undoc-members:
-
-Class hdf5_reader
------------------
-	    
-.. autoclass:: hdf5_reader
-	:members:
-	:undoc-members:
-
-Class plotter
--------------
-	    
-.. autoclass:: plotter
-	:members:
-	:undoc-members:
-
-Class plot_base
----------------
- 
-.. autoclass:: plot_base
-	:members:
-	:undoc-members:
-
---------------------------------------------------------------
-	     
 Other O2sclpy objects
 =====================
 
@@ -53,15 +18,4 @@ Other O2sclpy objects
 .. autodata:: extra_list
 .. autodata:: extra_types
 
---------------------------------------------------------------
-
-Internal classes
-================
-
-Class o2graph_plotter
----------------------
- 
-.. autoclass:: o2graph_plotter
-	:members:
-	:undoc-members:
 

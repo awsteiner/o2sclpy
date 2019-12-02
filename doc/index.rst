@@ -50,7 +50,9 @@ Contents
 
    licensing
    o2graph
+   other_class
    other
+   internal
    todos
 
 --------------------------------------------------------------
