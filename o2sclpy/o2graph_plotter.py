@@ -106,6 +106,8 @@ class o2graph_plotter(plot_base):
             if args[0]==line[0]:
                 match=True
 
+        print('herey',match)
+                
         # If it's an o2graph or yt parameter, then call the parent
         # set() function
         if match==True:
@@ -1956,7 +1958,7 @@ class o2graph_plotter(plot_base):
                                                     grey_opacity=False)
             else:
                 self.yt_tf=yt.ColorTransferFunction((float(eval(args[1])),
-                                                     float(evla(args[2]))),
+                                                     float(eval(args[2]))),
                                                     grey_opacity=False)
                 
         elif args[0]=='gauss':
@@ -2036,14 +2038,6 @@ class o2graph_plotter(plot_base):
         if len(args)>=8:
             alpha_column=args[7]
         
-        icnt=0
-        if self.yt_scene!=0:
-            for key, value in self.yt_scene.sources.items():
-                print('yt-source-list',icnt,key,type(value))
-                icnt=icnt+1
-        if icnt==0:
-            self.yt_def_vol()
-        
         int_ptr=ctypes.POINTER(ctypes.c_int)
         char_ptr=ctypes.POINTER(ctypes.c_char)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
@@ -2104,22 +2098,22 @@ class o2graph_plotter(plot_base):
                       column_z+'".')
                 failed=True
 
-            if (force_bytes(size_column)==b'None' and
+            if (force_bytes(size_column)==b'None' or
                 force_bytes(size_column)==b'none'):
                 size_column=''
-            if (force_bytes(red_column)==b'None' and
+            if (force_bytes(red_column)==b'None' or
                 force_bytes(red_column)==b'none'):
                 red_column=''
-            if (force_bytes(green_column)==b'None' and
+            if (force_bytes(green_column)==b'None' or
                 force_bytes(green_column)==b'none'):
                 green_column=''
-            if (force_bytes(blue_column)==b'None' and
+            if (force_bytes(blue_column)==b'None' or
                 force_bytes(blue_column)==b'none'):
                 blue_column=''
-            if (force_bytes(alpha_column)==b'None' and
+            if (force_bytes(alpha_column)==b'None' or
                 force_bytes(alpha_column)==b'none'):
                 alpha_column=''
-                
+
             if size_column!='':
                 cols=ctypes.c_char_p(force_bytes(size_column))
                 ids=ctypes.c_int(0)
@@ -2154,6 +2148,68 @@ class o2graph_plotter(plot_base):
                 ptra=double_ptr()
                 get_ret=get_fn(amp,cola,ctypes.byref(ida),
                                ctypes.byref(ptra))
+
+            rescale_r=False
+            rescale_g=False
+            rescale_b=False
+            for i in range(0,idr.value):
+                if ptrr[i]<0.0:
+                    if rescale_r==False:
+                        rescale_r=True
+                        min_r=ptrr[i]
+                        max_r=ptrr[i]
+                    elif ptrr[i]<min_r:
+                        min_r=ptrr[i]
+                if ptrr[i]>1.0:
+                    if rescale_r==False:
+                        rescale_r=True
+                        min_r=ptrr[i]
+                        max_r=ptrr[i]
+                    elif ptrr[i]>max_r:
+                        max_r=ptrr[i]
+                if ptrg[i]<0.0:
+                    if rescale_g==False:
+                        rescale_g=True
+                        min_g=ptrg[i]
+                        max_g=ptrg[i]
+                    elif ptrg[i]<min_g:
+                        min_g=ptrg[i]
+                if ptrg[i]>1.0:
+                    if rescale_g==False:
+                        rescale_g=True
+                        min_g=ptrg[i]
+                        max_g=ptrg[i]
+                    elif ptrg[i]>max_g:
+                        max_g=ptrg[i]
+                if ptrb[i]<0.0:
+                    if rescale_b==False:
+                        rescale_b=True
+                        min_b=ptrb[i]
+                        max_b=ptrb[i]
+                    elif ptrb[i]<min_b:
+                        min_b=ptrb[i]
+                if ptrb[i]>1.0:
+                    if rescale_b==False:
+                        rescale_b=True
+                        min_b=ptrb[i]
+                        max_b=ptrb[i]
+                    elif ptrb[i]>max_b:
+                        max_b=ptrb[i]
+            if rescale_r:
+                print('Rescaling red range ('+str(min_r)+','+
+                      str(max_r)+') to (0,1).')
+                for i in range(0,idr.value):
+                    ptrr[i]=(ptrr[i]-min_r)/(max_r-min_r)
+            if rescale_g:
+                print('Rescaling green range ('+str(min_g)+','+
+                      str(max_g)+') to (0,1).')
+                for i in range(0,idg.value):
+                    ptrg[i]=(ptrg[i]-min_g)/(max_g-min_g)
+            if rescale_b:
+                print('Rescaling blue range ('+str(min_b)+','+
+                      str(max_b)+') to (0,1).')
+                for i in range(0,idb.value):
+                    ptrb[i]=(ptrb[i]-min_b)/(max_b-min_b)
                 
             if self.xset==False:
                 self.xlo=ptrx[0]
@@ -2186,6 +2242,14 @@ class o2graph_plotter(plot_base):
             y_range=self.yhi-self.ylo
             z_range=self.zhi-self.zlo
 
+            icnt=0
+            if self.yt_scene!=0:
+                for key, value in self.yt_scene.sources.items():
+                    print('yt-source-list',icnt,key,type(value))
+                    icnt=icnt+1
+            if icnt==0:
+                self.yt_def_vol()
+            
             pts=[]
             cols=[]
             sizes=[]

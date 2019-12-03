@@ -385,6 +385,7 @@ class plot_base:
                     self.yt_update_text()
                     self.yt_camera.yaw(angle)
                     print(self.yt_camera)
+                    print(self.yt_scene.camera)
                     
                     
             elif path_arr[0]=='zoom':
@@ -469,6 +470,7 @@ class plot_base:
         """
         Set the value of parameter named ``name`` to value ``value``
         """
+        print('herex',name,value)
         if name=='logx':
             if value=='False' or value=='0':
                 self.logx=False
@@ -809,13 +811,15 @@ class plot_base:
             print('No volume object, adding yt volume.')
             
         self.yt_tf=yt.ColorTransferFunction((0,1),grey_opacity=False)
-        self.yt_tf.add_gaussian(2,0,[0,0,0,0])
+        self.yt_tf.add_gaussian(2.0,0.1,[0,0,0,0])
             
         arr=numpy.zeros(shape=(2,2,2))
         bbox=numpy.array([[0.0,1.0],[0.0,1.0],[0.0,1.0]])
-        ds=yt.load_uniform_grid(dict(density=arr),
-                                arr.shape,bbox=bbox)
-        vol=VolumeSource(ds,field='density')
+        self.yt_data_sources.append(yt.load_uniform_grid(dict(density=arr),
+                                                         arr.shape,bbox=bbox))
+        ds=self.yt_data_sources[len(self.yt_data_sources)-1]
+        self.yt_vols.append(VolumeSource(ds,field='density'))
+        vol=self.yt_vols[len(self.yt_vols)-1]
         vol.log_field=False
             
         vol.set_transfer_function(self.yt_tf)
