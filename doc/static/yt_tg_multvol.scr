@@ -7,7 +7,7 @@ o2graph -backend Agg \
 	-set-grid 2 "func:101:i*0.01" \
 	-function "(x0-0.2)^2+(x1-0.2)^2+(x2-0.2)^2" \
 	-yt-tf new 0 1 \
-	-yt-tf gauss 0.01 0.0001 1.0 0.0 0.0 1.0 \
+	-yt-tf gauss 0.01 4.0e-6 10.0 0.0 0.0 1.0 \
 	-yt-add-vol \
 	-function "(x0-0.8)^2+(x1-0.6)^2+(x2-0.2)^2" \
 	-yt-tf new 0 1 \
@@ -24,9 +24,9 @@ o2graph -backend Agg \
 	-yt-text 1.0 0.6 0.05 "$ \mathrm{Volume}~2 $" \
 	-yt-text 0.2 0.8 0.65 "$ \mathrm{Volume}~3 $" \
 	-yt-source-list \
-	-set yt_path "yaw 100 0.01" \
-	-yt-render "/tmp/yt_*.png" yt_tg_multvol.mp4
-	
-#	-yt-render yt_tg_multvol.png 
+	-yt-render yt_tg_multvol.png 
+
+#	-set yt_path "yaw 100 0.01" 
+#	-yt-render "/tmp/yt_*.png" yt_tg_multvol.mp4
 
 

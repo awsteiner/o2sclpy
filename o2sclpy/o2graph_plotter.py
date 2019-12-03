@@ -1932,20 +1932,37 @@ class o2graph_plotter(plot_base):
         if len(args)==0:
             print('Function yt_tf_func() requires arguments.')
             print('  For a new transfer function, args should be '+
-                  "('new','min','max').")
+                  "('new','min','max') or ('new','min','max','nbins')")
             print('  To add a Gaussian, args should be '+
                   "('gauss','loc','width','red','green','blue','alpha')")
+            print('  To add a step function, args should be '+
+                  "('step','low','high','red','green','blue','alpha')")
+            print('  To plot the transfer function, args should be '+
+                  "('plot','filename')")
             return
 
         if args[0]=='new':
+            if len(args)<3:
+                print('yt-tf new requires 3 arguments.')
+                return
             import yt
             print('o2graph:yt-tf: New transfer function.')
             print('o2graph:yt-tf: min:',args[1],
                   'max:',args[2])
-            self.yt_tf=yt.ColorTransferFunction((float(args[1]),
-                                                 float(args[2])),
-                                                grey_opacity=False)
+            if len(args)>=4:
+                self.yt_tf=yt.ColorTransferFunction((float(eval(args[1])),
+                                                     float(eval(args[2]))),
+                                                    nbins=int(eval(args[3])),
+                                                    grey_opacity=False)
+            else:
+                self.yt_tf=yt.ColorTransferFunction((float(eval(args[1])),
+                                                     float(evla(args[2]))),
+                                                    grey_opacity=False)
+                
         elif args[0]=='gauss':
+            if len(args)<7:
+                print('yt-tf gauss requires 6 arguments.')
+                return
             print('o2graph:yt-tf: Adding Gaussian to',
                   'transfer function.')
             print('o2graph:yt-tf: location:',args[1],
@@ -1953,12 +1970,38 @@ class o2graph_plotter(plot_base):
             print('o2graph:yt-tf: r,g,b,a:',
                   args[3],args[4],
                   args[5],args[6])
-            self.yt_tf.add_gaussian(float(args[1]),
-                                    float(args[2]),
-                                    [float(args[3]),
-                                     float(args[4]),
-                                     float(args[5]),
-                                     float(args[6])])
+            self.yt_tf.add_gaussian(float(eval(args[1])),
+                                    float(eval(args[2])),
+                                    [float(eval(args[3])),
+                                     float(eval(args[4])),
+                                     float(eval(args[5])),
+                                     float(eval(args[6]))])
+            
+        elif args[0]=='plot':
+            if len(args)<2:
+                print('yt-tf plot requires 1 argument.')
+                return
+            print('o2graph:yt-tf: Storing',
+                  'transfer function in file',args[1])
+            self.yt_tf.plot(args[1])
+
+        elif args[0]=='step':
+            if len(args)<7:
+                print('yt-tf step requires 6 arguments.')
+                return
+            print('o2graph:yt-tf: Adding step to',
+                  'transfer function.')
+            print('o2graph:yt-tf: start:',args[1],
+                  'stop:',args[2])
+            print('o2graph:yt-tf: r,g,b,a:',
+                  args[3],args[4],
+                  args[5],args[6])
+            self.yt_tf.add_step(float(eval(args[1])),
+                                float(eval(args[2])),
+                                [float(eval(args[3])),
+                                 float(eval(args[4])),
+                                 float(eval(args[5])),
+                                 float(eval(args[6]))])
 
         # End of function o2graph_plotter::yt_tf_func()
         return
