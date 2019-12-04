@@ -399,11 +399,23 @@ class plot_base:
                             os.system('open /tmp/o2gr'+
                                       'aph_temp.png &')
                             first=False
-                    self.yt_update_text()
-                    self.yt_camera.yaw(angle)
-                    print(self.yt_camera)
-                    print(self.yt_scene.camera)
+                            
                     
+                    from yt.units.yt_array import YTArray
+                    rv=YTArray([0,0,1])
+                    #rc=YTArray([0.5,0.5,0.5])
+                    self.yt_camera.rotate(angle,rot_vector=rv)
+                    
+                    #self.yt_camera.yaw(angle)
+                    
+                    self.yt_update_text()
+                    
+                    print(self.yt_camera)
+                    print('unit_vectors:',self.yt_camera.unit_vectors)
+                    print('origin:',self.yt_camera.lens.origin)
+                    print('num_threads:',self.yt_camera.lens.num_threads)
+                    print('back_center:',self.yt_camera.lens.back_center)
+                    print('front_center:',self.yt_camera.lens.front_center)
                     
             elif path_arr[0]=='zoom':
                 
@@ -487,7 +499,6 @@ class plot_base:
         """
         Set the value of parameter named ``name`` to value ``value``
         """
-        print('herex',name,value)
         if name=='logx':
             if value=='False' or value=='0':
                 self.logx=False

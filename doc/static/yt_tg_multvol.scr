@@ -24,10 +24,10 @@ o2graph -backend Agg \
 	-yt-text 1.0 0.6 0.05 "$ \mathrm{Volume}~2 $" \
 	-yt-text 0.2 0.8 0.65 "$ \mathrm{Volume}~3 $" \
 	-yt-source-list \
-	-yt-render yt_tg_multvol.png
-	
-#	-set yt_path "yaw 100 0.01" 
-#	-yt-render "/tmp/yt_*.png" yt_tg_multvol.mp4
+	-set yt_path "yaw 100 0.01" \
+	-yt-render "/tmp/yt_*.png" yt_tg_multvol.mp4
+
+#	-yt-render yt_tg_multvol.png
 
 
 
