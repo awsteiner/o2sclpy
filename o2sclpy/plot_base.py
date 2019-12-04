@@ -338,7 +338,24 @@ class plot_base:
 
             # No path, so just call save and finish
             print('o2graph:yt-render: Calling yt_scene.save().')
-            self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
+            if True:
+                self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
+            elif False:
+                self.yt_scene.save_annotated(fname,
+                                             sigma_clip=self.yt_sigma_clip)
+            else:
+                self.yt_scene.render()
+                axt=self.yt_scene._show_mpl(self.yt_scene._last_render.swapaxes(0,1),
+                                            sigma_clip=self.yt_sigma_clip,
+                                            dpi=100)
+                axt.axes.text(0.5,0.5,'test',color='w',
+                              transform=self.yt_scene._render_figure.transFigure)
+                from yt.visualization._mpl_imports import FigureCanvasAgg
+                canvast=FigureCanvasAgg(self.yt_scene._render_figure)
+                self.yt_scene._render_figure.canvas=canvast
+                self.yt_scene._render_figure.tight_layout(pad=0.0)
+                self.yt_scene._render_figure.savefig(fname,facecolor='white',
+                                                     pad_inches=0)
             
         else:
 

@@ -106,8 +106,6 @@ class o2graph_plotter(plot_base):
             if args[0]==line[0]:
                 match=True
 
-        print('herey',match)
-                
         # If it's an o2graph or yt parameter, then call the parent
         # set() function
         if match==True:
@@ -1808,7 +1806,6 @@ class o2graph_plotter(plot_base):
                       line[1]+'\n')
                 tempx_arr=line[3].split('\n')
                 for j in range(0,len(tempx_arr)):
-                    #print('here.'+tempx_arr[j]+'.')
                     if len(tempx_arr[j])<79:
                         print(tempx_arr[j])
                     else:
