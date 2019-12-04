@@ -414,8 +414,8 @@ class plot_base:
                     print('unit_vectors:',self.yt_camera.unit_vectors)
                     print('origin:',self.yt_camera.lens.origin)
                     print('num_threads:',self.yt_camera.lens.num_threads)
-                    print('back_center:',self.yt_camera.lens.back_center)
-                    print('front_center:',self.yt_camera.lens.front_center)
+                    print('normal:',self.yt_camera.Orientation.normal_vector)
+                    print('north:',self.yt_camera.Orientation.north_vector)
                     
             elif path_arr[0]=='zoom':
                 
