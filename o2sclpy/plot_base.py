@@ -401,6 +401,13 @@ class plot_base:
                             first=False
                             
                     
+                    print(self.yt_camera)
+                    print('unit_vectors:',self.yt_camera.unit_vectors)
+                    print('normal_vector:',self.yt_camera.normal_vector)
+                    print('north_vector:',self.yt_camera.north_vector)
+                    print('origin:',self.yt_camera.lens.origin)
+                    print('num_threads:',self.yt_camera.lens.num_threads)
+                    
                     from yt.units.yt_array import YTArray
                     rv=YTArray([0,0,1])
                     #rc=YTArray([0.5,0.5,0.5])
@@ -409,13 +416,6 @@ class plot_base:
                     #self.yt_camera.yaw(angle)
                     
                     self.yt_update_text()
-                    
-                    print(self.yt_camera)
-                    print('unit_vectors:',self.yt_camera.unit_vectors)
-                    print('origin:',self.yt_camera.lens.origin)
-                    print('num_threads:',self.yt_camera.lens.num_threads)
-                    print('normal:',self.yt_camera.Orientation.normal_vector)
-                    print('north:',self.yt_camera.Orientation.north_vector)
                     
             elif path_arr[0]=='zoom':
                 
