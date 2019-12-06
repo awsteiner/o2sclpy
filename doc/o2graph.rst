@@ -122,6 +122,8 @@ yt multiple volume example
 
 .. include:: static/yt_tg_multvol.scr
    :literal:	     
+.. image:: static/yt_tg_multvol_doc.png
+   :width: 70%
 
 .. raw:: html
 	 
