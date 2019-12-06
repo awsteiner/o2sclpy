@@ -412,6 +412,47 @@ class plot_base:
                     rv=YTArray([0,0,1])
                     #rc=YTArray([0.5,0.5,0.5])
                     self.yt_camera.rotate(angle,rot_vector=rv)
+
+                    if self.yt_position=='default':
+                        pos=[1.5,0.6,0.7]
+                    else:
+                        pos=[self.yt_position[0],
+                             self.yt_position[1],
+                             self.yt_position[2]]
+                    if self.yt_focus=='default':
+                        foc=[0.5,0.5,0.5]
+                    else:
+                        foc=[self.yt_focus[0],
+                             self.yt_focus[1],
+                             self.yt_focus[2]]
+                    print(pos,foc)
+                    xt=pos[0]-foc[0]
+                    yt=pos[1]-foc[1]
+                    zt=pos[2]-foc[2]
+                    print(xt,yt,zt)
+                    r=math.sqrt(xt**2+yt**2+zt**2)
+                    print(r)
+                    theta=math.acos(zt/r)
+                    phi=math.atan2(yt,xt)
+                    phi+=angle
+                    xt=r*math.sin(theta)*math.cos(phi)
+                    yt=r*math.sin(theta)*math.sin(phi)
+                    zt=r*math.cos(theta)
+                    print(xt,yt,zt)
+                    if self.yt_position=='default':
+                        self.yt_position=[0,0,0]
+                    self.yt_position[0]=foc[0]+xt
+                    self.yt_position[1]=foc[1]+yt
+                    self.yt_position[2]=foc[2]+zt
+                    print(self.yt_focus,self.yt_position)
+
+                    self.yt_camera.position=[pos[0],pos[1],pos[2]]
+                    if self.yt_focus=='default':
+                        self.yt_camera.focus=[0.5,0.5,0.5]
+                    else:
+                        self.yt_camera.focus=[foc[0],foc[1],foc[2]]
+                    self.yt_camera.north_vector=[0.0,0.0,1.0]
+                    self.yt_camera.switch_orientation()
                     
                     #self.yt_camera.yaw(angle)
                     
