@@ -81,10 +81,6 @@ class plot_base:
     """
     If True, then use a logarithmic z axis (default False)
     """
-    ztitle=''
-    """
-    Title for z axis (default '')
-    """
     xlo=0
     """
     Lower limit for x axis (default 0)
@@ -186,9 +182,9 @@ class plot_base:
     """
     yt camera position (default [1.5,0.6,0.7])
     """
-    yt_path=''
+    yt_path=[]
     """
-    yt animation path (default '')
+    yt animation path (default [])
     """
     yt_tf=0
     """
@@ -334,7 +330,7 @@ class plot_base:
         # the render() so I don't think I need this
         #self.yt_scene.render()
 
-        if self.yt_path=='':
+        if len(self.yt_path)==0:
 
             # No path, so just call save and finish
             print('o2graph:yt-render: Calling yt_scene.save().')
@@ -372,7 +368,6 @@ class plot_base:
                   fname,prefix,suffix,mov_fname)
                             
             # Read path 
-            path_arr=self.yt_path.split(' ')
             
             if path_arr[0]=='yaw':
 
@@ -689,6 +684,10 @@ class plot_base:
                                      (self.yhi-self.ylo),
                                      (self.yt_position[2]-self.zlo)/
                                      (self.zhi-self.zlo)]
+        print('Camera position [%0.6e,%0.6e,%0.6e]' %
+              (self.yt_camera.position[0],
+               self.yt_camera.position[1],
+               self.yt_camera.position[2]))
         if self.yt_focus=='default':
             self.yt_camera.focus=[0.5,0.5,0.5]
         else:
@@ -698,6 +697,10 @@ class plot_base:
                                   (self.yhi-self.ylo),
                                   (self.yt_focus[2]-self.zlo)/
                                   (self.zhi-self.zlo)]
+        print('Camera focus [%0.6e,%0.6e,%0.6e]' %
+              (self.yt_camera.focus[0],
+               self.yt_camera.focus[1],
+               self.yt_camera.focus[2]))
         self.yt_camera.north_vector=[0.0,0.0,1.0]
         self.yt_camera.switch_orientation()
         self.yt_created_camera=True
@@ -1277,33 +1280,12 @@ class plot_base:
         # End of function plot_base::subplots()
         return
 
-    def xtitle(self,textstr,loc='default',scale=0.6,font=30,color=(1,1,1,1),
-               keyname='o2graph_x_title'):
+    def xtitle(self,textstr):
         """
         Add a title for the x-axis
-
-        yt-mode: <text> [x loc] [y loc] [z loc]
         """
         
-        if self.yt_scene!=0:
-            
-            if (self.xset==False or self.yset==False or
-                self.zset==False):
-                print('Cannot place xtitle before limits set.')
-                return
-            xval=0.5
-            yval=-0.1
-            zval=-0.1
-            if loc!='default':
-                xval=(loc[0]-self.xlo)/(self.xhi-self.xlo)
-                yval=(loc[1]-self.ylo)/(self.yhi-self.ylo)
-                zval=(loc[2]-self.zlo)/(self.zhi-self.zlo)
-            kname=self.yt_unique_keyname(keyname)
-            self.yt_text_to_scene([xval,yval,zval],
-                                  textstr,scale=scale,font=font,keyname=kname)
-            
-        elif textstr!='' and textstr!='none':
-            
+        if textstr!='' and textstr!='none':
             if self.canvas_flag==False:
                 self.canvas()
             self.axes.set_xlabel(textstr,fontsize=self.font)
@@ -1311,65 +1293,20 @@ class plot_base:
         # End of function plot_base::xtitle()
         return
             
-    def ytitle(self,textstr,loc='default',scale=0.6,font=30,color=(1,1,1,1),
-               keyname='o2graph_y_title'):
+    def ytitle(self,textstr):
         """
         Add a title for the y-axis
-
-        yt-mode: <text> [x loc] [y loc] [z loc]
         """
-        if self.yt_scene!=0:
-            if (self.xset==False or self.yset==False or
-                self.zset==False):
-                print('Cannot place ytitle before limits set.')
-                return
-            xval=-0.1
-            yval=0.5
-            zval=-0.1
-            if loc!='default':
-                xval=(loc[0]-self.xlo)/(self.xhi-self.xlo)
-                yval=(loc[1]-self.ylo)/(self.yhi-self.ylo)
-                zval=(loc[2]-self.zlo)/(self.zhi-self.zlo)
-            kname=self.yt_unique_keyname(keyname)
-            self.yt_text_to_scene([xval,yval,zval],
-                                  textstr,scale=scale,font=font,keyname=kname)
-            
-        elif textstr!='' and textstr!='none':
-            
+        if textstr!='' and textstr!='none':
             if self.canvas_flag==False:
                 self.canvas()
             self.axes.set_ylabel(textstr,fontsize=self.font)
-            
         # End of function plot_base::ytitle()
         return
         
-    def ztitle(self,textstr,loc='default',scale=0.6,font=30,color=(1,1,1,1),
-               keyname='o2graph_z_title'):
-        """
-        Add a title for the z-axis
-
-        yt-mode: <text> [x loc] [y loc] [z loc]
-        """
-        if self.yt_scene!=0:
-            if (self.xset==False or self.yset==False or
-                self.zset==False):
-                print('Cannot place ztitle before limits set.')
-                return
-            xval=-0.1
-            yval=-0.1
-            zval=0.5
-            if loc!='default':
-                xval=(loc[0]-self.xlo)/(self.xhi-self.xlo)
-                yval=(loc[1]-self.ylo)/(self.yhi-self.ylo)
-                zval=(loc[2]-self.zlo)/(self.zhi-self.zlo)
-            kname=self.yt_unique_keyname(keyname)
-            self.yt_text_to_scene([xval,yval,zval],
-                                  textstr,scale=scale,font=font,
-                                  keyname=kname)
-        else:
-            print('No yt scene has been created for ztitle.')
-        # End of function plot_base::ztitle()
-        return
+    #def ztitle(self,textstr):
+    # End of function plot_base::ztitle()
+    #return
     
     def selax(self,nr,nc=0):
         """

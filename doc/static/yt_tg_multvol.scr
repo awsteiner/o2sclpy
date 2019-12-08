@@ -25,7 +25,7 @@ o2graph -backend Agg \
 	-yt-text 0.8 0.6 0.05 "$ \mathrm{Volume}~2 $" reorient=True,scale=0.4 \
 	-yt-text 0.2 0.8 0.65 "$ (x-x_0)^2 + \ldots $" reorient=True \
 	-yt-source-list \
-	-set yt_path "yaw 101 0.01" \
+	-yt-path yaw 101 0.01 \
 	-yt-render "/tmp/yt_*.png" yt_tg_multvol.mp4
 #
 # Combine the still images into a single image for the docs

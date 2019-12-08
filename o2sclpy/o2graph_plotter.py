@@ -2005,6 +2005,15 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::yt_tf_func()
         return
 
+    def yt_path_func(self,o2scl_hdf,amp,args):
+        """
+        """
+
+        self.yt_path.append(args)
+        print('yt_path is',self.yt_path)
+        
+        return
+
     def yt_scatter(self,o2scl_hdf,amp,args):
         """
         Create a 3D scatter plot with yt using data from an
@@ -2193,18 +2202,18 @@ class o2graph_plotter(plot_base):
                     elif ptrb[i]>max_b:
                         max_b=ptrb[i]
             if rescale_r:
-                print('Rescaling red range ('+str(min_r)+','+
-                      str(max_r)+') to (0,1).')
+                print('Rescaling red range   (%0.6e,%0.6e) to (0,1)' %
+                      (min_r,max_r))
                 for i in range(0,idr.value):
                     ptrr[i]=(ptrr[i]-min_r)/(max_r-min_r)
             if rescale_g:
-                print('Rescaling green range ('+str(min_g)+','+
-                      str(max_g)+') to (0,1).')
+                print('Rescaling green range (%0.6e,%0.6e) to (0,1)' %
+                      (min_g,max_g))
                 for i in range(0,idg.value):
                     ptrg[i]=(ptrg[i]-min_g)/(max_g-min_g)
             if rescale_b:
-                print('Rescaling blue range ('+str(min_b)+','+
-                      str(max_b)+') to (0,1).')
+                print('Rescaling blue range  (%0.6e,%0.6e) to (0,1)' %
+                      (min_b,max_b))
                 for i in range(0,idb.value):
                     ptrb[i]=(ptrb[i]-min_b)/(max_b-min_b)
                 
@@ -2216,6 +2225,7 @@ class o2graph_plotter(plot_base):
                         self.xlo=ptrx[i]
                     if ptrx[i]>self.xhi:
                         self.xhi=ptrx[i]
+                print('Set xlimits to (%0.6e,%0.6e)' % (self.xlo,self.xhi))
                 self.xset=True
             if self.yset==False:
                 self.ylo=ptry[0]
@@ -2225,6 +2235,7 @@ class o2graph_plotter(plot_base):
                         self.ylo=ptry[i]
                     if ptry[i]>self.yhi:
                         self.yhi=ptry[i]
+                print('Set ylimits to (%0.6e,%0.6e)' % (self.ylo,self.yhi))
                 self.yset=True
             if self.zset==False:
                 self.zlo=ptrz[0]
@@ -2234,6 +2245,7 @@ class o2graph_plotter(plot_base):
                         self.zlo=ptrz[i]
                     if ptrz[i]>self.zhi:
                         self.zhi=ptrz[i]
+                print('Set zlimits to (%0.6e,%0.6e)' % (self.zlo,self.zhi))
                 self.zset=True
             x_range=self.xhi-self.xlo
             y_range=self.yhi-self.ylo
@@ -2385,6 +2397,7 @@ class o2graph_plotter(plot_base):
                         self.xlo=ptrx[i]
                     if ptrx[i]>self.xhi:
                         self.xhi=ptrx[i]
+                print('Set xlimits to (%0.6e,%0.6e)' % (self.xlo,self.xhi))
                 self.xset=True
             if self.yset==False:
                 self.ylo=ptry[0]
@@ -2394,6 +2407,7 @@ class o2graph_plotter(plot_base):
                         self.ylo=ptry[i]
                     if ptry[i]>self.yhi:
                         self.yhi=ptry[i]
+                print('Set ylimits to (%0.6e,%0.6e)' % (self.ylo,self.yhi))
                 self.yset=True
             if self.zset==False:
                 self.zlo=ptrz[0]
@@ -2403,6 +2417,7 @@ class o2graph_plotter(plot_base):
                         self.zlo=ptrz[i]
                     if ptrz[i]>self.zhi:
                         self.zhi=ptrz[i]
+                print('Set zlimits to (%0.6e,%0.6e)' % (self.zlo,self.zhi))
                 self.zset=True
             x_range=self.xhi-self.xlo
             y_range=self.yhi-self.ylo
@@ -2468,6 +2483,7 @@ class o2graph_plotter(plot_base):
             else:
                 self.xlo=x2
                 self.xhi=x1
+            print('Set xlimits to',self.xlo,self.xhi)
             self.xset=True
         if self.yset==False:
             if y1<y2:
@@ -2476,6 +2492,7 @@ class o2graph_plotter(plot_base):
             else:
                 self.ylo=y2
                 self.yhi=y1
+            print('Set ylimits to',self.ylo,self.yhi)
             self.yset=True
         if self.zset==False:
             if z1<z2:
@@ -2484,6 +2501,7 @@ class o2graph_plotter(plot_base):
             else:
                 self.zlo=z2
                 self.zhi=z1
+            print('Set zlimits to',self.zlo,self.zhi)
             self.zset=True
         
         icnt=0
@@ -2535,6 +2553,7 @@ class o2graph_plotter(plot_base):
             else:
                 self.xlo=x2
                 self.xhi=x1
+            print('Set xlimits to',self.xlo,self.xhi)
             self.xset=True
         if self.yset==False:
             if y1<y2:
@@ -2543,6 +2562,7 @@ class o2graph_plotter(plot_base):
             else:
                 self.ylo=y2
                 self.yhi=y1
+            print('Set ylimits to',self.ylo,self.yhi)
             self.yset=True
         if self.zset==False:
             if z1<z2:
@@ -2551,6 +2571,7 @@ class o2graph_plotter(plot_base):
             else:
                 self.zlo=z2
                 self.zhi=z1
+            print('Set zlimits to',self.zlo,self.zhi)
             self.zset=True
         
         icnt=0
@@ -2744,6 +2765,16 @@ class o2graph_plotter(plot_base):
                     else:
                         self.yt_scatter(o2scl_hdf,amp,strlist[ix+1:ix_next])
                                                     
+                elif cmd_name=='yt-path':
+
+                    if self.verbose>2:
+                        print('Process yt-path.')
+
+                    if ix_next-ix<4:
+                        print('Not enough parameters for yt-path.')
+                    else:
+                        self.yt_path_func(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                                                    
                 elif cmd_name=='yt-text':
 
                     if self.verbose>2:
@@ -2801,7 +2832,10 @@ class o2graph_plotter(plot_base):
                         
                     icnt=0
                     for key, value in self.yt_scene.sources.items():
-                        print('yt-source-list',icnt,key,type(value))
+                        tstr=("<class 'yt.visualization.volume_"+
+                              "rendering.render_source.")
+                        print('yt-source-list',icnt,key,
+                              str(type(value)).replace(tstr,"<class '..."))
                         icnt=icnt+1
                     if icnt==0:
                         print('No yt sources.')
@@ -3060,22 +3094,22 @@ class o2graph_plotter(plot_base):
                                          float(eval(strlist[ix+3])),
                                          float(eval(strlist[ix+4]))])
                         
-                elif cmd_name=='ztitle':
+                # elif cmd_name=='ztitle':
                     
-                    if self.verbose>2:
-                        print('Process ztitle.')
+                #     if self.verbose>2:
+                #         print('Process ztitle.')
 
-                    if ix_next-ix<2:
-                        print('Not enough parameters for ztitle option.')
-                    elif ix_next-ix==2:
-                        self.ztitle(strlist[ix+1])
-                    elif ix_next-ix>2 and ix_next-ix<5:
-                        print('All three location parameters needed.')
-                    elif ix_next-ix==5:
-                        self.ztitle(strlist[ix+1],
-                                    loc=[float(eval(strlist[ix+2])),
-                                         float(eval(strlist[ix+3])),
-                                         float(eval(strlist[ix+4]))])
+                #     if ix_next-ix<2:
+                #         print('Not enough parameters for ztitle option.')
+                #     elif ix_next-ix==2:
+                #         self.ztitle(strlist[ix+1])
+                #     elif ix_next-ix>2 and ix_next-ix<5:
+                #         print('All three location parameters needed.')
+                #     elif ix_next-ix==5:
+                #         self.ztitle(strlist[ix+1],
+                #                     loc=[float(eval(strlist[ix+2])),
+                #                          float(eval(strlist[ix+3])),
+                #                          float(eval(strlist[ix+4]))])
                         
                 elif cmd_name=='line':
                     
