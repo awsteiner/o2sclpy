@@ -50,6 +50,7 @@ Contents
 
    licensing
    o2graph
+   yt
    class
    other
    internal

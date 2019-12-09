@@ -55,20 +55,17 @@ class o2graph_plotter(plot_base):
 
     Todo list:
 
-    .. todo:: Allow user to change key names for all yt objects
-    .. todo:: Simplify some of the larger functions like plot()
+    .. todo:: Simplify some of the larger functions like 
+       o2graph_plotter::plot()
     .. todo:: Finish setting up -set yt_resolution so it parses the
        two numerical values
-    .. todo:: Ensure the 'clf' command clears the yt objects
-    .. todo:: Create a list of yt objects so that we can manipulate them
-       in the middle of an animation
-    .. todo:: Figure out how to place 2d plot elements on top of the render
+    .. todo:: Ensure the 'clf' command clears the yt objects?
+    .. todo:: Figure out how to place 2d plot elements on top of a yt render
     .. todo:: Figure out how to allow user to specify focus and position in
        both coordinate systems
     .. todo:: Create yt-box command for BoxSource
     .. todo:: More yt-path options
-    .. todo:: Create yt-surface?
-    .. todo:: Anti-aliasing the axis would be nice
+    .. todo:: Anti-alias text objects (also anti-alias line sources?)
     
     """
 
@@ -2014,6 +2011,16 @@ class o2graph_plotter(plot_base):
         
         return
 
+    def yt_ann_func(self,o2scl_hdf,amp,args):
+        """
+        """
+
+        for i in range(0,len(args)):
+            self.yt_ann.append(args[i])
+        print('yt_ann is',self.yt_ann)
+        
+        return
+
     def yt_scatter(self,o2scl_hdf,amp,args):
         """
         Create a 3D scatter plot with yt using data from an
@@ -2120,6 +2127,9 @@ class o2graph_plotter(plot_base):
                 force_bytes(alpha_column)==b'none'):
                 alpha_column=''
 
+            print('size,red,green,blue,alpha:',size_column,red_column,
+                  green_column,blue_column,alpha_column)
+            
             if size_column!='':
                 cols=ctypes.c_char_p(force_bytes(size_column))
                 ids=ctypes.c_int(0)
@@ -2155,67 +2165,68 @@ class o2graph_plotter(plot_base):
                 get_ret=get_fn(amp,cola,ctypes.byref(ida),
                                ctypes.byref(ptra))
 
-            rescale_r=False
-            rescale_g=False
-            rescale_b=False
-            for i in range(0,idr.value):
-                if ptrr[i]<0.0:
-                    if rescale_r==False:
-                        rescale_r=True
-                        min_r=ptrr[i]
-                        max_r=ptrr[i]
-                    elif ptrr[i]<min_r:
-                        min_r=ptrr[i]
-                if ptrr[i]>1.0:
-                    if rescale_r==False:
-                        rescale_r=True
-                        min_r=ptrr[i]
-                        max_r=ptrr[i]
-                    elif ptrr[i]>max_r:
-                        max_r=ptrr[i]
-                if ptrg[i]<0.0:
-                    if rescale_g==False:
-                        rescale_g=True
-                        min_g=ptrg[i]
-                        max_g=ptrg[i]
-                    elif ptrg[i]<min_g:
-                        min_g=ptrg[i]
-                if ptrg[i]>1.0:
-                    if rescale_g==False:
-                        rescale_g=True
-                        min_g=ptrg[i]
-                        max_g=ptrg[i]
-                    elif ptrg[i]>max_g:
-                        max_g=ptrg[i]
-                if ptrb[i]<0.0:
-                    if rescale_b==False:
-                        rescale_b=True
-                        min_b=ptrb[i]
-                        max_b=ptrb[i]
-                    elif ptrb[i]<min_b:
-                        min_b=ptrb[i]
-                if ptrb[i]>1.0:
-                    if rescale_b==False:
-                        rescale_b=True
-                        min_b=ptrb[i]
-                        max_b=ptrb[i]
-                    elif ptrb[i]>max_b:
-                        max_b=ptrb[i]
-            if rescale_r:
-                print('Rescaling red range   (%0.6e,%0.6e) to (0,1)' %
-                      (min_r,max_r))
+            if red_column!='' and blue_column!='' and green_column!='':
+                rescale_r=False
+                rescale_g=False
+                rescale_b=False
                 for i in range(0,idr.value):
-                    ptrr[i]=(ptrr[i]-min_r)/(max_r-min_r)
-            if rescale_g:
-                print('Rescaling green range (%0.6e,%0.6e) to (0,1)' %
-                      (min_g,max_g))
-                for i in range(0,idg.value):
-                    ptrg[i]=(ptrg[i]-min_g)/(max_g-min_g)
-            if rescale_b:
-                print('Rescaling blue range  (%0.6e,%0.6e) to (0,1)' %
-                      (min_b,max_b))
-                for i in range(0,idb.value):
-                    ptrb[i]=(ptrb[i]-min_b)/(max_b-min_b)
+                    if ptrr[i]<0.0:
+                        if rescale_r==False:
+                            rescale_r=True
+                            min_r=ptrr[i]
+                            max_r=ptrr[i]
+                        elif ptrr[i]<min_r:
+                            min_r=ptrr[i]
+                    if ptrr[i]>1.0:
+                        if rescale_r==False:
+                            rescale_r=True
+                            min_r=ptrr[i]
+                            max_r=ptrr[i]
+                        elif ptrr[i]>max_r:
+                            max_r=ptrr[i]
+                    if ptrg[i]<0.0:
+                        if rescale_g==False:
+                            rescale_g=True
+                            min_g=ptrg[i]
+                            max_g=ptrg[i]
+                        elif ptrg[i]<min_g:
+                            min_g=ptrg[i]
+                    if ptrg[i]>1.0:
+                        if rescale_g==False:
+                            rescale_g=True
+                            min_g=ptrg[i]
+                            max_g=ptrg[i]
+                        elif ptrg[i]>max_g:
+                            max_g=ptrg[i]
+                    if ptrb[i]<0.0:
+                        if rescale_b==False:
+                            rescale_b=True
+                            min_b=ptrb[i]
+                            max_b=ptrb[i]
+                        elif ptrb[i]<min_b:
+                            min_b=ptrb[i]
+                    if ptrb[i]>1.0:
+                        if rescale_b==False:
+                            rescale_b=True
+                            min_b=ptrb[i]
+                            max_b=ptrb[i]
+                        elif ptrb[i]>max_b:
+                            max_b=ptrb[i]
+                if rescale_r:
+                    print('Rescaling red range   (%0.6e,%0.6e) to (0,1)' %
+                          (min_r,max_r))
+                    for i in range(0,idr.value):
+                        ptrr[i]=(ptrr[i]-min_r)/(max_r-min_r)
+                if rescale_g:
+                    print('Rescaling green range (%0.6e,%0.6e) to (0,1)' %
+                          (min_g,max_g))
+                    for i in range(0,idg.value):
+                        ptrg[i]=(ptrg[i]-min_g)/(max_g-min_g)
+                if rescale_b:
+                    print('Rescaling blue range  (%0.6e,%0.6e) to (0,1)' %
+                          (min_b,max_b))
+                    for i in range(0,idb.value):
+                        ptrb[i]=(ptrb[i]-min_b)/(max_b-min_b)
                 
             if self.xset==False:
                 self.xlo=ptrx[0]
@@ -2267,7 +2278,7 @@ class o2graph_plotter(plot_base):
                             (ptry[i]-self.ylo)/y_range,
                             (ptrz[i]-self.zlo)/z_range])
                 if red_column=='' or blue_column=='' or green_column=='':
-                    cols.append([1.0,1.0,1.0,1.0])
+                    cols.append([1.0,1.0,1.0,0.5])
                 else:
                     if alpha_column=='':
                         cols.append([ptrr[i],ptrg[i],ptrb[i],1.0])
@@ -2456,146 +2467,6 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::yt_vertex_list()
         return
         
-    def yt_line(self,o2scl_hdf,amp,args):
-        """
-        Plot a line in a yt volume visualization.
-        """
-
-        if len(args)<6:
-            print('Function yt_line() requires six ',
-                  'arguments.')
-            return
-
-        from yt.visualization.volume_rendering.api \
-            import LineSource
-        
-        x1=float(eval(args[0]))
-        y1=float(eval(args[1]))
-        z1=float(eval(args[2]))
-        x2=float(eval(args[3]))
-        y2=float(eval(args[4]))
-        z2=float(eval(args[5]))
-        
-        if self.xset==False:
-            if x1<x2:
-                self.xlo=x1
-                self.xhi=x2
-            else:
-                self.xlo=x2
-                self.xhi=x1
-            print('Set xlimits to',self.xlo,self.xhi)
-            self.xset=True
-        if self.yset==False:
-            if y1<y2:
-                self.ylo=y1
-                self.yhi=y2
-            else:
-                self.ylo=y2
-                self.yhi=y1
-            print('Set ylimits to',self.ylo,self.yhi)
-            self.yset=True
-        if self.zset==False:
-            if z1<z2:
-                self.zlo=z1
-                self.zhi=z2
-            else:
-                self.zlo=z2
-                self.zhi=z1
-            print('Set zlimits to',self.zlo,self.zhi)
-            self.zset=True
-        
-        icnt=0
-        if self.yt_scene!=0:
-            for key, value in self.yt_scene.sources.items():
-                icnt=icnt+1
-        if icnt==0:
-            self.yt_def_vol()
-
-        vertices=numpy.array([[[(x1-self.xlo)/(self.xhi-self.xlo),
-                                (y1-self.ylo)/(self.yhi-self.ylo),
-                                (z1-self.zlo)/(self.zhi-self.zlo)],
-                               [(x2-self.xlo)/(self.xhi-self.xlo),
-                                (y2-self.ylo)/(self.yhi-self.ylo),
-                                (z2-self.zlo)/(self.zhi-self.zlo)]]])
-        colors=numpy.array([[1.0,1.0,1.0,0.5]])
-        ls=LineSource(vertices,colors)
-        print('o2graph:yt-line: Adding line source.')
-        kname=self.yt_unique_keyname('o2graph_line')
-        self.yt_scene.add_source(ls,keyname=kname)
-
-        # End of function o2graph_plotter::yt_line()
-        return
-        
-    def yt_box(self,o2scl_hdf,amp,args):
-        """
-        Create a box in a yt visualization
-        """
-
-        if len(args)<6:
-            print('Function yt_box() requires six ',
-                  'arguments.')
-            return
-
-        from yt.visualization.volume_rendering.api \
-            import BoxSource
-        
-        x1=float(eval(args[0]))
-        y1=float(eval(args[1]))
-        z1=float(eval(args[2]))
-        x2=float(eval(args[3]))
-        y2=float(eval(args[4]))
-        z2=float(eval(args[5]))
-
-        if self.xset==False:
-            if x1<x2:
-                self.xlo=x1
-                self.xhi=x2
-            else:
-                self.xlo=x2
-                self.xhi=x1
-            print('Set xlimits to',self.xlo,self.xhi)
-            self.xset=True
-        if self.yset==False:
-            if y1<y2:
-                self.ylo=y1
-                self.yhi=y2
-            else:
-                self.ylo=y2
-                self.yhi=y1
-            print('Set ylimits to',self.ylo,self.yhi)
-            self.yset=True
-        if self.zset==False:
-            if z1<z2:
-                self.zlo=z1
-                self.zhi=z2
-            else:
-                self.zlo=z2
-                self.zhi=z1
-            print('Set zlimits to',self.zlo,self.zhi)
-            self.zset=True
-        
-        icnt=0
-        if self.yt_scene!=0:
-            for key, value in self.yt_scene.sources.items():
-                icnt=icnt+1
-        if icnt==0:
-            self.yt_def_vol()
-
-        colors=numpy.array([[1.0,1.0,1.0,0.5]])
-        left=numpy.array([(x1-self.xlo)/(self.xhi-self.xlo),
-                          (y1-self.ylo)/(self.yhi-self.ylo),
-                          (z1-self.zlo)/(self.zhi-self.zlo)])
-        right=numpy.array([(x2-self.xlo)/(self.xhi-self.xlo),
-                           (y2-self.ylo)/(self.yhi-self.ylo),
-                           (z2-self.zlo)/(self.zhi-self.zlo)])
-        ls=BoxSource(left,right,colors)
-        print('o2graph:yt-box: Adding box source.')
-        kname=self.yt_unique_keyname('o2graph_box')
-        self.yt_scene.add_source(ls,keyname=kname)
-
-        # End of function o2graph_plotter::yt_box()
-        return
-        
     def commands(self,o2scl_hdf,amp,args):
         """
         Output the currently available commands
@@ -2643,6 +2514,204 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::commands()
         return
     
+    def yt_render(self,o2scl_hdf,amp,fname,mov_fname=''):
+        """
+        Complete the yt render and save the image to a file. If necessary,
+        compile the images into a movie and save into the specified
+        file name.
+        """
+
+        # AWS 10/14/19 the call to save() below does
+        # the render() so I don't think I need this
+        #self.yt_scene.render()
+
+        if len(self.yt_path)==0:
+
+            # No path, so just call save and finish
+            
+            if len(self.yt_ann)==0:
+                
+                print('o2graph:yt-render: Calling yt_scene.save().')
+                self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
+                
+            else:
+                # This segment of code is based off of
+                # yt's save_annotate() function
+                self.yt_scene.render()
+                fa=self.yt_scene._show_mpl
+                axt=fa(self.yt_scene._last_render.swapaxes(0,1),
+                       sigma_clip=self.yt_sigma_clip,dpi=100)
+                self.yt_trans=self.yt_scene._render_figure.transFigure
+                self.axes=axt.axes
+                self.fig=self.yt_scene._render_figure
+                self.canvas_flag=True
+                print('Adding annotations:')
+                self.parse_string_list(self.yt_ann[0:len(self.yt_ann)-1],
+                                       o2scl_hdf,amp)
+                print('Done adding annotations:')
+                #self.text(0.1,0.9,'x',color='w',fontsize=self.font*1.25,
+                    #transform=tf)
+                self.canvas_flag=False
+                #axt.axes.text(0.1,0.9,'test',color='w',transform=tf,
+                #fontsize=self.font*1.25)
+                from yt.visualization._mpl_imports import FigureCanvasAgg
+                canvast=FigureCanvasAgg(self.yt_scene._render_figure)
+                self.yt_scene._render_figure.canvas=canvast
+                #self.yt_scene._render_figure.tight_layout(pad=0.0)
+                plot.subplots_adjust(left=0.0,bottom=0.0,
+                                     right=1.0,top=1.0)
+                print('o2graph:yt-render: Calling savefig() with annotations.')
+                self.yt_scene._render_figure.savefig(fname,facecolor='black',
+                                                     pad_inches=0)
+            
+        else:
+
+            # Setup destination filename
+            if mov_fname=='':
+                mov_fname='o2graph.mp4'
+
+            # Parse image file pattern
+            asterisk=fname.find('*')
+            prefix=fname[0:asterisk]
+            suffix=fname[asterisk+1:len(fname)]
+            print('o2graph:yt-render:',
+                  'fname,prefix,suffix,mov_fname:',
+                  fname,prefix,suffix,mov_fname)
+                            
+            # Read path 
+            
+            if path_arr[0]=='yaw':
+
+                first=True
+                n_frames=int(path_arr[1])
+                angle=float(path_arr[2])*numpy.pi*2.0
+                            
+                for i in range(0,n_frames):
+                    if i+1<10:
+                        fname2=prefix+'0'+str(i)+suffix
+                    else:
+                        fname2=prefix+str(i)+suffix
+                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
+                    #if platform.system()!='Darwin':
+                    #    os.system('cp '+fname2+
+                    #              ' /tmp/o2graph_temp.png')
+                    #    if first:
+                    #        os.system('eog /tmp/o2graph_temp.png &')
+                    #        first=False
+                    #else:
+                    #    os.system('cp '+fname2+
+                    #              ' /tmp/o2graph_temp.png')
+                    #    if first:
+                    #        os.system('open /tmp/o2gr'+
+                    #                  'aph_temp.png &')
+                    #        first=False
+                            
+                    if i!=n_frames-1:
+                        print(self.yt_camera)
+                        print('unit_vectors:',self.yt_camera.unit_vectors)
+                        print('normal_vector:',self.yt_camera.normal_vector)
+                        print('north_vector:',self.yt_camera.north_vector)
+                        print('origin:',self.yt_camera.lens.origin)
+                        print('num_threads:',self.yt_camera.lens.num_threads)
+                        
+                        from yt.units.yt_array import YTArray
+                        rv=YTArray([0,0,1])
+                        #rc=YTArray([0.5,0.5,0.5])
+                        self.yt_camera.rotate(angle,rot_vector=rv)
+    
+                        if self.yt_position=='default':
+                            pos=[1.5,0.6,0.7]
+                        else:
+                            pos=[self.yt_position[0],
+                                 self.yt_position[1],
+                                 self.yt_position[2]]
+                        if self.yt_focus=='default':
+                            foc=[0.5,0.5,0.5]
+                        else:
+                            foc=[self.yt_focus[0],
+                                 self.yt_focus[1],
+                                 self.yt_focus[2]]
+                        print(pos,foc)
+                        xt=pos[0]-foc[0]
+                        yt=pos[1]-foc[1]
+                        zt=pos[2]-foc[2]
+                        print(xt,yt,zt)
+                        r=math.sqrt(xt**2+yt**2+zt**2)
+                        print(r)
+                        theta=math.acos(zt/r)
+                        phi=math.atan2(yt,xt)
+                        phi+=angle
+                        xt=r*math.sin(theta)*math.cos(phi)
+                        yt=r*math.sin(theta)*math.sin(phi)
+                        zt=r*math.cos(theta)
+                        print(xt,yt,zt)
+                        if self.yt_position=='default':
+                            self.yt_position=[0,0,0]
+                        self.yt_position[0]=foc[0]+xt
+                        self.yt_position[1]=foc[1]+yt
+                        self.yt_position[2]=foc[2]+zt
+                        print(self.yt_focus,self.yt_position)
+
+                        self.yt_camera.position=[pos[0],pos[1],pos[2]]
+                        if self.yt_focus=='default':
+                            self.yt_camera.focus=[0.5,0.5,0.5]
+                        else:
+                            self.yt_camera.focus=[foc[0],foc[1],foc[2]]
+                        self.yt_camera.north_vector=[0.0,0.0,1.0]
+                        self.yt_camera.switch_orientation()
+                        
+                        #self.yt_camera.yaw(angle)
+                        
+                        self.yt_update_text()
+                        
+                    # End of 'if i!=n_frames-1'
+                    
+                # End of loop over number of frames
+                    
+            elif path_arr[0]=='zoom':
+                
+                first=True
+                n_frames=int(path_arr[1])
+                factor=float(path_arr[2])
+
+                for i in range(0,n_frames):
+                    if i+1<10:
+                        fname2=prefix+'0'+str(i)+suffix
+                    else:
+                        fname2=prefix+str(i)+suffix
+                    ifactor=factor**(float(i)/(float(n_frames)-1))
+                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
+                    if platform.system()!='Darwin':
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('eog /tmp/o2graph_temp.png &')
+                            first=False
+                    else:
+                        os.system('cp '+fname2+
+                                  ' /tmp/o2graph_temp.png')
+                        if first:
+                            os.system('open /tmp/o2gr'+
+                                      'aph_temp.png &')
+                            first=False
+                    self.yt_camera.zoom(ifactor)
+
+            # -r is rate, -f is format, -vcodec is video
+            # codec (apparently 420p works well with
+            # quicktime), -pix_fmt sepcifies the pixel format,
+            # -crf is the quality (15-25 recommended)
+            # -y forces overwrite of the movie file if it
+            # already exists
+                        
+            cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                      prefix+'%02d'+suffix+' -vcodec libx264 '+
+                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
+            print('ffmpeg command:',cmd)
+            os.system(cmd)
+            
+        # End of function o2graph_plotter::yt_render()
+        return
+
     def parse_string_list(self,strlist,o2scl_hdf,amp):
         """
         Parse a list of strings
@@ -2657,18 +2726,19 @@ class o2graph_plotter(plot_base):
             
             if self.verbose>2:
                 print('Processing index',ix,'with value',strlist[ix],'.')
+                
             # Find first option, at index ix
-            initial_ix_done=0
-            while initial_ix_done==0:
+            initial_ix_done=False
+            while initial_ix_done==False:
                 if ix==len(strlist):
-                    initial_ix_done=1
+                    initial_ix_done=True
                 elif strlist[ix][0]=='-':
-                    initial_ix_done=1
+                    initial_ix_done=True
                 else:
                     if self.verbose>2:
                          print('Incrementing ix')
                     ix=ix+1
-                    
+
             # If there is an option, then ix is its index
             if ix<len(strlist):
                 
@@ -2682,12 +2752,16 @@ class o2graph_plotter(plot_base):
                 # Set ix_next to the next option, or to the end if
                 # there is no next option
                 ix_next=ix+1
-                ix_next_done=0
-                while ix_next_done==0:
+                ix_next_done=False
+                while ix_next_done==False:
                     if ix_next==len(strlist):
-                        ix_next_done=1
-                    elif len(strlist[ix_next])>0 and strlist[ix_next][0]=='-':
-                        ix_next_done=1
+                        ix_next_done=True
+                    elif (cmd_name!='yt-ann' and
+                    len(strlist[ix_next])>0 and strlist[ix_next][0]=='-'):
+                        ix_next_done=True
+                    elif (cmd_name=='yt-ann' and ix_next>0 and
+                    strlist[ix_next-1]=='end'):
+                        ix_next_done=True
                     else:
                         if self.verbose>2:
                             print('Incrementing ix_next')
@@ -2775,6 +2849,16 @@ class o2graph_plotter(plot_base):
                     else:
                         self.yt_path_func(o2scl_hdf,amp,strlist[ix+1:ix_next])
                                                     
+                elif cmd_name=='yt-ann':
+
+                    if self.verbose>2:
+                        print('Process yt-ann.')
+
+                    if ix_next-ix<4:
+                        print('Not enough parameters for yt-ann.')
+                    else:
+                        self.yt_ann_func(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                                                    
                 elif cmd_name=='yt-text':
 
                     if self.verbose>2:
@@ -2802,7 +2886,13 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<6:
                         print('Not enough parameters for yt-line.')
                     else:
-                        self.yt_line(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                        x1=float(eval(strlist[ix+1]))
+                        y1=float(eval(strlist[ix+2]))
+                        z1=float(eval(strlist[ix+3]))
+                        x2=float(eval(strlist[ix+4]))
+                        y2=float(eval(strlist[ix+5]))
+                        z2=float(eval(strlist[ix+6]))
+                        self.yt_line([x1,y1,z1],[x2,y2,z2])
                                                     
                 elif cmd_name=='yt-box':
 
@@ -2812,7 +2902,29 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<6:
                         print('Not enough parameters for yt-box.')
                     else:
-                        self.yt_box(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                        x1=float(eval(strlist[ix+1]))
+                        y1=float(eval(strlist[ix+2]))
+                        z1=float(eval(strlist[ix+3]))
+                        x2=float(eval(strlist[ix+4]))
+                        y2=float(eval(strlist[ix+5]))
+                        z2=float(eval(strlist[ix+6]))
+                        self.yt_box([x1,y1,z1],[x2,y2,z2])
+                                                    
+                elif cmd_name=='yt-arrow':
+
+                    if self.verbose>2:
+                        print('Process yt-arrow.')
+
+                    if ix_next-ix<6:
+                        print('Not enough parameters for yt-arrow.')
+                    else:
+                        x1=float(eval(strlist[ix+1]))
+                        y1=float(eval(strlist[ix+2]))
+                        z1=float(eval(strlist[ix+3]))
+                        x2=float(eval(strlist[ix+4]))
+                        y2=float(eval(strlist[ix+5]))
+                        z2=float(eval(strlist[ix+6]))
+                        self.yt_arrow([x1,y1,z1],[x2,y2,z2])
                                                     
                 elif cmd_name=='yt-vertex-list':
 
@@ -2855,9 +2967,9 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for yt-render.')
                     elif ix_next-ix<3:
-                        self.yt_render(strlist[ix+1])
+                        self.yt_render(o2scl_hdf,amp,strlist[ix+1])
                     else:
-                        self.yt_render(strlist[ix+1],
+                        self.yt_render(o2scl_hdf,amp,strlist[ix+1],
                                        mov_fname=strlist[ix+2])
 
                 elif cmd_name=='yt-tf':

@@ -108,27 +108,7 @@ Subplot example 3
    :literal:
 .. image:: static/subplots3_doc.png
    :width: 70%
-
-yt scatter example
-------------------
-
-.. include:: static/yt_scatter.scr
-   :literal:
-.. image:: static/yt_scatter_doc.png
-   :width: 70%
-
-yt multiple volume example
---------------------------
-
-.. include:: static/yt_tg_multvol.scr
-   :literal:	     
-.. image:: static/yt_tg_multvol_doc.png
-   :width: 70%
-
-.. raw:: html
-	 
-   <video width="512" height="512" controls><source src="https://neutronstars.utk.edu/code/o2sclpy/_static/yt_tg_multvol_doc.mp4" type="video/mp4"></video>
-
+	   
 Internal structure
 ------------------
 

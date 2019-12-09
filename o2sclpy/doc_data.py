@@ -266,7 +266,8 @@ extra_list=[
      "capsize=None, barsabove=False, lolims=False, uplims=False, "+
      "xlolims=False, xuplims=False, errorevery=1, capthick=None, hold=None"],
     ["table","yt-scatter","Add scattered points to a yt scene",
-     "<x column> <y column> <z column> [size column] [color column]",
+     ("<x column> <y column> <z column> [size column] [red column] "+
+      "[green column] [blue column] [alpha column]"),
      ("This adds a series of points to a yt scene. If a volume "+
       "has not yet been added, then a default volume is added. "+
       "If the x, y-, or z-axis limits have not yet been set, then "+

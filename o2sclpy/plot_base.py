@@ -43,6 +43,13 @@ class plot_base:
     :py:class:`o2sclpy.o2graph_plotter` . The principal purpose
     of this class is just to provide some additional simplification
     to python code which makes plots using matplotlib.
+
+    .. todo:: Create a system of protected variables using
+       underscores and also create a __repr__() object
+    .. todo:: Create a plot_base_yt class in between plot_base
+       and o2graph_plotter?
+    .. todo:: Ensure yt uses self.font for text objects?
+
     """
 
     last_image=0
@@ -186,6 +193,14 @@ class plot_base:
     """
     yt animation path (default [])
     """
+    yt_ann=[]
+    """
+    Annotations for yt renders
+    """
+    yt_trans=0
+    """
+    Transformation for yt figure annotations
+    """
     yt_tf=0
     """
     The yt transfer function
@@ -319,188 +334,232 @@ class plot_base:
         # End of function plot_base::yt_update_text()
         return
     
-    def yt_render(self,fname,mov_fname=''):
+    def yt_line(self,point1,point2,color=''):
         """
-        Complete the yt render and save the image to a file. If necessary,
-        compile the images into a movie and save into the specified
-        file name.
+        Plot a line in a yt volume visualization.
         """
 
-        # AWS 10/14/19 the call to save() below does
-        # the render() so I don't think I need this
-        #self.yt_scene.render()
+        from yt.visualization.volume_rendering.api \
+            import LineSource
 
-        if len(self.yt_path)==0:
-
-            # No path, so just call save and finish
-            print('o2graph:yt-render: Calling yt_scene.save().')
-            if True:
-                self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
-            elif False:
-                self.yt_scene.save_annotated(fname,
-                                             sigma_clip=self.yt_sigma_clip)
+        x1=point1[0]
+        x2=point2[0]
+        y1=point1[1]
+        y2=point2[1]
+        z1=point1[2]
+        z2=point2[2]
+        
+        if self.xset==False:
+            if x1<x2:
+                self.xlo=x1
+                self.xhi=x2
             else:
-                self.yt_scene.render()
-                axt=self.yt_scene._show_mpl(self.yt_scene._last_render.swapaxes(0,1),
-                                            sigma_clip=self.yt_sigma_clip,
-                                            dpi=100)
-                axt.axes.text(0.5,0.5,'test',color='w',
-                              transform=self.yt_scene._render_figure.transFigure)
-                from yt.visualization._mpl_imports import FigureCanvasAgg
-                canvast=FigureCanvasAgg(self.yt_scene._render_figure)
-                self.yt_scene._render_figure.canvas=canvast
-                self.yt_scene._render_figure.tight_layout(pad=0.0)
-                self.yt_scene._render_figure.savefig(fname,facecolor='white',
-                                                     pad_inches=0)
-            
-        else:
+                self.xlo=x2
+                self.xhi=x1
+            print('Set xlimits to',self.xlo,self.xhi)
+            self.xset=True
+        if self.yset==False:
+            if y1<y2:
+                self.ylo=y1
+                self.yhi=y2
+            else:
+                self.ylo=y2
+                self.yhi=y1
+            print('Set ylimits to',self.ylo,self.yhi)
+            self.yset=True
+        if self.zset==False:
+            if z1<z2:
+                self.zlo=z1
+                self.zhi=z2
+            else:
+                self.zlo=z2
+                self.zhi=z1
+            print('Set zlimits to',self.zlo,self.zhi)
+            self.zset=True
+        
+        icnt=0
+        if self.yt_scene!=0:
+            for key, value in self.yt_scene.sources.items():
+                icnt=icnt+1
+        if icnt==0:
+            self.yt_def_vol()
 
-            # Setup destination filename
-            if mov_fname=='':
-                mov_fname='o2graph.mp4'
+        vertices=numpy.array([[[(x1-self.xlo)/(self.xhi-self.xlo),
+                                (y1-self.ylo)/(self.yhi-self.ylo),
+                                (z1-self.zlo)/(self.zhi-self.zlo)],
+                               [(x2-self.xlo)/(self.xhi-self.xlo),
+                                (y2-self.ylo)/(self.yhi-self.ylo),
+                                (z2-self.zlo)/(self.zhi-self.zlo)]]])
+        colors=numpy.array([[1.0,1.0,1.0,0.5]])
+        ls=LineSource(vertices,colors)
+        print('o2graph:yt-line: Adding line source.')
+        kname=self.yt_unique_keyname('o2graph_line')
+        self.yt_scene.add_source(ls,keyname=kname)
 
-            # Parse image file pattern
-            asterisk=fname.find('*')
-            prefix=fname[0:asterisk]
-            suffix=fname[asterisk+1:len(fname)]
-            print('o2graph:yt-render:',
-                  'fname,prefix,suffix,mov_fname:',
-                  fname,prefix,suffix,mov_fname)
-                            
-            # Read path 
-            
-            if path_arr[0]=='yaw':
-
-                first=True
-                n_frames=int(path_arr[1])
-                angle=float(path_arr[2])*numpy.pi*2.0
-                            
-                for i in range(0,n_frames):
-                    if i+1<10:
-                        fname2=prefix+'0'+str(i)+suffix
-                    else:
-                        fname2=prefix+str(i)+suffix
-                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
-                    #if platform.system()!='Darwin':
-                    #    os.system('cp '+fname2+
-                    #              ' /tmp/o2graph_temp.png')
-                    #    if first:
-                    #        os.system('eog /tmp/o2graph_temp.png &')
-                    #        first=False
-                    #else:
-                    #    os.system('cp '+fname2+
-                    #              ' /tmp/o2graph_temp.png')
-                    #    if first:
-                    #        os.system('open /tmp/o2gr'+
-                    #                  'aph_temp.png &')
-                    #        first=False
-                            
-                    if i!=n_frames-1:
-                        print(self.yt_camera)
-                        print('unit_vectors:',self.yt_camera.unit_vectors)
-                        print('normal_vector:',self.yt_camera.normal_vector)
-                        print('north_vector:',self.yt_camera.north_vector)
-                        print('origin:',self.yt_camera.lens.origin)
-                        print('num_threads:',self.yt_camera.lens.num_threads)
-                        
-                        from yt.units.yt_array import YTArray
-                        rv=YTArray([0,0,1])
-                        #rc=YTArray([0.5,0.5,0.5])
-                        self.yt_camera.rotate(angle,rot_vector=rv)
-    
-                        if self.yt_position=='default':
-                            pos=[1.5,0.6,0.7]
-                        else:
-                            pos=[self.yt_position[0],
-                                 self.yt_position[1],
-                                 self.yt_position[2]]
-                        if self.yt_focus=='default':
-                            foc=[0.5,0.5,0.5]
-                        else:
-                            foc=[self.yt_focus[0],
-                                 self.yt_focus[1],
-                                 self.yt_focus[2]]
-                        print(pos,foc)
-                        xt=pos[0]-foc[0]
-                        yt=pos[1]-foc[1]
-                        zt=pos[2]-foc[2]
-                        print(xt,yt,zt)
-                        r=math.sqrt(xt**2+yt**2+zt**2)
-                        print(r)
-                        theta=math.acos(zt/r)
-                        phi=math.atan2(yt,xt)
-                        phi+=angle
-                        xt=r*math.sin(theta)*math.cos(phi)
-                        yt=r*math.sin(theta)*math.sin(phi)
-                        zt=r*math.cos(theta)
-                        print(xt,yt,zt)
-                        if self.yt_position=='default':
-                            self.yt_position=[0,0,0]
-                        self.yt_position[0]=foc[0]+xt
-                        self.yt_position[1]=foc[1]+yt
-                        self.yt_position[2]=foc[2]+zt
-                        print(self.yt_focus,self.yt_position)
-
-                        self.yt_camera.position=[pos[0],pos[1],pos[2]]
-                        if self.yt_focus=='default':
-                            self.yt_camera.focus=[0.5,0.5,0.5]
-                        else:
-                            self.yt_camera.focus=[foc[0],foc[1],foc[2]]
-                        self.yt_camera.north_vector=[0.0,0.0,1.0]
-                        self.yt_camera.switch_orientation()
-                        
-                        #self.yt_camera.yaw(angle)
-                        
-                        self.yt_update_text()
-                        
-                    # End of 'if i!=n_frames-1'
-                    
-                # End of loop over number of frames
-                    
-            elif path_arr[0]=='zoom':
-                
-                first=True
-                n_frames=int(path_arr[1])
-                factor=float(path_arr[2])
-
-                for i in range(0,n_frames):
-                    if i+1<10:
-                        fname2=prefix+'0'+str(i)+suffix
-                    else:
-                        fname2=prefix+str(i)+suffix
-                    ifactor=factor**(float(i)/(float(n_frames)-1))
-                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
-                    if platform.system()!='Darwin':
-                        os.system('cp '+fname2+
-                                  ' /tmp/o2graph_temp.png')
-                        if first:
-                            os.system('eog /tmp/o2graph_temp.png &')
-                            first=False
-                    else:
-                        os.system('cp '+fname2+
-                                  ' /tmp/o2graph_temp.png')
-                        if first:
-                            os.system('open /tmp/o2gr'+
-                                      'aph_temp.png &')
-                            first=False
-                    self.yt_camera.zoom(ifactor)
-
-            # -r is rate, -f is format, -vcodec is video
-            # codec (apparently 420p works well with
-            # quicktime), -pix_fmt sepcifies the pixel format,
-            # -crf is the quality (15-25 recommended)
-            # -y forces overwrite of the movie file if it
-            # already exists
-                        
-            cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                      prefix+'%02d'+suffix+' -vcodec libx264 '+
-                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
-            print('ffmpeg command:',cmd)
-            os.system(cmd)
-            
-        # End of function plot_base::yt_render()
+        # End of function plot_base::yt_line()
         return
+        
+    def yt_arrow(self,point1,point2,color=[1.0,1.0,1.0,0.5]):
+        """
+        Plot a arrow in a yt volume visualization.
+        """
 
+        from yt.visualization.volume_rendering.api \
+            import LineSource
+
+        x1=point1[0]
+        x2=point2[0]
+        y1=point1[1]
+        y2=point2[1]
+        z1=point1[2]
+        z2=point2[2]
+        
+        if self.xset==False:
+            if x1<x2:
+                self.xlo=x1
+                self.xhi=x2
+            else:
+                self.xlo=x2
+                self.xhi=x1
+            print('Set xlimits to',self.xlo,self.xhi)
+            self.xset=True
+        if self.yset==False:
+            if y1<y2:
+                self.ylo=y1
+                self.yhi=y2
+            else:
+                self.ylo=y2
+                self.yhi=y1
+            print('Set ylimits to',self.ylo,self.yhi)
+            self.yset=True
+        if self.zset==False:
+            if z1<z2:
+                self.zlo=z1
+                self.zhi=z2
+            else:
+                self.zlo=z2
+                self.zhi=z1
+            print('Set zlimits to',self.zlo,self.zhi)
+            self.zset=True
+        
+        icnt=0
+        if self.yt_scene!=0:
+            for key, value in self.yt_scene.sources.items():
+                icnt=icnt+1
+        if icnt==0:
+            self.yt_def_vol()
+
+        # Coordinate transformation
+        x1=(x1-self.xlo)/(self.xhi-self.xlo)
+        y1=(y1-self.ylo)/(self.yhi-self.ylo)
+        z1=(z1-self.zlo)/(self.zhi-self.zlo)
+        x2=(x2-self.xlo)/(self.xhi-self.xlo)
+        y2=(y2-self.ylo)/(self.yhi-self.ylo)
+        z2=(z2-self.zlo)/(self.zhi-self.zlo)
+
+        # Arrow line
+        vertices=[[[x1,y1,z1],[x2,y2,z2]]]
+        colors=[color]
+        line=LineSource(vertices_axis,colors_axis)
+
+        lslen=math.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)
+        
+        # Arrow head
+        for theta in range(0,20):
+            for z in range(0,10):
+                x3=x2-(x2-x1)/10.0
+                y3=r*math.cos(theta/10.0*math.pi)
+                z3=r*math.sin(theta/10.0*math.pi)
+                vertices.append([[x2,y2,z2],[x3,y3,z3]])
+                colors.append(color)
+        arrow_source=LineSource(numpy.array(vertices),numpy.array(colors))
+        kname=self.yt_unique_keyname('o2graph_arrow')
+        self.yt_scene.add_source(lines_ahead,keyname=kname)
+
+        # End of function plot_base::yt_arrow()
+        return
+        
+    def yt_del_source(self,keyname):
+        """
+        Delete a yt source
+
+        o2sclpy has to keep track of the sources for two reasons (i)
+        to make sure volme sources refer to valid memory and (ii) to
+        be able to move text objects between renders in an animation.
+        Thus, this function is required to remove a source from both
+        the yt scene and from the internal o2sclpy lists.
+        """
+
+        del self.yt_scene.sources[keyname]
+        
+        # End of function plot_base::yt_del_source()
+        return
+        
+    def yt_box(self,point1,point2,color=''):
+        """
+        Create a box in a yt visualization
+        """
+
+        from yt.visualization.volume_rendering.api \
+            import BoxSource
+        
+        x1=point1[0]
+        x2=point2[0]
+        y1=point1[1]
+        y2=point2[1]
+        z1=point1[2]
+        z2=point2[2]
+        
+        if self.xset==False:
+            if x1<x2:
+                self.xlo=x1
+                self.xhi=x2
+            else:
+                self.xlo=x2
+                self.xhi=x1
+            print('Set xlimits to',self.xlo,self.xhi)
+            self.xset=True
+        if self.yset==False:
+            if y1<y2:
+                self.ylo=y1
+                self.yhi=y2
+            else:
+                self.ylo=y2
+                self.yhi=y1
+            print('Set ylimits to',self.ylo,self.yhi)
+            self.yset=True
+        if self.zset==False:
+            if z1<z2:
+                self.zlo=z1
+                self.zhi=z2
+            else:
+                self.zlo=z2
+                self.zhi=z1
+            print('Set zlimits to',self.zlo,self.zhi)
+            self.zset=True
+        
+        icnt=0
+        if self.yt_scene!=0:
+            for key, value in self.yt_scene.sources.items():
+                icnt=icnt+1
+        if icnt==0:
+            self.yt_def_vol()
+
+        colors=numpy.array([[1.0,1.0,1.0,0.5]])
+        left=numpy.array([(x1-self.xlo)/(self.xhi-self.xlo),
+                          (y1-self.ylo)/(self.yhi-self.ylo),
+                          (z1-self.zlo)/(self.zhi-self.zlo)])
+        right=numpy.array([(x2-self.xlo)/(self.xhi-self.xlo),
+                           (y2-self.ylo)/(self.yhi-self.ylo),
+                           (z2-self.zlo)/(self.zhi-self.zlo)])
+        ls=BoxSource(left,right,colors)
+        print('o2graph:yt-box: Adding box source.')
+        kname=self.yt_unique_keyname('o2graph_box')
+        self.yt_scene.add_source(ls,keyname=kname)
+
+        # End of function plot_base::yt_box()
+        return
+        
     def yt_text(self,tx,ty,tz,textstr,reorient=False,scale=0.6,font=30,
                 keyname='o2graph_text'):
         """
@@ -1204,6 +1263,11 @@ class plot_base:
         if fontsize_present==False:
             kwargs=dict(kwargs,fontsize=self.font)
 
+        # If we're doing a yt text annotation, then add the proper
+        # transformation
+        if self.yt_scene!=0:
+            kwargs=dict(kwargs,transform=self.yt_trans)
+            
         if isinstance(tx,str):
             tx=float(eval(tx))
         if isinstance(ty,str):
