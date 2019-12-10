@@ -44,11 +44,17 @@ class plot_base:
     of this class is just to provide some additional simplification
     to python code which makes plots using matplotlib.
 
+    .. todo:: add map to colormap option for yt tf's
     .. todo:: Create a system of protected variables using
        underscores and also create a __repr__() object
     .. todo:: Create a plot_base_yt class in between plot_base
        and o2graph_plotter?
     .. todo:: Ensure yt uses self.font for text objects?
+    .. todo:: den-plot-anim for a tensor_grid object
+    .. todo:: plot-set for a table3d object to create 
+       a sequence of curves for each column or row, or maybe 
+       do this as a 'mult-vector-spec'?
+    .. todo:: add a colorbar as an annotation to a yt render?
 
     """
 
@@ -399,9 +405,11 @@ class plot_base:
         # End of function plot_base::yt_line()
         return
         
-    def yt_arrow(self,point1,point2,color=[1.0,1.0,1.0,0.5]):
+    def yt_arrow(self,point1,point2,color=[1.0,1.0,1.0,0.5],n_lines=40,
+                 frac_length=0.05,radius=0.0125,keyname='o2graph_arrow',
+                 coords='user'):
         """
-        Plot a arrow in a yt volume visualization.
+        Plot an arrow in a yt volume visualization. 
         """
 
         from yt.visualization.volume_rendering.api \
@@ -450,31 +458,58 @@ class plot_base:
             self.yt_def_vol()
 
         # Coordinate transformation
-        x1=(x1-self.xlo)/(self.xhi-self.xlo)
-        y1=(y1-self.ylo)/(self.yhi-self.ylo)
-        z1=(z1-self.zlo)/(self.zhi-self.zlo)
-        x2=(x2-self.xlo)/(self.xhi-self.xlo)
-        y2=(y2-self.ylo)/(self.yhi-self.ylo)
-        z2=(z2-self.zlo)/(self.zhi-self.zlo)
+        if coords!='internal':
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+            x2=(x2-self.xlo)/(self.xhi-self.xlo)
+            y2=(y2-self.ylo)/(self.yhi-self.ylo)
+            z2=(z2-self.zlo)/(self.zhi-self.zlo)
 
         # Arrow line
         vertices=[[[x1,y1,z1],[x2,y2,z2]]]
         colors=[color]
-        line=LineSource(vertices_axis,colors_axis)
 
-        lslen=math.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)
-        
+        # First convert the arrow to polar coordinates
+        rarr=math.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)
+        parr=math.atan2(y2-y1,x2-x1)
+        tarr=math.acos((z2-z1)/rarr)
+
         # Arrow head
-        for theta in range(0,20):
-            for z in range(0,10):
-                x3=x2-(x2-x1)/10.0
-                y3=r*math.cos(theta/10.0*math.pi)
-                z3=r*math.sin(theta/10.0*math.pi)
-                vertices.append([[x2,y2,z2],[x3,y3,z3]])
+        for theta in range(0,n_lines):
+            for z in range(1,2):
+
+                # Construct a vector from the tail of the arrow to the
+                # outer circle beneath the arrow head presuming the
+                # arrow is at (0,0,1)
+                vec=[radius*math.cos(theta/n_lines*2.0*math.pi),
+                     radius*math.sin(theta/n_lines*2.0*math.pi),
+                     1-frac_length]
+
+                # First transform by rotating the polar angle
+                mat=numpy.array([[math.cos(tarr),0,math.sin(tarr)],
+                                 [0,1,0],
+                                 [math.sin(tarr),0,math.cos(tarr)]])
+                vec=mat.dot(vec)
+                # Then transform by rotating the azimuthal angle
+                mat=numpy.array([[math.cos(parr),math.sin(parr),0],
+                                 [math.sin(parr),math.cos(parr),0],
+                                 [0,0,1]])
+                vec=mat.dot(vec)
+
+                # Rescale by the original vector length and translate
+                # to the tail of the vector
+                xnew=rarr*vec[0]+x1
+                ynew=rarr*vec[1]+y1
+                znew=rarr*vec[2]+z1
+
+                # Add the lines to the list for the LineSource
+                vertices.append([[x2,y2,z2],[xnew,ynew,znew]])
                 colors.append(color)
+                
         arrow_source=LineSource(numpy.array(vertices),numpy.array(colors))
-        kname=self.yt_unique_keyname('o2graph_arrow')
-        self.yt_scene.add_source(lines_ahead,keyname=kname)
+        kname=self.yt_unique_keyname(keyname)
+        self.yt_scene.add_source(arrow_source,keyname=kname)
 
         # End of function plot_base::yt_arrow()
         return
@@ -855,9 +890,9 @@ class plot_base:
         # End of function o2graph_plotter::yt_text_to_scene()
         return
 
-    def yt_plot_axis(self,origin=[0.0,0.0,0.0],color=[1.0,1.0,1.0,0.5],
-                     ihat=[1.0,0.0,0.0],jhat=[0.0,1.0,0.0],
-                     khat=[0.0,0.0,1.0]):
+    def yt_plot_axis(self,xval=1.0,yval=1.0,zval=1.0,
+                     color=[1.0,1.0,1.0,0.5],
+                     coords='internal'):
         """
         Plot an axis in a yt volume consisting a PointSource for
         the origin and then three arrows pointing from ``origin``
@@ -873,6 +908,11 @@ class plot_base:
         # Imports
         from yt.visualization.volume_rendering.api \
             import PointSource, LineSource
+
+        origin=[0,0,0]
+        ihat=[xval,0,0]
+        jhat=[0,yval,0]
+        khat=[0,0,zval]
         
         # Point at origin
         vertex_origin=numpy.array([origin])
@@ -880,42 +920,13 @@ class plot_base:
         points=PointSource(vertex_origin,colors=color_origin,radii=3)
         kname=self.yt_unique_keyname('o2graph_origin')
         self.yt_scene.add_source(points,keyname=kname)
-    
-        # Axis lines
-        vertices_axis=numpy.array([[origin,ihat],
-                                   [origin,jhat],
-                                   [origin,khat]])
-        colors_axis=numpy.array([color,color,color])
-        axis=LineSource(vertices_axis,colors_axis)
-        kname=self.yt_unique_keyname('o2graph_axis_lines')
-        self.yt_scene.add_source(axis,keyname=kname)
-        
-        # Arrow heads
-        list2=[]
-        clist2=[]
-        for theta in range(0,20):
-            for z in range(0,10):
-                xloc=1.0-z/200.0
-                r=z/800.0
-                yloc=r*math.cos(theta/10.0*math.pi)
-                zloc=r*math.sin(theta/10.0*math.pi)
-                list2.append([[1,0,0],[xloc,yloc,zloc]])
-                yloc=1.0-z/200.0
-                r=z/800.0
-                xloc=r*math.cos(theta/10.0*math.pi)
-                zloc=r*math.sin(theta/10.0*math.pi)
-                list2.append([[0,1,0],[xloc,yloc,zloc]])
-                zloc=1.0-z/200.0
-                r=z/800.0
-                xloc=r*math.cos(theta/10.0*math.pi)
-                yloc=r*math.sin(theta/10.0*math.pi)
-                list2.append([[0,0,1],[xloc,yloc,zloc]])
-                clist2.append(color)
-                clist2.append(color)
-                clist2.append(color)
-        points_aheads2=LineSource(numpy.array(list2),numpy.array(clist2))
-        kname=self.yt_unique_keyname('o2graph_axis_arrows')
-        self.yt_scene.add_source(points_aheads2,keyname=kname)
+
+        self.yt_arrow(origin,ihat,color,keyname='o2graph_xaxis',
+                      coords=coords)
+        self.yt_arrow(origin,jhat,color,keyname='o2graph_yaxis',
+                      coords=coords)
+        self.yt_arrow(origin,khat,color,keyname='o2graph_zaxis',
+                      coords=coords)
 
         # End of function o2graph_plotter::yt_plot_axis()
         return

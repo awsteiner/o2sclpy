@@ -64,7 +64,7 @@ for i in range(1,len(sys.argv)):
       print('Set backend to',backend)
 
 for i in range(1,len(sys.argv)):
-  if sys.argv[i][0:3]=='-yt' and yt_found=False:
+  if sys.argv[i][0:3]=='-yt' and yt_found==False:
       if backend!='' and backend!='agg' and backend!='Agg':
         print('Backend was not set to Agg but yt comments were found.')
       yt_found=True
