@@ -1739,6 +1739,7 @@ class o2graph_plotter(plot_base):
                 self.yt_create_scene()
 
             kname=self.yt_unique_keyname('o2graph_vol')
+            self.yt_vol_keynames.append(kname)
             self.yt_scene.add_source(vol,keyname=kname)
                             
             if self.yt_created_camera==False:
@@ -2311,8 +2312,10 @@ class o2graph_plotter(plot_base):
             #self.yt_create_camera(ps)
 
         else:
+            # The object curr_type is a bytes object, so we just use
+            # commas and avoid trying to add the strings together
             print('Command yt-scatter does not work with type',
-                  curr_type+'.')
+                  curr_type,'.')
             
         # End of function o2graph_plotter::yt_scatter()
         return
@@ -2513,6 +2516,43 @@ class o2graph_plotter(plot_base):
 
         # End of function o2graph_plotter::commands()
         return
+
+    def yt_save_annotate(self,fname):
+        """
+        Create a .png image, then add 2D annotations, and finally
+        save to file named 'fname'.
+        
+        This segment of code is based off of yt's save_annotate()
+        function.
+        """
+        
+        self.yt_scene.render()
+        fa=self.yt_scene._show_mpl
+        axt=fa(self.yt_scene._last_render.swapaxes(0,1),
+               sigma_clip=self.yt_sigma_clip,dpi=100)
+        self.yt_trans=self.yt_scene._render_figure.transFigure
+        self.axes=axt.axes
+        self.fig=self.yt_scene._render_figure
+        self.canvas_flag=True
+        print('Adding annotations:')
+        self.parse_string_list(self.yt_ann[0:len(self.yt_ann)-1],
+                               o2scl_hdf,amp)
+        print('Done adding annotations:')
+        #self.text(0.1,0.9,'x',color='w',fontsize=self.font*1.25,
+            #transform=tf)
+        self.canvas_flag=False
+        #axt.axes.text(0.1,0.9,'test',color='w',transform=tf,
+        #fontsize=self.font*1.25)
+        from yt.visualization._mpl_imports import FigureCanvasAgg
+        canvast=FigureCanvasAgg(self.yt_scene._render_figure)
+        self.yt_scene._render_figure.canvas=canvast
+        #self.yt_scene._render_figure.tight_layout(pad=0.0)
+        plot.subplots_adjust(left=0.0,bottom=0.0,
+                             right=1.0,top=1.0)
+        print('o2graph:yt-render: Calling savefig() with annotations.')
+        self.yt_scene._render_figure.savefig(fname,facecolor='black',
+                                             pad_inches=0)
+        return
     
     def yt_render(self,o2scl_hdf,amp,fname,mov_fname=''):
         """
@@ -2521,6 +2561,10 @@ class o2graph_plotter(plot_base):
         file name.
         """
 
+        if self.yt_scene==0:
+            print('Cannot perform a yt render without a scene.')
+            return
+        
         # AWS 10/14/19 the call to save() below does
         # the render() so I don't think I need this
         #self.yt_scene.render()
@@ -2535,34 +2579,9 @@ class o2graph_plotter(plot_base):
                 self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
                 
             else:
-                # This segment of code is based off of
-                # yt's save_annotate() function
-                self.yt_scene.render()
-                fa=self.yt_scene._show_mpl
-                axt=fa(self.yt_scene._last_render.swapaxes(0,1),
-                       sigma_clip=self.yt_sigma_clip,dpi=100)
-                self.yt_trans=self.yt_scene._render_figure.transFigure
-                self.axes=axt.axes
-                self.fig=self.yt_scene._render_figure
-                self.canvas_flag=True
-                print('Adding annotations:')
-                self.parse_string_list(self.yt_ann[0:len(self.yt_ann)-1],
-                                       o2scl_hdf,amp)
-                print('Done adding annotations:')
-                #self.text(0.1,0.9,'x',color='w',fontsize=self.font*1.25,
-                    #transform=tf)
-                self.canvas_flag=False
-                #axt.axes.text(0.1,0.9,'test',color='w',transform=tf,
-                #fontsize=self.font*1.25)
-                from yt.visualization._mpl_imports import FigureCanvasAgg
-                canvast=FigureCanvasAgg(self.yt_scene._render_figure)
-                self.yt_scene._render_figure.canvas=canvast
-                #self.yt_scene._render_figure.tight_layout(pad=0.0)
-                plot.subplots_adjust(left=0.0,bottom=0.0,
-                                     right=1.0,top=1.0)
-                print('o2graph:yt-render: Calling savefig() with annotations.')
-                self.yt_scene._render_figure.savefig(fname,facecolor='black',
-                                                     pad_inches=0)
+                
+                print('o2graph:yt-render: yt_save_annotate().')
+                self.yt_save_annotate(fname);
             
         else:
 
@@ -2885,6 +2904,15 @@ class o2graph_plotter(plot_base):
 
                     if ix_next-ix<6:
                         print('Not enough parameters for yt-line.')
+                    elif ix_next-ix>=7:
+                        x1=float(eval(strlist[ix+1]))
+                        y1=float(eval(strlist[ix+2]))
+                        z1=float(eval(strlist[ix+3]))
+                        x2=float(eval(strlist[ix+4]))
+                        y2=float(eval(strlist[ix+5]))
+                        z2=float(eval(strlist[ix+6]))
+                        self.yt_line([x1,y1,z1],[x2,y2,z2],
+                                      **string_to_dict(strlist[ix+7]))
                     else:
                         x1=float(eval(strlist[ix+1]))
                         y1=float(eval(strlist[ix+2]))
@@ -2901,6 +2929,15 @@ class o2graph_plotter(plot_base):
 
                     if ix_next-ix<6:
                         print('Not enough parameters for yt-box.')
+                    elif ix_next-ix>=7:
+                        x1=float(eval(strlist[ix+1]))
+                        y1=float(eval(strlist[ix+2]))
+                        z1=float(eval(strlist[ix+3]))
+                        x2=float(eval(strlist[ix+4]))
+                        y2=float(eval(strlist[ix+5]))
+                        z2=float(eval(strlist[ix+6]))
+                        self.yt_box([x1,y1,z1],[x2,y2,z2],
+                                      **string_to_dict(strlist[ix+7]))
                     else:
                         x1=float(eval(strlist[ix+1]))
                         y1=float(eval(strlist[ix+2]))
@@ -2917,6 +2954,15 @@ class o2graph_plotter(plot_base):
 
                     if ix_next-ix<6:
                         print('Not enough parameters for yt-arrow.')
+                    elif ix_next-ix>=7:
+                        x1=float(eval(strlist[ix+1]))
+                        y1=float(eval(strlist[ix+2]))
+                        z1=float(eval(strlist[ix+3]))
+                        x2=float(eval(strlist[ix+4]))
+                        y2=float(eval(strlist[ix+5]))
+                        z2=float(eval(strlist[ix+6]))
+                        self.yt_arrow([x1,y1,z1],[x2,y2,z2],
+                                      **string_to_dict(strlist[ix+7]))
                     else:
                         x1=float(eval(strlist[ix+1]))
                         y1=float(eval(strlist[ix+2]))
@@ -2956,8 +3002,11 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-axis.')
-                        
-                    self.yt_plot_axis()
+
+                    if ix_next-ix<2:
+                        self.yt_plot_axis()
+                    else:
+                        self.yt_plot_axis(**string_to_dict(strlist[ix+1]))
 
                 elif cmd_name=='yt-render':
 

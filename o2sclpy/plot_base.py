@@ -219,6 +219,10 @@ class plot_base:
     """
     True if new colormaps were defined with 'new-cmaps'
     """
+    yt_vol_keynames=[]
+    """
+    Current list of volume keynames
+    """
     yt_volume_data=[]
     """
     Current list of data objects for volume sources
@@ -340,7 +344,8 @@ class plot_base:
         # End of function plot_base::yt_update_text()
         return
     
-    def yt_line(self,point1,point2,color=''):
+    def yt_line(self,point1,point2,color=[1.0,1.0,1.0,0.5],
+                keyname='o2sclpy_line'):
         """
         Plot a line in a yt volume visualization.
         """
@@ -390,28 +395,34 @@ class plot_base:
         if icnt==0:
             self.yt_def_vol()
 
+        # Convert color to [r,g,b,a] for yt
+        from matplotlib.colors import to_rgba
+        colt=to_rgba(color)
+        colt2=[colt[0],colt[1],colt[2],colt[3]]
+        colors=[colt2]
+        
         vertices=numpy.array([[[(x1-self.xlo)/(self.xhi-self.xlo),
                                 (y1-self.ylo)/(self.yhi-self.ylo),
                                 (z1-self.zlo)/(self.zhi-self.zlo)],
                                [(x2-self.xlo)/(self.xhi-self.xlo),
                                 (y2-self.ylo)/(self.yhi-self.ylo),
                                 (z2-self.zlo)/(self.zhi-self.zlo)]]])
-        colors=numpy.array([[1.0,1.0,1.0,0.5]])
+        colors=numpy.array([colt2])
         ls=LineSource(vertices,colors)
         print('o2graph:yt-line: Adding line source.')
-        kname=self.yt_unique_keyname('o2graph_line')
+        kname=self.yt_unique_keyname(keyname)
         self.yt_scene.add_source(ls,keyname=kname)
 
         # End of function plot_base::yt_line()
         return
         
     def yt_arrow(self,point1,point2,color=[1.0,1.0,1.0,0.5],n_lines=40,
-                 frac_length=0.05,radius=0.0125,keyname='o2graph_arrow',
+                 frac_length=0.05,radius=0.0125,keyname='o2sclpy_arrow',
                  coords='user'):
         """
         Plot an arrow in a yt volume visualization. 
         """
-
+        
         from yt.visualization.volume_rendering.api \
             import LineSource
 
@@ -468,7 +479,10 @@ class plot_base:
 
         # Arrow line
         vertices=[[[x1,y1,z1],[x2,y2,z2]]]
-        colors=[color]
+        from matplotlib.colors import to_rgba
+        colt=to_rgba(color)
+        colt2=[colt[0],colt[1],colt[2],colt[3]]
+        colors=[colt2]
 
         # First convert the arrow to polar coordinates
         rarr=math.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)
@@ -505,7 +519,7 @@ class plot_base:
 
                 # Add the lines to the list for the LineSource
                 vertices.append([[x2,y2,z2],[xnew,ynew,znew]])
-                colors.append(color)
+                colors.append(colt2)
                 
         arrow_source=LineSource(numpy.array(vertices),numpy.array(colors))
         kname=self.yt_unique_keyname(keyname)
@@ -525,14 +539,29 @@ class plot_base:
         the yt scene and from the internal o2sclpy lists.
         """
 
+        # Remove from the text objects list
+        for i in range(0,len(yt_text_objects)):
+            if yt_text_objects[i][0]==keyname:
+                del yt_text_objects[i]
+                
+        # Remove from the volume objects lists
+        for i in range(0,len(yt_vol_keynames)):
+            if yt_vol_keynames[i]==keyname:
+                del yt_vol_keynames[i]
+                del yt_volume_data[i]
+                del yt_volume_bbox[i]
+                del yt_vols[i]
+                del yt_data_sources[i]
+
+        # Now remove it from the scene
         del self.yt_scene.sources[keyname]
         
         # End of function plot_base::yt_del_source()
         return
         
-    def yt_box(self,point1,point2,color=''):
+    def yt_box(self,point1,point2,color=[1.0,1.0,1.0,0.5]):
         """
-        Create a box in a yt visualization
+        Create a box in a yt visualization. 
         """
 
         from yt.visualization.volume_rendering.api \
@@ -580,7 +609,13 @@ class plot_base:
         if icnt==0:
             self.yt_def_vol()
 
-        colors=numpy.array([[1.0,1.0,1.0,0.5]])
+        # Convert color to [r,g,b,a] for yt
+        from matplotlib.colors import to_rgba
+        colt=to_rgba(color)
+        colt2=[colt[0],colt[1],colt[2],colt[3]]
+        colors=[colt2]
+        
+        colors=numpy.array([colt])
         left=numpy.array([(x1-self.xlo)/(self.xhi-self.xlo),
                           (y1-self.ylo)/(self.yhi-self.ylo),
                           (z1-self.zlo)/(self.zhi-self.zlo)])
@@ -589,14 +624,14 @@ class plot_base:
                            (z2-self.zlo)/(self.zhi-self.zlo)])
         ls=BoxSource(left,right,colors)
         print('o2graph:yt-box: Adding box source.')
-        kname=self.yt_unique_keyname('o2graph_box')
+        kname=self.yt_unique_keyname('o2sclpy_box')
         self.yt_scene.add_source(ls,keyname=kname)
 
         # End of function plot_base::yt_box()
         return
         
     def yt_text(self,tx,ty,tz,textstr,reorient=False,scale=0.6,font=30,
-                keyname='o2graph_text'):
+                keyname='o2sclpy_text'):
         """
         Plot text given in ``textstr`` in a yt volume visualization at
         location ``(tx,ty,tz)``. If reorient is ``True``, then 
@@ -748,10 +783,10 @@ class plot_base:
         Create the yt scene object and set yt_created_scene to True.
         """
         from yt.visualization.volume_rendering.api import Scene
-        print('o2graph_plotter:yt_create_scene(): Creating scene.')
+        print('plot_base:yt_create_scene(): Creating scene.')
         self.yt_scene=Scene()
         self.yt_created_scene=True
-        # End of function o2graph_plotter::yt_create_scene()
+        # End of function plot_base::yt_create_scene()
         return
         
     def yt_create_camera(self,ds):
@@ -765,7 +800,7 @@ class plot_base:
             print('Cannot create camera before x, y, and z limits are set.')
             return
             
-        print('o2graph_plotter:yt_create_camera(): Creating camera.')
+        print('plot_base:yt_create_camera(): Creating camera.')
         self.yt_camera=self.yt_scene.add_camera()
         self.yt_camera.resolution=self.yt_resolution
         self.yt_camera.width=1.5*ds.domain_width[0]
@@ -798,7 +833,7 @@ class plot_base:
         self.yt_camera.north_vector=[0.0,0.0,1.0]
         self.yt_camera.switch_orientation()
         self.yt_created_camera=True
-        # End of function o2graph_plotter::yt_create_camera()
+        # End of function plot_base::yt_create_camera()
         return
     
     def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=30,
@@ -848,11 +883,11 @@ class plot_base:
         # that we have the point data
         plot.close(fig)
         
-        # End of function o2graph_plotter::yt_text_to_points()
+        # End of function plot_base::yt_text_to_points()
         return(numpy.array(Y),numpy.array(Y2))
 
     def yt_text_to_scene(self,loc,text,scale=0.6,font=30,
-                         keyname='o2graph_text'):
+                         keyname='o2sclpy_text'):
         """
         At location 'loc' put text 'text' into the scene using specified
         scale parameter and keyname. This function uses the current yt
@@ -887,23 +922,27 @@ class plot_base:
         kname=self.yt_unique_keyname(keyname)
         self.yt_scene.add_source(points_xalabels,keyname=kname)
 
-        # End of function o2graph_plotter::yt_text_to_scene()
+        # End of function plot_base::yt_text_to_scene()
         return
 
     def yt_plot_axis(self,xval=1.0,yval=1.0,zval=1.0,
                      color=[1.0,1.0,1.0,0.5],
                      coords='internal'):
         """
-        Plot an axis in a yt volume consisting a PointSource for
-        the origin and then three arrows pointing from ``origin``
-        to ``ihat``, ``jhat``, and ``khat``. The specified color
-        is used for the origin and all three arrows. The
-        arrows are constructed with one main LineSource and
-        then several smaller LineSource objects in a conical
-        shape to create the arrow heads. 
+        Plot an axis in a yt volume consisting a PointSource for the
+        origin and then three arrows pointing from ``origin`` to
+        ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. The
+        specified color is used for the origin and all three arrows.
+        The arrows are constructed with one main LineSource and then
+        several smaller LineSource objects in a conical shape to
+        create the arrow heads.
         """
+
+        if self.yt_scene==0:
+            print('Cannot plot yt axis without a scene.')
+            return
         
-        print('o2graph_plotter:yt_plot_axis(): Adding axis.')
+        print('plot_base:yt_plot_axis(): Adding axis.')
         
         # Imports
         from yt.visualization.volume_rendering.api \
@@ -913,22 +952,28 @@ class plot_base:
         ihat=[xval,0,0]
         jhat=[0,yval,0]
         khat=[0,0,zval]
+
+        # Convert color to [r,g,b,a] for yt
+        from matplotlib.colors import to_rgba
+        colt=to_rgba(color)
+        colt2=[colt[0],colt[1],colt[2],colt[3]]
+        colors=[colt2]
         
         # Point at origin
         vertex_origin=numpy.array([origin])
-        color_origin=numpy.array([color])
+        color_origin=numpy.array([colt2])
         points=PointSource(vertex_origin,colors=color_origin,radii=3)
-        kname=self.yt_unique_keyname('o2graph_origin')
+        kname=self.yt_unique_keyname('o2sclpy_origin')
         self.yt_scene.add_source(points,keyname=kname)
 
-        self.yt_arrow(origin,ihat,color,keyname='o2graph_xaxis',
+        self.yt_arrow(origin,ihat,color=color,keyname='o2sclpy_xaxis',
                       coords=coords)
-        self.yt_arrow(origin,jhat,color,keyname='o2graph_yaxis',
+        self.yt_arrow(origin,jhat,color=color,keyname='o2sclpy_yaxis',
                       coords=coords)
-        self.yt_arrow(origin,khat,color,keyname='o2graph_zaxis',
+        self.yt_arrow(origin,khat,color=color,keyname='o2sclpy_zaxis',
                       coords=coords)
 
-        # End of function o2graph_plotter::yt_plot_axis()
+        # End of function plot_base::yt_plot_axis()
         return
         
     def yt_check_backend(self):
@@ -942,7 +987,7 @@ class plot_base:
             print('yt integration only works with Agg.')
             print('Current backend is',matplotlib.get_backend())
             
-        # End of function o2graph_plotter::yt_check_backend()
+        # End of function plot_base::yt_check_backend()
         return
     
     def yt_def_vol(self):
@@ -972,7 +1017,7 @@ class plot_base:
         if self.yt_created_scene==False:
             self.yt_create_scene()
 
-        kname=self.yt_unique_keyname('o2graph_vol')
+        kname=self.yt_unique_keyname('o2sclpy_vol')
         self.yt_scene.add_source(vol,keyname=kname)
                             
         if self.yt_created_camera==False:
