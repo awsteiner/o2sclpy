@@ -2553,6 +2553,20 @@ class o2graph_plotter(plot_base):
         self.yt_scene._render_figure.savefig(fname,facecolor='black',
                                              pad_inches=0)
         return
+
+    def _make_fname(self,prefix,suffix,i_frame,n_frames):
+        """
+        Construct the animation filename
+        """
+        if n_frames>=1000:
+            fname2=prefix+'000'+str(i_frame)+suffix
+        elif n_frames>=100:
+            fname2=prefix+'00'+str(i_frame)+suffix
+        elif n_frames>=10:
+            fname2=prefix+'0'+str(i_frame)+suffix
+        else:
+            fname2=prefix+str(i_frame)+suffix
+        return fname2
     
     def yt_render(self,o2scl_hdf,amp,fname,mov_fname=''):
         """
@@ -2574,12 +2588,18 @@ class o2graph_plotter(plot_base):
             # No path, so just call save and finish
             
             if len(self.yt_ann)==0:
+
+                # No animation and no annotation, so just call
+                # scene.save()
                 
                 print('o2graph:yt-render: Calling yt_scene.save()',
                       'with filename',fname)
                 self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
                 
             else:
+
+                # No animation, but we have some annotations so
+                # call yt_save_annotate()
                 
                 print('o2graph:yt-render: yt_save_annotate()',
                       'with filename',fname)
@@ -2589,6 +2609,8 @@ class o2graph_plotter(plot_base):
 
             # Setup destination filename
             if mov_fname=='':
+                print('No movie filename specified so using',
+                      'o2graph.mp4')
                 mov_fname='o2graph.mp4'
 
             # Parse image file pattern
@@ -2599,35 +2621,91 @@ class o2graph_plotter(plot_base):
                   'fname,prefix,suffix,mov_fname:',
                   fname,prefix,suffix,mov_fname)
                             
-            # Read path 
-            
-            if path_arr[0]=='yaw':
+            # Count total frames
+            n_frames=0
+            for ip in range(0,len(yt_path)):
+                n_frames=n_frames+yt_path[ip][1]
+            print(n_frames,'total frames')
 
-                first=True
-                n_frames=int(path_arr[1])
-                angle=float(path_arr[2])*numpy.pi*2.0
-                            
-                for i in range(0,n_frames):
-                    if i+1<10:
-                        fname2=prefix+'0'+str(i)+suffix
+            # Render initial frame
+            i_frame=0
+            fname2=self._make_fname(prefix,suffix,i_frame,n_frames)
+            self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
+            
+            for ip in range(0,len(yt_path)):
+            
+                if yt_path[ip][0]=='yaw':
+
+                    angle=float(yt_path[ip][2])*numpy.pi*2.0
+
+                    # Create position array. 
+                    if self.yt_position=='default':
+                        pos=[1.5,0.6,0.7]
+                    elif len(self.yt_position.split(' '))==2:
+                        splittemp=self.yt_position.split(' ')
+                        if splittemp[1]=='internal':
+                            pos=[float(splittemp[0][0]),
+                                 float(splittemp[0][1]),
+                                 float(splittemp[0][2])]
+                        else:
+                            pos=[(float(splittemp[0][0])-self.xlo)/
+                                 (self.xhi-self.xlo),
+                                 (float(splittemp[0][1])-self.ylo)/
+                                 (self.yhi-self.ylo),
+                                 (float(splittemp[0][2])-self.zlo)/
+                                 (self.zhi-self.zlo)]
                     else:
-                        fname2=prefix+str(i)+suffix
-                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
-                    #if platform.system()!='Darwin':
-                    #    os.system('cp '+fname2+
-                    #              ' /tmp/o2graph_temp.png')
-                    #    if first:
-                    #        os.system('eog /tmp/o2graph_temp.png &')
-                    #        first=False
-                    #else:
-                    #    os.system('cp '+fname2+
-                    #              ' /tmp/o2graph_temp.png')
-                    #    if first:
-                    #        os.system('open /tmp/o2gr'+
-                    #                  'aph_temp.png &')
-                    #        first=False
+                        pos=[(eval(self.yt_position)[0]-self.xlo)/
+                             (self.xhi-self.xlo),
+                             (eval(self.yt_position)[1]-self.ylo)/
+                             (self.yhi-self.ylo),
+                             (eval(self.yt_position)[2]-self.zlo)/
+                             (self.zhi-self.zlo)]
+
+                    # Create focus array. 
+                    if self.yt_focus=='default':
+                        foc=[0.5,0.5,0.5]
+                    elif len(self.yt_focus.split(' '))==2:
+                        splittemp=self.yt_focus.split(' ')
+                        if splittemp[1]=='internal':
+                            foc=[float(splittemp[0][0]),
+                                 float(splittemp[0][1]),
+                                 float(splittemp[0][2])]
+                        else:
+                            foc=[(float(splittemp[0][0])-self.xlo)/
+                                 (self.xhi-self.xlo),
+                                 (float(splittemp[0][1])-self.ylo)/
+                                 (self.yhi-self.ylo),
+                                 (float(splittemp[0][2])-self.zlo)/
+                                 (self.zhi-self.zlo)]
+                    else:
+                        foc=[(eval(self.yt_focus)[0]-self.xlo)/
+                             (self.xhi-self.xlo),
+                             (eval(self.yt_focus)[1]-self.ylo)/
+                             (self.yhi-self.ylo),
+                             (eval(self.yt_focus)[2]-self.zlo)/
+                             (self.zhi-self.zlo)]
+
+                    print('yaw: initial position and focus:',pos,foc)
+                    
+                    for ifr in range(0,yt_path[ip][1]):
+                        
+                        i_frame=i_frame+1
+                        
+                        #if platform.system()!='Darwin':
+                        #    os.system('cp '+fname2+
+                        #              ' /tmp/o2graph_temp.png')
+                        #    if first:
+                        #        os.system('eog /tmp/o2graph_temp.png &')
+                        #        first=False
+                        #else:
+                        #    os.system('cp '+fname2+
+                        #              ' /tmp/o2graph_temp.png')
+                        #    if first:
+                        #        os.system('open /tmp/o2gr'+
+                        #                  'aph_temp.png &')
+                        #        first=False
                             
-                    if i!=n_frames-1:
                         print(self.yt_camera)
                         print('unit_vectors:',self.yt_camera.unit_vectors)
                         print('normal_vector:',self.yt_camera.normal_vector)
@@ -2639,83 +2717,139 @@ class o2graph_plotter(plot_base):
                         rv=YTArray([0,0,1])
                         #rc=YTArray([0.5,0.5,0.5])
                         self.yt_camera.rotate(angle,rot_vector=rv)
-    
-                        if self.yt_position=='default':
-                            pos=[1.5,0.6,0.7]
-                        else:
-                            pos=[self.yt_position[0],
-                                 self.yt_position[1],
-                                 self.yt_position[2]]
-                        if self.yt_focus=='default':
-                            foc=[0.5,0.5,0.5]
-                        else:
-                            foc=[self.yt_focus[0],
-                                 self.yt_focus[1],
-                                 self.yt_focus[2]]
-                        print(pos,foc)
+                        
                         xt=pos[0]-foc[0]
                         yt=pos[1]-foc[1]
                         zt=pos[2]-foc[2]
-                        print(xt,yt,zt)
                         r=math.sqrt(xt**2+yt**2+zt**2)
-                        print(r)
                         theta=math.acos(zt/r)
                         phi=math.atan2(yt,xt)
                         phi+=angle
                         xt=r*math.sin(theta)*math.cos(phi)
                         yt=r*math.sin(theta)*math.sin(phi)
                         zt=r*math.cos(theta)
-                        print(xt,yt,zt)
-                        if self.yt_position=='default':
-                            self.yt_position=[0,0,0]
-                        self.yt_position[0]=foc[0]+xt
-                        self.yt_position[1]=foc[1]+yt
-                        self.yt_position[2]=foc[2]+zt
-                        print(self.yt_focus,self.yt_position)
+                        
+                        pos[0]=foc[0]+xt
+                        pos[1]=foc[1]+yt
+                        pos[2]=foc[2]+zt
+                        print('yaw: new position:',pos)
 
+                        # Move camera
                         self.yt_camera.position=[pos[0],pos[1],pos[2]]
-                        if self.yt_focus=='default':
-                            self.yt_camera.focus=[0.5,0.5,0.5]
-                        else:
-                            self.yt_camera.focus=[foc[0],foc[1],foc[2]]
+                        self.yt_camera.focus=[foc[0],foc[1],foc[2]]
                         self.yt_camera.north_vector=[0.0,0.0,1.0]
                         self.yt_camera.switch_orientation()
-                        
-                        #self.yt_camera.yaw(angle)
-                        
-                        self.yt_update_text()
-                        
-                    # End of 'if i!=n_frames-1'
-                    
-                # End of loop over number of frames
-                    
-            elif path_arr[0]=='zoom':
-                
-                first=True
-                n_frames=int(path_arr[1])
-                factor=float(path_arr[2])
 
-                for i in range(0,n_frames):
-                    if i+1<10:
-                        fname2=prefix+'0'+str(i)+suffix
+                        # Update text objects
+                        self.yt_update_text()
+
+                        # Save new frame
+                        fname2=self._make_fname(prefix,suffix,
+                                                i_frame,n_frames)
+                        self.yt_scene.save(fname2,
+                                           sigma_clip=self.yt_sigma_clip)
+                        # End of 'for ifr in range(0,yt_path[ip][1])'
+                    
+                    # Restore position array. 
+                    if self.yt_position=='default':
+                        self.yt_position=[pos[0]*(self.xhi-self.xlo)+
+                                          self.xlo,
+                                          pos[1]*(self.yhi-self.ylo)+
+                                          self.ylo,
+                                          pos[2]*(self.zhi-self.zlo)+
+                                          self.zlo]
+                    elif len(self.yt_position.split(' '))==2:
+                        splittemp=self.yt_position.split(' ')
+                        if splittemp[1]=='internal':
+                            self.yt_position=(str([pos[0],pos[1],pos[2]])+
+                                              ' internal')
+                        else:
+                            self.yt_position=[pos[0]*(self.xhi-self.xlo)+
+                                              self.xlo,
+                                              pos[1]*(self.yhi-self.ylo)+
+                                              self.ylo,
+                                              pos[2]*(self.zhi-self.zlo)+
+                                              self.zlo]
                     else:
-                        fname2=prefix+str(i)+suffix
-                    ifactor=factor**(float(i)/(float(n_frames)-1))
-                    self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
-                    if platform.system()!='Darwin':
-                        os.system('cp '+fname2+
-                                  ' /tmp/o2graph_temp.png')
-                        if first:
-                            os.system('eog /tmp/o2graph_temp.png &')
-                            first=False
+                        self.yt_position=[pos[0]*(self.xhi-self.xlo)+
+                                          self.xlo,
+                                          pos[1]*(self.yhi-self.ylo)+
+                                          self.ylo,
+                                          pos[2]*(self.zhi-self.zlo)+
+                                          self.zlo]
+                    print('restored self.yt_position:',
+                          self.yt_position)
+
+                    # Restore focus array. 
+                    if self.yt_focus=='default':
+                        self.yt_focus=[foc[0]*(self.xhi-self.xlo)+
+                                          self.xlo,
+                                          foc[1]*(self.yhi-self.ylo)+
+                                          self.ylo,
+                                          foc[2]*(self.zhi-self.zlo)+
+                                          self.zlo]
+                    elif len(self.yt_focus.split(' '))==2:
+                        splittemp=self.yt_focus.split(' ')
+                        if splittemp[1]=='internal':
+                            self.yt_focus=(str([foc[0],foc[1],foc[2]])+
+                                              ' internal')
+                        else:
+                            self.yt_focus=[foc[0]*(self.xhi-self.xlo)+
+                                              self.xlo,
+                                              foc[1]*(self.yhi-self.ylo)+
+                                              self.ylo,
+                                              foc[2]*(self.zhi-self.zlo)+
+                                              self.zlo]
                     else:
-                        os.system('cp '+fname2+
-                                  ' /tmp/o2graph_temp.png')
-                        if first:
-                            os.system('open /tmp/o2gr'+
-                                      'aph_temp.png &')
-                            first=False
-                    self.yt_camera.zoom(ifactor)
+                        self.yt_focus=[foc[0]*(self.xhi-self.xlo)+
+                                          self.xlo,
+                                          foc[1]*(self.yhi-self.ylo)+
+                                          self.ylo,
+                                          foc[2]*(self.zhi-self.zlo)+
+                                          self.zlo]
+                    print('restored self.yt_focus:',
+                          self.yt_focus)
+
+                    # End of loop 'if yt_path[ip][0]=='yaw''
+                    
+                elif yt_path[ip][0]=='zoom':
+                    
+                    factor=float(yt_path[ip][2])
+
+                    for ifr in range(0,yt_path[ip][1]):
+                        
+                        i_frame=i_frame+1
+                        
+                        print(self.yt_camera)
+                        print('unit_vectors:',self.yt_camera.unit_vectors)
+                        print('normal_vector:',self.yt_camera.normal_vector)
+                        print('north_vector:',self.yt_camera.north_vector)
+                        print('origin:',self.yt_camera.lens.origin)
+                        print('num_threads:',self.yt_camera.lens.num_threads)
+                        
+                        from yt.units.yt_array import YTArray
+                        rv=YTArray([0,0,1])
+                        #rc=YTArray([0.5,0.5,0.5])
+                        self.yt_camera.rotate(angle,rot_vector=rv)
+                        
+                        # Move camera
+                        ifactor=factor**(ifr/
+                                         (float(yt_path[ip][1])-1))
+                        self.yt_camera.zoom(ifactor)
+
+                        # Update text objects
+                        self.yt_update_text()
+
+                        # Save new frame
+                        fname2=self._make_fname(prefix,suffix,
+                                                i_frame,n_frames)
+                        self.yt_scene.save(fname2,
+                                           sigma_clip=self.yt_sigma_clip)
+                        # End of 'for if in range(0,yt_path[ip][1])'
+                    
+                    # End of loop 'if yt_path[ip][0]=='zoom''
+                    
+                # End of 'for ip in range(0,len(yt_path)):'
 
             # -r is rate, -f is format, -vcodec is video
             # codec (apparently 420p works well with
@@ -2723,12 +2857,24 @@ class o2graph_plotter(plot_base):
             # -crf is the quality (15-25 recommended)
             # -y forces overwrite of the movie file if it
             # already exists
-                        
-            cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                      prefix+'%02d'+suffix+' -vcodec libx264 '+
-                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
+
+            if n_frames>=1000:
+                cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                     prefix+'%04d'+suffix+' -vcodec libx264 '+
+                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+            elif n_frames>=100:
+                cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                     prefix+'%03d'+suffix+' -vcodec libx264 '+
+                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+            else:
+                cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                     prefix+'%02d'+suffix+' -vcodec libx264 '+
+                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                
             print('ffmpeg command:',cmd)
             os.system(cmd)
+
+            # End of else for 'if len(self.yt_path)==0:'
             
         # End of function o2graph_plotter::yt_render()
         return

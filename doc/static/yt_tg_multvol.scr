@@ -28,7 +28,7 @@ o2graph -backend Agg \
 	-yt-path yaw 101 0.01 \
 	-yt-render "/tmp/yt_*.png" yt_tg_multvol.mp4
 #
-# Combine the still images into a single image for the docs
+# Combine the still images into a single image for the documentation
 #
 montage /tmp/yt_00.png /tmp/yt_25.png /tmp/yt_50.png /tmp/yt_75.png \
 -geometry 512x512>+2+2 yt_tg_multvol.png	

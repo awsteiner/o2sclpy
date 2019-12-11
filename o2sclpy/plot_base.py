@@ -753,21 +753,15 @@ class plot_base:
             value=value.split(',')
             self.yt_resolution=(float(value[0]),float(value[1]))
         elif name=='yt_focus':
-            left_brace=value.find('[')
-            right_brace=value.find(']')
-            value=value[left_brace+1:right_brace]
-            value=value.split(',')
-            self.yt_focus=[float(value[0]),float(value[1]),
-                           float(value[2])]
+            # We leave the focus as a string so we can parse
+            # it later
+            self.yt_focus=value
         elif name=='yt_sigma_clip':
             self.yt_sigma_clip=float(value)
         elif name=='yt_position':
-            left_brace=value.find('[')
-            right_brace=value.find(']')
-            value=value[left_brace+1:right_brace]
-            value=value.split(',')
-            self.yt_position=[float(value[0]),float(value[1]),
-                              float(value[2])]
+            # We leave the position as a string so we can parse
+            # it later
+            self.yt_position=value
         elif name=='yt_path':
             self.yt_path=value
         else:
