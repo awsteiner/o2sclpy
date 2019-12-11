@@ -2517,7 +2517,7 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::commands()
         return
 
-    def yt_save_annotate(self,fname):
+    def yt_save_annotate(self,o2scl_hdf,amp,fname):
         """
         Create a .png image, then add 2D annotations, and finally
         save to file named 'fname'.
@@ -2575,13 +2575,15 @@ class o2graph_plotter(plot_base):
             
             if len(self.yt_ann)==0:
                 
-                print('o2graph:yt-render: Calling yt_scene.save().')
+                print('o2graph:yt-render: Calling yt_scene.save()',
+                      'with filename',fname)
                 self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
                 
             else:
                 
-                print('o2graph:yt-render: yt_save_annotate().')
-                self.yt_save_annotate(fname);
+                print('o2graph:yt-render: yt_save_annotate()',
+                      'with filename',fname)
+                self.yt_save_annotate(o2scl_hdf,amp,fname);
             
         else:
 

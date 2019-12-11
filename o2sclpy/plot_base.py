@@ -631,7 +631,7 @@ class plot_base:
         return
         
     def yt_text(self,tx,ty,tz,textstr,reorient=False,scale=0.6,font=30,
-                keyname='o2sclpy_text'):
+                keyname='o2sclpy_text',filename=''):
         """
         Plot text given in ``textstr`` in a yt volume visualization at
         location ``(tx,ty,tz)``. If reorient is ``True``, then 
@@ -658,8 +658,9 @@ class plot_base:
         self.yt_text_objects.append([kname,reorient,xval,yval,zval,textstr,
                                      scale,font])
         
-        self.yt_text_to_scene([xval,yval,zval],
-                              textstr,scale=scale,font=font,keyname=kname)
+        self.yt_text_to_scene([xval,yval,zval],textstr,scale=scale,
+                              font=font,keyname=kname,filename=filename)
+                              
 
         # End of function plot_base::yt_text()
         return
@@ -837,7 +838,7 @@ class plot_base:
         return
     
     def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=30,
-                          textcolor=(0,0,0),show=False):
+                          textcolor=(0,0,0),show=False,filename=''):
         """
         Take three 3D vectors 'veco' (origin), 'vecx' (x direction) and
         'vecy' (y direction), and a string of text ('text'), and
@@ -858,8 +859,13 @@ class plot_base:
         
         plot.axis('off')
         fig.canvas.draw()
+        if filename is not '':
+            print("Saving render of text '"+text+
+                  "' in file named "+filename+'.')
+            plot.savefig(filename)
         if show:
             plot.show()
+            
         X=numpy.array(fig.canvas.renderer._renderer)
         Y=[]
         Y2=[]
@@ -887,7 +893,7 @@ class plot_base:
         return(numpy.array(Y),numpy.array(Y2))
 
     def yt_text_to_scene(self,loc,text,scale=0.6,font=30,
-                         keyname='o2sclpy_text'):
+                         keyname='o2sclpy_text',filename=''):
         """
         At location 'loc' put text 'text' into the scene using specified
         scale parameter and keyname. This function uses the current yt
@@ -915,7 +921,8 @@ class plot_base:
         view_y=view_y*scale*0.8
         
         # Convert text to points
-        (Y,Y2)=self.yt_text_to_points(loc,view_x,view_y,text,font=font)
+        (Y,Y2)=self.yt_text_to_points(loc,view_x,view_y,text,font=font,
+                                      filename=filename)
     
         # Add the point source
         points_xalabels=PointSource(Y,colors=Y2)
@@ -1454,6 +1461,7 @@ class plot_base:
         self.axis_list.append(axis_temp)
         self.axes=axis_temp
         cbar=self.fig.colorbar(self.last_image,cax=self.axes,**kwargs)
+        #fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax)
         cbar.ax.tick_params(labelsize=self.font*0.8)
         # End of function plot_base::addcbar()
         return
