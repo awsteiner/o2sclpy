@@ -340,9 +340,7 @@ def string_to_dict(s):
                 arr2[1]=arr2[1][1:len(arr2[1])-1]
                 arr3=arr2[1].split(',')
                 arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]))
-                print('here',arr2[1])
-                quit()
-            if arr2[0]=='color' and arr[i][5]=='=' and arr[i][6]=='[':
+            elif arr2[0]=='color' and arr[i][5]=='=' and arr[i][6]=='[':
                 arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]+','+arr[i+3]
                 print(arr2[1])
                 skip=3
@@ -350,28 +348,27 @@ def string_to_dict(s):
                 arr3=arr2[1].split(',')
                 arr2[1]=[float(arr3[0]),float(arr3[1]),float(arr3[2]),
                          float(arr3[3])]
-                print('here',arr2[1])
-                quit()
-            if (arr2[0]=='color' and (arr2[1].find('(')!=-1 or
-                                      arr2[1].find('[')!=-1)):
-                print('here',arr2[0],arr2[1])
-                if arr2[1].find('(')==-1:
-                    loc1=arr2[1].find('[')
-                    loc2=arr2[1].find(']')
-                else:
-                    loc1=arr2[1].find('(')
-                    loc2=arr2[1].find(')')
-                print('here2',loc1,loc2)
-                arr2[1]=arr2[1][loc1:loc2-loc1+1]
-                print('here3',arr2[1])
-                temp=arr2[1].split(',')
-                if len(temp)==3:
-                    arr2[1]=[float(temp[0]),float(temp[1]),
-                             float(temp[2])]
-                else:
-                    arr2[1]=[float(temp[0]),float(temp[1]),
-                             float(temp[2]),float(temp[3])]
-                print('here4',arr2[1])
+
+            # if (arr2[0]=='color' and (arr2[1].find('(')!=-1 or
+            #                           arr2[1].find('[')!=-1)):
+            #     print('here',arr2[0],arr2[1])
+            #     if arr2[1].find('(')==-1:
+            #         loc1=arr2[1].find('[')
+            #         loc2=arr2[1].find(']')
+            #     else:
+            #         loc1=arr2[1].find('(')
+            #         loc2=arr2[1].find(')')
+            #     print('here2',loc1,loc2)
+            #     arr2[1]=arr2[1][loc1:loc2-loc1+1]
+            #     print('here3',arr2[1])
+            #     temp=arr2[1].split(',')
+            #     if len(temp)==3:
+            #         arr2[1]=[float(temp[0]),float(temp[1]),
+            #                  float(temp[2])]
+            #     else:
+            #         arr2[1]=[float(temp[0]),float(temp[1]),
+            #                  float(temp[2]),float(temp[3])]
+            #     print('here4',arr2[1])
 
             # assign to dictionary (except for arrowstyle and
             # connectionstyle options which are handled separately

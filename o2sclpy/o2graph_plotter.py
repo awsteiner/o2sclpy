@@ -23,6 +23,7 @@ import math
 import sys
 import ctypes
 import numpy
+import os
 
 import matplotlib.pyplot as plot
 
@@ -57,33 +58,10 @@ class o2graph_plotter(plot_base):
 
     .. todo:: Simplify some of the larger functions like 
        o2graph_plotter::plot()
-    .. todo:: Finish setting up -set yt_resolution so it parses the
-       two numerical values
     .. todo:: Ensure the 'clf' command clears the yt objects?
-    .. todo:: Figure out how to place 2d plot elements on top of a yt render
-    .. todo:: Figure out how to allow user to specify focus and position in
-       both coordinate systems
-    .. todo:: Create yt-box command for BoxSource
     .. todo:: More yt-path options
     .. todo:: Anti-alias text objects (also anti-alias line sources?)
     
-    """
-
-    yt_scene=0
-    """ 
-    The yt scene object
-    """
-    yt_created_scene=False
-    """
-    If true, then the yt scene object has been created
-    """
-    yt_camera=0
-    """ 
-    The yt camera object
-    """
-    yt_created_camera=False
-    """
-    If true, then the yt camera object has been created
     """
 
     def set_wrapper(self,o2scl_hdf,amp,args):
@@ -1486,11 +1464,15 @@ class o2graph_plotter(plot_base):
         print(' ')
         for line in yt_param_list:
             if line[0]=='yt_focus':
-                print(line[0]+' '+str(self.yt_focus))
+                print(line[0]+' '+self.yt_focus)
             if line[0]=='yt_position':
-                print(line[0]+' '+str(self.yt_position))
+                print(line[0]+' '+self.yt_position)
+            if line[0]=='yt_width':
+                print(line[0]+' '+self.yt_width)
+            if line[0]=='yt_north':
+                print(line[0]+' '+self.yt_north)
             if line[0]=='yt_path':
-                print(line[0]+' '+self.yt_path)
+                print(line[0]+' '+str(self.yt_path))
             if line[0]=='yt_resolution':
                 print(line[0]+' '+str(self.yt_resolution))
             if line[0]=='yt_sigma_clip':
@@ -2567,6 +2549,138 @@ class o2graph_plotter(plot_base):
         else:
             fname2=prefix+str(i_frame)+suffix
         return fname2
+
+    def restore_position(self,pos):
+        """
+        """
+        
+        if self.yt_position=='default':
+            self.yt_position=[pos[0]*(self.xhi-self.xlo)+
+                              self.xlo,
+                              pos[1]*(self.yhi-self.ylo)+
+                              self.ylo,
+                              pos[2]*(self.zhi-self.zlo)+
+                              self.zlo]
+        elif len(self.yt_position.split(' '))==2:
+            splittemp=self.yt_position.split(' ')
+            if splittemp[1]=='internal':
+                self.yt_position=(str([pos[0],pos[1],pos[2]])+
+                                  ' internal')
+            else:
+                self.yt_position=[pos[0]*(self.xhi-self.xlo)+
+                                  self.xlo,
+                                  pos[1]*(self.yhi-self.ylo)+
+                                  self.ylo,
+                                  pos[2]*(self.zhi-self.zlo)+
+                                  self.zlo]
+        else:
+            self.yt_position=[pos[0]*(self.xhi-self.xlo)+
+                              self.xlo,
+                              pos[1]*(self.yhi-self.ylo)+
+                              self.ylo,
+                              pos[2]*(self.zhi-self.zlo)+
+                              self.zlo]
+        print('restored self.yt_position:',
+              self.yt_position)
+        return
+
+    def restore_focus(self,foc):
+        """
+        """
+        
+        # Restore focus array. 
+        if (len(self.yt_focus.split(' '))==2 and
+            self.yt_focus.split(' ')[1]=='internal'):
+            self.yt_focus=(str([foc[0],foc[1],foc[2]])+
+                           ' internal')
+        else:
+            self.yt_focus=[foc[0]*(self.xhi-self.xlo)+self.xlo,
+                           foc[1]*(self.yhi-self.ylo)+self.ylo,
+                           foc[2]*(self.zhi-self.zlo)+self.zlo]
+        print('restored self.yt_focus:',
+              self.yt_focus)
+
+    def restore_north(self,nor):
+        """
+        """
+        
+        self.yt_north=[nor[0],nor[1],nor[2]]
+        
+        return
+        
+    def restore_width(self,wid):
+        """
+        """
+        
+        self.yt_width=[wid[0],wid[1],wid[2]]
+        
+        return
+        
+    def create_camera_vecs(self):
+        
+        # Create position array
+        if self.yt_position=='default':
+            pos=[1.5,0.6,0.7]
+        elif len(self.yt_position.split(' '))==2:
+            splittemp=self.yt_position.split(' ')
+            if splittemp[1]=='internal':
+                pos=[float(splittemp[0][0]),
+                     float(splittemp[0][1]),
+                     float(splittemp[0][2])]
+            else:
+                pos=[(float(splittemp[0][0])-self.xlo)/
+                     (self.xhi-self.xlo),
+                     (float(splittemp[0][1])-self.ylo)/
+                     (self.yhi-self.ylo),
+                     (float(splittemp[0][2])-self.zlo)/
+                     (self.zhi-self.zlo)]
+        else:
+            pos=[(eval(self.yt_position)[0]-self.xlo)/
+                 (self.xhi-self.xlo),
+                 (eval(self.yt_position)[1]-self.ylo)/
+                 (self.yhi-self.ylo),
+                 (eval(self.yt_position)[2]-self.zlo)/
+                 (self.zhi-self.zlo)]
+
+        # Create focus array
+        if self.yt_focus=='default':
+            foc=[0.5,0.5,0.5]
+        elif len(self.yt_focus.split(' '))==2:
+            splittemp=self.yt_focus.split(' ')
+            if splittemp[1]=='internal':
+                foc=[float(splittemp[0][0]),
+                     float(splittemp[0][1]),
+                     float(splittemp[0][2])]
+            else:
+                foc=[(float(splittemp[0][0])-self.xlo)/
+                     (self.xhi-self.xlo),
+                     (float(splittemp[0][1])-self.ylo)/
+                     (self.yhi-self.ylo),
+                     (float(splittemp[0][2])-self.zlo)/
+                     (self.zhi-self.zlo)]
+        else:
+            foc=[(eval(self.yt_focus)[0]-self.xlo)/
+                 (self.xhi-self.xlo),
+                 (eval(self.yt_focus)[1]-self.ylo)/
+                 (self.yhi-self.ylo),
+                 (eval(self.yt_focus)[2]-self.zlo)/
+                 (self.zhi-self.zlo)]
+
+        if self.yt_north=='default':
+            nor=[0.0,0.0,1.0]
+        else:
+            nor=[float(eval(self.yt_north))[0],
+                 float(eval(self.yt_north))[1],
+                 float(eval(self.yt_north))[2]]
+            
+        if self.yt_width=='default':
+            wid=[1.5,1.5,1.5]
+        else:
+            wid=[float(eval(self.yt_width))[0],
+                 float(eval(self.yt_width))[1],
+                 float(eval(self.yt_width))[2]]
+            
+        return (pos,foc,nor,wid)
     
     def yt_render(self,o2scl_hdf,amp,fname,mov_fname=''):
         """
@@ -2618,13 +2732,13 @@ class o2graph_plotter(plot_base):
             prefix=fname[0:asterisk]
             suffix=fname[asterisk+1:len(fname)]
             print('o2graph:yt-render:',
-                  'fname,prefix,suffix,mov_fname:',
+                  'fname,prefix,suffix,mov_fname:\n  ',
                   fname,prefix,suffix,mov_fname)
                             
             # Count total frames
             n_frames=0
-            for ip in range(0,len(yt_path)):
-                n_frames=n_frames+yt_path[ip][1]
+            for ip in range(0,len(self.yt_path)):
+                n_frames=n_frames+int(self.yt_path[ip][1])
             print(n_frames,'total frames')
 
             # Render initial frame
@@ -2632,86 +2746,25 @@ class o2graph_plotter(plot_base):
             fname2=self._make_fname(prefix,suffix,i_frame,n_frames)
             self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
             
-            for ip in range(0,len(yt_path)):
+            for ip in range(0,len(self.yt_path)):
             
-                if yt_path[ip][0]=='yaw':
+                if self.yt_path[ip][0]=='yaw':
 
-                    angle=float(yt_path[ip][2])*numpy.pi*2.0
+                    angle=float(self.yt_path[ip][2])*numpy.pi*2.0
 
-                    # Create position array. 
-                    if self.yt_position=='default':
-                        pos=[1.5,0.6,0.7]
-                    elif len(self.yt_position.split(' '))==2:
-                        splittemp=self.yt_position.split(' ')
-                        if splittemp[1]=='internal':
-                            pos=[float(splittemp[0][0]),
-                                 float(splittemp[0][1]),
-                                 float(splittemp[0][2])]
-                        else:
-                            pos=[(float(splittemp[0][0])-self.xlo)/
-                                 (self.xhi-self.xlo),
-                                 (float(splittemp[0][1])-self.ylo)/
-                                 (self.yhi-self.ylo),
-                                 (float(splittemp[0][2])-self.zlo)/
-                                 (self.zhi-self.zlo)]
-                    else:
-                        pos=[(eval(self.yt_position)[0]-self.xlo)/
-                             (self.xhi-self.xlo),
-                             (eval(self.yt_position)[1]-self.ylo)/
-                             (self.yhi-self.ylo),
-                             (eval(self.yt_position)[2]-self.zlo)/
-                             (self.zhi-self.zlo)]
-
-                    # Create focus array. 
-                    if self.yt_focus=='default':
-                        foc=[0.5,0.5,0.5]
-                    elif len(self.yt_focus.split(' '))==2:
-                        splittemp=self.yt_focus.split(' ')
-                        if splittemp[1]=='internal':
-                            foc=[float(splittemp[0][0]),
-                                 float(splittemp[0][1]),
-                                 float(splittemp[0][2])]
-                        else:
-                            foc=[(float(splittemp[0][0])-self.xlo)/
-                                 (self.xhi-self.xlo),
-                                 (float(splittemp[0][1])-self.ylo)/
-                                 (self.yhi-self.ylo),
-                                 (float(splittemp[0][2])-self.zlo)/
-                                 (self.zhi-self.zlo)]
-                    else:
-                        foc=[(eval(self.yt_focus)[0]-self.xlo)/
-                             (self.xhi-self.xlo),
-                             (eval(self.yt_focus)[1]-self.ylo)/
-                             (self.yhi-self.ylo),
-                             (eval(self.yt_focus)[2]-self.zlo)/
-                             (self.zhi-self.zlo)]
-
-                    print('yaw: initial position and focus:',pos,foc)
+                    # Create arrays
+                    (pos,foc,nor,wid)=self.create_camera_vecs()
+                    print('yaw: camera pos, foc:',pos,foc)
+                    print('yaw: camera nor, wid:',nor,wid)
                     
-                    for ifr in range(0,yt_path[ip][1]):
+                    for ifr in range(0,int(self.yt_path[ip][1])):
                         
                         i_frame=i_frame+1
                         
-                        #if platform.system()!='Darwin':
-                        #    os.system('cp '+fname2+
-                        #              ' /tmp/o2graph_temp.png')
-                        #    if first:
-                        #        os.system('eog /tmp/o2graph_temp.png &')
-                        #        first=False
-                        #else:
-                        #    os.system('cp '+fname2+
-                        #              ' /tmp/o2graph_temp.png')
-                        #    if first:
-                        #        os.system('open /tmp/o2gr'+
-                        #                  'aph_temp.png &')
-                        #        first=False
-                            
                         print(self.yt_camera)
-                        print('unit_vectors:',self.yt_camera.unit_vectors)
                         print('normal_vector:',self.yt_camera.normal_vector)
                         print('north_vector:',self.yt_camera.north_vector)
                         print('origin:',self.yt_camera.lens.origin)
-                        print('num_threads:',self.yt_camera.lens.num_threads)
                         
                         from yt.units.yt_array import YTArray
                         rv=YTArray([0,0,1])
@@ -2732,7 +2785,7 @@ class o2graph_plotter(plot_base):
                         pos[0]=foc[0]+xt
                         pos[1]=foc[1]+yt
                         pos[2]=foc[2]+zt
-                        print('yaw: new position:',pos)
+                        #print('yaw: new position:',pos)
 
                         # Move camera
                         self.yt_camera.position=[pos[0],pos[1],pos[2]]
@@ -2748,75 +2801,18 @@ class o2graph_plotter(plot_base):
                                                 i_frame,n_frames)
                         self.yt_scene.save(fname2,
                                            sigma_clip=self.yt_sigma_clip)
-                        # End of 'for ifr in range(0,yt_path[ip][1])'
+                        # End of 'for ifr in range(0,int(self.yt_path...'
                     
-                    # Restore position array. 
-                    if self.yt_position=='default':
-                        self.yt_position=[pos[0]*(self.xhi-self.xlo)+
-                                          self.xlo,
-                                          pos[1]*(self.yhi-self.ylo)+
-                                          self.ylo,
-                                          pos[2]*(self.zhi-self.zlo)+
-                                          self.zlo]
-                    elif len(self.yt_position.split(' '))==2:
-                        splittemp=self.yt_position.split(' ')
-                        if splittemp[1]=='internal':
-                            self.yt_position=(str([pos[0],pos[1],pos[2]])+
-                                              ' internal')
-                        else:
-                            self.yt_position=[pos[0]*(self.xhi-self.xlo)+
-                                              self.xlo,
-                                              pos[1]*(self.yhi-self.ylo)+
-                                              self.ylo,
-                                              pos[2]*(self.zhi-self.zlo)+
-                                              self.zlo]
-                    else:
-                        self.yt_position=[pos[0]*(self.xhi-self.xlo)+
-                                          self.xlo,
-                                          pos[1]*(self.yhi-self.ylo)+
-                                          self.ylo,
-                                          pos[2]*(self.zhi-self.zlo)+
-                                          self.zlo]
-                    print('restored self.yt_position:',
-                          self.yt_position)
-
-                    # Restore focus array. 
-                    if self.yt_focus=='default':
-                        self.yt_focus=[foc[0]*(self.xhi-self.xlo)+
-                                          self.xlo,
-                                          foc[1]*(self.yhi-self.ylo)+
-                                          self.ylo,
-                                          foc[2]*(self.zhi-self.zlo)+
-                                          self.zlo]
-                    elif len(self.yt_focus.split(' '))==2:
-                        splittemp=self.yt_focus.split(' ')
-                        if splittemp[1]=='internal':
-                            self.yt_focus=(str([foc[0],foc[1],foc[2]])+
-                                              ' internal')
-                        else:
-                            self.yt_focus=[foc[0]*(self.xhi-self.xlo)+
-                                              self.xlo,
-                                              foc[1]*(self.yhi-self.ylo)+
-                                              self.ylo,
-                                              foc[2]*(self.zhi-self.zlo)+
-                                              self.zlo]
-                    else:
-                        self.yt_focus=[foc[0]*(self.xhi-self.xlo)+
-                                          self.xlo,
-                                          foc[1]*(self.yhi-self.ylo)+
-                                          self.ylo,
-                                          foc[2]*(self.zhi-self.zlo)+
-                                          self.zlo]
-                    print('restored self.yt_focus:',
-                          self.yt_focus)
-
-                    # End of loop 'if yt_path[ip][0]=='yaw''
+                    # Restore position array
+                    self.restore_position(pos)
                     
-                elif yt_path[ip][0]=='zoom':
+                    # End of loop 'if self.yt_path[ip][0]=='yaw''
                     
-                    factor=float(yt_path[ip][2])
+                elif self.yt_path[ip][0]=='zoom':
+                    
+                    factor=float(self.yt_path[ip][2])
 
-                    for ifr in range(0,yt_path[ip][1]):
+                    for ifr in range(0,self.yt_path[ip][1]):
                         
                         i_frame=i_frame+1
                         
@@ -2834,29 +2830,31 @@ class o2graph_plotter(plot_base):
                         
                         # Move camera
                         ifactor=factor**(ifr/
-                                         (float(yt_path[ip][1])-1))
+                                         (float(self.yt_path[ip][1])-1))
                         self.yt_camera.zoom(ifactor)
 
                         # Update text objects
                         self.yt_update_text()
+
+                        # Width
+                        self.restore_width(self.yt_camera.width)
 
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
                         self.yt_scene.save(fname2,
                                            sigma_clip=self.yt_sigma_clip)
-                        # End of 'for if in range(0,yt_path[ip][1])'
+                        # End of 'for if in range(0,self.yt_path[ip][1])'
                     
-                    # End of loop 'if yt_path[ip][0]=='zoom''
+                    # End of loop 'if self.yt_path[ip][0]=='zoom''
                     
-                # End of 'for ip in range(0,len(yt_path)):'
+                # End of 'for ip in range(0,len(self.yt_path)):'
 
-            # -r is rate, -f is format, -vcodec is video
-            # codec (apparently 420p works well with
-            # quicktime), -pix_fmt sepcifies the pixel format,
-            # -crf is the quality (15-25 recommended)
-            # -y forces overwrite of the movie file if it
-            # already exists
+            # -r is rate (in frames/sec), -f is format, -vcodec is
+            # video codec (apparently 420p works well with quicktime),
+            # -pix_fmt sepcifies the pixel format, -crf is the quality
+            # (15-25 recommended) -y forces overwrite of the movie
+            # file if it already exists
 
             if n_frames>=1000:
                 cmd=('ffmpeg -y -r 10 -f image2 -i '+
@@ -2866,9 +2864,13 @@ class o2graph_plotter(plot_base):
                 cmd=('ffmpeg -y -r 10 -f image2 -i '+
                      prefix+'%03d'+suffix+' -vcodec libx264 '+
                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
-            else:
+            elif n_frames>=10:
                 cmd=('ffmpeg -y -r 10 -f image2 -i '+
                      prefix+'%02d'+suffix+' -vcodec libx264 '+
+                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+            else:
+                cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                     prefix+'%01d'+suffix+' -vcodec libx264 '+
                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
                 
             print('ffmpeg command:',cmd)
@@ -3346,7 +3348,7 @@ class o2graph_plotter(plot_base):
                         print('Process addcbar.')
                         
                     if ix_next-ix<5:
-                        print('Not enough parameters for selax option.')
+                        print('Not enough parameters for addcbar option.')
                     elif ix_next-ix<6:
                         self.addcbar(float(eval(strlist[ix+1])),
                                      float(eval(strlist[ix+2])),
@@ -3358,6 +3360,20 @@ class o2graph_plotter(plot_base):
                                      float(eval(strlist[ix+3])),
                                      float(eval(strlist[ix+4])),
                                      **string_to_dict(strlist[ix+5]))
+                        
+                elif cmd_name=='newcbar':
+                    
+                    if self.verbose>5:
+                        print('Process newcbar.')
+                        
+                    if ix_next-ix<6:
+                        print('Not enough parameters for newcbar option.')
+                    else:
+                        self.newcbar(float(eval(strlist[ix+1])),
+                                     float(eval(strlist[ix+2])),
+                                     float(eval(strlist[ix+3])),
+                                     float(eval(strlist[ix+4])),
+                                     strlist[ix+5])
                         
                 elif cmd_name=='subadj':
                     

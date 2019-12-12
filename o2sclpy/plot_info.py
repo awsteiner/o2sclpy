@@ -134,8 +134,7 @@ def markers_plot(fname=''):
             plot.rc('text',usetex=False)
             axes.plot([(col_ctr+0.1)/(ncols)],
                       [float(nrows-row_ctr)/(nrows+1)],
-                      marker=entry[0],color='black',
-                      markersize=10)
+                      marker=entry[0],color='black',markersize=10)
             axes.text((col_ctr+0.25)/(ncols),
                       float(nrows-row_ctr)/(nrows+1),
                       entry[1],family='monospace',
@@ -424,16 +423,12 @@ def cmaps_plot(fname=''):
             name2=name.replace('_','\_')
             ax=axes[row_ctr][col_ctr]
             ax.imshow(gradient,aspect='auto',
-                             cmap=plot.get_cmap(name))
-            r=patches.Rectangle((0.32,0.1),0.36,0.8,0,
-                                fc=(1,1,1,0.7),lw=0,
-                                fill=True,
-                                transform=ax.transAxes)
+                      cmap=plot.get_cmap(name))
+            r=patches.Rectangle((0.32,0.1),0.36,0.8,0,fc=(1,1,1,0.7),lw=0,
+                                fill=True,transform=ax.transAxes)
             ax.add_patch(r)
-            ax.text(0.5,0.45,name2,
-                    va='center',ha='center',
-                    fontsize=8,color=(0,0,0),
-                    transform=ax.transAxes)
+            ax.text(0.5,0.45,name2,va='center',ha='center',
+                    fontsize=8,color=(0,0,0),transform=ax.transAxes)
             row_ctr=row_ctr+1
             if row_ctr>=nrows:
                 row_ctr=0
@@ -502,8 +497,7 @@ def colors_plot(fname=''):
     fig.subplots_adjust(left=0,right=1,top=1,bottom=0,
                         hspace=0,wspace=0)
     axes.text(X*0.5,(Y+header)*0.965,r'$ \mathrm{O}_2\mathrm{sc'+
-              'lpy~colors~summary} $',
-              fontsize=16,ha='center')
+              'lpy~colors~summary} $',fontsize=16,ha='center')
     if fname!='':
         plot.savefig(fname)
         print('Created image file '+fname+'.')
@@ -540,26 +534,24 @@ def color_list():
     ctr=0
     for col in css4_dict:
         if ctr%3==0:
-            outs=outs+(col+' '+
-                       str(css4_dict[col])).ljust(26)
+            outs=outs+(col+' '+str(css4_dict[col])).ljust(26)
         elif ctr%3==1:
-            outs=outs+(col+' '+
-                       str(css4_dict[col])).ljust(28)
+            outs=outs+(col+' '+str(css4_dict[col])).ljust(28)
         else:
-            outs=outs+(col+' '+
-                       str(css4_dict[col])).ljust(26)
+            outs=outs+(col+' '+str(css4_dict[col])).ljust(26)
             outs=outs+'\n'
         ctr=ctr+1
     print(outs)
     print(' ')
-    outs=('O2graph also supports the (r,g,b) format '+
-          'the HTML format, and the XKCD colors '+
-          "(see '-help xkcd-colors' for a list). "+
-          'For (r,g,b) colors, '+
-          'the r, g, and b numbers should be from '+
-          '0.0 to 1.0. The HTML format is #RRGGBB '+
-          'where RR, GG, and BB are two-digit '+
-          'hexadecimal values.')
+    outs=("o2sclpy also supports the (r,g,b) format, the [r,g,b,a] format, "+
+          "the HTML format, the grayscale single-value format, "+
+          "and the XKCD colors (see '-help xkcd-colors' for a list). "+
+          "For (r,g,b) colors, parentheses must be used, and the r, g,"+
+          " and b numbers should be from 0.0 to 1.0. For [r,g,b,a] "+
+          "colors, square brackets must be used and the r, g, b, "+
+          "and a numbers should be from 0.0 to 1.0. The HTML "+
+          "format is #RRGGBB where RR, GG, and BB are two-digit "+
+          "hexadecimal values.")
     str_list=textwrap.wrap(outs,79)
     for i in range (0,len(str_list)):
         print(str_list[i])
@@ -586,11 +578,9 @@ def xkcd_colors_list():
     ctr=0
     for col in xkcd_dict:
         if ctr%2==0:
-            outs=outs+(col+' '+
-                       str(xkcd_dict[col])).ljust(40)
+            outs=outs+(col+' '+str(xkcd_dict[col])).ljust(40)
         else:
-            outs=outs+(col+' '+
-                       str(xkcd_dict[col])).ljust(39)
+            outs=outs+(col+' '+str(xkcd_dict[col])).ljust(39)
             outs=outs+'\n'
         ctr=ctr+1
     print(outs)

@@ -30,7 +30,8 @@ List of new o2sclpy cmaps
 """
 
 base_list=[
-    ["addcbar","Add color bar.","<left> <bottom> <width> <height> [kwargs]",
+    ["addcbar","Add a color bar.",
+     "<left> <bottom> <width> <height> [kwargs]",
      "Add axis"],
     ["arrow","Plot an arrow.",
      "<x1> <y1> <x2> <y2> <arrow properties> [kwargs]",
@@ -84,12 +85,16 @@ base_list=[
      "effect."],
     ["canvas","Create a plotting canvas.","",
      "Create an empty plotting canvas. For example 'o2graph "+
-     "-canvas -show'."],
+     "-canvas -show'. Typically, 'o2graph' creates "+
+     "the canvas automatically so explicitly using this command "+
+     "is unnecessary."],
     ["clf","Clear the current figure.","",
      "Clear the current figure."],
-    ["eval","Run the python eval() function.","<source code>",
-     "Long desc."],
-    ["image","Plot an image.","<file>",""],
+    ["eval","Run the python eval() function.","<python code>",
+     "Take the python code given and execute it using eval(). "+
+     "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
+    ["image","Plot an image.","<file>",
+     "Read a .png file, create a plot, and then call plot.show()."],
     ["inset","Add an inset (unfinished).","",""],
     ["line","Plot a line.","<x1> <y1> <x2> <y2> [kwargs]",
      "Plot a line from (x1,y1) to (xy,y2). Some useful "+
@@ -198,13 +203,13 @@ base_list=[
     ["yt-tf","Edit the yt transfer function.","","Long desc."],
     ["yt-vertex-list","Draw a line from a series of vertices in a table.",
      "<col x> <col y> <col z>","Long desc."],
-    ["zlimits","Set the z-azis limits.","<low> <high>",
+    ["zlimits","Set the z-axis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
      "and set 'zset' to true. If a plotting canvas is currently "+
      "open, then "+
      "the z-limits on that plot are modified. Future plots are also "+
-     "set with the specified z-limits."],
-    ["ztitle","Add z title to plot (yt only).","",""]
+     "set with the specified z-limits."]
+#    ["ztitle","Add z title to plot (yt only).","",""]
 ]
 """
 This is a list of 4-element entries:
@@ -435,8 +440,12 @@ A list of 2-element entries, name and description
 """
 
 yt_param_list=[
-    ["yt_focus","The camera focus (default [0.5,0.5,0.5])."],
-    ["yt_position","The camera position (default [1.5,0.6,0.7])."],
+    ["yt_focus","The camera focus (default is the center of the volume)."],
+    ["yt_position","The camera position "+
+     "(default is '[1.5,0.6,0.7] internal')."],
+    ["yt_north","The camera north vector (default [0.0,0.0,1.0])."],
+    ["yt_width","The camera width relative to the volume "+
+     "(default [1.5,1.5,1.5])."],
     ["yt_path","The animation path (default '')."],
     ["yt_resolution","The rendering resolution (default (512,512))."],
     ["yt_sigma_clip","Sigma clipping parameter (default 4.0)."]

@@ -1,8 +1,7 @@
 # Demonstrate multiple volume sources with different transfer
 # functions, text reorientation, text scaling, and LaTeX.
 #
-o2graph -backend Agg \
-	-create tensor_grid 3 101 101 101 \
+o2graph -create tensor_grid 3 101 101 101 \
 	-set-grid 0 "func:101:i*0.01" \
 	-set-grid 1 "func:101:i*0.01" \
 	-set-grid 2 "func:101:i*0.01" \
@@ -25,13 +24,8 @@ o2graph -backend Agg \
 	-yt-text 0.8 0.6 0.05 "$ \mathrm{Volume}~2 $" reorient=True,scale=0.4 \
 	-yt-text 0.2 0.8 0.65 "$ (x-x_0)^2 + \ldots $" reorient=True \
 	-yt-source-list \
-	-yt-path yaw 101 0.01 \
+	-yt-path yaw 100 0.01 \
 	-yt-render "/tmp/yt_*.png" yt_tg_multvol.mp4
-#
-# Combine the still images into a single image for the documentation
-#
-montage /tmp/yt_00.png /tmp/yt_25.png /tmp/yt_50.png /tmp/yt_75.png \
--geometry 512x512>+2+2 yt_tg_multvol.png	
 
 
 

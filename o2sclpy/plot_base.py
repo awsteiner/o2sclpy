@@ -79,6 +79,10 @@ class plot_base:
     If True, then the figure and axes objects have been created
     (default False)
     """
+    new_cmaps_defined=False
+    """
+    True if new colormaps were defined with 'new-cmaps'
+    """
     
     # Quantities modified by set/get
     
@@ -182,6 +186,9 @@ class plot_base:
     """
     If true, include ticks on right side and top (default False)
     """
+
+    # Yt settings modifiable by get and set
+    
     yt_resolution=(512,512)
     """
     Resolution for yt rendering (default (512,512))
@@ -191,10 +198,24 @@ class plot_base:
     yt camera focus (default [0.5,0.5,0.5])
     """
     yt_position='default'
-    #[1.5,0.6,0.7]
     """
     yt camera position (default [1.5,0.6,0.7])
     """
+    yt_width='default'
+    """
+    yt camera width (default [1.5,1.5,1.5])
+    """
+    yt_north='default'
+    """
+    yt camera north (default [1.0,0.0,0.0])
+    """
+    yt_sigma_clip=4.0
+    """
+    The sigma_clip parameter for yt (default 4.0)
+    """
+
+    # Other yt settings
+    
     yt_path=[]
     """
     yt animation path (default [])
@@ -210,14 +231,6 @@ class plot_base:
     yt_tf=0
     """
     The yt transfer function
-    """
-    yt_sigma_clip=4.0
-    """
-    The sigma_clip parameter for yt (default 4.0)
-    """
-    new_cmaps_defined=False
-    """
-    True if new colormaps were defined with 'new-cmaps'
     """
     yt_vol_keynames=[]
     """
@@ -242,6 +255,25 @@ class plot_base:
     yt_text_objects=[]
     """
     Current list of yt data source objects
+    """
+
+    # Yt scene and camera
+    
+    yt_scene=0
+    """ 
+    The yt scene object
+    """
+    yt_created_scene=False
+    """
+    If true, then the yt scene object has been created
+    """
+    yt_camera=0
+    """ 
+    The yt camera object
+    """
+    yt_created_camera=False
+    """
+    If true, then the yt camera object has been created
     """
     
     def yt_unique_keyname(self,prefix):
@@ -751,7 +783,7 @@ class plot_base:
             right_paren=value.find(')')
             value=value[left_paren+1:right_paren]
             value=value.split(',')
-            self.yt_resolution=(float(value[0]),float(value[1]))
+            self.yt_resolution=(int(value[0]),int(value[1]))
         elif name=='yt_focus':
             # We leave the focus as a string so we can parse
             # it later
@@ -762,6 +794,14 @@ class plot_base:
             # We leave the position as a string so we can parse
             # it later
             self.yt_position=value
+        elif name=='yt_north':
+            # We leave the north as a string so we can parse
+            # it later
+            self.yt_north=value
+        elif name=='yt_width':
+            # We leave the width as a string so we can parse
+            # it later
+            self.yt_width=value
         elif name=='yt_path':
             self.yt_path=value
         else:
@@ -1455,9 +1495,23 @@ class plot_base:
         self.axis_list.append(axis_temp)
         self.axes=axis_temp
         cbar=self.fig.colorbar(self.last_image,cax=self.axes,**kwargs)
-        #fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax)
         cbar.ax.tick_params(labelsize=self.font*0.8)
         # End of function plot_base::addcbar()
+        return
+
+    def newcbar(self,left,bottom,width,height,cmap,**kwargs):
+        """
+        Experimental
+        """
+        axis_temp=self.fig.add_axes([left,bottom,width,height])
+        #axis_temp.set_frame_on(False)
+        self.axis_list.append(axis_temp)
+        self.axes=axis_temp
+        tempsm=plot.cm.ScalarMappable(cmap=cmap,
+                                      norm=plot.Normalize(vmin=0,vmax=1))
+        cbar=self.fig.colorbar(tempsm,cax=self.axes,orientation='horizontal')
+        cbar.ax.tick_params(labelsize=0,length=0)
+        # End of function plot_base::newcbar()
         return
 
     def canvas(self):

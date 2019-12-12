@@ -69,3 +69,12 @@ yt_scatter:
 		temp.png
 	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
 
+yt_tg_multvol:
+	./yt_tg_multvol.scr
+	convert +append yt_tg_multvol_doc.png yt_tg_multvol.png \
+		temp.png
+	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+# Combine the still images into a single image for the documentation
+	montage /tmp/yt_00.png /tmp/yt_25.png /tmp/yt_50.png \
+	/tmp/yt_75.png -geometry 512x512 yt_tg_multvol.png	
+
