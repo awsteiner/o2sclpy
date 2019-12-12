@@ -3355,25 +3355,21 @@ class o2graph_plotter(plot_base):
                                      float(eval(strlist[ix+3])),
                                      float(eval(strlist[ix+4])))
                     else:
-                        self.addcbar(float(eval(strlist[ix+1])),
-                                     float(eval(strlist[ix+2])),
-                                     float(eval(strlist[ix+3])),
-                                     float(eval(strlist[ix+4])),
-                                     **string_to_dict(strlist[ix+5]))
-                        
-                elif cmd_name=='newcbar':
-                    
-                    if self.verbose>5:
-                        print('Process newcbar.')
-                        
-                    if ix_next-ix<6:
-                        print('Not enough parameters for newcbar option.')
-                    else:
-                        self.newcbar(float(eval(strlist[ix+1])),
-                                     float(eval(strlist[ix+2])),
-                                     float(eval(strlist[ix+3])),
-                                     float(eval(strlist[ix+4])),
-                                     strlist[ix+5])
+                        dictt=string_to_dict(strlist[ix+5])
+                        if 'image' in dictt.keys():
+                            imval=dictt['image']
+                            del dictt['image']
+                            self.addcbar(float(eval(strlist[ix+1])),
+                                         float(eval(strlist[ix+2])),
+                                         float(eval(strlist[ix+3])),
+                                         float(eval(strlist[ix+4])),
+                                         image=imval,**dictt)
+                        else:
+                            self.addcbar(float(eval(strlist[ix+1])),
+                                         float(eval(strlist[ix+2])),
+                                         float(eval(strlist[ix+3])),
+                                         float(eval(strlist[ix+4])),
+                                         **dictt)
                         
                 elif cmd_name=='subadj':
                     

@@ -1485,33 +1485,33 @@ class plot_base:
         # End of function plot_base::selax()
         return
 
-    def addcbar(self,left,bottom,width,height,**kwargs):
+    def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):
         """
         Add a colorbar from the most recently created image
         at the location specified by ``left``, ``bottom``, ``width`` and
         ``height``. 
         """
-        axis_temp=self.fig.add_axes([left,bottom,width,height])
-        self.axis_list.append(axis_temp)
-        self.axes=axis_temp
-        cbar=self.fig.colorbar(self.last_image,cax=self.axes,**kwargs)
-        cbar.ax.tick_params(labelsize=self.font*0.8)
+        if image=='last':
+            axis_temp=self.fig.add_axes([left,bottom,width,height])
+            self.axis_list.append(axis_temp)
+            self.axes=axis_temp
+            cbar=self.fig.colorbar(self.last_image,cax=self.axes,**kwargs)
+            cbar.ax.tick_params(labelsize=self.font*0.8)
+        elif image=='new':
+            axis_temp=self.fig.add_axes([left,bottom,width,height])
+            #axis_temp.set_frame_on(False)
+            self.axis_list.append(axis_temp)
+            self.axes=axis_temp
+            tempsm=plot.cm.ScalarMappable(cmap=cmap,
+                                          norm=plot.Normalize(vmin=0,vmax=1))
+            cbar=self.fig.colorbar(tempsm,cax=self.axes,
+                                   orientation='horizontal')
+            cbar.ax.tick_params(labelsize=0,length=0)
+        else:
+            print('invalid value of image')
+            return
+        
         # End of function plot_base::addcbar()
-        return
-
-    def newcbar(self,left,bottom,width,height,cmap,**kwargs):
-        """
-        Experimental
-        """
-        axis_temp=self.fig.add_axes([left,bottom,width,height])
-        #axis_temp.set_frame_on(False)
-        self.axis_list.append(axis_temp)
-        self.axes=axis_temp
-        tempsm=plot.cm.ScalarMappable(cmap=cmap,
-                                      norm=plot.Normalize(vmin=0,vmax=1))
-        cbar=self.fig.colorbar(tempsm,cax=self.axes,orientation='horizontal')
-        cbar.ax.tick_params(labelsize=0,length=0)
-        # End of function plot_base::newcbar()
         return
 
     def canvas(self):
