@@ -3355,21 +3355,11 @@ class o2graph_plotter(plot_base):
                                      float(eval(strlist[ix+3])),
                                      float(eval(strlist[ix+4])))
                     else:
-                        dictt=string_to_dict(strlist[ix+5])
-                        if 'image' in dictt.keys():
-                            imval=dictt['image']
-                            del dictt['image']
-                            self.addcbar(float(eval(strlist[ix+1])),
-                                         float(eval(strlist[ix+2])),
-                                         float(eval(strlist[ix+3])),
-                                         float(eval(strlist[ix+4])),
-                                         image=imval,**dictt)
-                        else:
-                            self.addcbar(float(eval(strlist[ix+1])),
-                                         float(eval(strlist[ix+2])),
-                                         float(eval(strlist[ix+3])),
-                                         float(eval(strlist[ix+4])),
-                                         **dictt)
+                        self.addcbar(float(eval(strlist[ix+1])),
+                                     float(eval(strlist[ix+2])),
+                                     float(eval(strlist[ix+3])),
+                                     float(eval(strlist[ix+4])),
+                                     **string_to_dict(strlist[ix+5]))
                         
                 elif cmd_name=='subadj':
                     

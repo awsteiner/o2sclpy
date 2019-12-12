@@ -1499,9 +1499,13 @@ class plot_base:
             cbar.ax.tick_params(labelsize=self.font*0.8)
         elif image=='new':
             axis_temp=self.fig.add_axes([left,bottom,width,height])
+            # This doesn't work and I'm not quite sure why yet
             #axis_temp.set_frame_on(False)
             self.axis_list.append(axis_temp)
             self.axes=axis_temp
+            if cmap=='':
+                print('New colorbar needs colormap.')
+                return
             tempsm=plot.cm.ScalarMappable(cmap=cmap,
                                           norm=plot.Normalize(vmin=0,vmax=1))
             cbar=self.fig.colorbar(tempsm,cax=self.axes,
