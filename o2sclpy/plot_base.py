@@ -663,7 +663,7 @@ class plot_base:
         return
         
     def yt_text(self,tx,ty,tz,textstr,reorient=False,scale=0.6,font=30,
-                keyname='o2sclpy_text',filename=''):
+                keyname='o2sclpy_text',filename='',coords='internal'):
         """
         Plot text given in ``textstr`` in a yt volume visualization at
         location ``(tx,ty,tz)``. If reorient is ``True``, then 
@@ -680,10 +680,15 @@ class plot_base:
             self.zset==False):
             print('Cannot place text before limits set.')
             return
-        
-        xval=(tx-self.xlo)/(self.xhi-self.xlo)
-        yval=(ty-self.ylo)/(self.yhi-self.ylo)
-        zval=(tz-self.zlo)/(self.zhi-self.zlo)
+
+        if coords!='internal':
+            xval=(tx-self.xlo)/(self.xhi-self.xlo)
+            yval=(ty-self.ylo)/(self.yhi-self.ylo)
+            zval=(tz-self.zlo)/(self.zhi-self.zlo)
+        else:
+            xval=tx
+            yval=ty
+            zval=tz
         
         kname=self.yt_unique_keyname(keyname)
         
