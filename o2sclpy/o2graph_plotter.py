@@ -1308,7 +1308,7 @@ class o2graph_plotter(plot_base):
             
     def plotv(self,o2scl_hdf,amp,args):
         """
-        Plot two multiple vector specifications
+        Plot one or two multiple vector specifications
         """
 
         char_ptr=ctypes.POINTER(ctypes.c_char)
@@ -2538,20 +2538,37 @@ class o2graph_plotter(plot_base):
 
     def _make_fname(self,prefix,suffix,i_frame,n_frames):
         """
-        Construct the animation filename
+        Construct the animation filename from frame index and frame total,
+        padding with zeros when necessary.
         """
         if n_frames>=1000:
-            fname2=prefix+'000'+str(i_frame)+suffix
+            if i_frame<10:
+                fname2=prefix+'000'+str(i_frame)+suffix
+            elif i_frame<100:
+                fname2=prefix+'00'+str(i_frame)+suffix
+            elif i_frame<1000:
+                fname2=prefix+'0'+str(i_frame)+suffix
+            else:
+                fname2=prefix+str(i_frame)+suffix
         elif n_frames>=100:
-            fname2=prefix+'00'+str(i_frame)+suffix
+            if i_frame<10:
+                fname2=prefix+'00'+str(i_frame)+suffix
+            elif i_frame<100:
+                fname2=prefix+'0'+str(i_frame)+suffix
+            else:
+                fname2=prefix+str(i_frame)+suffix
         elif n_frames>=10:
-            fname2=prefix+'0'+str(i_frame)+suffix
+            if i_frame<10:
+                fname2=prefix+'0'+str(i_frame)+suffix
+            else:
+                fname2=prefix+str(i_frame)+suffix
         else:
             fname2=prefix+str(i_frame)+suffix
         return fname2
 
     def restore_position(self,pos):
         """
+        Restore the value of self.yt_position from the array 'pos'.
         """
         
         if self.yt_position=='default':
@@ -2586,9 +2603,9 @@ class o2graph_plotter(plot_base):
 
     def restore_focus(self,foc):
         """
+        Restore the value of self.yt_focus from the array 'foc'.
         """
         
-        # Restore focus array. 
         if (len(self.yt_focus.split(' '))==2 and
             self.yt_focus.split(' ')[1]=='internal'):
             self.yt_focus=(str([foc[0],foc[1],foc[2]])+
@@ -2602,21 +2619,24 @@ class o2graph_plotter(plot_base):
 
     def restore_north(self,nor):
         """
+        Restore the value of self.yt_north from the array 'nor'.
         """
-        
         self.yt_north=[nor[0],nor[1],nor[2]]
-        
         return
         
     def restore_width(self,wid):
         """
+        Restore the value of self.yt_width from the array 'wid'.
         """
-        
         self.yt_width=[wid[0],wid[1],wid[2]]
-        
         return
         
     def create_camera_vecs(self):
+        """
+        Create vectors (pos,foc,nor,wid) from the user settings in
+        yt_position, yt_focus, yt_north and yt_width. This function is
+        used in yt_render to keep track of the camera properties.
+        """
         
         # Create position array
         if self.yt_position=='default':
