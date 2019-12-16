@@ -1730,6 +1730,107 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::yt_add_vol()
         return
         
+    def den_plot_anim(self,o2scl_hdf,amp):
+        """
+        Add a volume source to a yt visualization from a
+        tensor_grid object.
+        """
+
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+        
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+        
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+
+        if curr_type==b'tensor_grid':
+            self.yt_check_backend()
+            import yt
+            from yt.visualization.volume_rendering.api \
+                import VolumeSource
+            from yt.visualization.volume_rendering.transfer_function_helper \
+                import TransferFunctionHelper
+
+            # Set up wrapper for get function
+            get_fn=o2scl_hdf.o2scl_acol_get_tensor_grid3
+            get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr,
+                             int_ptr,double_ptr_ptr,
+                             double_ptr_ptr,double_ptr_ptr,
+                             double_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+             # Call get function
+            nx=ctypes.c_int(0)
+            ny=ctypes.c_int(0)
+            nz=ctypes.c_int(0)
+            ret=ctypes.c_int(0)
+            gridx=double_ptr()
+            gridy=double_ptr()
+            gridz=double_ptr()
+            data=double_ptr()
+            ret=get_fn(amp,ctypes.byref(nx),ctypes.byref(ny),
+                       ctypes.byref(nz),ctypes.byref(gridx),
+                       ctypes.byref(gridy),ctypes.byref(gridz),
+                       ctypes.byref(data))
+
+            nx=nx.value
+            ny=ny.value
+            nz=nz.value
+            total_size=nx*ny*nz
+
+            if self.xset==False:
+                self.xlo=gridx[0]
+                self.xhi=gridx[nx-1]
+                self.xset=True
+            if self.yset==False:
+                self.ylo=gridy[0]
+                self.yhi=gridy[ny-1]
+                self.yset=True
+            if self.zset==False:
+                self.zlo=gridz[0]
+                self.zhi=gridz[nz-1]
+                self.zset=True
+            print('o2graph_plotter:yt-add-vol: axis limits:',
+                  self.xlo,self.xhi,
+                  self.ylo,self.yhi,self.zlo,self.zhi)
+            
+            arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
+            # self.yt_volume_data.append(numpy.copy(arr))
+            # # Rescale to the internal coordinate system
+            # bbox=numpy.array([[(gridx[0]-self.xlo)/(self.xhi-self.xlo),
+            #                    (gridx[nx-1]-self.xlo)/(self.xhi-self.xlo)],
+            #                   [(gridy[0]-self.ylo)/(self.yhi-self.ylo),
+            #                    (gridy[ny-1]-self.ylo)/(self.yhi-self.ylo)],
+            #                   [(gridz[0]-self.zlo)/(self.zhi-self.zlo),
+            #                    (gridz[nz-1]-self.zlo)/(self.zhi-self.zlo)]])
+            # self.yt_volume_bbox.append(numpy.copy(bbox))
+            # arr2=self.yt_volume_data[len(self.yt_volume_data)-1]
+            # bbox2=self.yt_volume_bbox[len(self.yt_volume_bbox)-1]
+
+            # func=yt.load_uniform_grid
+            # self.yt_data_sources.append(func(dict(density=arr2),
+            #                                  arr2.shape,bbox=bbox2))
+            # ds=self.yt_data_sources[len(self.yt_data_sources)-1]
+
+            # self.yt_vols.append(VolumeSource(ds,field='density'))
+            # vol=self.yt_vols[len(self.yt_vols)-1]
+            # vol.log_field=False
+
+                
+        # End of function o2graph_plotter::den_plot_anim()
+        return
+        
     def help_func(self,o2scl_hdf,amp,args):
         """
         Function to process the help command.
