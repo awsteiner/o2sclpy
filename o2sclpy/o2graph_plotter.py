@@ -712,6 +712,120 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::plot()
         return
                                  
+    def plot_color(self,o2scl_hdf,amp,args):
+        """
+        Plot a set of line segments, coloring according to a third variable
+        """
+
+        if len(args)<4:
+            raise ValueError('Function plot_color() requires four values '+
+                             'for the args list.')
+        
+        # Useful pointer types
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+                        
+        if curr_type==b'table':
+                            
+            failed=False
+
+            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+
+            colx=ctypes.c_char_p(force_bytes(args[0]))
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+            if get_ret!=0:
+                print('Failed to get column named "'+args[0]+'".')
+                failed=True
+
+            coly=ctypes.c_char_p(force_bytes(args[1]))
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
+            if get_ret!=0:
+                print('Failed to get column named "'+args[1]+'".')
+                failed=True
+
+            colz=ctypes.c_char_p(force_bytes(args[2]))
+            idz=ctypes.c_int(0)
+            ptrz=double_ptr()
+            get_ret=get_fn(amp,colz,ctypes.byref(idz),ctypes.byref(ptrz))
+            if get_ret!=0:
+                print('Failed to get column named "'+args[2]+'".')
+                failed=True
+
+            cmap=args[3]
+
+            if failed==False:
+                xv=[ptrx[i] for i in range(0,idx.value)]
+                yv=[ptry[i] for i in range(0,idy.value)]
+                zv=[ptrz[i] for i in range(0,idz.value)]
+
+                if self.logx:
+                    for i in range(0,len(xv)):
+                        xv[i]=math.log10(xv)
+                if self.logy:
+                    for i in range(0,len(yv)):
+                        yv[i]=math.log10(yv)
+                
+                if self.canvas_flag==False:
+                    self.canvas()
+
+                import matplotlib
+                import matplotlib.cm as cm
+                
+                norm=matplotlib.colors.Normalize(vmin=min(zv),
+                                                 vmax=max(zv),
+                                                 clip=True)
+                mapper=cm.ScalarMappable(norm=norm,cmap=cmap)
+                    
+                for i in range(0,len(xv)-1):
+
+                    col=mapper.to_rgba(zv[i])
+                    if len(args)<5:
+                        self.axes.plot([xv[i],xv[i+1]],
+                                       [yv[i],yv[i+1]],
+                                       color=col)
+                    else:
+                        self.axes.plot([xv[i],xv[i+1]],
+                                       [yv[i],yv[i+1]],
+                                       color=col,
+                                       **string_to_dict(args[4]))
+
+            # End of section for 'table' type
+        else:
+            print("Command 'plot' not supported for type",
+                  curr_type,".")
+            return
+        
+        if self.xset==True:
+            self.axes.set_xlim(self.xlo,self.xhi)
+        if self.yset==True:
+            self.axes.set_ylim(self.ylo,self.yhi)
+                                 
+        # End of function o2graph_plotter::plot()
+        return
+                                 
     def rplot(self,o2scl_hdf,amp,args):
         """
         Plot a region inside a curve or in between two curves
@@ -3321,6 +3435,13 @@ class o2graph_plotter(plot_base):
                         print('Process plot.')
 
                     self.plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+
+                elif cmd_name=='plot-color':
+                    
+                    if self.verbose>2:
+                        print('Process plot-color.')
+
+                    self.plot_color(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='rplot':
                     

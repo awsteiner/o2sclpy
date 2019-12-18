@@ -241,6 +241,9 @@ extra_list=[
      "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
      "(mfcalt), markersize (ms). For example: o2graph -create x 0 10 0.2 "+
      "-function sin(x) y -plot x y lw=0,marker='+' -show"],
+    ["table","plot-color",
+     "Plot three columns from the table.",
+     "<x> <y> <color> [kwargs]",""],
     ["table","rplot",
      "Plot a region inside a column or in between two columns.",
      "<x1> <y1> [x2 y2] [kwargs]",
