@@ -1,5 +1,9 @@
-O2sclpy classes
-===============
+O\ :sub:`2`\ sclpy classes
+==========================
+
+This page documents four classes, :py:class:`o2sclpy.cloud_file`,
+:py:class:`o2sclpy.hdf5_reader`, :py:class:`o2sclpy.plotter`, and
+:py:class:`o2sclpy.plot_base`.
 
 Class cloud_file
 ----------------

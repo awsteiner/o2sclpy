@@ -32,6 +32,8 @@ def build_o2scl(verbose=1,release=True):
     """
     This function attempts to automatically build O\ :sub:`2`\ scl using 
     homebrew on OSX and snap on Linux.
+
+    This function is in ``link_o2scl.py``.
     """
     
     print('Would you like to try to automatically install O2scl '+
@@ -86,6 +88,8 @@ def link_o2scl(verbose=1,o2scl_cpplib='',o2scl_libdir=''):
     """
     This function attempts to automatically load O\ :sub:`2`\ scl as a 
     DLL and returns the ``o2scl`` and ``o2scl_hdf`` DLL pointers.
+
+    This function is in ``link_o2scl.py``.
     """
 
     # Handle OSX and Linux separately

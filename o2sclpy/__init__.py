@@ -46,4 +46,33 @@ from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
 from o2sclpy.plot_info import colors_plot
 
+class todo_list:
+    """
+
+    Todo list:
+
+    .. todo:: create a vector field command in yt
+    .. todo:: add map to colormap option for yt tf's
+    .. todo:: Create a system of protected variables and functions using
+       underscores and also create a __repr__() object
+    .. todo:: Create a plot_base_yt class in between plot_base
+       and o2graph_plotter?
+    .. todo:: Ensure yt uses self.font for text objects?
+    .. todo:: Finish den-plot-anim for a tensor_grid objects
+    .. todo:: plot-set for a table3d object to create 
+       a sequence of curves for each column or row, or maybe 
+       do this as a 'mult-vector-spec'?
+    .. todo:: Simplify some of the larger functions like 
+       o2graph_plotter::plot(), possibly by creating a separate
+       function for each type?
+    .. todo:: Ensure the 'clf' command clears the yt objects?
+    .. todo:: More yt-path options
+    .. todo:: Anti-alias text objects in yt (also anti-alias line 
+       sources?)
+    
+    """
+
+    def empty_class():
+        print(' ')
+
 

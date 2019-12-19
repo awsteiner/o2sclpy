@@ -1,5 +1,5 @@
-O2sclpy: v0.924.dev1
-====================
+O\ :sub:`2`\ sclpy: v0.924.dev1
+===============================
 
 O\ :sub:`2`\ sclpy: A set of python classes for use with the
 O\ :sub:`2`\ scl C++ library (separately documented
@@ -8,7 +8,7 @@ at <https://neutronstars.utk.edu/code/o2scl>)
 .. warning:: This python library is experimental and still under
 	     development.
 
-The main objects of interest are the :ref:`O2graph script`, and the
+The main objects of interest are the :ref:`o2graph_script`, and the
 classes :py:class:`o2sclpy.cloud_file`,
 :py:class:`o2sclpy.hdf5_reader`, and :py:class:`o2sclpy.plotter` .
 
@@ -16,14 +16,15 @@ Installation and Requirements
 -----------------------------
 
 O\ :sub:`2`\ sclpy can be installed with e.g. ``pip3 install
-o2sclpy``. If you want to install the development version (v0.924.dev1),
-you can clone the git repository, change directory to the O\ :sub:`2`\
-sclpy directory, and then use e.g. ``pip3 install .`` if you want to
-use the pip package manager or ``python3 setup.py install`` to do a
-direct installation. O\ :sub:`2`\ sclpy requires python3 packages
-``requests``, `h5py <https://www.h5py.org/>`_, `numpy
-<https://www.numpy.org>`_, and `matplotlib <https://matplotlib.org>`_.
-O\ :sub:`2`\ sclpy also assumes LaTeX is installed on your system.
+o2sclpy``. If you want to install the development version
+(v0.924.dev1), you can clone the git repository, change directory to
+the O\ :sub:`2`\ sclpy directory, and then use e.g. ``pip3 install .``
+if you want to use the pip package manager or ``python3 setup.py
+install`` to do a direct installation. O\ :sub:`2`\ sclpy requires
+python3 packages `requests <https://pypi.org/project/requests/>`_,
+`h5py <https://www.h5py.org/>`_, `numpy <https://www.numpy.org>`_, and
+`matplotlib <https://matplotlib.org>`_. O\ :sub:`2`\ sclpy also
+assumes LaTeX is installed on your system.
 
 The ``o2graph`` script requires an installation of O\ :sub:`2`\ scl.
 The release version, O\ :sub:`2`\ sclpy 0.923, requires the O\

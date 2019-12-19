@@ -44,18 +44,6 @@ class plot_base:
     of this class is just to provide some additional simplification
     to python code which makes plots using matplotlib.
 
-    .. todo:: add map to colormap option for yt tf's
-    .. todo:: Create a system of protected variables using
-       underscores and also create a __repr__() object
-    .. todo:: Create a plot_base_yt class in between plot_base
-       and o2graph_plotter?
-    .. todo:: Ensure yt uses self.font for text objects?
-    .. todo:: den-plot-anim for a tensor_grid object
-    .. todo:: plot-set for a table3d object to create 
-       a sequence of curves for each column or row, or maybe 
-       do this as a 'mult-vector-spec'?
-    .. todo:: add a colorbar as an annotation to a yt render?
-
     """
 
     last_image=0

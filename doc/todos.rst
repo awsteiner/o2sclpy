@@ -1,5 +1,5 @@
 Todo list
 =========
 
-.. todolist::
+.. autoclass:: o2sclpy.todo_list
 	   

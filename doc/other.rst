@@ -1,8 +1,12 @@
-Other O2sclpy objects
-=====================
+Other O\ :sub:`2`\ sclpy objects
+================================
 
-Variables base_list, param_list, yt_param_list, extra_list are not
-listed here because there auto-docs are too long.
+Variables ``base_list``, ``param_list``, ``yt_param_list``,
+``extra_list`` are not listed here because their auto-docs are too
+long.
+
+Other O\ :sub:`2`\ sclpy functions
+----------------------------------
 
 .. autofunction:: o2sclpy.build_o2scl
 .. autofunction:: o2sclpy.link_o2scl
@@ -12,6 +16,11 @@ listed here because there auto-docs are too long.
 .. autofunction:: o2sclpy.parse_arguments
 .. autofunction:: o2sclpy.slack_notify
 .. autofunction:: o2sclpy.force_bytes
+.. autofunction:: o2sclpy.horiz_line
+
+Other O\ :sub:`2`\ sclpy variables
+----------------------------------
+
 .. autodata:: o2sclpy.version		  
 .. autodata:: o2sclpy.cmaps
 .. autodata:: o2sclpy.new_cmaps

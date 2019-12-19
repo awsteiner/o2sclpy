@@ -52,7 +52,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'o2sclpy'
+project = 'O2sclpy'
 copyright = '2016-2019, Andrew W. Steiner'
 author = 'Andrew W. Steiner'
 

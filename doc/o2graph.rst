@@ -1,5 +1,7 @@
-O2graph script
-==============
+.. _o2graph_script:
+
+O\ :sub:`2`\ graph script
+=========================
 
 Sometimes it's helpful to be able to do some quick and dirty data
 analysis without having to write python directly. The O\ :sub:`2`\

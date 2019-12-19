@@ -54,14 +54,6 @@ class o2graph_plotter(plot_base):
     This class is not necessarily intended to be instantiated by the 
     end user. 
 
-    Todo list:
-
-    .. todo:: Simplify some of the larger functions like 
-       o2graph_plotter::plot()
-    .. todo:: Ensure the 'clf' command clears the yt objects?
-    .. todo:: More yt-path options
-    .. todo:: Anti-alias text objects (also anti-alias line sources?)
-    
     """
 
     def set_wrapper(self,o2scl_hdf,amp,args):

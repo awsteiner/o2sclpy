@@ -55,8 +55,11 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
                  fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,
                  rt_ticks=False):
     """
-    This function sets up the o2sclpy ``matplotlib`` defaults.
-    It returns a pair of objects, the figure object and axes object.
+    This function sets up the O\ :sub:`2`\ sclpy ``matplotlib``
+    defaults. It returns a pair of objects, the figure object and axes
+    object.
+
+    This function is in ``utils.py``.
     """
     plot.rc('text',usetex=True)
     plot.rc('font',family='serif')
@@ -84,6 +87,8 @@ def get_str_array(dset):
     """
     Extract a string array from O\ :sub:`2`\ scl 
     HDF5 dataset ``dset`` as a list
+
+    This function is in ``utils.py``.
     """
     nw=dset['nw'][0]
     nc=dset['nc'][0]
@@ -123,6 +128,8 @@ def parse_arguments(argv,verbose=0):
     """
     Old command-line parser (this is currently unused and
     it's not clear if it will be useful in the future).
+
+    This function is in ``utils.py``.
     """
     list=[]
     unproc_list=[]
@@ -180,6 +187,8 @@ def string_to_dict(s):
     Convert a string to a dictionary, with extra processing for some
     matplotlib keyword arguments which are expected to have integer or
     floating point values.
+
+    This function is in ``utils.py``.
     """
 
     # First split into keyword = value pairs
@@ -390,6 +399,8 @@ def horiz_line():
     Return a string which represents a horizontal line. If possible,
     vt100-like terminal sequences are used to create a line.
     Otherwise, dashes are used.
+
+    This function is in ``utils.py``.
     """
     redirected=False
     if sys.stdout.isatty()==False:
