@@ -812,6 +812,11 @@ class o2graph_plotter(plot_base):
                                        color=col,
                                        **string_to_dict(args[4]))
 
+                if self.colbar==True:
+                    cbar=self.fig.colorbar(mapper,
+                                           ax=self.axes)
+                    cbar.ax.tick_params(labelsize=self.font*0.8)
+                    
             # End of section for 'table' type
         else:
             print("Command 'plot' not supported for type",
@@ -1772,6 +1777,12 @@ class o2graph_plotter(plot_base):
                        ctypes.byref(nz),ctypes.byref(gridx),
                        ctypes.byref(gridy),ctypes.byref(gridz),
                        ctypes.byref(data))
+            if ret==2:
+                print("Object of type 'tensor_grid' does not have rank 3.")
+                return
+            elif ret==1:
+                print("Object is not of type 'tensor_grid'.")
+                return
 
             nx=nx.value
             ny=ny.value
@@ -1844,7 +1855,7 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::yt_add_vol()
         return
         
-    def den_plot_anim(self,o2scl_hdf,amp):
+    def den_plot_anim(self,o2scl_hdf,amp,args):
         """
         Add a volume source to a yt visualization from a
         tensor_grid object.
@@ -1870,12 +1881,8 @@ class o2graph_plotter(plot_base):
             curr_type=curr_type+type_ptr[i]
 
         if curr_type==b'tensor_grid':
-            self.yt_check_backend()
-            import yt
-            from yt.visualization.volume_rendering.api \
-                import VolumeSource
-            from yt.visualization.volume_rendering.transfer_function_helper \
-                import TransferFunctionHelper
+            if self.yt_check_backend()==1:
+                return
 
             # Set up wrapper for get function
             get_fn=o2scl_hdf.o2scl_acol_get_tensor_grid3
@@ -1884,6 +1891,7 @@ class o2graph_plotter(plot_base):
                              double_ptr_ptr,double_ptr_ptr,
                              double_ptr_ptr]
             get_fn.restype=ctypes.c_int
+            
              # Call get function
             nx=ctypes.c_int(0)
             ny=ctypes.c_int(0)
@@ -1897,27 +1905,44 @@ class o2graph_plotter(plot_base):
                        ctypes.byref(nz),ctypes.byref(gridx),
                        ctypes.byref(gridy),ctypes.byref(gridz),
                        ctypes.byref(data))
+            if ret==2:
+                print("Object of type 'tensor_grid' does not have rank 3.")
+                return
+            elif ret==1:
+                print("Object is not of type 'tensor_grid'.")
+                return
 
             nx=nx.value
             ny=ny.value
             nz=nz.value
             total_size=nx*ny*nz
 
-            if self.xset==False:
-                self.xlo=gridx[0]
-                self.xhi=gridx[nx-1]
-                self.xset=True
-            if self.yset==False:
-                self.ylo=gridy[0]
-                self.yhi=gridy[ny-1]
-                self.yset=True
-            if self.zset==False:
-                self.zlo=gridz[0]
-                self.zhi=gridz[nz-1]
-                self.zset=True
-            print('o2graph_plotter:yt-add-vol: axis limits:',
-                  self.xlo,self.xhi,
-                  self.ylo,self.yhi,self.zlo,self.zhi)
+            if args[0]=='0':
+                xgrid=[gridx[i] for i in range(0,nx.value)]
+            elif args[0]=='1':
+                xgrid=[gridy[i] for i in range(0,ny.value)]
+            else:
+                xgrid=[gridz[i] for i in range(0,nz.value)]
+            
+            if args[1]=='0':
+                ygrid=[gridx[i] for i in range(0,nx.value)]
+            elif args[1]=='1':
+                ygrid=[gridy[i] for i in range(0,ny.value)]
+            else:
+                ygrid=[gridz[i] for i in range(0,nz.value)]
+
+            if args[2]=='0':
+                n_frames=nx.value
+            elif args[2]=='0r':
+                n_frames=nx.value
+            elif args[2]=='0':
+                n_frames=nx.value
+            elif args[2]=='0r':
+                n_frames=nx.value
+            elif args[2]=='0':
+                n_frames=nx.value
+            elif args[2]=='0r':
+                n_frames=nx.value
             
             arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
             # self.yt_volume_data.append(numpy.copy(arr))
@@ -2269,7 +2294,9 @@ class o2graph_plotter(plot_base):
             curr_type=curr_type+type_ptr[i]
 
         if curr_type==b'table':
-            self.yt_check_backend()
+            if self.yt_check_backend()==1:
+                return
+
             import yt
             from yt.visualization.volume_rendering.api \
                 import PointSource
@@ -2560,7 +2587,9 @@ class o2graph_plotter(plot_base):
             curr_type=curr_type+type_ptr[i]
 
         if curr_type==b'table':
-            self.yt_check_backend()
+            if self.yt_check_backend()==1:
+                return
+
             import yt
             from yt.visualization.volume_rendering.api \
                 import LineSource
@@ -3484,6 +3513,13 @@ class o2graph_plotter(plot_base):
                         print('Process den-plot.')
 
                     self.den_plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                
+                elif cmd_name=='den-plot-anim':
+                    
+                    if self.verbose>2:
+                        print('Process den-plot-anim.')
+
+                    self.den_plot_anim(o2scl_hdf,amp,strlist[ix+1:ix_next])
                 
                 elif cmd_name=='plot1':
                     

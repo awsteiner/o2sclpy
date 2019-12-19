@@ -396,7 +396,10 @@ extra_list=[
      "limit before plotting."],
     ["tensor_grid","yt-add-vol",
      "Add a tensor_grid object as a yt volume source",
-     "","Long desc."]
+     "","Long desc."],
+    ["tensor_grid","den-plot-anim",
+     "Create an animated density plot from a tensor_grid object.",
+     "<index to animate>",""],
 ]
 """
 This is a list of 5-element entries:

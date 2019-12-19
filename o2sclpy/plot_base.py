@@ -1032,9 +1032,10 @@ class plot_base:
             matplotlib.get_backend()!='agg'):
             print('yt integration only works with Agg.')
             print('Current backend is',matplotlib.get_backend())
+            return 1
             
         # End of function plot_base::yt_check_backend()
-        return
+        return 0
     
     def yt_def_vol(self):
         """
