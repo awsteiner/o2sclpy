@@ -787,6 +787,9 @@ class o2graph_plotter(plot_base):
                 if self.logy:
                     for i in range(0,len(yv)):
                         yv[i]=math.log10(yv)
+                if self.logz:
+                    for i in range(0,len(zv)):
+                        zv[i]=math.log10(zv)
                 
                 if self.canvas_flag==False:
                     self.canvas()
@@ -828,7 +831,7 @@ class o2graph_plotter(plot_base):
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
                                  
-        # End of function o2graph_plotter::plot()
+        # End of function o2graph_plotter::plot_color()
         return
                                  
     def rplot(self,o2scl_hdf,amp,args):

@@ -243,7 +243,17 @@ extra_list=[
      "-function sin(x) y -plot x y lw=0,marker='+' -show"],
     ["table","plot-color",
      "Plot three columns from the table.",
-     "<x> <y> <color> [kwargs]",""],
+     "<x> <y> <z> <cmap> [kwargs]",
+     "If the current object is a table, then plot "+
+     "column <y> versus column "+
+     "<x> using line segments colored by column <z> which are rescaled "+
+     "to colormap <cmap>. "+
+     "Some useful kwargs are color (c), dashes, "+
+     "linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), "+
+     "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
+     "(mfcalt), markersize (ms). For example: o2graph -create x 0 10 0.2 "+
+     "-function sin(x) y -function cos(x) z -plot-color x y z "+
+     "Purples lw=0,marker='+' -show"],
     ["table","rplot",
      "Plot a region inside a column or in between two columns.",
      "<x1> <y1> [x2 y2] [kwargs]",
