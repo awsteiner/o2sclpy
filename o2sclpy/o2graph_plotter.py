@@ -3336,9 +3336,9 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process yt-box.')
 
-                    if ix_next-ix<6:
+                    if ix_next-ix<7:
                         print('Not enough parameters for yt-box.')
-                    elif ix_next-ix>=7:
+                    elif ix_next-ix>=8:
                         x1=float(eval(strlist[ix+1]))
                         y1=float(eval(strlist[ix+2]))
                         z1=float(eval(strlist[ix+3]))

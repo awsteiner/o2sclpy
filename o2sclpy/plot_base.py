@@ -835,11 +835,11 @@ class plot_base:
         if self.yt_position=='default':
             self.yt_camera.position=[1.5,0.6,0.7]
         else:
-            self.yt_camera.position=[(self.yt_position[0]-self.xlo)/
+            self.yt_camera.position=[(eval(self.yt_position)[0]-self.xlo)/
                                      (self.xhi-self.xlo),
-                                     (self.yt_position[1]-self.ylo)/
+                                     (eval(self.yt_position)[1]-self.ylo)/
                                      (self.yhi-self.ylo),
-                                     (self.yt_position[2]-self.zlo)/
+                                     (eval(self.yt_position)[2]-self.zlo)/
                                      (self.zhi-self.zlo)]
         print('Camera position [%0.6e,%0.6e,%0.6e]' %
               (self.yt_camera.position[0],
@@ -848,11 +848,11 @@ class plot_base:
         if self.yt_focus=='default':
             self.yt_camera.focus=[0.5,0.5,0.5]
         else:
-            self.yt_camera.focus=[(self.yt_focus[0]-self.xlo)/
+            self.yt_camera.focus=[(eval(self.yt_focus)[0]-self.xlo)/
                                   (self.xhi-self.xlo),
-                                  (self.yt_focus[1]-self.ylo)/
+                                  (eval(self.yt_focus)[1]-self.ylo)/
                                   (self.yhi-self.ylo),
-                                  (self.yt_focus[2]-self.zlo)/
+                                  (eval(self.yt_focus)[2]-self.zlo)/
                                   (self.zhi-self.zlo)]
         print('Camera focus [%0.6e,%0.6e,%0.6e]' %
               (self.yt_camera.focus[0],
