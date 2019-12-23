@@ -9,6 +9,9 @@ os:
 dist: xenial
 sudo: required
 
+env:
+  - LD_LIBRARY_PATH=":/snap/o2scl/current/usr/lib/x86_64-linux-gnu:/snap/o2scl/current/lib/x86_64-linux-gnu"
+
 # This doesn't appear to work yet. It skips the snap install.
 # I don't know how to force the add on to select devmode
 #
@@ -25,7 +28,7 @@ addons:
 # 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-       pip install . && o2graph -help ;
+       env && acol --version && pip install . && o2graph -help ;
     fi
 
 notifications:
