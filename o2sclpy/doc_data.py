@@ -107,6 +107,10 @@ base_list=[
     ["new-cmaps","Define new color maps.","",
      "Define new color maps, 'jet2', 'pastel2' "+
      "'reds2', 'greens2', and 'blues2'."],
+    ["o2scl-libdir","Specify the directory where libo2scl.so is",
+     "<dir>",""],
+    ["o2scl-cpplib","Specify the location of the standard C++ library",
+     "<dir>",""],
     ["plotv","Plot several vector-like data sets.",
      "[multiple vector spec. for x] <multiple vector spec. for y>",
      "The 'plotv' command plots one or several pairs of vectors for x "+

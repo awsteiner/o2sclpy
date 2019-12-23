@@ -3710,6 +3710,16 @@ class o2graph_plotter(plot_base):
                                   strlist[ix+3],strlist[ix+4],
                                   **string_to_dict(strlist[ix+5]))
                         
+                elif cmd_name=='o2scl-cpplib':
+                    
+                    if self.verbose>2:
+                        print('Process o2scl-cpplib.')
+                        
+                elif cmd_name=='o2scl-libdir':
+                    
+                    if self.verbose>2:
+                        print('Process o2scl-libdir.')
+                    
                 elif cmd_name=='textbox':
                     
                     if self.verbose>2:

@@ -6,15 +6,20 @@ python:
 os:
   - linux
 
+# Travis supports bionic, but let's still with the older OS
+# for now for compatbility
+
 dist: xenial
 sudo: required
+
+# Set up the environment variables for the snap installation of
+# o2scl
 
 env:
   - LD_LIBRARY_PATH="/snap/o2scl/current/usr/lib/x86_64-linux-gnu:/snap/o2scl/current/lib/x86_64-linux-gnu" PATH="/usr/local/bin:/usr/bin:/bin:/snap/o2scl/current/bin"
 
-# This doesn't appear to work yet. It skips the snap install.
-# I don't know how to force the add on to select devmode
-#
+# Install o2scl
+
 addons:
   snaps:
     - name: o2scl
@@ -22,14 +27,15 @@ addons:
       channel: latest/edge
 
 # We use 'acol --version' to verify the o2scl installation and
-# then install o2graph
-# 
-# sudo snap install o2scl --devmode --edge && acol --version && pip install . && o2graph -help ;
-# 
+# then install o2graph and verify that installation with o2graph -help
+
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
        env && acol --version && pip install . && o2graph -o2scl-libdir /snap/o2scl/current/lib/ -help ;
     fi
+
+# For some reason travis requires a script for python installations
+# so we put a blank one in here
 
 script:
   - echo Done.
