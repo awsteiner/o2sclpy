@@ -28,7 +28,7 @@ addons:
 # 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-       env && acol --version && pip install . && o2graph -o2scl-libdir /snap/o2scl/current/lib/x86_64-linux-gnu -help ;
+       env && acol --version && pip install . && o2graph -o2scl-libdir /snap/o2scl/current/lib/ -help ;
     fi
 
 notifications:
