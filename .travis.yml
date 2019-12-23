@@ -12,16 +12,20 @@ sudo: required
 # This doesn't appear to work yet. It skips the snap install.
 # I don't know how to force the add on to select devmode
 #
-# addons:
-#  snaps:
-#  - name: o2scl
-#    channel: latest/edge
+addons:
+  snaps:
+    - name: o2scl
+      confinement: devmode
+      channel: latest/edge
 
 # We use 'acol --version' to verify the o2scl installation and
 # then install o2graph
+# 
+# sudo snap install o2scl --devmode --edge && acol --version && pip install . && o2graph -help ;
+# 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-       sudo snap install o2scl --devmode --edge && acol --version && pip install . && o2graph -help ;
+       pip install . && o2graph -help ;
     fi
 
 notifications:
