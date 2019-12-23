@@ -31,6 +31,9 @@ install:
        env && acol --version && pip install . && o2graph -o2scl-libdir /snap/o2scl/current/lib/ -help ;
     fi
 
+script:
+  - echo Done.
+
 notifications:
   email:
     on_success: never
