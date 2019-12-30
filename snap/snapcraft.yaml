@@ -1,6 +1,6 @@
 
   name: o2sclpy
-  version: '0.924pre'
+  version: '0.924'
   summary: Python extensions for Object-oriented Scientific Computing Library
   description: |
     The o2sclpy package includes a script called o2graph
