@@ -1,4 +1,4 @@
-O\ :sub:`2`\ sclpy: v0.924
+O\ :sub:`2`\ sclpy: v0.925.a1
 ==========================
 
 O\ :sub:`2`\ sclpy: A set of python classes for use with the
@@ -30,7 +30,7 @@ The ``o2graph`` script requires an installation of O\ :sub:`2`\ scl.
 The release version, O\ :sub:`2`\ sclpy 0.924, requires the O\
 :sub:`2`\ scl v0.924 release from
 <https://github.com/awsteiner/o2scl/releases/tag/v0.924> and the
-development version, O\ :sub:`2`\ sclpy 0.925pre1, requires that the
+development version, O\ :sub:`2`\ sclpy 0.925.a1, requires that the
 most recent version of O\ :sub:`2`\ scl from the master branch on
 github is installed on your machine.
 
