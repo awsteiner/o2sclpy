@@ -90,6 +90,9 @@ base_list=[
      "is unnecessary."],
     ["clf","Clear the current figure.","",
      "Clear the current figure."],
+    ["ellipse","Plot an ellipse.",
+     "<x> <y> <w> <h> [angle] [kwargs]",
+     "Plot an ellipse"],
     ["eval","Run the python eval() function.","<python code>",
      "Take the python code given and execute it using eval(). "+
      "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
@@ -127,7 +130,7 @@ base_list=[
     ["point","Plot a single point.","",""],
     ["python","Begin an interactive python session.","",""],
     ["rect","Plot a rectangle.",
-     "<x1> <y1> <x2> <y2> <angle> [kwargs]",
+     "<x1> <y1> <x2> <y2> [angle] [kwargs]",
      "Plot a rectange from (x1,y1) to (xy,y2) with "+
      "rotation angle <angle>. By default, the rectangle has no border, "+
      "but the linewidth ('lw') and edgecolor kwargs can be used to "+

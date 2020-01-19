@@ -3799,8 +3799,11 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process rect.')
                         
-                    if ix_next-ix<6:
+                    if ix_next-ix<5:
                         print('Not enough parameters for rect option.')
+                    elif ix_next-ix<6:
+                        self.rect(strlist[ix+1],strlist[ix+2],
+                                  strlist[ix+3],strlist[ix+4])
                     elif ix_next-ix<7:
                         self.rect(strlist[ix+1],strlist[ix+2],
                                   strlist[ix+3],strlist[ix+4],
@@ -3810,6 +3813,26 @@ class o2graph_plotter(plot_base):
                                   strlist[ix+3],strlist[ix+4],
                                   strlist[ix+5],
                                   **string_to_dict(strlist[ix+6]))
+                        
+                elif cmd_name=='ellipse':
+                    
+                    if self.verbose>2:
+                        print('Process ellipse.')
+                        
+                    if ix_next-ix<5:
+                        print('Not enough parameters for ellipse option.')
+                    elif ix_next-ix<6:
+                        self.ellipse(strlist[ix+1],strlist[ix+2],
+                                     strlist[ix+3],strlist[ix+4])
+                    elif ix_next-ix<7:
+                        self.ellipse(strlist[ix+1],strlist[ix+2],
+                                     strlist[ix+3],strlist[ix+4],
+                                     strlist[ix+5])
+                    else:
+                        self.ellipse(strlist[ix+1],strlist[ix+2],
+                                     strlist[ix+3],strlist[ix+4],
+                                     strlist[ix+5],
+                                     **string_to_dict(strlist[ix+6]))
                         
                 elif cmd_name=='move-labels':
                     if self.verbose>2:

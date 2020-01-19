@@ -31,7 +31,7 @@ import matplotlib.pyplot as plot
 # To create new color maps
 from matplotlib.colors import LinearSegmentedColormap
 
-# For rectangles
+# For rectangles and ellipses
 import matplotlib.patches as patches
 
 from o2sclpy.utils import parse_arguments, string_to_dict
@@ -1221,7 +1221,7 @@ class plot_base:
         # End of function plot_base::point()
         return
 
-    def rect(self,x1,y1,x2,y2,angle,**kwargs):
+    def rect(self,x1,y1,x2,y2,angle=0,**kwargs):
         """
         Plot a rectangle from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
         """
@@ -1246,6 +1246,26 @@ class plot_base:
         r=patches.Rectangle((left,lower),w,h,angle,**kwargs)
         self.axes.add_patch(r)
         # End of function plot_base::rect()
+        return
+
+    def ellipse(self,x,y,w,h,angle=0,**kwargs):
+        """
+        Plot an ellipse
+        """
+        if self.verbose>2:
+            print('Ellipse',x,y,w,h,angle)
+        if self.canvas_flag==False:
+            self.canvas()
+        fx=float(eval(x))
+        fy=float(eval(y))
+        fw=float(eval(w))
+        fh=float(eval(h))
+        fangle=float(eval(angle))
+        if self.canvas_flag==False:
+            self.canvas()
+        r=patches.Ellipse((fx,fy),fw,fh,fangle,**kwargs)
+        self.axes.add_patch(r)
+        # End of function plot_base::ellipse()
         return
 
     def show(self):
