@@ -92,7 +92,13 @@ base_list=[
      "Clear the current figure."],
     ["ellipse","Plot an ellipse.",
      "<x> <y> <w> <h> [angle] [kwargs]",
-     "Plot an ellipse"],
+     ("Plot an ellipse centered at (x,y) with width w and height h, "+
+      "optionally rotated by the specified angle. By default, the "+
+      "ellipse has no border, "+
+      "but the linewidth ('lw') and edgecolor kwargs can be used to "+
+      "specify one if desired. Some useful kwargs are alpha, color, "+
+      "edgecolor (ec), facecolor (fc), fill, hatch, linestyle (ls), "+
+      "linewidth (lw).")],
     ["eval","Run the python eval() function.","<python code>",
      "Take the python code given and execute it using eval(). "+
      "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
@@ -134,7 +140,9 @@ base_list=[
      "Plot a rectange from (x1,y1) to (xy,y2) with "+
      "rotation angle <angle>. By default, the rectangle has no border, "+
      "but the linewidth ('lw') and edgecolor kwargs can be used to "+
-     "specify one if desired."],
+     "specify one if desired. Some useful kwargs are alpha, color, "+
+     "edgecolor (ec), facecolor (fc), fill, hatch, linestyle (ls), "+
+     "linewidth (lw)."],
     ["reset-xlim","Reset the x-axis limits.","",
      "This is an alias for 'set xset False', and indicates "+
      "that the values of 'xlo' and 'xhi' are to be ignored until the "+
@@ -175,7 +183,12 @@ base_list=[
     ["textbox",
      "Plot a box with text.","<x1> <y1> <text> <bbox properties> [kwargs]",
      "Plot text <text> and a box at location <x1> <y1>. For example, "+
-     "textbox 0.5 0.5 \"$ f(x) $\" \"alpha=0.8,facecolor=white\" ."],
+     "textbox 0.5 0.5 \"$ f(x) $\" \"alpha=0.8,facecolor=white\" . "+
+     "This command uses the standard axis text function, but adds "+
+     "a bounding box with the specified properties. Typical bbox "+
+     "properties are boxstyle (Circle, DArrow, LArrow, RArrow, Round, "+
+     "Round4, Roundtooth, Sawtooth, Square), alpha, color, edgecolor (ec), "+
+     "facecolor (fc), fill, hatch, linestyle (ls), and linewidth (lw)."],
     ["ttext","Plot text in window coordinates [(0,0) to (1,1)].",
      "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
      "window coordinates [typically (0,0) to (1,1)] with the font size "+
