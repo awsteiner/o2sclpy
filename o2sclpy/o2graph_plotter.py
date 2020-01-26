@@ -24,6 +24,7 @@ import sys
 import ctypes
 import numpy
 import os
+import readline
 
 import matplotlib.pyplot as plot
 
