@@ -3452,7 +3452,7 @@ class o2graph_plotter(plot_base):
 
                     print('o2graph: A data table plotting and',
                           'processing program for O2scl.')
-                    print(' Version '+version+'.')
+                    print(' Version '+o2sclpy.version+'.')
 
                 elif cmd_name=='plot':
                     
