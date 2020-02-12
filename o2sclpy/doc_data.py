@@ -453,7 +453,11 @@ param_list=[
                  "plot. The value of rt_ticks refers to whether or not "+
                  "tick marks are plotted on the right and top sides of "+
                  "the plot. The font size parameter is multiplied by 0.8 "+
-                 "and then used for the axis labels.")],
+                 "and then used for the axis labels. Note that this "+
+                 "value must be set before the plotting canvas is"+
+                 "created (which is done by 'subplots' or automatically "+
+                 "when the first object is added to the plot) in order "+
+                 "to have any effect.")],
     ["font","Font scaling for text objects (default 16)."],
     ["logx","If true, use a logarithmic x-axis (default False)."],
     ["logy","If true, use a logarithmic y-axis (default False)."],
