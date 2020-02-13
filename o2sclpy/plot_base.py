@@ -831,7 +831,16 @@ class plot_base:
         print('plot_base:yt_create_camera(): Creating camera.')
         self.yt_camera=self.yt_scene.add_camera()
         self.yt_camera.resolution=self.yt_resolution
-        self.yt_camera.width=1.5*ds.domain_width[0]
+        if self.yt_width=='default':
+            self.yt_camera.width=1.5*ds.domain_width[0]
+        else:
+            self.yt_camera.width=[eval(self.yt_width)[0],
+                                  eval(self.yt_width)[1],
+                                  eval(self.yt_width)[2]]
+        print('Camera width [%0.6e,%0.6e,%0.6e]' %
+              (self.yt_camera.width[0],
+               self.yt_camera.width[1],
+               self.yt_camera.width[2]))
         if self.yt_position=='default':
             self.yt_camera.position=[1.5,0.6,0.7]
         else:
