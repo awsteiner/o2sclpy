@@ -2936,9 +2936,9 @@ class o2graph_plotter(plot_base):
         if self.yt_width=='default':
             wid=[1.5,1.5,1.5]
         else:
-            wid=[float(eval(self.yt_width))[0],
-                 float(eval(self.yt_width))[1],
-                 float(eval(self.yt_width))[2]]
+            wid=[eval(self.yt_width)[0],
+                 eval(self.yt_width)[1],
+                 eval(self.yt_width)[2]]
             
         return (pos,foc,nor,wid)
     
@@ -3050,9 +3050,15 @@ class o2graph_plotter(plot_base):
                         # Move camera
                         self.yt_camera.position=[pos[0],pos[1],pos[2]]
                         self.yt_camera.focus=[foc[0],foc[1],foc[2]]
+                        self.yt_camera.width=[wid[0],wid[1],wid[2]]
                         self.yt_camera.north_vector=[0.0,0.0,1.0]
                         self.yt_camera.switch_orientation()
-
+                            
+                        print('Camera width [%0.6e,%0.6e,%0.6e]' %
+                              (self.yt_camera.width[0],
+                               self.yt_camera.width[1],
+                               self.yt_camera.width[2]))
+                            
                         # Update text objects
                         self.yt_update_text()
 

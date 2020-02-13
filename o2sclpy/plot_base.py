@@ -837,6 +837,10 @@ class plot_base:
             self.yt_camera.width=[eval(self.yt_width)[0],
                                   eval(self.yt_width)[1],
                                   eval(self.yt_width)[2]]
+        print('yt_width [%0.6e,%0.6e,%0.6e]' %
+              (eval(self.yt_width)[0],
+               eval(self.yt_width)[1],
+               eval(self.yt_width)[2]))
         print('Camera width [%0.6e,%0.6e,%0.6e]' %
               (self.yt_camera.width[0],
                self.yt_camera.width[1],

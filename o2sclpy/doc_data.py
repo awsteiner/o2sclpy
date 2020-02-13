@@ -219,8 +219,16 @@ base_list=[
      "<filename or pattern> [movie output filename]","Long desc."],
     ["yt-source-list","List all current yt sources.","","Long desc."],
     ["yt-text","Add text to the yt volume.",
-     "<x> <y> <z> <text>","Long desc."],
-    ["yt-tf","Edit the yt transfer function.","","Long desc."],
+     "<x> <y> <z> <text>","reorient=False"],
+    ["yt-tf","Edit the yt transfer function.","<mode> <args>",
+     "To create a new transfer function, use 'new' for <mode> "+
+     "and the remaining <args> are <min> <max> [nbins] "+
+     "To add a Gaussian, use 'gauss' for <mode> "+
+     "and <args> are <loc> <width> <red> <green> <blue> <alpha>. "+
+     "To add a step function, use 'step'"+
+     "<low> <high> <red> <green> <blue> <alpha> "+
+     "To plot the transfer function, 'plot' "+
+     "<filename>."],
     ["yt-vertex-list","Draw a line from a series of vertices in a table.",
      "<col x> <col y> <col z>","Long desc."],
     ["zlimits","Set the z-axis limits.","<low> <high>",
@@ -484,7 +492,7 @@ yt_param_list=[
     ["yt_position","The camera position "+
      "(default is '[1.5,0.6,0.7] internal')."],
     ["yt_north","The camera north vector (default [0.0,0.0,1.0])."],
-    ["yt_width","The camera width relative to the volume "+
+    ["yt_width","The camera width relative to the domain volume< "+
      "(default [1.5,1.5,1.5])."],
     ["yt_path","The animation path (default '')."],
     ["yt_resolution","The rendering resolution (default (512,512))."],
