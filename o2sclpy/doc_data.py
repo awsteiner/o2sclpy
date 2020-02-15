@@ -208,13 +208,37 @@ base_list=[
      "set with the specified y-limits."],
     ["ytitle","Add y title to plot (or subplot).","",""],
     ["yt-arrow","Draw an arrow in yt.",
-     "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]","Long desc."],
+     "<[x1,y1,z1]> <x2,y2,z2> [kwargs]",
+     "Draw an arrow from the tail at (x1,y1,z1) to the head at "+
+     "(x2,y2,z2). Relevant kwargs are "+
+     "color=[r,g,b,a] where r,g,b,a are all from 0 to 1 and "+
+     "keyname='o2sclpy_line' for the key name in the list yt sources, "+
+     "n_lines=40 for the number of lines around the azimuthal angle, "+
+     "frac_length=0.05 for the fractional length of the head relative "+
+     "to the full arrow length, radius=0.0125 for the radius of the "+
+     "largest part of the arrow head, coords=user to use either the "+
+     "internal or user-based coordinate system. "+
+     "If the x, y, and z limits have not yet been set, then the "+
+     "lower limit for the x coordinate will be set by the minimum "+
+     "of x1 and x2, and the upper limit for the x coordinate will be "+
+     "set to the maximum of x1 and x2. Similarly for y and z. If "+
+     "a yt volume has not yet been constructed, then the default "+
+     "volume will be created."],
     ["yt-axis","Add an axis to the yt volume.",
      "[x] [y] [z] kwargs","Long desc."],
     ["yt-box","Draw a box in yt.",
      "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]","Long desc."],
     ["yt-line","Draw a line in yt.",
-     "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]","Long desc."],
+     "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]",
+     "Draw a line from (x1,y1,z1) to (x2,y2,z2). Relevant kwargs are "+
+     "color=[r,g,b,a] where r,g,b,a are all from 0 to 1 and "+
+     "keyname='o2sclpy_line' for the key name in the list yt sources. "+
+     "If the x, y, and z limits have not yet been set, then the "+
+     "lower limit for the x coordinate will be set by the minimum "+
+     "of x1 and x2, and the upper limit for the x coordinate will be "+
+     "set to the maximum of x1 and x2. Similarly for y and z. If "+
+     "a yt volume has not yet been constructed, then the default "+
+     "volume will be created."],
     ["yt-render","Render the yt visualization.",
      "<filename or pattern> [movie output filename]","Long desc."],
     ["yt-source-list","List all current yt sources.","","Long desc."],
