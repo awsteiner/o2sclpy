@@ -365,7 +365,7 @@ class plot_base:
         return
     
     def yt_line(self,point1,point2,color=[1.0,1.0,1.0,0.5],
-                keyname='o2sclpy_line'):
+                coords='user',keyname='o2sclpy_line'):
         """
         Plot a line in a yt volume visualization.
         """
@@ -415,6 +415,15 @@ class plot_base:
         if icnt==0:
             self.yt_def_vol()
 
+        # Coordinate transformation
+        if coords!='internal':
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+            x2=(x2-self.xlo)/(self.xhi-self.xlo)
+            y2=(y2-self.ylo)/(self.yhi-self.ylo)
+            z2=(z2-self.zlo)/(self.zhi-self.zlo)
+
         # Convert color to [r,g,b,a] for yt
         from matplotlib.colors import to_rgba
         colt=to_rgba(color)
@@ -437,8 +446,8 @@ class plot_base:
         return
         
     def yt_arrow(self,point1,point2,color=[1.0,1.0,1.0,0.5],n_lines=40,
-                 frac_length=0.05,radius=0.0125,keyname='o2sclpy_arrow',
-                 coords='user'):
+                 frac_length=0.05,radius=0.0125,coords='user',
+                 keyname='o2sclpy_arrow'):
         """
         Plot an arrow in a yt volume visualization. 
         """
@@ -579,7 +588,8 @@ class plot_base:
         # End of function plot_base::yt_del_source()
         return
         
-    def yt_box(self,point1,point2,color=[1.0,1.0,1.0,0.5]):
+    def yt_box(self,point1,point2,color=[1.0,1.0,1.0,0.5],
+               coords='user',keyname='o2sclpy_box'):
         """
         Create a box in a yt visualization. 
         """
@@ -629,6 +639,17 @@ class plot_base:
         if icnt==0:
             self.yt_def_vol()
 
+
+        # Coordinate transformation
+        if coords!='internal':
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+            x2=(x2-self.xlo)/(self.xhi-self.xlo)
+            y2=(y2-self.ylo)/(self.yhi-self.ylo)
+            z2=(z2-self.zlo)/(self.zhi-self.zlo)
+
+            
         # Convert color to [r,g,b,a] for yt
         from matplotlib.colors import to_rgba
         colt=to_rgba(color)
@@ -644,7 +665,7 @@ class plot_base:
                            (z2-self.zlo)/(self.zhi-self.zlo)])
         ls=BoxSource(left,right,colors)
         print('o2graph:yt-box: Adding box source.')
-        kname=self.yt_unique_keyname('o2sclpy_box')
+        kname=self.yt_unique_keyname(keyname)
         self.yt_scene.add_source(ls,keyname=kname)
 
         # End of function plot_base::yt_box()
@@ -971,10 +992,10 @@ class plot_base:
 
         # End of function plot_base::yt_text_to_scene()
         return
-
+    
     def yt_plot_axis(self,xval=1.0,yval=1.0,zval=1.0,
                      color=[1.0,1.0,1.0,0.5],
-                     coords='internal'):
+                     coords='internal',keyname='o2sclpy_axis'):
         """
         Plot an axis in a yt volume consisting a PointSource for the
         origin and then three arrows pointing from ``origin`` to
@@ -1010,14 +1031,14 @@ class plot_base:
         vertex_origin=numpy.array([origin])
         color_origin=numpy.array([colt2])
         points=PointSource(vertex_origin,colors=color_origin,radii=3)
-        kname=self.yt_unique_keyname('o2sclpy_origin')
+        kname=self.yt_unique_keyname(keyname+'_o')
         self.yt_scene.add_source(points,keyname=kname)
 
-        self.yt_arrow(origin,ihat,color=color,keyname='o2sclpy_xaxis',
+        self.yt_arrow(origin,ihat,color=color,keyname=keyname+'_x',
                       coords=coords)
-        self.yt_arrow(origin,jhat,color=color,keyname='o2sclpy_yaxis',
+        self.yt_arrow(origin,jhat,color=color,keyname=keyname+'_y',
                       coords=coords)
-        self.yt_arrow(origin,khat,color=color,keyname='o2sclpy_zaxis',
+        self.yt_arrow(origin,khat,color=color,keyname=keyname+'_z',
                       coords=coords)
 
         # End of function plot_base::yt_plot_axis()

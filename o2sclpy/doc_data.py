@@ -208,7 +208,7 @@ base_list=[
      "set with the specified y-limits."],
     ["ytitle","Add y title to plot (or subplot).","",""],
     ["yt-arrow","Draw an arrow in yt.",
-     "<[x1,y1,z1]> <x2,y2,z2> [kwargs]",
+     "<[x1,y1,z1]> <[x2,y2,z2]> [kwargs]",
      "Draw an arrow from the tail at (x1,y1,z1) to the head at "+
      "(x2,y2,z2). Relevant kwargs are "+
      "color=[r,g,b,a] where r,g,b,a are all from 0 to 1 and "+
@@ -225,13 +225,36 @@ base_list=[
      "a yt volume has not yet been constructed, then the default "+
      "volume will be created."],
     ["yt-axis","Add an axis to the yt volume.",
-     "[x] [y] [z] kwargs","Long desc."],
+     "[x] [y] [z] [kwargs]",
+     "Plot an axis using a point at the origin and then "+
+     "three arrows pointing to "+
+     "[0,0,xval], [0,yval,0], and [0,0,zval]. "+
+     "Relevant kwargs are color=[1,1,1,0.5], and coords='user' "+
+     "coords=user to use the "+
+     "user-based coordinate system or 'internal' to use the internal "+
+     "coordinates"],
     ["yt-box","Draw a box in yt.",
-     "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]","Long desc."],
+     "<[x1,y1,z1]> <[x2,y2,z2]> [kwargs]",
+     "Draw a box with diagonally opposed corners "+
+     "(x1,y1,z1) to (x2,y2,z2). Relevant kwargs are "+
+     "color=[r,g,b,a] where r,g,b,a are all from 0 to 1, "+
+     "coords=user to use the "+
+     "user-based coordinate system or 'internal' to use the internal "+
+     "coordinates, and "+
+     "keyname='o2sclpy_line' for the key name in the list yt sources. "+
+     "If the x, y, and z limits have not yet been set, then the "+
+     "lower limit for the x coordinate will be set by the minimum "+
+     "of x1 and x2, and the upper limit for the x coordinate will be "+
+     "set to the maximum of x1 and x2. Similarly for y and z. If "+
+     "a yt volume has not yet been constructed, then the default "+
+     "volume will be created."],
     ["yt-line","Draw a line in yt.",
      "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]",
      "Draw a line from (x1,y1,z1) to (x2,y2,z2). Relevant kwargs are "+
-     "color=[r,g,b,a] where r,g,b,a are all from 0 to 1 and "+
+     "color=[r,g,b,a] where r,g,b,a are all from 0 to 1, "+
+     "coords=user to use the "+
+     "user-based coordinate system or 'internal' to use the internal "+
+     "coordinates. and "+
      "keyname='o2sclpy_line' for the key name in the list yt sources. "+
      "If the x, y, and z limits have not yet been set, then the "+
      "lower limit for the x coordinate will be set by the minimum "+
@@ -240,8 +263,15 @@ base_list=[
      "a yt volume has not yet been constructed, then the default "+
      "volume will be created."],
     ["yt-render","Render the yt visualization.",
-     "<filename or pattern> [movie output filename]","Long desc."],
-    ["yt-source-list","List all current yt sources.","","Long desc."],
+     "<filename or pattern> [movie output filename]",
+     "Perform the volume rendering. If yt_path is empty, then "+
+     "the first argument is the filename. If yt_path is not empty "+
+     "then the first argument is a filename pattern containing * "+
+     "where each frame will be stored. If yt_path is not empty "+
+     "and a movie filename is given, then ffmpeg will be used "+
+     "to combine the frames into an mp4 file."],
+    ["yt-source-list","List all current yt sources.","",
+     "For each source output the index, keyname, and source type."],
     ["yt-text","Add text to the yt volume.",
      "<x> <y> <z> <text>","reorient=False"],
     ["yt-tf","Edit the yt transfer function.","<mode> <args>",
@@ -254,7 +284,12 @@ base_list=[
      "To plot the transfer function, 'plot' "+
      "<filename>."],
     ["yt-vertex-list","Draw a line from a series of vertices in a table.",
-     "<col x> <col y> <col z>","Long desc."],
+     "<col x> <col y> <col z> [kwargs]",
+     "Create a series of yt LineSource objects in a visualization "+
+     "using the three specified columns as vertices. One line segment "+
+     "will be drawn from the values in the first row to the values in "+
+     "the second row, one line segment from the second row to the "+
+     "third row, and so on"],
     ["zlimits","Set the z-axis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
      "and set 'zset' to true. If a plotting canvas is currently "+
@@ -458,7 +493,7 @@ extra_list=[
      "limit before plotting."],
     ["tensor_grid","yt-add-vol",
      "Add a tensor_grid object as a yt volume source",
-     "","Long desc."],
+     "[kwargs]","Long desc."],
     ["tensor_grid","den-plot-anim",
      "Create an animated density plot from a tensor_grid object.",
      "<index to animate>",""],

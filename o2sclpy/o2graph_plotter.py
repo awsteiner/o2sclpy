@@ -1720,7 +1720,7 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::parse_argv()
         return
 
-    def yt_add_vol(self,o2scl_hdf,amp):
+    def yt_add_vol(self,o2scl_hdf,amp,keyname='o2graph_vol'):
         """
         Add a volume source to a yt visualization from a
         tensor_grid object.
@@ -1841,7 +1841,7 @@ class o2graph_plotter(plot_base):
             if self.yt_created_scene==False:
                 self.yt_create_scene()
 
-            kname=self.yt_unique_keyname('o2graph_vol')
+            kname=self.yt_unique_keyname(keyname)
             self.yt_vol_keynames.append(kname)
             self.yt_scene.add_source(vol,keyname=kname)
                             
