@@ -207,7 +207,7 @@ base_list=[
      "the y-limits on that plot are modified. Future plots are also "+
      "set with the specified y-limits."],
     ["ytitle","Add y title to plot (or subplot).","",""],
-    ["yt-arrow","Draw an arrow in yt.",
+    ["yt-arrow","Draw an arrow in the yt volume.",
      "<[x1,y1,z1]> <[x2,y2,z2]> [kwargs]",
      "Draw an arrow from the tail at (x1,y1,z1) to the head at "+
      "(x2,y2,z2). Relevant kwargs are "+
@@ -233,7 +233,7 @@ base_list=[
      "coords=user to use the "+
      "user-based coordinate system or 'internal' to use the internal "+
      "coordinates"],
-    ["yt-box","Draw a box in yt.",
+    ["yt-box","Draw a box in the yt volume.",
      "<[x1,y1,z1]> <[x2,y2,z2]> [kwargs]",
      "Draw a box with diagonally opposed corners "+
      "(x1,y1,z1) to (x2,y2,z2). Relevant kwargs are "+
@@ -248,7 +248,7 @@ base_list=[
      "set to the maximum of x1 and x2. Similarly for y and z. If "+
      "a yt volume has not yet been constructed, then the default "+
      "volume will be created."],
-    ["yt-line","Draw a line in yt.",
+    ["yt-line","Draw a line in the yt volume.",
      "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]",
      "Draw a line from (x1,y1,z1) to (x2,y2,z2). Relevant kwargs are "+
      "color=[r,g,b,a] where r,g,b,a are all from 0 to 1, "+
@@ -262,7 +262,7 @@ base_list=[
      "set to the maximum of x1 and x2. Similarly for y and z. If "+
      "a yt volume has not yet been constructed, then the default "+
      "volume will be created."],
-    ["yt-render","Render the yt visualization.",
+    ["yt-render","Render the yt volume visualization.",
      "<filename or pattern> [movie output filename]",
      "Perform the volume rendering. If yt_path is empty, then "+
      "the first argument is the filename. If yt_path is not empty "+
@@ -283,13 +283,6 @@ base_list=[
      "<low> <high> <red> <green> <blue> <alpha> "+
      "To plot the transfer function, 'plot' "+
      "<filename>."],
-    ["yt-vertex-list","Draw a line from a series of vertices in a table.",
-     "<col x> <col y> <col z> [kwargs]",
-     "Create a series of yt LineSource objects in a visualization "+
-     "using the three specified columns as vertices. One line segment "+
-     "will be drawn from the values in the first row to the values in "+
-     "the second row, one line segment from the second row to the "+
-     "third row, and so on"],
     ["zlimits","Set the z-axis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
      "and set 'zset' to true. If a plotting canvas is currently "+
@@ -377,9 +370,21 @@ extra_list=[
      ("This adds a series of points to a yt scene. If a volume "+
       "has not yet been added, then a default volume is added. "+
       "If the x, y-, or z-axis limits have not yet been set, then "+
-      "they are set by the limits of the data.")],
-    ["table","yt-vertex-list","",
-     "<x column> <y column> <z column>",""],
+      "they are set by the limits of the data. If the size column "+
+      "is unspecified, 'none', or 'None', then the default value of 3 is "+
+      "used. If the color columns are unspecified, 'none' or "+
+      "'None', then [1,1,1] is used, and finally the default "+
+      "for the alpha column is 0.5. If any of the values for the color "+
+      "columns are less than zero or greater than 1, then that color "+
+      "column is rescaled to [0,1].")],
+    ["table","yt-vertex-list",
+     "Draw a line from a series of vertices in a table.",
+     "<x column> <y column> <z column> [kwargs]",
+     "Create a series of yt LineSource objects in a visualization "+
+     "using the three specified columns as vertices. One line segment "+
+     "will be drawn from the values in the first row to the values in "+
+     "the second row, one line segment from the second row to the "+
+     "third row, and so on"],
     ["table","plot1","Plot the specified column.","<y> [kwargs]",
      "Plot column <y> versus row number. Some "+
      "useful kwargs are color (c), "+
@@ -493,7 +498,11 @@ extra_list=[
      "limit before plotting."],
     ["tensor_grid","yt-add-vol",
      "Add a tensor_grid object as a yt volume source",
-     "[kwargs]","Long desc."],
+     "[kwargs]","This adds the volumetric data specified in the "+
+     "tensor_grid object as a yt volume source. The transfer "+
+     "function previously specified by 'yt-tf' is used, or if "+
+     "unspecified, then yt's transfer_function_helper is used "+
+     "to create a 3 layer default transfer function."],
     ["tensor_grid","den-plot-anim",
      "Create an animated density plot from a tensor_grid object.",
      "<index to animate>",""],
