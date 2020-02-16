@@ -1449,7 +1449,9 @@ class plot_base:
 
     def subplots(self,nr,nc=1,**kwargs):
         """
-        Create ``nr`` rows and ``nc`` columns of subplots.
+        Create ``nr`` rows and ``nc`` columns of subplots. The axis
+        objects are extracted and placed in a (one-dimensional) list
+        in ``axis_list``.
         """
         plot.rc('text',usetex=True)
         plot.rc('font',family='serif')
@@ -1459,9 +1461,16 @@ class plot_base:
             dct['fig_size_x']=6.0
         if not('fig_size_y' in dct):
             dct['fig_size_y']=6.0
+
+        # Make the call to subplots()
         self.fig,axis_temp=plot.subplots(nrows=nr,ncols=nc,
                                          figsize=(dct["fig_size_x"],
                                                   dct["fig_size_y"]))
+
+        # Record the first new for later use
+        index_start=len(self.axis_list)
+        
+        # Reformulate the axis objects into the list axis_list
         if nr==1 and nc==1:
             self.axis_list.append(axis_temp)
         elif nr==1:
@@ -1474,14 +1483,23 @@ class plot_base:
             for i in range(0,nr):
                 for j in range(0,nc):
                     self.axis_list.append(axis_temp[i][j])
-        for i in range(0,len(self.axis_list)):
+
+        # Record the index which marks the end of the list
+        index_end=len(self.axis_list)
+        
+        # Apply default preferences to the axes, similar to
+        # default_plot().
+        for i in range(index_start,index_end):
             self.axis_list[i].minorticks_on()
             self.axis_list[i].tick_params('both',length=12,width=1,
                                           which='major')
             self.axis_list[i].tick_params('both',length=5,width=1,
                                           which='minor')
             self.axis_list[i].tick_params(labelsize=self.font*0.8)
+
+        # Flip the canvas flag
         self.canvas_flag=True
+        
         # End of function plot_base::subplots()
         return
 

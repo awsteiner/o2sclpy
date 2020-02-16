@@ -169,9 +169,12 @@ base_list=[
     ["show","Show the current plot.","","Show the current plot "+
      "on the screen and begin "+
      "the graphical user interface. This is similar to plot.show()."],
-    ["subadj","Adjust subplots.","<kwargs>",
-     "The kwargs for 'subadj' are left, right, bottom, top, "+
-     "wspace, and hspace."],
+    ["subadj","Adjust spacing of subplots.","<kwargs>",
+     "Adjust the spacing for subplots after using the 'subplots' "+
+     "command. All arguments are keyword arguments. The kwargs for "+
+     "'subadj' are left, right, bottom, top, "+
+     "wspace, and hspace. This just a wrapper to the "+
+     "pyplot.subplots_adjust() function."],
     ["subplots","Create subplots.","<nrows> <ncols> [kwargs]",
      "Create a grid of <nrows> by <ncols> subplots. "+
      "The kwargs currently supported are 'sharex', 'sharey', "+
