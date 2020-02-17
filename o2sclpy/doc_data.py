@@ -280,18 +280,16 @@ base_list=[
     ["yt-tf","Edit the yt transfer function.","<mode> <args>",
      "To create a new transfer function, use 'new' for <mode> "+
      "and the remaining <args> are <min> <max> [nbins] "+
-     "To add a Gaussian, use 'gauss' for <mode> "+
-     "and <args> are <loc> <width> <red> <green> <blue> <alpha>. "+
-     "To add a step function, use 'step'"+
-     "<low> <high> <red> <green> <blue> <alpha> "+
-     "To plot the transfer function, 'plot' "+
+     ".To add a Gaussian, use 'gauss' for <mode> "+
+     "and <args> are <loc> <width> <red> <green> <blue>, and <alpha>. "+
+     "To add a step function, use 'step' "+
+     "<low> <high> <red> <green> <blue>, and <alpha> "+
+     "To plot the transfer function, use 'plot' "+
      "<filename>."],
     ["zlimits","Set the z-axis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
-     "and set 'zset' to true. If a plotting canvas is currently "+
-     "open, then "+
-     "the z-limits on that plot are modified. Future plots are also "+
-     "set with the specified z-limits."]
+     "and set 'zset' to true. The z-axis limits are principally used "+
+     "for yt volume visualizations."]
 #    ["ztitle","Add z title to plot (yt only).","",""]
 ]
 """
