@@ -344,11 +344,11 @@ class plotter(plot_base):
             tmp1=xgrid[0]-(xgrid[1]-xgrid[0])/2
             tmp2=xgrid[lx-1]+(xgrid[lx-1]-xgrid[lx-2])/2
             tmp3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-            tmp4=ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2]
+            tmp4=ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2
             self.last_image=self.axes.imshow(sl,interpolation='nearest',
                                              origin='lower',
                                              extent=[tmp1,tmp2,
-                                                     tmp3,tmp4]
+                                                     tmp3,tmp4],
                                              aspect='auto',**kwargs)
             if self.colbar==True:
                 cbar=self.fig.colorbar(self.last_image,ax=self.axes)
