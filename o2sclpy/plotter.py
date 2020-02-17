@@ -55,7 +55,7 @@ class plotter(plot_base):
             print('Wrong type',self.dtype,'for contour_plotx.')
             return
         if self.verbose>2:
-            print('contour_plot',level,kwargs)
+            print('In plotter.contour_plot()',level,kwargs)
         if self.canvas_flag==False:
             self.canvas()
         n_lines=self.dset['n_lines'][0]
@@ -80,15 +80,14 @@ class plotter(plot_base):
  
     def plot(self,colx,coly,**kwargs):
         """
-        If the current dataset is of type ``table``, then
-        plot the two columns specified in ``colx`` and ``coly``.
-        Otherwise, if the current dataset is of type 
-        ``hist``, then plot the histogram and ignore the
-        values of ``colx`` and ``coly``.
+        If the current dataset is of type ``table``, then plot the two
+        columns specified in ``colx`` and ``coly``. Otherwise, if the
+        current dataset is of type ``hist``, then plot the histogram
+        and ignore the values of ``colx`` and ``coly``.
         """
         if force_bytes(self.dtype)==b'table':
             if self.verbose>2:
-                print('plot',colx,coly,kwargs)
+                print('In function plotter.plot()',colx,coly,kwargs)
             if self.canvas_flag==False:
                 self.canvas()
             if self.logx==True:
@@ -140,7 +139,8 @@ class plotter(plot_base):
         """
         if force_bytes(self.dtype)==b'table':
             if self.verbose>2:
-                print('plot',colx,coly,kwargs)
+                print('In function plotter.scatter()',
+                      colx,coly,cols,colc,kwargs)
             if self.canvas_flag==False:
                 self.canvas()
             if self.logx==True:
@@ -179,13 +179,13 @@ class plotter(plot_base):
     def plot1(self,col,**kwargs):
         """
         If the current dataset is of type ``table``, then
-        plot the column specified in ``col``
+        plot the column specified in ``col``.
         """
         if force_bytes(self.dtype)!=b'table':
             print('Wrong type',self.dtype,'for plot1.')
             return
         if self.verbose>2:
-            print('plot1',col,kwargs)
+            print('In function plotter.plot1()',col,kwargs)
         if self.canvas_flag==False:
             self.canvas()
         tlist=range(1,len(self.dset['data/'+col])+1)
@@ -205,13 +205,13 @@ class plotter(plot_base):
             self.axes.set_ylim(self.ylo,self.yhi)
         return
 
-    def histplot(self,col,**kwargs):
+    def hist_plot(self,col,**kwargs):
         """
         If the current dataset is of type ``hist``, then
         plot the associated histogram.
         """
         if self.verbose>2:
-            print('histplot',kwargs)
+            print('In function plotter.hist_plot().',kwargs)
         if self.canvas_flag==False:
             self.canvas()
         for key in kwargs:
@@ -220,22 +220,23 @@ class plotter(plot_base):
         if force_bytes(self.dtype)==b'table':
             self.axes.hist(self.dset['data/'+col],**kwargs)
         else:
-            print('Wrong type',self.dtype,'for histplot()')
+            print('Wrong type',self.dtype,'for hist_plot()')
         return
 
-    def hist2dplot(self,colx,coly,**kwargs):
+    def hist2d_plot(self,colx,coly,**kwargs):
         """
         If the current dataset is of type ``hist2d``, then
         plot the associated two-dimensional histogram.
         """
         if self.verbose>2:
-            print('hist2d',colx,coly,kwargs)
+            print('In function plotter.hist2d_plot()',colx,coly,kwargs)
         if self.canvas_flag==False:
             self.canvas()
         for key in kwargs:
             if key=='bins':
                 kwargs[key]=int(kwargs[key])
-        self.axes.hist2d(self.dset['data/'+colx],self.dset['data/'+coly],**kwargs)
+        self.axes.hist2d(self.dset['data/'+colx],
+                         self.dset['data/'+coly],**kwargs)
         return
 
     def read(self,filename):
@@ -340,13 +341,15 @@ class plotter(plot_base):
                         sl[i][j]=math.log10(sl[i][h])
             lx=len(xgrid)
             ly=len(ygrid)
+            tmp1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+            tmp2=xgrid[lx-1]+(xgrid[lx-1]-xgrid[lx-2])/2
+            tmp3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+            tmp4=ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2]
             self.last_image=self.axes.imshow(sl,interpolation='nearest',
-                                        origin='lower',
-                                        extent=[xgrid[0]-(xgrid[1]-xgrid[0])/2,
-                                                xgrid[lx-1]+(xgrid[lx-1]-xgrid[lx-2])/2,
-                                                ygrid[0]-(ygrid[1]-ygrid[0])/2,
-                                                ygrid[ly-1]+(ygrid[ly-1]-ygrid[ly-2])/2],
-                                        aspect='auto',**kwargs)
+                                             origin='lower',
+                                             extent=[tmp1,tmp2,
+                                                     tmp3,tmp4]
+                                             aspect='auto',**kwargs)
             if self.colbar==True:
                 cbar=self.fig.colorbar(self.last_image,ax=self.axes)
                 cbar.ax.tick_params(labelsize=self.font*0.8)

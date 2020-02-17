@@ -52,6 +52,7 @@ class todo_list:
     Todo list:
 
     .. todo:: create a vector field command in yt
+    .. todo:: allow the creation of colormaps on the fly? 
     .. todo:: add map to colormap option for yt tf's
     .. todo:: Create a system of protected variables and functions using
        underscores and also create a __repr__() object

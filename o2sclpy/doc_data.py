@@ -395,11 +395,11 @@ extra_list=[
      "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
      "(mfcalt), markersize (ms). For example: o2 -create x 0 10 0.2 "+
      "-function sin(x) y -plot1 y ls='--',marker='o' -show"],
-    ["table","histplot","Create a histogram plot from column in a table.",
+    ["table","hist-plot","Create a histogram plot from column in a table.",
      "<col>","For a table, create a histogram plot from the "+
      "specified column. This command uses matplotlib to construct the "+
      "histogram rather than using O2scl to create a hist_2d object."],
-    ["table","hist2dplot",
+    ["table","hist2d-plot",
      "Create a 2-D histogram plot from two columns in a table.",
      "<col x> <col y>","For a table, create a 2D histogram plot from "+
      "the specified columns. This command uses matplotlib to construct the "+

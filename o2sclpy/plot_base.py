@@ -1543,15 +1543,25 @@ class plot_base:
         if nc_temp==1:
             self.axes=self.axis_list[nr]
         else:
+            # AWS: 2/16/20: I don't think axis_list should ever be a
+            # two-dimensional array. If that is correct, then we can just
+            # simplify this code above and just use self.axis_list[nr].
+            # More testing should probably be done to verify this.
             self.axes=self.axis_list[nr][nc]
+            print("Using two-dimensional form for axis_list.")
         # End of function plot_base::selax()
         return
 
     def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):
         """
-        Add a colorbar from the most recently created image
-        at the location specified by ``left``, ``bottom``, ``width`` and
-        ``height``. 
+        Add a new colorbar or a colorbar from the most recently created
+        image at the location specified by ``left``, ``bottom``,
+        ``width`` and ``height``. If the image keyword is 'last', 
+        then the last density plot (command 'den-plot') or 2d 
+        histogram plot (command 'hist2d-plot') is used. If 
+        the image keyword is 'new', then a colormap must be 
+        specified using the 'cmap' keyword and the color map is
+        used to create the colorbar. 
         """
         if image=='last':
             axis_temp=self.fig.add_axes([left,bottom,width,height])
@@ -1566,7 +1576,7 @@ class plot_base:
             self.axis_list.append(axis_temp)
             self.axes=axis_temp
             if cmap=='':
-                print('New colorbar needs colormap.')
+                print('New colorbar needs colormap in addcbar().')
                 return
             tempsm=plot.cm.ScalarMappable(cmap=cmap,
                                           norm=plot.Normalize(vmin=0,vmax=1))
@@ -1574,7 +1584,7 @@ class plot_base:
                                    orientation='horizontal')
             cbar.ax.tick_params(labelsize=0,length=0)
         else:
-            print('invalid value of image')
+            print('Invalid value of image in addcbar().')
             return
         
         # End of function plot_base::addcbar()

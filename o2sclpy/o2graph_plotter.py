@@ -1074,7 +1074,7 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::scatter()
         return
                                  
-    def histplot(self,o2scl_hdf,amp,args):
+    def hist_plot(self,o2scl_hdf,amp,args):
         """
         Plot a histogram
         """
@@ -1127,7 +1127,7 @@ class o2graph_plotter(plot_base):
                 
             # End of section for 'table' type
         else:
-            print("Command 'histplot' not supported for type",
+            print("Command 'hist_plot' not supported for type",
                   curr_type,".")
             return
         
@@ -1136,10 +1136,10 @@ class o2graph_plotter(plot_base):
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
                                  
-        # End of function o2graph_plotter::histplot()
+        # End of function o2graph_plotter::hist_plot()
         return
                                  
-    def hist2dplot(self,o2scl_hdf,amp,args):
+    def hist2d_plot(self,o2scl_hdf,amp,args):
         """
         Plot a two-dimensional histogram
         """
@@ -1215,7 +1215,7 @@ class o2graph_plotter(plot_base):
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
                                  
-        # End of function o2graph_plotter::hist2dplot()
+        # End of function o2graph_plotter::hist2d_plot()
         return
                                  
     def errorbar(self,o2scl_hdf,amp,args):
@@ -3488,12 +3488,12 @@ class o2graph_plotter(plot_base):
 
                     self.scatter(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
-                elif cmd_name=='histplot':
+                elif cmd_name=='hist-plot':
                     
                     if self.verbose>2:
-                        print('Process histplot.')
+                        print('Process hist-plot.')
 
-                    self.histplot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.hist_plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='errorbar':
                     
@@ -3502,12 +3502,12 @@ class o2graph_plotter(plot_base):
 
                     self.errorbar(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
-                elif cmd_name=='hist2dplot':
+                elif cmd_name=='hist2d-plot':
                     
                     if self.verbose>2:
-                        print('Process hist2dplot.')
+                        print('Process hist2d-plot.')
                         
-                    self.hist2dplot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.hist2d_plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
                             
                 elif cmd_name=='den-plot':
                     
