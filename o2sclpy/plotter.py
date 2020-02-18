@@ -135,7 +135,9 @@ class plotter(plot_base):
 
     def scatter(self,colx,coly,cols,colc,**kwargs):
         """
-        Generate a scatter plot.
+        Generate a scatter plot when the current object is a table object
+        from x and y columns colx and coly, with sizes in cols and
+        colors in colc. 
         """
         if force_bytes(self.dtype)==b'table':
             if self.verbose>2:
