@@ -702,7 +702,7 @@ class plot_base:
             zval=tz
         
         kname=self.yt_unique_keyname(keyname)
-        
+
         self.yt_text_objects.append([kname,reorient,xval,yval,zval,textstr,
                                      textcolor,dpi,scale,font])
         

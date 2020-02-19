@@ -184,9 +184,9 @@ def parse_arguments(argv,verbose=0):
 
 def string_to_dict(s):
     """
-    Convert a string to a dictionary, with extra processing for some
-    matplotlib keyword arguments which are expected to have integer or
-    floating point values.
+    Convert a string to a dictionary, with extra processing for
+    colors, subdictionaries, and matplotlib keyword arguments which
+    are expected to have integer or floating point values.
 
     This function is in ``utils.py``.
     """
@@ -301,6 +301,8 @@ def string_to_dict(s):
                 arr2[1]=float(arr2[1])
             if arr2[0]=='scale':
                 arr2[1]=float(arr2[1])
+            if arr2[0]=='dpi':
+                arr2[1]=float(arr2[1])
 
             # Convert strings to bool values
             if arr2[0]=='sharex':
@@ -339,24 +341,48 @@ def string_to_dict(s):
                 else:
                     arr2[1]=False
                     
-            # Process color entries. If color contains a left
-            # parenthesis or a left bracket, then we have to
-            # convert the string to an array
-            if arr2[0]=='color' and arr[i][5]=='=' and arr[i][6]=='(':
+            # Process color entries. The challenge here is that
+            # dictionary entries are separated by commas, but there
+            # are also commas inside color specifications. If color
+            # contains a left parenthesis or a left bracket, then we
+            # have to convert the string to an array. However, this
+            # algorithm has a limitation: it can only handle (rgb) or
+            # [rgba], but not [rgb] or (rgba).
+
+            if (arr2[0]=='color' and
+                arr[i][5]=='=' and arr[i][6]=='('):
                 arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]
-                print(arr2[1])
                 skip=2
                 arr2[1]=arr2[1][1:len(arr2[1])-1]
                 arr3=arr2[1].split(',')
                 arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]))
-            elif arr2[0]=='color' and arr[i][5]=='=' and arr[i][6]=='[':
+                print('Found color:',arr2[1])
+            elif (arr2[0]=='color' and
+                  arr[i][5]=='=' and arr[i][6]=='['):
                 arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]+','+arr[i+3]
-                print(arr2[1])
                 skip=3
                 arr2[1]=arr2[1][1:len(arr2[1])-1]
                 arr3=arr2[1].split(',')
                 arr2[1]=[float(arr3[0]),float(arr3[1]),float(arr3[2]),
                          float(arr3[3])]
+                print('Found color:',arr2[1])
+            elif (arr2[0]=='textcolor' and
+                arr[i][9]=='=' and arr[i][10]=='('):
+                arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]
+                skip=2
+                arr2[1]=arr2[1][1:len(arr2[1])-1]
+                arr3=arr2[1].split(',')
+                arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]))
+                print('Found color:',arr2[1])
+            elif (arr2[0]=='textcolor' and
+                  arr[i][9]=='=' and arr[i][10]=='['):
+                arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]+','+arr[i+3]
+                skip=3
+                arr2[1]=arr2[1][1:len(arr2[1])-1]
+                arr3=arr2[1].split(',')
+                arr2[1]=[float(arr3[0]),float(arr3[1]),float(arr3[2]),
+                         float(arr3[3])]
+                print('Found color:',arr2[1])
 
             # if (arr2[0]=='color' and (arr2[1].find('(')!=-1 or
             #                           arr2[1].find('[')!=-1)):
