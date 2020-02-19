@@ -671,8 +671,10 @@ class plot_base:
         # End of function plot_base::yt_box()
         return
         
-    def yt_text(self,tx,ty,tz,textstr,reorient=False,scale=0.6,font=30,
-                keyname='o2sclpy_text',filename='',coords='internal'):
+    def yt_text(self,tx,ty,tz,textstr,textcolor=(1,1,1,0.5),
+                reorient=False,scale=0.6,font=30,
+                keyname='o2sclpy_text',dpi=100,filename='',
+                coords='internal'):
         """
         Plot text given in ``textstr`` in a yt volume visualization at
         location ``(tx,ty,tz)``. If reorient is ``True``, then 
@@ -702,11 +704,11 @@ class plot_base:
         kname=self.yt_unique_keyname(keyname)
         
         self.yt_text_objects.append([kname,reorient,xval,yval,zval,textstr,
-                                     scale,font])
+                                     textcolor,dpi,scale,font])
         
         self.yt_text_to_scene([xval,yval,zval],textstr,scale=scale,
-                              font=font,keyname=kname,filename=filename)
-                              
+                              font=font,keyname=kname,filename=filename,
+                              dpi=dpi,textcolor=textcolor)
 
         # End of function plot_base::yt_text()
         return
@@ -894,27 +896,45 @@ class plot_base:
         # End of function plot_base::yt_create_camera()
         return
     
-    def yt_text_to_points(self,veco,vecx,vecy,text,alpha=0.5,font=30,
-                          textcolor=(0,0,0),show=False,filename=''):
+    def yt_text_to_points(self,veco,vecx,vecy,text,dpi=100,font=30,
+                          textcolor=(1,1,1,0.5),show=False,filename=''):
         """
         Take three 3D vectors 'veco' (origin), 'vecx' (x direction) and
         'vecy' (y direction), and a string of text ('text'), and
         return a numpy array of shape (6,npoints) which has entries
         (x,y,z,r,g,b). The values r, g, and b are between 0 and 1.
 
-        Currently, textcolor is unused.
+        The alpha value of 'textcolor' is also used for the alpha value
+        of the points.
+
+        Generally, to increase the point resolution of the text
+        rendering, you increase the dpi parameter by some factor
+        and decrease the scale factor by the same amount. However, 
+        be careful because increasing the number of points
+        will slow down the yt rendering considerably.
+
+        Note that this function presumes a black background so it
+        cannot handle black text. 
+
+        Using the default dpi and font size is usually sufficient for
+        lines of text containing about 30 characters. If more
+        characters are required, then font must be decreased and dpi
+        must be increased by the same factor in order to ensure all
+        characters fit in the temporary figure which this function
+        generates.
         """
-        fig, axes = plot.subplots()
         plot.rc('text',usetex=True)
+        fig=plot.figure(1,figsize=(6.4,4.8),dpi=dpi)
+        axes=plot.axes([0,0,1,1])
+        fig.set_facecolor((0,0,0))
+        axes.set_facecolor((0,0,0))
+
+        from matplotlib.colors import to_rgba
+        alpha=to_rgba(textcolor)[3]
         
-        # FIXME: The text color is messed up here because the
-        # Latex rendering is done on a white background and the
-        # default 3d yt volume is a black background, so we
-        # have to invert the colors below. 
         axes.text(0.5,0.5,text,fontsize=font,ha='center',va='center',
                   color=textcolor)
         
-        plot.axis('off')
         fig.canvas.draw()
         if filename is not '':
             print("Saving render of text '"+text+
@@ -926,21 +946,25 @@ class plot_base:
         X=numpy.array(fig.canvas.renderer._renderer)
         Y=[]
         Y2=[]
-        # FIXME: we should obtain these values from the properties
-        # of the fig object rather than hard coding them
-        xmax=480
-        ymax=640
+
+        # Note that the array is flipped, so ymax is obtained
+        # from the width and xmax is obtained from the height
+        ymax=int(fig.get_dpi()*fig.get_figwidth())
+        xmax=int(fig.get_dpi()*fig.get_figheight())
+        
         for i in range(0,xmax):
             for j in range(0,ymax):
-                if X[i,j,0]!=255 or X[i,j,1]!=255 or X[i,j,2]!=255:
+                if X[i,j,0]!=0 or X[i,j,1]!=0 or X[i,j,2]!=0:
                     xold=2.0*(i-float(xmax)/2)/float(xmax)
                     yold=2.0*(j-float(ymax)/2)/float(ymax)
                     vecnew=[veco[0]-vecy[0]*xold+vecx[0]*yold,
                             veco[1]-vecy[1]*xold+vecx[1]*yold,
                             veco[2]-vecy[2]*xold+vecx[2]*yold]
                     Y.append([vecnew[0],vecnew[1],vecnew[2]])
-                    Y2.append([1.0-X[i,j,0]/255.0,1.0-X[i,j,1]/255.0,
-                               1.0-X[i,j,2]/255.0,alpha])
+                    Y2.append([X[i,j,0]/255.0,X[i,j,1]/255.0,
+                               X[i,j,2]/255.0,alpha])
+        print('plot_base.yt_text_to_points():\n\t',
+              'Number of points for',text,'is',len(Y))
 
         # Close the figure so that the memory is released now
         # that we have the point data
@@ -949,8 +973,9 @@ class plot_base:
         # End of function plot_base::yt_text_to_points()
         return(numpy.array(Y),numpy.array(Y2))
 
-    def yt_text_to_scene(self,loc,text,scale=0.6,font=30,
-                         keyname='o2sclpy_text',filename=''):
+    def yt_text_to_scene(self,loc,text,textcolor=(1,1,1,0.5),scale=0.6,
+                         dpi=100,font=30,keyname='o2sclpy_text',
+                         filename=''):
         """
         At location 'loc' put text 'text' into the scene using specified
         scale parameter and keyname. This function uses the current yt
@@ -958,30 +983,43 @@ class plot_base:
         to the camera. Increasing 'scale' increase the size of the
         text and the 'font' parameter is passed on to the
         yt_text_to_points() function.
+
+        Generally, to increase the point resolution of the text
+        rendering, you increase the dpi parameter by some factor
+        and decrease the scale factor by the same amount. However, 
+        be careful because increasing the number of points
+        will slow down the yt rendering considerably.
+
+        Note that this function presumes a black background so it
+        cannot handle black text. 
         """
         
         # Imports
         from yt.visualization.volume_rendering.api \
             import PointSource
         
-        # Construct orientation vectors
+        # Construct orientation vectors. We arrange the text to be
+        # upright and parallel to the camera.
         view_y=self.yt_camera.north_vector
         view_x=-numpy.cross(view_y,self.yt_camera.focus-
                          self.yt_camera.position)
+
         # Normalize view_x and view_y
         view_x=view_x/numpy.sqrt(view_x[0]**2+view_x[1]**2+view_x[2]**2)
         view_y=view_y/numpy.sqrt(view_y[0]**2+view_y[1]**2+view_y[2]**2)
     
-        # Choose scale. The factor of 0.8 for y seems to be required
+        # Choose scale. The extra factor of 0.8 for y seems to be required
         # to make the text look correctly scaled.
         view_x=view_x*scale
         view_y=view_y*scale*0.8
         
         # Convert text to points
-        (Y,Y2)=self.yt_text_to_points(loc,view_x,view_y,text,font=font,
-                                      filename=filename)
+        (Y,Y2)=self.yt_text_to_points(loc,view_x,view_y,text,
+                                      textcolor=textcolor,font=font,
+                                      dpi=dpi,filename=filename)
     
-        # Add the point source
+        # Add the point source from the arrays returned by
+        # the yt_text_to_points() function.
         points_xalabels=PointSource(Y,colors=Y2)
         kname=self.yt_unique_keyname(keyname)
         self.yt_scene.add_source(points_xalabels,keyname=kname)
