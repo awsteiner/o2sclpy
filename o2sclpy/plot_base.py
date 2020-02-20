@@ -357,13 +357,15 @@ class plot_base:
                                        self.yt_text_objects[i][3],
                                        self.yt_text_objects[i][4]],
                                       self.yt_text_objects[i][5],
-                                      scale=self.yt_text_objects[i][6],
-                                      font=self.yt_text_objects[i][7],
+                                      textcolor=self.yt_text_objects[i][6],
+                                      dpi=self.yt_text_objects[i][7],
+                                      scale=self.yt_text_objects[i][8],
+                                      font=self.yt_text_objects[i][9],
                                       keyname=self.yt_text_objects[i][0])
         
         # End of function plot_base::yt_update_text()
         return
-    
+
     def yt_line(self,point1,point2,color=[1.0,1.0,1.0,0.5],
                 coords='user',keyname='o2sclpy_line'):
         """
