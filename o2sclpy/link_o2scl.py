@@ -28,6 +28,12 @@ import platform
 # For build_o2scl(), link_o2scl()
 import urllib.request
 
+o2scl_libdir=''
+o2scl_cpplib=''
+o2scl=0
+o2scl_hdf=0
+o2scl_part=0
+
 def build_o2scl(verbose=1,release=True):
     """
     This function attempts to automatically build O\ :sub:`2`\ scl using 
@@ -84,7 +90,7 @@ def build_o2scl(verbose=1,release=True):
         else:
             ret2=os.system('snap install o2scl --devmode --edge')
                 
-def link_o2scl(verbose=1,o2scl_cpplib='',o2scl_libdir=''):
+def link_o2scl(verbose=1):
     """
     This function attempts to automatically load O\ :sub:`2`\ scl as a 
     DLL and returns the ``o2scl`` and ``o2scl_hdf`` DLL pointers.
@@ -181,5 +187,56 @@ def link_o2scl(verbose=1,o2scl_cpplib='',o2scl_libdir=''):
             if verbose>0:
                 print('Loaded o2scl_hdf.')
 
-    return (o2scl,o2scl_hdf)
+    return
+    
+def link_o2scl_part(verbose=1):
+    """
+    """
+
+    # Handle OSX and Linux separately
+    if platform.system()=='Darwin':
+    
+        if verbose>=2:
+            print('Using OSX library rules.')
+          
+        if (o2scl_libdir=='' and os.getenv('O2SCL_LIB') is not None and
+            force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
+            o2scl_libdir=os.getenv('O2SCL_LIB')
+            if verbose>0:
+                print('Value of o2scl_libdir is ',o2scl_libdir,'.')
+        elif verbose>=2:
+                print('Value of o2scl_libdir is ',o2scl_libdir,'.')
+          
+        if o2scl_libdir!='':
+            try:
+                o2scl_part=ctypes.CDLL(o2scl_libdir+'/libo2scl_part.dylib',
+                                       mode=ctypes.RTLD_GLOBAL)
+            except:
+                print('O2scl_part not found.')
+            if verbose>0:
+                print('Loaded o2scl_part.')
+        else:
+            o2scl_part=ctypes.CDLL('libo2scl_part.dylib',
+                                   mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded o2scl_part.')
+    
+    else:
+    
+        if (o2scl_libdir=='' and os.getenv('O2SCL_LIB') is not None and
+            force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
+            o2scl_libdir=os.getenv('O2SCL_LIB')
+            print('Set o2scl-libdir to',o2scl_libdir)
+          
+        if o2scl_libdir=='':
+            o2scl_part=ctypes.CDLL(find_library("o2scl_part"),
+                                   mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded o2scl_part.')
+        else:
+            o2scl_part=ctypes.CDLL(o2scl_libdir+'/libo2scl_part.so',
+                              mode=ctypes.RTLD_GLOBAL)
+            if verbose>0:
+                print('Loaded o2scl_part.')
+    return
     
