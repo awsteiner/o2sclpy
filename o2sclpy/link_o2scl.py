@@ -31,6 +31,9 @@ import urllib.request
 # For force_bytes() in link_o2scl()
 from o2sclpy.utils import force_bytes
 
+# For find_library() in link_o2scl()
+from ctypes.util import find_library
+
 o2scl_libdir=''
 o2scl_cpplib=''
 o2scl=0
@@ -113,9 +116,9 @@ def link_o2scl(verbose=1):
             and force_bytes(os.getenv('O2SCL_CPPLIB'))!=b'None'):
             o2scl_cpplib=os.getenv('O2SCL_CPPLIB')
             if verbose>0:
-                print('Value of o2scl_cpplib is ',o2scl_cpplib,'.')
+                print('Value of o2scl_cpplib is',o2scl_cpplib,'.')
         elif verbose>=2:
-            print('Value of o2scl_cpplib is ',o2scl_cpplib,'.')
+            print('Value of o2scl_cpplib is',o2scl_cpplib,'.')
       
         if o2scl_cpplib!='':
             systcpp=ctypes.CDLL(o2scl_cpplib,mode=ctypes.RTLD_GLOBAL)
