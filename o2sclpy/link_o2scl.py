@@ -28,6 +28,9 @@ import platform
 # For build_o2scl(), link_o2scl()
 import urllib.request
 
+# For force_bytes() in link_o2scl()
+from o2sclpy.utils import force_bytes
+
 o2scl_libdir=''
 o2scl_cpplib=''
 o2scl=0
@@ -98,6 +101,8 @@ def link_o2scl(verbose=1):
     This function is in ``link_o2scl.py``.
     """
 
+    global o2scl_libdir, o2scl_cpplib, o2scl, o2scl_hdf
+    
     # Handle OSX and Linux separately
     if platform.system()=='Darwin':
     

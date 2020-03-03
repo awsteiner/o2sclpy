@@ -31,7 +31,8 @@ from o2sclpy.link_o2scl import o2scl, o2scl_part
 
 fermion_rel_ptr=0
 
-def init_pointers():
+def init_part_pointers():
+    global fermion_rel_ptr
     if o2scl==0:
         link_o2scl()
     if o2scl_part==0:
