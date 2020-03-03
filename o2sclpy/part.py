@@ -39,6 +39,7 @@ def init_part_pointers():
         link_o2scl_part()
     if fermion_rel_ptr==0:
         o2scl_part.o2scl_create_fermion_rel.restype=ctypes.c_void_p
+        fermion_rel_ptr=ctypes.c_void_p()
         fermion_rel_ptr=o2scl_part.o2scl_create_fermion_rel()
     return
 
