@@ -36,7 +36,7 @@ from o2sclpy.doc_data import yt_param_list
 from o2sclpy.slack import slack_notify
 from o2sclpy.cloud_file import cloud_file
 from o2sclpy.hdf5 import hdf5_reader
-from o2sclpy.link_o2scl import build_o2scl, link_o2scl
+from o2sclpy.link_o2scl import build_o2scl, link_o2scl, link_o2scl_part
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import parse_arguments, string_to_dict, horiz_line
 from o2sclpy.plot_base import plot_base

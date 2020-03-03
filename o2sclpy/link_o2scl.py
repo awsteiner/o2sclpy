@@ -149,19 +149,19 @@ def link_o2scl(verbose=1):
                     return 3
                 
             if verbose>0:
-                print('Loaded o2scl.')
+                print('Loaded o2scl (1).')
             o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.dylib',
                                   mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
-                print('Loaded o2scl_hdf.')
+                print('Loaded o2scl_hdf (1).')
         else:
             o2scl=ctypes.CDLL('libo2scl.dylib',mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
-                print('Loaded o2scl.')
+                print('Loaded o2scl (2).')
             o2scl_hdf=ctypes.CDLL('libo2scl_hdf.dylib',
                                   mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
-                print('Loaded o2scl_hdf.')
+                print('Loaded o2scl_hdf (2).')
     
     else:
     
@@ -177,20 +177,20 @@ def link_o2scl(verbose=1):
         if o2scl_libdir=='':
             o2scl=ctypes.CDLL(find_library("o2scl"),mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
-                print('Loaded o2scl.')
+                print('Loaded o2scl (3).')
             o2scl_hdf=ctypes.CDLL(find_library("o2scl_hdf"),
                                 mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
-                print('Loaded o2scl_hdf.')
+                print('Loaded o2scl_hdf (3).')
         else:
             o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.so',
                               mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
-                print('Loaded o2scl.')
+                print('Loaded o2scl (4).')
             o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.so',
                                   mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
-                print('Loaded o2scl_hdf.')
+                print('Loaded o2scl_hdf (4).')
 
     return
     
@@ -198,6 +198,8 @@ def link_o2scl_part(verbose=1):
     """
     """
 
+    global o2scl_libdir, o2scl_cpplib, o2scl_part
+    
     # Handle OSX and Linux separately
     if platform.system()=='Darwin':
     
@@ -219,12 +221,12 @@ def link_o2scl_part(verbose=1):
             except:
                 print('O2scl_part not found.')
             if verbose>0:
-                print('Loaded o2scl_part.')
+                print('Loaded o2scl_part (1).')
         else:
             o2scl_part=ctypes.CDLL('libo2scl_part.dylib',
                                    mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
-                print('Loaded o2scl_part.')
+                print('Loaded o2scl_part (2).')
     
     else:
     
@@ -237,11 +239,11 @@ def link_o2scl_part(verbose=1):
             o2scl_part=ctypes.CDLL(find_library("o2scl_part"),
                                    mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
-                print('Loaded o2scl_part.')
+                print('Loaded o2scl_part (3).')
         else:
             o2scl_part=ctypes.CDLL(o2scl_libdir+'/libo2scl_part.so',
                               mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
-                print('Loaded o2scl_part.')
+                print('Loaded o2scl_part (4).')
     return
     
