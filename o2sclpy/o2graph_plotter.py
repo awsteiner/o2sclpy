@@ -1602,7 +1602,7 @@ class o2graph_plotter(plot_base):
         """
         Parse command-line arguments.
 
-        This is the main function used by the :ref:`O2graph script` .
+        This is the main function used by the :ref:`o2graph_script` .
         Once it has created a list of strings from argv, it calls
         parse_string_list() to call the proper functions.
         """

@@ -1,5 +1,5 @@
 O\ :sub:`2`\ sclpy: v0.925.a1
-==========================
+=============================
 
 O\ :sub:`2`\ sclpy: A set of python classes for use with the
 O\ :sub:`2`\ scl C++ library (separately documented
@@ -17,7 +17,7 @@ Installation and Requirements
 
 O\ :sub:`2`\ sclpy can be installed with e.g. ``pip3 install
 o2sclpy``. If you want to install the development version
-(v0.925pre1), you can clone the git repository, change directory to
+(v0.925.a1), you can clone the git repository, change directory to
 the O\ :sub:`2`\ sclpy directory, and then use e.g. ``pip3 install .``
 if you want to use the pip package manager or ``python3 setup.py
 install`` to do a direct installation. O\ :sub:`2`\ sclpy requires
