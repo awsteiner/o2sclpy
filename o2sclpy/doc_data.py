@@ -505,8 +505,8 @@ extra_list=[
      "unspecified, then yt's transfer_function_helper is used "+
      "to create a 3 layer default transfer function."],
     ["tensor_grid","den-plot-anim",
-     "Create an animated density plot from a tensor_grid object.",
-     "<index to animate>",""],
+     ("Create an animated density plot from a tensor_grid object ")+
+     "(not working).","<index to animate>",""],
 ]
 """
 This is a list of 5-element entries:

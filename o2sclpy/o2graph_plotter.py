@@ -1853,8 +1853,13 @@ class o2graph_plotter(plot_base):
         
     def den_plot_anim(self,o2scl_hdf,amp,args):
         """
-        Add a volume source to a yt visualization from a
-        tensor_grid object.
+        Add a volume source to a yt visualization from a tensor_grid3
+        object. The first argument specifies which tensor index is
+        along the x axis, the second argument is the tensor index is
+        along the y axis, and the third argument is the tensor index
+        which will be animated.
+
+        Not working yet.
         """
 
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -1877,8 +1882,6 @@ class o2graph_plotter(plot_base):
             curr_type=curr_type+type_ptr[i]
 
         if curr_type==b'tensor_grid':
-            if self.yt_check_backend()==1:
-                return
 
             # Set up wrapper for get function
             get_fn=o2scl_hdf.o2scl_acol_get_tensor_grid3
@@ -1914,54 +1917,92 @@ class o2graph_plotter(plot_base):
             total_size=nx*ny*nz
 
             if args[0]=='0':
-                xgrid=[gridx[i] for i in range(0,nx.value)]
+                xgrid=[gridx[i] for i in range(0,nx)]
             elif args[0]=='1':
-                xgrid=[gridy[i] for i in range(0,ny.value)]
+                xgrid=[gridy[i] for i in range(0,ny)]
             else:
-                xgrid=[gridz[i] for i in range(0,nz.value)]
+                xgrid=[gridz[i] for i in range(0,nz)]
             
             if args[1]=='0':
-                ygrid=[gridx[i] for i in range(0,nx.value)]
+                ygrid=[gridx[i] for i in range(0,nx)]
             elif args[1]=='1':
-                ygrid=[gridy[i] for i in range(0,ny.value)]
+                ygrid=[gridy[i] for i in range(0,ny)]
             else:
-                ygrid=[gridz[i] for i in range(0,nz.value)]
+                ygrid=[gridz[i] for i in range(0,nz)]
 
             if args[2]=='0':
-                n_frames=nx.value
+                n_frames=nx
             elif args[2]=='0r':
-                n_frames=nx.value
-            elif args[2]=='0':
-                n_frames=nx.value
-            elif args[2]=='0r':
-                n_frames=nx.value
-            elif args[2]=='0':
-                n_frames=nx.value
-            elif args[2]=='0r':
-                n_frames=nx.value
+                n_frames=nx
+            elif args[2]=='1':
+                n_frames=ny
+            elif args[2]=='1r':
+                n_frames=ny
+            elif args[2]=='2':
+                n_frames=nz
+            elif args[2]=='2r':
+                n_frames=nz
             
             arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
-            # self.yt_volume_data.append(numpy.copy(arr))
-            # # Rescale to the internal coordinate system
-            # bbox=numpy.array([[(gridx[0]-self.xlo)/(self.xhi-self.xlo),
-            #                    (gridx[nx-1]-self.xlo)/(self.xhi-self.xlo)],
-            #                   [(gridy[0]-self.ylo)/(self.yhi-self.ylo),
-            #                    (gridy[ny-1]-self.ylo)/(self.yhi-self.ylo)],
-            #                   [(gridz[0]-self.zlo)/(self.zhi-self.zlo),
-            #                    (gridz[nz-1]-self.zlo)/(self.zhi-self.zlo)]])
-            # self.yt_volume_bbox.append(numpy.copy(bbox))
-            # arr2=self.yt_volume_data[len(self.yt_volume_data)-1]
-            # bbox2=self.yt_volume_bbox[len(self.yt_volume_bbox)-1]
+            print(arr.shape)
 
-            # func=yt.load_uniform_grid
-            # self.yt_data_sources.append(func(dict(density=arr2),
-            #                                  arr2.shape,bbox=bbox2))
-            # ds=self.yt_data_sources[len(self.yt_data_sources)-1]
-
-            # self.yt_vols.append(VolumeSource(ds,field='density'))
-            # vol=self.yt_vols[len(self.yt_vols)-1]
-            # vol.log_field=False
-
+            if self.canvas_flag==False:
+                self.canvas()
+                
+            for k in range(0,n_frames):
+                sl=arr[:][:][k]
+                sl=sl.transpose()
+                if self.logx==True:
+                    for i in range(0,len(xgrid)):
+                        xgrid[i]=math.log(xgrid[i],10)
+                if self.logy==True:
+                    for i in range(0,len(ygrid)):
+                        ygrid[i]=math.log(ygrid[i],10)
+                if self.logz==1:
+                    for i in range(0,len(xgrid)):
+                        for j in range(0,len(ygrid)):
+                            sl[i][j]=math.log10(sl[i][h])
+                tmp1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+                tmp2=xgrid[nx-1]+(xgrid[nx-1]-xgrid[nx-2])/2
+                tmp3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+                tmp4=ygrid[ny-1]+(ygrid[ny-1]-ygrid[ny-2])/2
+                self.last_image=self.axes.imshow(sl,interpolation='nearest',
+                                                 origin='lower',
+                                                 extent=[tmp1,tmp2,
+                                                         tmp3,tmp4],
+                                                 aspect='auto')
+                if self.colbar==True:
+                    cbar=self.fig.colorbar(self.last_image,ax=self.axes)
+                    cbar.ax.tick_params(labelsize=self.font*0.8)
+                if n_frames<100:
+                    if k<10:
+                        fname='/tmp/dpa_0'+str(k)+'.png'
+                    else:
+                        fname='/tmp/dpa_'+str(k)+'.png'
+                print('Saving to',fname)
+                plot.savefig(fname)
+                    
+            prefix='/tmp/dpa_'
+            suffix='.png'
+            mov_fname='dpa.mp4'
+            if n_frames>=1000:
+                cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                     prefix+'%04d'+suffix+' -vcodec libx264 '+
+                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+            elif n_frames>=100:
+                cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                     prefix+'%03d'+suffix+' -vcodec libx264 '+
+                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+            elif n_frames>=10:
+                cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                     prefix+'%02d'+suffix+' -vcodec libx264 '+
+                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+            else:
+                cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                     prefix+'%01d'+suffix+' -vcodec libx264 '+
+                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+            print('ffmpeg command:',cmd)
+            os.system(cmd)
                 
         # End of function o2graph_plotter::den_plot_anim()
         return
