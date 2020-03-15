@@ -95,7 +95,7 @@ def build_o2scl(verbose=1,release=True):
                       './configure; make; sudo make install')
         else:
             ret2=os.system('snap install o2scl --devmode --edge')
-                
+
 def link_o2scl(verbose=1):
     """
     This function attempts to automatically load O\ :sub:`2`\ scl as a 
@@ -108,10 +108,10 @@ def link_o2scl(verbose=1):
     
     # Handle OSX and Linux separately
     if platform.system()=='Darwin':
-    
+
         if verbose>=2:
             print('Using OSX library rules.')
-        
+
         if (o2scl_cpplib=='' and os.getenv('O2SCL_CPPLIB') is not None
             and force_bytes(os.getenv('O2SCL_CPPLIB'))!=b'None'):
             o2scl_cpplib=os.getenv('O2SCL_CPPLIB')
@@ -120,10 +120,14 @@ def link_o2scl(verbose=1):
         elif verbose>=2:
             print('Value of o2scl_cpplib is',o2scl_cpplib,'.')
       
-        if o2scl_cpplib!='':
+        if o2scl_cpplib!='' and o2scl_cpplib!='skip':
+            if verbose>0:
+                print('Loading',o2scl_cpplib)
             systcpp=ctypes.CDLL(o2scl_cpplib,mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
                 print('Loaded system C++ library.')
+            elif o2scl_cpp_lib=='skip' and verbose>0:
+                print('Skipping load of C++ library.')
       
         rl=ctypes.CDLL('/usr/lib/libreadline.dylib',
                        mode=ctypes.RTLD_GLOBAL)
@@ -140,6 +144,8 @@ def link_o2scl(verbose=1):
           
         if o2scl_libdir!='':
             try:
+                if verbose>0:
+                    print('Loading',o2scl_libdir+'/libo2scl.dylib')
                 o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.dylib',
                                   mode=ctypes.RTLD_GLOBAL)
             except:
@@ -153,6 +159,8 @@ def link_o2scl(verbose=1):
                 
             if verbose>0:
                 print('Loaded o2scl (1).')
+            if verbose>0:
+                print('Loading',o2scl_libdir+'/libo2scl_hdf.dylib')
             o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.dylib',
                                   mode=ctypes.RTLD_GLOBAL)
             if verbose>0:
