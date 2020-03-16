@@ -1950,7 +1950,7 @@ class o2graph_plotter(plot_base):
                 self.canvas()
                 
             for k in range(0,n_frames):
-                sl=arr[:][:][k]
+                sl=arr[:,:,k]
                 sl=sl.transpose()
                 if self.logx==True:
                     for i in range(0,len(xgrid)):
@@ -1976,6 +1976,13 @@ class o2graph_plotter(plot_base):
                     cbar.ax.tick_params(labelsize=self.font*0.8)
                 if n_frames<100:
                     if k<10:
+                        fname='/tmp/dpa_0'+str(k)+'.png'
+                    else:
+                        fname='/tmp/dpa_'+str(k)+'.png'
+                elif n_frames<1000:
+                    if k<10:
+                        fname='/tmp/dpa_00'+str(k)+'.png'
+                    elif k<100:
                         fname='/tmp/dpa_0'+str(k)+'.png'
                     else:
                         fname='/tmp/dpa_'+str(k)+'.png'
