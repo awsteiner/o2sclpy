@@ -46,6 +46,8 @@ class plot_base:
 
     """
 
+    cbar=0
+
     last_image=0
     """
     The last image object created (used for addcbar)

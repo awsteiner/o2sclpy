@@ -2026,6 +2026,17 @@ class o2graph_plotter(plot_base):
                 tmp2=xgrid[nx-1]+(xgrid[nx-1]-xgrid[nx-2])/2
                 tmp3=ygrid[0]-(ygrid[1]-ygrid[0])/2
                 tmp4=ygrid[ny-1]+(ygrid[ny-1]-ygrid[ny-2])/2
+                
+                if k>0:
+                    # It's important to remove the last image and
+                    # colorbar to free up the space. We have to
+                    # remmove the colorbar first, then the image.
+                    if self.colbar==True:
+                        self.cbar.remove()
+                        del self.cbar
+                    self.last_image.remove()
+                    del self.last_image
+                        
                 self.last_image=self.axes.imshow(sl,interpolation='nearest',
                                                  origin='lower',
                                                  extent=[tmp1,tmp2,
@@ -2033,8 +2044,8 @@ class o2graph_plotter(plot_base):
                                                  aspect='auto')
                 
                 if self.colbar==True:
-                    cbar=self.fig.colorbar(self.last_image,ax=self.axes)
-                    cbar.ax.tick_params(labelsize=self.font*0.8)
+                    self.cbar=self.fig.colorbar(self.last_image,ax=self.axes)
+                    self.cbar.ax.tick_params(labelsize=self.font*0.8)
                     
                 if n_frames<10:
                     fname='/tmp/dpa_'+str(k)+'.png'
