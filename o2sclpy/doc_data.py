@@ -177,8 +177,8 @@ base_list=[
      "pyplot.subplots_adjust() function."],
     ["subplots","Create subplots.","<nrows> <ncols> [kwargs]",
      "Create a grid of <nrows> by <ncols> subplots. "+
-     "The kwargs currently supported are 'sharex', 'sharey', "+
-     "and 'squeeze'."],
+     "The kwargs currently supported are 'sharex=True|False', "+
+     "and 'sharey=True|False'."],
     ["text","Plot text in the data coordinates.",
      "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
      "data coordinates defined by the current axes with the font size "+
@@ -505,8 +505,10 @@ extra_list=[
      "unspecified, then yt's transfer_function_helper is used "+
      "to create a 3 layer default transfer function."],
     ["tensor_grid","den-plot-anim",
-     ("Create an animated density plot from a tensor_grid object ")+
-     "(not working).","<index to animate>",""],
+     "Create an animated density plot from a tensor_grid object. ",
+     "<x index> <y index> <z index [+'r']> <mp4 filename>",
+     "(Requires ffmpeg.)"],
+     
 ]
 """
 This is a list of 5-element entries:

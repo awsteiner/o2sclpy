@@ -1859,7 +1859,7 @@ class o2graph_plotter(plot_base):
         along the y axis, and the third argument is the tensor index
         which will be animated.
 
-        Not working yet.
+        Experimental.
         """
 
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -1942,6 +1942,11 @@ class o2graph_plotter(plot_base):
                 n_frames=nz
             elif args[2]=='2r':
                 n_frames=nz
+
+            if n_frames>9999:
+                print('Large number of frames (',n_frames,') not',
+                      'supported in den-plot-anim.')
+                return
             
             arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
             print(arr.shape)
@@ -1949,19 +1954,74 @@ class o2graph_plotter(plot_base):
             if self.canvas_flag==False:
                 self.canvas()
                 
+            if self.logx==True:
+                for i in range(0,len(xgrid)):
+                    xgrid[i]=math.log(xgrid[i],10)
+                    
+            if self.logy==True:
+                for i in range(0,len(ygrid)):
+                    ygrid[i]=math.log(ygrid[i],10)
+                        
             for k in range(0,n_frames):
-                sl=arr[:,:,k]
+                if args[2]=='0':
+                    sl=arr[k,:,:]
+                elif args[2]=='0r':
+                    sl=arr[n_frames-1-k,:,:]
+                elif args[2]=='1':
+                    sl=arr[:,k,:]
+                elif args[2]=='0r':
+                    sl=arr[:,n_frames-1-k,:]
+                elif args[2]=='2':
+                    sl=arr[:,:,k]
+                elif args[2]=='2r':
+                    sl=arr[:,:,n_frames-1-k]
                 sl=sl.transpose()
-                if self.logx==True:
-                    for i in range(0,len(xgrid)):
-                        xgrid[i]=math.log(xgrid[i],10)
-                if self.logy==True:
+ 
+                if self.logz==True:
+                    fail_found=False
                     for i in range(0,len(ygrid)):
-                        ygrid[i]=math.log(ygrid[i],10)
-                if self.logz==1:
-                    for i in range(0,len(xgrid)):
-                        for j in range(0,len(ygrid)):
-                            sl[i][j]=math.log10(sl[i][h])
+                        for j in range(0,len(xgrid)):
+                            if sl[i][j]>0.0:
+                                sl[i][j]=math.log10(sl[i][j])
+                            else:
+                                if fail_found==False:
+                                    print('Failed to take log of',sl[i][j],
+                                          'at (i,j)=(',j,',',i,') or (',
+                                          xgrid[j],',',ygrid[i],
+                                          '). Setting point to zero and',
+                                          'suppressing future warnings.')
+                                fail_found=True
+                                sl[i][j]=0.0
+                                
+                # If the z range was specified, truncate all values
+                # outside that range (this truncation is done after
+                # the application of the log above)
+                if self.zset==True:
+                    for i in range(0,ny.value):
+                        for j in range(0,nx.value):
+                            if sl[i][j]>self.zhi:
+                                sl[i][j]=self.zhi
+                            elif sl[i][j]<self.zlo:
+                                sl[i][j]=self.zlo
+                            
+                diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
+                mean_x=numpy.mean(diffs_x)
+                std_x=numpy.std(diffs_x)
+                diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
+                mean_y=numpy.mean(diffs_y)
+                std_y=numpy.std(diffs_y)
+            
+                if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
+                    print('Warning in o2graph::o2graph_plotter::'+
+                          'den_plot_anim():')
+                    print('  Nonlinearity of x or y grid is greater than '+
+                          '10^{-4}.')
+                    print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
+                          (std_x/mean_x))
+                    print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
+                          (std_y/mean_y))
+                    print('  The density plot may not be properly scaled.')
+                
                 tmp1=xgrid[0]-(xgrid[1]-xgrid[0])/2
                 tmp2=xgrid[nx-1]+(xgrid[nx-1]-xgrid[nx-2])/2
                 tmp3=ygrid[0]-(ygrid[1]-ygrid[0])/2
@@ -1971,10 +2031,14 @@ class o2graph_plotter(plot_base):
                                                  extent=[tmp1,tmp2,
                                                          tmp3,tmp4],
                                                  aspect='auto')
+                
                 if self.colbar==True:
                     cbar=self.fig.colorbar(self.last_image,ax=self.axes)
                     cbar.ax.tick_params(labelsize=self.font*0.8)
-                if n_frames<100:
+                    
+                if n_frames<10:
+                    fname='/tmp/dpa_'+str(k)+'.png'
+                elif n_frames<100:
                     if k<10:
                         fname='/tmp/dpa_0'+str(k)+'.png'
                     else:
@@ -1986,12 +2050,24 @@ class o2graph_plotter(plot_base):
                         fname='/tmp/dpa_0'+str(k)+'.png'
                     else:
                         fname='/tmp/dpa_'+str(k)+'.png'
+                elif n_frames<10000:
+                    if k<10:
+                        fname='/tmp/dpa_000'+str(k)+'.png'
+                    elif k<100:
+                        fname='/tmp/dpa_00'+str(k)+'.png'
+                    elif k<1000:
+                        fname='/tmp/dpa_0'+str(k)+'.png'
+                    else:
+                        fname='/tmp/dpa_'+str(k)+'.png'
                 print('Saving to',fname)
                 plot.savefig(fname)
-                    
+
+                # End of loop, continue to next frame
+
+            # Now after loop, compile frames into a movie
             prefix='/tmp/dpa_'
             suffix='.png'
-            mov_fname='dpa.mp4'
+            mov_fname=args[3]
             if n_frames>=1000:
                 cmd=('ffmpeg -y -r 10 -f image2 -i '+
                      prefix+'%04d'+suffix+' -vcodec libx264 '+
@@ -2010,6 +2086,8 @@ class o2graph_plotter(plot_base):
                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
             print('ffmpeg command:',cmd)
             os.system(cmd)
+
+            # End of "if curr_type==b'tensor_grid':"
                 
         # End of function o2graph_plotter::den_plot_anim()
         return
