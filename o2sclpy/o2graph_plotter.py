@@ -57,6 +57,8 @@ class o2graph_plotter(plot_base):
 
     """
 
+    dpa_cax=0
+
     def set_wrapper(self,o2scl_hdf,amp,args):
         """
         Wrapper around :py:func:`o2sclpy.plot_base.set` which sets
@@ -1918,17 +1920,23 @@ class o2graph_plotter(plot_base):
 
             if args[0]=='0':
                 xgrid=[gridx[i] for i in range(0,nx)]
+                nx2=nx
             elif args[0]=='1':
                 xgrid=[gridy[i] for i in range(0,ny)]
+                nx2=ny
             else:
                 xgrid=[gridz[i] for i in range(0,nz)]
+                nx2=nz
             
             if args[1]=='0':
                 ygrid=[gridx[i] for i in range(0,nx)]
+                ny2=nx
             elif args[1]=='1':
                 ygrid=[gridy[i] for i in range(0,ny)]
+                ny2=ny
             else:
                 ygrid=[gridz[i] for i in range(0,nz)]
+                ny2=nz
 
             if args[2]=='0':
                 n_frames=nx
@@ -1951,8 +1959,39 @@ class o2graph_plotter(plot_base):
             arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
             print(arr.shape)
 
-            if self.canvas_flag==False:
-                self.canvas()
+            if self.colbar==True:
+                # The animation of the colorbar messes up the
+                # automatic colorbar placement, so this is a hack to
+                # attempt make sure the colorbar is placed correctly
+                # in all frames.
+                dct=string_to_dict(self.fig_dict)
+                if ('right_margin' not in dct.keys() or
+                    dct['right_margin']<0.1):
+                    dct['right_margin']=0.15
+                if ('top_margin' not in dct.keys() or
+                    dct['top_margin']<0.06):
+                    dct['top_margin']=0.06
+                if 'left_margin' not in dct.keys():
+                    dct['left_margin']=0.14
+                if 'bottom_margin' not in dct.keys():
+                    dct['bottom_margin']=0.12
+                rm=dct['right_margin']
+                lm=dct['left_margin']
+                tm=dct['top_margin']
+                bm=dct['bottom_margin']
+                if self.canvas_flag==False:
+                    (self.fig,self.axes)=default_plot(**dct)
+                    # Plot limits
+                    if self.xset==True:
+                        self.axes.set_xlim(self.xlo,self.xhi)
+                    if self.yset==True:
+                        self.axes.set_ylim(self.ylo,self.yhi)
+                    self.canvas_flag=True
+            else:
+                # If there's no colorbar, then we can use
+                # the standard approach
+                if self.canvas_flag==False:
+                    self.canvas()
                 
             if self.logx==True:
                 for i in range(0,len(xgrid)):
@@ -1997,8 +2036,8 @@ class o2graph_plotter(plot_base):
                 # outside that range (this truncation is done after
                 # the application of the log above)
                 if self.zset==True:
-                    for i in range(0,ny.value):
-                        for j in range(0,nx.value):
+                    for i in range(0,ny2):
+                        for j in range(0,nx2):
                             if sl[i][j]>self.zhi:
                                 sl[i][j]=self.zhi
                             elif sl[i][j]<self.zlo:
@@ -2023,9 +2062,9 @@ class o2graph_plotter(plot_base):
                     print('  The density plot may not be properly scaled.')
                 
                 tmp1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-                tmp2=xgrid[nx-1]+(xgrid[nx-1]-xgrid[nx-2])/2
+                tmp2=xgrid[nx2-1]+(xgrid[nx2-1]-xgrid[nx2-2])/2
                 tmp3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-                tmp4=ygrid[ny-1]+(ygrid[ny-1]-ygrid[ny-2])/2
+                tmp4=ygrid[ny2-1]+(ygrid[ny2-1]-ygrid[ny2-2])/2
                 
                 if k>0:
                     # It's important to remove the last image and
@@ -2044,7 +2083,11 @@ class o2graph_plotter(plot_base):
                                                  aspect='auto')
                 
                 if self.colbar==True:
-                    self.cbar=self.fig.colorbar(self.last_image,ax=self.axes)
+                    dpa_cax2=self.fig.add_axes([1.0-rm*0.9,
+                                                bm,rm*0.3,
+                                                1.0-bm-tm])
+                    self.cbar=self.fig.colorbar(self.last_image,
+                                                cax=dpa_cax2)
                     self.cbar.ax.tick_params(labelsize=self.font*0.8)
                     
                 if n_frames<10:
