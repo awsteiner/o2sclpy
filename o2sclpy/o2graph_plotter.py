@@ -292,7 +292,7 @@ class o2graph_plotter(plot_base):
             #https://stackoverflow.com/questions/2546475/
             #how-can-i-draw-a-log-normalized-imshow-plot-
             #with-a-colorbar-representing-the-raw
-            
+
             if self.logz==True:
                 fail_found=False
                 for i in range(0,ny.value):
@@ -347,23 +347,31 @@ class o2graph_plotter(plot_base):
                       (std_y/mean_y))
                 print('  The density plot may not be properly scaled.')
                 
-            extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-            extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
-                                       xgrid[nx.value-2])/2
-            extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-            extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
-                                       ygrid[ny.value-2])/2
-                        
-            if len(kwstring)==0:
-                self.last_image=self.axes.imshow(sl,interpolation='nearest',
-                                    origin='lower',extent=[extent1,extent2,
-                                                           extent3,extent4],
-                                    aspect='auto')
+            dctt=string_to_dict(kwstring)
+            if dctt.pop('pcm',None)==True:
+                print('pcolormesh mode')
+                self.last_image=self.axes.pcolormesh(xgrid,ygrid,sl)
             else:
-                self.last_image=self.axes.imshow(sl,interpolation='nearest',
-                                    origin='lower',extent=[extent1,extent2,
-                                                           extent3,extent4],
-                                    aspect='auto',**string_to_dict(kwstring))
+            
+                extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+                extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
+                                           xgrid[nx.value-2])/2
+                extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+                extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
+                                           ygrid[ny.value-2])/2
+                        
+                f=self.axes.imshow
+                if len(kwstring)==0:
+                    self.last_image=f(sl,interpolation='nearest',
+                                      origin='lower',extent=[extent1,extent2,
+                                                             extent3,extent4],
+                                      aspect='auto')
+                else:
+                    self.last_image=f(sl,interpolation='nearest',
+                                      origin='lower',extent=[extent1,extent2,
+                                                             extent3,extent4],
+                                      aspect='auto',
+                                      **string_to_dict(kwstring))
 
             # The color bar is added later below...
 
@@ -1855,7 +1863,7 @@ class o2graph_plotter(plot_base):
         
     def den_plot_anim(self,o2scl_hdf,amp,args):
         """
-        Add a volume source to a yt visualization from a tensor_grid3
+        Create an mp4 animation of a density plot from a tensor_grid3 
         object. The first argument specifies which tensor index is
         along the x axis, the second argument is the tensor index is
         along the y axis, and the third argument is the tensor index
