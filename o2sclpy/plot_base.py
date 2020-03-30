@@ -1205,6 +1205,10 @@ class plot_base:
         self.xset=True
         if self.canvas_flag==True:
             self.axes.set_xlim(self.xlo,self.xhi)
+            if self.logx==True:
+                self.axes.set_xscale('log')
+            else:
+                self.axes.set_xscale('linear')
         # End of function plot_base::xlimits()
         return
 
@@ -1225,6 +1229,10 @@ class plot_base:
         self.yset=True
         if self.canvas_flag==True:
             self.axes.set_ylim(self.ylo,self.yhi)
+            if self.logy==True:
+                self.axes.set_yscale('log')
+            else:
+                self.axes.set_yscale('linear')
         # End of function plot_base::ylimits()
         return
 

@@ -327,7 +327,7 @@ class o2graph_plotter(plot_base):
             if dctt.pop('pcm',None)==True:
                 
                 print('Creating density plot using pcolormesh()')
-                self.last_image=self.axes.pcolormesh(xgrid,ygrid,sl)
+                self.last_image=self.axes.pcolormesh(xgrid,ygrid,sl,**dctt)
                 
             else:
 
