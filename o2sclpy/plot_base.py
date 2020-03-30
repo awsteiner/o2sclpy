@@ -1640,8 +1640,10 @@ class plot_base:
         """
         if self.verbose>2:
             print('Canvas')
-            
+
         dct=string_to_dict(self.fig_dict)
+        if 'fontsize' not in dct.keys():
+            dct['fontsize']=self.font
         (self.fig,self.axes)=default_plot(**dct)
         
         # Plot limits
@@ -1649,6 +1651,13 @@ class plot_base:
             self.axes.set_xlim(self.xlo,self.xhi)
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
+
+        # Set log mode for x and y axes if requested
+        if self.logx==True:
+            self.axes.set_xscale('log')
+        if self.logy==True:
+            self.axes.set_yscale('log')
+            
         self.canvas_flag=True
         # End of function plot_base::canvas()
         return

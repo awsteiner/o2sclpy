@@ -309,13 +309,6 @@ class o2graph_plotter(plot_base):
                             fail_found=True
                             sl[i][j]=0.0
                                 
-            if self.logx==True:
-                xgrid=[math.log(ptrx[i],10) for i in
-                       range(0,nx.value)]
-            if self.logy==True:
-                ygrid=[math.log(ptry[i],10) for i in
-                       range(0,ny.value)]
-
             # If the z range was specified, truncate all values
             # outside that range (this truncation is done after
             # the application of the log above)
@@ -330,29 +323,43 @@ class o2graph_plotter(plot_base):
             if self.canvas_flag==False:
                 self.canvas()
 
-            diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
-            mean_x=numpy.mean(diffs_x)
-            std_x=numpy.std(diffs_x)
-            diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
-            mean_y=numpy.mean(diffs_y)
-            std_y=numpy.std(diffs_y)
-            
-            if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
-                print('Warning in o2graph::o2graph_plotter::den_plot():')
-                print('  Nonlinearity of x or y grid is greater than '+
-                      '10^{-4}.')
-                print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
-                      (std_x/mean_x))
-                print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
-                      (std_y/mean_y))
-                print('  The density plot may not be properly scaled.')
-                
             dctt=string_to_dict(kwstring)
             if dctt.pop('pcm',None)==True:
-                print('pcolormesh mode')
+                
+                print('Creating density plot using pcolormesh()')
                 self.last_image=self.axes.pcolormesh(xgrid,ygrid,sl)
+                
             else:
+
+                # The imshow() function doesn't work with a log axis, so we
+                # set the scales back to linear and manually take the log
+                self.axes.set_xscale('linear')
+                self.axes.set_yscale('linear')
             
+                if self.logx==True:
+                    xgrid=[math.log(ptrx[i],10) for i in
+                           range(0,nx.value)]
+                if self.logy==True:
+                    ygrid=[math.log(ptry[i],10) for i in
+                           range(0,ny.value)]
+
+                diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
+                mean_x=numpy.mean(diffs_x)
+                std_x=numpy.std(diffs_x)
+                diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
+                mean_y=numpy.mean(diffs_y)
+                std_y=numpy.std(diffs_y)
+            
+                if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
+                    print('Warning in o2graph::o2graph_plotter::den_plot():')
+                    print('  Nonlinearity of x or y grid is greater than '+
+                          '10^{-4}.')
+                    print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
+                          (std_x/mean_x))
+                    print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
+                          (std_y/mean_y))
+                    print('  The density plot may not be properly scaled.')
+                
                 extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
                 extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
                                            xgrid[nx.value-2])/2
@@ -1988,12 +1995,19 @@ class o2graph_plotter(plot_base):
                 tm=dct['top_margin']
                 bm=dct['bottom_margin']
                 if self.canvas_flag==False:
+                    if fontsize not in dct.keys():
+                        dct['fontsize']=self.font
                     (self.fig,self.axes)=default_plot(**dct)
                     # Plot limits
                     if self.xset==True:
                         self.axes.set_xlim(self.xlo,self.xhi)
                     if self.yset==True:
                         self.axes.set_ylim(self.ylo,self.yhi)
+                    # Set log mode for x and y axes if requested
+                    if self.logx==True:
+                        self.axes.set_xscale('log')
+                    if self.logy==True:
+                       self.axes.set_yscale('log')
                     self.canvas_flag=True
             else:
                 # If there's no colorbar, then we can use

@@ -52,6 +52,9 @@ class todo_list:
 
     Todo list:
 
+    .. todo:: default_plot() has a fontsize argument. Should this
+    be different than the font parameter in the plot_base class or should
+    all calls to default_plot inside plot_base set fontsize=self.font?
     .. todo:: create a vector field command in yt
     .. todo:: allow the creation of colormaps on the fly? 
     .. todo:: add map to colormap option for yt tf's

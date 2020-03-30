@@ -57,8 +57,12 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     """
     This function sets up the O\ :sub:`2`\ sclpy ``matplotlib``
     defaults. It returns a pair of objects, the figure object and axes
-    object.
-
+    object. The fontsize argument times 0.8 is used 
+    for the size of the font labels. Setting the ``ticks_in`` argument
+    to ``True`` makes the ticks point inwards instead of outwards
+    and setting ``rt_ticks`` to ``True`` puts ticks (but not labels)
+    on the right and top edges of the plot. 
+    
     This function is in ``utils.py``.
     """
     plot.rc('text',usetex=True)
@@ -78,15 +82,14 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     if rt_ticks:
         ax.tick_params('x',which='both',top=True,bottom=True)
         ax.tick_params('y',which='both',left=True,right=True)
-    #ax.tick_params('both',length=5,width=1,which='minor')
     ax.tick_params(labelsize=fontsize*0.8)
     plot.grid(False)
     return (fig,ax)
     
 def get_str_array(dset):
     """
-    Extract a string array from O\ :sub:`2`\ scl 
-    HDF5 dataset ``dset`` as a list
+    Extract a string array from O\ :sub:`2`\ scl HDF5 dataset ``dset``
+    as a python list
 
     This function is in ``utils.py``.
     """
@@ -336,6 +339,11 @@ def string_to_dict(s):
                 else:
                     arr2[1]=False
             if arr2[0]=='rt_ticks':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='pcm':
                 if arr2[1]=='True':
                     arr2[1]=True
                 else:
