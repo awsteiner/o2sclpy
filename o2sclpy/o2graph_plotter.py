@@ -458,6 +458,219 @@ class o2graph_plotter(plot_base):
             cbar=self.fig.colorbar(self.last_image,ax=self.axes)
             cbar.ax.tick_params(labelsize=self.font*0.8)
 
+    def den_plot_rgb(self,o2scl_hdf,amp,args):
+        """
+        Density plot from a ``table3d``, ``hist_2d`` ``tensor_grid``,
+        ``tensor``, ``tensor<int>`` or ``tensor<size_t>`` object
+        """
+
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+
+        # Set up wrapper for type function
+        type_fn=o2scl_hdf.o2scl_acol_get_type
+        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+
+        # Get current type
+        it=ctypes.c_int(0)
+        type_ptr=char_ptr()
+        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+        kwstring=''
+                
+        curr_type=b''
+        for i in range(0,it.value):
+            curr_type=curr_type+type_ptr[i]
+
+        # Handle tensor and table3d types
+        if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
+            curr_type==b'tensor_grid' or curr_type==b'tensor<int>' or
+            curr_type==b'table3d'):
+
+            # If the object is a tensor, convert to a table3d
+            # object before plotting
+            if curr_type!=b'table3d':
+                index1=0
+                index2=1
+                if len(args)==1:
+                    kwstring=args[0]
+                if len(args)>=2:
+                    index1=int(args[0])
+                    index2=int(args[1])
+                if len(args)>=3:
+                    kwstring=args[2]
+                if index1+index2!=1 and index1*index2!=0:
+                    print('Indices must be "0 1" or "1 0" in',
+                          'in den-plot.')
+                    return
+                    
+                conv_fn=o2scl_hdf.o2scl_acol_tensor_to_table3d
+                conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
+                conv_fn.restype=ctypes.c_int
+                
+                conv_ret=conv_fn(amp,index1,index2)
+                if conv_ret!=0:
+                    print('Automatic conversion to table3d failed.')
+                    return
+                slice_name="tensor"
+            else:
+                r_slice_name=args[0]
+                g_slice_name=args[1]
+                b_slice_name=args[2]
+                if len(args)>=4:
+                    kwstring=args[3]
+
+            # Now that we are guaranteed to have a table3d
+            # object to use, use that to create the density
+            # plot
+            get_fn=o2scl_hdf.o2scl_acol_get_slice
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr,
+                             int_ptr,double_ptr_ptr,double_ptr_ptr]
+
+            r_slice=ctypes.c_char_p(force_bytes(r_slice_name))
+            nx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            ny=ctypes.c_int(0)
+            ptry=double_ptr()
+            ptrs_r=double_ptr()
+            get_fn(amp,r_slice,ctypes.byref(nx),ctypes.byref(ptrx),
+                   ctypes.byref(ny),ctypes.byref(ptry),
+                   ctypes.byref(ptrs_r))
+            stemp_r=[ptrs_r[i] for i in range(0,nx.value*ny.value)]
+
+            g_slice=ctypes.c_char_p(force_bytes(g_slice_name))
+            nx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            ny=ctypes.c_int(0)
+            ptry=double_ptr()
+            ptrs_g=double_ptr()
+            get_fn(amp,g_slice,ctypes.byref(nx),ctypes.byref(ptrx),
+                   ctypes.byref(ny),ctypes.byref(ptry),
+                   ctypes.byref(ptrs_g))
+            stemp_g=[ptrs_g[i] for i in range(0,nx.value*ny.value)]
+
+            b_slice=ctypes.c_char_p(force_bytes(b_slice_name))
+            nx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            ny=ctypes.c_int(0)
+            ptry=double_ptr()
+            ptrs_b=double_ptr()
+            get_fn(amp,b_slice,ctypes.byref(nx),ctypes.byref(ptrx),
+                   ctypes.byref(ny),ctypes.byref(ptry),
+                   ctypes.byref(ptrs_b))
+            stemp_b=[ptrs_b[i] for i in range(0,nx.value*ny.value)]
+
+            xgrid=[ptrx[i] for i in range(0,nx.value)]
+            ygrid=[ptry[i] for i in range(0,ny.value)]
+            
+            stemp2_r=numpy.array(stemp_r)
+            stemp2_g=numpy.array(stemp_g)
+            stemp2_b=numpy.array(stemp_b)
+            sl_r=stemp2_r.reshape(nx.value,ny.value)
+            sl_g=stemp2_g.reshape(nx.value,ny.value)
+            sl_b=stemp2_b.reshape(nx.value,ny.value)
+            sl_r=sl_r.transpose()
+            sl_g=sl_g.transpose()
+            sl_b=sl_b.transpose()
+            sl_all=numpy.zeros((2000,2000,3))
+            for i in range(0,nx.value):
+                for j in range(0,ny.value):
+                    sl_all[i,j,0]=sl_r[i,j]
+                    sl_all[i,j,1]=sl_g[i,j]
+                    sl_all[i,j,2]=sl_b[i,j]
+
+            # If logz was specified, then manually apply the
+            # log to the data. Alternatively, we should consider
+            # using 'LogNorm' here, as suggested in
+            
+            # If the z range was specified, truncate all values
+            # outside that range (this truncation is done after
+            # the application of the log above)
+            if self.zset==True:
+                for i in range(0,ny.value):
+                    for j in range(0,nx.value):
+                        if sl_r[i][j]>self.zhi:
+                            sl_r[i][j]=self.zhi
+                        elif sl_r[i][j]<self.zlo:
+                            sl_r[i][j]=self.zlo
+                        if sl_g[i][j]>self.zhi:
+                            sl_g[i][j]=self.zhi
+                        elif sl_g[i][j]<self.zlo:
+                            sl_g[i][j]=self.zlo
+                        if sl_b[i][j]>self.zhi:
+                            sl_b[i][j]=self.zhi
+                        elif sl_b[i][j]<self.zlo:
+                            sl_b[i][j]=self.zlo
+
+            if self.canvas_flag==False:
+                self.canvas()
+
+            # The imshow() function doesn't work with a log axis, so we
+            # set the scales back to linear and manually take the log
+            self.axes.set_xscale('linear')
+            self.axes.set_yscale('linear')
+            
+            if self.logx==True:
+                xgrid=[math.log(ptrx[i],10) for i in
+                       range(0,nx.value)]
+            if self.logy==True:
+                ygrid=[math.log(ptry[i],10) for i in
+                       range(0,ny.value)]
+
+            diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
+            mean_x=numpy.mean(diffs_x)
+            std_x=numpy.std(diffs_x)
+            diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
+            mean_y=numpy.mean(diffs_y)
+            std_y=numpy.std(diffs_y)
+            
+            if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
+                print('Warning in o2graph::o2graph_plotter::den_plot():')
+                print('  Nonlinearity of x or y grid is greater than '+
+                      '10^{-4}.')
+                print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
+                      (std_x/mean_x))
+                print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
+                      (std_y/mean_y))
+                print('  The density plot may not be properly scaled.')
+                
+            extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+            extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
+                                       xgrid[nx.value-2])/2
+            extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+            extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
+                                       ygrid[ny.value-2])/2
+                        
+            f=self.axes.imshow
+            if len(kwstring)==0:
+                self.last_image=f(sl_all,
+                                  interpolation='nearest',
+                                  origin='lower',extent=[extent1,extent2,
+                                                         extent3,extent4],
+                                  aspect='auto')
+            else:
+                self.last_image=f(sl_all,
+                                  interpolation='nearest',
+                                  origin='lower',extent=[extent1,extent2,
+                                                         extent3,extent4],
+                                  aspect='auto',
+                                  **string_to_dict(kwstring))
+
+            # The color bar is added later below...
+
+            # End of section for tensor types and table3d
+        else:
+            print("Command 'den-plot-rgb' not supported for type",
+                  curr_type,".")
+            return
+
+        if self.colbar==True:
+            cbar=self.fig.colorbar(self.last_image,ax=self.axes)
+            cbar.ax.tick_params(labelsize=self.font*0.8)
+
     def plot(self,o2scl_hdf,amp,args):
         """
         Plot a two-dimensional set of data
@@ -3717,6 +3930,13 @@ class o2graph_plotter(plot_base):
                         print('Process den-plot.')
 
                     self.den_plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                
+                elif cmd_name=='den-plot-rgb':
+                    
+                    if self.verbose>2:
+                        print('Process den-plot-rgb.')
+
+                    self.den_plot_rgb(o2scl_hdf,amp,strlist[ix+1:ix_next])
                 
                 elif cmd_name=='den-plot-anim':
                     

@@ -412,6 +412,8 @@ extra_list=[
      "z-axis limits are specified, then values larger than the upper limit "+
      "are set equal to the upper limit and values smaller than the lower "+
      "limit are set equal to the lower limit before plotting."],
+    ["table3d","den-plot-rgb","",
+     "<slice_r> <slice_g> <slice_b>",""],
     ["hist","plot","Plot the histogram.","[kwargs]",
      "Plot the histogram weights as a function "+
      "of the bin representative values. "+
