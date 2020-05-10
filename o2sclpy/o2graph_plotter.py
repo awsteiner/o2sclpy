@@ -521,6 +521,7 @@ class o2graph_plotter(plot_base):
                 b_slice_name=args[2]
                 if len(args)>=4:
                     kwstring=args[3]
+            print('here',kwstring)
 
             # Now that we are guaranteed to have a table3d
             # object to use, use that to create the density
