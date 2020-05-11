@@ -521,7 +521,6 @@ class o2graph_plotter(plot_base):
                 b_slice_name=args[2]
                 if len(args)>=4:
                     kwstring=args[3]
-            print('here',kwstring)
 
             # Now that we are guaranteed to have a table3d
             # object to use, use that to create the density
@@ -540,8 +539,25 @@ class o2graph_plotter(plot_base):
             get_fn(amp,r_slice,ctypes.byref(nx),ctypes.byref(ptrx),
                    ctypes.byref(ny),ctypes.byref(ptry),
                    ctypes.byref(ptrs_r))
-            stemp_r=[ptrs_r[i] for i in range(0,nx.value*ny.value)]
 
+            # Allocate the python storage
+            sl_all=numpy.zeros((ny.value,nx.value,3))
+            xgrid=numpy.zeros((nx.value))
+            ygrid=numpy.zeros((ny.value))
+
+            # Copy from the C pointer to the python storage
+            ix=0
+            for i in range(0,nx.value):
+                for j in range(0,ny.value):
+                    sl_all[j,i,0]=ptrs_r[ix]
+                    ix=ix+1
+
+            # Copy the grid
+            for i in range(0,nx.value):
+                xgrid[i]=ptrx[i]
+            for j in range(0,ny.value):
+                ygrid[j]=ptry[j]
+            
             g_slice=ctypes.c_char_p(force_bytes(g_slice_name))
             nx=ctypes.c_int(0)
             ptrx=double_ptr()
@@ -551,8 +567,14 @@ class o2graph_plotter(plot_base):
             get_fn(amp,g_slice,ctypes.byref(nx),ctypes.byref(ptrx),
                    ctypes.byref(ny),ctypes.byref(ptry),
                    ctypes.byref(ptrs_g))
-            stemp_g=[ptrs_g[i] for i in range(0,nx.value*ny.value)]
 
+            # Copy from the C pointer to the python storage
+            ix=0
+            for i in range(0,nx.value):
+                for j in range(0,ny.value):
+                    sl_all[j,i,1]=ptrs_g[ix]
+                    ix=ix+1
+            
             b_slice=ctypes.c_char_p(force_bytes(b_slice_name))
             nx=ctypes.c_int(0)
             ptrx=double_ptr()
@@ -562,27 +584,15 @@ class o2graph_plotter(plot_base):
             get_fn(amp,b_slice,ctypes.byref(nx),ctypes.byref(ptrx),
                    ctypes.byref(ny),ctypes.byref(ptry),
                    ctypes.byref(ptrs_b))
-            stemp_b=[ptrs_b[i] for i in range(0,nx.value*ny.value)]
 
-            xgrid=[ptrx[i] for i in range(0,nx.value)]
-            ygrid=[ptry[i] for i in range(0,ny.value)]
-            
-            stemp2_r=numpy.array(stemp_r)
-            stemp2_g=numpy.array(stemp_g)
-            stemp2_b=numpy.array(stemp_b)
-            sl_r=stemp2_r.reshape(nx.value,ny.value)
-            sl_g=stemp2_g.reshape(nx.value,ny.value)
-            sl_b=stemp2_b.reshape(nx.value,ny.value)
-            sl_r=sl_r.transpose()
-            sl_g=sl_g.transpose()
-            sl_b=sl_b.transpose()
-            sl_all=numpy.zeros((2000,2000,3))
+            # Copy from the C pointer to the python storage
+            ix=0
             for i in range(0,nx.value):
                 for j in range(0,ny.value):
-                    sl_all[i,j,0]=sl_r[i,j]
-                    sl_all[i,j,1]=sl_g[i,j]
-                    sl_all[i,j,2]=sl_b[i,j]
+                    sl_all[j,i,2]=ptrs_b[ix]
+                    ix=ix+1
 
+            
             # If logz was specified, then manually apply the
             # log to the data. Alternatively, we should consider
             # using 'LogNorm' here, as suggested in
@@ -590,21 +600,22 @@ class o2graph_plotter(plot_base):
             # If the z range was specified, truncate all values
             # outside that range (this truncation is done after
             # the application of the log above)
-            if self.zset==True:
-                for i in range(0,ny.value):
-                    for j in range(0,nx.value):
-                        if sl_r[i][j]>self.zhi:
-                            sl_r[i][j]=self.zhi
-                        elif sl_r[i][j]<self.zlo:
-                            sl_r[i][j]=self.zlo
-                        if sl_g[i][j]>self.zhi:
-                            sl_g[i][j]=self.zhi
-                        elif sl_g[i][j]<self.zlo:
-                            sl_g[i][j]=self.zlo
-                        if sl_b[i][j]>self.zhi:
-                            sl_b[i][j]=self.zhi
-                        elif sl_b[i][j]<self.zlo:
-                            sl_b[i][j]=self.zlo
+            
+            # if self.zset==True:
+            #     for i in range(0,ny.value):
+            #         for j in range(0,nx.value):
+            #             if sl_r[i][j]>self.zhi:
+            #                 sl_r[i][j]=self.zhi
+            #             elif sl_r[i][j]<self.zlo:
+            #                 sl_r[i][j]=self.zlo
+            #             if sl_g[i][j]>self.zhi:
+            #                 sl_g[i][j]=self.zhi
+            #             elif sl_g[i][j]<self.zlo:
+            #                 sl_g[i][j]=self.zlo
+            #             if sl_b[i][j]>self.zhi:
+            #                 sl_b[i][j]=self.zhi
+            #             elif sl_b[i][j]<self.zlo:
+            #                 sl_b[i][j]=self.zlo
 
             if self.canvas_flag==False:
                 self.canvas()
