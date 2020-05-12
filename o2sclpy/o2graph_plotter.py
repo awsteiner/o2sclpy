@@ -1366,7 +1366,47 @@ class o2graph_plotter(plot_base):
                     self.axes.hist(xv)
                 else:
                     self.axes.hist(xv,**string_to_dict(args[1]))
-                
+
+        elif curr_type==b'hist':
+                    
+            get_reps_fn=o2scl_hdf.o2scl_acol_get_hist_reps
+            get_reps_fn.argtypes=[ctypes.c_void_p,
+                             int_ptr,double_ptr_ptr]
+                            
+            get_wgts_fn=o2scl_hdf.o2scl_acol_get_hist_wgts
+            get_wgts_fn.argtypes=[ctypes.c_void_p,
+                             int_ptr,double_ptr_ptr]
+                            
+            get_bins_fn=o2scl_hdf.o2scl_acol_get_hist_bins
+            get_bins_fn.argtypes=[ctypes.c_void_p,
+                             int_ptr,double_ptr_ptr]
+                            
+            idx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            get_reps_fn(amp,ctypes.byref(idx),
+                        ctypes.byref(ptrx))
+            xv=[ptrx[i] for i in range(0,idx.value)]
+
+            idy=ctypes.c_int(0)
+            ptry=double_ptr()
+            get_wgts_fn(amp,ctypes.byref(idy),
+                        ctypes.byref(ptry))
+            yv=[ptry[i] for i in range(0,idy.value)]
+
+            idz=ctypes.c_int(0)
+            ptrz=double_ptr()
+            get_bins_fn(amp,ctypes.byref(idz),
+                        ctypes.byref(ptrz))
+            zv=[ptrz[i] for i in range(0,idz.value)]
+            
+            if self.canvas_flag==False:
+                self.canvas()
+            if len(args)<1:
+                self.axes.hist(xv,weights=yv,bins=zv)
+            else:
+                self.axes.hist(xv,weights=yv,bins=zv,
+                               **string_to_dict(args[0]))
+            
             # End of section for 'table' type
         else:
             print("Command 'hist_plot' not supported for type",

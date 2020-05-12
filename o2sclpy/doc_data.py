@@ -405,15 +405,25 @@ extra_list=[
     ["table3d","den-plot","Create a density plot from a table3d object.",
      "<slice>",
      "Creates a density plot from the specified "+
-     "slice. Logarithmic x- or "+
-     "y-axes are handled by taking the base 10 log of the x- or y-grids "+
-     "specified in the table3d object before plotting. A z-axis density "+
-     "legend is print on the RHS if colbar is set to True before plotting. If "+
-     "z-axis limits are specified, then values larger than the upper limit "+
+     "slice. A z-axis density legend "+
+     "is print on the RHS if colbar is set to True before plotting. "+
+     "If z-axis limits are specified, then values larger than the upper limit "+
      "are set equal to the upper limit and values smaller than the lower "+
-     "limit are set equal to the lower limit before plotting."],
-    ["table3d","den-plot-rgb","",
-     "<slice_r> <slice_g> <slice_b>",""],
+     "limit are set equal to the lower limit before plotting. The python "+
+     "function imshow() is used, unless 'pcm=True' is specified, in "+
+     "which case the pcolormesh() function is used instead. When "+
+     "'pcm=False', logarithmic scales are handled by "+
+     "taking the base 10 log of the x- or y-grids "+
+     "specified in the table3d object before plotting. When 'pcm=True', "
+     "logarithmic axes can be handled automatically. The imshow() "+
+     "function presumes a uniform linear or logarithmic x- and y-axis "+
+     "grid, and the den-plot function will output a warning if this "+
+     "is not the case. The pcolormesh() function can handle arbitrary "+
+     "x and y-axis grids. Some useful kwargs are cmap, interpolation "+
+     "(for imshow), alpha, vmin, and vmax."],
+    ["table3d","den-plot-rgb","Create a (R,G,B) density plot from a table3d.",
+     "<slice_r> <slice_g> <slice_b>","Create a density plot from "+
+     "the three specified slices. This command uses imshow()."],
     ["hist","plot","Plot the histogram.","[kwargs]",
      "Plot the histogram weights as a function "+
      "of the bin representative values. "+
