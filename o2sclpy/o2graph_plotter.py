@@ -2260,7 +2260,7 @@ class o2graph_plotter(plot_base):
                 tm=dct['top_margin']
                 bm=dct['bottom_margin']
                 if self.canvas_flag==False:
-                    if fontsize not in dct.keys():
+                    if 'fontsize' not in dct.keys():
                         dct['fontsize']=self.font
                     (self.fig,self.axes)=default_plot(**dct)
                     # Plot limits
