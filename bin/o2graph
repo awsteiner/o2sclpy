@@ -80,7 +80,7 @@ if platform.system()=='Darwin':
   if (o2scl_cpplib=='' and os.getenv('O2SCL_CPPLIB') is not None and
       force_bytes2(os.getenv('O2SCL_CPPLIB'))!=b'None'):
     o2scl_cpplib=os.getenv('O2SCL_CPPLIB')
-    print('Set o2scl-cpplib to',o2scl_cpplib)
+    #print('Set o2scl-cpplib to',o2scl_cpplib)
 
   if o2scl_cpplib!='':
     systcpp=ctypes.CDLL(o2scl_cpplib,mode=ctypes.RTLD_GLOBAL)
@@ -91,7 +91,7 @@ if platform.system()=='Darwin':
   if (o2scl_libdir=='' and os.getenv('O2SCL_LIB') is not None and
       force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
     o2scl_libdir=os.getenv('O2SCL_LIB')
-    print('Set o2scl-libdir to',o2scl_libdir)
+    #print('Set o2scl-libdir to',o2scl_libdir)
     
   if o2scl_libdir!='':
     o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.dylib',
@@ -109,7 +109,7 @@ else:
   if (o2scl_libdir=='' and os.getenv('O2SCL_LIB') is not None and
       force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
     o2scl_libdir=os.getenv('O2SCL_LIB')
-    print('Set o2scl-libdir to',o2scl_libdir)
+    #print('Set o2scl-libdir to',o2scl_libdir)
 
   if o2scl_libdir=='':
     o2scl=ctypes.CDLL(find_library("o2scl"),mode=ctypes.RTLD_GLOBAL)
