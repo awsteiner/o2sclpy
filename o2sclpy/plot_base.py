@@ -1639,6 +1639,19 @@ class plot_base:
         # End of function plot_base::selax()
         return
 
+    def inset(self,left,bottom,width,height,**kwargs):
+        """
+        Useful kwargs:
+        visible, xlabel, xscale, xticks, position, projection, 
+        polar?, alpha, ...
+
+        I think to get labels on the RHS you have to modify
+        the ylabel property?
+        """
+        axis_temp=self.fig.add_axes([left,bottom,width,height])
+        self.axis_list.append(axis_temp)
+        self.axes=axis_temp
+    
     def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):
         """
         Add a new colorbar or a colorbar from the most recently created

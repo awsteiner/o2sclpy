@@ -4113,6 +4113,25 @@ class o2graph_plotter(plot_base):
                                      float(eval(strlist[ix+4])),
                                      **string_to_dict(strlist[ix+5]))
                         
+                elif cmd_name=='inset':
+                    
+                    if self.verbose>5:
+                        print('Process inset.')
+                        
+                    if ix_next-ix<5:
+                        print('Not enough parameters for inset option.')
+                    elif ix_next-ix<6:
+                        self.inset(float(eval(strlist[ix+1])),
+                                   float(eval(strlist[ix+2])),
+                                   float(eval(strlist[ix+3])),
+                                   float(eval(strlist[ix+4])))
+                    else:
+                        self.inset(float(eval(strlist[ix+1])),
+                                   float(eval(strlist[ix+2])),
+                                   float(eval(strlist[ix+3])),
+                                   float(eval(strlist[ix+4])),
+                                   **string_to_dict(strlist[ix+5]))
+                        
                 elif cmd_name=='subadj':
                     
                     if self.verbose>2:
