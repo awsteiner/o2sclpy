@@ -342,6 +342,14 @@ def cmap_list_func():
         for i in range (0,len(str_list)):
             print(str_list[i])
         print(' ')
+    for category, cmap_list in new_cmaps:
+        list2=''
+        for name in cmap_list:
+            list2+=name+' '
+        str_list=textwrap.wrap(category+': '+list2,79)
+        for i in range (0,len(str_list)):
+            print(str_list[i])
+        print(' ')
     print('Remember that colormaps can all be',
           'reversed by using a "_r" suffix.')
     print(' ')

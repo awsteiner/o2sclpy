@@ -53,25 +53,37 @@ class todo_list:
     Todo list:
 
     .. todo:: default_plot() has a fontsize argument. Should this
-    be different than the font parameter in the plot_base class or should
-    all calls to default_plot inside plot_base set fontsize=self.font?
+       be different than the font parameter in the plot_base class or should
+       all calls to default_plot inside plot_base set fontsize=self.font?
+
     .. todo:: create a vector field command in yt
+
     .. todo:: allow the creation of colormaps on the fly? 
+
     .. todo:: add map to colormap option for yt tf's
+
     .. todo:: Create a system of protected variables and functions using
        underscores and also create a __repr__() object
+
     .. todo:: Create a plot_base_yt class in between plot_base
        and o2graph_plotter?
+
     .. todo:: Ensure yt uses self.font for text objects?
+
     .. todo:: Finish den-plot-anim for a tensor_grid objects
+
     .. todo:: plot-set for a table3d object to create 
        a sequence of curves for each column or row, or maybe 
        do this as a 'mult-vector-spec'?
+
     .. todo:: Simplify some of the larger functions like 
        o2graph_plotter::plot(), possibly by creating a separate
        function for each type?
+
     .. todo:: Ensure the 'clf' command clears the yt objects?
+
     .. todo:: More yt-path options
+
     .. todo:: Anti-alias text objects in yt (also anti-alias line 
        sources?)
     

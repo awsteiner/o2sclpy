@@ -1,9 +1,11 @@
+.. _o2sclpy:
+
 O\ :sub:`2`\ sclpy: v0.925a1
 ============================
 
-O\ :sub:`2`\ sclpy: A set of python classes for use with the
-O\ :sub:`2`\ scl C++ library (separately documented
-at <https://neutronstars.utk.edu/code/o2scl>)
+O\ :sub:`2`\ sclpy: A high-level plotting script for quick
+``matplotlib`` plots and a set of python classes for use with the
+:ref:`O2scl <o2scl>` C++ library.
 
 .. warning:: This python library is experimental and still under
 	     development.

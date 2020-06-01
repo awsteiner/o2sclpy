@@ -37,6 +37,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.coverage',
               'sphinx.ext.mathjax',
               'sphinx.ext.ifconfig',
+              'sphinx.ext.intersphinx',
               'sphinx.ext.autosectionlabel']
 
 # Add any paths that contain templates here, relative to this directory.
@@ -82,6 +83,13 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+intersphinx_mapping = {'o2scl':
+                       ('https://neutronstars.utk.edu/code/o2scl-dev/html/',
+                        '../../../wcs/o2scl/doc/o2scl/sphinx/build/html/objects.inv'),
+                       'o2sclp':
+                       ('https://neutronstars.utk.edu/code/o2scl-dev/part/html/',
+                        '../../../wcs/o2scl/doc/o2scl/part/sphinx/build/html/objects.inv')}
 
 
 # -- Options for HTML output ----------------------------------------------

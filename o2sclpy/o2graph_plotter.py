@@ -2516,8 +2516,6 @@ class o2graph_plotter(plot_base):
             finished=True
 
         if (len(args)==1 or len(args)==2) and args[0]=='cmaps-plot':
-            if self.new_cmaps_defined==False:
-                self.new_cmaps()
             if len(args)==2:
                 cmaps_plot(args[1])
             else:
@@ -4339,10 +4337,6 @@ class o2graph_plotter(plot_base):
                 elif cmd_name=='backend':
                     if self.verbose>2:
                         print('Process backend in __init__.py.')
-                elif cmd_name=='new-cmaps':
-                    if self.verbose>2:
-                        print('Process reds2.')
-                    self.new_cmaps()
                 else:
                     if self.verbose>2:
                         print('Process acol command '+cmd_name+'.')
