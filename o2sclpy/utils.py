@@ -73,15 +73,8 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     ax=plot.axes([left_margin,bottom_margin,
                   1.0-left_margin-right_margin,1.0-top_margin-bottom_margin])
     ax.minorticks_on()
-    if ticks_in:
-        ax.tick_params('both',length=12,width=1,which='major',direction='in')
-        ax.tick_params('both',length=5,width=1,which='minor',direction='in')
-    else:
-        ax.tick_params('both',length=12,width=1,which='major')
-        ax.tick_params('both',length=5,width=1,which='minor')
-    if rt_ticks:
-        ax.tick_params('x',which='both',top=True,bottom=True)
-        ax.tick_params('y',which='both',left=True,right=True)
+    ax.tick_params('both',length=12,width=1,which='major')
+    ax.tick_params('both',length=5,width=1,which='minor')
     ax.tick_params(labelsize=fontsize*0.8)
     plot.grid(False)
     return (fig,ax)

@@ -1648,7 +1648,17 @@ class plot_base:
         and many other axis kwargs (which may be difficult to 
         modify in this simplified form)
         """
-        axis_temp=self.fig.add_axes([left,bottom,width,height])
+
+        # Create a unique axes label i.e. axes1
+        axis_temp=self.fig.add_axes([left,bottom,width,height],
+                                    label='axes'+str(len(self.axis_list)))
+        
+        # the same defaults as default_plot()
+        axis_temp.minorticks_on()
+        axis_temp.tick_params('both',length=12,width=1,which='major')
+        axis_temp.tick_params('both',length=5,width=1,which='minor')
+        axis_temp.tick_params(labelsize=self.font*0.8)
+        
         self.axis_list.append(axis_temp)
         self.axes=axis_temp
     
@@ -1688,12 +1698,41 @@ class plot_base:
         if 'alpha' in kwargs:
             self.axes.patch.set_alpha(float(kwargs['alpha']))
 
-        if 'y_right' in kwargs and kwargs['y_right']=='True':
-            self.axes.get_yaxis().tick_right()
+        if 'y_loc' in kwargs:
+            if kwargs['y_loc']=='rl' or kwargs['y_loc']=='lr':
+                self.axes.tick_params('y',which='both',
+                                      right=True,left=True,labelright=True,
+                                      labelleft=True)
+            elif kwargs['y_loc']=='l':
+                self.axes.tick_params('y',which='both',left=True,
+                                      labelleft=True,right=False,
+                                      labelright=False)
+            elif kwargs['y_loc']=='r':
+                self.axes.tick_params('y',which='both',right=True,
+                                      labelright=True,left=False,
+                                      labelleft=False)
             
-        if 'x_top' in kwargs and kwargs['x_top']=='True':
-            self.axes.get_xaxis().tick_top()
+        if 'x_loc' in kwargs:
+            if kwargs['y_loc']=='bt' or kwargs['y_loc']=='tb':
+                self.axes.tick_params('x',which='both',bottom=True,top=True,
+                                      labelbottom=True,labeltop=True)
+            elif kwargs['x_loc']=='t':
+                self.axes.tick_params('x',which='both',top=True,
+                                      labeltop=True,bottom=False,
+                                      labelbottom=False)
+            elif kwargs['x_loc']=='b':
+                self.axes.tick_params('x',which='both',bottom=True,
+                                      labelbottom=True,top=False,
+                                      labeltop=False)
             
+        if 'x_tick_dir' in kwargs:
+            self.axes.tick_params('x',which='major',
+                                  direction=kwargs['x_tick_dir'])
+                
+        if 'y_tick_dir' in kwargs:
+            self.axes.tick_params('y',which='major',
+                                  direction=kwargs['y_tick_dir'])
+                
         return
     
     def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):
