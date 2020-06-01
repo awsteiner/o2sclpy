@@ -1641,16 +1641,60 @@ class plot_base:
 
     def inset(self,left,bottom,width,height,**kwargs):
         """
-        Useful kwargs:
-        visible, xlabel, xscale, xticks, position, projection, 
-        polar?, alpha, ...
+        Create a new axis inside the current figure?
 
-        I think to get labels on the RHS you have to modify
-        the ylabel property?
+        Useful kwargs are projection (None, 'aitoff', 'hammer', 'lambert',
+        'mollweide', 'polar', 'rectilinear', str}) and polar (T/F)
+        and many other axis kwargs (which may be difficult to 
+        modify in this simplified form)
         """
         axis_temp=self.fig.add_axes([left,bottom,width,height])
         self.axis_list.append(axis_temp)
         self.axes=axis_temp
+    
+    def modax(self,**kwargs):
+        """
+        Modify the current axes properties
+        """
+        
+        if 'x_major_loc' in kwargs:
+            print('here',kwargs['x_major_loc'])
+            self.axes.get_xaxis().set_major_locator(plot.MultipleLocator
+                                        (float(kwargs['x_major_loc'])))
+        if 'x_minor_loc' in kwargs:
+            print('here',kwargs['x_minor_loc'])
+            self.axes.get_xaxis().set_minor_locator(plot.MultipleLocator
+                                        (float(kwargs['x_minor_loc'])))
+            
+        if 'y_major_loc' in kwargs:
+            print('here',kwargs['y_major_loc'])
+            self.axes.get_yaxis().set_major_locator(plot.MultipleLocator
+                                        (float(kwargs['y_major_loc'])))
+        if 'y_minor_loc' in kwargs:
+            print('here',kwargs['y_minor_loc'])
+            self.axes.get_yaxis().set_minor_locator(plot.MultipleLocator
+                                        (float(kwargs['y_minor_loc'])))
+            
+        if 'x_visible' in kwargs:
+            if kwargs['x_visible']=='False':
+                self.axes.get_xaxis().set_visible(False)
+        if 'y_visible' in kwargs:
+            if kwargs['y_visible']=='False':
+                self.axes.get_yaxis().set_visible(False)
+                
+        if 'labelsize' in kwargs:
+            self.axes.tick_params(labelsize=float(kwargs['labelsize']))
+                
+        if 'alpha' in kwargs:
+            self.axes.patch.set_alpha(float(kwargs['alpha']))
+
+        if 'y_right' in kwargs and kwargs['y_right']=='True':
+            self.axes.get_yaxis().tick_right()
+            
+        if 'x_top' in kwargs and kwargs['x_top']=='True':
+            self.axes.get_xaxis().tick_top()
+            
+        return
     
     def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):
         """

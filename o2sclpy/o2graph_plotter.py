@@ -46,6 +46,7 @@ from o2sclpy.plot_base import plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
 from o2sclpy.plot_info import colors_plot, color_list
+from o2sclpy import version
 
 class o2graph_plotter(plot_base):
     """
@@ -1901,7 +1902,8 @@ class o2graph_plotter(plot_base):
         # Get current type
         cmd_name=b'o2graph'
         cmd_desc=(b'o2graph: A data viewing and '+
-                  b'processing program for O2scl.\n')
+                  b'processing program for O2scl.\n  Version: '+
+                  force_bytes(version)+b'\n')
         env_var=b'O2GRAPH_DEFAULTS'
         names_fn(amp,len(cmd_name),ctypes.c_char_p(cmd_name),
                  len(cmd_desc),ctypes.c_char_p(cmd_desc),
@@ -3916,15 +3918,6 @@ class o2graph_plotter(plot_base):
 
                     self.help_func(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
-                elif cmd_name=='version':
-                    
-                    if self.verbose>2:
-                        print('Process version.')
-
-                    print('o2graph: A data table plotting and',
-                          'processing program for O2scl.')
-                    print(' Version '+o2sclpy.version+'.')
-
                 elif cmd_name=='plot':
                     
                     if self.verbose>2:
@@ -4131,6 +4124,16 @@ class o2graph_plotter(plot_base):
                                    float(eval(strlist[ix+3])),
                                    float(eval(strlist[ix+4])),
                                    **string_to_dict(strlist[ix+5]))
+                        
+                elif cmd_name=='modax':
+                    
+                    if self.verbose>1:
+                        print('Process modax.')
+                        
+                    if ix_next-ix<2:
+                        print('Not enough parameters for inset option.')
+                    else:
+                        self.modax(**string_to_dict(strlist[ix+1]))
                         
                 elif cmd_name=='subadj':
                     

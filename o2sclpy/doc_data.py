@@ -200,14 +200,14 @@ base_list=[
      "Set 'xlo' and 'xhi' to the specified limits, "+
      "and set 'xset' to true. If a plotting canvas is currently "+
      "open, then "+
-     "the x-limits on that plot are modified. Future plots are also "+
+     "the x-limits on the current axis are modified. Future plots are also "+
      "set with the specified x-limits."],
     ["xtitle","Add x title to plot (or subplot).","",""],
     ["ylimits","Set the y-axis limits.","<low> <high>",
      "Set 'ylo' and 'yhi' to the specified limits, "+
      "and set 'yset' to true. If a plotting canvas is currently "+
      "open, then "+
-     "the y-limits on that plot are modified. Future plots are also "+
+     "the y-limits on the current axis are modified. Future plots are also "+
      "set with the specified y-limits."],
     ["ytitle","Add y title to plot (or subplot).","",""],
     ["yt-arrow","Draw an arrow in the yt volume.",
