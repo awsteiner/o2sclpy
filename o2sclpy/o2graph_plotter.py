@@ -4335,10 +4335,6 @@ class o2graph_plotter(plot_base):
                                      strlist[ix+5],
                                      **string_to_dict(strlist[ix+6]))
                         
-                elif cmd_name=='move-labels':
-                    if self.verbose>2:
-                        print('Process move-labels.')
-                    self.move_labels()
                 elif cmd_name=='show':
                     if self.verbose>2:
                         print('Process show.')

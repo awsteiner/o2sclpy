@@ -1803,19 +1803,19 @@ class plot_base:
         # End of function plot_base::canvas()
         return
 
-    def move_labels(self):
-        """
-        Move tick labels
-        """
-        for label in self.axes.get_xticklabels():
-            t=label.get_position()
-            t2=t[0],t[1]-0.01
-            label.set_position(t2)
-            label.set_fontsize(16)
-        for label in self.axes.get_yticklabels():
-            t=label.get_position()
-            t2=t[0]-0.01,t[1]
-            label.set_position(t2)
-            label.set_fontsize(16)
-        # End of function plot_base::move_labels()
-        return
+    # def move_labels(self):
+    #     """
+    #     Move tick labels
+    #     """
+    #     for label in self.axes.get_xticklabels():
+    #         t=label.get_position()
+    #         t2=t[0],t[1]-0.01
+    #         label.set_position(t2)
+    #         label.set_fontsize(16)
+    #     for label in self.axes.get_yticklabels():
+    #         t=label.get_position()
+    #         t2=t[0]-0.01,t[1]
+    #         label.set_position(t2)
+    #         label.set_fontsize(16)
+    #     # End of function plot_base::move_labels()
+    #     return

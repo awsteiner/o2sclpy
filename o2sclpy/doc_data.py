@@ -104,7 +104,10 @@ base_list=[
      "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
     ["image","Plot an image.","<file>",
      "Read a .png file, create a plot, and then call plot.show()."],
-    ["inset","Add an inset (unfinished).","",""],
+    ["inset","Add a new set of axes (e.g. for an inset).",
+     "<left> <bottom> <width> <height> [kwargs]",
+     ("This command creates a new set of axes, adds the new axies "+
+      "to the list of axes, and sets the new axes as the current.")],
     ["line","Plot a line.","<x1> <y1> <x2> <y2> [kwargs]",
      "Plot a line from (x1,y1) to (xy,y2). Some useful "+
      "kwargs are color (c), dashes, linestyle (ls), linewidth (lw), "+
@@ -112,7 +115,21 @@ base_list=[
      "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
      "(ms). For example: o2graph -line 0.05 0.05 0.95 0.95 "+
      "lw=0,marker='+' -show"],
-    ["move-labels","Move the labels.","",""],
+    ["modax","Modify current axes properties.","[kwargs]",
+     ("kwarg       Values       Description\n"+
+      "-------------------------------------------------------------------\n"+
+      "alpha       float>0      alpha value for region inside axes\n"+
+      "labelsize   float>0      font size for labels\n"+
+      "x_loc       b,t,tb       placement of x-axis (bottom, top, or both)\n"+
+      "x_major_loc float>0      linear increment for x-axis major ticks\n"+
+      "x_minor_loc float>0      linear increment for x-axis minor ticks\n"+
+      "x_tick_dir  in,out,inout direction of x-axis ticks\n"+
+      "x_visible   T/F          set x-axis visible or invisible\n"+
+      "y_loc       l,r,lr       placement of y-axis (left, right, or both)\n"+
+      "y_major_loc float>0      linear increment for x-axis major ticks\n"+
+      "y_minor_loc float>0      linear increment for x-axis minor ticks\n"+
+      "y_tick_dir  in,out,inout direction of y-axis ticks\n"+
+      "y_visible   T/F          set y-axis visible or invisible\n")],
     ["new-cmaps","Define new color maps.","",
      "Define new color maps, 'jet2', 'pastel2' "+
      "'reds2', 'greens2', and 'blues2'."],
