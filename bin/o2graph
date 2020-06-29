@@ -30,6 +30,7 @@ import numpy
 
 o2scl_libdir=''
 o2scl_cpplib=''
+o2scl_addl_libs=''
 backend=''
 
 def force_bytes2(obj):
@@ -104,12 +105,20 @@ if platform.system()=='Darwin':
 
 else:
 
+  print('here')
   stdcpp=ctypes.CDLL(find_library("stdc++"),mode=ctypes.RTLD_GLOBAL)
+  print(stdcpp)
   
+  if (o2scl_addl_libs!='' or os.getenv('O2SCL_ADDL_LIBS') is not None):
+    if o2scl_addl_libs=='':
+      o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS')
+    print('Loading ',o2scl_addl_libs)
+    o2scl_addl=ctypes.CDLL(o2scl_addl_libs,mode=ctypes.RTLD_GLOBAL)
+    
   if (o2scl_libdir=='' and os.getenv('O2SCL_LIB') is not None and
       force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
     o2scl_libdir=os.getenv('O2SCL_LIB')
-    #print('Set o2scl-libdir to',o2scl_libdir)
+    print('Set o2scl-libdir to',o2scl_libdir)
 
   if o2scl_libdir=='':
     o2scl=ctypes.CDLL(find_library("o2scl"),mode=ctypes.RTLD_GLOBAL)
@@ -119,7 +128,7 @@ else:
     o2scl=ctypes.CDLL(o2scl_libdir+'/libo2scl.so',mode=ctypes.RTLD_GLOBAL)
     o2scl_hdf=ctypes.CDLL(o2scl_libdir+'/libo2scl_hdf.so',
                           mode=ctypes.RTLD_GLOBAL)
-    
+
 if backend!='':
   import matplotlib
   matplotlib.use(backend)
