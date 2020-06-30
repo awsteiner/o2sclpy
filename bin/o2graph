@@ -143,10 +143,12 @@ if platform.system()=='Darwin':
                                           mode=ctypes.RTLD_GLOBAL))
         if debug_first_pass:
             print('Finished loading additional libraries.')
-    
-    if (o2scl_lib_dir=='' and os.getenv('O2SCL_LIB_DIR') is not None and
-        force_bytes2(os.getenv('O2SCL_LIB_DIR'))!=b'None'):
-        o2scl_lib_dir=os.getenv('O2SCL_LIB_DIR')
+
+    # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
+    # the former is a more common notation for library directories
+    if (o2scl_lib_dir=='' and os.getenv('O2SCL_LIB') is not None and
+        force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
+        o2scl_lib_dir=os.getenv('O2SCL_LIB')
         if debug_first_pass:
             print('Set o2scl_lib_dir from environment variable to\n  ',
                   o2scl_lib_dir)
@@ -195,9 +197,11 @@ else:
         if debug_first_pass:
             print('Finished loading additional libraries.')
     
-    if (o2scl_lib_dir=='' and os.getenv('O2SCL_LIB_DIR') is not None and
-        force_bytes2(os.getenv('O2SCL_LIB_DIR'))!=b'None'):
-        o2scl_lib_dir=os.getenv('O2SCL_LIB_DIR')
+    # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
+    # the former is a more common notation for library directories
+    if (o2scl_lib_dir=='' and os.getenv('O2SCL_LIB') is not None and
+        force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
+        o2scl_lib_dir=os.getenv('O2SCL_LIB')
         if debug_first_pass:
             print('Set o2scl_lib_dir from environment variable to\n  ',
                   o2scl_lib_dir)
