@@ -367,7 +367,7 @@ class o2graph_plotter(plot_base):
                 extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
                 extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
                                            ygrid[ny.value-2])/2
-                        
+
                 f=self.axes.imshow
                 if len(kwstring)==0:
                     self.last_image=f(sl,interpolation='nearest',
@@ -380,6 +380,14 @@ class o2graph_plotter(plot_base):
                                                              extent3,extent4],
                                       aspect='auto',
                                       **string_to_dict(kwstring))
+
+                # AWS 7/1/2020: I'm not sure why imshow() is now
+                # apparently mangling the minor tick settings. This
+                # restores them. 
+                self.axes.minorticks_on()
+                self.axes.tick_params('both',length=12,width=1,which='major')
+                self.axes.tick_params('both',length=5,width=1,which='minor')
+                self.axes.tick_params(labelsize=self.font*0.8)
 
             # The color bar is added later below...
 
