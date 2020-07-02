@@ -174,7 +174,11 @@ class plot_base:
     """
 
     # Yt settings modifiable by get and set
-    
+
+    yt_filter=''
+    """
+    Filter for yt images
+    """
     yt_resolution=(512,512)
     """
     Resolution for yt rendering (default (512,512))
@@ -859,6 +863,8 @@ class plot_base:
             # We leave the width as a string so we can parse
             # it later
             self.yt_width=value
+        elif name=='yt_filter':
+            self.yt_filter=value
         elif name=='yt_path':
             self.yt_path=value
         else:

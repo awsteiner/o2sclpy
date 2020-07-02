@@ -1869,6 +1869,8 @@ class o2graph_plotter(plot_base):
         print('\nyt-related settings:')
         print(' ')
         for line in yt_param_list:
+            if line[0]=='yt_filter':
+                print(line[0]+' '+self.yt_filter)
             if line[0]=='yt_focus':
                 print(line[0]+' '+self.yt_focus)
             if line[0]=='yt_position':
@@ -3445,6 +3447,17 @@ class o2graph_plotter(plot_base):
                       'with filename',fname)
                 self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
                 
+                if self.yt_filter!='':
+                    print('Found filter')
+                    cmd=self.yt_filter
+                    cmd=cmd.replace('%i',fname)
+                    cmd=cmd.replace('%o','/tmp/yt_filtered.png')
+                    print('Running filter command:\n  ',cmd)
+                    os.system(cmd)
+                    print('Moving file back:',
+                          'mv /tmp/yt_filtered.png '+fname)
+                    os.system('mv /tmp/yt_filtered.png '+fname)
+                
             else:
 
                 # No animation, but we have some annotations so
@@ -3453,7 +3466,18 @@ class o2graph_plotter(plot_base):
                 print('o2graph:yt-render: yt_save_annotate()',
                       'with filename',fname)
                 self.yt_save_annotate(o2scl_hdf,amp,fname);
-            
+
+                if self.yt_filter!='':
+                    print('Found filter')
+                    cmd=self.yt_filter
+                    cmd=cmd.replace('%i',fname)
+                    cmd=cmd.replace('%o','/tmp/yt_filtered.png')
+                    print('Running filter command:\n  ',cmd)
+                    os.system(cmd)
+                    print('Moving file back:',
+                          'mv /tmp/yt_filtered.png '+fname)
+                    os.system('mv /tmp/yt_filtered.png '+fname)
+                
         else:
 
             # Setup destination filename
@@ -3480,6 +3504,17 @@ class o2graph_plotter(plot_base):
             i_frame=0
             fname2=self._make_fname(prefix,suffix,i_frame,n_frames)
             self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
+
+            if self.yt_filter!='':
+                print('Found filter')
+                cmd=self.yt_filter
+                cmd=cmd.replace('%i',fname2)
+                cmd=cmd.replace('%o','/tmp/yt_filtered.png')
+                print('Running filter command:\n  ',cmd)
+                os.system(cmd)
+                print('Moving file back:',
+                      'mv /tmp/yt_filtered.png '+fname2)
+                os.system('mv /tmp/yt_filtered.png '+fname2)
             
             for ip in range(0,len(self.yt_path)):
             
@@ -3542,6 +3577,18 @@ class o2graph_plotter(plot_base):
                                                 i_frame,n_frames)
                         self.yt_scene.save(fname2,
                                            sigma_clip=self.yt_sigma_clip)
+                        
+                        if self.yt_filter!='':
+                            print('Found filter')
+                            cmd=self.yt_filter
+                            cmd=cmd.replace('%i',fname2)
+                            cmd=cmd.replace('%o','/tmp/yt_filtered.png')
+                            print('Running filter command:\n  ',cmd)
+                            os.system(cmd)
+                            print('Moving file back:',
+                                  'mv /tmp/yt_filtered.png '+fname2)
+                            os.system('mv /tmp/yt_filtered.png '+fname2)
+                    
                         # End of 'for ifr in range(0,int(self.yt_path...'
                     
                     # Restore position array
@@ -3585,6 +3632,18 @@ class o2graph_plotter(plot_base):
                                                 i_frame,n_frames)
                         self.yt_scene.save(fname2,
                                            sigma_clip=self.yt_sigma_clip)
+                        
+                        if self.yt_filter!='':
+                            print('Found filter')
+                            cmd=self.yt_filter
+                            cmd=cmd.replace('%i',fname2)
+                            cmd=cmd.replace('%o','/tmp/yt_filtered.png')
+                            print('Running filter command:\n  ',cmd)
+                            os.system(cmd)
+                            print('Moving file back:',
+                                  'mv /tmp/yt_filtered.png '+fname2)
+                            os.system('mv /tmp/yt_filtered.png '+fname2)
+                            
                         # End of 'for if in range(0,self.yt_path[ip][1])'
                     
                     # End of loop 'if self.yt_path[ip][0]=='zoom''

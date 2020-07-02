@@ -588,6 +588,7 @@ A list of 2-element entries, name and description
 """
 
 yt_param_list=[
+    ["yt_filter","Filter for yt-generated images (default '')"],
     ["yt_focus","The camera focus (default is the center of the volume)."],
     ["yt_position","The camera position "+
      "(default is '[1.5,0.6,0.7] internal')."],
