@@ -282,6 +282,19 @@ base_list=[
      "set to the maximum of x1 and x2. Similarly for y and z. If "+
      "a yt volume has not yet been constructed, then the default "+
      "volume will be created."],
+    ["yt-path","Add a path to the yt animation.",
+     "<type> <number of frames> <other parameters>",
+     "This adds a path to the yt animation. To rotate the camera around "+
+     "the z-axis, use 'yaw' <n_frames> "+
+     "<angle>, where angle is a fraction of a full rotation. To zoom "+
+     "the camera, use 'zoom' "+
+     "<n_frames> <factor> ,where factor is the total zoom factor to "+
+     "apply over all n_frames. To move the camera along a line, "+
+     "use 'move' <n_frames> "+
+     "<[dest_x,dest_y,dest_z]> <'internal' or 'user'>, where the third "+
+     "argument is the destination in either the internal or user-specified "+
+     "coordinate system. Executing 'yt-path reset' resets the yt "+
+     "animation path to an empty list (for no animation)."],
     ["yt-render","Render the yt volume visualization.",
      "<filename or pattern> [movie output filename]",
      "Perform the volume rendering. If yt_path is empty, then "+
@@ -595,7 +608,6 @@ yt_param_list=[
     ["yt_north","The camera north vector (default [0.0,0.0,1.0])."],
     ["yt_width","The camera width relative to the domain volume< "+
      "(default [1.5,1.5,1.5])."],
-    ["yt_path","The animation path (default '')."],
     ["yt_resolution","The rendering resolution (default (512,512))."],
     ["yt_sigma_clip","Sigma clipping parameter (default 4.0)."]
 ]

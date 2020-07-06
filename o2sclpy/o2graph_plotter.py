@@ -3353,6 +3353,8 @@ class o2graph_plotter(plot_base):
         Create vectors (pos,foc,nor,wid) from the user settings in
         yt_position, yt_focus, yt_north and yt_width. This function is
         used in yt_render to keep track of the camera properties.
+        The output vectors are always created in the internal 
+        coordinate system.
         """
         
         # Create position array
@@ -3418,6 +3420,24 @@ class o2graph_plotter(plot_base):
                  eval(self.yt_width)[2]]
             
         return (pos,foc,nor,wid)
+
+    def filter_image(self,fname):
+        """ 
+        If a filter has been defined, apply that filter to the image
+        stored in file ``fname``. This function is used in yt_render()
+        to filter the images before combining them into a mp4.
+        """
+        if self.yt_filter!='':
+            print('Found filter')
+            cmd=self.yt_filter
+            cmd=cmd.replace('%i',fname)
+            cmd=cmd.replace('%o','/tmp/yt_filtered.png')
+            print('Running filter command:\n  ',cmd)
+            os.system(cmd)
+            print('Moving file back:',
+                  'mv /tmp/yt_filtered.png '+fname)
+            os.system('mv /tmp/yt_filtered.png '+fname)
+        return
     
     def yt_render(self,o2scl_hdf,amp,fname,mov_fname=''):
         """
@@ -3446,17 +3466,7 @@ class o2graph_plotter(plot_base):
                 print('o2graph:yt-render: Calling yt_scene.save()',
                       'with filename',fname)
                 self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
-                
-                if self.yt_filter!='':
-                    print('Found filter')
-                    cmd=self.yt_filter
-                    cmd=cmd.replace('%i',fname)
-                    cmd=cmd.replace('%o','/tmp/yt_filtered.png')
-                    print('Running filter command:\n  ',cmd)
-                    os.system(cmd)
-                    print('Moving file back:',
-                          'mv /tmp/yt_filtered.png '+fname)
-                    os.system('mv /tmp/yt_filtered.png '+fname)
+                self.filter_image(fname)
                 
             else:
 
@@ -3466,18 +3476,8 @@ class o2graph_plotter(plot_base):
                 print('o2graph:yt-render: yt_save_annotate()',
                       'with filename',fname)
                 self.yt_save_annotate(o2scl_hdf,amp,fname);
+                self.filter_image(fname)
 
-                if self.yt_filter!='':
-                    print('Found filter')
-                    cmd=self.yt_filter
-                    cmd=cmd.replace('%i',fname)
-                    cmd=cmd.replace('%o','/tmp/yt_filtered.png')
-                    print('Running filter command:\n  ',cmd)
-                    os.system(cmd)
-                    print('Moving file back:',
-                          'mv /tmp/yt_filtered.png '+fname)
-                    os.system('mv /tmp/yt_filtered.png '+fname)
-                
         else:
 
             # Setup destination filename
@@ -3504,17 +3504,7 @@ class o2graph_plotter(plot_base):
             i_frame=0
             fname2=self._make_fname(prefix,suffix,i_frame,n_frames)
             self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
-
-            if self.yt_filter!='':
-                print('Found filter')
-                cmd=self.yt_filter
-                cmd=cmd.replace('%i',fname2)
-                cmd=cmd.replace('%o','/tmp/yt_filtered.png')
-                print('Running filter command:\n  ',cmd)
-                os.system(cmd)
-                print('Moving file back:',
-                      'mv /tmp/yt_filtered.png '+fname2)
-                os.system('mv /tmp/yt_filtered.png '+fname2)
+            self.filter_image(fname2)
             
             for ip in range(0,len(self.yt_path)):
             
@@ -3577,17 +3567,7 @@ class o2graph_plotter(plot_base):
                                                 i_frame,n_frames)
                         self.yt_scene.save(fname2,
                                            sigma_clip=self.yt_sigma_clip)
-                        
-                        if self.yt_filter!='':
-                            print('Found filter')
-                            cmd=self.yt_filter
-                            cmd=cmd.replace('%i',fname2)
-                            cmd=cmd.replace('%o','/tmp/yt_filtered.png')
-                            print('Running filter command:\n  ',cmd)
-                            os.system(cmd)
-                            print('Moving file back:',
-                                  'mv /tmp/yt_filtered.png '+fname2)
-                            os.system('mv /tmp/yt_filtered.png '+fname2)
+                        self.filter_image(fname2)
                     
                         # End of 'for ifr in range(0,int(self.yt_path...'
                     
@@ -3632,22 +3612,186 @@ class o2graph_plotter(plot_base):
                                                 i_frame,n_frames)
                         self.yt_scene.save(fname2,
                                            sigma_clip=self.yt_sigma_clip)
+                        self.filter_image(fname2)
                         
-                        if self.yt_filter!='':
-                            print('Found filter')
-                            cmd=self.yt_filter
-                            cmd=cmd.replace('%i',fname2)
-                            cmd=cmd.replace('%o','/tmp/yt_filtered.png')
-                            print('Running filter command:\n  ',cmd)
-                            os.system(cmd)
-                            print('Moving file back:',
-                                  'mv /tmp/yt_filtered.png '+fname2)
-                            os.system('mv /tmp/yt_filtered.png '+fname2)
-                            
                         # End of 'for if in range(0,self.yt_path[ip][1])'
                     
                     # End of loop 'if self.yt_path[ip][0]=='zoom''
                     
+                elif self.yt_path[ip][0]=='move':
+
+                    # Move the camera without changing the focus
+
+                    dest=eval(self.yt_path[ip][2])
+                    unit_system=self.yt_path[ip][3]
+                    if unit_system=='user':
+                        dest=[(float(dest[0])-self.xlo)/
+                              (self.xhi-self.xlo),
+                              (float(dest[1])-self.ylo)/
+                              (self.yhi-self.ylo),
+                              (float(dest[2])-self.zlo)/
+                        (self.zhi-self.zlo)]
+                    
+                    # Create arrays
+                    (source,foc,nor,wid)=self.create_camera_vecs()
+                    print('move: camera pos, foc:',source,foc)
+                    print('move: camera nor, wid:',nor,wid)
+                    print('move: camera dest:',dest)
+
+                    for ifr in range(0,self.yt_path[ip][1]):
+                        
+                        i_frame=i_frame+1
+                    
+                        print(self.yt_camera)
+                        print('unit_vectors:',self.yt_camera.unit_vectors)
+                        print('normal_vector:',self.yt_camera.normal_vector)
+                        print('north_vector:',self.yt_camera.north_vector)
+                        print('origin:',self.yt_camera.lens.origin)
+                        print('num_threads:',self.yt_camera.lens.num_threads)
+
+                        # Create the new position array
+                        pos[0]=(source[0]+(dest[0]-source[0])*ifr/
+                                (float(self.yt_path[ip][1])-1))
+                        pos[1]=(source[1]+(dest[1]-source[1])*ifr/
+                                (float(self.yt_path[ip][1])-1))
+                        pos[2]=(source[2]+(dest[2]-source[2])*ifr/
+                                (float(self.yt_path[ip][1])-1))
+                        
+                        # Move camera
+                        self.yt_camera.position=[pos[0],pos[1],pos[2]]
+                        self.yt_camera.focus=[foc[0],foc[1],foc[2]]
+                        self.yt_camera.width=[wid[0],wid[1],wid[2]]
+                        self.yt_camera.north_vector=[0.0,0.0,1.0]
+                        self.yt_camera.switch_orientation()
+
+                        # Update text objects
+                        self.yt_update_text()
+
+                        # Save new frame
+                        fname2=self._make_fname(prefix,suffix,
+                                                i_frame,n_frames)
+                        self.yt_scene.save(fname2,
+                                           sigma_clip=self.yt_sigma_clip)
+                        self.filter_image(fname2)
+                        
+                elif self.yt_path[ip][0]=='turn':
+
+                    # Modify the focus without moving
+                    
+                    new_focus=eval(self.yt_path[ip][2])
+                    unit_system=self.yt_path[ip][3]
+                    if unit_system=='user':
+                        new_focus=[(float(dest[0])-self.xlo)/
+                                   (self.xhi-self.xlo),
+                                   (float(dest[1])-self.ylo)/
+                                   (self.yhi-self.ylo),
+                                   (float(dest[2])-self.zlo)/
+                                   (self.zhi-self.zlo)]
+                    
+                    # Create arrays
+                    (pos,old_focus,nor,wid)=self.create_camera_vecs()
+                    print('move: camera pos, foc:',pos,old_focus)
+                    print('move: camera nor, wid:',nor,wid)
+                    print('move: camera new focus:',new_focus)
+
+                    for ifr in range(0,self.yt_path[ip][1]):
+                        
+                        i_frame=i_frame+1
+                    
+                        print(self.yt_camera)
+                        print('unit_vectors:',self.yt_camera.unit_vectors)
+                        print('normal_vector:',self.yt_camera.normal_vector)
+                        print('north_vector:',self.yt_camera.north_vector)
+                        print('origin:',self.yt_camera.lens.origin)
+                        print('num_threads:',self.yt_camera.lens.num_threads)
+
+                        # Create the new focus array
+                        foc[0]=(old_focus[0]+(new_focus[0]-old_focus[0])*ifr/
+                                (float(self.yt_path[ip][1])-1))
+                        foc[1]=(old_focus[1]+(new_focus[1]-old_focus[1])*ifr/
+                                (float(self.yt_path[ip][1])-1))
+                        foc[2]=(old_focus[2]+(new_focus[2]-old_focus[2])*ifr/
+                                (float(self.yt_path[ip][1])-1))
+                        
+                        # Move camera
+                        self.yt_camera.position=[pos[0],pos[1],pos[2]]
+                        self.yt_camera.focus=[foc[0],foc[1],foc[2]]
+                        self.yt_camera.width=[wid[0],wid[1],wid[2]]
+                        self.yt_camera.north_vector=[0.0,0.0,1.0]
+                        self.yt_camera.switch_orientation()
+
+                        # Update text objects
+                        self.yt_update_text()
+
+                        # Save new frame
+                        fname2=self._make_fname(prefix,suffix,
+                                                i_frame,n_frames)
+                        self.yt_scene.save(fname2,
+                                           sigma_clip=self.yt_sigma_clip)
+                        self.filter_image(fname2)
+                        
+                elif self.yt_path[ip][0]=='moveauto':
+
+                    # Move the camera, automatically changing the
+                    # focus to lie along the direction of motion
+
+                    print('unfinished')
+                    quit()
+
+                    # This is just a copy of the 'move' code from
+                    # above
+                    dest=eval(self.yt_path[ip][2])
+                    unit_system=self.yt_path[ip][3]
+                    if unit_system=='user':
+                        dest=[(float(dest[0])-self.xlo)/
+                              (self.xhi-self.xlo),
+                              (float(dest[1])-self.ylo)/
+                              (self.yhi-self.ylo),
+                              (float(dest[2])-self.zlo)/
+                        (self.zhi-self.zlo)]
+                    
+                    # Create arrays
+                    (source,foc,nor,wid)=self.create_camera_vecs()
+                    print('move: camera pos, foc:',source,foc)
+                    print('move: camera nor, wid:',nor,wid)
+                    print('move: camera dest:',dest)
+
+                    for ifr in range(0,self.yt_path[ip][1]):
+                        
+                        i_frame=i_frame+1
+                    
+                        print(self.yt_camera)
+                        print('unit_vectors:',self.yt_camera.unit_vectors)
+                        print('normal_vector:',self.yt_camera.normal_vector)
+                        print('north_vector:',self.yt_camera.north_vector)
+                        print('origin:',self.yt_camera.lens.origin)
+                        print('num_threads:',self.yt_camera.lens.num_threads)
+
+                        # Create the new position array
+                        pos[0]=(source[0]+(dest[0]-source[0])*ifr/
+                                (float(self.yt_path[ip][1])-1))
+                        pos[1]=(source[1]+(dest[1]-source[1])*ifr/
+                                (float(self.yt_path[ip][1])-1))
+                        pos[2]=(source[2]+(dest[2]-source[2])*ifr/
+                                (float(self.yt_path[ip][1])-1))
+                        
+                        # Move camera
+                        self.yt_camera.position=[pos[0],pos[1],pos[2]]
+                        self.yt_camera.focus=[foc[0],foc[1],foc[2]]
+                        self.yt_camera.width=[wid[0],wid[1],wid[2]]
+                        self.yt_camera.north_vector=[0.0,0.0,1.0]
+                        self.yt_camera.switch_orientation()
+
+                        # Update text objects
+                        self.yt_update_text()
+
+                        # Save new frame
+                        fname2=self._make_fname(prefix,suffix,
+                                                i_frame,n_frames)
+                        self.yt_scene.save(fname2,
+                                           sigma_clip=self.yt_sigma_clip)
+                        self.filter_image(fname2)
+                        
                 # End of 'for ip in range(0,len(self.yt_path)):'
 
             # -r is rate (in frames/sec), -f is format, -vcodec is
@@ -3813,7 +3957,10 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process yt-path.')
 
-                    if ix_next-ix<4:
+                    if strlist[ix+1]=='reset':
+                        print('Resetting yt-path.')
+                        self.yt_path=[]
+                    elif ix_next-ix<4:
                         print('Not enough parameters for yt-path.')
                     else:
                         self.yt_path_func(o2scl_hdf,amp,strlist[ix+1:ix_next])

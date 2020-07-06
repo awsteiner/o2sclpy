@@ -208,7 +208,19 @@ class plot_base:
     
     yt_path=[]
     """
-    yt animation path (default [])
+    yt animation path (default []), as list of lists. The
+    list contains instructions such as
+
+    ['yaw',100,0.01]
+    ['zoom',100,2.0]
+    ...
+
+    where the first entry in each sublist is always a type
+    move, and the second entry in each sublist is always the 
+    number of frames over which to complete the move.
+
+    Note that this is not set using -set or -get but by the
+    'yt-path' command.
     """
     yt_ann=[]
     """
