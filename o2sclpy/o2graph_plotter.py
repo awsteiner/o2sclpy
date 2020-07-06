@@ -3580,7 +3580,7 @@ class o2graph_plotter(plot_base):
                     
                     factor=float(self.yt_path[ip][2])
 
-                    for ifr in range(0,self.yt_path[ip][1]):
+                    for ifr in range(0,int(self.yt_path[ip][1])):
                         
                         i_frame=i_frame+1
                         
@@ -3638,7 +3638,7 @@ class o2graph_plotter(plot_base):
                     print('move: camera nor, wid:',nor,wid)
                     print('move: camera dest:',dest)
 
-                    for ifr in range(0,self.yt_path[ip][1]):
+                    for ifr in range(0,int(self.yt_path[ip][1])):
                         
                         i_frame=i_frame+1
                     
@@ -3694,7 +3694,7 @@ class o2graph_plotter(plot_base):
                     print('move: camera nor, wid:',nor,wid)
                     print('move: camera new focus:',new_focus)
 
-                    for ifr in range(0,self.yt_path[ip][1]):
+                    for ifr in range(0,int(self.yt_path[ip][1])):
                         
                         i_frame=i_frame+1
                     
@@ -3749,12 +3749,21 @@ class o2graph_plotter(plot_base):
                               (self.yhi-self.ylo),
                               (float(dest[2])-self.zlo)/
                         (self.zhi-self.zlo)]
-                    
+                        
                     # Create arrays
-                    (source,foc,nor,wid)=self.create_camera_vecs()
-                    print('move: camera pos, foc:',source,foc)
+                    (source,old_focus,nor,wid)=self.create_camera_vecs()
+
+                    # The new focus is just beyond the destination,
+                    # we arbitrarily choose 0.1
+                    new_focus=[dest[0]-source[0]*0.1+dest[0],
+                               dest[1]-source[1]*0.1+dest[1],
+                               dest[2]-source[2]*0.1+dest[2]]
+                    
+                    print('move: camera old position, old focus:',source,
+                          old_focus)
                     print('move: camera nor, wid:',nor,wid)
                     print('move: camera dest:',dest)
+                    print('move: camera new focus:',new_focus)
 
                     for ifr in range(0,self.yt_path[ip][1]):
                         
@@ -3767,14 +3776,26 @@ class o2graph_plotter(plot_base):
                         print('origin:',self.yt_camera.lens.origin)
                         print('num_threads:',self.yt_camera.lens.num_threads)
 
-                        # Create the new position array
-                        pos[0]=(source[0]+(dest[0]-source[0])*ifr/
-                                (float(self.yt_path[ip][1])-1))
-                        pos[1]=(source[1]+(dest[1]-source[1])*ifr/
-                                (float(self.yt_path[ip][1])-1))
-                        pos[2]=(source[2]+(dest[2]-source[2])*ifr/
-                                (float(self.yt_path[ip][1])-1))
+                        frame_ratio=(float(ifr)/
+                                     (float(self.yt_path[ip][1])-1))
                         
+                        # Create the new position array
+                        pos[0]=source[0]+(dest[0]-source[0])*frame_ratio
+                        pos[1]=source[1]+(dest[1]-source[1])*frame_ratio
+                        pos[2]=source[2]+(dest[2]-source[2])*frame_ratio
+
+                        # This function makes the focus change quickly
+                        # at first and then slowly at the end
+                        foc_factor=0.11/(frame_ratio+0.1)-0.1
+
+                        # Create the new focus array
+                        foc[0]=(old_focus[0]+
+                                (new_focus[0]-old_focus[0])*foc_factor)
+                        foc[1]=(old_focus[1]+
+                                (new_focus[1]-old_focus[1])*foc_factor)
+                        foc[2]=(old_focus[2]+
+                                (new_focus[2]-old_focus[2])*foc_factor)
+                                
                         # Move camera
                         self.yt_camera.position=[pos[0],pos[1],pos[2]]
                         self.yt_camera.focus=[foc[0],foc[1],foc[2]]

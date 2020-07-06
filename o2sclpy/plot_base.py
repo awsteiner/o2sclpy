@@ -177,7 +177,13 @@ class plot_base:
 
     yt_filter=''
     """
-    Filter for yt images
+    Filter for yt images. If non-empty, must contain the 
+    strings '%i' for input file and '%o' for output file. A typical
+    example is something like
+
+    convert -contrast-stretch 0 %i %o 
+
+    which uses imagemagick to adjust the color curve.
     """
     yt_resolution=(512,512)
     """
@@ -185,19 +191,25 @@ class plot_base:
     """
     yt_focus='default'
     """
-    yt camera focus (default [0.5,0.5,0.5])
+    yt camera focus as a string. The string 'default' is equivalent
+    to '[0.5,0.5,0.5] internal'. Either in the 'internal' or 'user' 
+    unit system.
     """
     yt_position='default'
     """
-    yt camera position (default [1.5,0.6,0.7])
+    yt camera position as a string. The string 'default' is equivalent
+    to '[1.5,0.6,0.7] internal'. Either in the 'internal' or 'user' 
+    unit system.
     """
     yt_width='default'
     """
-    yt camera width (default [1.5,1.5,1.5])
+    yt camera width as a string. The string 'default' is equivalent to 
+    '[1.5,1.5,1.5]'. Always in the internal unit system.
     """
     yt_north='default'
     """
-    yt camera north (default [1.0,0.0,0.0])
+    yt camera north vector string. The string 'default' is equivalent to
+    '[1.0,0.0,0.0]'. Always in the internal unit system.
     """
     yt_sigma_clip=4.0
     """

@@ -1,0 +1,16 @@
+# 
+o2graph -backend Agg -read peano3.o2 -index -refine N 10 \
+	-set xlo "(-1)" -set xhi 8 \
+	-set ylo "(-1)" -set yhi 8 -set zlo "(-1)" -set zhi 8 \
+	-set yt_position [10,2,5] \
+	-yt-vertex-list c4 c5 c6 \
+	-yt-box "(-1)" "(-1)" "(-1)" 8 8 8 \
+	-yt-text 0.5 "(-0.05)" "(-0.05)" "$ x $" \
+	-yt-text "(-0.05)" 0.5 "(-0.05)" "$ y $" \
+	-yt-text "(-0.05)" "(-0.05)" 0.5 "$ z $" \
+	-yt-axis -yt-source-list \
+	-set yt_sigma_clip 4.0 \
+	-yt-path yaw 25 0.01 \
+	-yt-path zoom 25 2.0 \
+	-yt-path move 25 "[1.5,0.6,0.7]" internal \
+	-yt-render "/tmp/yp_*.png" yt_peano.mp4
