@@ -1,0 +1,30 @@
+# 
+o2graph -backend Agg -read peano3.o2 -index -refine N 10 \
+	-set xlo "(-1)" -set xhi 8 \
+	-set ylo "(-1)" -set yhi 8 -set zlo "(-1)" -set zhi 8 \
+	-set yt_position [10,2,5] \
+	-yt-vertex-list c4 c5 c6 \
+	-yt-box "(-1)" "(-1)" "(-1)" 8 8 8 \
+	-yt-text 0.5 "(-0.05)" "(-0.05)" "$ x $" \
+	-yt-text "(-0.05)" 0.5 "(-0.05)" "$ y $" \
+	-yt-text "(-0.05)" "(-0.05)" 0.5 "$ z $" \
+	-yt-axis -yt-source-list \
+	-create table i grid:0,1,0.01 \
+	-function "1.0e8*sin(1.0e3*i)" q \
+	-function "q-floor(q)" s \
+	-function "1.0e8*sin(1.001e3*i)" q2 \
+	-function "q2-floor(q2)" s2 \
+	-function "acos(-1)*s" theta \
+	-function "2.0*acos(-1)*s2" phi \
+	-function "i*3+1" size \
+	-function "4+20*sin(theta)*cos(phi)" x \
+	-function "4+20*sin(theta)*sin(phi)" y \
+	-function "4+20*cos(theta)" z \
+	-function 1.0 one \
+	-output \
+	-yt-scatter x y z size one one one one \
+	-set yt_sigma_clip 4.0 \
+	-yt-path yaw 50 0.25 \
+	-yt-path zoom 50 2.0 \
+	-yt-path move 50 "[1.5,0.6,0.7]" internal \
+	-yt-render "/tmp/yp_*.png" yt_path.mp4
