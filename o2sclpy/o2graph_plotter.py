@@ -3285,35 +3285,36 @@ class o2graph_plotter(plot_base):
 
     def restore_position(self,pos):
         """
-        Restore the value of self.yt_position from the array 'pos'.
+        Restore the value of self.yt_position from the array 'pos'
+        which is 
         """
         
         if self.yt_position=='default':
-            self.yt_position=[pos[0]*(self.xhi-self.xlo)+
-                              self.xlo,
-                              pos[1]*(self.yhi-self.ylo)+
-                              self.ylo,
-                              pos[2]*(self.zhi-self.zlo)+
-                              self.zlo]
+            self.yt_position=str([pos[0]*(self.xhi-self.xlo)+
+                                  self.xlo,
+                                  pos[1]*(self.yhi-self.ylo)+
+                                  self.ylo,
+                                  pos[2]*(self.zhi-self.zlo)+
+                                  self.zlo])
         elif len(self.yt_position.split(' '))==2:
             splittemp=self.yt_position.split(' ')
             if splittemp[1]=='internal':
                 self.yt_position=(str([pos[0],pos[1],pos[2]])+
                                   ' internal')
             else:
-                self.yt_position=[pos[0]*(self.xhi-self.xlo)+
+                self.yt_position=str([pos[0]*(self.xhi-self.xlo)+
+                                      self.xlo,
+                                      pos[1]*(self.yhi-self.ylo)+
+                                      self.ylo,
+                                      pos[2]*(self.zhi-self.zlo)+
+                                      self.zlo])
+        else:
+            self.yt_position=str([pos[0]*(self.xhi-self.xlo)+
                                   self.xlo,
                                   pos[1]*(self.yhi-self.ylo)+
                                   self.ylo,
                                   pos[2]*(self.zhi-self.zlo)+
-                                  self.zlo]
-        else:
-            self.yt_position=[pos[0]*(self.xhi-self.xlo)+
-                              self.xlo,
-                              pos[1]*(self.yhi-self.ylo)+
-                              self.ylo,
-                              pos[2]*(self.zhi-self.zlo)+
-                              self.zlo]
+                                  self.zlo])
         print('restored self.yt_position:',
               self.yt_position)
         return
@@ -3328,9 +3329,9 @@ class o2graph_plotter(plot_base):
             self.yt_focus=(str([foc[0],foc[1],foc[2]])+
                            ' internal')
         else:
-            self.yt_focus=[foc[0]*(self.xhi-self.xlo)+self.xlo,
-                           foc[1]*(self.yhi-self.ylo)+self.ylo,
-                           foc[2]*(self.zhi-self.zlo)+self.zlo]
+            self.yt_focus=str([foc[0]*(self.xhi-self.xlo)+self.xlo,
+                               foc[1]*(self.yhi-self.ylo)+self.ylo,
+                               foc[2]*(self.zhi-self.zlo)+self.zlo])
         print('restored self.yt_focus:',
               self.yt_focus)
 
@@ -3415,9 +3416,9 @@ class o2graph_plotter(plot_base):
         if self.yt_width=='default':
             wid=[1.5,1.5,1.5]
         else:
-            wid=[eval(self.yt_width)[0],
-                 eval(self.yt_width)[1],
-                 eval(self.yt_width)[2]]
+            wid=[self.yt_width[0],
+                 self.yt_width[1],
+                 self.yt_width[2]]
             
         return (pos,foc,nor,wid)
 
@@ -3505,8 +3506,12 @@ class o2graph_plotter(plot_base):
             fname2=self._make_fname(prefix,suffix,i_frame,n_frames)
             self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
             self.filter_image(fname2)
-            
+
+            # Loop over all movements
             for ip in range(0,len(self.yt_path)):
+
+                # Number of frames for this movement
+                n_frames_move=int(self.yt_path[ip][1])
             
                 if self.yt_path[ip][0]=='yaw':
 
@@ -3517,7 +3522,7 @@ class o2graph_plotter(plot_base):
                     print('yaw: camera pos, foc:',pos,foc)
                     print('yaw: camera nor, wid:',nor,wid)
                     
-                    for ifr in range(0,int(self.yt_path[ip][1])):
+                    for ifr in range(0,n_frames_move):
                         
                         i_frame=i_frame+1
                         
@@ -3525,6 +3530,10 @@ class o2graph_plotter(plot_base):
                         print('normal_vector:',self.yt_camera.normal_vector)
                         print('north_vector:',self.yt_camera.north_vector)
                         print('origin:',self.yt_camera.lens.origin)
+
+                        # We can't use the yt yaw() function because
+                        # it modifies the camera properties in an
+                        # undocumented way. 
                         
                         from yt.units.yt_array import YTArray
                         rv=YTArray([0,0,1])
@@ -3550,8 +3559,8 @@ class o2graph_plotter(plot_base):
                         # Move camera
                         self.yt_camera.position=[pos[0],pos[1],pos[2]]
                         self.yt_camera.focus=[foc[0],foc[1],foc[2]]
+                        self.yt_camera.north_vector=[nor[0],nor[1],nor[2]]
                         self.yt_camera.width=[wid[0],wid[1],wid[2]]
-                        self.yt_camera.north_vector=[0.0,0.0,1.0]
                         self.yt_camera.switch_orientation()
                             
                         print('Camera width [%0.6e,%0.6e,%0.6e]' %
@@ -3569,7 +3578,7 @@ class o2graph_plotter(plot_base):
                                            sigma_clip=self.yt_sigma_clip)
                         self.filter_image(fname2)
                     
-                        # End of 'for ifr in range(0,int(self.yt_path...'
+                        # End of 'for ifr in range(0,n_frames_move)'
                     
                     # Restore position array
                     self.restore_position(pos)
@@ -3580,7 +3589,7 @@ class o2graph_plotter(plot_base):
                     
                     factor=float(self.yt_path[ip][2])
 
-                    for ifr in range(0,int(self.yt_path[ip][1])):
+                    for ifr in range(0,n_frames_move):
                         
                         i_frame=i_frame+1
                         
@@ -3597,15 +3606,17 @@ class o2graph_plotter(plot_base):
                         self.yt_camera.rotate(angle,rot_vector=rv)
                         
                         # Move camera
-                        ifactor=factor**(ifr/
-                                         (float(self.yt_path[ip][1])-1))
+                        ifactor=factor**(1.0/float(n_frames_move-1))
+                        print('ifactor',ifactor)
                         self.yt_camera.zoom(ifactor)
 
+                        print('Camera width [%0.6e,%0.6e,%0.6e]' %
+                              (self.yt_camera.width[0],
+                               self.yt_camera.width[1],
+                               self.yt_camera.width[2]))
+                        
                         # Update text objects
                         self.yt_update_text()
-
-                        # Width
-                        self.restore_width(self.yt_camera.width)
 
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
@@ -3614,8 +3625,11 @@ class o2graph_plotter(plot_base):
                                            sigma_clip=self.yt_sigma_clip)
                         self.filter_image(fname2)
                         
-                        # End of 'for if in range(0,self.yt_path[ip][1])'
-                    
+                        # End of 'for ifr in range(0,n_frames_move)'
+
+                    # Width
+                    self.restore_width(self.yt_camera.width)
+                        
                     # End of loop 'if self.yt_path[ip][0]=='zoom''
                     
                 elif self.yt_path[ip][0]=='move':
@@ -3638,7 +3652,7 @@ class o2graph_plotter(plot_base):
                     print('move: camera nor, wid:',nor,wid)
                     print('move: camera dest:',dest)
 
-                    for ifr in range(0,int(self.yt_path[ip][1])):
+                    for ifr in range(0,n_frames_move):
                         
                         i_frame=i_frame+1
                     
@@ -3651,17 +3665,17 @@ class o2graph_plotter(plot_base):
 
                         # Create the new position array
                         pos[0]=(source[0]+(dest[0]-source[0])*ifr/
-                                (float(self.yt_path[ip][1])-1))
+                                (float(n_frames_move-1)))
                         pos[1]=(source[1]+(dest[1]-source[1])*ifr/
-                                (float(self.yt_path[ip][1])-1))
+                                (float(n_frames_move-1)))
                         pos[2]=(source[2]+(dest[2]-source[2])*ifr/
-                                (float(self.yt_path[ip][1])-1))
+                                (float(n_frames_move-1)))
                         
                         # Move camera
                         self.yt_camera.position=[pos[0],pos[1],pos[2]]
                         self.yt_camera.focus=[foc[0],foc[1],foc[2]]
                         self.yt_camera.width=[wid[0],wid[1],wid[2]]
-                        self.yt_camera.north_vector=[0.0,0.0,1.0]
+                        self.yt_camera.north_vector=[nor[0],nor[1],nor[2]]
                         self.yt_camera.switch_orientation()
 
                         # Update text objects
@@ -3673,7 +3687,14 @@ class o2graph_plotter(plot_base):
                         self.yt_scene.save(fname2,
                                            sigma_clip=self.yt_sigma_clip)
                         self.filter_image(fname2)
+
+                        # End of 'for ifr in range(0,n_frames_move)'
                         
+                    # Restore position array
+                    self.restore_position(pos)
+
+                    # End of loop 'if self.yt_path[ip][0]=='move''
+                    
                 elif self.yt_path[ip][0]=='turn':
 
                     # Modify the focus without moving
@@ -3707,17 +3728,17 @@ class o2graph_plotter(plot_base):
 
                         # Create the new focus array
                         foc[0]=(old_focus[0]+(new_focus[0]-old_focus[0])*ifr/
-                                (float(self.yt_path[ip][1])-1))
+                                (float(n_frames_move-1)))
                         foc[1]=(old_focus[1]+(new_focus[1]-old_focus[1])*ifr/
-                                (float(self.yt_path[ip][1])-1))
+                                (float(n_frames_move-1)))
                         foc[2]=(old_focus[2]+(new_focus[2]-old_focus[2])*ifr/
-                                (float(self.yt_path[ip][1])-1))
+                                (float(n_frames_move-1)))
                         
                         # Move camera
                         self.yt_camera.position=[pos[0],pos[1],pos[2]]
                         self.yt_camera.focus=[foc[0],foc[1],foc[2]]
                         self.yt_camera.width=[wid[0],wid[1],wid[2]]
-                        self.yt_camera.north_vector=[0.0,0.0,1.0]
+                        self.yt_camera.north_vector=[nor[0],nor[1],nor[2]]
                         self.yt_camera.switch_orientation()
 
                         # Update text objects
@@ -3729,6 +3750,8 @@ class o2graph_plotter(plot_base):
                         self.yt_scene.save(fname2,
                                            sigma_clip=self.yt_sigma_clip)
                         self.filter_image(fname2)
+
+                        # End of 'for ifr in range(0,n_frames_move)'
                         
                 elif self.yt_path[ip][0]=='moveauto':
 
@@ -3800,7 +3823,7 @@ class o2graph_plotter(plot_base):
                         self.yt_camera.position=[pos[0],pos[1],pos[2]]
                         self.yt_camera.focus=[foc[0],foc[1],foc[2]]
                         self.yt_camera.width=[wid[0],wid[1],wid[2]]
-                        self.yt_camera.north_vector=[0.0,0.0,1.0]
+                        self.yt_camera.north_vector=[nor[0],nor[1],nor[2]]
                         self.yt_camera.switch_orientation()
 
                         # Update text objects
@@ -3812,6 +3835,8 @@ class o2graph_plotter(plot_base):
                         self.yt_scene.save(fname2,
                                            sigma_clip=self.yt_sigma_clip)
                         self.filter_image(fname2)
+
+                        # End of 'for ifr in range(0,n_frames_move)'
                         
                 # End of 'for ip in range(0,len(self.yt_path)):'
 

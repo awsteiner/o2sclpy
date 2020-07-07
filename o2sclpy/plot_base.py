@@ -173,7 +173,7 @@ class plot_base:
     If true, include ticks on right side and top (default False)
     """
 
-    # Yt settings modifiable by get and set
+    # yt settings modifiable by get and set
 
     yt_filter=''
     """

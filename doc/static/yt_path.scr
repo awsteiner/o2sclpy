@@ -13,4 +13,4 @@ o2graph -backend Agg -read peano3.o2 -index -refine N 10 \
 	-yt-path yaw 25 0.01 \
 	-yt-path zoom 25 2.0 \
 	-yt-path move 25 "[1.5,0.6,0.7]" internal \
-	-yt-render "/tmp/yp_*.png" yt_peano.mp4
+	-yt-render "/tmp/yp_*.png" yt_path.mp4
