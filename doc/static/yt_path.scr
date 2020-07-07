@@ -10,7 +10,7 @@ o2graph -backend Agg -read peano3.o2 -index -refine N 10 \
 	-yt-text "(-0.05)" "(-0.05)" 0.5 "$ z $" \
 	-yt-axis -yt-source-list \
 	-set yt_sigma_clip 4.0 \
-	-yt-path yaw 25 0.01 \
-	-yt-path zoom 25 2.0 \
-	-yt-path move 25 "[1.5,0.6,0.7]" internal \
+	-yt-path yaw 50 0.25 \
+	-yt-path zoom 50 2.0 \
+	-yt-path move 50 "[1.5,0.6,0.7]" internal \
 	-yt-render "/tmp/yp_*.png" yt_path.mp4

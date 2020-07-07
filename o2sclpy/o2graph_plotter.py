@@ -3515,7 +3515,8 @@ class o2graph_plotter(plot_base):
             
                 if self.yt_path[ip][0]=='yaw':
 
-                    angle=float(self.yt_path[ip][2])*numpy.pi*2.0
+                    angle=(float(self.yt_path[ip][2])*numpy.pi*2.0/
+                           n_frames_move)
 
                     # Create arrays
                     (pos,foc,nor,wid)=self.create_camera_vecs()
@@ -3599,11 +3600,6 @@ class o2graph_plotter(plot_base):
                         print('north_vector:',self.yt_camera.north_vector)
                         print('origin:',self.yt_camera.lens.origin)
                         print('num_threads:',self.yt_camera.lens.num_threads)
-                        
-                        from yt.units.yt_array import YTArray
-                        rv=YTArray([0,0,1])
-                        #rc=YTArray([0.5,0.5,0.5])
-                        self.yt_camera.rotate(angle,rot_vector=rv)
                         
                         # Move camera
                         ifactor=factor**(1.0/float(n_frames_move-1))

@@ -24,7 +24,7 @@ o2graph -create tensor_grid 3 101 101 101 \
 	-yt-text 0.8 0.6 0.05 "$ \mathrm{Volume}~2 $" reorient=True,scale=0.4 \
 	-yt-text 0.2 0.8 0.65 "$ (x-x_0)^2 + \ldots $" reorient=True \
 	-yt-source-list \
-	-yt-path yaw 100 0.01 \
+	-yt-path yaw 100 1.0 \
 	-yt-render "/tmp/yt_*.png" yt_tg_multvol.mp4
 
 

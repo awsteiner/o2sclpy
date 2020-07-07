@@ -9,5 +9,5 @@ o2graph -backend Agg -read peano3.o2 -index -refine N 10 \
 	-yt-text "(-0.05)" 0.5 "(-0.05)" "$ y $" \
 	-yt-text "(-0.05)" "(-0.05)" 0.5 "$ z $" \
 	-yt-axis -yt-source-list \
-	-set yt_sigma_clip 4.0 -yt-path yaw 100 0.01 \
+	-set yt_sigma_clip 4.0 -yt-path yaw 100 1.0 \
 	-yt-render "/tmp/yp_*.png" yt_peano.mp4
