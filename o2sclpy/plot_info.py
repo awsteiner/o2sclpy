@@ -151,7 +151,7 @@ def markers_plot(fname=''):
         axes.text(0.5,0.835,r'$ \mathrm{O}_2\mathrm{sc'+
                   'lpy~markers~summary} $',
                   fontsize=16,ha='center')
-    if fname is not '':
+    if fname!='':
         plot.savefig(fname)
         print("Saved image in file",(fname+"."))
     import matplotlib

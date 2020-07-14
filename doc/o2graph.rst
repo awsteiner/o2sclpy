@@ -15,11 +15,10 @@ Basic usage
 -----------
 
 The ``o2graph`` script is formulated along the same lines as the
-``acol`` executable in O\ :sub:`2`\ scl documented at
-<https://neutronstars.utk.edu/code/o2scl/html/acol_section.html> .
-It operates on one object at a time, and the basic workflow is
-the same: read or create an object, manipulate and/or plot
-that object, and save the object or the plot to a file.
+``acol`` executable in O\ :sub:`2`\ scl documented at ":ref:`o2scl:The
+acol Command-line Utility`". It operates on one object at a time, and
+the basic workflow is the same: read or create an object, manipulate
+and/or plot that object, and save the object or the plot to a file.
 
 Similar to ``acol``, the ``o2graph`` list of commands and help
 screen changes depending on the type of the current object in
@@ -34,12 +33,12 @@ which shows how to plot columns from ``table`` objects.
 .. include:: static/o2graph.help.txt
    :literal:
 
-Integration with o2scl
-----------------------
+Integration with O\ :sub:`2`\ scl
+---------------------------------
 
-The O\ :sub:`2`\ graph script implements all of the commands from the
+The ``o2graph`` script implements all of the commands from the
 ``acol`` executable in O\ :sub:`2`\ scl documented at
-<https://neutronstars.utk.edu/code/o2scl/html/acol_section.html>
+":ref:`o2scl:The acol Command-line Utility`"
 	     
 First plot example
 ------------------
@@ -118,7 +117,6 @@ The O\ :sub:`2`\ graph script works by creating an instance of the
 :py:class:`o2sclpy.o2graph_plotter` class and calling the function
 :py:func:`o2sclpy.o2graph_plotter.parse_argv` . Internally, the
 ``o2graph_plotter`` class works by calling the global functions
-mentioned in page
-<https://neutronstars.utk.edu/code/o2scl/html/o2scl_python_section.html>
-in the O\ :sub:`2`\ scl documentation.
+mentioned in the :ref:`o2scl:Python Integration` page in the in the O\
+:sub:`2`\ scl documentation.
       

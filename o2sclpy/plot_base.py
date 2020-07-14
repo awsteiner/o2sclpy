@@ -1007,7 +1007,7 @@ class plot_base:
                   color=textcolor)
         
         fig.canvas.draw()
-        if filename is not '':
+        if filename!='':
             print("Saving render of text '"+text+
                   "' in file named "+filename+'.')
             plot.savefig(filename)

@@ -3,7 +3,7 @@ yt integration
 
 O2sclpy uses yt to perform 3D volume renderings. A volume rendering
 can be built upon a O\ :sub:`2`\ scl tensor_grid object using
-``-yt-add-vol``. A 3D scatter plot can be created from an O\ :sub:`2`\
+``yt-add-vol``. A 3D scatter plot can be created from an O\ :sub:`2`\
 scl table object using ``yt-scatter``. A set of line segments can be
 plotted using ``yt-vertex-list``. 
 

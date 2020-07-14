@@ -28,7 +28,7 @@ python3 packages `requests <https://pypi.org/project/requests/>`_,
 `matplotlib <https://matplotlib.org>`_. O\ :sub:`2`\ sclpy also
 assumes LaTeX is installed on your system.
 
-The ``o2graph`` script requires an installation of O\ :sub:`2`\ scl.
+The :ref:`o2graph_script` requires an installation of O\ :sub:`2`\ scl.
 The release version, O\ :sub:`2`\ sclpy 0.924, requires the O\
 :sub:`2`\ scl v0.924 release from
 <https://github.com/awsteiner/o2scl/releases/tag/v0.924> and the
@@ -36,7 +36,7 @@ development version, O\ :sub:`2`\ sclpy 0.925a1, requires that the
 most recent version of O\ :sub:`2`\ scl from the master branch on
 github is installed on your machine.
 
-The ``o2graph`` script attempts to dynamically load the O\ :sub:`2`\
+The :ref:`o2graph_script` attempts to dynamically load the O\ :sub:`2`\
 scl libraries ``libo2scl`` and ``libo2scl_hdf`` using python's ctypes
 module. If it cannot find them, you may need to use the argument
 ``-o2scl-libdir`` to specify the proper directory. If you're on OSX
