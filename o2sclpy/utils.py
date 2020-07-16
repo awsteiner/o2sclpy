@@ -205,6 +205,13 @@ def string_to_dict(s):
             # For each pair, split keyword and value.
             arr2=arr[i].split('=')
 
+            # Remove preceeding and trailing whitespace from the
+            # keywords (not for the values)
+            while arr2[0][0].isspace():
+                arr2[0]=arr2[0][1:]
+            while arr2[0][len(arr2[0])-1].isspace():
+                arr2[0]=arr2[0][:-1]
+
             # Remove quotes if necessary
             if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
                 arr2[1]=arr2[1][1:len(arr2[1])-1]
