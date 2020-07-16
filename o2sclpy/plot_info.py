@@ -170,66 +170,16 @@ def colors_near(col='',fname=''):
     Possible values of 'col' are red, orange, yellow, green,
     cyan, blue, purple, magenta, pink, grey, and gray.
     """
-    from matplotlib import colors as mc
 
-    colors=dict(**mc.CSS4_COLORS,**mc.XKCD_COLORS)
-    by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
-                    for name, color in colors.items())
-    sorted_names=[(hsv, name) for hsv, name in by_hsv]
-    selected=[]
-
-    #Red falls between 0 and 60 degrees.
-    # Orange
-    #Yellow falls between 61 and 120 degrees.
-    # Chartreuse
-    #Green falls between 121-180 degrees.
-    #Cyan falls between 181-240 degrees.
-    #Blue falls between 241-300 degrees.
-    # Purple
-    #Magenta falls between 301-360 degrees.
-    # Pink
-    
-    hue_dict={'red': 0.0/360.0, 'orange': 30.0/360.0,
-              'yellow': 60.0/360.0, 
-              'green': 120.0/360.0, 'cyan': 180.0/360.0, 
-              'blue': 240.0/360.0, 'purple': 270.0/360.0,
-              'magenta': 300.0/360.0, 'pink': 330.0/360.0}
-
-    if col=='grey' or col=='gray':
-        for i in range(0,len(sorted_names)):
-            if (sorted_names[i][0][1]<0.2):
-                selected.append((sorted_names[i][1]))
-    elif (col=='red' or col=='yellow' or col=='green' or col=='cyan' or
-            col=='blue' or col=='magenta' or col=='orange' or
-            col=='pink' or col=='purple'):
-        hrange=0.001
-        while len(selected)<80:
-            selected=[]
-            center=hue_dict[col]
-            low=center-hrange
-            high=center+hrange
-            if low<0.0:
-                low2=low+1.0
-                high2=high+1.0
-            elif high>1.0:
-                low2=low-1.0
-                high2=high-1.0
-            else:
-                low2=low
-                high2=high
-            for i in range(0,len(sorted_names)):
-                if sorted_names[i][0][1]>0.2:
-                    if ((sorted_names[i][0][0]>low and
-                        sorted_names[i][0][0]<high) or
-                        (sorted_names[i][0][0]>low2 and
-                         sorted_names[i][0][0]<high2)):
-                        selected.append((sorted_names[i][1],))
-            #print(low,high,low2,high2,len(selected))
-            if len(selected)<80:
-                hrange=hrange+0.001
-        title=(r'$ \mathrm{O}_2\mathrm{sc'+
-               'lpy~color summary: '+col+'} $')
-    elif col=='all':
+    if col=='all':
+        
+        from matplotlib import colors as mc
+        colors=dict(**mc.CSS4_COLORS,**mc.XKCD_COLORS)
+        by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
+                      for name, color in colors.items())
+        sorted_names=[(hsv, name) for hsv, name in by_hsv]
+        selected=[]
+        
         print('Hue          Saturation',
               '  Value        name')
         for i in range(0,len(sorted_names)):
@@ -238,15 +188,54 @@ def colors_near(col='',fname=''):
                    sorted_names[i][0][1],
                    sorted_names[i][0][2],
                    sorted_names[i][1]))
-    elif len(col)>=1 and col[0]=='(':
-        print('col start',col)
-        col=col[1:len(col)-1]
-        col=col[0:col.find(')')]
-        print('col end',col)
-    elif len(col)>=1 and col[0]=='#':
-        ir=float(int(col[1]+col[2],16))/255.0
-        ig=float(int(col[3]+col[4],16))/255.0
-        ib=float(int(col[5]+col[6],16))/255.0
+    elif col=='':
+
+        docstr=('o2graph -help colors-near <color> shows a '+
+                'plot of colors near <color>, where <color> can be '+
+                'either a named color like black or \"xkcd:pea green\", '+
+                'an rgb array of the form (r,g,b) where r, g, and b are '+
+                'all between 0 and 1, or a hexadecimalcolor like '+
+                '\"ff8200\". o2graph -help colors-near <color> <filename> '+
+                'shows a plot of '+
+                'colors near <color> and stores the plot in <filename>. '+
+                'o2graph -help colors-near all gives a list of all CSS4 '+
+                'and XKCD colors')
+        str_list=textwrap.wrap(docstr,79)
+        for i in range (0,len(str_list)):
+            print(str_list[i])
+        
+    else:
+
+        from matplotlib.colors import to_rgba
+        from matplotlib import colors as mc
+
+        # Obtain a list of CSS4 and XKCD colors
+        colors=dict(**mc.CSS4_COLORS,**mc.XKCD_COLORS)
+
+        # Remove leading space
+        while col[0].isspace():
+            col=col[1:]
+
+        # Convert from string to [r,g,b] if necessary
+        if col[0]=='(' or col[0]=='[':
+            col=col.replace('(',' ')
+            col=col.replace(')',' ')
+            col=col.replace('[',' ')
+            col=col.replace(']',' ')
+            col=col.split(',')
+            col=[float(col[0]),float(col[1]),float(col[2])]
+        
+        # Convert the specified color to [r,g,b,a] where
+        # all four entries are between 0 and 1
+        
+        colt=to_rgba(col)
+        print('converted',col,'to',colt)
+        ir=colt[0]
+        ig=colt[1]
+        ib=colt[2]
+        
+        selected=[]
+        
         crange=0.100
         while len(selected)<80:
             selected=[]
@@ -260,72 +249,85 @@ def colors_near(col='',fname=''):
                     selected.append((key,diff))
             if len(selected)<80:
                 crange=crange+0.002
+                
         if len(selected)>=80:
             def sort_first(val):
                 return val[0]
             selected2=sorted(selected,key=lambda x: x[1])
-            print(selected2)
-            print('Found list with range ',crange)
+            #print(selected2)
+            #print('Found list with range ',crange)
+
+        # If col was converted to (r,g,b), then convert back to a
+        # string.
+        col_fixpound=str(col).replace('#','\\#')
         title=(r'$ \mathrm{O}_2\mathrm{sc'+
-               'lpy~colors near '+col+'} $')
-    else:
-        print("'-help colors-near <color>' shows a",
-              'plot of colors near <color>')
-        print("'-help colors-near <color> <filename>' shows a plot of ",
-              'colors near <color> and stores the plot in <filename>')
-        print("'-help colors-near all' gives a list of all CSS4 and ",
-              'XKCD colors')
+               'lpy~colors~near~'+col_fixpound+'}: $')
+        print('title',title)
 
-    if len(selected)>80:
-        selected=selected[0:80]
+        if len(selected)>80:
+            selected=selected[0:80]
     
-    if len(selected)>0:
-        print('selected',selected)
-        n=len(selected)
-        header=1
-        ncols=4
-        nrows=n//ncols
-        print('ncols,nrows',ncols,nrows)
-        plot.rc('text',usetex=True)
-        plot.rc('font',family='serif')
-        fig,axes=plot.subplots(figsize=(9.5,6.4))
-        # Get height and width
-        X,Y=fig.get_dpi()*fig.get_size_inches()
-        h=Y/(nrows+header+1)
-        w=X/ncols
+        if len(selected)>0:
+            #print('selected',selected)
+            n=len(selected)
+            header=1
+            ncols=4
+            nrows=n//ncols
+            #print('ncols,nrows',ncols,nrows)
+            plot.rc('text',usetex=True)
+            plot.rc('font',family='serif')
+            fig,axes=plot.subplots(figsize=(9.5,6.4))
+            # Get height and width
+            X,Y=fig.get_dpi()*fig.get_size_inches()
+            h=Y/(nrows+header+1)
+            w=X/ncols
+        
+            for i in range(0,n):
+                row=i%nrows
+                column=i//nrows
+                y=Y-((row+header)*h)-h
+                xi_line=w*(column+0.05)
+                xf_line=w*(column+0.25)
+                xi_text=w*(column+0.3)
+                
+                axes.text(xi_text,y,selected[i][0],
+                          fontsize=(h*0.4),
+                          ha='left',va='center')
     
-        for i in range(0,n):
-            row=i%nrows
-            col=i//nrows
+                axes.hlines(y+h*0.1,xi_line,xf_line,
+                            color=selected[i][0],
+                            linewidth=(h*0.8))
+
+            column=2.4
+            row=-1.2
             y=Y-((row+header)*h)-h
-            xi_line=w*(col+0.05)
-            xf_line=w*(col+0.25)
-            xi_text=w*(col+0.3)
-            
-            axes.text(xi_text,y,selected[i][0],
-                      fontsize=(h*0.4),
-                      ha='left',va='center')
-
+            xi_line=w*(column+0.05)
+            xf_line=w*(column+0.25)
+            xi_text=w*(column+0.3)
+            axes.text(w*(column),y,title,
+                      fontsize=(h*0.5),ha='right',va='center')
             axes.hlines(y+h*0.1,xi_line,xf_line,
-                      color=selected[i][0],
-                      linewidth=(h*0.8))
+                        color=col,linewidth=(h*0.8))
             
-        axes.set_xlim(0,X)
-        axes.set_ylim(0,Y+header)
-        axes.set_axis_off()
-                                
-        fig.subplots_adjust(left=0,right=1,top=1,bottom=0,
-                            hspace=0,wspace=0)
-        if fname!='':
-            plot.savefig(fname)
-            print('Created file '+fname+'.')
-        import matplotlib
-        if (matplotlib.get_backend()!='Agg' and 
-            matplotlib.get_backend()!='agg'):
-            plot.show()
-        elif fname=='':
-            print('Backend is Agg but no filename is specified',
-                  'so no output was created.')                            
+            axes.set_xlim(0,X)
+            axes.set_ylim(0,Y+header)
+            axes.set_axis_off()
+                                    
+            fig.subplots_adjust(left=0,right=1,top=1,bottom=0,
+                                hspace=0,wspace=0)
+            if fname!='':
+                plot.savefig(fname)
+                print('Created file '+fname+'.')
+            import matplotlib
+            if (matplotlib.get_backend()!='Agg' and 
+                matplotlib.get_backend()!='agg'):
+                plot.show()
+            elif fname=='':
+                print('Backend is Agg but no filename is specified',
+                      'so no output was created.')
+        else:
+            print('Error. Not enough colors selected in colors_near().')
+            
     return
 
 def cmap_list_func():

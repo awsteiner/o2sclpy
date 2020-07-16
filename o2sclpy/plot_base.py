@@ -236,7 +236,8 @@ class plot_base:
     """
     yt_ann=[]
     """
-    Annotations for yt renders
+    Annotations for yt renders. This list is controlled by
+    the 'yt-ann' command.
     """
     yt_trans=0
     """

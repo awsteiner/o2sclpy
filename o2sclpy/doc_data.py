@@ -130,9 +130,6 @@ base_list=[
       "y_minor_loc float>0      linear increment for x-axis minor ticks\n"+
       "y_tick_dir  in,out,inout direction of y-axis ticks\n"+
       "y_visible   T/F          set y-axis visible or invisible\n")],
-    ["new-cmaps","Define new color maps.","",
-     "Define new color maps, 'jet2', 'pastel2' "+
-     "'reds2', 'greens2', and 'blues2'."],
     ["o2scl-libdir","Specify the directory where libo2scl.so is",
      "<dir>",""],
     ["o2scl-cpplib","Specify the location of the standard C++ library",
@@ -227,6 +224,16 @@ base_list=[
      "the y-limits on the current axis are modified. Future plots are also "+
      "set with the specified y-limits."],
     ["ytitle","Add y title to plot (or subplot).","",""],
+    ["yt-ann","Annotate a yt rendering (experimental).","",
+     "The 'yt-ann' command adds a list of o2graph commands that can "+
+     "be used to annotate a yt rendering. Annotations are normal "+
+     "o2graph 2D plotting commands built upon a coordinate system with "+
+     "(0,0) as the lower-left corner of the image and (1,1) as the "+
+     "upper-right corner. "+
+     "yt-ann command arguments may include dashes but must end with the "+
+     "word 'end'.\n\n"+
+     "Examples are:\n  -yt-ann -text 0.1 0.95 \"Ann. example\" "+
+     "color=w,ha=left end"],
     ["yt-arrow","Draw an arrow in the yt volume.",
      "<[x1,y1,z1]> <[x2,y2,z2]> [kwargs]",
      "Draw an arrow from the tail at (x1,y1,z1) to the head at "+

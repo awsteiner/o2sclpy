@@ -2712,7 +2712,8 @@ class o2graph_plotter(plot_base):
         """
 
         for i in range(0,len(args)):
-            self.yt_ann.append(args[i])
+            if force_bytes(args[i])!=b'end':
+                self.yt_ann.append(args[i])
         print('yt_ann is',self.yt_ann)
         
         return
@@ -3218,39 +3219,52 @@ class o2graph_plotter(plot_base):
 
     def yt_save_annotate(self,o2scl_hdf,amp,fname):
         """
-        Create a .png image, then add 2D annotations, and finally
-        save to file named 'fname'.
+        Create a .png image, then add 2D annotations, 
+        save to file named 'fname', and then apply any filters
         
-        This segment of code is based off of yt's save_annotate()
-        function.
         """
         
-        self.yt_scene.render()
-        fa=self.yt_scene._show_mpl
-        axt=fa(self.yt_scene._last_render.swapaxes(0,1),
-               sigma_clip=self.yt_sigma_clip,dpi=100)
-        self.yt_trans=self.yt_scene._render_figure.transFigure
-        self.axes=axt.axes
-        self.fig=self.yt_scene._render_figure
-        self.canvas_flag=True
-        print('Adding annotations:')
-        self.parse_string_list(self.yt_ann[0:len(self.yt_ann)-1],
-                               o2scl_hdf,amp)
-        print('Done adding annotations:')
-        #self.text(0.1,0.9,'x',color='w',fontsize=self.font*1.25,
-            #transform=tf)
-        self.canvas_flag=False
-        #axt.axes.text(0.1,0.9,'test',color='w',transform=tf,
-        #fontsize=self.font*1.25)
-        from yt.visualization._mpl_imports import FigureCanvasAgg
-        canvast=FigureCanvasAgg(self.yt_scene._render_figure)
-        self.yt_scene._render_figure.canvas=canvast
-        #self.yt_scene._render_figure.tight_layout(pad=0.0)
-        plot.subplots_adjust(left=0.0,bottom=0.0,
-                             right=1.0,top=1.0)
-        print('o2graph:yt-render: Calling savefig() with annotations.')
-        self.yt_scene._render_figure.savefig(fname,facecolor='black',
-                                             pad_inches=0)
+        if len(self.yt_ann)==0:
+            
+            # No animation and no annotation, so just call
+            # scene.save()
+            print('o2graph:yt_save_annotate: Calling yt_scene.save()',
+                  'with filename',fname)
+            self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
+            
+        else:
+
+            # This segment of code is based off of yt's save_annotate()
+            # function.
+            self.yt_scene.render()
+            fa=self.yt_scene._show_mpl
+            axt=fa(self.yt_scene._last_render.swapaxes(0,1),
+                   sigma_clip=self.yt_sigma_clip,dpi=100)
+            self.yt_trans=self.yt_scene._render_figure.transFigure
+            self.axes=axt.axes
+            self.fig=self.yt_scene._render_figure
+            self.canvas_flag=True
+            print('Adding annotations:')
+            self.parse_string_list(self.yt_ann,o2scl_hdf,amp)
+            print('Done adding annotations:')
+            #self.text(0.1,0.9,'x',color='w',fontsize=self.font*1.25,
+                #transform=tf)
+            self.canvas_flag=False
+            #axt.axes.text(0.1,0.9,'test',color='w',transform=tf,
+            #fontsize=self.font*1.25)
+            from yt.visualization._mpl_imports import FigureCanvasAgg
+            canvast=FigureCanvasAgg(self.yt_scene._render_figure)
+            self.yt_scene._render_figure.canvas=canvast
+            #self.yt_scene._render_figure.tight_layout(pad=0.0)
+            plot.subplots_adjust(left=0.0,bottom=0.0,
+                                 right=1.0,top=1.0)
+            print('o2graph:yt-render: Calling savefig() with annotations.')
+            self.yt_scene._render_figure.savefig(fname,facecolor='black',
+                                                 pad_inches=0)
+
+        # After having saved the image, filter it
+        self.filter_image(fname)
+            
         return
 
     def _make_fname(self,prefix,suffix,i_frame,n_frames):
@@ -3458,26 +3472,7 @@ class o2graph_plotter(plot_base):
         if len(self.yt_path)==0:
 
             # No path, so just call save and finish
-            
-            if len(self.yt_ann)==0:
-
-                # No animation and no annotation, so just call
-                # scene.save()
-                
-                print('o2graph:yt-render: Calling yt_scene.save()',
-                      'with filename',fname)
-                self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
-                self.filter_image(fname)
-                
-            else:
-
-                # No animation, but we have some annotations so
-                # call yt_save_annotate()
-                
-                print('o2graph:yt-render: yt_save_annotate()',
-                      'with filename',fname)
-                self.yt_save_annotate(o2scl_hdf,amp,fname);
-                self.filter_image(fname)
+            self.yt_save_annotate(o2scl_hdf,amp,fname);
 
         else:
 
@@ -3504,8 +3499,7 @@ class o2graph_plotter(plot_base):
             # Render initial frame
             i_frame=0
             fname2=self._make_fname(prefix,suffix,i_frame,n_frames)
-            self.yt_scene.save(fname2,sigma_clip=self.yt_sigma_clip)
-            self.filter_image(fname2)
+            self.yt_save_annotate(o2scl_hdf,amp,fname2);
 
             # Loop over all movements
             for ip in range(0,len(self.yt_path)):
@@ -3575,9 +3569,7 @@ class o2graph_plotter(plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_scene.save(fname2,
-                                           sigma_clip=self.yt_sigma_clip)
-                        self.filter_image(fname2)
+                        self.yt_save_annotate(o2scl_hdf,amp,fname2);
                     
                         # End of 'for ifr in range(0,n_frames_move)'
                     
@@ -3617,9 +3609,7 @@ class o2graph_plotter(plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_scene.save(fname2,
-                                           sigma_clip=self.yt_sigma_clip)
-                        self.filter_image(fname2)
+                        self.yt_save_annotate(o2scl_hdf,amp,fname2);
                         
                         # End of 'for ifr in range(0,n_frames_move)'
 
@@ -3680,9 +3670,7 @@ class o2graph_plotter(plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_scene.save(fname2,
-                                           sigma_clip=self.yt_sigma_clip)
-                        self.filter_image(fname2)
+                        self.yt_save_annotate(o2scl_hdf,amp,fname2);
 
                         # End of 'for ifr in range(0,n_frames_move)'
                         
@@ -3743,9 +3731,7 @@ class o2graph_plotter(plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_scene.save(fname2,
-                                           sigma_clip=self.yt_sigma_clip)
-                        self.filter_image(fname2)
+                        self.yt_save_annotate(o2scl_hdf,amp,fname2);
 
                         # End of 'for ifr in range(0,n_frames_move)'
                         
@@ -3828,9 +3814,7 @@ class o2graph_plotter(plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_scene.save(fname2,
-                                           sigma_clip=self.yt_sigma_clip)
-                        self.filter_image(fname2)
+                        self.yt_save_annotate(o2scl_hdf,amp,fname2);
 
                         # End of 'for ifr in range(0,n_frames_move)'
                         
@@ -3909,6 +3893,14 @@ class o2graph_plotter(plot_base):
                 ix_next=ix+1
                 ix_next_done=False
                 while ix_next_done==False:
+
+                    # Normally, o2graph and acol commands are ended by
+                    # the next command-line argument which begins with
+                    # a dash. We make an exception for yt-ann, which
+                    # annotates a yt plot. yt-ann commands require
+                    # the keyword "end" and the end to indicate that
+                    # they are complete.
+                    
                     if ix_next==len(strlist):
                         ix_next_done=True
                     elif (cmd_name!='yt-ann' and
