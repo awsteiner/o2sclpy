@@ -261,7 +261,7 @@ def colors_near(col='',fname=''):
         # string.
         col_fixpound=str(col).replace('#','\\#')
         title=(r'$ \mathrm{O}_2\mathrm{sc'+
-               'lpy~colors~near~'+col_fixpound+'}: $')
+               'lpy~list~of~colors~near~'+col_fixpound+'}: $')
         #print('title',title)
 
         if len(selected)>80:
