@@ -73,6 +73,7 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     ax=plot.axes([left_margin,bottom_margin,
                   1.0-left_margin-right_margin,1.0-top_margin-bottom_margin])
     ax.minorticks_on()
+    # Make the ticks longer than default
     ax.tick_params('both',length=12,width=1,which='major')
     ax.tick_params('both',length=5,width=1,which='minor')
     ax.tick_params(labelsize=fontsize*0.8)

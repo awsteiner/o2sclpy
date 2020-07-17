@@ -468,6 +468,7 @@ class o2graph_plotter(plot_base):
 
         if self.colbar==True:
             cbar=self.fig.colorbar(self.last_image,ax=self.axes)
+            cbar.ax.tick_params('both',length=6,width=1,which='major')
             cbar.ax.tick_params(labelsize=self.font*0.8)
 
     def den_plot_rgb(self,o2scl_hdf,amp,args):
@@ -693,6 +694,7 @@ class o2graph_plotter(plot_base):
 
         if self.colbar==True:
             cbar=self.fig.colorbar(self.last_image,ax=self.axes)
+            cbar.ax.tick_params('both',length=6,width=1,which='major')
             cbar.ax.tick_params(labelsize=self.font*0.8)
 
     def plot(self,o2scl_hdf,amp,args):
@@ -1066,6 +1068,7 @@ class o2graph_plotter(plot_base):
                 if self.colbar==True:
                     cbar=self.fig.colorbar(mapper,
                                            ax=self.axes)
+                    cbar.ax.tick_params('both',length=6,width=1,which='major')
                     cbar.ax.tick_params(labelsize=self.font*0.8)
                     
             # End of section for 'table' type
@@ -1313,6 +1316,8 @@ class o2graph_plotter(plot_base):
                     self.axes.set_ylim(self.ylo,self.yhi)
                 if self.colbar==True and len(cv)>0:
                     cbar=plot.colorbar(ax=self.axes)
+                    cbar.ax.tick_params('both',length=6,width=1,
+                                        which='major')
                     cbar.ax.tick_params(labelsize=self.font*0.8)
                     
             # End of section for 'table' type
@@ -1497,6 +1502,8 @@ class o2graph_plotter(plot_base):
                 
                 if self.colbar==True:
                     cbar=plot.colorbar(self.last_image,ax=self.axes)
+                    cbar.ax.tick_params('both',length=6,width=1,
+                                        which='major')
                     cbar.ax.tick_params(labelsize=self.font*0.8)
                     
             # End of section for 'table' type
@@ -2395,6 +2402,8 @@ class o2graph_plotter(plot_base):
                                                 1.0-bm-tm])
                     self.cbar=self.fig.colorbar(self.last_image,
                                                 cax=dpa_cax2)
+                    self.cbar.ax.tick_params('both',length=6,width=1,
+                                             which='major')
                     self.cbar.ax.tick_params(labelsize=self.font*0.8)
                     
                 if n_frames<10:
