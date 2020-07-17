@@ -43,7 +43,7 @@ The ``o2graph`` script implements all of the commands from the
 First plot example
 ------------------
 
-.. include:: static/figures/table_plot.scr
+.. include:: static/examples/table_plot.scr
    :literal:
 .. image:: static/figures/table_plot_doc.png
    :width: 70%
@@ -51,7 +51,7 @@ First plot example
 Density plot and contour line example
 -------------------------------------
 
-.. include:: static/figures/table3d_den_plot.scr
+.. include:: static/examples/table3d_den_plot.scr
    :literal:
 .. image:: static/figures/table3d_den_plot_doc.png
    :width: 70%
@@ -59,13 +59,13 @@ Density plot and contour line example
 Agg backend example
 -------------------
 
-.. include:: static/figures/backend.scr
+.. include:: static/examples/backend.scr
    :literal:
 
 'plotv' example
 ---------------
 
-.. include:: static/figures/table_plotv.scr
+.. include:: static/examples/table_plotv.scr
    :literal:
 .. image:: static/figures/table_plotv_doc.png
    :width: 70%
@@ -73,7 +73,7 @@ Agg backend example
 Scatter plot example
 --------------------
 
-.. include:: static/figures/table_scatter.scr
+.. include:: static/examples/table_scatter.scr
    :literal:
 .. image:: static/figures/table_scatter_doc.png
    :width: 70%
@@ -81,7 +81,7 @@ Scatter plot example
 Region plot example
 -------------------
 
-.. include:: static/figures/table_rplot.scr
+.. include:: static/examples/table_rplot.scr
    :literal:
 .. image:: static/figures/table_rplot_doc.png
    :width: 70%
@@ -89,7 +89,7 @@ Region plot example
 Subplot example 1
 -----------------
 
-.. include:: static/figures/subplots1.scr
+.. include:: static/examples/subplots1.scr
    :literal:
 .. image:: static/figures/subplots1_doc.png
    :width: 70%
@@ -97,7 +97,7 @@ Subplot example 1
 Subplot example 2
 -----------------
 
-.. include:: static/figures/subplots2.scr
+.. include:: static/examples/subplots2.scr
    :literal:
 .. image:: static/figures/subplots2_doc.png
    :width: 70%
@@ -105,7 +105,7 @@ Subplot example 2
 Subplot example 3
 -----------------
 
-.. include:: static/figures/subplots3.scr
+.. include:: static/examples/subplots3.scr
    :literal:
 .. image:: static/figures/subplots3_doc.png
    :width: 70%
