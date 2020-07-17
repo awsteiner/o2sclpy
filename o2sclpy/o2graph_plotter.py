@@ -2541,7 +2541,7 @@ class o2graph_plotter(plot_base):
                 colors_plot()
             finished=True
 
-        if (len(args)==2 or len(args)==1) and args[0]=='colors-near':
+        if (len(args)<=3 or len(args)>=1) and args[0]=='colors-near':
             if len(args)==3:
                 colors_near(col=args[1],fname=args[2])
             elif len(args)==2:

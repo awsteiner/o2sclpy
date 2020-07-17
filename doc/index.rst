@@ -55,6 +55,7 @@ Contents
    o2graph
    yt
    class
+   plot_ref
    other
    internal
    todos
