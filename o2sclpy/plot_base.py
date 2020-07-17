@@ -1699,20 +1699,16 @@ class plot_base:
         """
         
         if 'x_major_loc' in kwargs:
-            print('here',kwargs['x_major_loc'])
             self.axes.get_xaxis().set_major_locator(plot.MultipleLocator
                                         (float(kwargs['x_major_loc'])))
         if 'x_minor_loc' in kwargs:
-            print('here',kwargs['x_minor_loc'])
             self.axes.get_xaxis().set_minor_locator(plot.MultipleLocator
                                         (float(kwargs['x_minor_loc'])))
             
         if 'y_major_loc' in kwargs:
-            print('here',kwargs['y_major_loc'])
             self.axes.get_yaxis().set_major_locator(plot.MultipleLocator
                                         (float(kwargs['y_major_loc'])))
         if 'y_minor_loc' in kwargs:
-            print('here',kwargs['y_minor_loc'])
             self.axes.get_yaxis().set_minor_locator(plot.MultipleLocator
                                         (float(kwargs['y_minor_loc'])))
             
@@ -1744,7 +1740,7 @@ class plot_base:
                                       labelleft=False)
             
         if 'x_loc' in kwargs:
-            if kwargs['y_loc']=='bt' or kwargs['y_loc']=='tb':
+            if kwargs['x_loc']=='bt' or kwargs['x_loc']=='tb':
                 self.axes.tick_params('x',which='both',bottom=True,top=True,
                                       labelbottom=True,labeltop=True)
             elif kwargs['x_loc']=='t':
@@ -1759,11 +1755,44 @@ class plot_base:
         if 'x_tick_dir' in kwargs:
             self.axes.tick_params('x',which='major',
                                   direction=kwargs['x_tick_dir'])
+        if 'x_minor_tick_dir' in kwargs:
+            self.axes.tick_params('x',which='minor',
+                                  direction=kwargs['x_minor_tick_dir'])
                 
         if 'y_tick_dir' in kwargs:
             self.axes.tick_params('y',which='major',
                                   direction=kwargs['y_tick_dir'])
+        if 'y_minor_tick_dir' in kwargs:
+            self.axes.tick_params('y',which='minor',
+                                  direction=kwargs['y_minor_tick_dir'])
+            
+        if 'x_tick_len' in kwargs:
+            self.axes.tick_params('x',which='major',
+                                  length=kwargs['x_tick_len'])
+        if 'x_minor_tick_len' in kwargs:
+            self.axes.tick_params('x',which='minor',
+                                  length=kwargs['x_minor_tick_len'])
                 
+        if 'y_tick_len' in kwargs:
+            self.axes.tick_params('y',which='major',
+                                  length=float(kwargs['y_tick_len']))
+        if 'y_minor_tick_len' in kwargs:
+            self.axes.tick_params('y',which='minor',
+                                  length=float(kwargs['y_minor_tick_len']))
+
+        if 'x_tick_wid' in kwargs:
+            self.axes.tick_params('x',which='major',
+                                  width=kwargs['x_tick_wid'])
+        if 'x_minor_tick_wid' in kwargs:
+            self.axes.tick_params('x',which='minor',
+                                  width=kwargs['x_minor_tick_wid'])
+                
+        if 'y_tick_wid' in kwargs:
+            self.axes.tick_params('y',which='major',
+                                  width=float(kwargs['y_tick_wid']))
+        if 'y_minor_tick_wid' in kwargs:
+            self.axes.tick_params('y',which='minor',
+                                  width=float(kwargs['y_minor_tick_wid']))
         return
     
     def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):

@@ -1,0 +1,11 @@
+# Desc
+#
+o2graph -create table x grid:-3.14,3.14,0.1 \
+	-function "(1+sin(x))/2" y \
+	-set xlo "(-3.14)" -set xhi 3.14 -xtitle "$ x$" -deriv x y yp \
+	-preview 20 -internal ex1.o2 -plot x y marker=.,color=blue \
+	-plot x yp lw=2,color=red -text 0.5 0.95 "$ f(x)$" \
+	-text 1 0.05 "$ f^{\prime}(x)$" \
+	-modax x_loc=tb,y_minor_loc=0.1,y_tick_dir=inout,labelsize=20 \
+	-modax y_tick_len=10,y_minor_tick_len=10 \
+	-save modax.png -show

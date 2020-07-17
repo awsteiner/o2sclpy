@@ -94,6 +94,14 @@ plot-color example
 .. image:: static/figures/table_plot_color_doc.png
    :width: 70%
 
+Modifying axis example
+----------------------
+
+.. include:: static/examples/modax.scr
+   :literal:
+.. image:: static/figures/modax_doc.png
+   :width: 70%
+
 Subplot example 1
 -----------------
 

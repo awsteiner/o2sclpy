@@ -116,20 +116,30 @@ base_list=[
      "(ms). For example: o2graph -line 0.05 0.05 0.95 0.95 "+
      "lw=0,marker='+' -show"],
     ["modax","Modify current axes properties.","[kwargs]",
-     ("kwarg       Values       Description\n"+
-      "-------------------------------------------------------------------\n"+
-      "alpha       float>0      alpha value for region inside axes\n"+
-      "labelsize   float>0      font size for labels\n"+
-      "x_loc       b,t,tb       placement of x-axis (bottom, top, or both)\n"+
-      "x_major_loc float>0      linear increment for x-axis major ticks\n"+
-      "x_minor_loc float>0      linear increment for x-axis minor ticks\n"+
-      "x_tick_dir  in,out,inout direction of x-axis ticks\n"+
-      "x_visible   T/F          set x-axis visible or invisible\n"+
-      "y_loc       l,r,lr       placement of y-axis (left, right, or both)\n"+
-      "y_major_loc float>0      linear increment for x-axis major ticks\n"+
-      "y_minor_loc float>0      linear increment for x-axis minor ticks\n"+
-      "y_tick_dir  in,out,inout direction of y-axis ticks\n"+
-      "y_visible   T/F          set y-axis visible or invisible\n")],
+     ("kwarg            Values       Description\n"+
+      "------------------------------------------------------------------------\n"+
+      "alpha            float>0      alpha value for region inside axes\n"+
+      "labelsize        float>0      font size for labels\n"+
+      "x_loc            b,t,tb       placement of x-axis (bottom, top, or both)\n"+
+      "x_major_loc      float>0      linear increment for x-axis major ticks\n"+
+      "x_minor_loc      float>0      linear increment for x-axis minor ticks\n"+
+      "x_minor_tick_dir in,out,inout direction of x-axis minor ticks\n"+
+      "x_minor_tick_len float>0      length of x-axis minor ticks\n"+
+      "x_minor_tick_wid float>0      width of x-axis minor ticks\n"+
+      "x_tick_dir       in,out,inout direction of x-axis major ticks\n"+
+      "x_tick_len       float>0      length of x-axis major ticks\n"+
+      "x_tick_wid       float>0      width of x-axis major ticks\n"+
+      "x_visible        T/F          set x-axis visible or invisible\n"+
+      "y_loc            l,r,lr       placement of y-axis (left, right, or both)\n"+
+      "y_major_loc      float>0      linear increment for x-axis major ticks\n"+
+      "y_minor_loc      float>0      linear increment for x-axis minor ticks\n"+
+      "y_minor_tick_dir in,out,inout direction of y-axis minor ticks\n"+
+      "y_minor_tick_len float>0      length of y-axis minor ticks\n"+
+      "y_minor_tick_wid float>0      width of y-axis minor ticks\n"+
+      "y_tick_dir       in,out,inout direction of y-axis major ticks\n"+
+      "y_tick_len       float>0      length of y-axis major ticks\n"+
+      "y_tick_wid       float>0      width of y-axis major ticks\n"+
+      "y_visible        T/F          set y-axis visible or invisible\n")],
     ["o2scl-libdir","Specify the directory where libo2scl.so is",
      "<dir>",""],
     ["o2scl-cpplib","Specify the location of the standard C++ library",
