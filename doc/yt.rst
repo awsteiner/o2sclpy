@@ -32,17 +32,17 @@ that the lower left corner of the image is :math:`(0,0)`.
 yt scatter example
 ------------------
 
-.. include:: static/yt_scatter.scr
+.. include:: static/figures/yt_scatter.scr
    :literal:
-.. image:: static/yt_scatter_doc.png
+.. image:: static/figures/yt_scatter_doc.png
    :width: 70%
 
 yt multiple volume example
 --------------------------
 
-.. include:: static/yt_tg_multvol.scr
+.. include:: static/figures/yt_tg_multvol.scr
    :literal:	     
-.. image:: static/yt_tg_multvol_doc.png
+.. image:: static/figures/yt_tg_multvol_doc.png
    :width: 70%
 
 .. raw:: html
