@@ -86,6 +86,14 @@ Region plot example
 .. image:: static/figures/table_rplot_doc.png
    :width: 70%
 
+plot-color example
+------------------
+
+.. include:: static/examples/table_plot_color.scr
+   :literal:
+.. image:: static/figures/table_plot_color_doc.png
+   :width: 70%
+
 Subplot example 1
 -----------------
 

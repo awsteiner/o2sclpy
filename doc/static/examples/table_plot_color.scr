@@ -1,0 +1,3 @@
+o2graph -create table x grid:0,1,0.002 -function "sin(100*x)" y \
+-function "sqrt(x^2+y^2)" z -set fig_dict left_margin=0.15 \
+-plot-color x y z jet -xtitle x -ytitle y -save table_plot_color.png -show
