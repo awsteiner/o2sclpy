@@ -4,8 +4,9 @@ O\ :sub:`2`\ sclpy: v0.925a1
 ============================
 
 O\ :sub:`2`\ sclpy: A high-level plotting script, ``o2graph``, for
-quick ``matplotlib`` plots for use with the :ref:`O2scl <o2scl>` C++
-library and a set of python classes for convenient plotting.
+quick `matplotlib <https://matplotlib.org>`_ or `yt <https://yt-project.org/>`_
+plots for use with the :ref:`O2scl <o2scl>` C++ library and a set of
+python classes for convenient plotting.
 
 .. warning:: This python library is experimental and still under
 	     development.

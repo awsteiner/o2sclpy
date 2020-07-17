@@ -56,9 +56,12 @@ class o2graph_plotter(plot_base):
     This class is not necessarily intended to be instantiated by the 
     end user. 
 
+    The function parameter `o2scl_hdf` must always be a ctypes DLL 
+    object which points to the libo2scl_hdf shared library (.so on
+    linux and .dylib on OSX). The function parameter `amp` must
+    always be a pointer to the 
+    :ref:`o2scl_acol::acol_manager<o2scl:acol_manager>` object.
     """
-
-    dpa_cax=0
 
     def set_wrapper(self,o2scl_hdf,amp,args):
         """
@@ -152,7 +155,7 @@ class o2graph_plotter(plot_base):
     def gen_acol(self,o2scl_hdf,amp,cmd_name,args):
         """
         Run a general ``acol`` command named ``cmd_name`` with arguments
-        stored in ``args``. This funciton uses the O\ :sub:`2`\ scl function
+        stored in ``args``. This function uses the O\ :sub:`2`\ scl function
         ``o2scl_acol_parse()``.
         """
 
@@ -201,8 +204,8 @@ class o2graph_plotter(plot_base):
         
     def den_plot(self,o2scl_hdf,amp,args):
         """
-        Density plot from a ``table3d``, ``hist_2d`` ``tensor_grid``,
-        ``tensor``, ``tensor<int>`` or ``tensor<size_t>`` object
+        Density plot from a ``table3d``, ``hist_2d``, ``tensor_grid``,
+        ``tensor``, ``tensor<int>``, or ``tensor<size_t>`` object.
         """
 
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -469,8 +472,8 @@ class o2graph_plotter(plot_base):
 
     def den_plot_rgb(self,o2scl_hdf,amp,args):
         """
-        Density plot from a ``table3d``, ``hist_2d`` ``tensor_grid``,
-        ``tensor``, ``tensor<int>`` or ``tensor<size_t>`` object
+        Density plot from a ``table3d`` object using three slices
+        to specify the red, green, and blue values.
         """
 
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -958,7 +961,8 @@ class o2graph_plotter(plot_base):
                                  
     def plot_color(self,o2scl_hdf,amp,args):
         """
-        Plot a set of line segments, coloring according to a third variable
+        Plot a set of line segments, coloring according to a third 
+        variable.
         """
 
         if len(args)<4:
@@ -1327,7 +1331,7 @@ class o2graph_plotter(plot_base):
                                  
     def hist_plot(self,o2scl_hdf,amp,args):
         """
-        Plot a histogram
+        Plot a histogram.
         """
 
         # Useful pointer types
@@ -1432,7 +1436,7 @@ class o2graph_plotter(plot_base):
                                  
     def hist2d_plot(self,o2scl_hdf,amp,args):
         """
-        Plot a two-dimensional histogram
+        Plot a two-dimensional histogram.
         """
 
         # Useful pointer types
@@ -1511,7 +1515,7 @@ class o2graph_plotter(plot_base):
                                  
     def errorbar(self,o2scl_hdf,amp,args):
         """
-        Create a plot with error bars
+        Create a plot with error bars.
         """
 
         # Useful pointer types
@@ -1594,7 +1598,7 @@ class o2graph_plotter(plot_base):
                                  
     def plot1(self,o2scl_hdf,amp,args):
         """
-        Plot data versus an integer x axis
+        Plot one array of data versus an integer x axis.
         """
 
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -1823,6 +1827,8 @@ class o2graph_plotter(plot_base):
     def print_param_docs(self):
         """
         Print parameter documentation.
+
+        Called by help_func().
         """
 
         str_line=horiz_line()
@@ -1897,7 +1903,9 @@ class o2graph_plotter(plot_base):
 
         This is the main function used by the :ref:`o2graph_script` .
         Once it has created a list of strings from argv, it calls
-        parse_string_list() to call the proper functions.
+        parse_string_list() to call the proper functions. It 
+        creates the pointer to the o2scl acol_manager object 
+        called `amp`.
         """
 
         # Create an acol_manager object and get the pointer
@@ -2618,7 +2626,7 @@ class o2graph_plotter(plot_base):
         
     def yt_tf_func(self,args):
         """
-        Update yt transfer function
+        Update the yt transfer function.
         """
 
         if len(args)==0:
@@ -2700,6 +2708,8 @@ class o2graph_plotter(plot_base):
 
     def yt_path_func(self,o2scl_hdf,amp,args):
         """
+        Add a path to the list of yt animations for the next
+        yt render.
         """
 
         self.yt_path.append(args)
@@ -2709,12 +2719,20 @@ class o2graph_plotter(plot_base):
 
     def yt_ann_func(self,o2scl_hdf,amp,args):
         """
+        Add the o2graph commands specified in `args` to the 
+        list of yt annotations to be used in the next yt render.
+        The list or arguments in `args` must end with 'end'. 
+        If `args` contains only one entry ('end'), then the
+        list of annotations is cleared.
         """
 
-        for i in range(0,len(args)):
-            if force_bytes(args[i])!=b'end':
-                self.yt_ann.append(args[i])
-        print('yt_ann is',self.yt_ann)
+        if len(args)==1 and force_bytes(args[0])==b'end':
+            print('Clearing all yt annotations.')
+        else:
+            for i in range(0,len(args)):
+                if force_bytes(args[i])!=b'end':
+                    self.yt_ann.append(args[i])
+            print('yt_ann is',self.yt_ann)
         
         return
 
@@ -3021,7 +3039,7 @@ class o2graph_plotter(plot_base):
     def yt_vertex_list(self,o2scl_hdf,amp,args):
         """
         Plot a series of line segments between a list of
-        vertices specified in an O\ :sub:`2`\ scl table
+        vertices specified in an O\ :sub:`2`\ scl table.
         """
 
         if len(args)<3:
@@ -3172,7 +3190,7 @@ class o2graph_plotter(plot_base):
         
     def commands(self,o2scl_hdf,amp,args):
         """
-        Output the currently available commands
+        Output the currently available commands.
         """
 
         self.gen_acol(o2scl_hdf,amp,'commands',args)
@@ -3437,10 +3455,11 @@ class o2graph_plotter(plot_base):
         return (pos,foc,nor,wid)
 
     def filter_image(self,fname):
-        """ 
+        """
         If a filter has been defined, apply that filter to the image
-        stored in file ``fname``. This function is used in yt_render()
-        to filter the images before combining them into a mp4.
+        stored in file ``fname``. This function is used in
+        yt_save_annotate() to filter the images after saving them to a
+        file.
         """
         if self.yt_filter!='':
             print('Found filter')
@@ -3853,7 +3872,7 @@ class o2graph_plotter(plot_base):
 
     def parse_string_list(self,strlist,o2scl_hdf,amp):
         """
-        Parse a list of strings
+        Parse a list of strings.
 
         This function is called by parse_argv().
         """
