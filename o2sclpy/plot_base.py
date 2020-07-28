@@ -173,6 +173,13 @@ class plot_base:
     If true, include ticks on right side and top (default False)
     """
 
+    editor=False
+    """
+    If true, open the editor
+    """
+    ax_left_panel=0
+    ax_right_panel=0
+    
     # yt settings modifiable by get and set
 
     yt_filter=''
@@ -853,6 +860,11 @@ class plot_base:
                 self.zset=False
             else:
                 self.zset=True
+        elif name=='editor':
+            if value=='False' or value=='0':
+                self.editor=False
+            else:
+                self.editor=True
         elif name=='verbose':
             self.verbose=int(value)
         elif name=='colbar':
@@ -1420,7 +1432,197 @@ class plot_base:
         """
         Call the ``matplotlib`` show function.
         """
+
+        if self.editor:
+            
+            from matplotlib.widgets import Button, Slider, TextBox
+
+            title=r'$ \mathrm{O}_2\mathrm{graph~Plot~Editor}$'
+            editor_title=self.ax_right_panel.text(0.02,0.955,title,
+                                                  ha='left',va='center',
+                                                  fontsize=16)
+
+            inst_text=('Begin by selecting a plot element above '+
+                       'to modify.')
+            instructions=self.ax_right_panel.text(0.02,0.91,inst_text,
+                                                  ha='left',va='center',
+                                                  fontsize=16)
+            
+            # The 'close' button
+            ax_close_button=plot.axes([0.915,0.93,0.08,0.06])
+            close_button=Button(ax_close_button,r'close')
+            close_button.label.set_size(14)
+
+            # The 'figure' button
+            ax_figure_button=plot.axes([0.505,0.81,0.1,0.06])
+            figure_button=Button(ax_figure_button,'figure')
+            figure_button.label.set_size(14)
+
+            # The 'axes' button
+            ax_axes_button=plot.axes([0.715,0.81,0.1,0.06])
+            axes_button=Button(ax_axes_button,'axes')
+            axes_button.label.set_size(14)
+            
+            # The 'subplot' button
+            ax_subplot_button=plot.axes([0.61,0.81,0.1,0.06])
+            subplot_button=Button(ax_subplot_button,'subplot')
+            subplot_button.label.set_size(14)
+            
+            # The 'text' button
+            ax_text_button=plot.axes([0.82,0.81,0.1,0.06])
+            text_button=Button(ax_text_button,'text')
+            text_button.label.set_size(14)
+
+            # figure margin sliders
+            
+            ax_left_margin_slider=plot.axes([1,1,0.1,0.1],facecolor='blue')
+            left_margin_slider=Slider(ax_left_margin_slider,'left margin',
+                                      0,0.5,valinit=self.left_margin,
+                                      valstep=0.005)
+            left_margin_slider.label.set_size(14)
+            left_margin_slider.valtext.set_size(14)
+            
+            ax_right_margin_slider=plot.axes([1.1,1,0.1,0.1],facecolor='blue')
+            right_margin_slider=Slider(ax_right_margin_slider,'right margin',
+                                      0,0.5,valinit=self.right_margin,
+                                      valstep=0.005)
+            right_margin_slider.label.set_size(14)
+            right_margin_slider.valtext.set_size(14)
+            
+            ax_top_margin_slider=plot.axes([1.2,1,0.1,0.1],facecolor='blue')
+            top_margin_slider=Slider(ax_top_margin_slider,'top margin',
+                                      0,0.5,valinit=self.top_margin,
+                                      valstep=0.005)
+            top_margin_slider.label.set_size(14)
+            top_margin_slider.valtext.set_size(14)
+            
+            ax_bottom_margin_slider=plot.axes([1.3,1,0.1,0.1],facecolor='blue')
+            bottom_margin_slider=Slider(ax_bottom_margin_slider,'bottom margin',
+                                      0,0.5,valinit=self.bottom_margin,
+                                      valstep=0.005)
+            bottom_margin_slider.label.set_size(14)
+            bottom_margin_slider.valtext.set_size(14)
+
+            # axis limit text boxes
+            
+            ax_xlo_tbox=plot.axes([1,1,0.107,0.107])
+            ax_xhi_tbox=plot.axes([1,1,0.108,0.108])
+            if self.xset==False:
+                limt=self.axes.get_xlim()
+                self.xlo=limt[0]
+                self.xhi=limt[1]
+            xlo_tbox=TextBox(ax_xlo_tbox,'x low:',
+                             initial=('%5.4f' % self.xlo))
+            xhi_tbox=TextBox(ax_xhi_tbox,'x high:',
+                             initial=('%5.4f' % self.xhi))
+            xlo_tbox.label.set_size(14)
+            xhi_tbox.label.set_size(14)
+            
+            ax_ylo_tbox=plot.axes([1,1,0.109,0.109])
+            ax_yhi_tbox=plot.axes([1,1,0.110,0.110])
+            if self.yset==False:
+                limt=self.axes.get_ylim()
+                self.ylo=limt[0]
+                self.yhi=limt[1]
+            ylo_tbox=TextBox(ax_ylo_tbox,'y low:',
+                             initial=('%5.4f' % self.ylo))
+            yhi_tbox=TextBox(ax_yhi_tbox,'y high:',
+                             initial=('%5.4f' % self.yhi))
+            ylo_tbox.label.set_size(14)
+            yhi_tbox.label.set_size(14)
+            
+            # Callback for 'close editor' button
+            def close_editor(event):
+                self.fig.set_size_inches(6,6,forward=True)
+                ax_close_button.set_position([1.1,1.1,0.1,0.1])
+                ax_figure_button.set_position([1.1,1.1,0.1,0.1])
+                ax_axes_button.set_position([1.1,1.1,0.1,0.1])
+                ax_text_button.set_position([1.1,1.1,0.1,0.1])
+                ax_subplot_button.set_position([1.1,1.1,0.1,0.1])
+                self.ax_left_panel.set_position([0,0,1,1])
+                self.ax_right_panel.set_position([1,1,1,1])
+                self.axes.set_position([self.left_margin,
+                                        self.bottom_margin,
+                                        1.0-self.left_margin-self.right_margin,
+                                        1.0-self.top_margin-self.bottom_margin])
+                self.fig.canvas.draw_idle()
+                return
+
+            def figure_editor(event):
+                instructions.set_text('')
+                ax_left_margin_slider.set_position([0.63,0.7,0.30,0.05])
+                ax_bottom_margin_slider.set_position([0.63,0.64,0.30,0.05])
+                ax_right_margin_slider.set_position([0.63,0.58,0.30,0.05])
+                ax_top_margin_slider.set_position([0.63,0.52,0.30,0.05])
+                self.fig.canvas.draw_idle()
+                return
+
+            def axes_editor(event):
+                instructions.set_text('')
+                ax_left_margin_slider.set_position([1,1,0.103,0.103])
+                ax_bottom_margin_slider.set_position([1,1,0.104,0.104])
+                ax_right_margin_slider.set_position([1,1,0.105,0.105])
+                ax_top_margin_slider.set_position([1,1,0.106,0.106])
+                ax_xlo_tbox.set_position([0.63,0.7,0.30,0.05])
+                ax_xhi_tbox.set_position([0.63,0.64,0.30,0.05])
+                ax_ylo_tbox.set_position([0.63,0.58,0.30,0.05])
+                ax_yhi_tbox.set_position([0.63,0.52,0.30,0.05])
+                self.fig.canvas.draw_idle()
+                return
+
+            def margin_update():
+                self.axes.set_position([self.left_margin/2.0,
+                                        self.bottom_margin,
+                                        (1.0-self.left_margin-
+                                         self.right_margin)/2.0,
+                                        1.0-self.top_margin-self.bottom_margin])
+                self.fig.canvas.draw_idle()
+                return
+                
+            def left_margin_update(val):
+                self.left_margin=val
+                margin_update()
+                return
+            def right_margin_update(val):
+                self.right_margin=val
+                margin_update()
+                return
+            def bottom_margin_update(val):
+                self.bottom_margin=val
+                margin_update()
+                return
+            def top_margin_update(val):
+                self.top_margin=val
+                margin_update()
+                return
+
+            def xlim_lo_update(val):
+                self.axes.set_xlim([float(val),self.xhi])
+                return
+            def xlim_hi_update(val):
+                self.axes.set_xlim([self.xlo,float(val)])
+                return
+            def ylim_lo_update(val):
+                self.axes.set_ylim([float(val),self.yhi])
+                return
+            def ylim_hi_update(val):
+                self.axes.set_ylim([self.ylo,float(val)])
+                return
+
+            close_button.on_clicked(close_editor)
+            figure_button.on_clicked(figure_editor)
+            axes_button.on_clicked(axes_editor)
+            left_margin_slider.on_changed(left_margin_update)
+            right_margin_slider.on_changed(right_margin_update)
+            top_margin_slider.on_changed(top_margin_update)
+            bottom_margin_slider.on_changed(bottom_margin_update)
+            xlo_tbox.on_submit(xlim_lo_update)
+            xhi_tbox.on_submit(xlim_hi_update)
+            ylo_tbox.on_submit(ylim_lo_update)
+            yhi_tbox.on_submit(ylim_hi_update)
+            
         plot.show()
+        
         # End of function plot_base::show()
         return
 
@@ -1845,7 +2047,11 @@ class plot_base:
         dct=string_to_dict(self.fig_dict)
         if 'fontsize' not in dct.keys():
             dct['fontsize']=self.font
-        (self.fig,self.axes)=default_plot(**dct)
+        if self.editor:
+            (self.fig,self.axes,self.ax_left_panel,
+             self.ax_right_panel)=default_plot(**dct,editor=True)
+        else:
+            (self.fig,self.axes)=default_plot(**dct)
         
         # Plot limits
         if self.xset==True:

@@ -579,6 +579,7 @@ This is a list of 5-element entries:
 
 param_list=[
     ["colbar","If true, den-plot adds a color legend (default False)."],
+    ["editor","If true, open the plot editor."],
     ["fig_dict",("Dictionary for figure properties. The default value is "+
                  "blank and implies ('fig_size_x=6.0, fig_size_y=6.0, "+
                  "ticks_in=False, "+

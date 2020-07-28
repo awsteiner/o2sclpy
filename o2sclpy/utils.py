@@ -53,7 +53,7 @@ def force_bytes(obj):
 def default_plot(left_margin=0.14,bottom_margin=0.12,
                  right_margin=0.04,top_margin=0.04,fontsize=16,
                  fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,
-                 rt_ticks=False):
+                 rt_ticks=False,editor=False):
     """
     This function sets up the O\ :sub:`2`\ sclpy ``matplotlib``
     defaults. It returns a pair of objects, the figure object and axes
@@ -68,16 +68,44 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     plot.rc('text',usetex=True)
     plot.rc('font',family='serif')
     plot.rcParams['lines.linewidth']=0.5
-    fig=plot.figure(1,figsize=(fig_size_x,fig_size_y))
-    fig.set_facecolor('white')
-    ax=plot.axes([left_margin,bottom_margin,
-                  1.0-left_margin-right_margin,1.0-top_margin-bottom_margin])
+    
+    if editor:
+        
+        fig=plot.figure(1,figsize=(fig_size_x*2,fig_size_y))
+        fig.set_facecolor('white')
+        
+        ax_left_panel=plot.axes([0,0,0.5,1],facecolor=(1,1,1,0),
+                                autoscale_on=False)
+        ax_left_panel.margins(x=0,y=0)
+        ax_left_panel.axis('off')
+        
+        ax_right_panel=plot.axes([0.5,0,0.5,1],facecolor=(0.9,0.9,0.9,1),
+                                 autoscale_on=False)
+        ax_right_panel.margins(x=0,y=0)
+        ax_right_panel.get_xaxis().set_visible(False)
+        ax_right_panel.get_yaxis().set_visible(False)
+        ax=plot.axes([left_margin/2.0,bottom_margin,
+                           (1.0-left_margin-right_margin)/2,
+                           1.0-top_margin-bottom_margin])
+    else:
+        
+        fig=plot.figure(1,figsize=(fig_size_x,fig_size_y))
+        fig.set_facecolor('white')
+        
+        ax=plot.axes([left_margin,bottom_margin,
+                      1.0-left_margin-right_margin,
+                      1.0-top_margin-bottom_margin])
+        
     ax.minorticks_on()
     # Make the ticks longer than default
     ax.tick_params('both',length=12,width=1,which='major')
     ax.tick_params('both',length=5,width=1,which='minor')
     ax.tick_params(labelsize=fontsize*0.8)
     plot.grid(False)
+
+    if editor:
+        return (fig,ax,ax_left_panel,ax_right_panel)
+    
     return (fig,ax)
     
 def get_str_array(dset):
