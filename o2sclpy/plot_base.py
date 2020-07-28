@@ -1512,9 +1512,9 @@ class plot_base:
                 self.xlo=limt[0]
                 self.xhi=limt[1]
             xlo_tbox=TextBox(ax_xlo_tbox,'x low:',
-                             initial=('%5.4f' % self.xlo))
+                             initial=('%5.4g' % self.xlo))
             xhi_tbox=TextBox(ax_xhi_tbox,'x high:',
-                             initial=('%5.4f' % self.xhi))
+                             initial=('%5.4g' % self.xhi))
             xlo_tbox.label.set_size(14)
             xhi_tbox.label.set_size(14)
             
@@ -1525,9 +1525,9 @@ class plot_base:
                 self.ylo=limt[0]
                 self.yhi=limt[1]
             ylo_tbox=TextBox(ax_ylo_tbox,'y low:',
-                             initial=('%5.4f' % self.ylo))
+                             initial=('%5.4g' % self.ylo))
             yhi_tbox=TextBox(ax_yhi_tbox,'y high:',
-                             initial=('%5.4f' % self.yhi))
+                             initial=('%5.4g' % self.yhi))
             ylo_tbox.label.set_size(14)
             yhi_tbox.label.set_size(14)
             
