@@ -1435,6 +1435,24 @@ class plot_base:
 
         if self.editor:
             
+            def disable(ax):
+                b=ax.get_position().bounds
+                if b[0]<1:
+                    b2=[b[0]+1,b[1],b[2],b[3]]
+                else:
+                    b2=[b[0],b[1],b[2],b[3]]
+                ax.set_position(b2)
+                return
+                
+            def enable(ax):
+                b=ax.get_position().bounds
+                if b[0]>1:
+                    b2=[b[0]-1,b[1],b[2],b[3]]
+                else:
+                    b2=[b[0],b[1],b[2],b[3]]
+                ax.set_position(b2)
+                return
+                
             from matplotlib.widgets import Button, Slider, TextBox
 
             title=r'$ \mathrm{O}_2\mathrm{graph~Plot~Editor}$'
@@ -1475,38 +1493,47 @@ class plot_base:
 
             # figure margin sliders
             
-            ax_left_margin_slider=plot.axes([1,1,0.1,0.1],facecolor='blue')
+            ax_left_margin_slider=plot.axes([0.63,0.7,0.30,0.05],
+                                            facecolor='#bbbbbb')
             left_margin_slider=Slider(ax_left_margin_slider,'left margin',
                                       0,0.5,valinit=self.left_margin,
-                                      valstep=0.005)
+                                      valstep=0.005,color='#777777')
             left_margin_slider.label.set_size(14)
             left_margin_slider.valtext.set_size(14)
             
-            ax_right_margin_slider=plot.axes([1.1,1,0.1,0.1],facecolor='blue')
+            ax_right_margin_slider=plot.axes([0.63,0.58,0.30,0.05],
+                                             facecolor='#bbbbbb')
             right_margin_slider=Slider(ax_right_margin_slider,'right margin',
                                       0,0.5,valinit=self.right_margin,
-                                      valstep=0.005)
+                                      valstep=0.005,color='#777777')
             right_margin_slider.label.set_size(14)
             right_margin_slider.valtext.set_size(14)
             
-            ax_top_margin_slider=plot.axes([1.2,1,0.1,0.1],facecolor='blue')
+            ax_top_margin_slider=plot.axes([0.63,0.52,0.30,0.05],
+                                            facecolor='#bbbbbb')
             top_margin_slider=Slider(ax_top_margin_slider,'top margin',
                                       0,0.5,valinit=self.top_margin,
-                                      valstep=0.005)
+                                      valstep=0.005,color='#777777')
             top_margin_slider.label.set_size(14)
             top_margin_slider.valtext.set_size(14)
             
-            ax_bottom_margin_slider=plot.axes([1.3,1,0.1,0.1],facecolor='blue')
+            ax_bottom_margin_slider=plot.axes([0.63,0.64,0.30,0.05],
+                                            facecolor='#bbbbbb')
             bottom_margin_slider=Slider(ax_bottom_margin_slider,'bottom margin',
-                                      0,0.5,valinit=self.bottom_margin,
-                                      valstep=0.005)
+                                        0,0.5,valinit=self.bottom_margin,
+                                        valstep=0.005,color='#777777')
             bottom_margin_slider.label.set_size(14)
             bottom_margin_slider.valtext.set_size(14)
 
+            disable(ax_left_margin_slider)
+            disable(ax_right_margin_slider)
+            disable(ax_top_margin_slider)
+            disable(ax_bottom_margin_slider)
+
             # axis limit text boxes
             
-            ax_xlo_tbox=plot.axes([1,1,0.107,0.107])
-            ax_xhi_tbox=plot.axes([1,1,0.108,0.108])
+            ax_xlo_tbox=plot.axes([0.63,0.7,0.30,0.05])
+            ax_xhi_tbox=plot.axes([0.63,0.64,0.30,0.05])
             if self.xset==False:
                 limt=self.axes.get_xlim()
                 self.xlo=limt[0]
@@ -1518,8 +1545,8 @@ class plot_base:
             xlo_tbox.label.set_size(14)
             xhi_tbox.label.set_size(14)
             
-            ax_ylo_tbox=plot.axes([1,1,0.109,0.109])
-            ax_yhi_tbox=plot.axes([1,1,0.110,0.110])
+            ax_ylo_tbox=plot.axes([0.63,0.58,0.30,0.05])
+            ax_yhi_tbox=plot.axes([0.63,0.52,0.30,0.05])
             if self.yset==False:
                 limt=self.axes.get_ylim()
                 self.ylo=limt[0]
@@ -1530,15 +1557,45 @@ class plot_base:
                              initial=('%5.4g' % self.yhi))
             ylo_tbox.label.set_size(14)
             yhi_tbox.label.set_size(14)
+
+            disable(ax_xlo_tbox)
+            disable(ax_xhi_tbox)
+            disable(ax_ylo_tbox)
+            disable(ax_yhi_tbox)
             
             # Callback for 'close editor' button
             def close_editor(event):
                 self.fig.set_size_inches(6,6,forward=True)
-                ax_close_button.set_position([1.1,1.1,0.1,0.1])
-                ax_figure_button.set_position([1.1,1.1,0.1,0.1])
-                ax_axes_button.set_position([1.1,1.1,0.1,0.1])
-                ax_text_button.set_position([1.1,1.1,0.1,0.1])
-                ax_subplot_button.set_position([1.1,1.1,0.1,0.1])
+
+                disable(ax_close_button)
+                disable(ax_figure_button)
+                disable(ax_axes_button)
+                disable(ax_text_button)
+                disable(ax_subplot_button)
+                #ax_close_button.set_position([1.1,1.1,0.1,0.1])
+                #ax_figure_button.set_position([1.1,1.1,0.1,0.1])
+                #ax_axes_button.set_position([1.1,1.1,0.1,0.1])
+                #ax_text_button.set_position([1.1,1.1,0.1,0.1])
+                #ax_subplot_button.set_position([1.1,1.1,0.1,0.1])
+
+                disable(ax_xlo_tbox)
+                disable(ax_xhi_tbox)
+                disable(ax_ylo_tbox)
+                disable(ax_yhi_tbox)
+                #ax_xlo_tbox.set_position([1,1,0.111,0.111])
+                #ax_xhi_tbox.set_position([1,1,0.112,0.112])
+                #ax_ylo_tbox.set_position([1,1,0.113,0.113])
+                #ax_yhi_tbox.set_position([1,1,0.114,0.114])
+
+                disable(ax_left_margin_slider)
+                disable(ax_right_margin_slider)
+                disable(ax_top_margin_slider)
+                disable(ax_bottom_margin_slider)
+                #ax_left_margin_slider.set_position([1,1,0.103,0.103])
+                #ax_bottom_margin_slider.set_position([1,1,0.104,0.104])
+                #ax_right_margin_slider.set_position([1,1,0.105,0.105])
+                #ax_top_margin_slider.set_position([1,1,0.106,0.106])
+
                 self.ax_left_panel.set_position([0,0,1,1])
                 self.ax_right_panel.set_position([1,1,1,1])
                 self.axes.set_position([self.left_margin,
@@ -1549,24 +1606,35 @@ class plot_base:
                 return
 
             def figure_editor(event):
+                
                 instructions.set_text('')
-                ax_left_margin_slider.set_position([0.63,0.7,0.30,0.05])
-                ax_bottom_margin_slider.set_position([0.63,0.64,0.30,0.05])
-                ax_right_margin_slider.set_position([0.63,0.58,0.30,0.05])
-                ax_top_margin_slider.set_position([0.63,0.52,0.30,0.05])
+                
+                enable(ax_left_margin_slider)
+                enable(ax_right_margin_slider)
+                enable(ax_top_margin_slider)
+                enable(ax_bottom_margin_slider)
+                
+                disable(ax_xlo_tbox)
+                disable(ax_xhi_tbox)
+                disable(ax_ylo_tbox)
+                disable(ax_yhi_tbox)
+                
                 self.fig.canvas.draw_idle()
                 return
 
             def axes_editor(event):
                 instructions.set_text('')
-                ax_left_margin_slider.set_position([1,1,0.103,0.103])
-                ax_bottom_margin_slider.set_position([1,1,0.104,0.104])
-                ax_right_margin_slider.set_position([1,1,0.105,0.105])
-                ax_top_margin_slider.set_position([1,1,0.106,0.106])
-                ax_xlo_tbox.set_position([0.63,0.7,0.30,0.05])
-                ax_xhi_tbox.set_position([0.63,0.64,0.30,0.05])
-                ax_ylo_tbox.set_position([0.63,0.58,0.30,0.05])
-                ax_yhi_tbox.set_position([0.63,0.52,0.30,0.05])
+                
+                disable(ax_left_margin_slider)
+                disable(ax_right_margin_slider)
+                disable(ax_top_margin_slider)
+                disable(ax_bottom_margin_slider)
+
+                enable(ax_xlo_tbox)
+                enable(ax_xhi_tbox)
+                enable(ax_ylo_tbox)
+                enable(ax_yhi_tbox)
+
                 self.fig.canvas.draw_idle()
                 return
 
