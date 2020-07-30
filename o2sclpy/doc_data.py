@@ -102,6 +102,9 @@ base_list=[
     ["eval","Run the python eval() function.","<python code>",
      "Take the python code given and execute it using eval(). "+
      "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
+    ["exec","Run the python code specified in file","<filename>",
+     "Take the python code given and execute it using execfile(). "+
+     "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
     ["image","Plot an image.","<file>",
      "Read a .png file, create a plot, and then call plot.show()."],
     ["inset","Add a new set of axes (e.g. for an inset).",

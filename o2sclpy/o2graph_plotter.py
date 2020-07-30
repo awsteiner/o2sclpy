@@ -4570,6 +4570,13 @@ class o2graph_plotter(plot_base):
 
                     eval(strlist[ix+1],None,locals())
                     
+                elif cmd_name=='exec':
+                    
+                    if self.verbose>2:
+                        print('Process exec.')
+
+                    exec(open(strlist[ix+1]).read(),None,locals())
+                    
                 elif cmd_name=='image':
                     
                     if self.verbose>2:
