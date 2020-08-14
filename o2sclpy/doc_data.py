@@ -456,9 +456,11 @@ extra_list=[
      "Creates a density plot from the specified "+
      "slice. A z-axis density legend "+
      "is print on the RHS if colbar is set to True before plotting. "+
-     "If z-axis limits are specified, then values larger than the upper limit "+
+     "If z-axis limits are specified, then values larger than the upper "+
+     "limit "+
      "are set equal to the upper limit and values smaller than the lower "+
-     "limit are set equal to the lower limit before plotting. The python "+
+     "limit are set equal to the lower limit before plotting. The x- "+
+     "and y-axis limits (xlo,xhi,ylo,yhi) are ignored. The python "+
      "function imshow() is used, unless 'pcm=True' is specified, in "+
      "which case the pcolormesh() function is used instead. When "+
      "'pcm=False', logarithmic scales are handled by "+
