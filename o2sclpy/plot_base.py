@@ -877,10 +877,13 @@ class plot_base:
         elif name=='fig_dict':
             self.fig_dict=value
         elif name=='yt_resolution':
+            # Remove parenthesis
             left_paren=value.find('(')
             right_paren=value.find(')')
             value=value[left_paren+1:right_paren]
+            # Then split into two values
             value=value.split(',')
+            # And reformat as a list
             self.yt_resolution=(int(value[0]),int(value[1]))
         elif name=='yt_focus':
             # We leave the focus as a string so we can parse
