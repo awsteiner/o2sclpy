@@ -1458,6 +1458,8 @@ class plot_base:
                 
             from matplotlib.widgets import Button, Slider, TextBox
 
+            plot.rc('text',usetex=False)
+            
             title=r'$ \mathrm{O}_2\mathrm{graph~Plot~Editor}$'
             editor_title=self.ax_right_panel.text(0.02,0.955,title,
                                                   ha='left',va='center',
@@ -1691,6 +1693,8 @@ class plot_base:
             xhi_tbox.on_submit(xlim_hi_update)
             ylo_tbox.on_submit(ylim_lo_update)
             yhi_tbox.on_submit(ylim_hi_update)
+            
+            plot.rc('text',usetex=True)
             
         plot.show()
         
