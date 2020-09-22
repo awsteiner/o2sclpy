@@ -335,6 +335,8 @@ def string_to_dict(s):
                 arr2[1]=float(arr2[1])
             if arr2[0]=='dpi':
                 arr2[1]=float(arr2[1])
+            if arr2[0]=='pad':
+                arr2[1]=float(arr2[1])
 
             # Convert strings to bool values
             if arr2[0]=='sharex':
