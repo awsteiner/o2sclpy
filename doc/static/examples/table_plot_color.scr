@@ -1,3 +1,8 @@
+# An example of the 'plot-color' command. The third argument specifies
+# the color value and the fourth argument specifies the color map.
+# Note that 'plot-color' builds the curve up from line segments, so a
+# relatively fine grid is needed to generate this image.
+#
 o2graph -create table x grid:0,1,0.002 -function "sin(100*x)" y \
 -function "sqrt(x^2+y^2)" z -set fig_dict left_margin=0.15 \
 -plot-color x y z jet -xtitle x -ytitle y -save table_plot_color.png -show

@@ -2338,12 +2338,7 @@ class o2graph_plotter(plot_base):
         if len(args)==1:
 
             # Get current type
-            int_ptr=ctypes.POINTER(ctypes.c_int)
-            char_ptr=ctypes.POINTER(ctypes.c_char)
-            char_ptr_ptr=ctypes.POINTER(char_ptr)
-
             curr_type=o2scl_get_type(o2scl_hdf,amp)
-                            
             cmd=args[0]
 
         elif len(args)==2:
@@ -2380,10 +2375,70 @@ class o2graph_plotter(plot_base):
                 match=True
                 print('Usage: '+cmd+' '+line[3]+'\n\n'+
                       line[2]+'\n')
-                str_list=textwrap.wrap(line[4],79)
-                for i in range (0,len(str_list)):
-                    print(str_list[i])
+                
+                tempx_arr=line[4].split('\n')
+                for j in range(0,len(tempx_arr)):
+                    if len(tempx_arr[j])<79:
+                        print(tempx_arr[j])
+                    else:
+                        str_list=textwrap.wrap(tempx_arr[j],79)
+                        for i in range (0,len(str_list)):
+                            print(str_list[i])
 
+        # If we haven't matched yet, then show commands for
+        # other types
+        if match==False:
+            for line in extra_list:
+                if cmd==line[1]:
+                    match=True
+                    str_line=horiz_line()
+                    print('\n'+str_line)
+                    print('Type '+line[0]+':')
+                    print('Usage: '+cmd+' '+line[3]+'\n\n'+
+                          line[2]+'\n')
+                    
+                    tempx_arr=line[4].split('\n')
+                    for j in range(0,len(tempx_arr)):
+                        if len(tempx_arr[j])<79:
+                            print(tempx_arr[j])
+                        else:
+                            str_list=textwrap.wrap(tempx_arr[j],79)
+                            for i in range (0,len(str_list)):
+                                print(str_list[i])
+
+        # If we haven't matched yet, check for get/set parameters
+        if match==False:
+            for line in param_list:
+                if cmd==line[0]:
+                    match=True
+                    print('Parameter modified by get/set: '+line[0]+'\n')
+                    
+                    tempx_arr=line[1].split('\n')
+                    for j in range(0,len(tempx_arr)):
+                        if len(tempx_arr[j])<79:
+                            print(tempx_arr[j])
+                        else:
+                            str_list=textwrap.wrap(tempx_arr[j],79)
+                            for i in range (0,len(str_list)):
+                                print(str_list[i])
+                                
+        # If we haven't matched yet, check for get/set parameters
+        # from yt
+        if match==False:
+            for line in yt_param_list:
+                if cmd==line[0]:
+                    match=True
+                    print('yt parameter modified by get/set: '+line[0]+'\n')
+                    
+                    tempx_arr=line[1].split('\n')
+                    for j in range(0,len(tempx_arr)):
+                        if len(tempx_arr[j])<79:
+                            print(tempx_arr[j])
+                        else:
+                            str_list=textwrap.wrap(tempx_arr[j],79)
+                            for i in range (0,len(str_list)):
+                                print(str_list[i])
+                                
         finished=False
         
         if cmd=='cmaps' and len(args)==1:

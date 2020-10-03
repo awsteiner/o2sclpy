@@ -75,6 +75,12 @@ table_rplot:
 		temp.png
 	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
 
+table_errorbar:
+	./table_errorbar.scr
+	convert +append ../figures/table_errorbar_doc.png table_errorbar.png \
+		temp.png
+	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+
 table_scatter:
 	./table_scatter.scr
 	convert +append ../figures/table_scatter_doc.png table_scatter.png \

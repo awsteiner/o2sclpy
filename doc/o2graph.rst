@@ -86,6 +86,14 @@ Region plot example
 .. image:: static/figures/table_rplot_doc.png
    :width: 70%
 
+Error bars example
+------------------
+
+.. include:: static/examples/table_errorbar.scr
+   :literal:
+.. image:: static/figures/table_errorbar_doc.png
+   :width: 70%
+
 plot-color example
 ------------------
 

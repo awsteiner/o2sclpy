@@ -1,4 +1,4 @@
-# Desc
+# An example showing how to modify axes using the 'modax' command. 
 #
 o2graph -create table x grid:-3.14,3.14,0.1 \
 	-function "(1+sin(x))/2" y \

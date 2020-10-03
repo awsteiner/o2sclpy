@@ -414,17 +414,20 @@ extra_list=[
      "symmetric error bars given in "+
      "column <xerr> and <yerr>. For no uncertainty in either the x or y "+
      "direction, just use 0 for <xerr> or <yerr>, respectively. New kwargs "+
-     "for the errorbar command are ecolor(error bar color)=None, "+
-     "elinewidth(error bar line width)=None, "+
-     "capsize(cap size in points)=None, "+
-     "barsabove(plot error bars on top of points)=False, "+
-     "lolims(y value is lower limit)=False, "+
-     "uplims(y value is upper limit)=False, "+
-     "xlolims(x value is lower limit)=False, "+
-     "xuplims(x value is upper limit)=False, "+
-     "errorevery(draw error bars on subset of data)=1, "+
-     "and capthick(thickness of error bar cap)=None. For "+
-     "error points with no lines use, e.g. lw=0,elinewidth=1 ."],
+     "for the errorbar command are:\n\n"+
+     "keyword    description                      default value\n"+
+     "---------------------------------------------------------\n"+
+     "ecolor     error bar color                   None\n"+
+     "elinewidth error bar line width              None\n"+
+     "capsize    cap size in points                None\n"+
+     "barsabove  plot error bars on top of points  False\n"+
+     "lolims     y value is lower limit            False\n"+
+     "uplims     y value is upper limit            False\n"+
+     "xlolims    x value is lower limit            False\n"+
+     "xuplims    x value is upper limit            False\n"+
+     "errorevery draw error bars on subset of data 1\n"+
+     "capthick   thickness of error bar cap        None\n\n"+
+     "For error points with no lines use, e.g. lw=0,elinewidth=1 ."],
     ["table","yt-scatter","Add scattered points to a yt scene",
      ("<x column> <y column> <z column> [size column] [red column] "+
       "[green column] [blue column] [alpha column]"),

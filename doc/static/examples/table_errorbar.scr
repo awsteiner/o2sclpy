@@ -1,4 +1,7 @@
-# errorbar example
+# An example with errorbars. A table is created to demonstrate
+# plotting a dataset with error bars (the 'errorbar' command), and
+# then three individual points are plotted with error bars (the
+# 'error-point' command).
 #
 o2graph -create table x grid:0,1,8.0e-2 \
 	-function "sin(4*x)" y \
