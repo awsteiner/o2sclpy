@@ -160,7 +160,10 @@ base_list=[
      "the vector<contour_line> object as temporary storage, so if "+
      "the current object has type vector<contour_line> then you "+
      "will need to save that object to a file and use 'clear' first."],
-    ["point","Plot a single point.","",""],
+    ["point","Plot a single point.","<x> <y>",""],
+    ["errorpoint","Plot a single point.",
+     "<x> <y> [<x err> <yerr>] or [<x lo> <x hi> <y lo> <y hi>]",
+     ""],
     ["python","Begin an interactive python session.","",""],
     ["rect","Plot a rectangle.",
      "<x1> <y1> <x2> <y2> [angle] [kwargs]",
@@ -411,9 +414,17 @@ extra_list=[
      "symmetric error bars given in "+
      "column <xerr> and <yerr>. For no uncertainty in either the x or y "+
      "direction, just use 0 for <xerr> or <yerr>, respectively. New kwargs "+
-     "for the errorbar command are ecolor=None, elinewidth=None, "+
-     "capsize=None, barsabove=False, lolims=False, uplims=False, "+
-     "xlolims=False, xuplims=False, errorevery=1, capthick=None, hold=None"],
+     "for the errorbar command are ecolor(error bar color)=None, "+
+     "elinewidth(error bar line width)=None, "+
+     "capsize(cap size in points)=None, "+
+     "barsabove(plot error bars on top of points)=False, "+
+     "lolims(y value is lower limit)=False, "+
+     "uplims(y value is upper limit)=False, "+
+     "xlolims(x value is lower limit)=False, "+
+     "xuplims(x value is upper limit)=False, "+
+     "errorevery(draw error bars on subset of data)=1, "+
+     "and capthick(thickness of error bar cap)=None. For "+
+     "error points with no lines use, e.g. lw=0,elinewidth=1 ."],
     ["table","yt-scatter","Add scattered points to a yt scene",
      ("<x column> <y column> <z column> [size column] [red column] "+
       "[green column] [blue column] [alpha column]"),

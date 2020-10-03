@@ -1,9 +1,15 @@
 # errorbar example
 #
-o2graph -create table x grid:0,1,1.0e-3 \
+o2graph -create table x grid:0,1,8.0e-2 \
 	-function "sin(4*x)" y \
-	-function "sqrt(x)+0.1" xe \
-	-function "sin(4*x)+0.3*cos(4*x)" ye \
+	-function "0.06*(sqrt(x)+0.1)" xe \
+	-function "0.07*(sqrt(abs(y))+0.1)" ye \
 	-xtitle x -ytitle y \
-	-errorbar x y xe ye -save table_errorbar.png
+	-errorbar x y xe ye \
+	ecolor=red,elinewidth=2,capsize=3,capthick=3,lw=0 \
+	-error-point 0.4 "(-0.25)" 0.1 0.2 ecolor=blue \
+	-error-point 0.3 0.2 0.1 None 0.2 0.1 ecolor=green \
+	-error-point 0.1 "(-0.5)" 0.1 0.2 0.3 0.4 \
+	lolims=True,ecolor=black,capsize=4 \
+	-save table_errorbar.png
 	

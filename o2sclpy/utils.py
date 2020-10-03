@@ -24,6 +24,59 @@ import numpy
 
 import matplotlib.pyplot as plot
 
+import ctypes
+
+def o2scl_get_type(o2scl_hdf,amp):
+    """
+    Get the type of the current object stored in the acol_manager
+    pointer
+    """
+    # pointer types
+    char_ptr=ctypes.POINTER(ctypes.c_char)
+    char_ptr_ptr=ctypes.POINTER(char_ptr)
+    int_ptr=ctypes.POINTER(ctypes.c_int)
+    
+    # Set up wrapper for type function
+    type_fn=o2scl_hdf.o2scl_acol_get_type
+    type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+    
+    # Get current type
+    it=ctypes.c_int(0)
+    type_ptr=char_ptr()
+    type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
+
+    # Construct the type as a byte string
+    curr_type=b''
+    for i in range(0,it.value):
+        curr_type=curr_type+type_ptr[i]
+    return curr_type
+
+def table_get_column(o2scl_hdf,amp,name):
+    """
+    """
+    int_ptr=ctypes.POINTER(ctypes.c_int)
+    double_ptr=ctypes.POINTER(ctypes.c_double)
+    double_ptr_ptr=ctypes.POINTER(double_ptr)
+    get_fn=o2scl_hdf.o2scl_acol_get_column
+    get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                     int_ptr,double_ptr_ptr]
+    col=ctypes.c_char_p(force_bytes(name))
+    size=ctypes.c_int(0)
+    pointer=double_ptr()
+    get_fn(amp,col,ctypes.byref(size),ctypes.byref(pointer))
+    col=[pointer[i] for i in range(0,size.value)]
+    return col
+
+def is_number(s):
+    """
+    Return true if 's' is likely a number
+    """
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+    
 def force_bytes(obj):
     """
     This function returns the bytes object corresponding to ``obj``
@@ -295,6 +348,10 @@ def string_to_dict(s):
                 arr2[1]=float(arr2[1])
             if arr2[0]=='lw':
                 arr2[1]=float(arr2[1])
+            if arr2[0]=='linewidth':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='elinewidth':
+                arr2[1]=float(arr2[1])
             if arr2[0]=='alpha':
                 arr2[1]=float(arr2[1])
             if arr2[0]=='shrinkA':
@@ -337,9 +394,33 @@ def string_to_dict(s):
                 arr2[1]=float(arr2[1])
             if arr2[0]=='pad':
                 arr2[1]=float(arr2[1])
+            if arr2[0]=='capsize':
+                arr2[1]=float(arr2[1])
+            if arr2[0]=='capthick':
+                arr2[1]=float(arr2[1])
 
             # Convert strings to bool values
             if arr2[0]=='sharex':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='lolims':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='uplims':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='xlolims':
+                if arr2[1]=='True':
+                    arr2[1]=True
+                else:
+                    arr2[1]=False
+            if arr2[0]=='xuplims':
                 if arr2[1]=='True':
                     arr2[1]=True
                 else:

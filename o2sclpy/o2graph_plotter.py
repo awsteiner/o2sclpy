@@ -42,6 +42,7 @@ from o2sclpy.doc_data import extra_types, extra_list, param_list
 from o2sclpy.doc_data import yt_param_list
 from o2sclpy.utils import parse_arguments, string_to_dict, horiz_line
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
+from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
 from o2sclpy.plot_base import plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
@@ -178,30 +179,6 @@ class o2graph_plotter(plot_base):
         # End of function o2graph_plotter::gen_acol()
         return
 
-    def get_type(self,o2scl_hdf,amp):
-        """
-        Get the current O\ :sub:`2`\ scl object type.
-        """
-        
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-        
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
-                        
-        return curr_type
-        
     def den_plot(self,o2scl_hdf,amp,args):
         """
         Density plot from a ``table3d``, ``hist_2d``, ``tensor_grid``,
@@ -214,19 +191,7 @@ class o2graph_plotter(plot_base):
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
 
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-        kwstring=''
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
 
         # Handle tensor and table3d types
         if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
@@ -487,19 +452,7 @@ class o2graph_plotter(plot_base):
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
 
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-        kwstring=''
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
 
         # Handle tensor and table3d types
         if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
@@ -713,18 +666,7 @@ class o2graph_plotter(plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
                         
         if curr_type==b'table':
                             
@@ -982,18 +924,7 @@ class o2graph_plotter(plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
                         
         if curr_type==b'table':
                             
@@ -1101,18 +1032,7 @@ class o2graph_plotter(plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
                         
         if curr_type==b'table':
                             
@@ -1210,18 +1130,7 @@ class o2graph_plotter(plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
                         
         if curr_type==b'table':
                             
@@ -1350,18 +1259,7 @@ class o2graph_plotter(plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
                         
         if curr_type==b'table':
                             
@@ -1455,18 +1353,7 @@ class o2graph_plotter(plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
                         
         if curr_type==b'table':
                             
@@ -1529,61 +1416,72 @@ class o2graph_plotter(plot_base):
         Create a plot with error bars.
         """
 
-        # Useful pointer types
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
                         
         if curr_type==b'table':
-                            
-            get_fn=o2scl_hdf.o2scl_acol_get_column
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr]
 
-            colx=ctypes.c_char_p(force_bytes(args[0]))
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
-            xv=[ptrx[i] for i in range(0,idx.value)]
+            xv=table_get_column(o2scl_hdf,amp,args[0])
+            yv=table_get_column(o2scl_hdf,amp,args[1])
 
-            coly=ctypes.c_char_p(force_bytes(args[1]))
-            idy=ctypes.c_int(0)
-            ptry=double_ptr()
-            get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
-            yv=[ptry[i] for i in range(0,idy.value)]
-
-            if args[2]=='0':
-                xerrv=[0.0 for i in range(0,idx.value)]
+            if len(args)>=6 and args[2]=='None' or args[2]=='none':
+                if is_number(args[3]):
+                    xerrv=float(args[3]);
+                else:
+                    xerrv=table_get_column(o2scl_hdf,amp,args[3])
+            if len(args)>=6 and args[3]=='None' or args[3]=='none':
+                if is_number(args[2]):
+                    xerrv=float(args[2]);
+                else:
+                    xerrv=table_get_column(o2scl_hdf,amp,args[2])
+            elif len(args)>=6:
+                if is_number(args[2]):
+                    if is_number(args[3]):
+                        xerrv=[[float(args[2]),float(args[3])]
+                               for i in range(0,idxerr.value)]
+                    else:
+                        colxerr=ctypes.c_char_p(force_bytes(args[3]))
+                        idxerr=ctypes.c_int(0)
+                        ptrxerr=double_ptr()
+                        get_fn(amp,colxerr,ctypes.byref(idxerr),
+                               ctypes.byref(ptrxerr))
+                        xerrv=[[float(args[2]),ptrxerr[i]] for i in
+                               range(0,idxerr.value)]
+                else:
+                    if is_number(args[3]):
+                        colxerr=ctypes.c_char_p(force_bytes(args[2]))
+                        idxerr=ctypes.c_int(0)
+                        ptrxerr=double_ptr()
+                        get_fn(amp,colxerr,ctypes.byref(idxerr),
+                               ctypes.byref(ptrxerr))
+                        xerrv=[[ptrxerr[i],float(args[3])] for i in
+                               range(0,idxerr.value)]
+                    else:
+                        colxerr=ctypes.c_char_p(force_bytes(args[2]))
+                        idxerr=ctypes.c_int(0)
+                        ptrxerr=double_ptr()
+                        get_fn(amp,colxerr,ctypes.byref(idxerr),
+                               ctypes.byref(ptrxerr))
+                        colxerr2=ctypes.c_char_p(force_bytes(args[3]))
+                        idxerr2=ctypes.c_int(0)
+                        ptrxerr2=double_ptr()
+                        get_fn(amp,colxerr2,ctypes.byref(idxerr2),
+                               ctypes.byref(ptrxerr2))
+                        xerrv=[[ptrxerr[i],ptrxerr2[i]] for i in
+                               range(0,idxerr.value)]
             else:
-                colxerr=ctypes.c_char_p(force_bytes(args[2]))
-                idxerr=ctypes.c_int(0)
-                ptrxerr=double_ptr()
-                get_fn(amp,colxerr,ctypes.byref(idxerr),ctypes.byref(ptrxerr))
-                xerrv=[ptrxerr[i] for i in range(0,idxerr.value)]
+                if args[2]=='None' or args[2]=='none':
+                    xerrv=0.0
+                elif is_number(args[2]):
+                    xerrv=float(args[2])
+                else:
+                    xerrv=table_get_column(o2scl_hdf,amp,args[2])
     
-            if args[3]=='0':
-                yerrv=[0.0 for i in range(0,idy.value)]
+            if args[3]=='None' or args[3]=='none':
+                yerrv=0.0
+            elif is_number(args[3]):
+                yerrv=float(args[3])
             else:
-                colyerr=ctypes.c_char_p(force_bytes(args[3]))
-                idyerr=ctypes.c_int(0)
-                ptryerr=double_ptr()
-                get_fn(amp,colyerr,ctypes.byref(idyerr),ctypes.byref(ptryerr))
-                yerrv=[ptryerr[i] for i in range(0,idyerr.value)]
+                yerrv=table_get_column(o2scl_hdf,amp,args[3])
 
             if self.canvas_flag==False:
                 self.canvas()
@@ -1618,18 +1516,7 @@ class o2graph_plotter(plot_base):
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
                         
         if curr_type==b'table':
             
@@ -1738,19 +1625,8 @@ class o2graph_plotter(plot_base):
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
         
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
-
         if curr_type==b'vector<contour_line>':
              print('Store and clear the vector<contour_line> object '+
                    'before using \'plotv\'.')
@@ -2045,18 +1921,7 @@ class o2graph_plotter(plot_base):
         double_ptr=ctypes.POINTER(ctypes.c_double)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-        
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-        
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
 
         if curr_type==b'tensor_grid':
             self.yt_check_backend()
@@ -2181,18 +2046,7 @@ class o2graph_plotter(plot_base):
         double_ptr=ctypes.POINTER(ctypes.c_double)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-        
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-        
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
 
         if curr_type==b'tensor_grid':
 
@@ -2488,19 +2342,7 @@ class o2graph_plotter(plot_base):
             char_ptr=ctypes.POINTER(ctypes.c_char)
             char_ptr_ptr=ctypes.POINTER(char_ptr)
 
-            # Set up wrapper for type function
-            type_fn=o2scl_hdf.o2scl_acol_get_type
-            type_fn.argtypes=[ctypes.c_void_p,int_ptr,
-                              char_ptr_ptr]
-
-            # Get current type
-            it=ctypes.c_int(0)
-            type_ptr=char_ptr()
-            type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                
-            curr_type=b''
-            for i in range(0,it.value):
-                curr_type=curr_type+type_ptr[i]
+            curr_type=o2scl_get_type(o2scl_hdf,amp)
                             
             cmd=args[0]
 
@@ -2785,18 +2627,7 @@ class o2graph_plotter(plot_base):
         double_ptr=ctypes.POINTER(ctypes.c_double)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
                     
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-                    
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                    
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
 
         if curr_type==b'table':
             if self.yt_check_backend()==1:
@@ -3078,18 +2909,7 @@ class o2graph_plotter(plot_base):
         double_ptr=ctypes.POINTER(ctypes.c_double)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
                     
-        # Set up wrapper for type function
-        type_fn=o2scl_hdf.o2scl_acol_get_type
-        type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-                    
-        # Get current type
-        it=ctypes.c_int(0)
-        type_ptr=char_ptr()
-        type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-                    
-        curr_type=b''
-        for i in range(0,it.value):
-            curr_type=curr_type+type_ptr[i]
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
 
         if curr_type==b'table':
             if self.yt_check_backend()==1:
@@ -3219,18 +3039,7 @@ class o2graph_plotter(plot_base):
             char_ptr=ctypes.POINTER(ctypes.c_char)
             char_ptr_ptr=ctypes.POINTER(char_ptr)
             
-            # Set up wrapper for type function
-            type_fn=o2scl_hdf.o2scl_acol_get_type
-            type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-            
-            # Get current type
-            it=ctypes.c_int(0)
-            type_ptr=char_ptr()
-            type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-            
-            curr_type=b''
-            for i in range(0,it.value):
-                curr_type=curr_type+type_ptr[i]
+            curr_type=o2scl_get_type(o2scl_hdf,amp)
                 
         print('O2graph commands for type '+
               str(curr_type)+':\n')
@@ -4555,6 +4364,30 @@ class o2graph_plotter(plot_base):
                     else:
                         self.point(strlist[ix+1],strlist[ix+2],
                                    **string_to_dict(strlist[ix+3]))
+                        
+                elif cmd_name=='error-point':
+                    
+                    if self.verbose>2:
+                        print('Process point.')
+                        
+                    if ix_next-ix<5:
+                        print('Not enough parameters for point option.')
+                    elif ix_next-ix>=8:
+                        self.error_point(strlist[ix+1],strlist[ix+2],
+                                         strlist[ix+3],strlist[ix+4],
+                                         strlist[ix+5],strlist[ix+6],
+                                         **string_to_dict(strlist[ix+7]))
+                    elif ix_next-ix>=7:
+                        self.error_point(strlist[ix+1],strlist[ix+2],
+                                         strlist[ix+3],strlist[ix+4],
+                                         strlist[ix+5],strlist[ix+6])
+                    elif ix_next-ix>=6:
+                        self.error_point(strlist[ix+1],strlist[ix+2],
+                                         strlist[ix+3],strlist[ix+4],
+                                         **string_to_dict(strlist[ix+5]))
+                    else:
+                        self.error_point(strlist[ix+1],strlist[ix+2],
+                                         strlist[ix+3],strlist[ix+4])
                         
                 elif cmd_name=='python':
                     

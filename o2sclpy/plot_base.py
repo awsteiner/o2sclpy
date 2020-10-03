@@ -1384,6 +1384,58 @@ class plot_base:
         # End of function plot_base::point()
         return
 
+    def error_point(self,xval,yval,err1=None,err2=None,
+                    err3=None,err4=None,**kwargs):
+        """
+        Plot a point at location (xval,yval)
+        """
+        if err1=='None' or err1=='none':
+            err1=None
+        if err2=='None' or err2=='none':
+            err2=None
+        if err3=='None' or err3=='none':
+            err3=None
+        if err4=='None' or err4=='none':
+            err4=None
+        if self.verbose>2:
+            print('error-point',xval,yval,err1,err2,err3,err4,kwargs)
+        if self.canvas_flag==False:
+            self.canvas()
+        if err1==None and err2==None and err3==None and err4==None:
+            self.axes.point([float(eval(xval))],
+                            [float(eval(yval))],**kwargs)
+        elif err3==None and err4==None:
+            self.axes.errorbar([float(eval(xval))],
+                               [float(eval(yval))],
+                               yerr=[float(eval(err2))],
+                               xerr=[float(eval(err1))],
+                               **kwargs)
+        elif err2==None:
+            self.axes.errorbar([float(eval(xval))],
+                               [float(eval(yval))],
+                               yerr=[[float(eval(err3))],
+                                     [float(eval(err4))]],
+                               xerr=[float(eval(err1))],**kwargs)
+        elif err4==None:
+            self.axes.errorbar([float(eval(xval))],
+                               [float(eval(yval))],
+                               yerr=[float(eval(err3))],
+                               xerr=[[float(eval(err1))],
+                                     [float(eval(err2))]],**kwargs)
+        else:
+            self.axes.errorbar([float(eval(xval))],
+                               [float(eval(yval))],
+                               yerr=[[float(eval(err3))],
+                                     [float(eval(err4))]],
+                               xerr=[[float(eval(err1))],
+                                     [float(eval(err2))]],**kwargs)
+        if self.xset==True:
+            self.axes.set_xlim(self.xlo,self.xhi)
+        if self.yset==True:
+            self.axes.set_ylim(self.ylo,self.yhi)
+        # End of function plot_base::point()
+        return
+
     def rect(self,x1,y1,x2,y2,angle=0,**kwargs):
         """
         Plot a rectangle from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
