@@ -2411,7 +2411,8 @@ class o2graph_plotter(plot_base):
             for line in param_list:
                 if cmd==line[0]:
                     match=True
-                    print('Parameter modified by get/set: '+line[0]+'\n')
+                    print('O2graph parameter modified by get/set: '+
+                          line[0]+'\n')
                     
                     tempx_arr=line[1].split('\n')
                     for j in range(0,len(tempx_arr)):
