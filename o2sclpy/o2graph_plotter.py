@@ -43,6 +43,7 @@ from o2sclpy.doc_data import yt_param_list
 from o2sclpy.utils import parse_arguments, string_to_dict, horiz_line
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
+from o2sclpy.utils import terminal
 from o2sclpy.plot_base import plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
@@ -1805,10 +1806,12 @@ class o2graph_plotter(plot_base):
                            ctypes.c_char_p]
 
         # Get current type
+        ter=terminal()
         cmd_name=b'o2graph'
         cmd_desc=(b'o2graph: A data viewing and '+
-                  b'processing program for O2scl.\n  Version: '+
-                  force_bytes(version)+b'\n')
+                  b'processing program for '+force_bytes(ter.bold())+
+                  b'O2scl'+force_bytes(ter.default_fg())+
+                  b'.\n  Version: '+force_bytes(version)+b'\n')
         env_var=b'O2GRAPH_DEFAULTS'
         names_fn(amp,len(cmd_name),ctypes.c_char_p(cmd_name),
                  len(cmd_desc),ctypes.c_char_p(cmd_desc),
@@ -2328,11 +2331,9 @@ class o2graph_plotter(plot_base):
         curr_type=''
         cmd=''
 
-        redirected=False
-        if sys.stdout.isatty()==False:
-            redirected=True
+        ter=terminal()
                     
-        str_line=horiz_line()
+        str_line=ter.horiz_line()
 
         # If only a command is specified
         if len(args)==1:
@@ -2355,8 +2356,8 @@ class o2graph_plotter(plot_base):
         for line in base_list:
             if cmd==line[0]:
                 match=True
-                print('Usage: '+cmd+' '+line[2]+'\n\n'+
-                      line[1]+'\n')
+                print('Usage: '+ter.cyan_fg()+cmd+ter.default_fg()+
+                      ' '+line[2]+'\n\n'+line[1]+'\n')
                 tempx_arr=line[3].split('\n')
                 for j in range(0,len(tempx_arr)):
                     if len(tempx_arr[j])<79:
@@ -2373,8 +2374,8 @@ class o2graph_plotter(plot_base):
                  curr_type==force_bytes(line[0])) and
                 cmd==line[1]):
                 match=True
-                print('Usage: '+cmd+' '+line[3]+'\n\n'+
-                      line[2]+'\n')
+                print('Usage: '+ter.cyan_fg()+cmd+ter.default_fg()+
+                      ' '+line[3]+'\n\n'+line[2]+'\n')
                 
                 tempx_arr=line[4].split('\n')
                 for j in range(0,len(tempx_arr)):
@@ -2393,9 +2394,10 @@ class o2graph_plotter(plot_base):
                     match=True
                     str_line=horiz_line()
                     print('\n'+str_line)
-                    print('Type '+line[0]+':')
-                    print('Usage: '+cmd+' '+line[3]+'\n\n'+
-                          line[2]+'\n')
+                    print('Type '+ter.magenta_fg()+line[0]+
+                          ter.default_fg()+':')
+                    print('Usage: '+cmd+' '+ter.cyan_fg()+line[3]+
+                          ter.default_fg()+'\n\n'+line[2]+'\n')
                     
                     tempx_arr=line[4].split('\n')
                     for j in range(0,len(tempx_arr)):
@@ -2503,9 +2505,15 @@ class o2graph_plotter(plot_base):
             print(str_line)
             print('\nO2graph command-line options:\n')
             for line in base_list:
-                strt='  -'+line[0]
-                while len(strt)<18:
+                strt='  -'+ter.cyan_fg()+ter.bold()+line[0]+ter.default_fg()
+                # Include extra length for the color commands
+                lent=26
+                if ter.redirected==True:
+                    lent=18
+                # Pad with spaces
+                while len(strt)<lent:
                     strt=strt+' '
+                # Add command-description
                 strt+=line[1]
                 print(strt)
             print('\n'+str_line)
@@ -2528,9 +2536,23 @@ class o2graph_plotter(plot_base):
                     else:
                         print(' ',str_list[i])
             print('\n'+str_line)
-            print('Additional o2graph help topics:',
-                  'cmaps, cmaps-plot, colors, colors-plot,')
-            print('\tcolors-near, markers, markers-plot, xkcd-colors')
+            print('Additional o2graph help topics: '+
+                  ter.green_fg()+ter.bold()+
+                  'cmaps'+ter.default_fg()+', '+
+                  ter.green_fg()+ter.bold()+
+                  'cmaps-plot'+ter.default_fg()+', '+
+                  ter.green_fg()+ter.bold()+
+                  'colors'+ter.default_fg()+', '+
+                  ter.green_fg()+ter.bold()+
+                  'colors-plot'+ter.default_fg()+',\n  '+
+                  ter.green_fg()+ter.bold()+
+                  'colors-near'+ter.default_fg()+', '+
+                  ter.green_fg()+ter.bold()+
+                  'markers'+ter.default_fg()+', '+
+                  ter.green_fg()+ter.bold()+
+                  'markers-plot'+ter.default_fg()+', and '+
+                  ter.green_fg()+ter.bold()+
+                  'xkcd-colors'+ter.default_fg()+'.')
 
         # End of function o2graph_plotter::help_func()
         return

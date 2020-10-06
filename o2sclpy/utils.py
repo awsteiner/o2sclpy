@@ -600,3 +600,67 @@ def horiz_line():
             str_line+='q'
         str_line=str_line+chr(27)+'(B'
     return str_line
+
+class terminal:
+
+    redirected=False
+    
+    def __init__(self):
+        if sys.stdout.isatty()==False:
+            self.redirected=True
+        return
+    
+    def cyan_fg(self):
+        strt=''
+        if self.redirected:
+            return strt
+        strt=strt+chr(27)+'[36m'
+        return strt
+    
+    def magenta_fg(self):
+        strt=''
+        if self.redirected:
+            return strt
+        strt=strt+chr(27)+'[35m'
+        return strt
+    
+    def green_fg(self):
+        strt=''
+        if self.redirected:
+            return strt
+        strt=strt+chr(27)+'[32m'
+        return strt
+    
+    def bold(self):
+        strt=''
+        if self.redirected:
+            return strt
+        strt=strt+chr(27)+'[1m'
+        return strt
+    
+    def default_fg(self):
+        strt=''
+        if self.redirected:
+            return strt
+        strt=strt+chr(27)+'[m'
+        return strt
+    
+    def horiz_line(self):
+        """
+        Return a string which represents a horizontal line. If possible,
+        vt100-like terminal sequences are used to create a line.
+        Otherwise, dashes are used.
+    
+        This function is in ``utils.py``.
+        """
+        str_line=''
+        if self.redirected:
+            for jj in range(0,78):
+                str_line+='-'
+        else:
+            str_line=str_line+chr(27)+'(0'
+            for jj in range(0,78):
+                str_line+='q'
+            str_line=str_line+chr(27)+'(B'
+        return str_line
+
