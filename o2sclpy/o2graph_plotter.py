@@ -40,10 +40,9 @@ import matplotlib.patches as patches
 from o2sclpy.doc_data import cmaps, new_cmaps, base_list
 from o2sclpy.doc_data import extra_types, extra_list, param_list
 from o2sclpy.doc_data import yt_param_list
-from o2sclpy.utils import parse_arguments, string_to_dict, horiz_line
+from o2sclpy.utils import parse_arguments, string_to_dict, terminal
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
-from o2sclpy.utils import terminal
 from o2sclpy.plot_base import plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
@@ -1719,44 +1718,61 @@ class o2graph_plotter(plot_base):
         Called by help_func().
         """
 
-        str_line=horiz_line()
+        ter=terminal()
+        str_line=ter.horiz_line()
         print('\n'+str_line)
         print('\nO2graph parameter list:')
         print(' ')
         for line in param_list:
             if line[0]!='verbose':
                 if line[0]=='colbar':
-                    print(line[0]+' '+str(self.colbar))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.colbar))
                 elif line[0]=='fig-dict':
-                    print(line[0]+' '+str(self.fig_dict))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.fig_dict))
                 elif line[0]=='font':
-                    print(line[0]+' '+str(self.font))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.font))
                 elif line[0]=='logx':
-                    print(line[0]+' '+str(self.logx))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.logx))
                 elif line[0]=='logy':
-                    print(line[0]+' '+str(self.logy))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.logy))
                 elif line[0]=='logz':
-                    print(line[0]+' '+str(self.logz))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.logz))
                 elif line[0]=='xhi':
-                    print(line[0]+' '+str(self.xhi))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.xhi))
                 elif line[0]=='xlo':
-                    print(line[0]+' '+str(self.xlo))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.xlo))
                 elif line[0]=='xset':
-                    print(line[0]+' '+str(self.xset))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.xset))
                 elif line[0]=='yhi':
-                    print(line[0]+' '+str(self.yhi))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.yhi))
                 elif line[0]=='ylo':
-                    print(line[0]+' '+str(self.ylo))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.ylo))
                 elif line[0]=='yset':
-                    print(line[0]+' '+str(self.yset))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.yset))
                 elif line[0]=='zhi':
-                    print(line[0]+' '+str(self.zhi))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.zhi))
                 elif line[0]=='zlo':
-                    print(line[0]+' '+str(self.zlo))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.zlo))
                 elif line[0]=='zset':
-                    print(line[0]+' '+str(self.zset))
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg())+' '+str(self.zset))
                 else:
-                    print(line[0])
+                    print((ter.red_fg()+ter.bold()+line[0]+
+                           ter.default_fg()))
                 print(' '+line[1])
                 print(' ')
         print(str_line)
@@ -1764,21 +1780,29 @@ class o2graph_plotter(plot_base):
         print(' ')
         for line in yt_param_list:
             if line[0]=='yt_filter':
-                print(line[0]+' '+self.yt_filter)
+                print((ter.red_fg()+ter.bold()+line[0]+
+                       ter.default_fg())+' '+self.yt_filter)
             if line[0]=='yt_focus':
-                print(line[0]+' '+self.yt_focus)
+                print((ter.red_fg()+ter.bold()+line[0]+
+                       ter.default_fg())+' '+self.yt_focus)
             if line[0]=='yt_position':
-                print(line[0]+' '+self.yt_position)
+                print((ter.red_fg()+ter.bold()+line[0]+
+                       ter.default_fg())+' '+self.yt_position)
             if line[0]=='yt_width':
-                print(line[0]+' '+self.yt_width)
+                print((ter.red_fg()+ter.bold()+line[0]+
+                       ter.default_fg())+' '+self.yt_width)
             if line[0]=='yt_north':
-                print(line[0]+' '+self.yt_north)
+                print((ter.red_fg()+ter.bold()+line[0]+
+                       ter.default_fg())+' '+self.yt_north)
             if line[0]=='yt_path':
-                print(line[0]+' '+str(self.yt_path))
+                print((ter.red_fg()+ter.bold()+line[0]+
+                       ter.default_fg())+' '+str(self.yt_path))
             if line[0]=='yt_resolution':
-                print(line[0]+' '+str(self.yt_resolution))
+                print((ter.red_fg()+ter.bold()+line[0]+
+                       ter.default_fg())+' '+str(self.yt_resolution))
             if line[0]=='yt_sigma_clip':
-                print(line[0]+' '+str(self.yt_sigma_clip))
+                print((ter.red_fg()+ter.bold()+line[0]+
+                       ter.default_fg())+' '+str(self.yt_sigma_clip))
             print(' '+line[1])
             print(' ')
 
@@ -2424,7 +2448,7 @@ class o2graph_plotter(plot_base):
                             str_list=textwrap.wrap(tempx_arr[j],79)
                             for i in range (0,len(str_list)):
                                 print(str_list[i])
-                                
+
         # If we haven't matched yet, check for get/set parameters
         # from yt
         if match==False:
@@ -2493,7 +2517,7 @@ class o2graph_plotter(plot_base):
         # Handle the case of an acol command 
         if match==False and finished==False:
             self.gen_acol(o2scl_hdf,amp,'help',args)
-
+            
         # If the user specified 'help set', then print
         # the o2graph parameter documentation
         if (cmd=='set' or cmd=='get') and len(args)==1:
@@ -2501,13 +2525,13 @@ class o2graph_plotter(plot_base):
 
         # If no arguments were given, then give a list of
         # o2graph commands in addition to acol commands
-        if len(args)==0:
+        if finished==False and len(args)==0:
             print(str_line)
             print('\nO2graph command-line options:\n')
             for line in base_list:
                 strt='  -'+ter.cyan_fg()+ter.bold()+line[0]+ter.default_fg()
                 # Include extra length for the color commands
-                lent=26
+                lent=30
                 if ter.redirected==True:
                     lent=18
                 # Pad with spaces
@@ -2520,16 +2544,23 @@ class o2graph_plotter(plot_base):
             print('O2graph type-specific commands:\n')
             extra_types.sort()
             for typename in extra_types:
-                strt=typename+': '
+                strt=(ter.magenta_fg()+ter.bold()+typename+
+                      ter.default_fg()+': ')
                 first=True
                 for line in extra_list:
                     if line[0]==typename:
                         if first==True:
-                            strt+=line[1]
+                            strt+=(ter.cyan_fg()+ter.bold()+line[1]+
+                                   ter.default_fg())
                             first=False
                         else:
-                            strt+=', '+line[1]
-                str_list=textwrap.wrap(strt,77)
+                            strt+=(', '+ter.cyan_fg()+ter.bold()+line[1]+
+                                   ter.default_fg())
+                if ter.redirected:
+                    str_list=textwrap.wrap(strt,77)
+                else:
+                    # Include extra space for color formatting
+                    str_list=textwrap.wrap(strt,150)
                 for i in range (0,len(str_list)):
                     if i==0:
                         print(str_list[i])

@@ -579,28 +579,6 @@ def string_to_dict(s):
         
     return dct
 
-def horiz_line():
-    """
-    Return a string which represents a horizontal line. If possible,
-    vt100-like terminal sequences are used to create a line.
-    Otherwise, dashes are used.
-
-    This function is in ``utils.py``.
-    """
-    redirected=False
-    if sys.stdout.isatty()==False:
-        redirected=True
-    str_line=''
-    if redirected:
-        for jj in range(0,78):
-            str_line+='-'
-    else:
-        str_line=str_line+chr(27)+'(0'
-        for jj in range(0,78):
-            str_line+='q'
-        str_line=str_line+chr(27)+'(B'
-    return str_line
-
 class terminal:
 
     redirected=False
@@ -615,6 +593,13 @@ class terminal:
         if self.redirected:
             return strt
         strt=strt+chr(27)+'[36m'
+        return strt
+    
+    def red_fg(self):
+        strt=''
+        if self.redirected:
+            return strt
+        strt=strt+chr(27)+'[31m'
         return strt
     
     def magenta_fg(self):

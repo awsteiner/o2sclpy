@@ -28,7 +28,7 @@ import matplotlib.pyplot as plot
 # For rectangles
 import matplotlib.patches as patches
 
-from o2sclpy.utils import default_plot, string_to_dict, horiz_line
+from o2sclpy.utils import default_plot, string_to_dict, terminal
 from o2sclpy.doc_data import cmaps, new_cmaps
 
 def marker_list():
@@ -37,7 +37,8 @@ def marker_list():
     command-line arguments.
     """
     print('Matplotlib markers supported by O2graph:')
-    print(horiz_line())
+    ter=terminal()
+    print(ter.horiz_line())
     outs='. point'.ljust(20)
     outs=outs+', pixel'.ljust(20)
     outs=outs+'o circle'.ljust(20)
@@ -335,7 +336,8 @@ def cmap_list_func():
     List the matplotlib and o2sclpy colormaps.
     """
     print('Matplotlib colormaps:')
-    print(horiz_line())
+    ter=terminal()
+    print(ter.horiz_line())
     for category, cmap_list in cmaps:
         list2=''
         for name in cmap_list:
@@ -527,7 +529,8 @@ def color_list():
     """
     from matplotlib import colors as mcolors
     print('Matplotlib colors:')
-    print(horiz_line())
+    ter=terminal()
+    print(ter.horiz_line())
     base_dict=dict(mcolors.BASE_COLORS)
     css4_dict=dict(**mcolors.CSS4_COLORS)
     print(len(base_dict),'base colors:')
@@ -579,7 +582,8 @@ def xkcd_colors_list():
     from matplotlib import colors as mcolors
     xkcd_dict=dict(**mcolors.XKCD_COLORS)
     print('XKCD colors:')
-    print(horiz_line())
+    ter=terminal()
+    print(ter.horiz_line())
     # These are commented out for now because
     # o2graph has a hard time with spaces in
     # color names
