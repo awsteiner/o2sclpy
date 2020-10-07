@@ -43,6 +43,7 @@ from o2sclpy.doc_data import yt_param_list
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
+from o2sclpy.utils import length_without_colors, wrap_line
 from o2sclpy.plot_base import plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
@@ -1819,7 +1820,7 @@ class o2graph_plotter(plot_base):
         creates the pointer to the o2scl acol_manager object 
         called `amp`.
         """
-
+        
         # Create an acol_manager object and get the pointer
         o2scl_hdf.o2scl_create_acol_manager.restype=ctypes.c_void_p
         amp=o2scl_hdf.o2scl_create_acol_manager()
@@ -2382,14 +2383,9 @@ class o2graph_plotter(plot_base):
                 match=True
                 print('Usage: '+ter.cyan_fg()+cmd+ter.default_fg()+
                       ' '+line[2]+'\n\n'+line[1]+'\n')
-                tempx_arr=line[3].split('\n')
-                for j in range(0,len(tempx_arr)):
-                    if len(tempx_arr[j])<79:
-                        print(tempx_arr[j])
-                    else:
-                        str_list=textwrap.wrap(tempx_arr[j],79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
+                tempx_arr=wrap_line(line[3])
+                for i in range (0,len(tempx_arr)):
+                    print(tempx_arr[i])
                                 
         # Handle the case of an o2graph command from the
         # extra list
@@ -2400,15 +2396,9 @@ class o2graph_plotter(plot_base):
                 match=True
                 print('Usage: '+ter.cyan_fg()+cmd+ter.default_fg()+
                       ' '+line[3]+'\n\n'+line[2]+'\n')
-                
-                tempx_arr=line[4].split('\n')
-                for j in range(0,len(tempx_arr)):
-                    if len(tempx_arr[j])<79:
-                        print(tempx_arr[j])
-                    else:
-                        str_list=textwrap.wrap(tempx_arr[j],79)
-                        for i in range (0,len(str_list)):
-                            print(str_list[i])
+                tempx_arr=wrap_line(line[4])
+                for i in range (0,len(tempx_arr)):
+                    print(tempx_arr[i])
 
         # If we haven't matched yet, then show commands for
         # other types

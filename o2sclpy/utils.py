@@ -649,3 +649,76 @@ class terminal:
             str_line=str_line+chr(27)+'(B'
         return str_line
 
+def length_without_colors(strt):
+    """
+    Compute the length of strt, ignoring characters which correspond
+    to VT100 formatting sequences
+    """
+    count=0
+    index=0
+    while index<len(strt):
+        if strt[index]!=chr(27):
+            count=count+1
+        elif index+2<len(strt) and strt[index+1]=='[' and strt[index+2]=='m':
+            index=index+2
+        elif index+3<len(strt) and strt[index+1]=='[' and strt[index+3]=='m':
+            index=index+3
+        elif index+4<len(strt) and strt[index+1]=='[' and strt[index+4]=='m':
+            index=index+4
+        elif index+2<len(strt) and strt[index+1]=='(' and strt[index+2]=='0':
+            index=index+2
+        elif index+2<len(strt) and strt[index+1]=='(' and strt[index+2]=='B':
+            index=index+2
+        index=index+1
+    return count
+            
+def wrap_line(line,ncols=79):
+    """
+    From a string 'line', create a list of strings which adds return
+    characters in order to attempt to ensure each line is less than
+    or equal to ncols characters long. This function also respects
+    explicit carriage returns, ensuring they force a new line 
+    independent of the line length. This function uses the
+    'length_without_colors()' function above, to ensure VT100 formatting
+    sequences aren't included in the count.
+    """
+    list=[]
+    # First, just split by carriage returns
+    post_list=line.split('\n')
+    for i in range(0,len(post_list)):
+        # If this line is already short enough, then just handle
+        # it directly below
+        if length_without_colors(post_list[i])>ncols:
+            # A temporary string which will hold the current line
+            strt=''
+            # Now split by spaces
+            post_word=post_list[i].split(' ')
+            # Proceed word by word
+            for j in range(0,len(post_word)):
+                # If the current word is longer than ncols, then
+                # clear the temporary string and add it to the list
+                if length_without_colors(post_word[j])>ncols:
+                    if length_without_colors(strt)>0:
+                        list.append(strt)
+                    list.append(post_word[j])
+                    strt=''
+                elif (length_without_colors(strt)+
+                      length_without_colors(post_word[j])+1)>ncols:
+                    # Otherwise if the next word will take us over the
+                    # limit
+                    list.append(strt)
+                    strt=post_word[j]
+                else:
+                    strt=strt+' '+post_word[j]
+            # If after the last word we still have anything in the
+            # temporary string, then add it to the list
+            if length_without_colors(strt)>0:
+                list.append(strt)
+        else:
+            # Now if the line was already short enough, add it
+            # to the list
+            list.append(post_list[i])
+                
+    return list
+            
+

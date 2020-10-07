@@ -1,3 +1,7 @@
+from o2sclpy.utils import terminal
+
+ter=terminal()
+
 cmaps=[('Perceptually Uniform Sequential',
         ['viridis','plasma','inferno','magma']),
        ('Sequential', 
@@ -32,7 +36,7 @@ List of new o2sclpy cmaps
 base_list=[
     ["addcbar","Add a color bar.",
      "<left> <bottom> <width> <height> [kwargs]",
-     "Add axis"],
+     "Add a color bar from the most recently created image."],
     ["arrow","Plot an arrow.",
      "<x1> <y1> <x2> <y2> <arrow properties> [kwargs]",
      "Plot an arrow from (x1,y1) to (x2,y2). This command uses "+
@@ -80,7 +84,8 @@ base_list=[
      "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', 'QT4Agg'. "+
      "Use -backend Agg to save the plot to a file without "+
      "opening a window. The backend can only be changed once, i.e. "+
-     "if the \"backend\" command is invoked "+
+     "if the "+ter.cyan_fg()+ter.bold()+"backend"+ter.default_fg()+
+     " command is invoked "+
      "more than once, then only the last invocation will have any "+
      "effect."],
     ["canvas","Create a plotting canvas.","",
@@ -149,21 +154,41 @@ base_list=[
      "<dir>",""],
     ["plotv","Plot several vector-like data sets.",
      "[multiple vector spec. for x] <multiple vector spec. for y>",
-     "The 'plotv' command plots one or several pairs of vectors for x "+
+     "The "+ter.cyan_fg()+ter.bold()+"plotv"+ter.default_fg()+
+     " command plots one or several pairs of vectors for x "+
      "and y. The total number of curves plotted will be the number "+
      "of vector data sets from the first argument times the number "+
      "of vector data sets from the second argument. If the x and y "+
      "vector lengths are not equal, then the longer vector is "+
      "truncated. Any kwargs are applied to all curves plotted. For "+
      "details on multiple vector specifications, use "+
-     "'o2graph -help mult-vector-spec'. Note that 'plotv' uses "+
+     "'o2graph -help "+ter.green_fg()+ter.bold()+"mult-vector-spec"+
+     ter.default_fg()+"'. Note that "+ter.cyan_fg()+ter.bold()+"plotv"+
+     ter.default_fg()+" uses "+
      "the vector<contour_line> object as temporary storage, so if "+
      "the current object has type vector<contour_line> then you "+
-     "will need to save that object to a file and use 'clear' first."],
+     "will need to save that object to a file and use "+ter.cyan_fg()+
+     ter.bold()+"clear"+ter.default_fg()+" first."],
     ["point","Plot a single point.","<x> <y>",""],
-    ["error-point","Plot a single point.",
+    ["error-point","Plot a single point with errorbars.",
      "<x> <y> [<x err> <yerr>] or [<x lo> <x hi> <y lo> <y hi>]",
-     ""],
+     "Some "+
+     "useful kwargs "+
+     "for the error-point command are:\n\n"+
+     "keyword    description                      default value\n"+
+     "---------------------------------------------------------\n"+
+     "ecolor     error bar color                   None\n"+
+     "capsize    cap size in points                None\n"+
+     "barsabove  plot error bars on top of point   False\n"+
+     "lolims     y value is lower limit            False\n"+
+     "uplims     y value is upper limit            False\n"+
+     "xlolims    x value is lower limit            False\n"+
+     "xuplims    x value is upper limit            False\n"+
+     "errorevery draw error bars on subset of data 1\n"+
+     "capthick   thickness of error bar cap        None\n\n"+
+     "See also "+ter.cyan_fg()+ter.bold()+"errorbar"+ter.default_fg()+
+     " for for plotting columns from a "+ter.magenta_fg()+ter.bold()+
+     "table "+ter.default_fg()+"object."],
     ["python","Begin an interactive python session.","",""],
     ["rect","Plot a rectangle.",
      "<x1> <y1> <x2> <y2> [angle] [kwargs]",
@@ -413,7 +438,8 @@ extra_list=[
      "Plot column <y> versus column <x> with "+
      "symmetric error bars given in "+
      "column <xerr> and <yerr>. For no uncertainty in either the x or y "+
-     "direction, just use 0 for <xerr> or <yerr>, respectively. New kwargs "+
+     "direction, just use 0 for <xerr> or <yerr>, respectively. Some "+
+     "useful kwargs "+
      "for the errorbar command are:\n\n"+
      "keyword    description                      default value\n"+
      "---------------------------------------------------------\n"+
@@ -427,7 +453,8 @@ extra_list=[
      "xuplims    x value is upper limit            False\n"+
      "errorevery draw error bars on subset of data 1\n"+
      "capthick   thickness of error bar cap        None\n\n"+
-     "For error points with no lines use, e.g. lw=0,elinewidth=1 ."],
+     "For error points with no lines use, e.g. lw=0,elinewidth=1 . "+
+     "See also 'error-point' for plotting a single point with errorbars."],
     ["table","yt-scatter","Add scattered points to a yt scene",
      ("<x column> <y column> <z column> [size column] [red column] "+
       "[green column] [blue column] [alpha column]"),
