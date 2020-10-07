@@ -2416,7 +2416,7 @@ class o2graph_plotter(plot_base):
             for line in extra_list:
                 if cmd==line[1]:
                     match=True
-                    str_line=horiz_line()
+                    str_line=ter.horiz_line()
                     print('\n'+str_line)
                     print('Type '+ter.magenta_fg()+line[0]+
                           ter.default_fg()+':')

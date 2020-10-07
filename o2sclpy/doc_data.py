@@ -161,7 +161,7 @@ base_list=[
      "the current object has type vector<contour_line> then you "+
      "will need to save that object to a file and use 'clear' first."],
     ["point","Plot a single point.","<x> <y>",""],
-    ["errorpoint","Plot a single point.",
+    ["error-point","Plot a single point.",
      "<x> <y> [<x err> <yerr>] or [<x lo> <x hi> <y lo> <y hi>]",
      ""],
     ["python","Begin an interactive python session.","",""],
