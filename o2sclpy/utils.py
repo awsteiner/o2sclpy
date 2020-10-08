@@ -708,6 +708,8 @@ def wrap_line(line,ncols=79):
                     # limit
                     list.append(strt)
                     strt=post_word[j]
+                elif len(strt)==0:
+                    strt=post_word[j]
                 else:
                     strt=strt+' '+post_word[j]
             # If after the last word we still have anything in the

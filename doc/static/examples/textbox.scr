@@ -8,4 +8,8 @@ o2graph -set font 30 -textbox 0.5 0.9 test1 fc=#ffdddd color=red \
 	"fontstyle=italic,rotation=10" \
 	-ttext 0.5 0.3 "test4" \
 	fontfamily=sans-serif,fontsize=28,backgroundcolor=#eeeeee \
+        -rect 0.2 0.05 0.4 0.15 10 \
+	fc=#bbeeee,ls=-.,lw=2,ec=black \
+        -ellipse 0.7 0.1 0.2 0.1 "(-10)" \
+	fc=#bbeeee,ls=-.,lw=2,ec=black \
 	-save textbox.png -show
