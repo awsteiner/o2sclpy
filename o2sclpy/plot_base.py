@@ -1866,7 +1866,7 @@ class plot_base:
         # End of function plot_base::text()
         return
 
-    def textbox(self,tx,ty,str,boxprops,**kwargs):
+    def textbox(self,tx,ty,str,boxprops='',**kwargs):
         """
         Plot text in the axis coordinate system with a box
         """
@@ -1887,10 +1887,17 @@ class plot_base:
         if va_present==False:
             kwargs=dict(kwargs,va='center')
 
+        fontsize_present=False
+        for key in kwargs:
+            if key=='fontsize':
+                fontsize_present=True
+        if fontsize_present==False:
+            kwargs=dict(kwargs,fontsize=self.font)
+
         self.axes.text(float(eval(tx)),float(eval(ty)),str,
-                       fontsize=self.font,
                        transform=self.axes.transAxes,
                        bbox=string_to_dict(boxprops),**kwargs)
+        
         # End of function plot_base::textbox()
         return
 

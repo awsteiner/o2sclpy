@@ -239,14 +239,15 @@ base_list=[
      "data coordinates defined by the current axes with the font size "+
      "determined by the value of the parameter 'font'."],
     ["textbox",
-     "Plot a box with text.","<x1> <y1> <text> <bbox properties> [kwargs]",
+     "Plot a box with text.","<x1> <y1> <text> [bbox properties] [kwargs]",
      "Plot text <text> and a box at location <x1> <y1>. For example, "+
      "textbox 0.5 0.5 \"$ f(x) $\" \"alpha=0.8,facecolor=white\" . "+
      "This command uses the standard axis text function, but adds "+
      "a bounding box with the specified properties. Typical bbox "+
      "properties are boxstyle (Circle, DArrow, LArrow, RArrow, Round, "+
      "Round4, Roundtooth, Sawtooth, Square), alpha, color, edgecolor (ec), "+
-     "facecolor (fc), fill, hatch, linestyle (ls), and linewidth (lw)."],
+     "facecolor (fc), fill, hatch ({'/','\','|','-','+','x','o','O',"+
+     "'.', '*'}), linestyle (ls), and linewidth (lw)."],
     ["ttext","Plot text in window coordinates [(0,0) to (1,1)].",
      "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
      "window coordinates [typically (0,0) to (1,1)] with the font size "+

@@ -4424,8 +4424,11 @@ class o2graph_plotter(plot_base):
                     if self.verbose>2:
                         print('Process textbox.')
                         
-                    if ix_next-ix<5:
+                    if ix_next-ix<4:
                         print('Not enough parameters for textbox option.')
+                    elif ix_next-ix<5:
+                        self.textbox(strlist[ix+1],strlist[ix+2],
+                                     strlist[ix+3])
                     elif ix_next-ix<6:
                         self.textbox(strlist[ix+1],strlist[ix+2],
                                      strlist[ix+3],strlist[ix+4])

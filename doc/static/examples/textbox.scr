@@ -1,0 +1,11 @@
+# This example demonstrates the use of 'textbox'. 
+#
+o2graph -set font 30 -textbox 0.5 0.9 test1 fc=#ffdddd color=red \
+	-textbox 0.5 0.7 test2 fc=#ddffdd,boxstyle=Circle,ec=blue,ls=: \
+	fontfamily=cursive,ha=left \
+	-textbox 0.5 0.5 test3 \
+	"fill=False,boxstyle=Sawtooth,ec=orange,ls=--,hatch=///" \
+	"fontstyle=italic,rotation=10" \
+	-ttext 0.5 0.3 "test4" \
+	fontfamily=sans-serif,fontsize=28,backgroundcolor=#eeeeee \
+	-save textbox.png -show
