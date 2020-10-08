@@ -258,21 +258,30 @@ base_list=[
      "those of the "+ter.cyan_fg()+ter.bold()+"text"+ter.default_fg()+
      " command."],
     ["ttext","Plot text in window coordinates [(0,0) to (1,1)].",
-     "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
+     "<x> <y> <text> [kwargs]","The "+ter.cyan_fg()+ter.bold()+"ttext"+
+     ter.default_fg()+" command plots text in the "+
      "window coordinates [typically (0,0) to (1,1)] with the font size "+
-     "determined by the value of the parameter 'font' LaTeX is used "+
+     "determined by the value of the parameter "+ter.red_fg()+
+     ter.bold()+"font"+ter.default_fg()+" LaTeX is used "+
      "for text rendering by default, but this setting can be changed "+
      "using, e.g. '-set usetex 0'. Some useful kwargs are fontfamily, "+
      "fontstyle, fontsize, color, backgroundcolor, rotation, "+
-     "horizontalalignment (ha), and verticalalignment (va). Note that "+
+     "horizontalalignment (ha), and verticalalignment (va). Specifying "+
+     "fontsize overrides the "+ter.red_fg()+ter.bold()+"font"+
+     ter.default_fg()+" parameter Note that "+
      "you must disable LaTeX rendering to change fontfamily or "+
      "fontstyle."],
     ["xlimits","Set the x-axis limits.","<low> <high>",
-     "Set 'xlo' and 'xhi' to the specified limits, "+
-     "and set 'xset' to true. If a plotting canvas is currently "+
+     "The "+ter.cyan_fg()+ter.bold()+"xlimits"+
+     ter.default_fg()+" command sets "+ter.red_fg()+
+     ter.bold()+"xlo"+ter.default_fg()+" and "+ter.red_fg()+
+     ter.bold()+"xhi"+ter.default_fg()+" to the specified limits, "+
+     "and sets "+ter.red_fg()+
+     ter.bold()+"xset"+ter.default_fg()+" to true. If a plotting "+
+     "canvas is currently "+
      "open, then "+
      "the x-limits on the current axis are modified. Future plots are also "+
-     "set with the specified x-limits."],
+     "plot with the specified x-limits."],
     ["xtitle","Add x title to plot (or subplot).","",""],
     ["ylimits","Set the y-axis limits.","<low> <high>",
      "Set 'ylo' and 'yhi' to the specified limits, "+

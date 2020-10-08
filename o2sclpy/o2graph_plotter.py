@@ -2381,7 +2381,8 @@ class o2graph_plotter(plot_base):
         for line in base_list:
             if cmd==line[0]:
                 match=True
-                print('Usage: '+ter.cyan_fg()+cmd+ter.default_fg()+
+                print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
+                      ter.default_fg()+
                       ' '+line[2]+'\n\n'+line[1]+'\n')
                 tempx_arr=wrap_line(line[3])
                 for i in range (0,len(tempx_arr)):
