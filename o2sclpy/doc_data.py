@@ -237,7 +237,13 @@ base_list=[
     ["text","Plot text in the data coordinates.",
      "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
      "data coordinates defined by the current axes with the font size "+
-     "determined by the value of the parameter 'font'."],
+     "determined by the value of the parameter 'font'. LaTeX is used "+
+     "for text rendering by default, but this setting can be changed "+
+     "using, e.g. '-set usetex 0'. Some useful kwargs are fontfamily, "+
+     "fontstyle, fontsize, color, backgroundcolor, rotation, "+
+     "horizontalalignment (ha), and verticalalignment (va). Note that "+
+     "you must disable LaTeX rendering to change fontfamily or "+
+     "fontstyle."],
     ["textbox",
      "Plot a box with text.","<x1> <y1> <text> [bbox properties] [kwargs]",
      "Plot text <text> and a box at location <x1> <y1>. For example, "+
@@ -247,11 +253,20 @@ base_list=[
      "properties are boxstyle (Circle, DArrow, LArrow, RArrow, Round, "+
      "Round4, Roundtooth, Sawtooth, Square), alpha, color, edgecolor (ec), "+
      "facecolor (fc), fill, hatch ({'/','\','|','-','+','x','o','O',"+
-     "'.', '*'}), linestyle (ls), and linewidth (lw)."],
+     "'.', '*'}), linestyle (ls), and linewidth (lw). The keyword "+
+     "arguments are for the text properties, and follow "+
+     "those of the "+ter.cyan_fg()+ter.bold()+"text"+ter.default_fg()+
+     " command."],
     ["ttext","Plot text in window coordinates [(0,0) to (1,1)].",
      "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
      "window coordinates [typically (0,0) to (1,1)] with the font size "+
-     "determined by the value of the parameter 'font'."],
+     "determined by the value of the parameter 'font' LaTeX is used "+
+     "for text rendering by default, but this setting can be changed "+
+     "using, e.g. '-set usetex 0'. Some useful kwargs are fontfamily, "+
+     "fontstyle, fontsize, color, backgroundcolor, rotation, "+
+     "horizontalalignment (ha), and verticalalignment (va). Note that "+
+     "you must disable LaTeX rendering to change fontfamily or "+
+     "fontstyle."],
     ["xlimits","Set the x-axis limits.","<low> <high>",
      "Set 'xlo' and 'xhi' to the specified limits, "+
      "and set 'xset' to true. If a plotting canvas is currently "+
@@ -647,6 +662,7 @@ param_list=[
     ["logx","If true, use a logarithmic x-axis (default False)."],
     ["logy","If true, use a logarithmic y-axis (default False)."],
     ["logz","If true, use a logarithmic z-axis (default False)."],
+    ["usetex","If true, use LaTeX for text rendering (default True)."],
     ["verbose","Verbosity parameter (default 1)."],
     ["xhi","Upper limit for x-axis (function if starts with '(')."],
     ["xlo","Lower limit for x-axis (function if starts with '(')."],

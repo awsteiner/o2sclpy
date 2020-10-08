@@ -860,6 +860,13 @@ class plot_base:
                 self.zset=False
             else:
                 self.zset=True
+        elif name=='usetex':
+            if value=='False' or value=='0':
+                self.usetex=False
+                plot.rc('text',usetex=False)
+            else:
+                self.usetex=True
+                plot.rc('text',usetex=True)
         elif name=='editor':
             if value=='False' or value=='0':
                 self.editor=False
