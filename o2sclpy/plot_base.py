@@ -1354,8 +1354,17 @@ class plot_base:
             print('Line',x1,y1,x2,y1)
         if self.canvas_flag==False:
             self.canvas()
-        self.axes.plot([float(eval(x1)),float(eval(x2))],
-                       [float(eval(y1)),float(eval(y2))],**kwargs)
+            
+        if isinstance(x1,str):
+            x1=float(eval(x1))
+        if isinstance(y1,str):
+            y1=float(eval(y1))
+        if isinstance(x2,str):
+            x2=float(eval(x2))
+        if isinstance(y2,str):
+            y2=float(eval(y2))
+
+        self.axes.plot([x1,x2],[y1,y2],**kwargs)
         # End of function plot_base::line()
         return
 
@@ -1451,18 +1460,24 @@ class plot_base:
             print('Rect',x1,y1,x2,y1)
         if self.canvas_flag==False:
             self.canvas()
-        fx1=float(eval(x1))
-        fx2=float(eval(x2))
-        fy1=float(eval(y1))
-        fy2=float(eval(y2))
-        left=fx1
-        if fx2<fx1:
-            left=fx2
-        lower=fy1
-        if fy2<fy1:
-            lower=fy2
-        w=abs(fx1-fx2)
-        h=abs(fy1-fy2)
+
+        if isinstance(x1,str):
+            x1=float(eval(x1))
+        if isinstance(x2,str):
+            x2=float(eval(x2))
+        if isinstance(y1,str):
+            y1=float(eval(y1))
+        if isinstance(y2,str):
+            y2=float(eval(y2))
+
+        left=x1
+        if x2<x1:
+            left=x2
+        lower=y1
+        if y2<y1:
+            lower=y2
+        w=abs(x1-x2)
+        h=abs(y1-y2)
         if self.canvas_flag==False:
             self.canvas()
         r=patches.Rectangle((left,lower),w,h,angle,**kwargs)
@@ -1873,13 +1888,13 @@ class plot_base:
         # End of function plot_base::text()
         return
 
-    def textbox(self,tx,ty,str,boxprops='',**kwargs):
+    def textbox(self,tx,ty,strt,boxprops='',**kwargs):
         """
         Plot text in the axis coordinate system with a box
         """
         if self.canvas_flag==False:
             self.canvas()
-            
+
         ha_present=False
         for key in kwargs:
             if key=='ha':
@@ -1901,7 +1916,12 @@ class plot_base:
         if fontsize_present==False:
             kwargs=dict(kwargs,fontsize=self.font)
 
-        self.axes.text(float(eval(tx)),float(eval(ty)),str,
+        if isinstance(tx,str):
+            tx=float(eval(tx))
+        if isinstance(ty,str):
+            ty=float(eval(ty))
+            
+        self.axes.text(tx,ty,strt,
                        transform=self.axes.transAxes,
                        bbox=string_to_dict(boxprops),**kwargs)
         
@@ -2183,7 +2203,7 @@ class plot_base:
         axis titles and xlo, xhi, ylo, and yhi for the axis limits.
         """
         if self.verbose>2:
-            print('Canvas')
+            print('Canvas',self.fig_dict)
 
         dct=string_to_dict(self.fig_dict)
         if 'fontsize' not in dct.keys():
