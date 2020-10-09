@@ -44,6 +44,7 @@ from o2sclpy.utils import parse_arguments, string_to_dict, terminal
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
 from o2sclpy.utils import length_without_colors, wrap_line
+from o2sclpy.utils import get_ic_ptrs_to_list, string_equal_dash
 from o2sclpy.plot_base import plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
@@ -2353,20 +2354,18 @@ class o2graph_plotter(plot_base):
         Function to process the help command.
         """
         
-        curr_type=''
         cmd=''
 
         ter=terminal()
                     
         str_line=ter.horiz_line()
 
-        # If only a command is specified
+        # Get current type
+        curr_type=''
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
+
         if len(args)==1:
-
-            # Get current type
-            curr_type=o2scl_get_type(o2scl_hdf,amp)
             cmd=args[0]
-
         elif len(args)==2:
             # If both a type and command are specified
                         
@@ -2504,77 +2503,109 @@ class o2graph_plotter(plot_base):
             else:
                 markers_plot()
             finished=True
-                        
-        # Handle the case of an acol command 
+
         if match==False and finished==False:
-            self.gen_acol(o2scl_hdf,amp,'help',args)
+            
+            # C types
+            int_ptr=ctypes.POINTER(ctypes.c_int)
+            int_ptr_ptr=ctypes.POINTER(int_ptr)
+            char_ptr=ctypes.POINTER(ctypes.c_char)
+            char_ptr_ptr=ctypes.POINTER(char_ptr)
+        
+            # Function interface
+            get_fn=o2scl_hdf.o2scl_acol_get_cli_options
+            get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
+                             char_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+
+            # Arguments
+            size=ctypes.c_int(0)
+            iptr=int_ptr()
+            cptr=char_ptr()
+        
+            # Function call
+            get_ret=get_fn(amp,ctypes.byref(size),
+                           ctypes.byref(iptr),ctypes.byref(cptr))
+
+            desc_fn=o2scl_hdf.o2scl_acol_cli_option_desc
+            desc_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,
+                              char_ptr_ptr]
+            desc_fn.restype=ctypes.c_int
+
+            # tlist is the list of acol commands
+            tlist=get_ic_ptrs_to_list(size,iptr,cptr)
+
+            # If specified, look up command in acol list
+            acol_match=False
+            if len(args)>0:
+                for j in range(0,len(tlist)):
+                    if string_equal_dash(tlist[j],args[0]):
+                        acol_match=True
+
+            # If there was no match, do a command list
+            if acol_match==False:
+                print(' ')
+                print(str_line)
+                print('\nO2graph command-line options:\n')
+                full_list=[]
+                for j in range(0,len(tlist)):
+                    opt_name=ctypes.c_char_p(tlist[j])
+                    desc_ret=desc_fn(amp,opt_name,iptr,cptr)
+                    desc=b''
+                    for k in range(0,iptr[0]):
+                        desc=desc+cptr[k]
+                    full_list.append([tlist[j],desc])
+                for line in base_list:
+                    full_list.append([force_bytes(line[0]),
+                                      force_bytes(line[1])])
+                if curr_type!='':
+                    for line in extra_list:
+                        if force_bytes(line[0])==curr_type:
+                            full_list.append([force_bytes(line[1]),
+                                              force_bytes(line[2])])
+                full_list2=sorted(full_list,key=lambda x: x[0])
+                max_len=0
+                for k in range(0,len(full_list2)):
+                    full_list2[k][0]=(ter.cyan_fg()+ter.bold()+
+                                      full_list2[k][0].decode('utf-8')+
+                                      ter.default_fg())
+                    full_list2[k][1]=full_list2[k][1].decode('utf-8')
+                    if length_without_colors(full_list2[k][0])>max_len:
+                        max_len=length_without_colors(full_list2[k][0])
+                for k in range(0,len(full_list2)):
+                    strt='  '
+                    extra=max_len-length_without_colors(full_list2[k][0])
+                    strt+='-'+full_list2[k][0]
+                    for ij in range(0,extra):
+                        strt+=' '
+                    strt+=' '+full_list2[k][1]
+                    print(strt)
+                print('\n'+str_line)
+                print('Additional o2graph help topics: '+
+                      ter.green_fg()+ter.bold()+
+                      'cmaps'+ter.default_fg()+', '+
+                      ter.green_fg()+ter.bold()+
+                      'cmaps-plot'+ter.default_fg()+', '+
+                      ter.green_fg()+ter.bold()+
+                      'colors'+ter.default_fg()+', '+
+                      ter.green_fg()+ter.bold()+
+                      'colors-plot'+ter.default_fg()+',\n  '+
+                      ter.green_fg()+ter.bold()+
+                      'colors-near'+ter.default_fg()+', '+
+                      ter.green_fg()+ter.bold()+
+                      'markers'+ter.default_fg()+', '+
+                      ter.green_fg()+ter.bold()+
+                      'markers-plot'+ter.default_fg()+', and '+
+                      ter.green_fg()+ter.bold()+
+                      'xkcd-colors'+ter.default_fg()+'.')
+            else:
+                # Otherwise, it's an acol command so
+                self.gen_acol(o2scl_hdf,amp,'help',args)
             
         # If the user specified 'help set', then print
         # the o2graph parameter documentation
         if (cmd=='set' or cmd=='get') and len(args)==1:
             self.print_param_docs()
-
-        # If no arguments were given, then give a list of
-        # o2graph commands in addition to acol commands
-        if finished==False and len(args)==0:
-            print(str_line)
-            print('\nO2graph command-line options:\n')
-            for line in base_list:
-                strt='  -'+ter.cyan_fg()+ter.bold()+line[0]+ter.default_fg()
-                # Include extra length for the color commands
-                lent=30
-                if ter.redirected==True:
-                    lent=18
-                # Pad with spaces
-                while len(strt)<lent:
-                    strt=strt+' '
-                # Add command-description
-                strt+=line[1]
-                print(strt)
-            print('\n'+str_line)
-            print('O2graph type-specific commands:\n')
-            extra_types.sort()
-            for typename in extra_types:
-                strt=(ter.magenta_fg()+ter.bold()+typename+
-                      ter.default_fg()+': ')
-                first=True
-                for line in extra_list:
-                    if line[0]==typename:
-                        if first==True:
-                            strt+=(ter.cyan_fg()+ter.bold()+line[1]+
-                                   ter.default_fg())
-                            first=False
-                        else:
-                            strt+=(', '+ter.cyan_fg()+ter.bold()+line[1]+
-                                   ter.default_fg())
-                if ter.redirected:
-                    str_list=textwrap.wrap(strt,77)
-                else:
-                    # Include extra space for color formatting
-                    str_list=textwrap.wrap(strt,150)
-                for i in range (0,len(str_list)):
-                    if i==0:
-                        print(str_list[i])
-                    else:
-                        print(' ',str_list[i])
-            print('\n'+str_line)
-            print('Additional o2graph help topics: '+
-                  ter.green_fg()+ter.bold()+
-                  'cmaps'+ter.default_fg()+', '+
-                  ter.green_fg()+ter.bold()+
-                  'cmaps-plot'+ter.default_fg()+', '+
-                  ter.green_fg()+ter.bold()+
-                  'colors'+ter.default_fg()+', '+
-                  ter.green_fg()+ter.bold()+
-                  'colors-plot'+ter.default_fg()+',\n  '+
-                  ter.green_fg()+ter.bold()+
-                  'colors-near'+ter.default_fg()+', '+
-                  ter.green_fg()+ter.bold()+
-                  'markers'+ter.default_fg()+', '+
-                  ter.green_fg()+ter.bold()+
-                  'markers-plot'+ter.default_fg()+', and '+
-                  ter.green_fg()+ter.bold()+
-                  'xkcd-colors'+ter.default_fg()+'.')
 
         # End of function o2graph_plotter::help_func()
         return

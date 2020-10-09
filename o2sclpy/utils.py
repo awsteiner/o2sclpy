@@ -241,6 +241,19 @@ def get_str_array(dset):
         word_counter=word_counter+1
     return list
 
+def get_ic_ptrs_to_list(size,lengths,chars):
+    """
+    """
+    tlist=[]
+    count=0
+    for i in range(0,size.value):
+        strt=b''
+        for j in range(0,lengths[i]):
+            strt=strt+chars[count]
+            count+=1
+        tlist.append(strt)
+    return tlist
+
 def parse_arguments(argv,verbose=0):
     """
     Old command-line parser (this is currently unused and
@@ -580,15 +593,28 @@ def string_to_dict(s):
     return dct
 
 class terminal:
-
+    """
+    Handle vt100 formatting sequences
+    """
+    
     redirected=False
+    """
+    If true, then the output is being redirected to a file, so 
+    don't use the formatting sequences
+    """
     
     def __init__(self):
+        """
+        Determine if the output is being redirected or not
+        """
         if sys.stdout.isatty()==False:
             self.redirected=True
         return
     
     def cyan_fg(self):
+        """
+        Set the foreground color to cyan
+        """
         strt=''
         if self.redirected:
             return strt
@@ -596,6 +622,9 @@ class terminal:
         return strt
     
     def red_fg(self):
+        """
+        Set the foreground color to red
+        """
         strt=''
         if self.redirected:
             return strt
@@ -603,6 +632,9 @@ class terminal:
         return strt
     
     def magenta_fg(self):
+        """
+        Set the foreground color to magenta
+        """
         strt=''
         if self.redirected:
             return strt
@@ -610,6 +642,9 @@ class terminal:
         return strt
     
     def green_fg(self):
+        """
+        Set the foreground color to green
+        """
         strt=''
         if self.redirected:
             return strt
@@ -617,6 +652,9 @@ class terminal:
         return strt
     
     def bold(self):
+        """
+        Set the face to bold
+        """
         strt=''
         if self.redirected:
             return strt
@@ -624,6 +662,9 @@ class terminal:
         return strt
     
     def default_fg(self):
+        """
+        Set the foreground color to the default
+        """
         strt=''
         if self.redirected:
             return strt
@@ -635,8 +676,6 @@ class terminal:
         Return a string which represents a horizontal line. If possible,
         vt100-like terminal sequences are used to create a line.
         Otherwise, dashes are used.
-    
-        This function is in ``utils.py``.
         """
         str_line=''
         if self.redirected:
@@ -723,4 +762,16 @@ def wrap_line(line,ncols=79):
                 
     return list
             
+def string_equal_dash(str1,str2):
+    b1=force_bytes(str1)
+    b2=force_bytes(str2)
+    for i in range(0,len(b1)):
+        if b1[i]==b'-':
+            b1[i]=b'-'
+    for i in range(0,len(b2)):
+        if b2[i]==b'-':
+            b2[i]=b'-'
+    if b1==b2:
+        return True
+    return False
 
