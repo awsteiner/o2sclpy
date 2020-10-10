@@ -706,3 +706,10 @@ List of yt parameters for o2sclpy
 A list of 2-element entries, name and description
 """
 
+acol_help_topics=["functions","mult-vector-spec","strings-spec",
+                  "types","value-spec","vector-spec"]
+
+o2graph_help_topics=["cmaps","cmaps-plot","colors","colors-plot",
+                     "colors-near","markers","markers-plot",
+                     "xkcd-colors"]
+

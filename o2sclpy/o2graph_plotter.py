@@ -39,7 +39,8 @@ import matplotlib.patches as patches
 
 from o2sclpy.doc_data import cmaps, new_cmaps, base_list
 from o2sclpy.doc_data import extra_types, extra_list, param_list
-from o2sclpy.doc_data import yt_param_list
+from o2sclpy.doc_data import yt_param_list, acol_help_topics
+from o2sclpy.doc_data import o2graph_help_topics
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
@@ -2544,9 +2545,17 @@ class o2graph_plotter(plot_base):
 
             # If there was no match, do a command list
             if acol_match==False:
+                print('o2graph: A data viewing and '+
+                      'processing program for '+ter.bold()+
+                      'O2scl'+ter.default_fg()+
+                      '.\n  Version: '+version)
                 print(' ')
-                print(str_line)
-                print('\nO2graph command-line options:\n')
+                if curr_type==b'':
+                    print('List of command-line options:\n')
+                else:
+                    print('List of command-line options',
+                          '(current object type is',
+                          curr_type.decode('utf-8')+'):\n')
                 full_list=[]
                 for j in range(0,len(tlist)):
                     opt_name=ctypes.c_char_p(tlist[j])
@@ -2581,23 +2590,18 @@ class o2graph_plotter(plot_base):
                     strt+=' '+full_list2[k][1]
                     print(strt)
                 print('\n'+str_line)
-                print('Additional o2graph help topics: '+
-                      ter.green_fg()+ter.bold()+
-                      'cmaps'+ter.default_fg()+', '+
-                      ter.green_fg()+ter.bold()+
-                      'cmaps-plot'+ter.default_fg()+', '+
-                      ter.green_fg()+ter.bold()+
-                      'colors'+ter.default_fg()+', '+
-                      ter.green_fg()+ter.bold()+
-                      'colors-plot'+ter.default_fg()+',\n  '+
-                      ter.green_fg()+ter.bold()+
-                      'colors-near'+ter.default_fg()+', '+
-                      ter.green_fg()+ter.bold()+
-                      'markers'+ter.default_fg()+', '+
-                      ter.green_fg()+ter.bold()+
-                      'markers-plot'+ter.default_fg()+', and '+
-                      ter.green_fg()+ter.bold()+
-                      'xkcd-colors'+ter.default_fg()+'.')
+                help_topics=sorted(acol_help_topics+o2graph_help_topics)
+                strt='Additional help topics: '
+                for j in range(0,len(help_topics)):
+                    if j<len(help_topics)-1:
+                        strt+=(ter.green_fg()+ter.bold()+
+                               help_topics[j]+ter.default_fg()+', ')
+                    else:
+                        strt+=('and '+ter.green_fg()+ter.bold()+
+                               help_topics[j]+ter.default_fg()+'.')
+                tlist=wrap_line(strt)
+                for j in range(0,len(tlist)):
+                    print(tlist[j])
             else:
                 # Otherwise, it's an acol command so
                 self.gen_acol(o2scl_hdf,amp,'help',args)
