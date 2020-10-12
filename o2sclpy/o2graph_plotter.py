@@ -2551,7 +2551,8 @@ class o2graph_plotter(plot_base):
                       '.\n  Version: '+version)
                 print(' ')
                 if curr_type==b'':
-                    print('List of command-line options:\n')
+                    print('List of command-line options which',
+                          'do not require a current object:\n')
                 else:
                     print('List of command-line options',
                           '(current object type is',
