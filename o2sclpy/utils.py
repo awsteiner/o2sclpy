@@ -605,9 +605,11 @@ def string_to_dict(s):
                 arr2[0]!='lengthB' and arr2[0]!='widthB' and
                 arr2[0]!='cs_angleB'):
                 if len(arr2)<2:
-                    print('Failed to parse string as dictionary.')
-                    print('arr2:',arr2,' dct:',dct)
-                    return dct
+                    print('Original string:',s)
+                    print('Current entry:',arr2)
+                    print('Current dictionary:',dct)
+                    raise Exception('Failed to parse string "'+s+
+                                    '" as dictionary.')
                 dct[arr2[0]]=arr2[1]
         
     return dct

@@ -3924,6 +3924,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process set.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
@@ -3934,6 +3935,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process get.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
                         self.get('No parameter specified to get.')
@@ -3944,6 +3946,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process commands.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.commands(o2scl_hdf,amp,
                                   strlist[ix+1:ix_next])
@@ -3952,6 +3955,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-add-vol.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.yt_add_vol(o2scl_hdf,amp)
                     
@@ -3959,6 +3963,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-scatter.')
+                        print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-scatter.')
@@ -3969,6 +3974,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-path.')
+                        print('args:',strlist[ix:ix_next])
 
                     if strlist[ix+1]=='reset':
                         print('Resetting yt-path.')
@@ -3982,6 +3988,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-ann.')
+                        print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-ann.')
@@ -3992,6 +3999,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-text.')
+                        print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<5:
                         print('Not enough parameters for yt-text.')
@@ -4011,10 +4019,11 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-line.')
+                        print('args:',strlist[ix:ix_next])
 
-                    if ix_next-ix<6:
+                    if ix_next-ix<7:
                         print('Not enough parameters for yt-line.')
-                    elif ix_next-ix>=7:
+                    elif ix_next-ix>7:
                         x1=float(eval(strlist[ix+1]))
                         y1=float(eval(strlist[ix+2]))
                         z1=float(eval(strlist[ix+3]))
@@ -4036,6 +4045,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-box.')
+                        print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<7:
                         print('Not enough parameters for yt-box.')
@@ -4061,6 +4071,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-arrow.')
+                        print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<6:
                         print('Not enough parameters for yt-arrow.')
@@ -4086,6 +4097,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-vertex-list.')
+                        print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-vertex-list.')
@@ -4097,6 +4109,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-source-list.')
+                        print('args:',strlist[ix:ix_next])
                         
                     icnt=0
                     for key, value in self.yt_scene.sources.items():
@@ -4112,6 +4125,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-axis.')
+                        print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
                         self.yt_plot_axis()
@@ -4122,6 +4136,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process render.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
                         print('Not enough parameters for yt-render.')
@@ -4135,6 +4150,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process yt-tf.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.yt_tf_func(strlist[ix+1:ix_next])
                     
@@ -4142,6 +4158,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process help.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.help_func(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
@@ -4149,6 +4166,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process plot.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
@@ -4156,6 +4174,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process plot-color.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.plot_color(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
@@ -4163,6 +4182,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process rplot.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.rplot(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
@@ -4170,6 +4190,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process scatter.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.scatter(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
@@ -4177,6 +4198,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process hist-plot.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.hist_plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
@@ -4184,6 +4206,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process errorbar.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.errorbar(o2scl_hdf,amp,strlist[ix+1:ix_next])
 
@@ -4191,6 +4214,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process hist2d-plot.')
+                        print('args:',strlist[ix:ix_next])
                         
                     self.hist2d_plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
                             
@@ -4198,6 +4222,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process den-plot.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.den_plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
                 
@@ -4205,6 +4230,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process den-plot-rgb.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.den_plot_rgb(o2scl_hdf,amp,strlist[ix+1:ix_next])
                 
@@ -4212,6 +4238,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process den-plot-anim.')
+                        print('args:',strlist[ix:ix_next])
 
                     self.den_plot_anim(o2scl_hdf,amp,strlist[ix+1:ix_next])
                 
@@ -4219,6 +4246,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process plot1.')
+                        print('args:',strlist[ix:ix_next])
                         
                     self.plot1(o2scl_hdf,amp,strlist[ix+1:ix_next])
                             
@@ -4226,6 +4254,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process plotv.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
                         print('Not enough parameters for plotv option.')
@@ -4236,6 +4265,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process text.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<4:
                         print('Not enough parameters for text option.')
@@ -4249,6 +4279,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process ttext.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<4:
                         print('Not enough parameters for ttext option.')
@@ -4262,6 +4293,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process xlimits.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
                         print('Not enough parameters for xlimits option.')
@@ -4273,6 +4305,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process ylimits.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
                         print('Not enough parameters for ylimits option.')
@@ -4281,9 +4314,11 @@ class o2graph_plotter(plot_base):
                                      float(eval(strlist[ix+2])))
                         
                 elif cmd_name=='save':
+                    
                     if self.verbose>2:
-                        
                         print('Process save.')
+                        print('args:',strlist[ix:ix_next])
+                        
                     if ix_next-ix<2:
                         print('Not enough parameters for save option.')
                     else:
@@ -4293,6 +4328,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process subplots.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
                         print('Not enough parameters for subplots option.')
@@ -4308,6 +4344,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process selax.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
                         print('Not enough parameters for selax option.')
@@ -4318,6 +4355,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>5:
                         print('Process addcbar.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
                         print('Not enough parameters for addcbar option.')
@@ -4337,6 +4375,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>5:
                         print('Process inset.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
                         print('Not enough parameters for inset option.')
@@ -4356,6 +4395,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>1:
                         print('Process modax.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
                         print('Not enough parameters for inset option.')
@@ -4366,6 +4406,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process subadj.')
+                        print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
                         print('Not enough parameters for subadj option.')
@@ -4376,6 +4417,7 @@ class o2graph_plotter(plot_base):
 
                     if self.verbose>2:
                         print('Process xtitle.')
+                        print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
                         print('Not enough parameters for xtitle option.')
@@ -4393,6 +4435,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process ytitle.')
+                        print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
                         print('Not enough parameters for ytitle option.')
@@ -4427,6 +4470,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process line.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
                         print('Not enough parameters for line option.')
@@ -4442,26 +4486,31 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process o2scl-cpp-lib.')
+                        print('args:',strlist[ix:ix_next])
                         
                 elif cmd_name=='o2scl-lib-dir':
                     
                     if self.verbose>2:
                         print('Process o2scl-lib-dir.')
+                        print('args:',strlist[ix:ix_next])
                     
                 elif cmd_name=='o2scl-addl-libs':
                     
                     if self.verbose>2:
                         print('Process o2scl-addl-libs.')
+                        print('args:',strlist[ix:ix_next])
                     
                 elif cmd_name=='debug-first-pass':
                     
                     if self.verbose>2:
                         print('Process debug-first-pass.')
+                        print('args:',strlist[ix:ix_next])
                     
                 elif cmd_name=='textbox':
                     
                     if self.verbose>2:
                         print('Process textbox.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<4:
                         print('Not enough parameters for textbox option.')
@@ -4480,6 +4529,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process arrow.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<6:
                         print('Not enough parameters for arrow option.')
@@ -4497,6 +4547,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process point.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
                         print('Not enough parameters for point option.')
@@ -4510,6 +4561,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process point.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
                         print('Not enough parameters for point option.')
@@ -4534,6 +4586,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process python.')
+                        print('args:',strlist[ix:ix_next])
 
                     print("The o2graph_plotter() object is named 'self'.")
                     print("Use 'import o2sclpy' and 'help(o2sclpy)' +"
@@ -4545,6 +4598,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process eval.')
+                        print('args:',strlist[ix:ix_next])
 
                     eval(strlist[ix+1],None,locals())
                     
@@ -4552,6 +4606,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process exec.')
+                        print('args:',strlist[ix:ix_next])
 
                     exec(open(strlist[ix+1]).read(),None,locals())
                     
@@ -4559,6 +4614,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process image.')
+                        print('args:',strlist[ix:ix_next])
 
                     import matplotlib.image as img
                     im = img.imread(strlist[ix+1])
@@ -4570,6 +4626,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process rect.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
                         print('Not enough parameters for rect option.')
@@ -4590,6 +4647,7 @@ class o2graph_plotter(plot_base):
                     
                     if self.verbose>2:
                         print('Process ellipse.')
+                        print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
                         print('Not enough parameters for ellipse option.')
@@ -4609,26 +4667,32 @@ class o2graph_plotter(plot_base):
                 elif cmd_name=='show':
                     if self.verbose>2:
                         print('Process show.')
+                        print('args:',strlist[ix:ix_next])
                     self.show()
                 elif cmd_name=='move-labels':
                     if self.verbose>2:
                         print('Process move-labels.')
+                        print('args:',strlist[ix:ix_next])
                     self.move_labels()
                 elif cmd_name=='canvas':
                     if self.verbose>2:
                         print('Process canvas.')
+                        print('args:',strlist[ix:ix_next])
                     self.canvas()
                 elif cmd_name=='clf':
                     if self.verbose>2:
                         print('Process clf.')
+                        print('args:',strlist[ix:ix_next])
                     plot.clf()
                     self.canvas_flag=False
                 elif cmd_name=='backend':
                     if self.verbose>2:
                         print('Process backend in __init__.py.')
+                        print('args:',strlist[ix:ix_next])
                 else:
                     if self.verbose>2:
                         print('Process acol command '+cmd_name+'.')
+                        print('args:',strlist[ix:ix_next])
                     self.gen_acol(o2scl_hdf,amp,cmd_name,
                                   strlist[ix+1:ix_next])
                     
