@@ -347,10 +347,11 @@ def string_to_dict(s):
                 arr2[0]=arr2[0][:-1]
 
             # Remove quotes if necessary
-            if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
-                arr2[1]=arr2[1][1:len(arr2[1])-1]
-            if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
-                arr2[1]=arr2[1][1:len(arr2[1])-1]
+            if len(arr2)>1 and len(arr2[1])>2:
+                if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
+                    arr2[1]=arr2[1][1:len(arr2[1])-1]
+                if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
+                    arr2[1]=arr2[1][1:len(arr2[1])-1]
 
             # If one of the entries is arrowstyle, then combine
             # it with the head_width, head_length, and tail_width
@@ -556,6 +557,21 @@ def string_to_dict(s):
                          float(arr3[3])]
                 print('Found color:',arr2[1])
 
+            if ((arr2[0]=='ls' or arr2[0]=='linestyle')
+                and len(arr2)>=2 and len(arr2[1])>1
+                and arr2[1][0]=='('):
+                lstemp=arr[i]
+                skip=0
+                while (lstemp[-1]!=')' and lstemp[-2]!=')' and
+                       i+1<len(arr)):
+                    lstemp=lstemp+','+arr[i+1]
+                    skip=skip+1
+                    i=i+1
+                if lstemp[-2]!=')' or lstemp[-1]!=')':
+                    print('Failed to parse line style from',s)
+                    quit()
+                arr2[1]=eval(lstemp[3:])
+
             # if (arr2[0]=='color' and (arr2[1].find('(')!=-1 or
             #                           arr2[1].find('[')!=-1)):
             #     print('here',arr2[0],arr2[1])
@@ -588,6 +604,10 @@ def string_to_dict(s):
                 arr2[0]!='shrink_factor' and arr2[0]!='widthA' and
                 arr2[0]!='lengthB' and arr2[0]!='widthB' and
                 arr2[0]!='cs_angleB'):
+                if len(arr2)<2:
+                    print('Failed to parse string as dictionary.')
+                    print('arr2:',arr2,' dct:',dct)
+                    return dct
                 dct[arr2[0]]=arr2[1]
         
     return dct
