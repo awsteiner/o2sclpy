@@ -1278,18 +1278,13 @@ class plot_base:
         # End of function plot_base::get()
         return
 
-    def reset_xlimits(self):
-        """
-        Reset x axis limits
-        """
-        self.xset=False
-        # End of function plot_base::reset_xlimits()
-        return
-
     def xlimits(self,xlo,xhi):
         """
         Set the x-axis limits
         """
+        if xlo==xhi:
+            self.xset=False
+            return
         self.xlo=xlo
         self.xhi=xhi
         self.xset=True
@@ -1302,18 +1297,13 @@ class plot_base:
         # End of function plot_base::xlimits()
         return
 
-    def reset_ylimits(self):
-        """
-        Reset y axis limits
-        """
-        self.yset=False
-        # End of function plot_base::reset_ylimits()
-        return
-
     def ylimits(self,ylo,yhi):
         """
         Set the y-axis limits
         """
+        if ylo==yhi:
+            self.yset=False
+            return
         self.ylo=ylo
         self.yhi=yhi
         self.yset=True
@@ -1326,18 +1316,13 @@ class plot_base:
         # End of function plot_base::ylimits()
         return
 
-    def reset_zlimits(self):
-        """
-        Reset z axis limits
-        """
-        self.zset=False
-        # End of function plot_base::reset_zlimits()
-        return
-
     def zlimits(self,zlo,zhi):
         """
         Set the z-axis limits
         """
+        if zlo==zhi:
+            self.zset=False
+            return
         self.zlo=zlo
         self.zhi=zhi
         self.zset=True

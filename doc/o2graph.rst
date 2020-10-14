@@ -110,6 +110,14 @@ Modifying axis example
 .. image:: static/figures/modax_doc.png
    :width: 70%
 
+Textbox example
+---------------
+
+.. include:: static/examples/textbox.scr
+   :literal:
+.. image:: static/figures/textbox_doc.png
+   :width: 70%
+
 Subplot example 1
 -----------------
 

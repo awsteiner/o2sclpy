@@ -16,7 +16,6 @@ Other O\ :sub:`2`\ sclpy functions
 .. autofunction:: o2sclpy.parse_arguments
 .. autofunction:: o2sclpy.slack_notify
 .. autofunction:: o2sclpy.force_bytes
-.. autofunction:: o2sclpy.horiz_line
 
 Other O\ :sub:`2`\ sclpy variables
 ----------------------------------

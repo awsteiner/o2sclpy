@@ -198,18 +198,6 @@ base_list=[
      "specify one if desired. Some useful kwargs are alpha, color, "+
      "edgecolor (ec), facecolor (fc), fill, hatch, linestyle (ls), "+
      "linewidth (lw)."],
-    ["reset-xlim","Reset the x-axis limits.","",
-     "This is an alias for 'set xset False', and indicates "+
-     "that the values of 'xlo' and 'xhi' are to be ignored until the "+
-     "next call to 'xlimits'."],
-    ["reset-ylim","Reset the y-axis limits.","",
-     "This is an alias for 'set yset False', and indicates "+
-     "that the values of 'ylo' and 'yhi' are to be ignored until the "+
-     "next call to 'ylimits'."],
-    ["reset-zlim","Reset the z-azis limits.","",
-     "This is an alias for 'set zset False', and indicates "+
-     "that the values of 'zlo' and 'zhi' are to be ignored until the "+
-     "next call to 'zlimits'."],
     ["save","Save the current plot in a file.","<filename>",
      "Save the current plot in a file similar "+
      "to plot.savefig(). The action of this command depends on "+
@@ -281,14 +269,20 @@ base_list=[
      "canvas is currently "+
      "open, then "+
      "the x-limits on the current axis are modified. Future plots are also "+
-     "plot with the specified x-limits."],
+     "plot with the specified x-limits. If <low> and <high> are identical "+
+     "then "+ter.red_fg()+
+     ter.bold()+"xset"+ter.default_fg()+" is set to false and the x "+
+     "limits are automatically set by matplotlib."],
     ["xtitle","Add x title to plot (or subplot).","",""],
     ["ylimits","Set the y-axis limits.","<low> <high>",
      "Set 'ylo' and 'yhi' to the specified limits, "+
      "and set 'yset' to true. If a plotting canvas is currently "+
      "open, then "+
      "the y-limits on the current axis are modified. Future plots are also "+
-     "set with the specified y-limits."],
+     "set with the specified y-limits. If <low> and <high> are identical "+
+     "then "+ter.red_fg()+
+     ter.bold()+"yset"+ter.default_fg()+" is set to false and the y "+
+     "limits are automatically set by matplotlib."],
     ["ytitle","Add y title to plot (or subplot).","",""],
     ["yt-ann","Annotate a yt rendering (experimental).","",
      "The 'yt-ann' command adds a list of o2graph commands that can "+
@@ -392,8 +386,10 @@ base_list=[
     ["zlimits","Set the z-axis limits.","<low> <high>",
      "Set 'zlo' and 'zhi' to the specified limits, "+
      "and set 'zset' to true. The z-axis limits are principally used "+
-     "for yt volume visualizations."]
-#    ["ztitle","Add z title to plot (yt only).","",""]
+     "for yt volume visualizations. If <low> and <high> are identical "+
+     "then "+ter.red_fg()+
+     ter.bold()+"zset"+ter.default_fg()+" is set to false."]
+    #    ["ztitle","Add z title to plot (yt only).","",""]
 ]
 """
 This is a list of 4-element entries:

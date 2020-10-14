@@ -13,11 +13,13 @@ help:
 	@echo "subplots1.scr             o2graph.rst"
 	@echo "subplots2.scr             o2graph.rst"
 	@echo "subplots3.scr             o2graph.rst"
+	@echo "table_errorbar.scr        o2graph.rst"
 	@echo "table_plot.scr            o2graph.rst"
 	@echo "table_plotv.scr           o2graph.rst"
 	@echo "table_rplot.scr           o2graph.rst"
 	@echo "table_scatter.scr         o2graph.rst"
 	@echo "table3d_den_plot.scr      o2graph.rst"
+	@echo "textbox.scr               o2graph.rst"
 	@echo "yt_scatter.scr            yt.rst"
 	@echo "yt_tg_multvol.scr         yt.rst"
 	@echo ""
@@ -37,7 +39,8 @@ VIEW_SUFFIX =
 endif
 
 all: subplots1 subplots2 subplots3 table_plot \
-	table_plotv table_rplot table_scatter table3d_den_plot
+	table_plotv table_rplot table_scatter table3d_den_plot \
+	table_errorbar textbox
 
 subplots1:
 	./subplots1.scr
@@ -78,6 +81,12 @@ table_rplot:
 table_errorbar:
 	./table_errorbar.scr
 	convert +append ../figures/table_errorbar_doc.png table_errorbar.png \
+		temp.png
+	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+
+textbox:
+	./textbox.scr
+	convert +append ../figures/textbox_doc.png textbox.png \
 		temp.png
 	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
 

@@ -201,6 +201,8 @@ class o2graph_plotter(plot_base):
             curr_type==b'tensor_grid' or curr_type==b'tensor<int>' or
             curr_type==b'table3d'):
 
+            kwstring=''
+            
             # If the object is a tensor, convert to a table3d
             # object before plotting
             if curr_type!=b'table3d':
