@@ -1,7 +1,7 @@
 # Demonstrate multiple volume sources with different transfer
 # functions, text reorientation, text scaling, and LaTeX.
 #
-o2graph -create tensor_grid 3 101 101 101 \
+o2graph -set verbose 3 -create tensor_grid 3 101 101 101 \
 	-set-grid 0 "func:101:i*0.01" \
 	-set-grid 1 "func:101:i*0.01" \
 	-set-grid 2 "func:101:i*0.01" \

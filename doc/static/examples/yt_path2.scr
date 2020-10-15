@@ -1,4 +1,5 @@
-# 
+# This is an experimental version of yt_path.scr which includes
+# a star field in the background. It does not work yet.
 o2graph -backend Agg -read peano3.o2 -index -refine N 10 \
 	-set xlo "(-1)" -set xhi 8 \
 	-set ylo "(-1)" -set yhi 8 -set zlo "(-1)" -set zhi 8 \

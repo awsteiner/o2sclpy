@@ -360,7 +360,9 @@ base_list=[
      "use 'move' <n_frames> "+
      "<[dest_x,dest_y,dest_z]> <'internal' or 'user'>, where the third "+
      "argument is the destination in either the internal or user-specified "+
-     "coordinate system. Executing 'yt-path reset' resets the yt "+
+     "coordinate system. To turn the camera without moving it, use "+
+     "'turn' <n_frames> <[foc_x,foc_y,foc_z]> <'internal' or 'user'>. "+
+     "Executing 'yt-path reset' resets the yt "+
      "animation path to an empty list (for no animation)."],
     ["yt-render","Render the yt volume visualization.",
      "<filename or pattern> [movie output filename]",
@@ -657,7 +659,9 @@ param_list=[
                  "to whether or not the ticks are inside or outside the "+
                  "plot. The value of rt_ticks refers to whether or not "+
                  "tick marks are plotted on the right and top sides of "+
-                 "the plot. The font size parameter is multiplied by 0.8 "+
+                 "the plot. If the font size is unspecified, then "+
+                 "the 'font' setting is used. "+
+                 "The font size parameter is multiplied by 0.8 "+
                  "and then used for the axis labels. Note that this "+
                  "value must be set before the plotting canvas is"+
                  "created (which is done by 'subplots' or automatically "+

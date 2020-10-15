@@ -1,3 +1,6 @@
+# This example is unfinished, I had intended to add to use
+# something like yt-path moveauto to move the camera along
+# the peano curve
 # 
 o2graph -backend Agg -read peano3.o2 -index -refine N 10 \
 	-set xlo "(-1)" -set xhi 8 \
