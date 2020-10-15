@@ -2146,14 +2146,14 @@ class plot_base:
         """
         if image=='last':
             self.axes=self.fig.add_axes([left,bottom,width,height])
-            self.axis_dict["cbar"]=self.axes
+            self.axes_dict["cbar"]=self.axes
             cbar=self.fig.colorbar(self.last_image,cax=self.axes,**kwargs)
             cbar.ax.tick_params(labelsize=self.font*0.8)
         elif image=='new':
             self.axes=self.fig.add_axes([left,bottom,width,height])
             # This doesn't work and I'm not quite sure why yet
             #axis_temp.set_frame_on(False)
-            self.axis_dict["cbar"]=self.axes
+            self.axes_dict["cbar"]=self.axes
             if cmap=='':
                 print('New colorbar needs colormap in addcbar().')
                 return

@@ -42,7 +42,7 @@ endif
 # not because they are more time-consuming.
 all: subplots1 subplots2 subplots3 table_plot \
 	table_plotv table_rplot table_scatter table3d_den_plot \
-	table_errorbar textbox yt-scatter
+	table_errorbar textbox yt_scatter
 
 subplots1:
 	./subplots1.scr
