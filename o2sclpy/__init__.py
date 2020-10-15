@@ -50,35 +50,41 @@ from o2sclpy.part import init_part_pointers
 class todo_list:
     """
 
-    Todo list:
+    .. todo:: * Give an example of yt_filter in the docs
+              * Allow the user to name and list axes to ensure less
+                confusion when adding, e.g. insets to subplots.
+              * an example of a cube plot like Raph(?) showed, where
+                three density plots are shown on the xy xz and yz
+                planes in combination with a volume rendering. This
+                demands taking a density plot and transforming it to a
+                paralellogram with normal matplotlib, using yt for the
+                volume rendering, and then making a yt_filter to add
+                the volume rendering on top of the density plots. See
+                https://matplotlib.org/3.1.0/tutorials/toolkits/axisartist.html
+                for the parallelograms.
+              * an example of more complicated yt annotations
+              * Finish the 'moveauto' path in yt_render()
+              * create a vector field command in yt
+              * allow the creation of colormaps on the fly? 
+              * add map to colormap option for yt tf's
+              * Create a system of protected variables and functions using
+                underscores and also create a __repr__() object
+              * Create a plot_base_yt class in between plot_base
+                and o2graph_plotter?
+              * Ensure yt uses self.font for text objects?
+              * Finish den-plot-anim for a tensor_grid objects
+              * plot-set for a table3d object to create 
+                a sequence of curves for each column or row, or maybe 
+                do this as a 'mult-vector-spec'?
+              * Simplify some of the larger functions like 
+                o2graph_plotter::plot(), possibly by creating a separate
+                function for each type?
+              * Ensure the 'clf' command clears the yt objects?
+              * New yt_path option to move along a path determined by
+                an o2scl table object?
+              * Anti-alias text objects in yt (also anti-alias line 
+                sources?)
 
-    .. todo:: Allow the user to name and list axes to ensure less
-       confusion when adding, e.g. insets to subplots
-    .. todo:: an example of a cube plot like Raph(?) showed, where
-       three density plots are shown on the xy xz and yz planes
-       in combination with a volume rendering.
-    .. todo:: an example of more complicated yt annotations
-    .. todo:: finish the 'moveauto' path in yt_render()
-    .. todo:: create a vector field command in yt
-    .. todo:: allow the creation of colormaps on the fly? 
-    .. todo:: add map to colormap option for yt tf's
-    .. todo:: Create a system of protected variables and functions using
-       underscores and also create a __repr__() object
-    .. todo:: Create a plot_base_yt class in between plot_base
-       and o2graph_plotter?
-    .. todo:: Ensure yt uses self.font for text objects?
-    .. todo:: Finish den-plot-anim for a tensor_grid objects
-    .. todo:: plot-set for a table3d object to create 
-       a sequence of curves for each column or row, or maybe 
-       do this as a 'mult-vector-spec'?
-    .. todo:: Simplify some of the larger functions like 
-       o2graph_plotter::plot(), possibly by creating a separate
-       function for each type?
-    .. todo:: Ensure the 'clf' command clears the yt objects?
-    .. todo:: More yt-path options
-    .. todo:: Anti-alias text objects in yt (also anti-alias line 
-       sources?)
-    
     """
 
     def empty_class():

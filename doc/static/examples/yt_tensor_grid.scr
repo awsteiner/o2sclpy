@@ -1,3 +1,5 @@
+# This is an unfinished example of a neutron star volume rendering
+# 
 # 11.54 is radius, 0.918*11.54 is crust-core transition, 0.5 is
 # halfway out, at n_B=0.456 fm^{-3}
 #

@@ -3718,6 +3718,11 @@ class o2graph_plotter(plot_base):
 
                     # Move the camera, automatically changing the
                     # focus to lie along the direction of motion
+                    #
+                    # The idea here is to do the turn at the beginning
+                    # of the movement so that the initial frames turn
+                    # toward the new focus while moving and the final
+                    # frames just move to the final camera position.
 
                     print('unfinished')
                     quit()

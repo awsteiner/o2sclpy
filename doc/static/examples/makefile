@@ -38,9 +38,11 @@ VIEW_COMMAND = open
 VIEW_SUFFIX = 
 endif
 
+# The yt_scatter script is included here but the other yt plots are
+# not because they are more time-consuming.
 all: subplots1 subplots2 subplots3 table_plot \
 	table_plotv table_rplot table_scatter table3d_den_plot \
-	table_errorbar textbox
+	table_errorbar textbox yt-scatter
 
 subplots1:
 	./subplots1.scr

@@ -16,6 +16,9 @@ help:
 	@echo "'python3 setup.py sdist bdist_wheel'"
 	@echo "  and then 'twine upload dist/*'."
 
+viewdoc: .empty
+	open doc/build/html/index.html
+
 doc: .empty
 	cd doc; $(MAKE) html
 
