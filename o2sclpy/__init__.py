@@ -51,6 +51,8 @@ class todo_list:
     """
 
     .. todo:: * Give an example of yt_filter in the docs
+              * Create new functions based on yt_render() which are easier 
+                called directly from python.
               * Allow the user to name and list axes to ensure less
                 confusion when adding, e.g. insets to subplots.
               * an example of a cube plot like Raph(?) showed, where

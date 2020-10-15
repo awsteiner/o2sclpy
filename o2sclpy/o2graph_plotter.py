@@ -4354,7 +4354,7 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for selax option.')
                     else:
-                        self.selax(int(strlist[ix+1]))
+                        self.selax(strlist[ix+1])
                         
                 elif cmd_name=='addcbar':
                     

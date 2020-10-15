@@ -56,9 +56,9 @@ class plot_base:
     """ 
     Axis object
     """
-    axis_list=[]
+    axes_dict={}
     """
-    2D array of axis objects when subplots is used
+    Dictionary of axis objects 
     """
     fig=0
     """ 
@@ -1917,7 +1917,7 @@ class plot_base:
         """
         Create ``nr`` rows and ``nc`` columns of subplots. The axis
         objects are extracted and placed in a (one-dimensional) list
-        in ``axis_list``.
+        in ``axes_dict``.
         """
         plot.rc('text',usetex=True)
         plot.rc('font',family='serif')
@@ -1932,36 +1932,36 @@ class plot_base:
         self.fig,axis_temp=plot.subplots(nrows=nr,ncols=nc,
                                          figsize=(dct["fig_size_x"],
                                                   dct["fig_size_y"]))
-
-        # Record the first new for later use
-        index_start=len(self.axis_list)
-        
-        # Reformulate the axis objects into the list axis_list
+        # Reformulate the axis objects into the axes_dict
+        nsub=0
         if nr==1 and nc==1:
-            self.axis_list.append(axis_temp)
+            self.axes_dict["subplot0"]=axis_temp
+            nsub=1
         elif nr==1:
             for i in range(0,nc):
-                self.axis_list.append(axis_temp[i])
+                self.axes_dict["subplot"+str(i)]=axis_temp[i]
+            nsub=nc
         elif nc==1:
             for i in range(0,nr):
-                self.axis_list.append(axis_temp[i])
+                self.axes_dict["subplot"+str(i)]=axis_temp[i]
+            nsub=nr
         else:
+            cnt=0
             for i in range(0,nr):
                 for j in range(0,nc):
-                    self.axis_list.append(axis_temp[i][j])
+                    self.axes_dict["subplot"+str(cnt)]=axis_temp[i][j]
+                    cnt=cnt+1
+            nsub=cnt
 
-        # Record the index which marks the end of the list
-        index_end=len(self.axis_list)
-        
         # Apply default preferences to the axes, similar to
         # default_plot().
-        for i in range(index_start,index_end):
-            self.axis_list[i].minorticks_on()
-            self.axis_list[i].tick_params('both',length=12,width=1,
-                                          which='major')
-            self.axis_list[i].tick_params('both',length=5,width=1,
-                                          which='minor')
-            self.axis_list[i].tick_params(labelsize=self.font*0.8)
+        for i in range(0,nsub):
+            axt=self.axes_dict["subplot"+str(i)]
+            axt.minorticks_on()
+            axt.tick_params('both',length=12,width=1,which='major')
+            axt.tick_params('both',length=5,width=1,
+                            which='minor')
+            axt.tick_params(labelsize=self.font*0.8)
 
         # Flip the canvas flag
         self.canvas_flag=True
@@ -1997,24 +1997,16 @@ class plot_base:
     # End of function plot_base::ztitle()
     #return
     
-    def selax(self,nr,nc=0):
+    def selax(self,name):
         """
         Select an axis from the current list of axes
         """
-        nr_temp=len(self.axis_list)
-        try:
-            nc_temp=len(self.axis_list[0])
-        except:
-            nc_temp=1
-        if nc_temp==1:
-            self.axes=self.axis_list[nr]
+        
+        if len(name)==1:
+            self.axes=self.axes_dict["subplot"+name]
         else:
-            # AWS: 2/16/20: I don't think axis_list should ever be a
-            # two-dimensional array. If that is correct, then we can just
-            # simplify this code above and just use self.axis_list[nr].
-            # More testing should probably be done to verify this.
-            self.axes=self.axis_list[nr][nc]
-            print("Using two-dimensional form for axis_list.")
+            self.axes=self.axes_dict[name]
+        
         # End of function plot_base::selax()
         return
 
@@ -2029,8 +2021,9 @@ class plot_base:
         """
 
         # Create a unique axes label i.e. axes1
-        axis_temp=self.fig.add_axes([left,bottom,width,height],
-                                    label='axes'+str(len(self.axis_list)))
+        self.axes=self.fig.add_axes([left,bottom,width,height],
+                                    label='inset1')
+        self.axes_dict["inset1"]=self.axes
         
         # the same defaults as default_plot()
         axis_temp.minorticks_on()
@@ -2038,9 +2031,6 @@ class plot_base:
         axis_temp.tick_params('both',length=5,width=1,which='minor')
         axis_temp.tick_params(labelsize=self.font*0.8)
         
-        self.axis_list.append(axis_temp)
-        self.axes=axis_temp
-    
     def modax(self,**kwargs):
         """
         Modify the current axes properties
@@ -2155,17 +2145,15 @@ class plot_base:
         used to create the colorbar. 
         """
         if image=='last':
-            axis_temp=self.fig.add_axes([left,bottom,width,height])
-            self.axis_list.append(axis_temp)
-            self.axes=axis_temp
+            self.axes=self.fig.add_axes([left,bottom,width,height])
+            self.axis_dict["cbar"]=self.axes
             cbar=self.fig.colorbar(self.last_image,cax=self.axes,**kwargs)
             cbar.ax.tick_params(labelsize=self.font*0.8)
         elif image=='new':
-            axis_temp=self.fig.add_axes([left,bottom,width,height])
+            self.axes=self.fig.add_axes([left,bottom,width,height])
             # This doesn't work and I'm not quite sure why yet
             #axis_temp.set_frame_on(False)
-            self.axis_list.append(axis_temp)
-            self.axes=axis_temp
+            self.axis_dict["cbar"]=self.axes
             if cmap=='':
                 print('New colorbar needs colormap in addcbar().')
                 return
@@ -2198,6 +2186,9 @@ class plot_base:
              self.ax_right_panel)=default_plot(**dct,editor=True)
         else:
             (self.fig,self.axes)=default_plot(**dct)
+
+        # Add axes object to the dictionary
+        self.axes_dict["main"]=self.axes
         
         # Plot limits
         if self.xset==True:
