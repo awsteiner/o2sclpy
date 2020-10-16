@@ -55,10 +55,14 @@ Contents
    licensing
    o2graph
    yt
-   class
+   class_cloud_file
+   class_hdf5_reader
+   class_plotter
+   class_plot_base
+   class_yt_plot_base
+   class_o2graph_plotter
    plot_ref
    other
-   internal
    todos
 
 --------------------------------------------------------------
