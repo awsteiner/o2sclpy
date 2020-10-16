@@ -710,6 +710,18 @@ class terminal:
             str_line=str_line+chr(27)+'(B'
         return str_line
 
+    def type_str(self,strt):
+        return self.magenta_fg()+self.bold()+strt+self.default_fg()
+    
+    def cmd_str(self,strt):
+        return self.cyan_fg()+self.bold()+strt+self.default_fg()
+    
+    def topic_str(self,strt):
+        return self.green_fg()+self.bold()+strt+self.default_fg()
+    
+    def var_str(self,strt):
+        return self.red_fg()+self.bold()+strt+self.default_fg()
+
 def length_without_colors(strt):
     """
     Compute the length of strt, ignoring characters which correspond
@@ -797,3 +809,26 @@ def string_equal_dash(str1,str2):
         return True
     return False
 
+def screenify(tlist,ncols=79):
+    maxlen=0
+    for i in range(0,len(tlist)):
+        if length_without_colors(tlist[i])>maxlen:
+            maxlen=length_without_colors(tlist[i])
+    # Add to ensure there is at least one space between columns
+    maxlen=maxlen+1
+    ncolumns=int(ncols/maxlen)
+    nrows=int(len(tlist)/ncolumns)
+    while nrows*ncolumns<len(tlist):
+        nrows=nrows+1
+    output_list=[]
+    for i in range(0,nrows):
+        row=''
+        for j in range(0,ncolumns):
+            if j+i*ncolumns<len(tlist):
+                colt=tlist[j+i*ncolumns]
+                while length_without_colors(colt)<maxlen:
+                    colt=colt+' '
+                row=row+colt
+        output_list.append(row)
+    return output_list
+            

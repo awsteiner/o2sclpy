@@ -44,7 +44,7 @@ from o2sclpy.doc_data import o2graph_help_topics
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
-from o2sclpy.utils import length_without_colors, wrap_line
+from o2sclpy.utils import length_without_colors, wrap_line, screenify
 from o2sclpy.utils import get_ic_ptrs_to_list, string_equal_dash
 from o2sclpy.plot_base import plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
@@ -2397,7 +2397,7 @@ class o2graph_plotter(plot_base):
                  curr_type==force_bytes(line[0])) and
                 cmd==line[1]):
                 match=True
-                print('Usage: '+ter.cyan_fg()+cmd+ter.default_fg()+
+                print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+ter.default_fg()+
                       ' '+line[3]+'\n\n'+line[2]+'\n')
                 tempx_arr=wrap_line(line[4])
                 for i in range (0,len(tempx_arr)):
@@ -2411,9 +2411,9 @@ class o2graph_plotter(plot_base):
                     match=True
                     str_line=ter.horiz_line()
                     print('\n'+str_line)
-                    print('Type '+ter.magenta_fg()+line[0]+
+                    print('Type: '+ter.magenta_fg()+ter.bold()+line[0]+
                           ter.default_fg()+':')
-                    print('Usage: '+cmd+' '+ter.cyan_fg()+line[3]+
+                    print('Usage: '+cmd+' '+ter.cyan_fg()+ter.bold()+line[3]+
                           ter.default_fg()+'\n\n'+line[2]+'\n')
                     
                     tempx_arr=line[4].split('\n')
@@ -3164,34 +3164,111 @@ class o2graph_plotter(plot_base):
         Output the currently available commands.
         """
 
-        self.gen_acol(o2scl_hdf,amp,'commands',args)
+        ter=terminal()
+        
+        #self.gen_acol(o2scl_hdf,amp,'commands',args)
                     
         if len(args)>0:
             
             curr_type=args[0]
+
+            print('O2graph commands for an object of type '+
+                  ter.type_str(str(curr_type))+':\n')
+            
+            # C types
+            int_ptr=ctypes.POINTER(ctypes.c_int)
+            int_ptr_ptr=ctypes.POINTER(int_ptr)
+            char_ptr=ctypes.POINTER(ctypes.c_char)
+            char_ptr_ptr=ctypes.POINTER(char_ptr)
+        
+            # Function interface
+            get_fn=o2scl_hdf.o2scl_acol_get_cli_options_type
+            get_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,int_ptr_ptr,
+                             char_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+
+            # Arguments
+            size=ctypes.c_int(0)
+            iptr=int_ptr()
+            cptr=char_ptr()
+            curr_type2=ctypes.c_char_p(force_bytes(curr_type))
+        
+            # Function call
+            get_ret=get_fn(amp,curr_type2,ctypes.byref(size),
+                           ctypes.byref(iptr),ctypes.byref(cptr))
+
+            # comm_list is the list of acol commands for this type
+            comm_list=get_ic_ptrs_to_list(size,iptr,cptr)
+            
+            for line in base_list:
+                comm_list.append(force_bytes(line[0]))
+            for line in extra_list:
+                if (curr_type==line[0] or
+                    curr_type==force_bytes(line[0])):
+                    comm_list.append(force_bytes(line[1]))
+
+            comm_list2=sorted(comm_list)
+            for i in range(0,len(comm_list2)):
+                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
+            comm_rows=screenify(comm_list2)
+            for i in range(0,len(comm_rows)):
+                print(comm_rows[i])
                         
         else:
 
-            # Get current type
             int_ptr=ctypes.POINTER(ctypes.c_int)
+            double_ptr=ctypes.POINTER(ctypes.c_double)
             char_ptr=ctypes.POINTER(ctypes.c_char)
+            double_ptr_ptr=ctypes.POINTER(double_ptr)
             char_ptr_ptr=ctypes.POINTER(char_ptr)
             
             curr_type=o2scl_get_type(o2scl_hdf,amp)
-                
-        print('O2graph commands for type '+
-              str(curr_type)+':\n')
-        strout=''
-        for line in base_list:
-            strout+=line[0]+' '
-        for line in extra_list:
-            if (curr_type==line[0] or
-                curr_type==force_bytes(line[0])):
-                strout+=line[1]+' '
-        str_list=textwrap.wrap(strout,79)
-        for i in range (0,len(str_list)):
-            print(str_list[i])
 
+            if curr_type==b'':
+                print('O2graph commands which do not require a '+
+                      'current object.')
+            else:
+                print('O2graph commands for an object of type '+
+                      ter.type_str(curr_type.decode('utf-8'))+':\n')
+            
+            # C types
+            int_ptr=ctypes.POINTER(ctypes.c_int)
+            int_ptr_ptr=ctypes.POINTER(int_ptr)
+            char_ptr=ctypes.POINTER(ctypes.c_char)
+            char_ptr_ptr=ctypes.POINTER(char_ptr)
+        
+            # Function interface
+            get_fn=o2scl_hdf.o2scl_acol_get_cli_options
+            get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
+                             char_ptr_ptr]
+            get_fn.restype=ctypes.c_int
+
+            # Arguments
+            size=ctypes.c_int(0)
+            iptr=int_ptr()
+            cptr=char_ptr()
+        
+            # Function call
+            get_ret=get_fn(amp,ctypes.byref(size),
+                           ctypes.byref(iptr),ctypes.byref(cptr))
+
+            # comm_list is the list of acol commands for this type
+            comm_list=get_ic_ptrs_to_list(size,iptr,cptr)
+            
+            for line in base_list:
+                comm_list.append(force_bytes(line[0]))
+            for line in extra_list:
+                if (curr_type==line[0] or
+                    curr_type==force_bytes(line[0])):
+                    comm_list.append(force_bytes(line[1]))
+
+            comm_list2=sorted(comm_list)
+            for i in range(0,len(comm_list2)):
+                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
+            comm_rows=screenify(comm_list2)
+            for i in range(0,len(comm_rows)):
+                print(comm_rows[i])
+                        
         # End of function o2graph_plotter::commands()
         return
 
