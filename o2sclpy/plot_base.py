@@ -1435,6 +1435,9 @@ class plot_base:
     #     return
 
 class yt_plot_base(plot_base):
+    """
+    Desc
+    """
 
     # yt settings modifiable by get and set
 
@@ -2252,6 +2255,11 @@ class yt_plot_base(plot_base):
         return
             
     def text2(self,tx,ty,textstr,**kwargs):
+        """
+        A wrapper for plot_base::yt() which ensures that the
+        yt transformations are done
+        """
+        
         # If we're doing a yt text annotation, then add the proper
         # transformation
         if self.yt_scene!=0:

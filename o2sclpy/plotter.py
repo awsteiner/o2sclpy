@@ -25,7 +25,7 @@ import matplotlib.pyplot as plot
 from o2sclpy.hdf5 import hdf5_reader
 from o2sclpy.plot_base import plot_base
 
-class plotter(plot_base):
+class plotter(yt_plot_base):
     """ 
     A class useful for quickly plotting HDF5 data generated
     by O\ :sub:`2`\ scl . This class is a child of the
