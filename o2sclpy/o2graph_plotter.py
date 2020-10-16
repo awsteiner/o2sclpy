@@ -46,13 +46,13 @@ from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
 from o2sclpy.utils import length_without_colors, wrap_line, screenify
 from o2sclpy.utils import get_ic_ptrs_to_list, string_equal_dash
-from o2sclpy.plot_base import plot_base
+from o2sclpy.plot_base import plot_base, yt_plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
 from o2sclpy.plot_info import colors_plot, color_list
 from o2sclpy import version
 
-class o2graph_plotter(plot_base):
+class o2graph_plotter(yt_plot_base):
     """
     A plotting class for the o2graph script. This class is a child of the
     :py:class:`o2sclpy.plot_base` class.
@@ -4352,9 +4352,9 @@ class o2graph_plotter(plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for text option.')
                     elif ix_next-ix<5:
-                        self.text(strlist[ix+1],strlist[ix+2],strlist[ix+3])
+                        self.text2(strlist[ix+1],strlist[ix+2],strlist[ix+3])
                     else:
-                        self.text(strlist[ix+1],strlist[ix+2],strlist[ix+3],
+                        self.text2(strlist[ix+1],strlist[ix+2],strlist[ix+3],
                                   **string_to_dict(strlist[ix+4]))
                         
                 elif cmd_name=='ttext':

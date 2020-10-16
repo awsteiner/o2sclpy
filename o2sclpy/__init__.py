@@ -70,8 +70,6 @@ class todo_list:
               * add map to colormap option for yt tf's
               * Create a system of protected variables and functions using
                 underscores and also create a __repr__() object
-              * Create a plot_base_yt class in between plot_base
-                and o2graph_plotter?
               * Ensure yt uses self.font for text objects?
               * Finish den-plot-anim for a tensor_grid objects
               * plot-set for a table3d object to create 
