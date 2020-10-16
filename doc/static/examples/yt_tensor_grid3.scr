@@ -7,14 +7,15 @@ o2graph -backend Agg -create tensor_grid 3 101 101 101 \
 	-set-grid 0 "func:101:(i/100)*11.54" \
 	-set-grid 1 "func:101:(i/100)*11.54" \
 	-set-grid 2 "func:101:(i/100)*11.54" \
-	-function "(x0<=0 || x1<=0 || x2<=0)*sqrt(x0*x0/11.54^2+x1*x1/11.54^2+x2*x2/11.54^2)+(x0>0 && x1>0 && x2>0)*(-100.0)" \
+	-function "sqrt(x0*x0/11.54^2+x1*x1/11.54^2+x2*x2/11.54^2)" \
+	-list \
 	-yt-tf new 0 1 \
-	-yt-tf gauss 1.0 0.001   0.8 0.0 0.0 0.5 \
-	-yt-tf gauss 0.918 0.001 0.7 0.4 0.0 0.5 \
-	-yt-tf gauss 0.5 0.001   0.7 0.0 0.4 0.5 \
-	-yt-add-vol -xtitle "$ x $" -ytitle "$ y $" \
+	-yt-tf gauss 1.0 0.001   0.8 0.0 0.0 10 \
+	-yt-tf gauss 0.918 0.001 0.7 0.4 0.0 10 \
+	-yt-tf gauss 0.5 0.001   0.7 0.0 0.4 10 \
+	-yt-add-vol \
+	-yt-axis \
+	-yt-text 11.5 "(-0.5)" 0.5 "$ x $" textcolor=[1,1,1,1] \
+	-yt-text 0.0 11.9 0.0 "$ y $" textcolor=[1,1,1,1] \
 	-yt-source-list \
 	-yt-render ytg0.png
-
-#"/tmp/ytg_*.png" ytg.mp4
-#-yt-axis -ztitle "$ z $" 

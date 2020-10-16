@@ -395,7 +395,6 @@ base_list=[
      "for yt volume visualizations. If <low> and <high> are identical "+
      "then "+ter.red_fg()+
      ter.bold()+"zset"+ter.default_fg()+" is set to false."]
-    #    ["ztitle","Add z title to plot (yt only).","",""]
 ]
 """
 This is a list of 4-element entries:

@@ -1977,6 +1977,10 @@ class plot_base:
         """
         Add a title for the x-axis
         """
+
+        # Note that this function no longer works inside of yt
+        # visualizations because they need to be accessible for
+        # annotations on top of yt
         
         if textstr!='' and textstr!='none':
             if self.canvas_flag==False:
@@ -1990,16 +1994,17 @@ class plot_base:
         """
         Add a title for the y-axis
         """
+
+        # Note that this function no longer works inside of yt
+        # visualizations because they need to be accessible for
+        # annotations on top of yt
+        
         if textstr!='' and textstr!='none':
             if self.canvas_flag==False:
                 self.canvas()
             self.axes.set_ylabel(textstr,fontsize=self.font)
         # End of function plot_base::ytitle()
         return
-        
-    #def ztitle(self,textstr):
-    # End of function plot_base::ztitle()
-    #return
     
     def selax(self,name=''):
         """
