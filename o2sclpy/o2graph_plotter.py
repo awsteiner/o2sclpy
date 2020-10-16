@@ -4352,7 +4352,7 @@ class o2graph_plotter(plot_base):
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
-                        print('Not enough parameters for selax option.')
+                        self.selax()
                     else:
                         self.selax(strlist[ix+1])
                         

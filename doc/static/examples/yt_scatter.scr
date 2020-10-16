@@ -14,7 +14,8 @@ o2graph -create table x "grid:0,5,0.01" \
 	color=w,ha=left end \
 	-yt-ann -text 0.1 0.9 "$ y=\sin(4 x);~z=\cos(4x) $" \
 	color=w,ha=left end \
-	-yt-text 2.2 "(-1.2)" "(-1.2)" "$ x $" \
-	-yt-text "(-0.5)" 0.0 "(-1.2)" "$ y $" \
+	-yt-text 3.5 "(-1.15)" "(-1.15)" "$ x $" "textcolor=[1,1,1,0.8]" \
+	-yt-text "(-0.5)" 0.0 "(-1.2)" "$ y $" "textcolor=[1,1,1,0.8]" \
+	-yt-text 0.0 "(-0.8)" 0.9 "$ z $" "textcolor=[1,1,1,0.8]" \
 	-yt-source-list \
 	-set yt_sigma_clip 0.5 -yt-render yt_scatter.png

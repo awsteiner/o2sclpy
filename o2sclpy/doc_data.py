@@ -36,7 +36,8 @@ List of new o2sclpy cmaps
 base_list=[
     ["addcbar","Add a color bar.",
      "<left> <bottom> <width> <height> [kwargs]",
-     "Add a color bar from the most recently created image."],
+     "Add a color bar from the most recently created image. The "+
+     "axes object for the first colorbar added is named "],
     ["arrow","Plot an arrow.",
      "<x1> <y1> <x2> <y2> <arrow properties> [kwargs]",
      "Plot an arrow from (x1,y1) to (x2,y2). This command uses "+
@@ -114,8 +115,10 @@ base_list=[
      "Read a .png file, create a plot, and then call plot.show()."],
     ["inset","Add a new set of axes (e.g. for an inset).",
      "<left> <bottom> <width> <height> [kwargs]",
-     ("This command creates a new set of axes, adds the new axies "+
-      "to the list of axes, and sets the new axes as the current.")],
+     "This command creates a new set of axes, adds the new axies "+
+     "to the list of axes, and sets the new axes as the current. "+
+     "The axes object is named 'inset0' for the first inset, then "+
+     "'inset1', and so on."],
     ["line","Plot a line.","<x1> <y1> <x2> <y2> [kwargs]",
      "Plot a line from (x1,y1) to (xy,y2). Some useful "+
      "kwargs are color (c), dashes, linestyle (ls), linewidth (lw), "+
@@ -204,11 +207,10 @@ base_list=[
      "which backend was selected. File type depends on the "+
      "extension, typically either .png, .pdf, .eps, .jpg, .raw, .svg, "+
      "and .tif ."],
-    ["selax","Select axis.","<index>",
+    ["selax","Select axis.","[name]",
      "Select which axis to use for subsequent plotting commands. "+
-     "If a two-dimesional grid is made with 'subplots', then the "+
-     "index starts at zero and goes to the right before proceeding "+
-     "to the next row."],
+     "If [name] is not specified, then the names of all current "+
+     "axes objects are listed."],
     ["show","Show the current plot.","","Show the current plot "+
      "on the screen and begin "+
      "the graphical user interface. This is similar to plot.show()."],
@@ -221,7 +223,9 @@ base_list=[
     ["subplots","Create subplots.","<nrows> <ncols> [kwargs]",
      "Create a grid of <nrows> by <ncols> subplots. "+
      "The kwargs currently supported are 'sharex=True|False', "+
-     "and 'sharey=True|False'."],
+     "and 'sharey=True|False'. Subplots are named 'subplot0', 'subplot1', "+
+     "... with the indexes moving to the right before proceeding to "+
+     "the next row."],
     ["text","Plot text in the data coordinates.",
      "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
      "data coordinates defined by the current axes with the font size "+

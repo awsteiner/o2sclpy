@@ -751,7 +751,7 @@ class plot_base:
     def yt_text(self,tx,ty,tz,textstr,textcolor=(1,1,1,0.5),
                 reorient=False,scale=0.6,font=30,
                 keyname='o2sclpy_text',dpi=100,filename='',
-                coords='internal'):
+                coords=''):
         """
         Plot text given in ``textstr`` in a yt volume visualization at
         location ``(tx,ty,tz)``. If reorient is ``True``, then 
@@ -782,7 +782,7 @@ class plot_base:
 
         self.yt_text_objects.append([kname,reorient,xval,yval,zval,textstr,
                                      textcolor,dpi,scale,font])
-        
+
         self.yt_text_to_scene([xval,yval,zval],textstr,scale=scale,
                               font=font,keyname=kname,filename=filename,
                               dpi=dpi,textcolor=textcolor)
@@ -1087,7 +1087,7 @@ class plot_base:
         Note that this function presumes a black background so it
         cannot handle black text. 
         """
-        
+
         # Imports
         from yt.visualization.volume_rendering.api \
             import PointSource
@@ -1936,20 +1936,24 @@ class plot_base:
         nsub=0
         if nr==1 and nc==1:
             self.axes_dict["subplot0"]=axis_temp
+            print('Created new axes named subplot0.')
             nsub=1
         elif nr==1:
             for i in range(0,nc):
                 self.axes_dict["subplot"+str(i)]=axis_temp[i]
+                print('Created new axes named subplot'+str(i)+'.')
             nsub=nc
         elif nc==1:
             for i in range(0,nr):
                 self.axes_dict["subplot"+str(i)]=axis_temp[i]
+                print('Created new axes named subplot'+str(i)+'.')
             nsub=nr
         else:
             cnt=0
             for i in range(0,nr):
                 for j in range(0,nc):
                     self.axes_dict["subplot"+str(cnt)]=axis_temp[i][j]
+                    print('Created new axes named subplot'+str(cnt)+'.')
                     cnt=cnt+1
             nsub=cnt
 
@@ -1997,12 +2001,14 @@ class plot_base:
     # End of function plot_base::ztitle()
     #return
     
-    def selax(self,name):
+    def selax(self,name=''):
         """
         Select an axis from the current list of axes
         """
-        
-        if len(name)==1:
+
+        if name=='':
+            print('Axes names:',self.axes_dict.keys())
+        elif len(name)==1:
             self.axes=self.axes_dict["subplot"+name]
         else:
             self.axes=self.axes_dict[name]
@@ -2020,10 +2026,18 @@ class plot_base:
         modify in this simplified form)
         """
 
-        # Create a unique axes label i.e. axes1
+        # Create a unique axes label i.e. inset0
+        ifound=9
+        for i in range(0,8):
+            if ifound==9:
+                axname="inset"+str(i)
+                if axname not in self.axes_dict:
+                    ifound=i
+        axname="inset"+str(ifound)
         self.axes=self.fig.add_axes([left,bottom,width,height],
-                                    label='inset1')
-        self.axes_dict["inset1"]=self.axes
+                                    label=axname)
+        self.axes_dict[axname]=self.axes
+        print('Created new axes named',axname)
         
         # the same defaults as default_plot()
         axis_temp.minorticks_on()
@@ -2144,16 +2158,28 @@ class plot_base:
         specified using the 'cmap' keyword and the color map is
         used to create the colorbar. 
         """
+
+        # Create a unique axes label i.e. cbar0
+        ifound=9
+        for i in range(0,8):
+            if ifound==9:
+                axname="cbar"+str(i)
+                if axname not in self.axes_dict:
+                    ifound=i
+        axname="cbar"+str(ifound)
+        
         if image=='last':
             self.axes=self.fig.add_axes([left,bottom,width,height])
-            self.axes_dict["cbar"]=self.axes
+            self.axes_dict[axname]=self.axes
+            print('Created new axes named',axname)
             cbar=self.fig.colorbar(self.last_image,cax=self.axes,**kwargs)
             cbar.ax.tick_params(labelsize=self.font*0.8)
         elif image=='new':
             self.axes=self.fig.add_axes([left,bottom,width,height])
             # This doesn't work and I'm not quite sure why yet
             #axis_temp.set_frame_on(False)
-            self.axes_dict["cbar"]=self.axes
+            self.axes_dict[axname]=self.axes
+            print('Created new axes named',axname)
             if cmap=='':
                 print('New colorbar needs colormap in addcbar().')
                 return
