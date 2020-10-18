@@ -42,7 +42,37 @@ endif
 # not because they are more time-consuming.
 all: subplots1 subplots2 subplots3 table_plot \
 	table_plotv table_rplot table_scatter table3d_den_plot \
-	table_errorbar textbox yt_scatter
+	table_errorbar textbox yt_scatter modax
+
+cmaps:
+	./cmaps.scr
+	convert +append ../figures/cmaps_doc.png cmaps.png \
+		temp.png
+	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+
+colors_near:
+	./colors_near.scr
+	convert +append ../figures/near_blue_doc.png near_blue.png \
+		temp.png
+	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+	convert +append ../figures/near_hex_doc.png near_hex.png \
+		temp.png
+	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+	convert +append ../figures/near_rgb_doc.png near_rgb.png \
+		temp.png
+	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+
+markers_plot:
+	./markers_plot.scr
+	convert +append ../figures/markers_plot_doc.png markers_plot.png \
+		temp.png
+	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+
+modax:
+	./modax.scr
+	convert +append ../figures/modax_doc.png modax.png \
+		temp.png
+	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
 
 subplots1:
 	./subplots1.scr
