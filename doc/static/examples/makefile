@@ -42,7 +42,8 @@ endif
 # not because they are more time-consuming.
 all: subplots1 subplots2 subplots3 table_plot \
 	table_plotv table_rplot table_scatter table3d_den_plot \
-	table_errorbar textbox yt_scatter modax
+	table_errorbar textbox yt_scatter modax cmaps colors_near \
+	markers
 
 cmaps:
 	./cmaps.scr
@@ -53,18 +54,18 @@ cmaps:
 colors_near:
 	./colors_near.scr
 	convert +append ../figures/near_blue_doc.png near_blue.png \
-		temp.png
-	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+		temp1.png
 	convert +append ../figures/near_hex_doc.png near_hex.png \
-		temp.png
-	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+		temp2.png
 	convert +append ../figures/near_rgb_doc.png near_rgb.png \
-		temp.png
-	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
+		temp3.png
+	$(VIEW_COMMAND) temp1.png $(VIEW_SUFFIX)
+	$(VIEW_COMMAND) temp2.png $(VIEW_SUFFIX)
+	$(VIEW_COMMAND) temp3.png $(VIEW_SUFFIX)
 
-markers_plot:
-	./markers_plot.scr
-	convert +append ../figures/markers_plot_doc.png markers_plot.png \
+markers:
+	./markers.scr
+	convert +append ../figures/markers_doc.png markers.png \
 		temp.png
 	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
 
