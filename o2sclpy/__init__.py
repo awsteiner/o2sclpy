@@ -51,6 +51,15 @@ class todo_list:
     """
 
     .. todo:: * Give an example of yt_filter in the docs
+              * Add RGB hex values to 'colors-near'.
+              * Command rect is x1 y1 x2 y2, but ellipse is x1 y1 w h, 
+                which is confusing. maybe its better to make them consistent?
+                Or allow the user to choose the format?
+              * Also, rectanges by default are done without the axes
+                transformation, which means they don't change when 
+                the plot is zoomed. Maybe allow the user to pick the
+                transformation?
+              * An example of 'python', 'exec', 'image', 'clf'?
               * Create new functions based on yt_render() which are easier 
                 called directly from python.
               * Allow the user to name axes in cbar, inset, and subplots.
@@ -65,6 +74,7 @@ class todo_list:
                 for the parallelograms.
               * an example of more complicated yt annotations
               * Finish the 'moveauto' path in yt_render()
+              * Create a moveauto path which includes a zoom
               * create a vector field command in yt
               * allow the creation of colormaps on the fly? 
               * add map to colormap option for yt tf's
@@ -83,6 +93,8 @@ class todo_list:
                 an o2scl table object?
               * Anti-alias text objects in yt (also anti-alias line 
                 sources?)
+              * Allow user to specify slack URL and slack username as
+                string specs?
 
     """
 
