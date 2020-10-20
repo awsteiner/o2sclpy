@@ -1,0 +1,8 @@
+# An example of using acol and o2graph to do normalize a probability
+# distribution. The first command outputs 2.294944, which is used
+# by the second command to normalize the probability distribution.
+# 
+o2graph -create table x grid:0,5,0.1 -function "exp(-2*(x-2)^2)+x^2/40" y \
+-plot x y -integ x y yi -plot x yi -interp x 5 yi 
+o2graph -create table x grid:0,5,0.1 \
+-function "(exp(-2*(x-2)^2)+x^2/40)/2.294944" y2 -plot x y2 -show
