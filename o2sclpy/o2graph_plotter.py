@@ -2458,7 +2458,7 @@ class o2graph_plotter(yt_plot_base):
                             str_list=textwrap.wrap(tempx_arr[j],79)
                             for i in range (0,len(str_list)):
                                 print(str_list[i])
-                                
+
         finished=False
         
         if cmd=='cmaps' and len(args)==1:
@@ -2507,6 +2507,25 @@ class o2graph_plotter(yt_plot_base):
                 markers_plot()
             finished=True
 
+        # Handle acol topics and types
+        if (len(args)==1 and (cmd=='strings-spec' or cmd=='functions' or
+                              cmd=='mult-vector-spec' or cmd=='types' or
+                              cmd=='value-spec' or cmd=='vector-spec' or
+                              cmd=='index-spec' or cmd=='char' or
+                              cmd=='double' or cmd=='double[]' or
+                              cmd=='hist' or cmd=='hist_2d' or
+                              cmd=='int' or cmd=='int[]' or
+                              cmd=='prob_dens_amr' or cmd=='size_t' or
+                              cmd=='size_t[]' or cmd=='string' or
+                              cmd=='string[]' or cmd=='table' or
+                              cmd=='table3d' or cmd=='tensor' or
+                              cmd=='tensor<int>' or cmd=='tensor<size_t>' or
+                              cmd=='tensor_grid' or
+                              cmd=='uniform_grid<double>' or
+                              cmd=='vector<contour_line>')):
+            self.gen_acol(o2scl_hdf,amp,'help',args)
+            finished=True
+            
         if match==False and finished==False:
 
             # Since we didn't match anything above, see if
