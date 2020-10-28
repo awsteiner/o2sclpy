@@ -2356,15 +2356,15 @@ class o2graph_plotter(yt_plot_base):
         """
         Function to process the help command.
         """
-        
+
+        # The command we're looking for help on (if specified)
         cmd=''
 
+        # vt100 inits
         ter=terminal()
-                    
         str_line=ter.horiz_line()
 
         # Get current type
-        curr_type=''
         curr_type=o2scl_get_type(o2scl_hdf,amp)
 
         if len(args)==1:
@@ -2508,45 +2508,87 @@ class o2graph_plotter(yt_plot_base):
             finished=True
 
         if match==False and finished==False:
+
+            # Since we didn't match anything above, see if
+            # it is an acol command
             
             # C types
             int_ptr=ctypes.POINTER(ctypes.c_int)
             int_ptr_ptr=ctypes.POINTER(int_ptr)
             char_ptr=ctypes.POINTER(ctypes.c_char)
             char_ptr_ptr=ctypes.POINTER(char_ptr)
-        
-            # Function interface
-            get_fn=o2scl_hdf.o2scl_acol_get_cli_options
-            get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
-                             char_ptr_ptr]
-            get_fn.restype=ctypes.c_int
 
-            # Arguments
-            size=ctypes.c_int(0)
-            iptr=int_ptr()
-            cptr=char_ptr()
-        
-            # Function call
-            get_ret=get_fn(amp,ctypes.byref(size),
-                           ctypes.byref(iptr),ctypes.byref(cptr))
-
-            desc_fn=o2scl_hdf.o2scl_acol_cli_option_desc
-            desc_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,
-                              char_ptr_ptr]
-            desc_fn.restype=ctypes.c_int
-
-            # tlist is the list of acol commands
-            tlist=get_ic_ptrs_to_list(size,iptr,cptr)
-
-            # If specified, look up command in acol list
             acol_match=False
-            if len(args)>0:
-                for j in range(0,len(tlist)):
-                    if string_equal_dash(tlist[j],args[0]):
-                        acol_match=True
+                
+            # If len(args)>=2, then the user gave a type,
+            # so check options based on that type
+            if len(args)>=2:
+
+                # Function interface
+                get_fn=o2scl_hdf.o2scl_acol_get_cli_options_type
+                get_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,int_ptr_ptr,
+                                 char_ptr_ptr]
+                get_fn.restype=ctypes.c_int
+
+                # Arguments
+                size=ctypes.c_int(0)
+                iptr=int_ptr()
+                cptr=char_ptr()
+                curr_type2=ctypes.c_char_p(force_bytes(curr_type))
+        
+                # Function call
+                get_ret=get_fn(amp,curr_type2,ctypes.byref(size),
+                               ctypes.byref(iptr),ctypes.byref(cptr))
+
+                # tlist is the list of acol commands
+                tlist=get_ic_ptrs_to_list(size,iptr,cptr)
+
+                # If specified, look up command in acol list
+                if len(args)>0:
+                    for j in range(0,len(tlist)):
+                        if string_equal_dash(tlist[j],cmd):
+                            acol_match=True
+
+            # If either len(args)<2 or the last section failed, then in
+            # either case we need to compute tlist 
+            if acol_match==False:
+
+                # Check acol options based on the current type
+                
+                # Function interface
+                get_fn=o2scl_hdf.o2scl_acol_get_cli_options
+                get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
+                                 char_ptr_ptr]
+                get_fn.restype=ctypes.c_int
+    
+                # Arguments
+                size=ctypes.c_int(0)
+                iptr=int_ptr()
+                cptr=char_ptr()
+            
+                # Function call
+                get_ret=get_fn(amp,ctypes.byref(size),
+                               ctypes.byref(iptr),ctypes.byref(cptr))
+    
+                # tlist is the list of acol commands
+                tlist=get_ic_ptrs_to_list(size,iptr,cptr)
+
+                if len(args)<2:
+                    # If specified, look up command in acol list
+                    acol_match=False
+                    if len(args)>0:
+                        for j in range(0,len(tlist)):
+                            if string_equal_dash(tlist[j],args[0]):
+                                acol_match=True
 
             # If there was no match, do a command list
             if acol_match==False:
+
+                desc_fn=o2scl_hdf.o2scl_acol_cli_option_desc
+                desc_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,
+                                  char_ptr_ptr]
+                desc_fn.restype=ctypes.c_int
+                
                 print('o2graph: A data viewing and '+
                       'processing program for '+ter.bold()+
                       'O2scl'+ter.default_fg()+
@@ -2556,10 +2598,12 @@ class o2graph_plotter(yt_plot_base):
                     print('List of command-line options which',
                           'do not require a current object:\n')
                 else:
+                    # AWS removed decode on 10/27/2020
                     print('List of command-line options',
                           '(current object type is',
-                          curr_type.decode('utf-8')+'):\n')
+                          curr_type+'):\n')
                 full_list=[]
+
                 for j in range(0,len(tlist)):
                     opt_name=ctypes.c_char_p(tlist[j])
                     desc_ret=desc_fn(amp,opt_name,iptr,cptr)
@@ -2567,14 +2611,17 @@ class o2graph_plotter(yt_plot_base):
                     for k in range(0,iptr[0]):
                         desc=desc+cptr[k]
                     full_list.append([tlist[j],desc])
+
                 for line in base_list:
                     full_list.append([force_bytes(line[0]),
                                       force_bytes(line[1])])
+
                 if curr_type!='':
                     for line in extra_list:
                         if force_bytes(line[0])==curr_type:
                             full_list.append([force_bytes(line[1]),
                                               force_bytes(line[2])])
+
                 full_list2=sorted(full_list,key=lambda x: x[0])
                 max_len=0
                 for k in range(0,len(full_list2)):
