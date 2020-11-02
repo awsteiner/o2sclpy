@@ -19,6 +19,8 @@
 #  
 #  -------------------------------------------------------------------
 #
+import h5py
+from o2sclpy.utils import get_str_array
 
 class hdf5_reader:
     """
@@ -33,6 +35,14 @@ class hdf5_reader:
     search_type=''
     """
     O2scl type used by :py:func:`cloud_file.hdf5_is_object_type`.
+    """
+    filet=0
+    """
+    File handle
+    """
+    filename=''
+    """
+    Current filename
     """
 
     def hdf5_is_object_type(self,name,obj):
@@ -54,37 +64,117 @@ class hdf5_reader:
         """
         Read the first object of type ``loc_type`` from file named ``fname``
         """
-        del self.list_of_dsets[:]
+        # We have to delete the previous list, because it
+        # may have been generated from a different type
+        if self.list_of_dsets!=[]:
+            del self.list_of_dsets[:]
+        # If a different file has been opened, then close it
+        # and open the new file
+        if fname!=self.filename and self.filename!='':
+            #print('closing',self.filename)
+            self.filet.close()
+        if fname!=self.filename:
+            #print('opening',fname)
+            self.filet=h5py.File(fname,'r')
+            self.filename=fname
         self.search_type=loc_type
-        file=h5py.File(fname,'r')
-        file.visititems(self.hdf5_is_object_type)
+        self.filet.visititems(self.hdf5_is_object_type)
         if len(self.list_of_dsets)==0:
             str='Could not object of type '+loc_type+' in file '+fname+'.'
             raise RuntimeError(str)
-        return file[self.list_of_dsets[0]]
+        return self.filet[self.list_of_dsets[0]]
 
-    def h5read_name(self,fname,name):
+    def h5read_name_type(self,fname,name):
         """
-        Read object named ``name`` from file named ``fname``
+        Read o2scl object named ``name`` from file named ``fname``
+        and return 'object,type'
         """
-        file=h5py.File(fname,'r')
-        obj=file[name]
+        # If a different file has been opened, then close it
+        # and open the new file
+        if fname!=self.filename and self.filename!='':
+            #print('closing',self.filename)
+            self.filet.close()
+        if fname!=self.filename:
+            #print('opening',fname)
+            self.filet=h5py.File(fname,'r')
+            self.filename=fname
+        obj=self.filet[name]
         o2scl_type_dset=obj['o2scl_type']
         loc_type=o2scl_type_dset.__getitem__(0)
         return (obj,loc_type)
+    
+    def h5read_name(self,fname,name):
+        """
+        Read object named ``name`` from file named ``fname``
+        and return 'object,type'
+        """
+        # If a different file has been opened, then close it
+        # and open the new file
+        if fname!=self.filename and self.filename!='':
+            #print('closing',self.filename)
+            self.filet.close()
+        if fname!=self.filename:
+            #print('opening',fname)
+            self.filet=h5py.File(fname,'r')
+            self.filename=fname
+        obj=self.filet[name]
+        return obj
     
     def h5read_type_named(self,fname,loc_type,name):
         """
         Read object of type ``loc_type`` named ``name`` from file 
         named ``fname``
         """
-        del self.list_of_dsets[:]
+        # We have to delete the previous list, because it
+        # may have been generated from a different type
+        if self.list_of_dsets!=[]:
+            del self.list_of_dsets[:]
+        # If a different file has been opened, then close it
+        # and open the new file
+        if fname!=self.filename and self.filename!='':
+            self.filet.close()
+        if fname!=self.filename:
+            self.filet=h5py.File(fname,'r')
+            self.filename=fname
         self.search_type=loc_type
-        file=h5py.File(fname,'r')
-        file.visititems(self.hdf5_is_object_type)
+        self.filet.visititems(self.hdf5_is_object_type)
         if name in self.list_of_dsets:
-            return file[name]
+            return self.filet[name]
         str='No object of type '+loc_type+' named '+name+' in file '+fname+'.'
         raise RuntimeError(str)
         return
 
+    def table_row_to_dict(self,obj,row):
+        """
+        Desc
+        """
+        col_names=obj['col_names']
+        col_names2=get_str_array(col_names)
+        dct={}
+        for i in range(0,len(col_names2)):
+            dct[col_names2[i]]=obj['data/'+col_names2[i]][row]
+        return dct
+
+    def uniform_grid_to_array(self,obj):
+        start=obj["start"][0]
+        end=obj["end"][0]
+        n_bins=obj["n_bins"][0]
+        width=obj["width"][0]
+        log=obj["log"][0]    
+        arr=[]
+        for i in range(0,int(n_bins)+1):
+            if i==0:
+                arr.append(start)
+            elif i==n_bins:
+                arr.append(end)
+            elif log==1:
+                arr.append(pow(width,i)*start)
+            else:
+                arr.append(i*width+start)
+        return arr
+    
+    def close_file(self):
+        self.filet.close()
+        self.filename=''
+        return
+    

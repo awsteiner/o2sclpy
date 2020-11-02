@@ -47,6 +47,9 @@ class plot_base:
     """
 
     cbar=0
+    """ 
+    Colorbar?
+    """
 
     last_image=0
     """
@@ -562,7 +565,11 @@ class plot_base:
             print('point',xval,yval,kwargs)
         if self.canvas_flag==False:
             self.canvas()
-        self.axes.plot([float(eval(xval))],[float(eval(yval))],**kwargs)
+        if isinstance(xval,str):
+            xval=float(eval(xval))
+        if isinstance(yval,str):
+            yval=float(eval(yval))
+        self.axes.plot([xval],[yval],**kwargs)
         if self.xset==True:
             self.axes.set_xlim(self.xlo,self.xhi)
         if self.yset==True:
@@ -587,34 +594,49 @@ class plot_base:
             print('error-point',xval,yval,err1,err2,err3,err4,kwargs)
         if self.canvas_flag==False:
             self.canvas()
+        if isinstance(xval,str):
+            xval=float(eval(xval))
+        if isinstance(yval,str):
+            yval=float(eval(yval))
         if err1==None and err2==None and err3==None and err4==None:
             self.axes.point([float(eval(xval))],
                             [float(eval(yval))],**kwargs)
         elif err3==None and err4==None:
-            self.axes.errorbar([float(eval(xval))],
-                               [float(eval(yval))],
-                               yerr=[float(eval(err2))],
-                               xerr=[float(eval(err1))],
-                               **kwargs)
+            if isinstance(err2,str):
+                err2=float(eval(err2))
+            if isinstance(err1,str):
+                err1=float(eval(err1))
+            self.axes.errorbar([xval],[yval],
+                               yerr=[err2],xerr=[err1],**kwargs)
         elif err2==None:
-            self.axes.errorbar([float(eval(xval))],
-                               [float(eval(yval))],
-                               yerr=[[float(eval(err3))],
-                                     [float(eval(err4))]],
-                               xerr=[float(eval(err1))],**kwargs)
+            if isinstance(err4,str):
+                err4=float(eval(err4))
+            if isinstance(err3,str):
+                err3=float(eval(err3))
+            self.axes.errorbar([xval],[yval],
+                               yerr=[[err3],[err4]],
+                               xerr=[err1],**kwargs)
         elif err4==None:
-            self.axes.errorbar([float(eval(xval))],
-                               [float(eval(yval))],
-                               yerr=[float(eval(err3))],
-                               xerr=[[float(eval(err1))],
-                                     [float(eval(err2))]],**kwargs)
+            if isinstance(err2,str):
+                err2=float(eval(err2))
+            if isinstance(err1,str):
+                err1=float(eval(err1))
+            if isinstance(err3,str):
+                err3=float(eval(err3))
+            self.axes.errorbar([xval],[yval],yerr=[err3],
+                               xerr=[[err1],[err2]],**kwargs)
         else:
-            self.axes.errorbar([float(eval(xval))],
-                               [float(eval(yval))],
-                               yerr=[[float(eval(err3))],
-                                     [float(eval(err4))]],
-                               xerr=[[float(eval(err1))],
-                                     [float(eval(err2))]],**kwargs)
+            if isinstance(err2,str):
+                err2=float(eval(err2))
+            if isinstance(err1,str):
+                err1=float(eval(err1))
+            if isinstance(err4,str):
+                err4=float(eval(err4))
+            if isinstance(err3,str):
+                err3=float(eval(err3))
+            self.axes.errorbar([xval],[yval],
+                               yerr=[[err3],[err4]],
+                               xerr=[[err1],[err2]],**kwargs)
         if self.xset==True:
             self.axes.set_xlim(self.xlo,self.xhi)
         if self.yset==True:
