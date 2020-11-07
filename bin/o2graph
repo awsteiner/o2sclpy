@@ -23,209 +23,28 @@
 
 # For sys.argv
 import sys
-# For CDLL loading
-import ctypes
-from ctypes.util import find_library
-# To test between Linux/OSX using system()
-import platform
-# For os.getenv()
-import os
-# For numpy.bytes_
-import numpy
 
 # O2scl library directory from command-line or environment variables
-o2scl_lib_dir=''
+#o2scl_lib_dir=''
 
 # C++ library from command-line or environment variables
-o2scl_cpp_lib=''
+#o2scl_cpp_lib=''
 
 # Additional library list from command-line or environment variables
-o2scl_addl_libs=[]
+#o2scl_addl_libs=[]
 
 # List of additional library objects
-o2scl_addl=[]
+#o2scl_addl=[]
 
 # Backend specification from command-line
-backend=''
+#backend=''
 
-# If true, -debug-first-pass was specified on command-line
-debug_first_pass=False
+from o2sclpy.utils import force_bytes, if_yt_then_Agg
+from o2sclpy.link_o2scl import get_library_settings, link_o2scl_o2graph
 
-def force_bytes2(obj):
-    """
-    In cases where we're unsure whether or not obj is
-    a string or bytes object, we ensure it's a bytes
-    object by converting if necessary.
-    """
-    if isinstance(obj,numpy.bytes_)==False and isinstance(obj,bytes)==False:
-        return bytes(obj,'utf-8')
-    return obj
+backend=get_library_settings(sys.argv)
+(o2scl,o2scl_hdf)=link_o2scl_o2graph()
 
-# Go through the argument list and determine settings for
-# o2scl-lib-dir, o2scl-cpp-lib, o2scl-addl-libs and determine if
-# -debug-libs was present
-
-for i in range(1,len(sys.argv)):
-    if sys.argv[i]=='-o2scl-lib-dir':
-        if i>=len(sys.argv)-1:
-            print('Option -o2scl-lib-dir specified with no value.')
-        else:
-            o2scl_lib_dir=sys.argv[i+1]
-            if debug_first_pass:
-                print('Set o2scl_lib_dir from command-line to',o2scl_lib_dir)
-    elif sys.argv[i]=='-o2scl-cpp-lib':
-        if i>=len(sys.argv)-1:
-            print('Option -o2scl-cpp-lib specified with no value.')
-        else:
-            o2scl_cpp_lib=sys.argv[i+1]
-            if debug_first_pass:
-                print('Set o2scl_cpp_lib from command-line to',o2scl_cpp_lib)
-    elif sys.argv[i]=='-o2scl-addl-libs':
-        if i>=len(sys.argv)-1:
-            print('Option -o2scl-addl-libs specified with no value.')
-        else:
-            o2scl_addllibs=sys.argv[i+1].split(',')
-            if debug_first_pass:
-                print('Set o2scl_addl_libs from command-line to',
-                      o2scl_addl_libs)
-    elif sys.argv[i]=='-backend':
-        if i>=len(sys.argv)-1:
-            print('Option -backend specified with no value.')
-        else:
-            backend=sys.argv[i+1]
-    elif sys.argv[i]=='-debug-first-pass':
-        debug_first_pass=True
-
-# Determine if yt commands are present
-        
-yt_found=False
-for i in range(1,len(sys.argv)):
-    if sys.argv[i][0:4]=='-yt-' and yt_found==False:
-        if backend!='' and backend!='agg' and backend!='Agg':
-            print('Backend was not set to Agg but yt commands were found.')
-        yt_found=True
-        backend='Agg'
-        if debug_first_pass:
-            print("yt commands found. Setting backend to 'Agg'.")
-
-# Future: it appears we may need to fix the string comparisons in the
-# code below and force conversion to byte strings (even though for now
-# this code seems to work)
-      
-if platform.system()=='Darwin':
-
-    if (o2scl_cpp_lib=='' and os.getenv('O2SCL_CPP_LIB') is not None and
-        force_bytes2(os.getenv('O2SCL_CPP_LIB'))!=b'None'):
-        o2scl_cpp_lib=os.getenv('O2SCL_CPP_LIB')
-        if debug_first_pass:
-            print('Set o2scl_cpp_lib from environment variable to\n  ',
-                  o2scl_cpp_lib)
-
-    if o2scl_cpp_lib!='':
-        if debug_first_pass:
-            print('Loading C++ library',o2scl_cpp_lib,',')
-        systcpp=ctypes.CDLL(o2scl_cpp_lib,mode=ctypes.RTLD_GLOBAL)
-        if debug_first_pass:
-            print('Finished loading C++ library.')
-
-    if (len(o2scl_addl_libs)==0 and os.getenv('O2SCL_ADDL_LIBS') is not None
-        and force_bytes2(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
-        o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS').split(',')
-        if debug_first_pass:
-            print('Set o2scl_addl_libs from environment variable to\n  ',
-                  o2scl_addl_libs)
-
-    if len(o2scl_addl_libs)>0:
-        for i in range(0,len(o2scl_addl_libs)):
-            if debug_first_pass:
-                print('Loading additional library',o2scl_addl_libs[i],'.')
-            o2scl_addl.append(ctypes.CDLL(o2scl_addl_libs[i],
-                                          mode=ctypes.RTLD_GLOBAL))
-        if debug_first_pass:
-            print('Finished loading additional libraries.')
-
-    # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
-    # the former is a more common notation for library directories
-    if (o2scl_lib_dir=='' and os.getenv('O2SCL_LIB') is not None and
-        force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
-        o2scl_lib_dir=os.getenv('O2SCL_LIB')
-        if debug_first_pass:
-            print('Set o2scl_lib_dir from environment variable to\n  ',
-                  o2scl_lib_dir)
-    
-    if o2scl_lib_dir!='':
-        if debug_first_pass:
-            print('Loading',o2scl_lib_dir+'/libo2scl.dylib','.')
-        o2scl=ctypes.CDLL(o2scl_lib_dir+'/libo2scl.dylib',
-                          mode=ctypes.RTLD_GLOBAL)
-        if debug_first_pass:
-            print('Loading',o2scl_lib_dir+'/libo2scl_hdf.dylib','.')
-        o2scl_hdf=ctypes.CDLL(o2scl_lib_dir+'/libo2scl_hdf.dylib',
-                              mode=ctypes.RTLD_GLOBAL)
-    else:
-        if debug_first_pass:
-            print('Loading libo2scl.dylib.')
-        o2scl=ctypes.CDLL('libo2scl.dylib',mode=ctypes.RTLD_GLOBAL)
-        if debug_first_pass:
-            print('Loading libo2scl_hdf.dylib.')
-        o2scl_hdf=ctypes.CDLL('libo2scl_hdf.dylib',mode=ctypes.RTLD_GLOBAL)
-        
-    if debug_first_pass:
-        print('Done loading o2scl libraries.')
-
-else:
-
-    if debug_first_pass:
-        print('Loading C++ library.')
-    stdcpp=ctypes.CDLL(find_library("stdc++"),mode=ctypes.RTLD_GLOBAL)
-    if debug_first_pass:
-        print('Finished loading C++ library.')
-  
-    if (len(o2scl_addl_libs)==0 and os.getenv('O2SCL_ADDL_LIBS') is not None
-        and force_bytes2(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
-        o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS').split(',')
-        if debug_first_pass:
-            print('Set o2scl_addl_libs from environment variable to\n  ',
-                  o2scl_addl_libs)
-
-    if len(o2scl_addl_libs)>0:
-        for i in range(0,len(o2scl_addl_libs)):
-            if debug_first_pass:
-                print('Loading additional library',o2scl_addl_libs[i],'.')
-            o2scl_addl.append(ctypes.CDLL(o2scl_addl_libs[i],
-                                          mode=ctypes.RTLD_GLOBAL))
-        if debug_first_pass:
-            print('Finished loading additional libraries.')
-    
-    # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
-    # the former is a more common notation for library directories
-    if (o2scl_lib_dir=='' and os.getenv('O2SCL_LIB') is not None and
-        force_bytes2(os.getenv('O2SCL_LIB'))!=b'None'):
-        o2scl_lib_dir=os.getenv('O2SCL_LIB')
-        if debug_first_pass:
-            print('Set o2scl_lib_dir from environment variable to\n  ',
-                  o2scl_lib_dir)
-    
-    if o2scl_lib_dir=='':
-        if debug_first_pass:
-            print('Loading o2scl.')
-        o2scl=ctypes.CDLL(find_library("o2scl"),mode=ctypes.RTLD_GLOBAL)
-        if debug_first_pass:
-            print('Loading o2scl_hdf.')
-        o2scl_hdf=ctypes.CDLL(find_library("o2scl_hdf"),
-                              mode=ctypes.RTLD_GLOBAL)
-    else:
-        if debug_first_pass:
-            print('Loading',o2scl_lib_dir+'/libo2scl.so .')
-        o2scl=ctypes.CDLL(o2scl_lib_dir+'/libo2scl.so',mode=ctypes.RTLD_GLOBAL)
-        if debug_first_pass:
-            print('Loading',o2scl_lib_dir+'/libo2scl_hdf.so .')
-        o2scl_hdf=ctypes.CDLL(o2scl_lib_dir+'/libo2scl_hdf.so',
-                              mode=ctypes.RTLD_GLOBAL)
-
-    if debug_first_pass:
-        print('Done loading o2scl libraries.')
-        
 if backend!='':
     import matplotlib
     matplotlib.use(backend)

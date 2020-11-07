@@ -20,22 +20,21 @@
 #  -------------------------------------------------------------------
 import ctypes
 
-from o2sclpy.link_o2scl import link_o2scl, link_o2scl_part
-from o2sclpy.link_o2scl import o2scl, o2scl_part
+from o2sclpy.link_o2scl import o2scl
 
-fermion_rel_ptr=0
-
-def init_part_pointers():
-    global fermion_rel_ptr
-    if o2scl==0:
-        link_o2scl()
+def init_part_pointers(o2scl_part):
     if o2scl_part==0:
-        #o2sclpy.o2scl_cppdir='skip'
-        link_o2scl_part()
-    if fermion_rel_ptr==0:
-        o2scl_part.o2scl_create_fermion_rel.restype=ctypes.c_void_p
-        fermion_rel_ptr=ctypes.c_void_p()
-        fermion_rel_ptr=o2scl_part.o2scl_create_fermion_rel()
-    return
+        print('O2scl particle library not loaded.')
+        return 0
+
+    print('here',o2scl)
+    
+    print('Creating pointer to fermion_rel.')
+    o2scl_part.o2scl_create_fermion_rel.restype=ctypes.c_void_p
+    o2scl_part.o2scl_create_fermion_rel.argtypes=[]
+    fermion_rel_ptr=ctypes.c_void_p()
+    fermion_rel_ptr=o2scl_part.o2scl_create_fermion_rel()
+    
+    return fermion_rel_ptr
 
 

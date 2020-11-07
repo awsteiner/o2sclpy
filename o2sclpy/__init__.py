@@ -36,7 +36,7 @@ from o2sclpy.doc_data import yt_param_list
 from o2sclpy.slack import slack_notify
 from o2sclpy.cloud_file import cloud_file
 from o2sclpy.hdf5 import hdf5_reader
-from o2sclpy.link_o2scl import build_o2scl, link_o2scl, link_o2scl_part
+from o2sclpy.link_o2scl import build_o2scl, link_o2scl_f, link_o2scl_part
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal
 from o2sclpy.plot_base import plot_base, yt_plot_base
@@ -46,6 +46,7 @@ from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
 from o2sclpy.plot_info import colors_plot
 from o2sclpy.part import init_part_pointers
+from o2sclpy.link_o2scl import get_library_settings, link_o2scl_o2graph
 
 class todo_list:
     """

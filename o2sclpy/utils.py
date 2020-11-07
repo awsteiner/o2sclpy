@@ -20,11 +20,35 @@
 #  -------------------------------------------------------------------
 #
 import sys
+
+# For os.getenv()
+import os
+
+# For numpy.bytes_
 import numpy
 
 import matplotlib.pyplot as plot
 
+# To test between Linux/OSX using system()
+import platform
+
+# For CDLL loading
 import ctypes
+from ctypes.util import find_library
+
+def if_yt_then_Agg(backend,argv):
+    # Determine if yt commands are present
+            
+    yt_found=False
+    for i in range(1,len(argv)):
+        if argv[i][0:4]=='-yt-' and yt_found==False:
+            if backend!='' and backend!='agg' and backend!='Agg':
+                print('Backend was not set to Agg but yt commands were found.')
+            yt_found=True
+            backend='Agg'
+            if debug_first_pass:
+                print("yt commands found. Setting backend to 'Agg'.")
+    return backend
 
 def o2scl_get_type(o2scl_hdf,amp):
     """
