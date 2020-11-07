@@ -45,8 +45,8 @@ from o2sclpy.o2graph_plotter import o2graph_plotter
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
 from o2sclpy.plot_info import colors_plot
-from o2sclpy.part import init_part_pointers
-from o2sclpy.link_o2scl import get_library_settings, link_o2scl_o2graph
+from o2sclpy.part import init_part_pointers, fermion_density
+from o2sclpy.link_o2scl import linker
 
 class todo_list:
     """

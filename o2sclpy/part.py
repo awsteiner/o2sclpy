@@ -20,21 +20,49 @@
 #  -------------------------------------------------------------------
 import ctypes
 
-from o2sclpy.link_o2scl import o2scl
+from o2sclpy.link_o2scl import linker
 
-def init_part_pointers(o2scl_part):
-    if o2scl_part==0:
+def init_part_pointers(link):
+    """
+    Desc
+    """
+    
+    if link.o2scl_part==0:
         print('O2scl particle library not loaded.')
         return 0
 
-    print('here',o2scl)
-    
-    print('Creating pointer to fermion_rel.')
-    o2scl_part.o2scl_create_fermion_rel.restype=ctypes.c_void_p
-    o2scl_part.o2scl_create_fermion_rel.argtypes=[]
+    link.o2scl_part.o2scl_create_fermion_rel.restype=ctypes.c_void_p
+    link.o2scl_part.o2scl_create_fermion_rel.argtypes=[]
     fermion_rel_ptr=ctypes.c_void_p()
-    fermion_rel_ptr=o2scl_part.o2scl_create_fermion_rel()
+    fermion_rel_ptr=link.o2scl_part.o2scl_create_fermion_rel()
     
     return fermion_rel_ptr
 
+def fermion_density(link,frp,m,g,T,n):
+    """
+    Desc
+    """
+
+    double_ptr=ctypes.POINTER(ctypes.c_double)
+    link.o2scl_part.o2scl_fermion_density.argtypes=[ctypes.c_void_p,
+                                                    ctypes.c_double,
+                                                    ctypes.c_double,
+                                                    ctypes.c_double,
+                                                    ctypes.c_double,
+                                                    double_ptr,
+                                                    double_ptr,
+                                                    double_ptr,
+                                                    double_ptr]
+    mu=ctypes.c_double(0)
+    ed=ctypes.c_double(0)
+    pr=ctypes.c_double(0)
+    en=ctypes.c_double(0)
+    
+    link.o2scl_part.o2scl_fermion_density(frp,m,g,T,n,
+                                          ctypes.byref(mu),
+                                          ctypes.byref(ed),
+                                          ctypes.byref(pr),
+                                          ctypes.byref(en))
+    
+    return (mu.value,ed.value,pr.value,en.value)
 

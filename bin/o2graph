@@ -40,10 +40,11 @@ import sys
 #backend=''
 
 from o2sclpy.utils import force_bytes, if_yt_then_Agg
-from o2sclpy.link_o2scl import get_library_settings, link_o2scl_o2graph
+from o2sclpy.link_o2scl import linker
 
-backend=get_library_settings(sys.argv)
-(o2scl,o2scl_hdf)=link_o2scl_o2graph()
+l=linker()
+backend=l.get_library_settings(sys.argv)
+l.link_o2scl_o2graph()
 
 if backend!='':
     import matplotlib
@@ -52,5 +53,5 @@ if backend!='':
 
 import o2sclpy
 gc=o2sclpy.o2graph_plotter()
-gc.parse_argv(sys.argv,o2scl_hdf)
+gc.parse_argv(sys.argv,l.o2scl_hdf)
 

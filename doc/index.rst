@@ -1,7 +1,7 @@
 .. _o2sclpy:
 
-O\ :sub:`2`\ sclpy: v0.925
-==========================
+O\ :sub:`2`\ sclpy: v0.926.a1
+=============================
 
 O\ :sub:`2`\ sclpy: A high-level plotting script, ``o2graph``, for
 quick `matplotlib <https://matplotlib.org>`_ or `yt <https://yt-project.org/>`_

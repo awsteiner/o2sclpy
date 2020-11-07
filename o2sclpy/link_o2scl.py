@@ -34,240 +34,258 @@ from o2sclpy.utils import force_bytes, if_yt_then_Agg
 # For find_library() in link_o2scl()
 from ctypes.util import find_library
 
-# O2scl library directory from command-line or environment variables
-o2scl_lib_dir=''
+class linker:
 
-# C++ library from command-line or environment variables
-o2scl_cpp_lib=''
+    # O2scl library directory from command-line or environment variables
+    o2scl_lib_dir=''
+    
+    # C++ library from command-line or environment variables
+    o2scl_cpp_lib=''
+    
+    # Backend specification from command-line
+    backend=''
+    
+    # Additional library list from command-line or environment variables
+    o2scl_addl_libs=[]
+    
+    # List of additional library objects
+    o2scl_addl=[]
+    
+    # If true, -debug-first-pass was specified on command-line
+    debug_first_pass=False
+    
+    # Main o2scl library handle
+    o2scl=0
+    
+    # O2scl HDF library handle
+    o2scl_hdf=0
+    
+    # O2scl particle library handle
+    o2scl_part=0
 
-# Backend specification from command-line
-backend=''
-
-# Additional library list from command-line or environment variables
-o2scl_addl_libs=[]
-
-# List of additional library objects
-o2scl_addl=[]
-
-# If true, -debug-first-pass was specified on command-line
-debug_first_pass=False
-
-# Main o2scl library handle
-o2scl=0
-
-# O2scl HDF library handle
-o2scl_hdf=0
-
-# O2scl particle library handle
-o2scl_part=0
-
-def link_o2scl_o2graph(include_part=False):
-    """
-    A new function for linking o2scl which came originally from
-    the o2graph script
-    """
-
-    global o2scl_lib_dir, o2scl_cpp_lib, o2scl, o2scl_hdf, o2scl_part
-    global backend, o2scl_addl, o2scl_addl_libs, debug_first_pass
-
+    # Additional library handles
     o2scl_addl=[]
 
-    # Future: it appears we may need to fix the string comparisons in the
-    # code below and force conversion to byte strings (even though for now
-    # this code seems to work)
-          
-    if platform.system()=='Darwin':
+    # System C++ library handle
+    systcpp=0
     
-        if (o2scl_cpp_lib=='' and
-            os.getenv('O2SCL_CPP_LIB') is not None and
-            force_bytes(os.getenv('O2SCL_CPP_LIB'))!=b'None'):
-            o2scl_cpp_lib=os.getenv('O2SCL_CPP_LIB')
-            if debug_first_pass:
-                print('Set o2scl_cpp_lib from environment variable to\n  ',
-                      o2scl_cpp_lib)
+    def link_o2scl_o2graph(self,include_part=False):
+        """
+        A new function for linking o2scl which came originally from
+        the o2graph script
+        """
     
-        if o2scl_cpp_lib!='':
-            if debug_first_pass:
-                print('Loading C++ library',o2scl_cpp_lib,',')
-            systcpp=ctypes.CDLL(o2scl_cpp_lib,mode=ctypes.RTLD_GLOBAL)
-            if debug_first_pass:
+        # Future: it appears we may need to fix the string comparisons in the
+        # code below and force conversion to byte strings (even though for now
+        # this code seems to work)
+              
+        if platform.system()=='Darwin':
+        
+            if (self.o2scl_cpp_lib=='' and
+                os.getenv('O2SCL_CPP_LIB') is not None and
+                force_bytes(os.getenv('O2SCL_CPP_LIB'))!=b'None'):
+                self.o2scl_cpp_lib=os.getenv('O2SCL_CPP_LIB')
+                if self.debug_first_pass:
+                    print('Set o2scl_cpp_lib from environment',
+                          'variable to\n  ',o2scl_cpp_lib)
+        
+            if self.o2scl_cpp_lib!='':
+                if self.debug_first_pass:
+                    print('Loading C++ library',o2scl_cpp_lib,',')
+                self.systcpp=ctypes.CDLL(self.o2scl_cpp_lib,
+                                         mode=ctypes.RTLD_GLOBAL)
+                if self.debug_first_pass:
+                    print('Finished loading C++ library.')
+        
+            if (len(self.o2scl_addl_libs)==0 and
+                os.getenv('O2SCL_ADDL_LIBS') is not None
+                and force_bytes(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
+                self.o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS').split(',')
+                if self.debug_first_pass:
+                    print('Set o2scl_addl_libs from environment',
+                          'variable to\n  ',
+                          self.o2scl_addl_libs)
+
+            if len(self.o2scl_addl_libs)>0:
+                for i in range(0,len(self.o2scl_addl_libs)):
+                    if self.debug_first_pass:
+                        print('Loading additional library',
+                              self.o2scl_addl_libs[i],'.')
+                    self.o2scl_addl.append(ctypes.CDLL(self.o2scl_addl_libs[i],
+                                                  mode=ctypes.RTLD_GLOBAL))
+                if self.debug_first_pass:
+                    print('Finished loading additional libraries.')
+        
+            # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
+            # the former is a more common notation for library directories
+            if (self.o2scl_lib_dir=='' and os.getenv('O2SCL_LIB')
+                is not None and
+                force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
+                o2scl_lib_dir=os.getenv('O2SCL_LIB')
+                if self.debug_first_pass:
+                    print('Set o2scl_lib_dir from environment',
+                          'variable to\n  ',
+                          self.o2scl_lib_dir)
+            
+            if self.o2scl_lib_dir!='':
+                if self.debug_first_pass:
+                    print('Loading',self.o2scl_lib_dir+
+                          '/libo2scl.dylib','.')
+                self.o2scl=ctypes.CDLL(self.o2scl_lib_dir+
+                                       '/libo2scl.dylib',
+                                  mode=ctypes.RTLD_GLOBAL)
+                if self.debug_first_pass:
+                    print('Loading',self.o2scl_lib_dir+
+                          '/libo2scl_hdf.dylib','.')
+                self.o2scl_hdf=ctypes.CDLL(self.o2scl_lib_dir+
+                                           '/libo2scl_hdf.dylib',
+                                      mode=ctypes.RTLD_GLOBAL)
+                if include_part:
+                    if self.debug_first_pass:
+                        print('Loading',self.o2scl_lib_dir+
+                              '/libo2scl_part.dylib','.')
+                    self.o2scl_part=ctypes.CDLL(self.o2scl_lib_dir+
+                                           '/libo2scl_part.dylib',
+                                           mode=ctypes.RTLD_GLOBAL)
+            else:
+                if self.debug_first_pass:
+                    print('Loading libo2scl.dylib.')
+                self.o2scl=ctypes.CDLL('libo2scl.dylib',
+                                       mode=ctypes.RTLD_GLOBAL)
+                if self.debug_first_pass:
+                    print('Loading libo2scl_hdf.dylib.')
+                self.o2scl_hdf=ctypes.CDLL('libo2scl_hdf.dylib',
+                                      mode=ctypes.RTLD_GLOBAL)
+                if include_part:
+                    if self.debug_first_pass:
+                        print('Loading libo2scl_part.dylib.')
+                    self.o2scl_part=ctypes.CDLL('libo2scl_part.dylib',
+                                          mode=ctypes.RTLD_GLOBAL)
+                
+            if self.debug_first_pass:
+                print('Done loading o2scl libraries.')
+        
+        else:
+        
+            if self.debug_first_pass:
+                print('Loading C++ library.')
+            stdcpp=ctypes.CDLL(find_library("stdc++"),
+                               mode=ctypes.RTLD_GLOBAL)
+            if self.debug_first_pass:
                 print('Finished loading C++ library.')
-    
-        if (len(o2scl_addl_libs)==0 and
-            os.getenv('O2SCL_ADDL_LIBS') is not None
-            and force_bytes(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
-            o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS').split(',')
-            if debug_first_pass:
-                print('Set o2scl_addl_libs from environment variable to\n  ',
-                      o2scl_addl_libs)
-    
-        if len(o2scl_addl_libs)>0:
-            for i in range(0,len(o2scl_addl_libs)):
-                if debug_first_pass:
-                    print('Loading additional library',o2scl_addl_libs[i],'.')
-                o2scl_addl.append(ctypes.CDLL(o2scl_addl_libs[i],
-                                              mode=ctypes.RTLD_GLOBAL))
-            if debug_first_pass:
-                print('Finished loading additional libraries.')
-    
-        # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
-        # the former is a more common notation for library directories
-        if (o2scl_lib_dir=='' and os.getenv('O2SCL_LIB') is not None and
-            force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
-            o2scl_lib_dir=os.getenv('O2SCL_LIB')
-            if debug_first_pass:
-                print('Set o2scl_lib_dir from environment variable to\n  ',
-                      o2scl_lib_dir)
+          
+            if (len(self.o2scl_addl_libs)==0 and
+                os.getenv('O2SCL_ADDL_LIBS') is not None
+                and force_bytes(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
+                self.o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS').split(',')
+                if self.debug_first_pass:
+                    print('Set o2scl_addl_libs from environment',
+                          'variable to\n  ',
+                          self.o2scl_addl_libs)
         
-        if o2scl_lib_dir!='':
-            if debug_first_pass:
-                print('Loading',o2scl_lib_dir+'/libo2scl.dylib','.')
-            o2scl=ctypes.CDLL(o2scl_lib_dir+'/libo2scl.dylib',
-                              mode=ctypes.RTLD_GLOBAL)
-            if debug_first_pass:
-                print('Loading',o2scl_lib_dir+'/libo2scl_hdf.dylib','.')
-            o2scl_hdf=ctypes.CDLL(o2scl_lib_dir+'/libo2scl_hdf.dylib',
-                                  mode=ctypes.RTLD_GLOBAL)
-            if include_part:
-                if debug_first_pass:
-                    print('Loading',o2scl_lib_dir+'/libo2scl_part.dylib','.')
-                o2scl_part=ctypes.CDLL(o2scl_lib_dir+'/libo2scl_part.dylib',
-                                      mode=ctypes.RTLD_GLOBAL)
-        else:
-            if debug_first_pass:
-                print('Loading libo2scl.dylib.')
-            o2scl=ctypes.CDLL('libo2scl.dylib',mode=ctypes.RTLD_GLOBAL)
-            if debug_first_pass:
-                print('Loading libo2scl_hdf.dylib.')
-            o2scl_hdf=ctypes.CDLL('libo2scl_hdf.dylib',
-                                  mode=ctypes.RTLD_GLOBAL)
-            if include_part:
-                if debug_first_pass:
-                    print('Loading libo2scl_part.dylib.')
-                o2scl_part=ctypes.CDLL('libo2scl_part.dylib',
-                                      mode=ctypes.RTLD_GLOBAL)
+            if len(self.o2scl_addl_libs)>0:
+                for i in range(0,len(self.o2scl_addl_libs)):
+                    if self.debug_first_pass:
+                        print('Loading additional library',
+                              self.o2scl_addl_libs[i],'.')
+                    self.o2scl_addl.append(ctypes.CDLL(self.o2scl_addl_libs[i],
+                                                  mode=ctypes.RTLD_GLOBAL))
+                if self.debug_first_pass:
+                    print('Finished loading additional libraries.')
             
-        if debug_first_pass:
-            print('Done loading o2scl libraries.')
-    
-    else:
-    
-        if debug_first_pass:
-            print('Loading C++ library.')
-        stdcpp=ctypes.CDLL(find_library("stdc++"),mode=ctypes.RTLD_GLOBAL)
-        if debug_first_pass:
-            print('Finished loading C++ library.')
-      
-        if (len(o2scl_addl_libs)==0 and
-            os.getenv('O2SCL_ADDL_LIBS') is not None
-            and force_bytes(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
-            o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS').split(',')
-            if debug_first_pass:
-                print('Set o2scl_addl_libs from environment variable to\n  ',
-                      o2scl_addl_libs)
-    
-        if len(o2scl_addl_libs)>0:
-            for i in range(0,len(o2scl_addl_libs)):
-                if debug_first_pass:
-                    print('Loading additional library',o2scl_addl_libs[i],'.')
-                o2scl_addl.append(ctypes.CDLL(o2scl_addl_libs[i],
-                                              mode=ctypes.RTLD_GLOBAL))
-            if debug_first_pass:
-                print('Finished loading additional libraries.')
-        
-        # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
-        # the former is a more common notation for library directories
-        if (o2scl_lib_dir=='' and os.getenv('O2SCL_LIB') is not None and
-            force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
-            o2scl_lib_dir=os.getenv('O2SCL_LIB')
-            if debug_first_pass:
-                print('Set o2scl_lib_dir from environment variable to\n  ',
-                      o2scl_lib_dir)
-        
-        if o2scl_lib_dir=='':
-            if debug_first_pass:
-                print('Loading o2scl.')
-            o2scl=ctypes.CDLL(find_library("o2scl"),mode=ctypes.RTLD_GLOBAL)
-            if debug_first_pass:
-                print('Loading o2scl_hdf.')
-            o2scl_hdf=ctypes.CDLL(find_library("o2scl_hdf"),
+            # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
+            # the former is a more common notation for library directories
+            if (self.o2scl_lib_dir=='' and os.getenv('O2SCL_LIB')
+                is not None and
+                force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
+                self.o2scl_lib_dir=os.getenv('O2SCL_LIB')
+                if self.debug_first_pass:
+                    print('Set o2scl_lib_dir from environment',
+                          'variable to\n  ',
+                          self.o2scl_lib_dir)
+            
+            if self.o2scl_lib_dir=='':
+                if self.debug_first_pass:
+                    print('Loading o2scl.')
+                self.o2scl=ctypes.CDLL(find_library("o2scl"),
                                   mode=ctypes.RTLD_GLOBAL)
-            if include_part:
-                if debug_first_pass:
+                if self.debug_first_pass:
                     print('Loading o2scl_hdf.')
-                o2scl_hdf=ctypes.CDLL(find_library("o2scl_hdf"),
+                self.o2scl_hdf=ctypes.CDLL(find_library("o2scl_hdf"),
                                       mode=ctypes.RTLD_GLOBAL)
-        else:
-            if debug_first_pass:
-                print('Loading',o2scl_lib_dir+'/libo2scl.so .')
-            o2scl=ctypes.CDLL(o2scl_lib_dir+'/libo2scl.so',
-                              mode=ctypes.RTLD_GLOBAL)
-            if debug_first_pass:
-                print('Loading',o2scl_lib_dir+'/libo2scl_hdf.so .')
-            o2scl_hdf=ctypes.CDLL(o2scl_lib_dir+'/libo2scl_hdf.so',
+                if include_part:
+                    if self.debug_first_pass:
+                        print('Loading o2scl_hdf.')
+                    self.o2scl_hdf=ctypes.CDLL(find_library("o2scl_hdf"),
+                                          mode=ctypes.RTLD_GLOBAL)
+            else:
+                if self.debug_first_pass:
+                    print('Loading',self.o2scl_lib_dir+'/libo2scl.so .')
+                self.o2scl=ctypes.CDLL(self.o2scl_lib_dir+'/libo2scl.so',
                                   mode=ctypes.RTLD_GLOBAL)
-            if include_part:
-                if debug_first_pass:
-                    print('Loading',o2scl_lib_dir+'/libo2scl_hdf.so .')
-                o2scl_hdf=ctypes.CDLL(o2scl_lib_dir+'/libo2scl_hdf.so',
+                if self.debug_first_pass:
+                    print('Loading',self.o2scl_lib_dir+'/libo2scl_hdf.so .')
+                self.o2scl_hdf=ctypes.CDLL(self.o2scl_lib_dir+
+                                           '/libo2scl_hdf.so',
                                       mode=ctypes.RTLD_GLOBAL)
+                if include_part:
+                    if self.debug_first_pass:
+                        print('Loading',self.o2scl_lib_dir+
+                              '/libo2scl_hdf.so .')
+                    self.o2scl_hdf=ctypes.CDLL(self.o2scl_lib_dir+
+                                               '/libo2scl_hdf.so',
+                                          mode=ctypes.RTLD_GLOBAL)
+        
+            if self.debug_first_pass:
+                print('Done loading o2scl libraries.')
     
-        if debug_first_pass:
-            print('Done loading o2scl libraries.')
-
-    if include_part:
-        return (o2scl,o2scl_hdf,o2scl_part)
+        return
     
-    return (o2scl,o2scl_hdf)
-
-def get_library_settings(argv=[]):
-    """
-    Get the library settings from the command-line arguments
-    """
-
-    global o2scl_lib_dir, o2scl_cpp_lib
-    global backend, o2scl_addl_libs, debug_first_pass
+    def get_library_settings(self,argv=[]):
+        """
+        Get the library settings from the command-line arguments
+        """
     
-    # Go through the argument list and determine settings for
-    # o2scl-lib-dir, o2scl-cpp-lib, o2scl-addl-libs and determine if
-    # -debug-libs was present
-    
-    for i in range(1,len(argv)):
-        if argv[i]=='-o2scl-lib-dir':
-            if i>=len(argv)-1:
-                print('Option -o2scl-lib-dir specified with no value.')
-            else:
-                o2scl_lib_dir=argv[i+1]
-                if debug_first_pass:
-                    print('Set o2scl_lib_dir from command-line to',
-                          o2scl_lib_dir)
-        elif argv[i]=='-o2scl-cpp-lib':
-            if i>=len(argv)-1:
-                print('Option -o2scl-cpp-lib specified with no value.')
-            else:
-                o2scl_cpp_lib=argv[i+1]
-                if debug_first_pass:
-                    print('Set o2scl_cpp_lib from command-line to',
-                          o2scl_cpp_lib)
-        elif argv[i]=='-o2scl-addl-libs':
-            if i>=len(argv)-1:
-                print('Option -o2scl-addl-libs specified with no value.')
-            else:
-                o2scl_addl_libs=argv[i+1].split(',')
-                if debug_first_pass:
-                    print('Set o2scl_addl_libs from command-line to',
-                          o2scl_addl_libs)
-        elif argv[i]=='-backend':
-            if i>=len(argv)-1:
-                print('Option -backend specified with no value.')
-            else:
-                backend=argv[i+1]
-        elif argv[i]=='-debug-first-pass':
-            debug_first_pass=True
-            
-    backend=if_yt_then_Agg(backend,argv)
-    
-    return backend
+        # Go through the argument list and determine settings for
+        # o2scl-lib-dir, o2scl-cpp-lib, o2scl-addl-libs and determine if
+        # -debug-libs was present
+        
+        for i in range(1,len(argv)):
+            if argv[i]=='-o2scl-lib-dir':
+                if i>=len(argv)-1:
+                    print('Option -o2scl-lib-dir specified with no value.')
+                else:
+                    self.o2scl_lib_dir=argv[i+1]
+                    if self.debug_first_pass:
+                        print('Set o2scl_lib_dir from command-line to',
+                              self.o2scl_lib_dir)
+            elif argv[i]=='-o2scl-cpp-lib':
+                if i>=len(argv)-1:
+                    print('Option -o2scl-cpp-lib specified with no value.')
+                else:
+                    self.o2scl_cpp_lib=argv[i+1]
+                    if self.debug_first_pass:
+                        print('Set o2scl_cpp_lib from command-line to',
+                              self.o2scl_cpp_lib)
+            elif argv[i]=='-o2scl-addl-libs':
+                if i>=len(argv)-1:
+                    print('Option -o2scl-addl-libs specified with no value.')
+                else:
+                    self.o2scl_addl_libs=argv[i+1].split(',')
+                    if self.debug_first_pass:
+                        print('Set o2scl_addl_libs from command-line to',
+                              self.o2scl_addl_libs)
+            elif argv[i]=='-backend':
+                if i>=len(argv)-1:
+                    print('Option -backend specified with no value.')
+                else:
+                    self.backend=argv[i+1]
+            elif argv[i]=='-debug-first-pass':
+                self.debug_first_pass=True
+                
+        self.backend=if_yt_then_Agg(self.backend,argv)
+        
+        return self.backend
 
 def build_o2scl(verbose=1,release=True):
     """
