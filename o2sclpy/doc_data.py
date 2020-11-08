@@ -2,6 +2,8 @@ from o2sclpy.utils import terminal
 
 ter=terminal()
 
+version='0.926.a1'
+
 cmaps=[('Perceptually Uniform Sequential',
         ['viridis','plasma','inferno','magma']),
        ('Sequential', 

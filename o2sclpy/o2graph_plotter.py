@@ -50,7 +50,7 @@ from o2sclpy.plot_base import plot_base, yt_plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
 from o2sclpy.plot_info import colors_plot, color_list
-from o2sclpy import version
+from o2sclpy.doc_data import version
 
 class o2graph_plotter(yt_plot_base):
     """
