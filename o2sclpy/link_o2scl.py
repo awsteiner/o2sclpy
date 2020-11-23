@@ -63,13 +63,16 @@ class linker:
     # O2scl particle library handle
     o2scl_part=0
 
+    # O2scl EOS library handle
+    o2scl_eos=0
+
     # Additional library handles
     o2scl_addl=[]
 
     # System C++ library handle
     systcpp=0
     
-    def link_o2scl_o2graph(self,include_part=False):
+    def link_o2scl_o2graph(self,include_part=False,include_eos=False):
         """
         A new function for linking o2scl which came originally from
         the o2graph script
@@ -147,6 +150,13 @@ class linker:
                     self.o2scl_part=ctypes.CDLL(self.o2scl_lib_dir+
                                            '/libo2scl_part.dylib',
                                            mode=ctypes.RTLD_GLOBAL)
+                    if include_eos:
+                        if self.debug_first_pass:
+                            print('Loading',self.o2scl_lib_dir+
+                                  '/libo2scl_eos.dylib','.')
+                        self.o2scl_eos=ctypes.CDLL(self.o2scl_lib_dir+
+                                               '/libo2scl_eos.dylib',
+                                               mode=ctypes.RTLD_GLOBAL)
             else:
                 if self.debug_first_pass:
                     print('Loading libo2scl.dylib.')
@@ -161,6 +171,11 @@ class linker:
                         print('Loading libo2scl_part.dylib.')
                     self.o2scl_part=ctypes.CDLL('libo2scl_part.dylib',
                                           mode=ctypes.RTLD_GLOBAL)
+                    if include_eos:
+                        if self.debug_first_pass:
+                            print('Loading libo2scl_eos.dylib.')
+                        self.o2scl_eos=ctypes.CDLL('libo2scl_eos.dylib',
+                                              mode=ctypes.RTLD_GLOBAL)
                 
             if self.debug_first_pass:
                 print('Done loading o2scl libraries.')
@@ -215,9 +230,14 @@ class linker:
                                       mode=ctypes.RTLD_GLOBAL)
                 if include_part:
                     if self.debug_first_pass:
-                        print('Loading o2scl_hdf.')
-                    self.o2scl_hdf=ctypes.CDLL(find_library("o2scl_hdf"),
+                        print('Loading o2scl_part.')
+                    self.o2scl_part=ctypes.CDLL(find_library("o2scl_part"),
                                           mode=ctypes.RTLD_GLOBAL)
+                    if include_eos:
+                        if self.debug_first_pass:
+                            print('Loading o2scl_eos.')
+                        self.o2scl_eos=ctypes.CDLL(find_library("o2scl_eos"),
+                                              mode=ctypes.RTLD_GLOBAL)
             else:
                 if self.debug_first_pass:
                     print('Loading',self.o2scl_lib_dir+'/libo2scl.so .')
@@ -231,10 +251,17 @@ class linker:
                 if include_part:
                     if self.debug_first_pass:
                         print('Loading',self.o2scl_lib_dir+
-                              '/libo2scl_hdf.so .')
-                    self.o2scl_hdf=ctypes.CDLL(self.o2scl_lib_dir+
-                                               '/libo2scl_hdf.so',
+                              '/libo2scl_part.so .')
+                    self.o2scl_part=ctypes.CDLL(self.o2scl_lib_dir+
+                                               '/libo2scl_part.so',
                                           mode=ctypes.RTLD_GLOBAL)
+                    if include_eos:
+                        if self.debug_first_pass:
+                            print('Loading',self.o2scl_lib_dir+
+                                  '/libo2scl_eos.so .')
+                        self.o2scl_eos=ctypes.CDLL(self.o2scl_lib_dir+
+                                                   '/libo2scl_eos.so',
+                                              mode=ctypes.RTLD_GLOBAL)
         
             if self.debug_first_pass:
                 print('Done loading o2scl libraries.')
@@ -349,6 +376,10 @@ def build_o2scl(verbose=1,release=True):
 
 def link_o2scl_f(verbose=1):
     """
+    AWS 11/23/2020: This is an old link function and is probably
+    unused and may need to be removed. It should be replaced with
+    link_o2scl_o2graph()
+
     This function attempts to automatically load O\ :sub:`2`\ scl as a 
     DLL and returns the ``o2scl`` and ``o2scl_hdf`` DLL pointers.
 
@@ -459,6 +490,9 @@ def link_o2scl_f(verbose=1):
     
 def link_o2scl_part(verbose=1):
     """
+    AWS 11/23/2020: This is an old link function and is probably
+    unused and may need to be removed. It should be replaced with
+    link_o2scl_o2graph()
     """
 
     global o2scl_lib_dir, o2scl_cpp_lib, o2scl_part

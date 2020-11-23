@@ -88,12 +88,40 @@ class part_class:
 
         return
 
-    def fermion_density(self,m,g,T,n):
+    def fermion_density(self,m,g,T,n,nonrel=False,derivs=False):
         """
         Properties of a fermion given the density
         """
     
         op=self.link.o2scl_part
+
+        if derivs:
+            print('here')
+        
+        if nonrel:
+        
+            # Non-relativistic version without derivatives
+
+            double_ptr=ctypes.POINTER(ctypes.c_double)
+            op.o2scl_fermion_nonrel_density.argtypes=
+            [ctypes.c_void_p,ctypes.c_double,
+             ctypes.c_double,ctypes.c_double,
+             ctypes.c_double,double_ptr,
+             double_ptr,double_ptr,
+             double_ptr]
+            
+            mu=ctypes.c_double(0)
+            ed=ctypes.c_double(0)
+            pr=ctypes.c_double(0)
+            en=ctypes.c_double(0)
+    
+            op.o2scl_fermion_nonrel_density(self.fermion_rel_ptr,m,g,T,n,
+                                            ctypes.byref(mu),ctypes.byref(ed),
+                                            ctypes.byref(pr),ctypes.byref(en))
+            
+            return (mu.value,ed.value,pr.value,en.value)
+
+        # Relativistic version without derivatives
         
         double_ptr=ctypes.POINTER(ctypes.c_double)
         op.o2scl_fermion_density.argtypes=[ctypes.c_void_p,ctypes.c_double,
@@ -112,13 +140,44 @@ class part_class:
         
         return (mu.value,ed.value,pr.value,en.value)
     
-    def fermion_mu(self,m,g,T,n):
+    def fermion_mu(self,m,g,T,n,nonrel=False,derivs=False):
         """
         Properties of a fermion given the chemical potential
         """
-    
+
         op=self.link.o2scl_part
+
+        if derivs:
+
+            # Relativistic version with derivatives
+            double_ptr=ctypes.POINTER(ctypes.c_double)
+            op.o2scl_fermion_deriv_mu.argtypes=[ctypes.c_void_p,
+                                                ctypes.c_double,
+                                                ctypes.c_double,
+                                                ctypes.c_double,
+                                                ctypes.c_double,
+                                                double_ptr,
+                                                double_ptr,double_ptr,
+                                                double_ptr,double_ptr,
+                                                double_ptr,double_ptr]
+            n=ctypes.c_double(0)
+            ed=ctypes.c_double(0)
+            pr=ctypes.c_double(0)
+            en=ctypes.c_double(0)
+            dndT=ctypes.c_double(0)
+            dsdT=ctypes.c_double(0)
+            dndmu=ctypes.c_double(0)
+            
+            op.o2scl_fermion_deriv_mu(self.fermion_deriv_rel_ptr,m,g,T,mu,
+                                      ctypes.byref(n),ctypes.byref(ed),
+                                      ctypes.byref(pr),ctypes.byref(en),
+                                      ctypes.byref(dndT),ctypes.byref(dsdT),
+                                      ctypes.byref(dndmu))
+            
+            return (n.value,ed.value,pr.value,en.value,dndT.value,
+                    dsdT.value,dndmu.value)
         
+        # Relativistic version without derivatives
         double_ptr=ctypes.POINTER(ctypes.c_double)
         op.o2scl_fermion_mu.argtypes=[ctypes.c_void_p,ctypes.c_double,
                                       ctypes.c_double,ctypes.c_double,
@@ -135,35 +194,4 @@ class part_class:
                             ctypes.byref(pr),ctypes.byref(en))
         
         return (n.value,ed.value,pr.value,en.value)
-    
-    def fermion_deriv_mu(self,m,g,T,mu):
-        """
-        Properties of a fermion given the chemical potential
-        """
-    
-        op=self.link.o2scl_part
-        
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        op.o2scl_fermion_deriv_mu.argtypes=[ctypes.c_void_p,ctypes.c_double,
-                                            ctypes.c_double,ctypes.c_double,
-                                            ctypes.c_double,double_ptr,
-                                            double_ptr,double_ptr,
-                                            double_ptr,double_ptr,
-                                            double_ptr,double_ptr]
-        n=ctypes.c_double(0)
-        ed=ctypes.c_double(0)
-        pr=ctypes.c_double(0)
-        en=ctypes.c_double(0)
-        dndT=ctypes.c_double(0)
-        dsdT=ctypes.c_double(0)
-        dndmu=ctypes.c_double(0)
-        
-        op.o2scl_fermion_deriv_mu(self.fermion_deriv_rel_ptr,m,g,T,mu,
-                                  ctypes.byref(n),ctypes.byref(ed),
-                                  ctypes.byref(pr),ctypes.byref(en),
-                                  ctypes.byref(dndT),ctypes.byref(dsdT),
-                                  ctypes.byref(dndmu))
-        
-        return (n.value,ed.value,pr.value,en.value,dndT.value,
-                dsdT.value,dndmu.value)
     
