@@ -24,74 +24,146 @@ from o2sclpy.link_o2scl import linker
 
 class part:
 
-    part_ptr=0
+    _g=0
+    _m=0
+    _ms=0
+    _mu=0
+    _nu=0
+    _ed=0
+    _pr=0
+    _en=0
+    _non_interacting=0
+    _inc_rest_mass=0
+    pointer=0
 
-    def __init__(self):
-        op.o2scl_create_part.restyspe=ctypes.c_void_p
-        op.o2scl_create_part.argtypes=[]
-        self.part_ptr=ctypes.c_void_p()
-        self.part_ptr=op.o2scl_create_part()
+    def __init__(self,link):
+
+        op=link.o2scl_part
+        
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        bool_ptr=ctypes.POINTER(ctypes.c_bool)
+        bool_ptr_ptr=ctypes.POINTER(bool_ptr)
+        self._g=double_ptr()
+        self._m=double_ptr()
+        self._ms=double_ptr()
+        self._mu=double_ptr()
+        self._nu=double_ptr()
+        self._pr=double_ptr()
+        self._ed=double_ptr()
+        self._en=double_ptr()
+        self._inc_rest_mass=bool_ptr()
+        self._non_interacting=bool_ptr()
+        
+        op.o2scl_create_part.restype=ctypes.c_void_p
+        op.o2scl_create_part.argtypes=[double_ptr_ptr,
+                                       double_ptr_ptr,double_ptr_ptr,
+                                       double_ptr_ptr,double_ptr_ptr,
+                                       double_ptr_ptr,double_ptr_ptr,
+                                       double_ptr_ptr,bool_ptr_ptr,
+                                       bool_ptr_ptr]
+        self.part_ptr=op.o2scl_create_part(ctypes.byref(self._g),
+                                           ctypes.byref(self._m),
+                                           ctypes.byref(self._ms),
+                                           ctypes.byref(self._mu),
+                                           ctypes.byref(self._nu),
+                                           ctypes.byref(self._ed),
+                                           ctypes.byref(self._pr),
+                                           ctypes.byref(self._en),
+                                           ctypes.byref(self._inc_rest_mass),
+                                           ctypes.byref(self._non_interacting))
         return
     
     @property
     def g(self):
-        op.o2scl_get_part_g.restyspe=ctypes.c_double
-        op.o2scl_get_part_g.argtypes=[ctypes.c_void_p]
-        return op.o2scl_get_part_g(self.part_ptr)
+        return self._g.value
 
+    @g.setter
+    def g(self,value):
+        self._g.value=value
+        return
+    
     @property
     def m(self):
-        op.o2scl_get_part_m.restyspe=ctypes.c_double
-        op.o2scl_get_part_m.argtypes=[ctypes.c_void_p]
-        return op.o2scl_get_part_m(self.part_ptr)
+        return self._m.value
+
+    @m.setter
+    def m(self.value):
+        self._m.value=value
+        return
 
     @property
     def ms(self):
-        op.o2scl_get_part_ms.restyspe=ctypes.c_double
-        op.o2scl_get_part_ms.argtypes=[ctypes.c_void_p]
-        return op.o2scl_get_part_ms(self.part_ptr)
-    
+        return self._ms.value
+
+    @ms.setter
+    def ms(self.value):
+        self._ms.value=value
+        return
+
     @property
     def mu(self):
-        op.o2scl_get_part_mu.restyspe=ctypes.c_double
-        op.o2scl_get_part_mu.argtypes=[ctypes.c_void_p]
-        return op.o2scl_get_part_mu(self.part_ptr)
-    
+        return self._mu.value
+
+    @mu.setter
+    def mu(self.value):
+        self._mu.value=value
+        return
+
     @property
     def nu(self):
-        op.o2scl_get_part_nu.restyspe=ctypes.c_double
-        op.o2scl_get_part_nu.argtypes=[ctypes.c_void_p]
-        return op.o2scl_get_part_nu(self.part_ptr)
-    
+        return self._nu.value
+
+    @nu.setter
+    def nu(self.value):
+        self._nu.value=value
+        return
+
     @property
     def ed(self):
-        op.o2scl_get_part_ed.restyspe=ctypes.c_double
-        op.o2scl_get_part_ed.argtypes=[ctypes.c_void_p]
-        return op.o2scl_get_part_ed(self.part_ptr)
-    
+        return self._ed.value
+
+    @ed.setter
+    def ed(self.value):
+        self._ed.value=value
+        return
+
     @property
     def pr(self):
-        op.o2scl_get_part_pr.restyspe=ctypes.c_double
-        op.o2scl_get_part_pr.argtypes=[ctypes.c_void_p]
-        return op.o2scl_get_part_pr(self.part_ptr)
-    
+        return self._pr.value
+
+    @pr.setter
+    def pr(self.value):
+        self._pr.value=value
+        return
+
     @property
     def en(self):
-        op.o2scl_get_part_en.restyspe=ctypes.c_double
-        op.o2scl_get_part_en.argtypes=[ctypes.c_void_p]
-        return op.o2scl_get_part_en(self.part_ptr)
-    
+        return self._en.value
+
+    @en.setter
+    def en(self.value):
+        self._en.value=value
+        return
+
     @property
     def inc_rest_mass(self):
-        op.o2scl_get_part_inc_rest_mass.restyspe=ctypes.c_double
-        op.o2scl_get_part_inc_rest_mass.argtypes=[ctypes.c_void_p]
-        return op.o2scl_get_part_inc_rest_mass(self.part_ptr)
-    
+        return self._inc_rest_mass.value
+
+    @inc_rest_mass.setter
+    def inc_rest_mass(self.value):
+        self._inc_rest_mass.value=value
+        return
+
     @property
     def non_interacting(self):
-        op.o2scl_get_part_non_interacting.restyspe=ctypes.c_double
-        op.o2scl_get_part_non_interacting.argtypes=[ctypes.c_void_p]
-        return op.o2scl_get_part_non_interacting(self.part_ptr)
+        return self._non_interacting.value
+
+    @non_interacting.setter
+    def non_interacting(self.value):
+        self._non_interacting.value=value
+        return
+
     
 class fermion(part):
 
