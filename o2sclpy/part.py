@@ -37,62 +37,61 @@ class part:
     def g(self):
         op.o2scl_get_part_g.restyspe=ctypes.c_double
         op.o2scl_get_part_g.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_g(self.part_ptr)
+        return op.o2scl_get_part_g(self.part_ptr)
 
     @property
     def m(self):
         op.o2scl_get_part_m.restyspe=ctypes.c_double
         op.o2scl_get_part_m.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_m(self.part_ptr)
-        return self._m
+        return op.o2scl_get_part_m(self.part_ptr)
 
     @property
     def ms(self):
         op.o2scl_get_part_ms.restyspe=ctypes.c_double
         op.o2scl_get_part_ms.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_ms(self.part_ptr)
+        return op.o2scl_get_part_ms(self.part_ptr)
     
     @property
     def mu(self):
         op.o2scl_get_part_mu.restyspe=ctypes.c_double
         op.o2scl_get_part_mu.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_mu(self.part_ptr)
+        return op.o2scl_get_part_mu(self.part_ptr)
     
     @property
     def nu(self):
         op.o2scl_get_part_nu.restyspe=ctypes.c_double
         op.o2scl_get_part_nu.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_nu(self.part_ptr)
+        return op.o2scl_get_part_nu(self.part_ptr)
     
     @property
     def ed(self):
         op.o2scl_get_part_ed.restyspe=ctypes.c_double
         op.o2scl_get_part_ed.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_ed(self.part_ptr)
+        return op.o2scl_get_part_ed(self.part_ptr)
     
     @property
     def pr(self):
         op.o2scl_get_part_pr.restyspe=ctypes.c_double
         op.o2scl_get_part_pr.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_pr(self.part_ptr)
+        return op.o2scl_get_part_pr(self.part_ptr)
     
     @property
     def en(self):
         op.o2scl_get_part_en.restyspe=ctypes.c_double
         op.o2scl_get_part_en.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_en(self.part_ptr)
+        return op.o2scl_get_part_en(self.part_ptr)
     
     @property
     def inc_rest_mass(self):
         op.o2scl_get_part_inc_rest_mass.restyspe=ctypes.c_double
         op.o2scl_get_part_inc_rest_mass.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_inc_rest_mass(self.part_ptr)
+        return op.o2scl_get_part_inc_rest_mass(self.part_ptr)
     
     @property
     def non_interacting(self):
         op.o2scl_get_part_non_interacting.restyspe=ctypes.c_double
         op.o2scl_get_part_non_interacting.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_non_interacting(self.part_ptr)
+        return op.o2scl_get_part_non_interacting(self.part_ptr)
     
 class fermion(part):
 
@@ -100,13 +99,13 @@ class fermion(part):
     def kf(self):
         op.o2scl_get_part_kf.restyspe=ctypes.c_double
         op.o2scl_get_part_kf.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_kf(self.part_ptr)
+        return op.o2scl_get_part_kf(self.part_ptr)
     
     @property
-    def del(self):
+    def delta(self):
         op.o2scl_get_part_del.restyspe=ctypes.c_double
         op.o2scl_get_part_del.argtypes=[ctypes.c_void_p]
-        return self.part_ptr=op.o2scl_get_part_del(self.part_ptr)
+        return op.o2scl_get_part_del(self.part_ptr)
     
     def __init__(self):
 
@@ -196,12 +195,15 @@ class fermion_thermo:
             # Non-relativistic version without derivatives
 
             double_ptr=ctypes.POINTER(ctypes.c_double)
-            op.o2scl_fermion_nonrel_density.argtypes=
-            [ctypes.c_void_p,ctypes.c_double,
-             ctypes.c_double,ctypes.c_double,
-             ctypes.c_double,double_ptr,
-             double_ptr,double_ptr,
-             double_ptr]
+            op.o2scl_fermion_nonrel_density.argtypes=[ctypes.c_void_p,
+                                                      ctypes.c_double,
+                                                      ctypes.c_double,
+                                                      ctypes.c_double,
+                                                      ctypes.c_double,
+                                                      double_ptr,
+                                                      double_ptr,
+                                                      double_ptr,
+                                                      double_ptr]
             
             mu=ctypes.c_double(0)
             ed=ctypes.c_double(0)
