@@ -142,21 +142,21 @@ class linker:
                           '/libo2scl_hdf.dylib','.')
                 self.o2scl_hdf=ctypes.CDLL(self.o2scl_lib_dir+
                                            '/libo2scl_hdf.dylib',
-                                      mode=ctypes.RTLD_GLOBAL)
+                                           mode=ctypes.RTLD_GLOBAL)
                 if include_part:
                     if self.debug_first_pass:
                         print('Loading',self.o2scl_lib_dir+
                               '/libo2scl_part.dylib','.')
                     self.o2scl_part=ctypes.CDLL(self.o2scl_lib_dir+
                                            '/libo2scl_part.dylib',
-                                           mode=ctypes.RTLD_GLOBAL)
+                                                mode=ctypes.RTLD_GLOBAL)
                     if include_eos:
                         if self.debug_first_pass:
                             print('Loading',self.o2scl_lib_dir+
                                   '/libo2scl_eos.dylib','.')
                         self.o2scl_eos=ctypes.CDLL(self.o2scl_lib_dir+
-                                               '/libo2scl_eos.dylib',
-                                               mode=ctypes.RTLD_GLOBAL)
+                                                   '/libo2scl_eos.dylib',
+                                                   mode=ctypes.RTLD_GLOBAL)
             else:
                 if self.debug_first_pass:
                     print('Loading libo2scl.dylib.')
@@ -265,7 +265,12 @@ class linker:
         
             if self.debug_first_pass:
                 print('Done loading o2scl libraries.')
-    
+
+        if include_part:
+            if self.debug_first_pass:
+                print('Setting alternate error handler.')
+            self.o2scl_part.o2scl_set_err_hnd_gsl()
+            
         return
     
     def get_library_settings(self,argv=[]):
