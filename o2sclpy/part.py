@@ -39,15 +39,14 @@ class part:
         self._dll=dll
         return
 
-    def __init__(self,dll):
+    def __del__(self):
         """
         Delete function for class part .
         """
 
-        f=dll.o2scl_free_part
+        f=self._dll.o2scl_free_part
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
-        self._dll=dll
         return
 
     @property
@@ -58,12 +57,13 @@ class part:
         f=self._dll.o2scl_part_get_g
         f.restype=ctypes.c_double
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @g.setter
     def g(self,value):
         """
         Setter function for part::g .
+        """
         f=self._dll.o2scl_part_set_g
         f.argtypes=[ctypes.c_void_p,ctypes.c_double]
         self._g=f(self._ptr,value)
@@ -77,12 +77,13 @@ class part:
         f=self._dll.o2scl_part_get_m
         f.restype=ctypes.c_double
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @m.setter
     def m(self,value):
         """
         Setter function for part::m .
+        """
         f=self._dll.o2scl_part_set_m
         f.argtypes=[ctypes.c_void_p,ctypes.c_double]
         self._m=f(self._ptr,value)
@@ -96,12 +97,13 @@ class part:
         f=self._dll.o2scl_part_get_ms
         f.restype=ctypes.c_double
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @ms.setter
     def ms(self,value):
         """
         Setter function for part::ms .
+        """
         f=self._dll.o2scl_part_set_ms
         f.argtypes=[ctypes.c_void_p,ctypes.c_double]
         self._ms=f(self._ptr,value)
@@ -115,12 +117,13 @@ class part:
         f=self._dll.o2scl_part_get_mu
         f.restype=ctypes.c_double
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @mu.setter
     def mu(self,value):
         """
         Setter function for part::mu .
+        """
         f=self._dll.o2scl_part_set_mu
         f.argtypes=[ctypes.c_void_p,ctypes.c_double]
         self._mu=f(self._ptr,value)
@@ -134,12 +137,13 @@ class part:
         f=self._dll.o2scl_part_get_nu
         f.restype=ctypes.c_double
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @nu.setter
     def nu(self,value):
         """
         Setter function for part::nu .
+        """
         f=self._dll.o2scl_part_set_nu
         f.argtypes=[ctypes.c_void_p,ctypes.c_double]
         self._nu=f(self._ptr,value)
@@ -153,12 +157,13 @@ class part:
         f=self._dll.o2scl_part_get_ed
         f.restype=ctypes.c_double
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @ed.setter
     def ed(self,value):
         """
         Setter function for part::ed .
+        """
         f=self._dll.o2scl_part_set_ed
         f.argtypes=[ctypes.c_void_p,ctypes.c_double]
         self._ed=f(self._ptr,value)
@@ -172,12 +177,13 @@ class part:
         f=self._dll.o2scl_part_get_pr
         f.restype=ctypes.c_double
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @pr.setter
     def pr(self,value):
         """
         Setter function for part::pr .
+        """
         f=self._dll.o2scl_part_set_pr
         f.argtypes=[ctypes.c_void_p,ctypes.c_double]
         self._pr=f(self._ptr,value)
@@ -191,12 +197,13 @@ class part:
         f=self._dll.o2scl_part_get_en
         f.restype=ctypes.c_double
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @en.setter
     def en(self,value):
         """
         Setter function for part::en .
+        """
         f=self._dll.o2scl_part_set_en
         f.argtypes=[ctypes.c_void_p,ctypes.c_double]
         self._en=f(self._ptr,value)
@@ -210,12 +217,13 @@ class part:
         f=self._dll.o2scl_part_get_inc_rest_mass
         f.restype=ctypes.c_bool
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @inc_rest_mass.setter
     def inc_rest_mass(self,value):
         """
         Setter function for part::inc_rest_mass .
+        """
         f=self._dll.o2scl_part_set_inc_rest_mass
         f.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         self._inc_rest_mass=f(self._ptr,value)
@@ -229,12 +237,13 @@ class part:
         f=self._dll.o2scl_part_get_non_interacting
         f.restype=ctypes.c_bool
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @non_interacting.setter
     def non_interacting(self,value):
         """
         Setter function for part::non_interacting .
+        """
         f=self._dll.o2scl_part_set_non_interacting
         f.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         self._non_interacting=f(self._ptr,value)
@@ -254,15 +263,14 @@ class fermion(part):
         self._dll=dll
         return
 
-    def __init__(self,dll):
+    def __del__(self):
         """
         Delete function for class fermion .
         """
 
-        f=dll.o2scl_free_fermion
+        f=self._dll.o2scl_free_fermion
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
-        self._dll=dll
         return
 
     @property
@@ -273,12 +281,13 @@ class fermion(part):
         f=self._dll.o2scl_fermion_get_kf
         f.restype=ctypes.c_double
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @kf.setter
     def kf(self,value):
         """
         Setter function for fermion::kf .
+        """
         f=self._dll.o2scl_fermion_set_kf
         f.argtypes=[ctypes.c_void_p,ctypes.c_double]
         self._kf=f(self._ptr,value)
@@ -292,12 +301,13 @@ class fermion(part):
         f=self._dll.o2scl_fermion_get_delta
         f.restype=ctypes.c_double
         f.argtypes=[ctypes.c_void_p]
-        return f(self._ptr).contents
+        return f(self._ptr)
 
     @delta.setter
     def delta(self,value):
         """
         Setter function for fermion::delta .
+        """
         f=self._dll.o2scl_fermion_set_delta
         f.argtypes=[ctypes.c_void_p,ctypes.c_double]
         self._delta=f(self._ptr,value)
@@ -320,15 +330,14 @@ class fermion_rel:
         self._dll=dll
         return
 
-    def __init__(self,dll):
+    def __del__(self):
         """
         Delete function for class fermion_rel .
         """
 
-        f=dll.o2scl_free_fermion_rel
+        f=self._dll.o2scl_free_fermion_rel
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
-        self._dll=dll
         return
 
     def calc_density(self,f,T):
@@ -338,7 +347,7 @@ class fermion_rel:
         func=self._dll.o2scl_fermion_rel_calc_density
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
-        ret=f(self._ptr,f._ptr,T)
+        ret=func(self._ptr,f._ptr,T)
         return ret
 
     def calc_mu(self,f,T):
@@ -347,7 +356,7 @@ class fermion_rel:
         """
         func=self._dll.o2scl_fermion_rel_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
-        f(self._ptr,f._ptr,T)
+        func(self._ptr,f._ptr,T)
         return
 
 class fermion_nonrel:
@@ -367,15 +376,14 @@ class fermion_nonrel:
         self._dll=dll
         return
 
-    def __init__(self,dll):
+    def __del__(self):
         """
         Delete function for class fermion_nonrel .
         """
 
-        f=dll.o2scl_free_fermion_nonrel
+        f=self._dll.o2scl_free_fermion_nonrel
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
-        self._dll=dll
         return
 
 class fermion_deriv_nr:
@@ -395,15 +403,14 @@ class fermion_deriv_nr:
         self._dll=dll
         return
 
-    def __init__(self,dll):
+    def __del__(self):
         """
         Delete function for class fermion_deriv_nr .
         """
 
-        f=dll.o2scl_free_fermion_deriv_nr
+        f=self._dll.o2scl_free_fermion_deriv_nr
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
-        self._dll=dll
         return
 
 class fermion_deriv_rel:
@@ -423,15 +430,14 @@ class fermion_deriv_rel:
         self._dll=dll
         return
 
-    def __init__(self,dll):
+    def __del__(self):
         """
         Delete function for class fermion_deriv_rel .
         """
 
-        f=dll.o2scl_free_fermion_deriv_rel
+        f=self._dll.o2scl_free_fermion_deriv_rel
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
-        self._dll=dll
         return
 
 class boson_rel:
@@ -451,15 +457,14 @@ class boson_rel:
         self._dll=dll
         return
 
-    def __init__(self,dll):
+    def __del__(self):
         """
         Delete function for class boson_rel .
         """
 
-        f=dll.o2scl_free_boson_rel
+        f=self._dll.o2scl_free_boson_rel
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
-        self._dll=dll
         return
 
 class classical_thermo:
@@ -479,15 +484,14 @@ class classical_thermo:
         self._dll=dll
         return
 
-    def __init__(self,dll):
+    def __del__(self):
         """
         Delete function for class classical_thermo .
         """
 
-        f=dll.o2scl_free_classical_thermo
+        f=self._dll.o2scl_free_classical_thermo
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
-        self._dll=dll
         return
 
 class classical_deriv_thermo:
@@ -507,15 +511,14 @@ class classical_deriv_thermo:
         self._dll=dll
         return
 
-    def __init__(self,dll):
+    def __del__(self):
         """
         Delete function for class classical_deriv_thermo .
         """
 
-        f=dll.o2scl_free_classical_deriv_thermo
+        f=self._dll.o2scl_free_classical_deriv_thermo
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
-        self._dll=dll
         return
 
 class fermion_mag_zerot:
@@ -535,14 +538,13 @@ class fermion_mag_zerot:
         self._dll=dll
         return
 
-    def __init__(self,dll):
+    def __del__(self):
         """
         Delete function for class fermion_mag_zerot .
         """
 
-        f=dll.o2scl_free_fermion_mag_zerot
+        f=self._dll.o2scl_free_fermion_mag_zerot
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
-        self._dll=dll
         return
 

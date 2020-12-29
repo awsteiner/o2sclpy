@@ -269,7 +269,7 @@ class linker:
         if include_part:
             if self.debug_first_pass:
                 print('Setting alternate error handler.')
-            self.o2scl_part.o2scl_set_err_hnd_gsl()
+            self.o2scl.o2scl_set_err_hnd_gsl()
             
         return
     
