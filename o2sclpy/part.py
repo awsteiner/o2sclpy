@@ -313,10 +313,79 @@ class fermion(part):
         self._delta=f(self._ptr,value)
         return
 
-class fermion_rel:
+class fermion_zerot:
 
     _ptr=0
     _dll=0
+
+    def __init__(self,dll):
+        """
+        Init function for class fermion_zerot .
+        """
+
+        f=dll.o2scl_create_fermion_zerot
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class fermion_zerot .
+        """
+
+        f=self._dll.o2scl_free_fermion_zerot
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    def kf_from_density(self,f):
+        """
+        Wrapper for fermion_zerot::kf_from_density() .
+        """
+        func=self._dll.o2scl_fermion_zerot_kf_from_density
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,f._ptr)
+        return
+
+    def energy_density_zerot(self,f):
+        """
+        Wrapper for fermion_zerot::energy_density_zerot() .
+        """
+        func=self._dll.o2scl_fermion_zerot_energy_density_zerot
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,f._ptr)
+        return
+
+    def pressure_zerot(self,f):
+        """
+        Wrapper for fermion_zerot::pressure_zerot() .
+        """
+        func=self._dll.o2scl_fermion_zerot_pressure_zerot
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,f._ptr)
+        return
+
+    def calc_mu_zerot(self,f):
+        """
+        Wrapper for fermion_zerot::calc_mu_zerot() .
+        """
+        func=self._dll.o2scl_fermion_zerot_calc_mu_zerot
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,f._ptr)
+        return
+
+    def calc_density_zerot(self,f):
+        """
+        Wrapper for fermion_zerot::calc_density_zerot() .
+        """
+        func=self._dll.o2scl_fermion_zerot_calc_density_zerot
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,f._ptr)
+        return
+
+class fermion_rel(fermion_zerot):
 
     def __init__(self,dll):
         """
@@ -340,6 +409,72 @@ class fermion_rel:
         f(self._ptr)
         return
 
+    def calc_mu_deg(self,f,T,prec):
+        """
+        Wrapper for fermion_rel::calc_mu_deg() .
+        """
+        func=self._dll.o2scl_fermion_rel_calc_mu_deg
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,f._ptr,T,prec)
+        return ret
+
+    def calc_mu_ndeg(self,f,T,prec,inc_antip):
+        """
+        Wrapper for fermion_rel::calc_mu_ndeg() .
+        """
+        func=self._dll.o2scl_fermion_rel_calc_mu_ndeg
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
+        ret=func(self._ptr,f._ptr,T,prec,inc_antip)
+        return ret
+
+    def massless_calc_mu(self,f,T):
+        """
+        Wrapper for fermion_rel::massless_calc_mu() .
+        """
+        func=self._dll.o2scl_fermion_rel_massless_calc_mu
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,f._ptr,T)
+        return
+
+    def massless_pair_mu(self,f,T):
+        """
+        Wrapper for fermion_rel::massless_pair_mu() .
+        """
+        func=self._dll.o2scl_fermion_rel_massless_pair_mu
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,f._ptr,T)
+        return
+
+    def massless_calc_density(self,f,T):
+        """
+        Wrapper for fermion_rel::massless_calc_density() .
+        """
+        func=self._dll.o2scl_fermion_rel_massless_calc_density
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,f._ptr,T)
+        return
+
+    def massless_pair_density(self,f,T):
+        """
+        Wrapper for fermion_rel::massless_pair_density() .
+        """
+        func=self._dll.o2scl_fermion_rel_massless_pair_density
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,f._ptr,T)
+        return
+
+    def nu_from_n(self,f,T):
+        """
+        Wrapper for fermion_rel::nu_from_n() .
+        """
+        func=self._dll.o2scl_fermion_rel_nu_from_n
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,f._ptr,T)
+        return ret
+
     def calc_density(self,f,T):
         """
         Wrapper for fermion_rel::calc_density() .
@@ -350,11 +485,30 @@ class fermion_rel:
         ret=func(self._ptr,f._ptr,T)
         return ret
 
+    def pair_density(self,f,T):
+        """
+        Wrapper for fermion_rel::pair_density() .
+        """
+        func=self._dll.o2scl_fermion_rel_pair_density
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,f._ptr,T)
+        return ret
+
     def calc_mu(self,f,T):
         """
         Wrapper for fermion_rel::calc_mu() .
         """
         func=self._dll.o2scl_fermion_rel_calc_mu
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,f._ptr,T)
+        return
+
+    def pair_mu(self,f,T):
+        """
+        Wrapper for fermion_rel::pair_mu() .
+        """
+        func=self._dll.o2scl_fermion_rel_pair_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,f._ptr,T)
         return
