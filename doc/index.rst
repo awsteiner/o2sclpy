@@ -59,6 +59,7 @@ Contents
    class_plotter
    class_hdf5_reader
    class_cloud_file
+   part
    class_plot_base
    class_yt_plot_base
    class_o2graph_plotter

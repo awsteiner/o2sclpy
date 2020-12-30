@@ -89,7 +89,10 @@ intersphinx_mapping = {'o2scl':
                         '../../../wcs/o2scl/doc/o2scl/sphinx/build/html/objects.inv'),
                        'o2sclp':
                        ('https://neutronstars.utk.edu/code/o2scl-dev/part/html/',
-                        '../../../wcs/o2scl/doc/o2scl/part/sphinx/build/html/objects.inv')}
+                        '../../../wcs/o2scl/doc/o2scl/part/sphinx/build/html/objects.inv'),
+                       'o2scle':
+                       ('https://neutronstars.utk.edu/code/o2scl-dev/eos/html/',
+                        '../../../wcs/o2scl/doc/o2scl/eos/sphinx/build/html/objects.inv')}
 
 
 # -- Options for HTML output ----------------------------------------------

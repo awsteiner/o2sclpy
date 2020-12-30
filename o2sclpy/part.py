@@ -23,6 +23,9 @@
 import ctypes
 
 class thermo:
+    """
+    Python interface for class :ref:`thermo <o2sclp:thermo_tl>`.
+    """
 
     _ptr=0
     _dll=0
@@ -110,6 +113,9 @@ class thermo:
         return
 
 class part:
+    """
+    Python interface for class :ref:`o2sclp:part`.
+    """
 
     _ptr=0
     _dll=0
@@ -339,6 +345,7 @@ class part:
     def init(self,mass,dof):
         """
         Wrapper for part::init() .
+        wrapper for :ref:`o2sclp:part::init()`.
         """
         func=self._dll.o2scl_part_init
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
@@ -348,6 +355,7 @@ class part:
     def anti(self,ax):
         """
         Wrapper for part::anti() .
+        wrapper for :ref:`o2sclp:part::anti()`.
         """
         func=self._dll.o2scl_part_anti
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -355,6 +363,9 @@ class part:
         return
 
 class fermion(part):
+    """
+    Python interface for class :ref:`o2sclp:fermion`.
+    """
 
     def __init__(self,dll):
         """
@@ -419,6 +430,9 @@ class fermion(part):
         return
 
 class quark(fermion):
+    """
+    Python interface for class :ref:`o2sclp:quark`.
+    """
 
     def __init__(self,dll):
         """
@@ -483,6 +497,9 @@ class quark(fermion):
         return
 
 class fermion_zerot:
+    """
+    Python interface for class :ref:`o2sclp:fermion_zerot`.
+    """
 
     _ptr=0
     _dll=0
@@ -512,6 +529,7 @@ class fermion_zerot:
     def kf_from_density(self,f):
         """
         Wrapper for fermion_zerot::kf_from_density() .
+        wrapper for :ref:`o2sclp:fermion_zerot::kf_from_density()`.
         """
         func=self._dll.o2scl_fermion_zerot_kf_from_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -521,6 +539,7 @@ class fermion_zerot:
     def energy_density_zerot(self,f):
         """
         Wrapper for fermion_zerot::energy_density_zerot() .
+        wrapper for :ref:`o2sclp:fermion_zerot::energy_density_zerot()`.
         """
         func=self._dll.o2scl_fermion_zerot_energy_density_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -530,6 +549,7 @@ class fermion_zerot:
     def pressure_zerot(self,f):
         """
         Wrapper for fermion_zerot::pressure_zerot() .
+        wrapper for :ref:`o2sclp:fermion_zerot::pressure_zerot()`.
         """
         func=self._dll.o2scl_fermion_zerot_pressure_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -539,6 +559,7 @@ class fermion_zerot:
     def calc_mu_zerot(self,f):
         """
         Wrapper for fermion_zerot::calc_mu_zerot() .
+        wrapper for :ref:`o2sclp:fermion_zerot::calc_mu_zerot()`.
         """
         func=self._dll.o2scl_fermion_zerot_calc_mu_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -548,6 +569,7 @@ class fermion_zerot:
     def calc_density_zerot(self,f):
         """
         Wrapper for fermion_zerot::calc_density_zerot() .
+        wrapper for :ref:`o2sclp:fermion_zerot::calc_density_zerot()`.
         """
         func=self._dll.o2scl_fermion_zerot_calc_density_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -555,6 +577,9 @@ class fermion_zerot:
         return
 
 class fermion_rel(fermion_zerot):
+    """
+    Python interface for class :ref:`o2sclp:fermion_rel`.
+    """
 
     def __init__(self,dll):
         """
@@ -819,6 +844,7 @@ class fermion_rel(fermion_zerot):
     def calc_mu_deg(self,f,T,prec):
         """
         Wrapper for fermion_rel::calc_mu_deg() .
+        wrapper for :ref:`o2sclp:fermion_rel::calc_mu_deg()`.
         """
         func=self._dll.o2scl_fermion_rel_calc_mu_deg
         func.restype=ctypes.c_bool
@@ -829,6 +855,7 @@ class fermion_rel(fermion_zerot):
     def calc_mu_ndeg(self,f,T,prec,inc_antip):
         """
         Wrapper for fermion_rel::calc_mu_ndeg() .
+        wrapper for :ref:`o2sclp:fermion_rel::calc_mu_ndeg()`.
         """
         func=self._dll.o2scl_fermion_rel_calc_mu_ndeg
         func.restype=ctypes.c_bool
@@ -839,6 +866,7 @@ class fermion_rel(fermion_zerot):
     def massless_calc_mu(self,f,T):
         """
         Wrapper for fermion_rel::massless_calc_mu() .
+        wrapper for :ref:`o2sclp:fermion_rel::massless_calc_mu()`.
         """
         func=self._dll.o2scl_fermion_rel_massless_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -848,6 +876,7 @@ class fermion_rel(fermion_zerot):
     def massless_pair_mu(self,f,T):
         """
         Wrapper for fermion_rel::massless_pair_mu() .
+        wrapper for :ref:`o2sclp:fermion_rel::massless_pair_mu()`.
         """
         func=self._dll.o2scl_fermion_rel_massless_pair_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -857,6 +886,7 @@ class fermion_rel(fermion_zerot):
     def massless_calc_density(self,f,T):
         """
         Wrapper for fermion_rel::massless_calc_density() .
+        wrapper for :ref:`o2sclp:fermion_rel::massless_calc_density()`.
         """
         func=self._dll.o2scl_fermion_rel_massless_calc_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -866,6 +896,7 @@ class fermion_rel(fermion_zerot):
     def massless_pair_density(self,f,T):
         """
         Wrapper for fermion_rel::massless_pair_density() .
+        wrapper for :ref:`o2sclp:fermion_rel::massless_pair_density()`.
         """
         func=self._dll.o2scl_fermion_rel_massless_pair_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -875,6 +906,7 @@ class fermion_rel(fermion_zerot):
     def nu_from_n(self,f,T):
         """
         Wrapper for fermion_rel::nu_from_n() .
+        wrapper for :ref:`o2sclp:fermion_rel::nu_from_n()`.
         """
         func=self._dll.o2scl_fermion_rel_nu_from_n
         func.restype=ctypes.c_int
@@ -885,6 +917,7 @@ class fermion_rel(fermion_zerot):
     def calc_density(self,f,T):
         """
         Wrapper for fermion_rel::calc_density() .
+        wrapper for :ref:`o2sclp:fermion_rel::calc_density()`.
         """
         func=self._dll.o2scl_fermion_rel_calc_density
         func.restype=ctypes.c_int
@@ -895,6 +928,7 @@ class fermion_rel(fermion_zerot):
     def pair_density(self,f,T):
         """
         Wrapper for fermion_rel::pair_density() .
+        wrapper for :ref:`o2sclp:fermion_rel::pair_density()`.
         """
         func=self._dll.o2scl_fermion_rel_pair_density
         func.restype=ctypes.c_int
@@ -905,6 +939,7 @@ class fermion_rel(fermion_zerot):
     def calc_mu(self,f,T):
         """
         Wrapper for fermion_rel::calc_mu() .
+        wrapper for :ref:`o2sclp:fermion_rel::calc_mu()`.
         """
         func=self._dll.o2scl_fermion_rel_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -914,6 +949,7 @@ class fermion_rel(fermion_zerot):
     def pair_mu(self,f,T):
         """
         Wrapper for fermion_rel::pair_mu() .
+        wrapper for :ref:`o2sclp:fermion_rel::pair_mu()`.
         """
         func=self._dll.o2scl_fermion_rel_pair_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -921,6 +957,9 @@ class fermion_rel(fermion_zerot):
         return
 
 class fermion_nonrel(fermion_zerot):
+    """
+    Python interface for class :ref:`o2sclp:fermion_nonrel`.
+    """
 
     def __init__(self,dll):
         """
@@ -947,6 +986,7 @@ class fermion_nonrel(fermion_zerot):
     def calc_density(self,f,T):
         """
         Wrapper for fermion_nonrel::calc_density() .
+        wrapper for :ref:`o2sclp:fermion_nonrel::calc_density()`.
         """
         func=self._dll.o2scl_fermion_nonrel_calc_density
         func.restype=ctypes.c_int
@@ -957,6 +997,7 @@ class fermion_nonrel(fermion_zerot):
     def calc_mu(self,f,T):
         """
         Wrapper for fermion_nonrel::calc_mu() .
+        wrapper for :ref:`o2sclp:fermion_nonrel::calc_mu()`.
         """
         func=self._dll.o2scl_fermion_nonrel_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -966,6 +1007,7 @@ class fermion_nonrel(fermion_zerot):
     def nu_from_n(self,f,T):
         """
         Wrapper for fermion_nonrel::nu_from_n() .
+        wrapper for :ref:`o2sclp:fermion_nonrel::nu_from_n()`.
         """
         func=self._dll.o2scl_fermion_nonrel_nu_from_n
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -973,6 +1015,9 @@ class fermion_nonrel(fermion_zerot):
         return
 
 class boson(part):
+    """
+    Python interface for class :ref:`o2sclp:boson`.
+    """
 
     def __init__(self,dll):
         """
@@ -1017,6 +1062,9 @@ class boson(part):
         return
 
 class boson_rel:
+    """
+    Python interface for class :ref:`o2sclp:boson_rel`.
+    """
 
     _ptr=0
     _dll=0
@@ -1046,6 +1094,7 @@ class boson_rel:
     def calc_density(self,b,T):
         """
         Wrapper for boson_rel::calc_density() .
+        wrapper for :ref:`o2sclp:boson_rel::calc_density()`.
         """
         func=self._dll.o2scl_boson_rel_calc_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -1055,6 +1104,7 @@ class boson_rel:
     def calc_mu(self,b,T):
         """
         Wrapper for boson_rel::calc_mu() .
+        wrapper for :ref:`o2sclp:boson_rel::calc_mu()`.
         """
         func=self._dll.o2scl_boson_rel_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -1064,6 +1114,7 @@ class boson_rel:
     def nu_from_n(self,b,T):
         """
         Wrapper for boson_rel::nu_from_n() .
+        wrapper for :ref:`o2sclp:boson_rel::nu_from_n()`.
         """
         func=self._dll.o2scl_boson_rel_nu_from_n
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -1073,6 +1124,7 @@ class boson_rel:
     def pair_density(self,b,T):
         """
         Wrapper for boson_rel::pair_density() .
+        wrapper for :ref:`o2sclp:boson_rel::pair_density()`.
         """
         func=self._dll.o2scl_boson_rel_pair_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -1082,6 +1134,7 @@ class boson_rel:
     def pair_mu(self,b,T):
         """
         Wrapper for boson_rel::pair_mu() .
+        wrapper for :ref:`o2sclp:boson_rel::pair_mu()`.
         """
         func=self._dll.o2scl_boson_rel_pair_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -1089,6 +1142,9 @@ class boson_rel:
         return
 
 class classical_thermo:
+    """
+    Python interface for class :ref:`o2sclp:classical_thermo`.
+    """
 
     _ptr=0
     _dll=0
@@ -1118,6 +1174,7 @@ class classical_thermo:
     def calc_density(self,p,T):
         """
         Wrapper for classical_thermo::calc_density() .
+        wrapper for :ref:`o2sclp:classical_thermo::calc_density()`.
         """
         func=self._dll.o2scl_classical_thermo_calc_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -1127,6 +1184,7 @@ class classical_thermo:
     def calc_mu(self,p,T):
         """
         Wrapper for classical_thermo::calc_mu() .
+        wrapper for :ref:`o2sclp:classical_thermo::calc_mu()`.
         """
         func=self._dll.o2scl_classical_thermo_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -1134,6 +1192,9 @@ class classical_thermo:
         return
 
 class thermo_np_deriv_press:
+    """
+    Python interface for class :ref:`o2sclp:thermo_np_deriv_press`.
+    """
 
     _ptr=0
     _dll=0
@@ -1281,6 +1342,9 @@ class thermo_np_deriv_press:
         return
 
 class thermo_np_deriv_helm:
+    """
+    Python interface for class :ref:`o2sclp:thermo_np_deriv_helm`.
+    """
 
     _ptr=0
     _dll=0
@@ -1428,6 +1492,9 @@ class thermo_np_deriv_helm:
         return
 
 class part_deriv_press:
+    """
+    Python interface for class :ref:`o2sclp:part_deriv_press`.
+    """
 
     _ptr=0
     _dll=0
@@ -1517,6 +1584,7 @@ class part_deriv_press:
     def deriv_f(self,dmudn,dmudT,dsdT_n):
         """
         Wrapper for part_deriv_press::deriv_f() .
+        wrapper for :ref:`o2sclp:part_deriv_press::deriv_f()`.
         """
         func=self._dll.o2scl_part_deriv_press_deriv_f
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -1524,6 +1592,9 @@ class part_deriv_press:
         return
 
 class part_deriv(part):
+    """
+    Python interface for class :ref:`o2sclp:part_deriv`.
+    """
 
     def __init__(self,dll):
         """
@@ -1548,6 +1619,9 @@ class part_deriv(part):
         return
 
 class fermion_deriv(fermion):
+    """
+    Python interface for class :ref:`o2sclp:fermion_deriv`.
+    """
 
     def __init__(self,dll):
         """
@@ -1572,6 +1646,9 @@ class fermion_deriv(fermion):
         return
 
 class deriv_thermo_base:
+    """
+    Python interface for class :ref:`o2sclp:deriv_thermo_base`.
+    """
 
     _ptr=0
     _dll=0
@@ -1601,6 +1678,7 @@ class deriv_thermo_base:
     def heat_cap_ppart_const_vol(self,p,T):
         """
         Wrapper for deriv_thermo_base::heat_cap_ppart_const_vol() .
+        wrapper for :ref:`o2sclp:deriv_thermo_base::heat_cap_ppart_const_vol()`.
         """
         func=self._dll.o2scl_deriv_thermo_base_heat_cap_ppart_const_vol
         func.restype=ctypes.c_double
@@ -1611,6 +1689,7 @@ class deriv_thermo_base:
     def heat_cap_ppart_const_press(self,p,T):
         """
         Wrapper for deriv_thermo_base::heat_cap_ppart_const_press() .
+        wrapper for :ref:`o2sclp:deriv_thermo_base::heat_cap_ppart_const_press()`.
         """
         func=self._dll.o2scl_deriv_thermo_base_heat_cap_ppart_const_press
         func.restype=ctypes.c_double
@@ -1621,6 +1700,7 @@ class deriv_thermo_base:
     def compress_adiabatic(self,p,T):
         """
         Wrapper for deriv_thermo_base::compress_adiabatic() .
+        wrapper for :ref:`o2sclp:deriv_thermo_base::compress_adiabatic()`.
         """
         func=self._dll.o2scl_deriv_thermo_base_compress_adiabatic
         func.restype=ctypes.c_double
@@ -1631,6 +1711,7 @@ class deriv_thermo_base:
     def compress_const_tptr(self,p,T):
         """
         Wrapper for deriv_thermo_base::compress_const_tptr() .
+        wrapper for :ref:`o2sclp:deriv_thermo_base::compress_const_tptr()`.
         """
         func=self._dll.o2scl_deriv_thermo_base_compress_const_tptr
         func.restype=ctypes.c_double
@@ -1641,6 +1722,7 @@ class deriv_thermo_base:
     def coeff_thermal_exp(self,p,T):
         """
         Wrapper for deriv_thermo_base::coeff_thermal_exp() .
+        wrapper for :ref:`o2sclp:deriv_thermo_base::coeff_thermal_exp()`.
         """
         func=self._dll.o2scl_deriv_thermo_base_coeff_thermal_exp
         func.restype=ctypes.c_double
@@ -1651,6 +1733,7 @@ class deriv_thermo_base:
     def squared_sound_speed(self,p,T):
         """
         Wrapper for deriv_thermo_base::squared_sound_speed() .
+        wrapper for :ref:`o2sclp:deriv_thermo_base::squared_sound_speed()`.
         """
         func=self._dll.o2scl_deriv_thermo_base_squared_sound_speed
         func.restype=ctypes.c_double
@@ -1659,6 +1742,9 @@ class deriv_thermo_base:
         return ret
 
 class fermion_deriv_rel:
+    """
+    Python interface for class :ref:`o2sclp:fermion_deriv_rel`.
+    """
 
     _ptr=0
     _dll=0
@@ -1826,6 +1912,7 @@ class fermion_deriv_rel:
     def nu_from_n(self,f,T):
         """
         Wrapper for fermion_deriv_rel::nu_from_n() .
+        wrapper for :ref:`o2sclp:fermion_deriv_rel::nu_from_n()`.
         """
         func=self._dll.o2scl_fermion_deriv_rel_nu_from_n
         func.restype=ctypes.c_int
@@ -1836,6 +1923,7 @@ class fermion_deriv_rel:
     def calc_density(self,f,T):
         """
         Wrapper for fermion_deriv_rel::calc_density() .
+        wrapper for :ref:`o2sclp:fermion_deriv_rel::calc_density()`.
         """
         func=self._dll.o2scl_fermion_deriv_rel_calc_density
         func.restype=ctypes.c_int
@@ -1846,6 +1934,7 @@ class fermion_deriv_rel:
     def pair_density(self,f,T):
         """
         Wrapper for fermion_deriv_rel::pair_density() .
+        wrapper for :ref:`o2sclp:fermion_deriv_rel::pair_density()`.
         """
         func=self._dll.o2scl_fermion_deriv_rel_pair_density
         func.restype=ctypes.c_int
@@ -1856,6 +1945,7 @@ class fermion_deriv_rel:
     def calc_mu(self,f,T):
         """
         Wrapper for fermion_deriv_rel::calc_mu() .
+        wrapper for :ref:`o2sclp:fermion_deriv_rel::calc_mu()`.
         """
         func=self._dll.o2scl_fermion_deriv_rel_calc_mu
         func.restype=ctypes.c_int
@@ -1866,6 +1956,7 @@ class fermion_deriv_rel:
     def pair_mu(self,f,T):
         """
         Wrapper for fermion_deriv_rel::pair_mu() .
+        wrapper for :ref:`o2sclp:fermion_deriv_rel::pair_mu()`.
         """
         func=self._dll.o2scl_fermion_deriv_rel_pair_mu
         func.restype=ctypes.c_int
@@ -1874,6 +1965,9 @@ class fermion_deriv_rel:
         return ret
 
 class fermion_deriv_nr:
+    """
+    Python interface for class :ref:`o2sclp:fermion_deriv_nr`.
+    """
 
     _ptr=0
     _dll=0
@@ -1941,6 +2035,7 @@ class fermion_deriv_nr:
     def calc_density_zerot(self,f):
         """
         Wrapper for fermion_deriv_nr::calc_density_zerot() .
+        wrapper for :ref:`o2sclp:fermion_deriv_nr::calc_density_zerot()`.
         """
         func=self._dll.o2scl_fermion_deriv_nr_calc_density_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -1950,6 +2045,7 @@ class fermion_deriv_nr:
     def calc_mu_zerot(self,f):
         """
         Wrapper for fermion_deriv_nr::calc_mu_zerot() .
+        wrapper for :ref:`o2sclp:fermion_deriv_nr::calc_mu_zerot()`.
         """
         func=self._dll.o2scl_fermion_deriv_nr_calc_mu_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -1959,6 +2055,7 @@ class fermion_deriv_nr:
     def nu_from_n(self,f,T):
         """
         Wrapper for fermion_deriv_nr::nu_from_n() .
+        wrapper for :ref:`o2sclp:fermion_deriv_nr::nu_from_n()`.
         """
         func=self._dll.o2scl_fermion_deriv_nr_nu_from_n
         func.restype=ctypes.c_int
@@ -1969,6 +2066,7 @@ class fermion_deriv_nr:
     def calc_density(self,f,T):
         """
         Wrapper for fermion_deriv_nr::calc_density() .
+        wrapper for :ref:`o2sclp:fermion_deriv_nr::calc_density()`.
         """
         func=self._dll.o2scl_fermion_deriv_nr_calc_density
         func.restype=ctypes.c_int
@@ -1979,6 +2077,7 @@ class fermion_deriv_nr:
     def calc_mu(self,f,T):
         """
         Wrapper for fermion_deriv_nr::calc_mu() .
+        wrapper for :ref:`o2sclp:fermion_deriv_nr::calc_mu()`.
         """
         func=self._dll.o2scl_fermion_deriv_nr_calc_mu
         func.restype=ctypes.c_int
@@ -1987,6 +2086,9 @@ class fermion_deriv_nr:
         return ret
 
 class classical_deriv_thermo:
+    """
+    Python interface for class :ref:`o2sclp:classical_deriv_thermo`.
+    """
 
     _ptr=0
     _dll=0
@@ -2016,6 +2118,7 @@ class classical_deriv_thermo:
     def calc_density(self,p,T):
         """
         Wrapper for classical_deriv_thermo::calc_density() .
+        wrapper for :ref:`o2sclp:classical_deriv_thermo::calc_density()`.
         """
         func=self._dll.o2scl_classical_deriv_thermo_calc_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
@@ -2025,6 +2128,7 @@ class classical_deriv_thermo:
     def calc_mu(self,p,T):
         """
         Wrapper for classical_deriv_thermo::calc_mu() .
+        wrapper for :ref:`o2sclp:classical_deriv_thermo::calc_mu()`.
         """
         func=self._dll.o2scl_classical_deriv_thermo_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]

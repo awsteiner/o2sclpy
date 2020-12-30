@@ -6,6 +6,7 @@ help:
 	@echo "Developer targets:"
 	@echo "doc:       Make the documentation (requires sphinx & breathe)"
 	@echo "sync-doc:  Copies documentation to webserver"
+	@echo "open-doc:  Open local documentation in browser"
 	@echo "test-sync:"
 	@echo "reinstall: Reinstall o2sclpy using pip3"
 	@echo "statfiles: Make the images and extra files for the docs"
@@ -16,8 +17,16 @@ help:
 	@echo "'python3 setup.py sdist bdist_wheel'"
 	@echo "  and then 'twine upload dist/*'."
 
-viewdoc: .empty
-	open doc/build/html/index.html
+BROWSER = 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+    BROWSER += open
+else
+    BROWSER += xdg-open
+endif
+
+open-doc: .empty
+	$(BROWSER) doc/build/html/index.html
 
 doc: .empty
 	cd doc; $(MAKE) html
