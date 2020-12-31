@@ -25,7 +25,7 @@ from abc import abstractmethod
 
 class thermo:
     """
-    Python interface for class :ref:`thermo <o2sclp:thermo>`.
+    Python interface for class :ref:`thermo <o2sclp:thermo_tl>`.
     """
 
     _ptr=0
@@ -115,7 +115,7 @@ class thermo:
 
 class part:
     """
-    Python interface for class :ref:`part <o2sclp:part>`.
+    Python interface for class :ref:`part <o2sclp:part_tl>`.
     """
 
     _ptr=0
@@ -365,7 +365,7 @@ class part:
 
 class fermion(part):
     """
-    Python interface for class :ref:`fermion <o2sclp:fermion>`.
+    Python interface for class :ref:`fermion <o2sclp:fermion_tl>`.
     """
 
     def __init__(self,dll):
@@ -499,7 +499,7 @@ class quark(fermion):
 
 class fermion_zerot:
     """
-    Python interface for class :ref:`fermion_zerot <o2sclp:fermion_zerot>`.
+    Python interface for class :ref:`fermion_zerot <o2sclp:fermion_zerot_tl>`.
     """
 
     _ptr=0
@@ -579,7 +579,7 @@ class fermion_zerot:
 
 class fermion_thermo(fermion_zerot):
     """
-    Python interface for class :ref:`fermion_thermo <o2sclp:fermion_thermo>`.
+    Python interface for class :ref:`fermion_thermo <o2sclp:fermion_thermo_tl>`.
     """
 
     @abstractmethod
@@ -669,7 +669,7 @@ class fermion_thermo(fermion_zerot):
 
 class fermion_rel(fermion_thermo):
     """
-    Python interface for class :ref:`fermion_rel <o2sclp:fermion_rel>`.
+    Python interface for class :ref:`fermion_rel <o2sclp:fermion_rel_tl>`.
     """
 
     def __init__(self,dll):
@@ -987,7 +987,7 @@ class fermion_rel(fermion_thermo):
 
 class fermion_nonrel(fermion_zerot):
     """
-    Python interface for class :ref:`fermion_nonrel <o2sclp:fermion_nonrel>`.
+    Python interface for class :ref:`fermion_nonrel <o2sclp:fermion_nonrel_tl>`.
     """
 
     def __init__(self,dll):
@@ -1172,7 +1172,7 @@ class boson_rel:
 
 class classical_thermo:
     """
-    Python interface for class :ref:`classical_thermo <o2sclp:classical_thermo>`.
+    Python interface for class :ref:`classical_thermo <o2sclp:classical_thermo_tl>`.
     """
 
     _ptr=0
@@ -1222,7 +1222,7 @@ class classical_thermo:
 
 class thermo_np_deriv_press:
     """
-    Python interface for class :ref:`thermo_np_deriv_press <o2sclp:thermo_np_deriv_press>`.
+    Python interface for class :ref:`thermo_np_deriv_press <o2sclp:thermo_np_deriv_press_tl>`.
     """
 
     _ptr=0
@@ -1372,7 +1372,7 @@ class thermo_np_deriv_press:
 
 class thermo_np_deriv_helm:
     """
-    Python interface for class :ref:`thermo_np_deriv_helm <o2sclp:thermo_np_deriv_helm>`.
+    Python interface for class :ref:`thermo_np_deriv_helm <o2sclp:thermo_np_deriv_helm_tl>`.
     """
 
     _ptr=0
@@ -1522,7 +1522,7 @@ class thermo_np_deriv_helm:
 
 class part_deriv_press:
     """
-    Python interface for class :ref:`part_deriv_press <o2sclp:part_deriv_press>`.
+    Python interface for class :ref:`part_deriv_press <o2sclp:part_deriv_press_tl>`.
     """
 
     _ptr=0
@@ -1622,7 +1622,7 @@ class part_deriv_press:
 
 class part_deriv(part):
     """
-    Python interface for class :ref:`part_deriv <o2sclp:part_deriv>`.
+    Python interface for class :ref:`part_deriv <o2sclp:part_deriv_tl>`.
     """
 
     def __init__(self,dll):
@@ -1649,7 +1649,7 @@ class part_deriv(part):
 
 class fermion_deriv(fermion):
     """
-    Python interface for class :ref:`fermion_deriv <o2sclp:fermion_deriv>`.
+    Python interface for class :ref:`fermion_deriv <o2sclp:fermion_deriv_tl>`.
     """
 
     def __init__(self,dll):
@@ -1676,7 +1676,7 @@ class fermion_deriv(fermion):
 
 class deriv_thermo_base:
     """
-    Python interface for class :ref:`deriv_thermo_base <o2sclp:deriv_thermo_base>`.
+    Python interface for class :ref:`deriv_thermo_base <o2sclp:deriv_thermo_base_tl>`.
     """
 
     _ptr=0
@@ -1772,7 +1772,7 @@ class deriv_thermo_base:
 
 class fermion_deriv_rel:
     """
-    Python interface for class :ref:`fermion_deriv_rel <o2sclp:fermion_deriv_rel>`.
+    Python interface for class :ref:`fermion_deriv_rel <o2sclp:fermion_deriv_rel_tl>`.
     """
 
     _ptr=0
@@ -1995,7 +1995,7 @@ class fermion_deriv_rel:
 
 class fermion_deriv_nr:
     """
-    Python interface for class :ref:`fermion_deriv_nr <o2sclp:fermion_deriv_nr>`.
+    Python interface for class :ref:`fermion_deriv_nr <o2sclp:fermion_deriv_nr_tl>`.
     """
 
     _ptr=0
@@ -2116,7 +2116,7 @@ class fermion_deriv_nr:
 
 class classical_deriv_thermo:
     """
-    Python interface for class :ref:`classical_deriv_thermo <o2sclp:classical_deriv_thermo>`.
+    Python interface for class :ref:`classical_deriv_thermo <o2sclp:classical_deriv_thermo_tl>`.
     """
 
     _ptr=0

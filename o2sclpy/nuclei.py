@@ -187,7 +187,7 @@ class nucmass_info:
         """
         func=self._dll.o2scl_nucmass_info_parse_elstring
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_std::string,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,ela,Z._ptr,N._ptr,A._ptr)
         return ret
 
@@ -198,7 +198,7 @@ class nucmass_info:
         """
         func=self._dll.o2scl_nucmass_info_eltoZ
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_std::string]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,el)
         return ret
 
@@ -253,7 +253,7 @@ class nucmass_info:
         """
         func=self._dll.o2scl_nucmass_info_spinp_to_int
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_std::string]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,s)
         return ret
 
