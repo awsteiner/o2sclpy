@@ -21,10 +21,11 @@
 """
 
 import ctypes
+from abc import abstractmethod
 
 class thermo:
     """
-    Python interface for class :ref:`thermo <o2sclp:thermo_tl>`.
+    Python interface for class :ref:`thermo <o2sclp:thermo>`.
     """
 
     _ptr=0
@@ -114,7 +115,7 @@ class thermo:
 
 class part:
     """
-    Python interface for class :ref:`o2sclp:part`.
+    Python interface for class :ref:`part <o2sclp:part>`.
     """
 
     _ptr=0
@@ -364,7 +365,7 @@ class part:
 
 class fermion(part):
     """
-    Python interface for class :ref:`o2sclp:fermion`.
+    Python interface for class :ref:`fermion <o2sclp:fermion>`.
     """
 
     def __init__(self,dll):
@@ -431,7 +432,7 @@ class fermion(part):
 
 class quark(fermion):
     """
-    Python interface for class :ref:`o2sclp:quark`.
+    Python interface for class :ref:`quark <o2sclp:quark>`.
     """
 
     def __init__(self,dll):
@@ -498,7 +499,7 @@ class quark(fermion):
 
 class fermion_zerot:
     """
-    Python interface for class :ref:`o2sclp:fermion_zerot`.
+    Python interface for class :ref:`fermion_zerot <o2sclp:fermion_zerot>`.
     """
 
     _ptr=0
@@ -576,9 +577,99 @@ class fermion_zerot:
         func(self._ptr,f._ptr)
         return
 
-class fermion_rel(fermion_zerot):
+class fermion_thermo(fermion_zerot):
     """
-    Python interface for class :ref:`o2sclp:fermion_rel`.
+    Python interface for class :ref:`fermion_thermo <o2sclp:fermion_thermo>`.
+    """
+
+    @abstractmethod
+    def __init__(self,dll):
+        """
+        Init function for class fermion_thermo .
+        """
+
+        f=dll.o2scl_create_fermion_thermo
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class fermion_thermo .
+        """
+
+        f=self._dll.o2scl_free_fermion_thermo
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    def calc_mu_deg(self,f,T,prec):
+        """
+        Wrapper for fermion_thermo::calc_mu_deg() .
+        wrapper for :ref:`o2sclp:fermion_thermo::calc_mu_deg()`.
+        """
+        func=self._dll.o2scl_fermion_thermo_calc_mu_deg
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,f._ptr,T,prec)
+        return ret
+
+    def calc_mu_ndeg(self,f,T,prec,inc_antip):
+        """
+        Wrapper for fermion_thermo::calc_mu_ndeg() .
+        wrapper for :ref:`o2sclp:fermion_thermo::calc_mu_ndeg()`.
+        """
+        func=self._dll.o2scl_fermion_thermo_calc_mu_ndeg
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
+        ret=func(self._ptr,f._ptr,T,prec,inc_antip)
+        return ret
+
+    def massless_calc_mu(self,f,T):
+        """
+        Wrapper for fermion_thermo::massless_calc_mu() .
+        wrapper for :ref:`o2sclp:fermion_thermo::massless_calc_mu()`.
+        """
+        func=self._dll.o2scl_fermion_thermo_massless_calc_mu
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,f._ptr,T)
+        return
+
+    def massless_pair_mu(self,f,T):
+        """
+        Wrapper for fermion_thermo::massless_pair_mu() .
+        wrapper for :ref:`o2sclp:fermion_thermo::massless_pair_mu()`.
+        """
+        func=self._dll.o2scl_fermion_thermo_massless_pair_mu
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,f._ptr,T)
+        return
+
+    def massless_calc_density(self,f,T):
+        """
+        Wrapper for fermion_thermo::massless_calc_density() .
+        wrapper for :ref:`o2sclp:fermion_thermo::massless_calc_density()`.
+        """
+        func=self._dll.o2scl_fermion_thermo_massless_calc_density
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,f._ptr,T)
+        return
+
+    def massless_pair_density(self,f,T):
+        """
+        Wrapper for fermion_thermo::massless_pair_density() .
+        wrapper for :ref:`o2sclp:fermion_thermo::massless_pair_density()`.
+        """
+        func=self._dll.o2scl_fermion_thermo_massless_pair_density
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,f._ptr,T)
+        return
+
+class fermion_rel(fermion_thermo):
+    """
+    Python interface for class :ref:`fermion_rel <o2sclp:fermion_rel>`.
     """
 
     def __init__(self,dll):
@@ -841,68 +932,6 @@ class fermion_rel(fermion_zerot):
         func(self._ptr,value._ptr)
         return
 
-    def calc_mu_deg(self,f,T,prec):
-        """
-        Wrapper for fermion_rel::calc_mu_deg() .
-        wrapper for :ref:`o2sclp:fermion_rel::calc_mu_deg()`.
-        """
-        func=self._dll.o2scl_fermion_rel_calc_mu_deg
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
-        ret=func(self._ptr,f._ptr,T,prec)
-        return ret
-
-    def calc_mu_ndeg(self,f,T,prec,inc_antip):
-        """
-        Wrapper for fermion_rel::calc_mu_ndeg() .
-        wrapper for :ref:`o2sclp:fermion_rel::calc_mu_ndeg()`.
-        """
-        func=self._dll.o2scl_fermion_rel_calc_mu_ndeg
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
-        ret=func(self._ptr,f._ptr,T,prec,inc_antip)
-        return ret
-
-    def massless_calc_mu(self,f,T):
-        """
-        Wrapper for fermion_rel::massless_calc_mu() .
-        wrapper for :ref:`o2sclp:fermion_rel::massless_calc_mu()`.
-        """
-        func=self._dll.o2scl_fermion_rel_massless_calc_mu
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
-        func(self._ptr,f._ptr,T)
-        return
-
-    def massless_pair_mu(self,f,T):
-        """
-        Wrapper for fermion_rel::massless_pair_mu() .
-        wrapper for :ref:`o2sclp:fermion_rel::massless_pair_mu()`.
-        """
-        func=self._dll.o2scl_fermion_rel_massless_pair_mu
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
-        func(self._ptr,f._ptr,T)
-        return
-
-    def massless_calc_density(self,f,T):
-        """
-        Wrapper for fermion_rel::massless_calc_density() .
-        wrapper for :ref:`o2sclp:fermion_rel::massless_calc_density()`.
-        """
-        func=self._dll.o2scl_fermion_rel_massless_calc_density
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
-        func(self._ptr,f._ptr,T)
-        return
-
-    def massless_pair_density(self,f,T):
-        """
-        Wrapper for fermion_rel::massless_pair_density() .
-        wrapper for :ref:`o2sclp:fermion_rel::massless_pair_density()`.
-        """
-        func=self._dll.o2scl_fermion_rel_massless_pair_density
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
-        func(self._ptr,f._ptr,T)
-        return
-
     def nu_from_n(self,f,T):
         """
         Wrapper for fermion_rel::nu_from_n() .
@@ -958,7 +987,7 @@ class fermion_rel(fermion_zerot):
 
 class fermion_nonrel(fermion_zerot):
     """
-    Python interface for class :ref:`o2sclp:fermion_nonrel`.
+    Python interface for class :ref:`fermion_nonrel <o2sclp:fermion_nonrel>`.
     """
 
     def __init__(self,dll):
@@ -1016,7 +1045,7 @@ class fermion_nonrel(fermion_zerot):
 
 class boson(part):
     """
-    Python interface for class :ref:`o2sclp:boson`.
+    Python interface for class :ref:`boson <o2sclp:boson>`.
     """
 
     def __init__(self,dll):
@@ -1063,7 +1092,7 @@ class boson(part):
 
 class boson_rel:
     """
-    Python interface for class :ref:`o2sclp:boson_rel`.
+    Python interface for class :ref:`boson_rel <o2sclp:boson_rel>`.
     """
 
     _ptr=0
@@ -1143,7 +1172,7 @@ class boson_rel:
 
 class classical_thermo:
     """
-    Python interface for class :ref:`o2sclp:classical_thermo`.
+    Python interface for class :ref:`classical_thermo <o2sclp:classical_thermo>`.
     """
 
     _ptr=0
@@ -1193,7 +1222,7 @@ class classical_thermo:
 
 class thermo_np_deriv_press:
     """
-    Python interface for class :ref:`o2sclp:thermo_np_deriv_press`.
+    Python interface for class :ref:`thermo_np_deriv_press <o2sclp:thermo_np_deriv_press>`.
     """
 
     _ptr=0
@@ -1343,7 +1372,7 @@ class thermo_np_deriv_press:
 
 class thermo_np_deriv_helm:
     """
-    Python interface for class :ref:`o2sclp:thermo_np_deriv_helm`.
+    Python interface for class :ref:`thermo_np_deriv_helm <o2sclp:thermo_np_deriv_helm>`.
     """
 
     _ptr=0
@@ -1493,7 +1522,7 @@ class thermo_np_deriv_helm:
 
 class part_deriv_press:
     """
-    Python interface for class :ref:`o2sclp:part_deriv_press`.
+    Python interface for class :ref:`part_deriv_press <o2sclp:part_deriv_press>`.
     """
 
     _ptr=0
@@ -1593,7 +1622,7 @@ class part_deriv_press:
 
 class part_deriv(part):
     """
-    Python interface for class :ref:`o2sclp:part_deriv`.
+    Python interface for class :ref:`part_deriv <o2sclp:part_deriv>`.
     """
 
     def __init__(self,dll):
@@ -1620,7 +1649,7 @@ class part_deriv(part):
 
 class fermion_deriv(fermion):
     """
-    Python interface for class :ref:`o2sclp:fermion_deriv`.
+    Python interface for class :ref:`fermion_deriv <o2sclp:fermion_deriv>`.
     """
 
     def __init__(self,dll):
@@ -1647,7 +1676,7 @@ class fermion_deriv(fermion):
 
 class deriv_thermo_base:
     """
-    Python interface for class :ref:`o2sclp:deriv_thermo_base`.
+    Python interface for class :ref:`deriv_thermo_base <o2sclp:deriv_thermo_base>`.
     """
 
     _ptr=0
@@ -1743,7 +1772,7 @@ class deriv_thermo_base:
 
 class fermion_deriv_rel:
     """
-    Python interface for class :ref:`o2sclp:fermion_deriv_rel`.
+    Python interface for class :ref:`fermion_deriv_rel <o2sclp:fermion_deriv_rel>`.
     """
 
     _ptr=0
@@ -1966,7 +1995,7 @@ class fermion_deriv_rel:
 
 class fermion_deriv_nr:
     """
-    Python interface for class :ref:`o2sclp:fermion_deriv_nr`.
+    Python interface for class :ref:`fermion_deriv_nr <o2sclp:fermion_deriv_nr>`.
     """
 
     _ptr=0
@@ -2087,7 +2116,7 @@ class fermion_deriv_nr:
 
 class classical_deriv_thermo:
     """
-    Python interface for class :ref:`o2sclp:classical_deriv_thermo`.
+    Python interface for class :ref:`classical_deriv_thermo <o2sclp:classical_deriv_thermo>`.
     """
 
     _ptr=0
