@@ -9,6 +9,7 @@
 
   grade: devel
   confinement: devmode
+  base: core20
   
   parts:
     o2sclpy:
