@@ -244,6 +244,26 @@ class part:
         return
 
     @property
+    def n(self):
+        """
+        Getter function for part::n .
+        """
+        func=self._dll.o2scl_part_get_n
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @n.setter
+    def n(self,value):
+        """
+        Setter function for part::n .
+        """
+        func=self._dll.o2scl_part_set_n
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
     def ed(self):
         """
         Getter function for part::ed .
@@ -2162,5 +2182,115 @@ class classical_deriv_thermo:
         func=self._dll.o2scl_classical_deriv_thermo_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,p._ptr,T)
+        return
+
+class fermion_mag_zerot:
+    """
+    Python interface for class :ref:`fermion_mag_zerot <o2sclp:fermion_mag_zerot>`.
+    """
+
+    _ptr=0
+    _dll=0
+
+    def __init__(self,dll):
+        """
+        Init function for class fermion_mag_zerot .
+        """
+
+        f=dll.o2scl_create_fermion_mag_zerot
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class fermion_mag_zerot .
+        """
+
+        f=self._dll.o2scl_free_fermion_mag_zerot
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def nmax_up(self):
+        """
+        Getter function for fermion_mag_zerot::nmax_up .
+        """
+        func=self._dll.o2scl_fermion_mag_zerot_get_nmax_up
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @nmax_up.setter
+    def nmax_up(self,value):
+        """
+        Setter function for fermion_mag_zerot::nmax_up .
+        """
+        func=self._dll.o2scl_fermion_mag_zerot_set_nmax_up
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def nmax_dn(self):
+        """
+        Getter function for fermion_mag_zerot::nmax_dn .
+        """
+        func=self._dll.o2scl_fermion_mag_zerot_get_nmax_dn
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @nmax_dn.setter
+    def nmax_dn(self,value):
+        """
+        Setter function for fermion_mag_zerot::nmax_dn .
+        """
+        func=self._dll.o2scl_fermion_mag_zerot_set_nmax_dn
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def sum_limit(self):
+        """
+        Getter function for fermion_mag_zerot::sum_limit .
+        """
+        func=self._dll.o2scl_fermion_mag_zerot_get_sum_limit
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @sum_limit.setter
+    def sum_limit(self,value):
+        """
+        Setter function for fermion_mag_zerot::sum_limit .
+        """
+        func=self._dll.o2scl_fermion_mag_zerot_set_sum_limit
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    def calc_mu_zerot_mag(self,f,qB,kappa):
+        """
+        Wrapper for fermion_mag_zerot::calc_mu_zerot_mag() .
+        wrapper for :ref:`o2sclp:fermion_mag_zerot::calc_mu_zerot_mag()`.
+        """
+        func=self._dll.o2scl_fermion_mag_zerot_calc_mu_zerot_mag
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,f._ptr,qB,kappa)
+        return
+
+    def calc_density_zerot_mag(self,f,qB,kappa):
+        """
+        Wrapper for fermion_mag_zerot::calc_density_zerot_mag() .
+        wrapper for :ref:`o2sclp:fermion_mag_zerot::calc_density_zerot_mag()`.
+        """
+        func=self._dll.o2scl_fermion_mag_zerot_calc_density_zerot_mag
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,f._ptr,qB,kappa)
         return
 
