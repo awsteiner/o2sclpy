@@ -23,6 +23,8 @@
 import ctypes
 from abc import abstractmethod
 
+from o2sclpy.part import *
+
 class nucleus(part):
     """
     Python interface for class :ref:`nucleus <o2sclp:nucleus>`.
@@ -208,7 +210,7 @@ class nucmass_info:
         wrapper for :ref:`o2sclp:nucmass_info::Ztoel()`.
         """
         func=self._dll.o2scl_nucmass_info_Ztoel
-        func.restype=ctypes.c_std::string
+        func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,Z)
         return ret
@@ -219,7 +221,7 @@ class nucmass_info:
         wrapper for :ref:`o2sclp:nucmass_info::Ztoname()`.
         """
         func=self._dll.o2scl_nucmass_info_Ztoname
-        func.restype=ctypes.c_std::string
+        func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,Z)
         return ret
@@ -230,7 +232,7 @@ class nucmass_info:
         wrapper for :ref:`o2sclp:nucmass_info::tostring()`.
         """
         func=self._dll.o2scl_nucmass_info_tostring
-        func.restype=ctypes.c_std::string
+        func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         ret=func(self._ptr,Z,N)
         return ret
@@ -241,7 +243,7 @@ class nucmass_info:
         wrapper for :ref:`o2sclp:nucmass_info::int_to_spinp()`.
         """
         func=self._dll.o2scl_nucmass_info_int_to_spinp
-        func.restype=ctypes.c_std::string
+        func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         ret=func(self._ptr,g)
         return ret
@@ -586,7 +588,7 @@ class nucmass_table(nucmass):
         Getter function for nucmass_table::reference .
         """
         func=self._dll.o2scl_nucmass_table_get_reference
-        func.restype=ctypes.c_std::string
+        func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         return func(self._ptr,reference._ptr)
 
@@ -668,4 +670,153 @@ class nucmass_fit_base(nucmass):
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
+
+class nucmass_semi_empirical(nucmass_fit_base):
+    """
+    Python interface for class :ref:`nucmass_semi_empirical <o2sclp:nucmass_semi_empirical>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class nucmass_semi_empirical .
+        """
+
+        f=dll.o2scl_create_nucmass_semi_empirical
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_semi_empirical .
+        """
+
+        f=self._dll.o2scl_free_nucmass_semi_empirical
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def B(self):
+        """
+        Getter function for nucmass_semi_empirical::B .
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_get_B
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @B.setter
+    def B(self,value):
+        """
+        Setter function for nucmass_semi_empirical::B .
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_set_B
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Sv(self):
+        """
+        Getter function for nucmass_semi_empirical::Sv .
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_get_Sv
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Sv.setter
+    def Sv(self,value):
+        """
+        Setter function for nucmass_semi_empirical::Sv .
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_set_Sv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Ss(self):
+        """
+        Getter function for nucmass_semi_empirical::Ss .
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_get_Ss
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Ss.setter
+    def Ss(self,value):
+        """
+        Setter function for nucmass_semi_empirical::Ss .
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_set_Ss
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Ec(self):
+        """
+        Getter function for nucmass_semi_empirical::Ec .
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_get_Ec
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Ec.setter
+    def Ec(self,value):
+        """
+        Setter function for nucmass_semi_empirical::Ec .
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_set_Ec
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Epair(self):
+        """
+        Getter function for nucmass_semi_empirical::Epair .
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_get_Epair
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Epair.setter
+    def Epair(self,value):
+        """
+        Setter function for nucmass_semi_empirical::Epair .
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_set_Epair
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    def mass_excess(self,Z,N):
+        """
+        Wrapper for nucmass_semi_empirical::mass_excess() .
+        wrapper for :ref:`o2sclp:nucmass_semi_empirical::mass_excess()`.
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_mass_excess
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
+        ret=func(self._ptr,Z,N)
+        return ret
+
+    def mass_excess_d(self,Z,N):
+        """
+        Wrapper for nucmass_semi_empirical::mass_excess_d() .
+        wrapper for :ref:`o2sclp:nucmass_semi_empirical::mass_excess_d()`.
+        """
+        func=self._dll.o2scl_nucmass_semi_empirical_mass_excess_d
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,Z,N)
+        return ret
 
