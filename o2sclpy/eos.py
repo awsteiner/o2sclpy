@@ -23,6 +23,7 @@
 import ctypes
 from abc import abstractmethod
 
+
 class eos_base:
     """
     Python interface for class :ref:`eos_base <o2scle:eos_base>`.
@@ -768,7 +769,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         Getter function for eos_had_skyrme::reference .
         """
         func=self._dll.o2scl_eos_had_skyrme_get_reference
-        func.restype=ctypes.c_std::string
+        func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         return func(self._ptr,reference._ptr)
 
