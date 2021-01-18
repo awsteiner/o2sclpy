@@ -940,9 +940,9 @@ class fermion_rel(fermion_thermo):
         Getter function for fermion_rel::unc .
         """
         func=self._dll.o2scl_fermion_rel_get_unc
-        func.restype=ctypes.c_fermion
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        return func(self._ptr,unc._ptr)
+        func(self._ptr,unc._ptr)
+        return
 
     def set_unc(self,value):
         """
@@ -1886,9 +1886,9 @@ class fermion_deriv_rel:
         Getter function for fermion_deriv_rel::unc .
         """
         func=self._dll.o2scl_fermion_deriv_rel_get_unc
-        func.restype=ctypes.c_fermion_deriv
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        return func(self._ptr,unc._ptr)
+        func(self._ptr,unc._ptr)
+        return
 
     def set_unc(self,value):
         """
@@ -2069,9 +2069,9 @@ class fermion_deriv_nr:
         Getter function for fermion_deriv_nr::unc .
         """
         func=self._dll.o2scl_fermion_deriv_nr_get_unc
-        func.restype=ctypes.c_fermion_deriv
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        return func(self._ptr,unc._ptr)
+        func(self._ptr,unc._ptr)
+        return
 
     def set_unc(self,value):
         """

@@ -59,9 +59,9 @@ class eos_base:
         Getter function for eos_base::def_thermo .
         """
         func=self._dll.o2scl_eos_base_get_def_thermo
-        func.restype=ctypes.c_o2scl::thermo
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        return func(self._ptr,def_thermo._ptr)
+        func(self._ptr,def_thermo._ptr)
+        return
 
     def set_def_thermo(self,value):
         """
@@ -71,27 +71,6 @@ class eos_base:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
-
-    def set_thermo(self,th):
-        """
-        Wrapper for eos_base::set_thermo() .
-        wrapper for :ref:`o2sclp:eos_base::set_thermo()`.
-        """
-        func=self._dll.o2scl_eos_base_set_thermo
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,th._ptr)
-        return
-
-    def get_thermo(self,):
-        """
-        Wrapper for eos_base::get_thermo() .
-        wrapper for :ref:`o2sclp:eos_base::get_thermo()`.
-        """
-        func=self._dll.o2scl_eos_base_get_thermo
-        func.restype=ctypes.c_o2scl::thermo
-        func.argtypes=[ctypes.c_void_p,]
-        ret=func(self._ptr,)
-        return ret
 
 class eos_had_base(eos_base):
     """
@@ -266,9 +245,9 @@ class eos_had_base(eos_base):
         Getter function for eos_had_base::def_neutron .
         """
         func=self._dll.o2scl_eos_had_base_get_def_neutron
-        func.restype=ctypes.c_o2scl::fermion
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        return func(self._ptr,def_neutron._ptr)
+        func(self._ptr,def_neutron._ptr)
+        return
 
     def set_def_neutron(self,value):
         """
@@ -284,9 +263,9 @@ class eos_had_base(eos_base):
         Getter function for eos_had_base::def_proton .
         """
         func=self._dll.o2scl_eos_had_base_get_def_proton
-        func.restype=ctypes.c_o2scl::fermion
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        return func(self._ptr,def_proton._ptr)
+        func(self._ptr,def_proton._ptr)
+        return
 
     def set_def_proton(self,value):
         """
@@ -296,6 +275,17 @@ class eos_had_base(eos_base):
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
+
+    def calc_e(self,n,p,th):
+        """
+        Wrapper for eos_had_base::calc_e() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_e()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_e
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,n._ptr,p._ptr,th._ptr)
+        return ret
 
 class eos_had_eden_base(eos_had_base):
     """
@@ -771,7 +761,8 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         func=self._dll.o2scl_eos_had_skyrme_get_reference
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        return func(self._ptr,reference._ptr)
+        func(self._ptr,reference._ptr)
+        return
 
     def set_reference(self,value):
         """
@@ -787,9 +778,9 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         Getter function for eos_had_skyrme::nrfd .
         """
         func=self._dll.o2scl_eos_had_skyrme_get_nrfd
-        func.restype=ctypes.c_o2scl::fermion_deriv_nr
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        return func(self._ptr,nrfd._ptr)
+        func(self._ptr,nrfd._ptr)
+        return
 
     def set_nrfd(self,value):
         """

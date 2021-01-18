@@ -22,6 +22,7 @@
 
 import ctypes
 from abc import abstractmethod
+from o2sclpy.utils import force_bytes
 
 from o2sclpy.part import *
 
@@ -590,7 +591,8 @@ class nucmass_table(nucmass):
         func=self._dll.o2scl_nucmass_table_get_reference
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        return func(self._ptr,reference._ptr)
+        func(self._ptr,reference._ptr)
+        return
 
     def set_reference(self,value):
         """
@@ -819,4 +821,41 @@ class nucmass_semi_empirical(nucmass_fit_base):
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,Z,N)
         return ret
+
+class nucmass_ame(nucmass_table):
+    """
+    Python interface for class :ref:`nucmass_ame <o2sclp:nucmass_ame>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class nucmass_ame .
+        """
+
+        f=dll.o2scl_create_nucmass_ame
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_ame .
+        """
+
+        f=self._dll.o2scl_free_nucmass_ame
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+def ame_load(dll,ame,name,exp_only):
+    """
+    Wrapper for ame_load() .
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=dll.o2scl_ame_load_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
+    func(ame._ptr,name_,exp_only)
+    return
 
