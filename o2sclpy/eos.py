@@ -22,6 +22,7 @@
 
 import ctypes
 from abc import abstractmethod
+from o2sclpy.utils import force_bytes
 
 
 class eos_base:
@@ -789,5 +790,820 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         func=self._dll.o2scl_eos_had_skyrme_set_nrfd
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
+        return
+
+class eos_had_apr(eos_had_temp_eden_base):
+    """
+    Python interface for class :ref:`eos_had_apr <o2scle:eos_had_apr>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class eos_had_apr .
+        """
+
+        f=dll.o2scl_create_eos_had_apr
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_had_apr .
+        """
+
+        f=self._dll.o2scl_free_eos_had_apr
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def pion(self):
+        """
+        Getter function for eos_had_apr::pion .
+        """
+        func=self._dll.o2scl_eos_had_apr_get_pion
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @pion.setter
+    def pion(self,value):
+        """
+        Setter function for eos_had_apr::pion .
+        """
+        func=self._dll.o2scl_eos_had_apr_set_pion
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def parent_method(self):
+        """
+        Getter function for eos_had_apr::parent_method .
+        """
+        func=self._dll.o2scl_eos_had_apr_get_parent_method
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @parent_method.setter
+    def parent_method(self,value):
+        """
+        Setter function for eos_had_apr::parent_method .
+        """
+        func=self._dll.o2scl_eos_had_apr_set_parent_method
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+class eos_had_rmf(eos_had_temp_pres_base):
+    """
+    Python interface for class :ref:`eos_had_rmf <o2scle:eos_had_rmf>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class eos_had_rmf .
+        """
+
+        f=dll.o2scl_create_eos_had_rmf
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_had_rmf .
+        """
+
+        f=self._dll.o2scl_free_eos_had_rmf
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def calc_e_steps(self):
+        """
+        Getter function for eos_had_rmf::calc_e_steps .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_calc_e_steps
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @calc_e_steps.setter
+    def calc_e_steps(self,value):
+        """
+        Setter function for eos_had_rmf::calc_e_steps .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_calc_e_steps
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def calc_e_relative(self):
+        """
+        Getter function for eos_had_rmf::calc_e_relative .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_calc_e_relative
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @calc_e_relative.setter
+    def calc_e_relative(self,value):
+        """
+        Setter function for eos_had_rmf::calc_e_relative .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_calc_e_relative
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def zm_mode(self):
+        """
+        Getter function for eos_had_rmf::zm_mode .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_zm_mode
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @zm_mode.setter
+    def zm_mode(self,value):
+        """
+        Setter function for eos_had_rmf::zm_mode .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_zm_mode
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def verbose(self):
+        """
+        Getter function for eos_had_rmf::verbose .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for eos_had_rmf::verbose .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def err_nonconv(self):
+        """
+        Getter function for eos_had_rmf::err_nonconv .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_err_nonconv
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @err_nonconv.setter
+    def err_nonconv(self,value):
+        """
+        Setter function for eos_had_rmf::err_nonconv .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_err_nonconv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def mnuc(self):
+        """
+        Getter function for eos_had_rmf::mnuc .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_mnuc
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @mnuc.setter
+    def mnuc(self,value):
+        """
+        Setter function for eos_had_rmf::mnuc .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_mnuc
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def ms(self):
+        """
+        Getter function for eos_had_rmf::ms .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_ms
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @ms.setter
+    def ms(self,value):
+        """
+        Setter function for eos_had_rmf::ms .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_ms
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def mw(self):
+        """
+        Getter function for eos_had_rmf::mw .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_mw
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @mw.setter
+    def mw(self,value):
+        """
+        Setter function for eos_had_rmf::mw .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_mw
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def mr(self):
+        """
+        Getter function for eos_had_rmf::mr .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_mr
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @mr.setter
+    def mr(self,value):
+        """
+        Setter function for eos_had_rmf::mr .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_mr
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def cs(self):
+        """
+        Getter function for eos_had_rmf::cs .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_cs
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @cs.setter
+    def cs(self,value):
+        """
+        Setter function for eos_had_rmf::cs .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_cs
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def cw(self):
+        """
+        Getter function for eos_had_rmf::cw .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_cw
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @cw.setter
+    def cw(self,value):
+        """
+        Setter function for eos_had_rmf::cw .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_cw
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def cr(self):
+        """
+        Getter function for eos_had_rmf::cr .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_cr
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @cr.setter
+    def cr(self,value):
+        """
+        Setter function for eos_had_rmf::cr .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_cr
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def b(self):
+        """
+        Getter function for eos_had_rmf::b .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_b
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @b.setter
+    def b(self,value):
+        """
+        Setter function for eos_had_rmf::b .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_b
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def c(self):
+        """
+        Getter function for eos_had_rmf::c .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_c
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @c.setter
+    def c(self,value):
+        """
+        Setter function for eos_had_rmf::c .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_c
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def zeta(self):
+        """
+        Getter function for eos_had_rmf::zeta .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_zeta
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @zeta.setter
+    def zeta(self,value):
+        """
+        Setter function for eos_had_rmf::zeta .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_zeta
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def xi(self):
+        """
+        Getter function for eos_had_rmf::xi .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_xi
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @xi.setter
+    def xi(self,value):
+        """
+        Setter function for eos_had_rmf::xi .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_xi
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def a1(self):
+        """
+        Getter function for eos_had_rmf::a1 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_a1
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @a1.setter
+    def a1(self,value):
+        """
+        Setter function for eos_had_rmf::a1 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_a1
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def a2(self):
+        """
+        Getter function for eos_had_rmf::a2 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_a2
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @a2.setter
+    def a2(self,value):
+        """
+        Setter function for eos_had_rmf::a2 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_a2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def a3(self):
+        """
+        Getter function for eos_had_rmf::a3 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_a3
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @a3.setter
+    def a3(self,value):
+        """
+        Setter function for eos_had_rmf::a3 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_a3
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def a4(self):
+        """
+        Getter function for eos_had_rmf::a4 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_a4
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @a4.setter
+    def a4(self,value):
+        """
+        Setter function for eos_had_rmf::a4 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_a4
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def a5(self):
+        """
+        Getter function for eos_had_rmf::a5 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_a5
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @a5.setter
+    def a5(self,value):
+        """
+        Setter function for eos_had_rmf::a5 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_a5
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def a6(self):
+        """
+        Getter function for eos_had_rmf::a6 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_a6
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @a6.setter
+    def a6(self,value):
+        """
+        Setter function for eos_had_rmf::a6 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_a6
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def b1(self):
+        """
+        Getter function for eos_had_rmf::b1 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_b1
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @b1.setter
+    def b1(self,value):
+        """
+        Setter function for eos_had_rmf::b1 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_b1
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def b2(self):
+        """
+        Getter function for eos_had_rmf::b2 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_b2
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @b2.setter
+    def b2(self,value):
+        """
+        Setter function for eos_had_rmf::b2 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_b2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def b3(self):
+        """
+        Getter function for eos_had_rmf::b3 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_get_b3
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @b3.setter
+    def b3(self,value):
+        """
+        Setter function for eos_had_rmf::b3 .
+        """
+        func=self._dll.o2scl_eos_had_rmf_set_b3
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+class eos_quark(eos_base):
+    """
+    Python interface for class :ref:`eos_quark <o2scle:eos_quark>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class eos_quark .
+        """
+
+        f=dll.o2scl_create_eos_quark
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_quark .
+        """
+
+        f=self._dll.o2scl_free_eos_quark
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+class eos_quark_bag(eos_quark):
+    """
+    Python interface for class :ref:`eos_quark_bag <o2scle:eos_quark_bag>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class eos_quark_bag .
+        """
+
+        f=dll.o2scl_create_eos_quark_bag
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_quark_bag .
+        """
+
+        f=self._dll.o2scl_free_eos_quark_bag
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def bag_constant(self):
+        """
+        Getter function for eos_quark_bag::bag_constant .
+        """
+        func=self._dll.o2scl_eos_quark_bag_get_bag_constant
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @bag_constant.setter
+    def bag_constant(self,value):
+        """
+        Setter function for eos_quark_bag::bag_constant .
+        """
+        func=self._dll.o2scl_eos_quark_bag_set_bag_constant
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+class eos_quark_njl(eos_quark):
+    """
+    Python interface for class :ref:`eos_quark_njl <o2scle:eos_quark_njl>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class eos_quark_njl .
+        """
+
+        f=dll.o2scl_create_eos_quark_njl
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_quark_njl .
+        """
+
+        f=self._dll.o2scl_free_eos_quark_njl
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def B0(self):
+        """
+        Getter function for eos_quark_njl::B0 .
+        """
+        func=self._dll.o2scl_eos_quark_njl_get_B0
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @B0.setter
+    def B0(self,value):
+        """
+        Setter function for eos_quark_njl::B0 .
+        """
+        func=self._dll.o2scl_eos_quark_njl_set_B0
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def L(self):
+        """
+        Getter function for eos_quark_njl::L .
+        """
+        func=self._dll.o2scl_eos_quark_njl_get_L
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @L.setter
+    def L(self,value):
+        """
+        Setter function for eos_quark_njl::L .
+        """
+        func=self._dll.o2scl_eos_quark_njl_set_L
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def G(self):
+        """
+        Getter function for eos_quark_njl::G .
+        """
+        func=self._dll.o2scl_eos_quark_njl_get_G
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @G.setter
+    def G(self,value):
+        """
+        Setter function for eos_quark_njl::G .
+        """
+        func=self._dll.o2scl_eos_quark_njl_set_G
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def K(self):
+        """
+        Getter function for eos_quark_njl::K .
+        """
+        func=self._dll.o2scl_eos_quark_njl_get_K
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @K.setter
+    def K(self,value):
+        """
+        Setter function for eos_quark_njl::K .
+        """
+        func=self._dll.o2scl_eos_quark_njl_set_K
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def limit(self):
+        """
+        Getter function for eos_quark_njl::limit .
+        """
+        func=self._dll.o2scl_eos_quark_njl_get_limit
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @limit.setter
+    def limit(self,value):
+        """
+        Setter function for eos_quark_njl::limit .
+        """
+        func=self._dll.o2scl_eos_quark_njl_set_limit
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def fromqq(self):
+        """
+        Getter function for eos_quark_njl::fromqq .
+        """
+        func=self._dll.o2scl_eos_quark_njl_get_fromqq
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @fromqq.setter
+    def fromqq(self,value):
+        """
+        Setter function for eos_quark_njl::fromqq .
+        """
+        func=self._dll.o2scl_eos_quark_njl_set_fromqq
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
         return
 
