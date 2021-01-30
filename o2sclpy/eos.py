@@ -288,6 +288,356 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,n._ptr,p._ptr,th._ptr)
         return ret
 
+    def calc_p(self,n,p,th):
+        """
+        Wrapper for eos_had_base::calc_p() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_p()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_p
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,n._ptr,p._ptr,th._ptr)
+        return ret
+
+    def fcomp(self,nb,delta):
+        """
+        Wrapper for eos_had_base::fcomp() .
+        wrapper for :ref:`o2sclp:eos_had_base::fcomp()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fcomp
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def fcomp_err(self,nb,delta,unc):
+        """
+        Wrapper for eos_had_base::fcomp_err() .
+        wrapper for :ref:`o2sclp:eos_had_base::fcomp_err()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fcomp_err
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,nb,delta,unc._ptr)
+        return ret
+
+    def feoa(self,nb,delta):
+        """
+        Wrapper for eos_had_base::feoa() .
+        wrapper for :ref:`o2sclp:eos_had_base::feoa()`.
+        """
+        func=self._dll.o2scl_eos_had_base_feoa
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def fesym(self,nb,delta):
+        """
+        Wrapper for eos_had_base::fesym() .
+        wrapper for :ref:`o2sclp:eos_had_base::fesym()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fesym
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def fesym_err(self,nb,delta,unc):
+        """
+        Wrapper for eos_had_base::fesym_err() .
+        wrapper for :ref:`o2sclp:eos_had_base::fesym_err()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fesym_err
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,nb,delta,unc._ptr)
+        return ret
+
+    def fesym_slope(self,nb,delta):
+        """
+        Wrapper for eos_had_base::fesym_slope() .
+        wrapper for :ref:`o2sclp:eos_had_base::fesym_slope()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fesym_slope
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def fesym_curve(self,nb,delta):
+        """
+        Wrapper for eos_had_base::fesym_curve() .
+        wrapper for :ref:`o2sclp:eos_had_base::fesym_curve()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fesym_curve
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def fesym_skew(self,nb,delta):
+        """
+        Wrapper for eos_had_base::fesym_skew() .
+        wrapper for :ref:`o2sclp:eos_had_base::fesym_skew()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fesym_skew
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def fesym_diff(self,nb):
+        """
+        Wrapper for eos_had_base::fesym_diff() .
+        wrapper for :ref:`o2sclp:eos_had_base::fesym_diff()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fesym_diff
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,nb)
+        return ret
+
+    def feta(self,nb):
+        """
+        Wrapper for eos_had_base::feta() .
+        wrapper for :ref:`o2sclp:eos_had_base::feta()`.
+        """
+        func=self._dll.o2scl_eos_had_base_feta
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,nb)
+        return ret
+
+    def feta_prime(self,nb):
+        """
+        Wrapper for eos_had_base::feta_prime() .
+        wrapper for :ref:`o2sclp:eos_had_base::feta_prime()`.
+        """
+        func=self._dll.o2scl_eos_had_base_feta_prime
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,nb)
+        return ret
+
+    def fkprime(self,nb,delta):
+        """
+        Wrapper for eos_had_base::fkprime() .
+        wrapper for :ref:`o2sclp:eos_had_base::fkprime()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fkprime
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def fmsom(self,nb,delta):
+        """
+        Wrapper for eos_had_base::fmsom() .
+        wrapper for :ref:`o2sclp:eos_had_base::fmsom()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fmsom
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def f_effm_neut(self,nb,delta):
+        """
+        Wrapper for eos_had_base::f_effm_neut() .
+        wrapper for :ref:`o2sclp:eos_had_base::f_effm_neut()`.
+        """
+        func=self._dll.o2scl_eos_had_base_f_effm_neut
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def f_effm_prot(self,nb,delta):
+        """
+        Wrapper for eos_had_base::f_effm_prot() .
+        wrapper for :ref:`o2sclp:eos_had_base::f_effm_prot()`.
+        """
+        func=self._dll.o2scl_eos_had_base_f_effm_prot
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def f_effm_scalar(self,nb,delta):
+        """
+        Wrapper for eos_had_base::f_effm_scalar() .
+        wrapper for :ref:`o2sclp:eos_had_base::f_effm_scalar()`.
+        """
+        func=self._dll.o2scl_eos_had_base_f_effm_scalar
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def f_effm_vector(self,nb,delta):
+        """
+        Wrapper for eos_had_base::f_effm_vector() .
+        wrapper for :ref:`o2sclp:eos_had_base::f_effm_vector()`.
+        """
+        func=self._dll.o2scl_eos_had_base_f_effm_vector
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def fn0(self,delta,leoa):
+        """
+        Wrapper for eos_had_base::fn0() .
+        wrapper for :ref:`o2sclp:eos_had_base::fn0()`.
+        """
+        func=self._dll.o2scl_eos_had_base_fn0
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,delta,leoa._ptr)
+        return ret
+
+    def f_number_suscept(self,mun,mup,dPdnn,dPdnp,dPdpp):
+        """
+        Wrapper for eos_had_base::f_number_suscept() .
+        wrapper for :ref:`o2sclp:eos_had_base::f_number_suscept()`.
+        """
+        func=self._dll.o2scl_eos_had_base_f_number_suscept
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,mun,mup,dPdnn._ptr,dPdnp._ptr,dPdpp._ptr)
+        return
+
+    def f_inv_number_suscept(self,mun,mup,dednn,dednp,dedpp):
+        """
+        Wrapper for eos_had_base::f_inv_number_suscept() .
+        wrapper for :ref:`o2sclp:eos_had_base::f_inv_number_suscept()`.
+        """
+        func=self._dll.o2scl_eos_had_base_f_inv_number_suscept
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,mun,mup,dednn._ptr,dednp._ptr,dedpp._ptr)
+        return
+
+    def saturation(self):
+        """
+        Wrapper for eos_had_base::saturation() .
+        wrapper for :ref:`o2sclp:eos_had_base::saturation()`.
+        """
+        func=self._dll.o2scl_eos_had_base_saturation
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
+    def calc_mun_e(self,nn,np):
+        """
+        Wrapper for eos_had_base::calc_mun_e() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_mun_e()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_mun_e
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nn,np)
+        return ret
+
+    def calc_mup_e(self,nn,np):
+        """
+        Wrapper for eos_had_base::calc_mup_e() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_mup_e()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_mup_e
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nn,np)
+        return ret
+
+    def calc_ed(self,nn,np):
+        """
+        Wrapper for eos_had_base::calc_ed() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_ed()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_ed
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nn,np)
+        return ret
+
+    def calc_pr(self,nn,np):
+        """
+        Wrapper for eos_had_base::calc_pr() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_pr()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_pr
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nn,np)
+        return ret
+
+    def calc_nn_p(self,mun,mup):
+        """
+        Wrapper for eos_had_base::calc_nn_p() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_nn_p()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_nn_p
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,mun,mup)
+        return ret
+
+    def calc_np_p(self,nn,mup):
+        """
+        Wrapper for eos_had_base::calc_np_p() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_np_p()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_np_p
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nn,mup)
+        return ret
+
+    def calc_dmu_delta(self,nb,delta):
+        """
+        Wrapper for eos_had_base::calc_dmu_delta() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_dmu_delta()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_dmu_delta
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def calc_musum_delta(self,nb,delta):
+        """
+        Wrapper for eos_had_base::calc_musum_delta() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_musum_delta()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_musum_delta
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def calc_pressure_nb(self,nb,delta):
+        """
+        Wrapper for eos_had_base::calc_pressure_nb() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_pressure_nb()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_pressure_nb
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
+    def calc_edensity_nb(self,nb,delta):
+        """
+        Wrapper for eos_had_base::calc_edensity_nb() .
+        wrapper for :ref:`o2sclp:eos_had_base::calc_edensity_nb()`.
+        """
+        func=self._dll.o2scl_eos_had_base_calc_edensity_nb
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nb,delta)
+        return ret
+
 class eos_had_eden_base(eos_had_base):
     """
     Python interface for class :ref:`eos_had_eden_base <o2scle:eos_had_eden_base>`.
@@ -1606,4 +1956,24 @@ class eos_quark_njl(eos_quark):
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
+
+def skyrme_load(dll,sk,model,external,verbose):
+    """
+    Wrapper for skyrme_load() .
+    """
+    model_=ctypes.c_char_p(force_bytes(model))
+    func=dll.o2scl_skyrme_load_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool,ctypes.c_int]
+    func(sk._ptr,model_,external,verbose)
+    return
+
+def rmf_load(dll,rmf,model,external):
+    """
+    Wrapper for rmf_load() .
+    """
+    model_=ctypes.c_char_p(force_bytes(model))
+    func=dll.o2scl_rmf_load_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
+    func(rmf._ptr,model_,external)
+    return
 
