@@ -35,6 +35,7 @@ from o2sclpy.plot_base import *
 from o2sclpy.plotter import *
 from o2sclpy.o2graph_plotter import *
 from o2sclpy.plot_info import *
+from o2sclpy.base import *
 from o2sclpy.part import *
 from o2sclpy.nuclei import *
 from o2sclpy.eos import *
