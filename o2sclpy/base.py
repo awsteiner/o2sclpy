@@ -132,6 +132,257 @@ class table:
         ret=func(self._ptr,icol)
         return ret
 
+    def clear(self):
+        """
+        Wrapper for table<>::clear() .
+        wrapper for :ref:`o2sclp:table<>::clear()`.
+        """
+        func=self._dll.o2scl_table___clear
+        func.argtypes=[ctypes.c_void_p,]
+        func(self._ptr,)
+        return
+
+    def clear_data(self):
+        """
+        Wrapper for table<>::clear_data() .
+        wrapper for :ref:`o2sclp:table<>::clear_data()`.
+        """
+        func=self._dll.o2scl_table___clear_data
+        func.argtypes=[ctypes.c_void_p,]
+        func(self._ptr,)
+        return
+
+    def clear_table(self):
+        """
+        Wrapper for table<>::clear_table() .
+        wrapper for :ref:`o2sclp:table<>::clear_table()`.
+        """
+        func=self._dll.o2scl_table___clear_table
+        func.argtypes=[ctypes.c_void_p,]
+        func(self._ptr,)
+        return
+
+    def clear_constants(self):
+        """
+        Wrapper for table<>::clear_constants() .
+        wrapper for :ref:`o2sclp:table<>::clear_constants()`.
+        """
+        func=self._dll.o2scl_table___clear_constants
+        func.argtypes=[ctypes.c_void_p,]
+        func(self._ptr,)
+        return
+
+class table_units(table<>):
+    """
+    Python interface for class :ref:`table_units<> <o2scl:table_units<>>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class table_units<> .
+        """
+
+        f=dll.o2scl_create_table_units__
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class table_units<> .
+        """
+
+        f=self._dll.o2scl_free_table_units__
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    def get_unit(self,col):
+        """
+        Wrapper for table_units<>::get_unit() .
+        wrapper for :ref:`o2sclp:table_units<>::get_unit()`.
+        """
+        col_=ctypes.c_char_p(force_bytes(col))
+        func=self._dll.o2scl_table_units___get_unit
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,col_)
+        return ret
+
+    def set_unit(self,col,unit):
+        """
+        Wrapper for table_units<>::set_unit() .
+        wrapper for :ref:`o2sclp:table_units<>::set_unit()`.
+        """
+        col_=ctypes.c_char_p(force_bytes(col))
+        unit_=ctypes.c_char_p(force_bytes(unit))
+        func=self._dll.o2scl_table_units___set_unit
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,col_,unit_)
+        return
+
+    def convert_to_unit(self,col,unit,err_on_fail):
+        """
+        Wrapper for table_units<>::convert_to_unit() .
+        wrapper for :ref:`o2sclp:table_units<>::convert_to_unit()`.
+        """
+        col_=ctypes.c_char_p(force_bytes(col))
+        unit_=ctypes.c_char_p(force_bytes(unit))
+        func=self._dll.o2scl_table_units___convert_to_unit
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_bool]
+        ret=func(self._ptr,col_,unit_,err_on_fail)
+        return ret
+
+    def clear_table(self):
+        """
+        Wrapper for table_units<>::clear_table() .
+        wrapper for :ref:`o2sclp:table_units<>::clear_table()`.
+        """
+        func=self._dll.o2scl_table_units___clear_table
+        func.argtypes=[ctypes.c_void_p,]
+        func(self._ptr,)
+        return
+
+class table3d:
+    """
+    Python interface for class :ref:`table3d <o2scl:table3d>`.
+    """
+
+    _ptr=0
+    _dll=0
+
+    def __init__(self,dll):
+        """
+        Init function for class table3d .
+        """
+
+        f=dll.o2scl_create_table3d
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class table3d .
+        """
+
+        f=self._dll.o2scl_free_table3d
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    def set(self,ix,iy,name,val):
+        """
+        Wrapper for table3d::set() .
+        wrapper for :ref:`o2sclp:table3d::set()`.
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._dll.o2scl_table3d_set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_char_p,ctypes.c_double]
+        func(self._ptr,ix,iy,name_,val)
+        return
+
+    def get(self,ix,iy,name):
+        """
+        Wrapper for table3d::get() .
+        wrapper for :ref:`o2sclp:table3d::get()`.
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._dll.o2scl_table3d_get
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_char_p]
+        ret=func(self._ptr,ix,iy,name_)
+        return ret
+
+    def new_slice(self,slice):
+        """
+        Wrapper for table3d::new_slice() .
+        wrapper for :ref:`o2sclp:table3d::new_slice()`.
+        """
+        slice_=ctypes.c_char_p(force_bytes(slice))
+        func=self._dll.o2scl_table3d_new_slice
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,slice_)
+        return
+
+    def get_nx(self):
+        """
+        Wrapper for table3d::get_nx() .
+        wrapper for :ref:`o2sclp:table3d::get_nx()`.
+        """
+        func=self._dll.o2scl_table3d_get_nx
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
+    def get_ny(self):
+        """
+        Wrapper for table3d::get_ny() .
+        wrapper for :ref:`o2sclp:table3d::get_ny()`.
+        """
+        func=self._dll.o2scl_table3d_get_ny
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
+    def get_nslices(self):
+        """
+        Wrapper for table3d::get_nslices() .
+        wrapper for :ref:`o2sclp:table3d::get_nslices()`.
+        """
+        func=self._dll.o2scl_table3d_get_nslices
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
+class tensor:
+    """
+    Python interface for class :ref:`tensor<> <o2scl:tensor<>>`.
+    """
+
+    _ptr=0
+    _dll=0
+
+    def __init__(self,dll):
+        """
+        Init function for class tensor<> .
+        """
+
+        f=dll.o2scl_create_tensor__
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class tensor<> .
+        """
+
+        f=self._dll.o2scl_free_tensor__
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    def clear(self):
+        """
+        Wrapper for tensor<>::clear() .
+        wrapper for :ref:`o2sclp:tensor<>::clear()`.
+        """
+        func=self._dll.o2scl_tensor___clear
+        func.argtypes=[ctypes.c_void_p,]
+        func(self._ptr,)
+        return
+
 class find_constants:
     """
     Python interface for class :ref:`find_constants <o2scl:find_constants>`.
@@ -350,5 +601,42 @@ class convert_units:
         func=self._dll.o2scl_convert_units___print_cache
         func.argtypes=[ctypes.c_void_p,]
         func(self._ptr,)
+        return
+
+class shared_ptr_table_units(table_units):
+
+    _s_ptr=0
+    _ptr=0
+    _dll=0
+
+    def __init__(self,dll):
+        """
+        Init function for sp table_units<> .
+        """
+
+        self._s_ptr=0
+        self._ptr=0
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for sp table_units<> .
+        """
+
+        f=self._dll.o2scl_free_shared_ptr_table_units__
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    def __set_ptr(self):
+        """
+        Set pointer function for sp table_units<> .
+        """
+
+        f=self._dll.o2scl_shared_ptr_table_units___ptr
+        f.argtypes=[ctypes.c_void_p]
+        f.restype=ctypes.c_void_p
+        self._ptr=f(self._s_ptr)
         return
 
