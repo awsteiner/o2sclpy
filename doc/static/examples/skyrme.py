@@ -1,7 +1,6 @@
 import o2sclpy
 
 l=o2sclpy.linker()
-l.get_library_settings()
 l.link_o2scl_o2graph(True,True)
 
 # Create neutron and proton
