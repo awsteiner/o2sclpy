@@ -524,7 +524,7 @@ class eos_had_base(eos_base):
         """
         func=self._dll.o2scl_eos_had_base_saturation
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr,)
         return ret
 
@@ -2015,7 +2015,7 @@ class eos_tov:
         """
         func=self._dll.o2scl_eos_tov_has_baryons
         func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr,)
         return ret
 
@@ -2206,7 +2206,7 @@ class eos_tov_interp(eos_tov):
         wrapper for :ref:`o2sclp:eos_tov_interp::default_low_dens_eos()`.
         """
         func=self._dll.o2scl_eos_tov_interp_default_low_dens_eos
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -2216,7 +2216,7 @@ class eos_tov_interp(eos_tov):
         wrapper for :ref:`o2sclp:eos_tov_interp::sho11_low_dens_eos()`.
         """
         func=self._dll.o2scl_eos_tov_interp_sho11_low_dens_eos
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -2270,7 +2270,7 @@ class eos_tov_interp(eos_tov):
         wrapper for :ref:`o2sclp:eos_tov_interp::no_low_dens_eos()`.
         """
         func=self._dll.o2scl_eos_tov_interp_no_low_dens_eos
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -2901,7 +2901,7 @@ class tov_solve:
         """
         func=self._dll.o2scl_tov_solve_mvsr
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr,)
         return ret
 
@@ -2923,7 +2923,7 @@ class tov_solve:
         """
         func=self._dll.o2scl_tov_solve_max
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr,)
         return ret
 
@@ -2932,11 +2932,13 @@ class tov_solve:
         Wrapper for tov_solve::get_results() .
         wrapper for :ref:`o2sclp:tov_solve::get_results()`.
         """
+        sp=shared_ptr_table_units()
         func=self._dll.o2scl_tov_solve_get_results
-        func.restype=ctypes.c_table_units<>
-        func.argtypes=[ctypes.c_void_p,]
-        ret=func(self._ptr,)
-        return ret
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        sp._s_ptr=f(self._ptr)
+        sp.__set_ptr()
+        return sp
 
 class tov_love:
     """
@@ -3113,7 +3115,7 @@ class tov_love:
         wrapper for :ref:`o2sclp:tov_love::clear_discs()`.
         """
         func=self._dll.o2scl_tov_love_clear_discs
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -3466,7 +3468,7 @@ class nstar_cold:
         """
         func=self._dll.o2scl_nstar_cold_calc_nstar
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr,)
         return ret
 
@@ -3486,22 +3488,26 @@ class nstar_cold:
         Wrapper for nstar_cold::get_eos_results() .
         wrapper for :ref:`o2sclp:nstar_cold::get_eos_results()`.
         """
+        sp=shared_ptr_table_units()
         func=self._dll.o2scl_nstar_cold_get_eos_results
-        func.restype=ctypes.c_table_units<>
-        func.argtypes=[ctypes.c_void_p,]
-        ret=func(self._ptr,)
-        return ret
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        sp._s_ptr=f(self._ptr)
+        sp.__set_ptr()
+        return sp
 
     def get_tov_results(self):
         """
         Wrapper for nstar_cold::get_tov_results() .
         wrapper for :ref:`o2sclp:nstar_cold::get_tov_results()`.
         """
+        sp=shared_ptr_table_units()
         func=self._dll.o2scl_nstar_cold_get_tov_results
-        func.restype=ctypes.c_table_units<>
-        func.argtypes=[ctypes.c_void_p,]
-        ret=func(self._ptr,)
-        return ret
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        sp._s_ptr=f(self._ptr)
+        sp.__set_ptr()
+        return sp
 
 def skyrme_load(dll,sk,model,external,verbose):
     """
