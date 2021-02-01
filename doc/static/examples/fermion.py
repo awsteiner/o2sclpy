@@ -1,18 +1,18 @@
 import o2sclpy
 
-l=o2sclpy.linker()
-l.link_o2scl_o2graph(True)
+link=o2sclpy.linker()
+link.link_o2scl_o2graph(True)
 
 # Create a fermion with spin 2, mass 1.1, and chemical potential 2.0
 # Mass, chemical potential, and temperature have the same units.
-f=o2sclpy.fermion(l.o2scl_part)
+f=o2sclpy.fermion(link)
 f.g=2.0
 f.m=1.1
 f.mu=2.0
 
 # Create an object with handles the thermodynamics of
 # relativistic fermions
-fr=o2sclpy.fermion_rel(l.o2scl_part)
+fr=o2sclpy.fermion_rel(link)
 
 # Compute the number density, energy density, pressure, and entropy
 # density at a temperature of T=1. Number density has units of mass^3,

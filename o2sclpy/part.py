@@ -22,6 +22,7 @@
 
 import ctypes
 from abc import abstractmethod
+from o2sclpy.utils import force_bytes
 
 
 class thermo:
@@ -30,18 +31,18 @@ class thermo:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class thermo .
         """
 
-        f=dll.o2scl_create_thermo
+        f=link.o2scl_part.o2scl_create_thermo
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -49,7 +50,7 @@ class thermo:
         Delete function for class thermo .
         """
 
-        f=self._dll.o2scl_free_thermo
+        f=self._link.o2scl_part.o2scl_free_thermo
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -59,7 +60,7 @@ class thermo:
         """
         Getter function for thermo::ed .
         """
-        func=self._dll.o2scl_thermo_get_ed
+        func=self._link.o2scl_part.o2scl_thermo_get_ed
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -69,7 +70,7 @@ class thermo:
         """
         Setter function for thermo::ed .
         """
-        func=self._dll.o2scl_thermo_set_ed
+        func=self._link.o2scl_part.o2scl_thermo_set_ed
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -79,7 +80,7 @@ class thermo:
         """
         Getter function for thermo::pr .
         """
-        func=self._dll.o2scl_thermo_get_pr
+        func=self._link.o2scl_part.o2scl_thermo_get_pr
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -89,7 +90,7 @@ class thermo:
         """
         Setter function for thermo::pr .
         """
-        func=self._dll.o2scl_thermo_set_pr
+        func=self._link.o2scl_part.o2scl_thermo_set_pr
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -99,7 +100,7 @@ class thermo:
         """
         Getter function for thermo::en .
         """
-        func=self._dll.o2scl_thermo_get_en
+        func=self._link.o2scl_part.o2scl_thermo_get_en
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -109,7 +110,7 @@ class thermo:
         """
         Setter function for thermo::en .
         """
-        func=self._dll.o2scl_thermo_set_en
+        func=self._link.o2scl_part.o2scl_thermo_set_en
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -120,18 +121,18 @@ class part:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class part .
         """
 
-        f=dll.o2scl_create_part
+        f=link.o2scl_part.o2scl_create_part
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -139,7 +140,7 @@ class part:
         Delete function for class part .
         """
 
-        f=self._dll.o2scl_free_part
+        f=self._link.o2scl_part.o2scl_free_part
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -149,7 +150,7 @@ class part:
         """
         Getter function for part::g .
         """
-        func=self._dll.o2scl_part_get_g
+        func=self._link.o2scl_part.o2scl_part_get_g
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -159,7 +160,7 @@ class part:
         """
         Setter function for part::g .
         """
-        func=self._dll.o2scl_part_set_g
+        func=self._link.o2scl_part.o2scl_part_set_g
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -169,7 +170,7 @@ class part:
         """
         Getter function for part::m .
         """
-        func=self._dll.o2scl_part_get_m
+        func=self._link.o2scl_part.o2scl_part_get_m
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -179,7 +180,7 @@ class part:
         """
         Setter function for part::m .
         """
-        func=self._dll.o2scl_part_set_m
+        func=self._link.o2scl_part.o2scl_part_set_m
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -189,7 +190,7 @@ class part:
         """
         Getter function for part::ms .
         """
-        func=self._dll.o2scl_part_get_ms
+        func=self._link.o2scl_part.o2scl_part_get_ms
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -199,7 +200,7 @@ class part:
         """
         Setter function for part::ms .
         """
-        func=self._dll.o2scl_part_set_ms
+        func=self._link.o2scl_part.o2scl_part_set_ms
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -209,7 +210,7 @@ class part:
         """
         Getter function for part::mu .
         """
-        func=self._dll.o2scl_part_get_mu
+        func=self._link.o2scl_part.o2scl_part_get_mu
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -219,7 +220,7 @@ class part:
         """
         Setter function for part::mu .
         """
-        func=self._dll.o2scl_part_set_mu
+        func=self._link.o2scl_part.o2scl_part_set_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -229,7 +230,7 @@ class part:
         """
         Getter function for part::nu .
         """
-        func=self._dll.o2scl_part_get_nu
+        func=self._link.o2scl_part.o2scl_part_get_nu
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -239,7 +240,7 @@ class part:
         """
         Setter function for part::nu .
         """
-        func=self._dll.o2scl_part_set_nu
+        func=self._link.o2scl_part.o2scl_part_set_nu
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -249,7 +250,7 @@ class part:
         """
         Getter function for part::n .
         """
-        func=self._dll.o2scl_part_get_n
+        func=self._link.o2scl_part.o2scl_part_get_n
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -259,7 +260,7 @@ class part:
         """
         Setter function for part::n .
         """
-        func=self._dll.o2scl_part_set_n
+        func=self._link.o2scl_part.o2scl_part_set_n
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -269,7 +270,7 @@ class part:
         """
         Getter function for part::ed .
         """
-        func=self._dll.o2scl_part_get_ed
+        func=self._link.o2scl_part.o2scl_part_get_ed
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -279,7 +280,7 @@ class part:
         """
         Setter function for part::ed .
         """
-        func=self._dll.o2scl_part_set_ed
+        func=self._link.o2scl_part.o2scl_part_set_ed
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -289,7 +290,7 @@ class part:
         """
         Getter function for part::pr .
         """
-        func=self._dll.o2scl_part_get_pr
+        func=self._link.o2scl_part.o2scl_part_get_pr
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -299,7 +300,7 @@ class part:
         """
         Setter function for part::pr .
         """
-        func=self._dll.o2scl_part_set_pr
+        func=self._link.o2scl_part.o2scl_part_set_pr
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -309,7 +310,7 @@ class part:
         """
         Getter function for part::en .
         """
-        func=self._dll.o2scl_part_get_en
+        func=self._link.o2scl_part.o2scl_part_get_en
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -319,7 +320,7 @@ class part:
         """
         Setter function for part::en .
         """
-        func=self._dll.o2scl_part_set_en
+        func=self._link.o2scl_part.o2scl_part_set_en
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -329,7 +330,7 @@ class part:
         """
         Getter function for part::inc_rest_mass .
         """
-        func=self._dll.o2scl_part_get_inc_rest_mass
+        func=self._link.o2scl_part.o2scl_part_get_inc_rest_mass
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -339,7 +340,7 @@ class part:
         """
         Setter function for part::inc_rest_mass .
         """
-        func=self._dll.o2scl_part_set_inc_rest_mass
+        func=self._link.o2scl_part.o2scl_part_set_inc_rest_mass
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -349,7 +350,7 @@ class part:
         """
         Getter function for part::non_interacting .
         """
-        func=self._dll.o2scl_part_get_non_interacting
+        func=self._link.o2scl_part.o2scl_part_get_non_interacting
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -359,7 +360,7 @@ class part:
         """
         Setter function for part::non_interacting .
         """
-        func=self._dll.o2scl_part_set_non_interacting
+        func=self._link.o2scl_part.o2scl_part_set_non_interacting
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -369,7 +370,7 @@ class part:
         Wrapper for part::init() .
         wrapper for :ref:`o2sclp:part::init()`.
         """
-        func=self._dll.o2scl_part_init
+        func=self._link.o2scl_part.o2scl_part_init
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         func(self._ptr,mass,dof)
         return
@@ -379,7 +380,7 @@ class part:
         Wrapper for part::anti() .
         wrapper for :ref:`o2sclp:part::anti()`.
         """
-        func=self._dll.o2scl_part_anti
+        func=self._link.o2scl_part.o2scl_part_anti
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,ax._ptr)
         return
@@ -389,16 +390,16 @@ class fermion(part):
     Python interface for class :ref:`fermion <o2sclp:fermion_tl>`.
     """
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class fermion .
         """
 
-        f=dll.o2scl_create_fermion
+        f=link.o2scl_part.o2scl_create_fermion
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -406,7 +407,7 @@ class fermion(part):
         Delete function for class fermion .
         """
 
-        f=self._dll.o2scl_free_fermion
+        f=self._link.o2scl_part.o2scl_free_fermion
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -416,7 +417,7 @@ class fermion(part):
         """
         Getter function for fermion::kf .
         """
-        func=self._dll.o2scl_fermion_get_kf
+        func=self._link.o2scl_part.o2scl_fermion_get_kf
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -426,7 +427,7 @@ class fermion(part):
         """
         Setter function for fermion::kf .
         """
-        func=self._dll.o2scl_fermion_set_kf
+        func=self._link.o2scl_part.o2scl_fermion_set_kf
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -436,7 +437,7 @@ class fermion(part):
         """
         Getter function for fermion::delta .
         """
-        func=self._dll.o2scl_fermion_get_delta
+        func=self._link.o2scl_part.o2scl_fermion_get_delta
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -446,7 +447,7 @@ class fermion(part):
         """
         Setter function for fermion::delta .
         """
-        func=self._dll.o2scl_fermion_set_delta
+        func=self._link.o2scl_part.o2scl_fermion_set_delta
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -456,16 +457,16 @@ class quark(fermion):
     Python interface for class :ref:`quark <o2sclp:quark>`.
     """
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class quark .
         """
 
-        f=dll.o2scl_create_quark
+        f=link.o2scl_part.o2scl_create_quark
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -473,7 +474,7 @@ class quark(fermion):
         Delete function for class quark .
         """
 
-        f=self._dll.o2scl_free_quark
+        f=self._link.o2scl_part.o2scl_free_quark
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -483,7 +484,7 @@ class quark(fermion):
         """
         Getter function for quark::B .
         """
-        func=self._dll.o2scl_quark_get_B
+        func=self._link.o2scl_part.o2scl_quark_get_B
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -493,7 +494,7 @@ class quark(fermion):
         """
         Setter function for quark::B .
         """
-        func=self._dll.o2scl_quark_set_B
+        func=self._link.o2scl_part.o2scl_quark_set_B
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -503,7 +504,7 @@ class quark(fermion):
         """
         Getter function for quark::qq .
         """
-        func=self._dll.o2scl_quark_get_qq
+        func=self._link.o2scl_part.o2scl_quark_get_qq
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -513,7 +514,7 @@ class quark(fermion):
         """
         Setter function for quark::qq .
         """
-        func=self._dll.o2scl_quark_set_qq
+        func=self._link.o2scl_part.o2scl_quark_set_qq
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -524,18 +525,18 @@ class fermion_zerot:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class fermion_zerot .
         """
 
-        f=dll.o2scl_create_fermion_zerot
+        f=link.o2scl_part.o2scl_create_fermion_zerot
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -543,7 +544,7 @@ class fermion_zerot:
         Delete function for class fermion_zerot .
         """
 
-        f=self._dll.o2scl_free_fermion_zerot
+        f=self._link.o2scl_part.o2scl_free_fermion_zerot
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -553,7 +554,7 @@ class fermion_zerot:
         Wrapper for fermion_zerot::kf_from_density() .
         wrapper for :ref:`o2sclp:fermion_zerot::kf_from_density()`.
         """
-        func=self._dll.o2scl_fermion_zerot_kf_from_density
+        func=self._link.o2scl_part.o2scl_fermion_zerot_kf_from_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,f._ptr)
         return
@@ -563,7 +564,7 @@ class fermion_zerot:
         Wrapper for fermion_zerot::energy_density_zerot() .
         wrapper for :ref:`o2sclp:fermion_zerot::energy_density_zerot()`.
         """
-        func=self._dll.o2scl_fermion_zerot_energy_density_zerot
+        func=self._link.o2scl_part.o2scl_fermion_zerot_energy_density_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,f._ptr)
         return
@@ -573,7 +574,7 @@ class fermion_zerot:
         Wrapper for fermion_zerot::pressure_zerot() .
         wrapper for :ref:`o2sclp:fermion_zerot::pressure_zerot()`.
         """
-        func=self._dll.o2scl_fermion_zerot_pressure_zerot
+        func=self._link.o2scl_part.o2scl_fermion_zerot_pressure_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,f._ptr)
         return
@@ -583,7 +584,7 @@ class fermion_zerot:
         Wrapper for fermion_zerot::calc_mu_zerot() .
         wrapper for :ref:`o2sclp:fermion_zerot::calc_mu_zerot()`.
         """
-        func=self._dll.o2scl_fermion_zerot_calc_mu_zerot
+        func=self._link.o2scl_part.o2scl_fermion_zerot_calc_mu_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,f._ptr)
         return
@@ -593,7 +594,7 @@ class fermion_zerot:
         Wrapper for fermion_zerot::calc_density_zerot() .
         wrapper for :ref:`o2sclp:fermion_zerot::calc_density_zerot()`.
         """
-        func=self._dll.o2scl_fermion_zerot_calc_density_zerot
+        func=self._link.o2scl_part.o2scl_fermion_zerot_calc_density_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,f._ptr)
         return
@@ -604,16 +605,16 @@ class fermion_thermo(fermion_zerot):
     """
 
     @abstractmethod
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class fermion_thermo .
         """
 
-        f=dll.o2scl_create_fermion_thermo
+        f=link.o2scl_part.o2scl_create_fermion_thermo
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -621,7 +622,7 @@ class fermion_thermo(fermion_zerot):
         Delete function for class fermion_thermo .
         """
 
-        f=self._dll.o2scl_free_fermion_thermo
+        f=self._link.o2scl_part.o2scl_free_fermion_thermo
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -631,7 +632,7 @@ class fermion_thermo(fermion_zerot):
         Wrapper for fermion_thermo::calc_mu_deg() .
         wrapper for :ref:`o2sclp:fermion_thermo::calc_mu_deg()`.
         """
-        func=self._dll.o2scl_fermion_thermo_calc_mu_deg
+        func=self._link.o2scl_part.o2scl_fermion_thermo_calc_mu_deg
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T,prec)
@@ -642,7 +643,7 @@ class fermion_thermo(fermion_zerot):
         Wrapper for fermion_thermo::calc_mu_ndeg() .
         wrapper for :ref:`o2sclp:fermion_thermo::calc_mu_ndeg()`.
         """
-        func=self._dll.o2scl_fermion_thermo_calc_mu_ndeg
+        func=self._link.o2scl_part.o2scl_fermion_thermo_calc_mu_ndeg
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
         ret=func(self._ptr,f._ptr,T,prec,inc_antip)
@@ -653,7 +654,7 @@ class fermion_thermo(fermion_zerot):
         Wrapper for fermion_thermo::massless_calc_mu() .
         wrapper for :ref:`o2sclp:fermion_thermo::massless_calc_mu()`.
         """
-        func=self._dll.o2scl_fermion_thermo_massless_calc_mu
+        func=self._link.o2scl_part.o2scl_fermion_thermo_massless_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,f._ptr,T)
         return
@@ -663,7 +664,7 @@ class fermion_thermo(fermion_zerot):
         Wrapper for fermion_thermo::massless_pair_mu() .
         wrapper for :ref:`o2sclp:fermion_thermo::massless_pair_mu()`.
         """
-        func=self._dll.o2scl_fermion_thermo_massless_pair_mu
+        func=self._link.o2scl_part.o2scl_fermion_thermo_massless_pair_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,f._ptr,T)
         return
@@ -673,7 +674,7 @@ class fermion_thermo(fermion_zerot):
         Wrapper for fermion_thermo::massless_calc_density() .
         wrapper for :ref:`o2sclp:fermion_thermo::massless_calc_density()`.
         """
-        func=self._dll.o2scl_fermion_thermo_massless_calc_density
+        func=self._link.o2scl_part.o2scl_fermion_thermo_massless_calc_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,f._ptr,T)
         return
@@ -683,7 +684,7 @@ class fermion_thermo(fermion_zerot):
         Wrapper for fermion_thermo::massless_pair_density() .
         wrapper for :ref:`o2sclp:fermion_thermo::massless_pair_density()`.
         """
-        func=self._dll.o2scl_fermion_thermo_massless_pair_density
+        func=self._link.o2scl_part.o2scl_fermion_thermo_massless_pair_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,f._ptr,T)
         return
@@ -693,16 +694,16 @@ class fermion_rel(fermion_thermo):
     Python interface for class :ref:`fermion_rel <o2sclp:fermion_rel_tl>`.
     """
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class fermion_rel .
         """
 
-        f=dll.o2scl_create_fermion_rel
+        f=link.o2scl_part.o2scl_create_fermion_rel
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -710,7 +711,7 @@ class fermion_rel(fermion_thermo):
         Delete function for class fermion_rel .
         """
 
-        f=self._dll.o2scl_free_fermion_rel
+        f=self._link.o2scl_part.o2scl_free_fermion_rel
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -720,7 +721,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::err_nonconv .
         """
-        func=self._dll.o2scl_fermion_rel_get_err_nonconv
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_err_nonconv
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -730,7 +731,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::err_nonconv .
         """
-        func=self._dll.o2scl_fermion_rel_set_err_nonconv
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_err_nonconv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -740,7 +741,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::min_psi .
         """
-        func=self._dll.o2scl_fermion_rel_get_min_psi
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_min_psi
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -750,7 +751,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::min_psi .
         """
-        func=self._dll.o2scl_fermion_rel_set_min_psi
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_min_psi
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -760,7 +761,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::deg_limit .
         """
-        func=self._dll.o2scl_fermion_rel_get_deg_limit
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_deg_limit
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -770,7 +771,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::deg_limit .
         """
-        func=self._dll.o2scl_fermion_rel_set_deg_limit
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_deg_limit
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -780,7 +781,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::exp_limit .
         """
-        func=self._dll.o2scl_fermion_rel_get_exp_limit
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_exp_limit
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -790,7 +791,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::exp_limit .
         """
-        func=self._dll.o2scl_fermion_rel_set_exp_limit
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_exp_limit
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -800,7 +801,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::upper_limit_fac .
         """
-        func=self._dll.o2scl_fermion_rel_get_upper_limit_fac
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_upper_limit_fac
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -810,7 +811,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::upper_limit_fac .
         """
-        func=self._dll.o2scl_fermion_rel_set_upper_limit_fac
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_upper_limit_fac
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -820,7 +821,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::deg_entropy_fac .
         """
-        func=self._dll.o2scl_fermion_rel_get_deg_entropy_fac
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_deg_entropy_fac
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -830,7 +831,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::deg_entropy_fac .
         """
-        func=self._dll.o2scl_fermion_rel_set_deg_entropy_fac
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_deg_entropy_fac
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -840,7 +841,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::verbose .
         """
-        func=self._dll.o2scl_fermion_rel_get_verbose
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_verbose
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -850,7 +851,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::verbose .
         """
-        func=self._dll.o2scl_fermion_rel_set_verbose
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_verbose
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -860,7 +861,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::use_expansions .
         """
-        func=self._dll.o2scl_fermion_rel_get_use_expansions
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_use_expansions
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -870,7 +871,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::use_expansions .
         """
-        func=self._dll.o2scl_fermion_rel_set_use_expansions
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_use_expansions
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -880,7 +881,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::tol_expan .
         """
-        func=self._dll.o2scl_fermion_rel_get_tol_expan
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_tol_expan
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -890,7 +891,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::tol_expan .
         """
-        func=self._dll.o2scl_fermion_rel_set_tol_expan
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_tol_expan
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -900,7 +901,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::verify_ti .
         """
-        func=self._dll.o2scl_fermion_rel_get_verify_ti
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_verify_ti
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -910,7 +911,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::verify_ti .
         """
-        func=self._dll.o2scl_fermion_rel_set_verify_ti
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_verify_ti
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -920,7 +921,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::therm_ident .
         """
-        func=self._dll.o2scl_fermion_rel_get_therm_ident
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_therm_ident
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -930,7 +931,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::therm_ident .
         """
-        func=self._dll.o2scl_fermion_rel_set_therm_ident
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_therm_ident
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -939,7 +940,7 @@ class fermion_rel(fermion_thermo):
         """
         Getter function for fermion_rel::unc .
         """
-        func=self._dll.o2scl_fermion_rel_get_unc
+        func=self._link.o2scl_part.o2scl_fermion_rel_get_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,unc._ptr)
         return
@@ -948,7 +949,7 @@ class fermion_rel(fermion_thermo):
         """
         Setter function for fermion_rel::unc .
         """
-        func=self._dll.o2scl_fermion_rel_set_unc
+        func=self._link.o2scl_part.o2scl_fermion_rel_set_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -958,7 +959,7 @@ class fermion_rel(fermion_thermo):
         Wrapper for fermion_rel::nu_from_n() .
         wrapper for :ref:`o2sclp:fermion_rel::nu_from_n()`.
         """
-        func=self._dll.o2scl_fermion_rel_nu_from_n
+        func=self._link.o2scl_part.o2scl_fermion_rel_nu_from_n
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -969,7 +970,7 @@ class fermion_rel(fermion_thermo):
         Wrapper for fermion_rel::calc_density() .
         wrapper for :ref:`o2sclp:fermion_rel::calc_density()`.
         """
-        func=self._dll.o2scl_fermion_rel_calc_density
+        func=self._link.o2scl_part.o2scl_fermion_rel_calc_density
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -980,7 +981,7 @@ class fermion_rel(fermion_thermo):
         Wrapper for fermion_rel::pair_density() .
         wrapper for :ref:`o2sclp:fermion_rel::pair_density()`.
         """
-        func=self._dll.o2scl_fermion_rel_pair_density
+        func=self._link.o2scl_part.o2scl_fermion_rel_pair_density
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -991,7 +992,7 @@ class fermion_rel(fermion_thermo):
         Wrapper for fermion_rel::calc_mu() .
         wrapper for :ref:`o2sclp:fermion_rel::calc_mu()`.
         """
-        func=self._dll.o2scl_fermion_rel_calc_mu
+        func=self._link.o2scl_part.o2scl_fermion_rel_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,f._ptr,T)
         return
@@ -1001,7 +1002,7 @@ class fermion_rel(fermion_thermo):
         Wrapper for fermion_rel::pair_mu() .
         wrapper for :ref:`o2sclp:fermion_rel::pair_mu()`.
         """
-        func=self._dll.o2scl_fermion_rel_pair_mu
+        func=self._link.o2scl_part.o2scl_fermion_rel_pair_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,f._ptr,T)
         return
@@ -1011,16 +1012,16 @@ class fermion_nonrel(fermion_zerot):
     Python interface for class :ref:`fermion_nonrel <o2sclp:fermion_nonrel_tl>`.
     """
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class fermion_nonrel .
         """
 
-        f=dll.o2scl_create_fermion_nonrel
+        f=link.o2scl_part.o2scl_create_fermion_nonrel
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1028,7 +1029,7 @@ class fermion_nonrel(fermion_zerot):
         Delete function for class fermion_nonrel .
         """
 
-        f=self._dll.o2scl_free_fermion_nonrel
+        f=self._link.o2scl_part.o2scl_free_fermion_nonrel
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1038,7 +1039,7 @@ class fermion_nonrel(fermion_zerot):
         Wrapper for fermion_nonrel::calc_density() .
         wrapper for :ref:`o2sclp:fermion_nonrel::calc_density()`.
         """
-        func=self._dll.o2scl_fermion_nonrel_calc_density
+        func=self._link.o2scl_part.o2scl_fermion_nonrel_calc_density
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -1049,7 +1050,7 @@ class fermion_nonrel(fermion_zerot):
         Wrapper for fermion_nonrel::calc_mu() .
         wrapper for :ref:`o2sclp:fermion_nonrel::calc_mu()`.
         """
-        func=self._dll.o2scl_fermion_nonrel_calc_mu
+        func=self._link.o2scl_part.o2scl_fermion_nonrel_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,f._ptr,T)
         return
@@ -1059,7 +1060,7 @@ class fermion_nonrel(fermion_zerot):
         Wrapper for fermion_nonrel::nu_from_n() .
         wrapper for :ref:`o2sclp:fermion_nonrel::nu_from_n()`.
         """
-        func=self._dll.o2scl_fermion_nonrel_nu_from_n
+        func=self._link.o2scl_part.o2scl_fermion_nonrel_nu_from_n
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,f._ptr,T)
         return
@@ -1069,16 +1070,16 @@ class boson(part):
     Python interface for class :ref:`boson <o2sclp:boson>`.
     """
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class boson .
         """
 
-        f=dll.o2scl_create_boson
+        f=link.o2scl_part.o2scl_create_boson
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1086,7 +1087,7 @@ class boson(part):
         Delete function for class boson .
         """
 
-        f=self._dll.o2scl_free_boson
+        f=self._link.o2scl_part.o2scl_free_boson
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1096,7 +1097,7 @@ class boson(part):
         """
         Getter function for boson::co .
         """
-        func=self._dll.o2scl_boson_get_co
+        func=self._link.o2scl_part.o2scl_boson_get_co
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1106,7 +1107,7 @@ class boson(part):
         """
         Setter function for boson::co .
         """
-        func=self._dll.o2scl_boson_set_co
+        func=self._link.o2scl_part.o2scl_boson_set_co
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1117,18 +1118,18 @@ class boson_rel:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class boson_rel .
         """
 
-        f=dll.o2scl_create_boson_rel
+        f=link.o2scl_part.o2scl_create_boson_rel
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1136,7 +1137,7 @@ class boson_rel:
         Delete function for class boson_rel .
         """
 
-        f=self._dll.o2scl_free_boson_rel
+        f=self._link.o2scl_part.o2scl_free_boson_rel
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1146,7 +1147,7 @@ class boson_rel:
         Wrapper for boson_rel::calc_density() .
         wrapper for :ref:`o2sclp:boson_rel::calc_density()`.
         """
-        func=self._dll.o2scl_boson_rel_calc_density
+        func=self._link.o2scl_part.o2scl_boson_rel_calc_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,b._ptr,T)
         return
@@ -1156,7 +1157,7 @@ class boson_rel:
         Wrapper for boson_rel::calc_mu() .
         wrapper for :ref:`o2sclp:boson_rel::calc_mu()`.
         """
-        func=self._dll.o2scl_boson_rel_calc_mu
+        func=self._link.o2scl_part.o2scl_boson_rel_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,b._ptr,T)
         return
@@ -1166,7 +1167,7 @@ class boson_rel:
         Wrapper for boson_rel::nu_from_n() .
         wrapper for :ref:`o2sclp:boson_rel::nu_from_n()`.
         """
-        func=self._dll.o2scl_boson_rel_nu_from_n
+        func=self._link.o2scl_part.o2scl_boson_rel_nu_from_n
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,b._ptr,T)
         return
@@ -1176,7 +1177,7 @@ class boson_rel:
         Wrapper for boson_rel::pair_density() .
         wrapper for :ref:`o2sclp:boson_rel::pair_density()`.
         """
-        func=self._dll.o2scl_boson_rel_pair_density
+        func=self._link.o2scl_part.o2scl_boson_rel_pair_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,b._ptr,T)
         return
@@ -1186,7 +1187,7 @@ class boson_rel:
         Wrapper for boson_rel::pair_mu() .
         wrapper for :ref:`o2sclp:boson_rel::pair_mu()`.
         """
-        func=self._dll.o2scl_boson_rel_pair_mu
+        func=self._link.o2scl_part.o2scl_boson_rel_pair_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,b._ptr,T)
         return
@@ -1197,18 +1198,18 @@ class classical_thermo:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class classical_thermo .
         """
 
-        f=dll.o2scl_create_classical_thermo
+        f=link.o2scl_part.o2scl_create_classical_thermo
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1216,7 +1217,7 @@ class classical_thermo:
         Delete function for class classical_thermo .
         """
 
-        f=self._dll.o2scl_free_classical_thermo
+        f=self._link.o2scl_part.o2scl_free_classical_thermo
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1226,7 +1227,7 @@ class classical_thermo:
         Wrapper for classical_thermo::calc_density() .
         wrapper for :ref:`o2sclp:classical_thermo::calc_density()`.
         """
-        func=self._dll.o2scl_classical_thermo_calc_density
+        func=self._link.o2scl_part.o2scl_classical_thermo_calc_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,p._ptr,T)
         return
@@ -1236,7 +1237,7 @@ class classical_thermo:
         Wrapper for classical_thermo::calc_mu() .
         wrapper for :ref:`o2sclp:classical_thermo::calc_mu()`.
         """
-        func=self._dll.o2scl_classical_thermo_calc_mu
+        func=self._link.o2scl_part.o2scl_classical_thermo_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,p._ptr,T)
         return
@@ -1247,18 +1248,18 @@ class thermo_np_deriv_press:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class thermo_np_deriv_press .
         """
 
-        f=dll.o2scl_create_thermo_np_deriv_press
+        f=link.o2scl_part.o2scl_create_thermo_np_deriv_press
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1266,7 +1267,7 @@ class thermo_np_deriv_press:
         Delete function for class thermo_np_deriv_press .
         """
 
-        f=self._dll.o2scl_free_thermo_np_deriv_press
+        f=self._link.o2scl_part.o2scl_free_thermo_np_deriv_press
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1276,7 +1277,7 @@ class thermo_np_deriv_press:
         """
         Getter function for thermo_np_deriv_press::dsdT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_get_dsdT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dsdT
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1286,7 +1287,7 @@ class thermo_np_deriv_press:
         """
         Setter function for thermo_np_deriv_press::dsdT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_set_dsdT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_set_dsdT
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1296,7 +1297,7 @@ class thermo_np_deriv_press:
         """
         Getter function for thermo_np_deriv_press::dnndT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_get_dnndT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnndT
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1306,7 +1307,7 @@ class thermo_np_deriv_press:
         """
         Setter function for thermo_np_deriv_press::dnndT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_set_dnndT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_set_dnndT
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1316,7 +1317,7 @@ class thermo_np_deriv_press:
         """
         Getter function for thermo_np_deriv_press::dnpdT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_get_dnpdT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnpdT
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1326,7 +1327,7 @@ class thermo_np_deriv_press:
         """
         Setter function for thermo_np_deriv_press::dnpdT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_set_dnpdT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_set_dnpdT
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1336,7 +1337,7 @@ class thermo_np_deriv_press:
         """
         Getter function for thermo_np_deriv_press::dnndmun .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_get_dnndmun
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnndmun
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1346,7 +1347,7 @@ class thermo_np_deriv_press:
         """
         Setter function for thermo_np_deriv_press::dnndmun .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_set_dnndmun
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_set_dnndmun
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1356,7 +1357,7 @@ class thermo_np_deriv_press:
         """
         Getter function for thermo_np_deriv_press::dndmu_mixed .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_get_dndmu_mixed
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dndmu_mixed
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1366,7 +1367,7 @@ class thermo_np_deriv_press:
         """
         Setter function for thermo_np_deriv_press::dndmu_mixed .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_set_dndmu_mixed
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_set_dndmu_mixed
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1376,7 +1377,7 @@ class thermo_np_deriv_press:
         """
         Getter function for thermo_np_deriv_press::dnpdmup .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_get_dnpdmup
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnpdmup
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1386,7 +1387,7 @@ class thermo_np_deriv_press:
         """
         Setter function for thermo_np_deriv_press::dnpdmup .
         """
-        func=self._dll.o2scl_thermo_np_deriv_press_set_dnpdmup
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_set_dnpdmup
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1397,18 +1398,18 @@ class thermo_np_deriv_helm:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class thermo_np_deriv_helm .
         """
 
-        f=dll.o2scl_create_thermo_np_deriv_helm
+        f=link.o2scl_part.o2scl_create_thermo_np_deriv_helm
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1416,7 +1417,7 @@ class thermo_np_deriv_helm:
         Delete function for class thermo_np_deriv_helm .
         """
 
-        f=self._dll.o2scl_free_thermo_np_deriv_helm
+        f=self._link.o2scl_part.o2scl_free_thermo_np_deriv_helm
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1426,7 +1427,7 @@ class thermo_np_deriv_helm:
         """
         Getter function for thermo_np_deriv_helm::dsdT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_get_dsdT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dsdT
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1436,7 +1437,7 @@ class thermo_np_deriv_helm:
         """
         Setter function for thermo_np_deriv_helm::dsdT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_set_dsdT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_set_dsdT
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1446,7 +1447,7 @@ class thermo_np_deriv_helm:
         """
         Getter function for thermo_np_deriv_helm::dmundT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_get_dmundT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmundT
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1456,7 +1457,7 @@ class thermo_np_deriv_helm:
         """
         Setter function for thermo_np_deriv_helm::dmundT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_set_dmundT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_set_dmundT
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1466,7 +1467,7 @@ class thermo_np_deriv_helm:
         """
         Getter function for thermo_np_deriv_helm::dmupdT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_get_dmupdT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmupdT
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1476,7 +1477,7 @@ class thermo_np_deriv_helm:
         """
         Setter function for thermo_np_deriv_helm::dmupdT .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_set_dmupdT
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_set_dmupdT
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1486,7 +1487,7 @@ class thermo_np_deriv_helm:
         """
         Getter function for thermo_np_deriv_helm::dmundnn .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_get_dmundnn
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmundnn
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1496,7 +1497,7 @@ class thermo_np_deriv_helm:
         """
         Setter function for thermo_np_deriv_helm::dmundnn .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_set_dmundnn
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_set_dmundnn
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1506,7 +1507,7 @@ class thermo_np_deriv_helm:
         """
         Getter function for thermo_np_deriv_helm::dmudn_mixed .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_get_dmudn_mixed
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmudn_mixed
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1516,7 +1517,7 @@ class thermo_np_deriv_helm:
         """
         Setter function for thermo_np_deriv_helm::dmudn_mixed .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_set_dmudn_mixed
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_set_dmudn_mixed
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1526,7 +1527,7 @@ class thermo_np_deriv_helm:
         """
         Getter function for thermo_np_deriv_helm::dmupdnp .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_get_dmupdnp
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmupdnp
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1536,7 +1537,7 @@ class thermo_np_deriv_helm:
         """
         Setter function for thermo_np_deriv_helm::dmupdnp .
         """
-        func=self._dll.o2scl_thermo_np_deriv_helm_set_dmupdnp
+        func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_set_dmupdnp
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1547,18 +1548,18 @@ class part_deriv_press:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class part_deriv_press .
         """
 
-        f=dll.o2scl_create_part_deriv_press
+        f=link.o2scl_part.o2scl_create_part_deriv_press
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1566,7 +1567,7 @@ class part_deriv_press:
         Delete function for class part_deriv_press .
         """
 
-        f=self._dll.o2scl_free_part_deriv_press
+        f=self._link.o2scl_part.o2scl_free_part_deriv_press
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1576,7 +1577,7 @@ class part_deriv_press:
         """
         Getter function for part_deriv_press::dndmu .
         """
-        func=self._dll.o2scl_part_deriv_press_get_dndmu
+        func=self._link.o2scl_part.o2scl_part_deriv_press_get_dndmu
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1586,7 +1587,7 @@ class part_deriv_press:
         """
         Setter function for part_deriv_press::dndmu .
         """
-        func=self._dll.o2scl_part_deriv_press_set_dndmu
+        func=self._link.o2scl_part.o2scl_part_deriv_press_set_dndmu
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1596,7 +1597,7 @@ class part_deriv_press:
         """
         Getter function for part_deriv_press::dndT .
         """
-        func=self._dll.o2scl_part_deriv_press_get_dndT
+        func=self._link.o2scl_part.o2scl_part_deriv_press_get_dndT
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1606,7 +1607,7 @@ class part_deriv_press:
         """
         Setter function for part_deriv_press::dndT .
         """
-        func=self._dll.o2scl_part_deriv_press_set_dndT
+        func=self._link.o2scl_part.o2scl_part_deriv_press_set_dndT
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1616,7 +1617,7 @@ class part_deriv_press:
         """
         Getter function for part_deriv_press::dsdT .
         """
-        func=self._dll.o2scl_part_deriv_press_get_dsdT
+        func=self._link.o2scl_part.o2scl_part_deriv_press_get_dsdT
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1626,7 +1627,7 @@ class part_deriv_press:
         """
         Setter function for part_deriv_press::dsdT .
         """
-        func=self._dll.o2scl_part_deriv_press_set_dsdT
+        func=self._link.o2scl_part.o2scl_part_deriv_press_set_dsdT
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1636,7 +1637,7 @@ class part_deriv_press:
         Wrapper for part_deriv_press::deriv_f() .
         wrapper for :ref:`o2sclp:part_deriv_press::deriv_f()`.
         """
-        func=self._dll.o2scl_part_deriv_press_deriv_f
+        func=self._link.o2scl_part.o2scl_part_deriv_press_deriv_f
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,dmudn._ptr,dmudT._ptr,dsdT_n._ptr)
         return
@@ -1646,16 +1647,16 @@ class part_deriv(part):
     Python interface for class :ref:`part_deriv <o2sclp:part_deriv_tl>`.
     """
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class part_deriv .
         """
 
-        f=dll.o2scl_create_part_deriv
+        f=link.o2scl_part.o2scl_create_part_deriv
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1663,7 +1664,7 @@ class part_deriv(part):
         Delete function for class part_deriv .
         """
 
-        f=self._dll.o2scl_free_part_deriv
+        f=self._link.o2scl_part.o2scl_free_part_deriv
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1673,16 +1674,16 @@ class fermion_deriv(fermion):
     Python interface for class :ref:`fermion_deriv <o2sclp:fermion_deriv_tl>`.
     """
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class fermion_deriv .
         """
 
-        f=dll.o2scl_create_fermion_deriv
+        f=link.o2scl_part.o2scl_create_fermion_deriv
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1690,7 +1691,7 @@ class fermion_deriv(fermion):
         Delete function for class fermion_deriv .
         """
 
-        f=self._dll.o2scl_free_fermion_deriv
+        f=self._link.o2scl_part.o2scl_free_fermion_deriv
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1701,18 +1702,18 @@ class deriv_thermo_base:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class deriv_thermo_base .
         """
 
-        f=dll.o2scl_create_deriv_thermo_base
+        f=link.o2scl_part.o2scl_create_deriv_thermo_base
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1720,7 +1721,7 @@ class deriv_thermo_base:
         Delete function for class deriv_thermo_base .
         """
 
-        f=self._dll.o2scl_free_deriv_thermo_base
+        f=self._link.o2scl_part.o2scl_free_deriv_thermo_base
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1730,7 +1731,7 @@ class deriv_thermo_base:
         Wrapper for deriv_thermo_base::heat_cap_ppart_const_vol() .
         wrapper for :ref:`o2sclp:deriv_thermo_base::heat_cap_ppart_const_vol()`.
         """
-        func=self._dll.o2scl_deriv_thermo_base_heat_cap_ppart_const_vol
+        func=self._link.o2scl_part.o2scl_deriv_thermo_base_heat_cap_ppart_const_vol
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,p._ptr,T)
@@ -1741,7 +1742,7 @@ class deriv_thermo_base:
         Wrapper for deriv_thermo_base::heat_cap_ppart_const_press() .
         wrapper for :ref:`o2sclp:deriv_thermo_base::heat_cap_ppart_const_press()`.
         """
-        func=self._dll.o2scl_deriv_thermo_base_heat_cap_ppart_const_press
+        func=self._link.o2scl_part.o2scl_deriv_thermo_base_heat_cap_ppart_const_press
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,p._ptr,T)
@@ -1752,7 +1753,7 @@ class deriv_thermo_base:
         Wrapper for deriv_thermo_base::compress_adiabatic() .
         wrapper for :ref:`o2sclp:deriv_thermo_base::compress_adiabatic()`.
         """
-        func=self._dll.o2scl_deriv_thermo_base_compress_adiabatic
+        func=self._link.o2scl_part.o2scl_deriv_thermo_base_compress_adiabatic
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,p._ptr,T)
@@ -1763,7 +1764,7 @@ class deriv_thermo_base:
         Wrapper for deriv_thermo_base::compress_const_tptr() .
         wrapper for :ref:`o2sclp:deriv_thermo_base::compress_const_tptr()`.
         """
-        func=self._dll.o2scl_deriv_thermo_base_compress_const_tptr
+        func=self._link.o2scl_part.o2scl_deriv_thermo_base_compress_const_tptr
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,p._ptr,T)
@@ -1774,7 +1775,7 @@ class deriv_thermo_base:
         Wrapper for deriv_thermo_base::coeff_thermal_exp() .
         wrapper for :ref:`o2sclp:deriv_thermo_base::coeff_thermal_exp()`.
         """
-        func=self._dll.o2scl_deriv_thermo_base_coeff_thermal_exp
+        func=self._link.o2scl_part.o2scl_deriv_thermo_base_coeff_thermal_exp
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,p._ptr,T)
@@ -1785,7 +1786,7 @@ class deriv_thermo_base:
         Wrapper for deriv_thermo_base::squared_sound_speed() .
         wrapper for :ref:`o2sclp:deriv_thermo_base::squared_sound_speed()`.
         """
-        func=self._dll.o2scl_deriv_thermo_base_squared_sound_speed
+        func=self._link.o2scl_part.o2scl_deriv_thermo_base_squared_sound_speed
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,p._ptr,T)
@@ -1797,18 +1798,18 @@ class fermion_deriv_rel:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class fermion_deriv_rel .
         """
 
-        f=dll.o2scl_create_fermion_deriv_rel
+        f=link.o2scl_part.o2scl_create_fermion_deriv_rel
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -1816,7 +1817,7 @@ class fermion_deriv_rel:
         Delete function for class fermion_deriv_rel .
         """
 
-        f=self._dll.o2scl_free_fermion_deriv_rel
+        f=self._link.o2scl_part.o2scl_free_fermion_deriv_rel
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -1826,7 +1827,7 @@ class fermion_deriv_rel:
         """
         Getter function for fermion_deriv_rel::exp_limit .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_get_exp_limit
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_exp_limit
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1836,7 +1837,7 @@ class fermion_deriv_rel:
         """
         Setter function for fermion_deriv_rel::exp_limit .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_set_exp_limit
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_set_exp_limit
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1846,7 +1847,7 @@ class fermion_deriv_rel:
         """
         Getter function for fermion_deriv_rel::deg_limit .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_get_deg_limit
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_deg_limit
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1856,7 +1857,7 @@ class fermion_deriv_rel:
         """
         Setter function for fermion_deriv_rel::deg_limit .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_set_deg_limit
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_set_deg_limit
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1866,7 +1867,7 @@ class fermion_deriv_rel:
         """
         Getter function for fermion_deriv_rel::upper_limit_fac .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_get_upper_limit_fac
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_upper_limit_fac
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1876,7 +1877,7 @@ class fermion_deriv_rel:
         """
         Setter function for fermion_deriv_rel::upper_limit_fac .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_set_upper_limit_fac
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_set_upper_limit_fac
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1885,7 +1886,7 @@ class fermion_deriv_rel:
         """
         Getter function for fermion_deriv_rel::unc .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_get_unc
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,unc._ptr)
         return
@@ -1894,7 +1895,7 @@ class fermion_deriv_rel:
         """
         Setter function for fermion_deriv_rel::unc .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_set_unc
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_set_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -1904,7 +1905,7 @@ class fermion_deriv_rel:
         """
         Getter function for fermion_deriv_rel::method .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_get_method
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_method
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1914,7 +1915,7 @@ class fermion_deriv_rel:
         """
         Setter function for fermion_deriv_rel::method .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_set_method
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_set_method
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -1924,7 +1925,7 @@ class fermion_deriv_rel:
         """
         Getter function for fermion_deriv_rel::last_method .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_get_last_method
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_last_method
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1934,7 +1935,7 @@ class fermion_deriv_rel:
         """
         Setter function for fermion_deriv_rel::last_method .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_set_last_method
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_set_last_method
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -1944,7 +1945,7 @@ class fermion_deriv_rel:
         """
         Getter function for fermion_deriv_rel::err_nonconv .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_get_err_nonconv
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_err_nonconv
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1954,7 +1955,7 @@ class fermion_deriv_rel:
         """
         Setter function for fermion_deriv_rel::err_nonconv .
         """
-        func=self._dll.o2scl_fermion_deriv_rel_set_err_nonconv
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_set_err_nonconv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -1964,7 +1965,7 @@ class fermion_deriv_rel:
         Wrapper for fermion_deriv_rel::nu_from_n() .
         wrapper for :ref:`o2sclp:fermion_deriv_rel::nu_from_n()`.
         """
-        func=self._dll.o2scl_fermion_deriv_rel_nu_from_n
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_nu_from_n
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -1975,7 +1976,7 @@ class fermion_deriv_rel:
         Wrapper for fermion_deriv_rel::calc_density() .
         wrapper for :ref:`o2sclp:fermion_deriv_rel::calc_density()`.
         """
-        func=self._dll.o2scl_fermion_deriv_rel_calc_density
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_calc_density
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -1986,7 +1987,7 @@ class fermion_deriv_rel:
         Wrapper for fermion_deriv_rel::pair_density() .
         wrapper for :ref:`o2sclp:fermion_deriv_rel::pair_density()`.
         """
-        func=self._dll.o2scl_fermion_deriv_rel_pair_density
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_pair_density
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -1997,7 +1998,7 @@ class fermion_deriv_rel:
         Wrapper for fermion_deriv_rel::calc_mu() .
         wrapper for :ref:`o2sclp:fermion_deriv_rel::calc_mu()`.
         """
-        func=self._dll.o2scl_fermion_deriv_rel_calc_mu
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_calc_mu
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -2008,7 +2009,7 @@ class fermion_deriv_rel:
         Wrapper for fermion_deriv_rel::pair_mu() .
         wrapper for :ref:`o2sclp:fermion_deriv_rel::pair_mu()`.
         """
-        func=self._dll.o2scl_fermion_deriv_rel_pair_mu
+        func=self._link.o2scl_part.o2scl_fermion_deriv_rel_pair_mu
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -2020,18 +2021,18 @@ class fermion_deriv_nr:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class fermion_deriv_nr .
         """
 
-        f=dll.o2scl_create_fermion_deriv_nr
+        f=link.o2scl_part.o2scl_create_fermion_deriv_nr
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -2039,7 +2040,7 @@ class fermion_deriv_nr:
         Delete function for class fermion_deriv_nr .
         """
 
-        f=self._dll.o2scl_free_fermion_deriv_nr
+        f=self._link.o2scl_part.o2scl_free_fermion_deriv_nr
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -2049,7 +2050,7 @@ class fermion_deriv_nr:
         """
         Getter function for fermion_deriv_nr::flimit .
         """
-        func=self._dll.o2scl_fermion_deriv_nr_get_flimit
+        func=self._link.o2scl_part.o2scl_fermion_deriv_nr_get_flimit
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2059,7 +2060,7 @@ class fermion_deriv_nr:
         """
         Setter function for fermion_deriv_nr::flimit .
         """
-        func=self._dll.o2scl_fermion_deriv_nr_set_flimit
+        func=self._link.o2scl_part.o2scl_fermion_deriv_nr_set_flimit
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2068,7 +2069,7 @@ class fermion_deriv_nr:
         """
         Getter function for fermion_deriv_nr::unc .
         """
-        func=self._dll.o2scl_fermion_deriv_nr_get_unc
+        func=self._link.o2scl_part.o2scl_fermion_deriv_nr_get_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,unc._ptr)
         return
@@ -2077,7 +2078,7 @@ class fermion_deriv_nr:
         """
         Setter function for fermion_deriv_nr::unc .
         """
-        func=self._dll.o2scl_fermion_deriv_nr_set_unc
+        func=self._link.o2scl_part.o2scl_fermion_deriv_nr_set_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -2087,7 +2088,7 @@ class fermion_deriv_nr:
         Wrapper for fermion_deriv_nr::calc_density_zerot() .
         wrapper for :ref:`o2sclp:fermion_deriv_nr::calc_density_zerot()`.
         """
-        func=self._dll.o2scl_fermion_deriv_nr_calc_density_zerot
+        func=self._link.o2scl_part.o2scl_fermion_deriv_nr_calc_density_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,f._ptr)
         return
@@ -2097,7 +2098,7 @@ class fermion_deriv_nr:
         Wrapper for fermion_deriv_nr::calc_mu_zerot() .
         wrapper for :ref:`o2sclp:fermion_deriv_nr::calc_mu_zerot()`.
         """
-        func=self._dll.o2scl_fermion_deriv_nr_calc_mu_zerot
+        func=self._link.o2scl_part.o2scl_fermion_deriv_nr_calc_mu_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,f._ptr)
         return
@@ -2107,7 +2108,7 @@ class fermion_deriv_nr:
         Wrapper for fermion_deriv_nr::nu_from_n() .
         wrapper for :ref:`o2sclp:fermion_deriv_nr::nu_from_n()`.
         """
-        func=self._dll.o2scl_fermion_deriv_nr_nu_from_n
+        func=self._link.o2scl_part.o2scl_fermion_deriv_nr_nu_from_n
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -2118,7 +2119,7 @@ class fermion_deriv_nr:
         Wrapper for fermion_deriv_nr::calc_density() .
         wrapper for :ref:`o2sclp:fermion_deriv_nr::calc_density()`.
         """
-        func=self._dll.o2scl_fermion_deriv_nr_calc_density
+        func=self._link.o2scl_part.o2scl_fermion_deriv_nr_calc_density
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -2129,7 +2130,7 @@ class fermion_deriv_nr:
         Wrapper for fermion_deriv_nr::calc_mu() .
         wrapper for :ref:`o2sclp:fermion_deriv_nr::calc_mu()`.
         """
-        func=self._dll.o2scl_fermion_deriv_nr_calc_mu
+        func=self._link.o2scl_part.o2scl_fermion_deriv_nr_calc_mu
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,f._ptr,T)
@@ -2141,18 +2142,18 @@ class classical_deriv_thermo:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class classical_deriv_thermo .
         """
 
-        f=dll.o2scl_create_classical_deriv_thermo
+        f=link.o2scl_part.o2scl_create_classical_deriv_thermo
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -2160,7 +2161,7 @@ class classical_deriv_thermo:
         Delete function for class classical_deriv_thermo .
         """
 
-        f=self._dll.o2scl_free_classical_deriv_thermo
+        f=self._link.o2scl_part.o2scl_free_classical_deriv_thermo
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -2170,7 +2171,7 @@ class classical_deriv_thermo:
         Wrapper for classical_deriv_thermo::calc_density() .
         wrapper for :ref:`o2sclp:classical_deriv_thermo::calc_density()`.
         """
-        func=self._dll.o2scl_classical_deriv_thermo_calc_density
+        func=self._link.o2scl_part.o2scl_classical_deriv_thermo_calc_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,p._ptr,T)
         return
@@ -2180,7 +2181,7 @@ class classical_deriv_thermo:
         Wrapper for classical_deriv_thermo::calc_mu() .
         wrapper for :ref:`o2sclp:classical_deriv_thermo::calc_mu()`.
         """
-        func=self._dll.o2scl_classical_deriv_thermo_calc_mu
+        func=self._link.o2scl_part.o2scl_classical_deriv_thermo_calc_mu
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,p._ptr,T)
         return
@@ -2191,18 +2192,18 @@ class fermion_mag_zerot:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class fermion_mag_zerot .
         """
 
-        f=dll.o2scl_create_fermion_mag_zerot
+        f=link.o2scl_part.o2scl_create_fermion_mag_zerot
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -2210,7 +2211,7 @@ class fermion_mag_zerot:
         Delete function for class fermion_mag_zerot .
         """
 
-        f=self._dll.o2scl_free_fermion_mag_zerot
+        f=self._link.o2scl_part.o2scl_free_fermion_mag_zerot
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -2220,7 +2221,7 @@ class fermion_mag_zerot:
         """
         Getter function for fermion_mag_zerot::nmax_up .
         """
-        func=self._dll.o2scl_fermion_mag_zerot_get_nmax_up
+        func=self._link.o2scl_part.o2scl_fermion_mag_zerot_get_nmax_up
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2230,7 +2231,7 @@ class fermion_mag_zerot:
         """
         Setter function for fermion_mag_zerot::nmax_up .
         """
-        func=self._dll.o2scl_fermion_mag_zerot_set_nmax_up
+        func=self._link.o2scl_part.o2scl_fermion_mag_zerot_set_nmax_up
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -2240,7 +2241,7 @@ class fermion_mag_zerot:
         """
         Getter function for fermion_mag_zerot::nmax_dn .
         """
-        func=self._dll.o2scl_fermion_mag_zerot_get_nmax_dn
+        func=self._link.o2scl_part.o2scl_fermion_mag_zerot_get_nmax_dn
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2250,7 +2251,7 @@ class fermion_mag_zerot:
         """
         Setter function for fermion_mag_zerot::nmax_dn .
         """
-        func=self._dll.o2scl_fermion_mag_zerot_set_nmax_dn
+        func=self._link.o2scl_part.o2scl_fermion_mag_zerot_set_nmax_dn
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -2260,7 +2261,7 @@ class fermion_mag_zerot:
         """
         Getter function for fermion_mag_zerot::sum_limit .
         """
-        func=self._dll.o2scl_fermion_mag_zerot_get_sum_limit
+        func=self._link.o2scl_part.o2scl_fermion_mag_zerot_get_sum_limit
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2270,7 +2271,7 @@ class fermion_mag_zerot:
         """
         Setter function for fermion_mag_zerot::sum_limit .
         """
-        func=self._dll.o2scl_fermion_mag_zerot_set_sum_limit
+        func=self._link.o2scl_part.o2scl_fermion_mag_zerot_set_sum_limit
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -2280,7 +2281,7 @@ class fermion_mag_zerot:
         Wrapper for fermion_mag_zerot::calc_mu_zerot_mag() .
         wrapper for :ref:`o2sclp:fermion_mag_zerot::calc_mu_zerot_mag()`.
         """
-        func=self._dll.o2scl_fermion_mag_zerot_calc_mu_zerot_mag
+        func=self._link.o2scl_part.o2scl_fermion_mag_zerot_calc_mu_zerot_mag
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         func(self._ptr,f._ptr,qB,kappa)
         return
@@ -2290,7 +2291,7 @@ class fermion_mag_zerot:
         Wrapper for fermion_mag_zerot::calc_density_zerot_mag() .
         wrapper for :ref:`o2sclp:fermion_mag_zerot::calc_density_zerot_mag()`.
         """
-        func=self._dll.o2scl_fermion_mag_zerot_calc_density_zerot_mag
+        func=self._link.o2scl_part.o2scl_fermion_mag_zerot_calc_density_zerot_mag
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         func(self._ptr,f._ptr,qB,kappa)
         return

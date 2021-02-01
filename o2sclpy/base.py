@@ -31,18 +31,18 @@ class table:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class table<> .
         """
 
-        f=dll.o2scl_create_table__
+        f=link.o2scl.o2scl_create_table__
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -50,7 +50,7 @@ class table:
         Delete function for class table<> .
         """
 
-        f=self._dll.o2scl_free_table__
+        f=self._link.o2scl.o2scl_free_table__
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -61,7 +61,7 @@ class table:
         wrapper for :ref:`o2sclp:table<>::set()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._dll.o2scl_table___set
+        func=self._link.o2scl.o2scl_table___set
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_double]
         func(self._ptr,col_,row,val)
         return
@@ -72,7 +72,7 @@ class table:
         wrapper for :ref:`o2sclp:table<>::get()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._dll.o2scl_table___get
+        func=self._link.o2scl.o2scl_table___get
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
         ret=func(self._ptr,col_,row)
@@ -83,9 +83,9 @@ class table:
         Wrapper for table<>::get_ncolumns() .
         wrapper for :ref:`o2sclp:table<>::get_ncolumns()`.
         """
-        func=self._dll.o2scl_table___get_ncolumns
+        func=self._link.o2scl.o2scl_table___get_ncolumns
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr,)
         return ret
 
@@ -94,9 +94,9 @@ class table:
         Wrapper for table<>::get_nlines() .
         wrapper for :ref:`o2sclp:table<>::get_nlines()`.
         """
-        func=self._dll.o2scl_table___get_nlines
+        func=self._link.o2scl.o2scl_table___get_nlines
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr,)
         return ret
 
@@ -105,7 +105,7 @@ class table:
         Wrapper for table<>::set_nlines() .
         wrapper for :ref:`o2sclp:table<>::set_nlines()`.
         """
-        func=self._dll.o2scl_table___set_nlines
+        func=self._link.o2scl.o2scl_table___set_nlines
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,lines)
         return
@@ -116,7 +116,7 @@ class table:
         wrapper for :ref:`o2sclp:table<>::new_column()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._dll.o2scl_table___new_column
+        func=self._link.o2scl.o2scl_table___new_column
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,col_)
         return
@@ -126,7 +126,7 @@ class table:
         Wrapper for table<>::get_column_name() .
         wrapper for :ref:`o2sclp:table<>::get_column_name()`.
         """
-        func=self._dll.o2scl_table___get_column_name
+        func=self._link.o2scl.o2scl_table___get_column_name
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
@@ -137,8 +137,8 @@ class table:
         Wrapper for table<>::clear() .
         wrapper for :ref:`o2sclp:table<>::clear()`.
         """
-        func=self._dll.o2scl_table___clear
-        func.argtypes=[ctypes.c_void_p,]
+        func=self._link.o2scl.o2scl_table___clear
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -147,8 +147,8 @@ class table:
         Wrapper for table<>::clear_data() .
         wrapper for :ref:`o2sclp:table<>::clear_data()`.
         """
-        func=self._dll.o2scl_table___clear_data
-        func.argtypes=[ctypes.c_void_p,]
+        func=self._link.o2scl.o2scl_table___clear_data
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -157,8 +157,8 @@ class table:
         Wrapper for table<>::clear_table() .
         wrapper for :ref:`o2sclp:table<>::clear_table()`.
         """
-        func=self._dll.o2scl_table___clear_table
-        func.argtypes=[ctypes.c_void_p,]
+        func=self._link.o2scl.o2scl_table___clear_table
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -167,8 +167,8 @@ class table:
         Wrapper for table<>::clear_constants() .
         wrapper for :ref:`o2sclp:table<>::clear_constants()`.
         """
-        func=self._dll.o2scl_table___clear_constants
-        func.argtypes=[ctypes.c_void_p,]
+        func=self._link.o2scl.o2scl_table___clear_constants
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -177,16 +177,16 @@ class table_units(table):
     Python interface for class :ref:`table_units<> <o2scl:table_units<>>`.
     """
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class table_units<> .
         """
 
-        f=dll.o2scl_create_table_units__
+        f=link.o2scl.o2scl_create_table_units__
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -194,7 +194,7 @@ class table_units(table):
         Delete function for class table_units<> .
         """
 
-        f=self._dll.o2scl_free_table_units__
+        f=self._link.o2scl.o2scl_free_table_units__
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -205,7 +205,7 @@ class table_units(table):
         wrapper for :ref:`o2sclp:table_units<>::get_unit()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._dll.o2scl_table_units___get_unit
+        func=self._link.o2scl.o2scl_table_units___get_unit
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,col_)
@@ -218,7 +218,7 @@ class table_units(table):
         """
         col_=ctypes.c_char_p(force_bytes(col))
         unit_=ctypes.c_char_p(force_bytes(unit))
-        func=self._dll.o2scl_table_units___set_unit
+        func=self._link.o2scl.o2scl_table_units___set_unit
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,col_,unit_)
         return
@@ -230,7 +230,7 @@ class table_units(table):
         """
         col_=ctypes.c_char_p(force_bytes(col))
         unit_=ctypes.c_char_p(force_bytes(unit))
-        func=self._dll.o2scl_table_units___convert_to_unit
+        func=self._link.o2scl.o2scl_table_units___convert_to_unit
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_bool]
         ret=func(self._ptr,col_,unit_,err_on_fail)
@@ -241,8 +241,8 @@ class table_units(table):
         Wrapper for table_units<>::clear_table() .
         wrapper for :ref:`o2sclp:table_units<>::clear_table()`.
         """
-        func=self._dll.o2scl_table_units___clear_table
-        func.argtypes=[ctypes.c_void_p,]
+        func=self._link.o2scl.o2scl_table_units___clear_table
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -252,18 +252,18 @@ class table3d:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class table3d .
         """
 
-        f=dll.o2scl_create_table3d
+        f=link.o2scl.o2scl_create_table3d
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -271,7 +271,7 @@ class table3d:
         Delete function for class table3d .
         """
 
-        f=self._dll.o2scl_free_table3d
+        f=self._link.o2scl.o2scl_free_table3d
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -282,7 +282,7 @@ class table3d:
         wrapper for :ref:`o2sclp:table3d::set()`.
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._dll.o2scl_table3d_set
+        func=self._link.o2scl.o2scl_table3d_set
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_char_p,ctypes.c_double]
         func(self._ptr,ix,iy,name_,val)
         return
@@ -293,7 +293,7 @@ class table3d:
         wrapper for :ref:`o2sclp:table3d::get()`.
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._dll.o2scl_table3d_get
+        func=self._link.o2scl.o2scl_table3d_get
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_char_p]
         ret=func(self._ptr,ix,iy,name_)
@@ -305,7 +305,7 @@ class table3d:
         wrapper for :ref:`o2sclp:table3d::new_slice()`.
         """
         slice_=ctypes.c_char_p(force_bytes(slice))
-        func=self._dll.o2scl_table3d_new_slice
+        func=self._link.o2scl.o2scl_table3d_new_slice
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,slice_)
         return
@@ -315,9 +315,9 @@ class table3d:
         Wrapper for table3d::get_nx() .
         wrapper for :ref:`o2sclp:table3d::get_nx()`.
         """
-        func=self._dll.o2scl_table3d_get_nx
+        func=self._link.o2scl.o2scl_table3d_get_nx
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr,)
         return ret
 
@@ -326,9 +326,9 @@ class table3d:
         Wrapper for table3d::get_ny() .
         wrapper for :ref:`o2sclp:table3d::get_ny()`.
         """
-        func=self._dll.o2scl_table3d_get_ny
+        func=self._link.o2scl.o2scl_table3d_get_ny
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr,)
         return ret
 
@@ -337,9 +337,9 @@ class table3d:
         Wrapper for table3d::get_nslices() .
         wrapper for :ref:`o2sclp:table3d::get_nslices()`.
         """
-        func=self._dll.o2scl_table3d_get_nslices
+        func=self._link.o2scl.o2scl_table3d_get_nslices
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,]
+        func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr,)
         return ret
 
@@ -349,18 +349,18 @@ class tensor:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class tensor<> .
         """
 
-        f=dll.o2scl_create_tensor__
+        f=link.o2scl.o2scl_create_tensor__
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -368,7 +368,7 @@ class tensor:
         Delete function for class tensor<> .
         """
 
-        f=self._dll.o2scl_free_tensor__
+        f=self._link.o2scl.o2scl_free_tensor__
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -378,8 +378,8 @@ class tensor:
         Wrapper for tensor<>::clear() .
         wrapper for :ref:`o2sclp:tensor<>::clear()`.
         """
-        func=self._dll.o2scl_tensor___clear
-        func.argtypes=[ctypes.c_void_p,]
+        func=self._link.o2scl.o2scl_tensor___clear
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -389,18 +389,18 @@ class find_constants:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class find_constants .
         """
 
-        f=dll.o2scl_create_find_constants
+        f=link.o2scl.o2scl_create_find_constants
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -408,7 +408,7 @@ class find_constants:
         Delete function for class find_constants .
         """
 
-        f=self._dll.o2scl_free_find_constants
+        f=self._link.o2scl.o2scl_free_find_constants
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -420,7 +420,7 @@ class find_constants:
         """
         name_=ctypes.c_char_p(force_bytes(name))
         unit_=ctypes.c_char_p(force_bytes(unit))
-        func=self._dll.o2scl_find_constants_find_print
+        func=self._link.o2scl.o2scl_find_constants_find_print
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_int]
         func(self._ptr,name_,unit_,prec,verbose)
         return
@@ -432,7 +432,7 @@ class find_constants:
         """
         name_=ctypes.c_char_p(force_bytes(name))
         unit_=ctypes.c_char_p(force_bytes(unit))
-        func=self._dll.o2scl_find_constants_find_unique
+        func=self._link.o2scl.o2scl_find_constants_find_unique
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         ret=func(self._ptr,name_,unit_)
@@ -444,18 +444,18 @@ class convert_units:
     """
 
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for class convert_units<> .
         """
 
-        f=dll.o2scl_create_convert_units__
+        f=link.o2scl.o2scl_create_convert_units__
         f.restype=ctypes.c_void_p
         f.argtypes=[]
         self._ptr=f()
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -463,7 +463,7 @@ class convert_units:
         Delete function for class convert_units<> .
         """
 
-        f=self._dll.o2scl_free_convert_units__
+        f=self._link.o2scl.o2scl_free_convert_units__
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -473,7 +473,7 @@ class convert_units:
         """
         Getter function for convert_units<>::verbose .
         """
-        func=self._dll.o2scl_convert_units___get_verbose
+        func=self._link.o2scl.o2scl_convert_units___get_verbose
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -483,7 +483,7 @@ class convert_units:
         """
         Setter function for convert_units<>::verbose .
         """
-        func=self._dll.o2scl_convert_units___set_verbose
+        func=self._link.o2scl.o2scl_convert_units___set_verbose
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -493,7 +493,7 @@ class convert_units:
         """
         Getter function for convert_units<>::use_gnu_units .
         """
-        func=self._dll.o2scl_convert_units___get_use_gnu_units
+        func=self._link.o2scl.o2scl_convert_units___get_use_gnu_units
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -503,7 +503,7 @@ class convert_units:
         """
         Setter function for convert_units<>::use_gnu_units .
         """
-        func=self._dll.o2scl_convert_units___set_use_gnu_units
+        func=self._link.o2scl.o2scl_convert_units___set_use_gnu_units
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -513,7 +513,7 @@ class convert_units:
         """
         Getter function for convert_units<>::err_on_fail .
         """
-        func=self._dll.o2scl_convert_units___get_err_on_fail
+        func=self._link.o2scl.o2scl_convert_units___get_err_on_fail
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -523,7 +523,7 @@ class convert_units:
         """
         Setter function for convert_units<>::err_on_fail .
         """
-        func=self._dll.o2scl_convert_units___set_err_on_fail
+        func=self._link.o2scl.o2scl_convert_units___set_err_on_fail
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -533,7 +533,7 @@ class convert_units:
         """
         Getter function for convert_units<>::combine_two_conv .
         """
-        func=self._dll.o2scl_convert_units___get_combine_two_conv
+        func=self._link.o2scl.o2scl_convert_units___get_combine_two_conv
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -543,7 +543,7 @@ class convert_units:
         """
         Setter function for convert_units<>::combine_two_conv .
         """
-        func=self._dll.o2scl_convert_units___set_combine_two_conv
+        func=self._link.o2scl.o2scl_convert_units___set_combine_two_conv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -552,7 +552,7 @@ class convert_units:
         """
         Getter function for convert_units<>::units_cmd_string .
         """
-        func=self._dll.o2scl_convert_units___get_units_cmd_string
+        func=self._link.o2scl.o2scl_convert_units___get_units_cmd_string
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,units_cmd_string._ptr)
@@ -562,7 +562,7 @@ class convert_units:
         """
         Setter function for convert_units<>::units_cmd_string .
         """
-        func=self._dll.o2scl_convert_units___set_units_cmd_string
+        func=self._link.o2scl.o2scl_convert_units___set_units_cmd_string
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -574,7 +574,7 @@ class convert_units:
         """
         frm_=ctypes.c_char_p(force_bytes(frm))
         to_=ctypes.c_char_p(force_bytes(to))
-        func=self._dll.o2scl_convert_units___convert
+        func=self._link.o2scl.o2scl_convert_units___convert
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_double]
         ret=func(self._ptr,frm_,to_,val)
@@ -587,7 +587,7 @@ class convert_units:
         """
         frm_=ctypes.c_char_p(force_bytes(frm))
         to_=ctypes.c_char_p(force_bytes(to))
-        func=self._dll.o2scl_convert_units___convert_ret
+        func=self._link.o2scl.o2scl_convert_units___convert_ret
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,frm_,to_,val,converted)
@@ -598,8 +598,8 @@ class convert_units:
         Wrapper for convert_units<>::print_cache() .
         wrapper for :ref:`o2sclp:convert_units<>::print_cache()`.
         """
-        func=self._dll.o2scl_convert_units___print_cache
-        func.argtypes=[ctypes.c_void_p,]
+        func=self._link.o2scl.o2scl_convert_units___print_cache
+        func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
 
@@ -607,16 +607,16 @@ class shared_ptr_table_units(table_units):
 
     _s_ptr=0
     _ptr=0
-    _dll=0
+    _link=0
 
-    def __init__(self,dll):
+    def __init__(self,link):
         """
         Init function for sp table_units<> .
         """
 
         self._s_ptr=0
         self._ptr=0
-        self._dll=dll
+        self._link=link
         return
 
     def __del__(self):
@@ -624,7 +624,7 @@ class shared_ptr_table_units(table_units):
         Delete function for sp table_units<> .
         """
 
-        f=self._dll.o2scl_free_shared_ptr_table_units__
+        f=self._link.o2scl.o2scl_free_shared_ptr_table_units__
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
@@ -634,7 +634,7 @@ class shared_ptr_table_units(table_units):
         Set pointer function for sp table_units<> .
         """
 
-        f=self._dll.o2scl_shared_ptr_table_units___ptr
+        f=self._link.o2scl.o2scl_shared_ptr_table_units___ptr
         f.argtypes=[ctypes.c_void_p]
         f.restype=ctypes.c_void_p
         self._ptr=f(self._s_ptr)
