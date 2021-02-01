@@ -2933,12 +2933,12 @@ class tov_solve:
         Wrapper for tov_solve::get_results() .
         wrapper for :ref:`o2sclp:tov_solve::get_results()`.
         """
-        sp=shared_ptr_table_units(link)
+        sp=shared_ptr_table_units(self._link)
         func=self._link.o2scl_eos.o2scl_tov_solve_get_results
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        sp._s_ptr=f(self._ptr)
-        sp.__set_ptr()
+        sp._s_ptr=func(self._ptr)
+        sp.set_pointer()
         return sp
 
 class tov_love:
@@ -3489,12 +3489,12 @@ class nstar_cold:
         Wrapper for nstar_cold::get_eos_results() .
         wrapper for :ref:`o2sclp:nstar_cold::get_eos_results()`.
         """
-        sp=shared_ptr_table_units(link)
+        sp=shared_ptr_table_units(self._link)
         func=self._link.o2scl_eos.o2scl_nstar_cold_get_eos_results
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        sp._s_ptr=f(self._ptr)
-        sp.__set_ptr()
+        sp._s_ptr=func(self._ptr)
+        sp.set_pointer()
         return sp
 
     def get_tov_results(self):
@@ -3502,12 +3502,12 @@ class nstar_cold:
         Wrapper for nstar_cold::get_tov_results() .
         wrapper for :ref:`o2sclp:nstar_cold::get_tov_results()`.
         """
-        sp=shared_ptr_table_units(link)
+        sp=shared_ptr_table_units(self._link)
         func=self._link.o2scl_eos.o2scl_nstar_cold_get_tov_results
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        sp._s_ptr=f(self._ptr)
-        sp.__set_ptr()
+        sp._s_ptr=func(self._ptr)
+        sp.set_pointer()
         return sp
 
 def skyrme_load(link,sk,model,external,verbose):

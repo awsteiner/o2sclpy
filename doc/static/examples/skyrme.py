@@ -24,8 +24,8 @@ nc=o2sclpy.nstar_cold(link)
 nc.set_eos(sk)
 ret1=nc.calc_eos(0.01)
 eos_table=nc.get_eos_results()
-#ret2=nc.calc_nstar()
-#mvsr_table=nc.get_tov_results()
+ret2=nc.calc_nstar()
+mvsr_table=nc.get_tov_results()
 
 
 

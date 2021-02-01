@@ -629,7 +629,7 @@ class shared_ptr_table_units(table_units):
         f(self._ptr)
         return
 
-    def __set_ptr(self):
+    def set_pointer(self):
         """
         Set pointer function for sp table_units<> .
         """
