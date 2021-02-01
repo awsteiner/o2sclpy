@@ -1957,6 +1957,1552 @@ class eos_quark_njl(eos_quark):
         func(self._ptr,value)
         return
 
+class eos_tov:
+    """
+    Python interface for class :ref:`eos_tov <o2scle:eos_tov>`.
+    """
+
+    _ptr=0
+    _dll=0
+
+    @abstractmethod
+    def __init__(self,dll):
+        """
+        Init function for class eos_tov .
+        """
+
+        f=dll.o2scl_create_eos_tov
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_tov .
+        """
+
+        f=self._dll.o2scl_free_eos_tov
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def verbose(self):
+        """
+        Getter function for eos_tov::verbose .
+        """
+        func=self._dll.o2scl_eos_tov_get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for eos_tov::verbose .
+        """
+        func=self._dll.o2scl_eos_tov_set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    def has_baryons(self):
+        """
+        Wrapper for eos_tov::has_baryons() .
+        wrapper for :ref:`o2sclp:eos_tov::has_baryons()`.
+        """
+        func=self._dll.o2scl_eos_tov_has_baryons
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
+class eos_tov_buchdahl(eos_tov):
+    """
+    Python interface for class :ref:`eos_tov_buchdahl <o2scle:eos_tov_buchdahl>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class eos_tov_buchdahl .
+        """
+
+        f=dll.o2scl_create_eos_tov_buchdahl
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_tov_buchdahl .
+        """
+
+        f=self._dll.o2scl_free_eos_tov_buchdahl
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def Pstar(self):
+        """
+        Getter function for eos_tov_buchdahl::Pstar .
+        """
+        func=self._dll.o2scl_eos_tov_buchdahl_get_Pstar
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Pstar.setter
+    def Pstar(self,value):
+        """
+        Setter function for eos_tov_buchdahl::Pstar .
+        """
+        func=self._dll.o2scl_eos_tov_buchdahl_set_Pstar
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+class eos_tov_polytrope(eos_tov):
+    """
+    Python interface for class :ref:`eos_tov_polytrope <o2scle:eos_tov_polytrope>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class eos_tov_polytrope .
+        """
+
+        f=dll.o2scl_create_eos_tov_polytrope
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_tov_polytrope .
+        """
+
+        f=self._dll.o2scl_free_eos_tov_polytrope
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    def set_coeff_index(self,coeff,index):
+        """
+        Wrapper for eos_tov_polytrope::set_coeff_index() .
+        wrapper for :ref:`o2sclp:eos_tov_polytrope::set_coeff_index()`.
+        """
+        func=self._dll.o2scl_eos_tov_polytrope_set_coeff_index
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,coeff,index)
+        return
+
+class eos_tov_linear(eos_tov):
+    """
+    Python interface for class :ref:`eos_tov_linear <o2scle:eos_tov_linear>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class eos_tov_linear .
+        """
+
+        f=dll.o2scl_create_eos_tov_linear
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_tov_linear .
+        """
+
+        f=self._dll.o2scl_free_eos_tov_linear
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    def set_cs2_eps0(self,cs2,eps0):
+        """
+        Wrapper for eos_tov_linear::set_cs2_eps0() .
+        wrapper for :ref:`o2sclp:eos_tov_linear::set_cs2_eps0()`.
+        """
+        func=self._dll.o2scl_eos_tov_linear_set_cs2_eps0
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,cs2,eps0)
+        return
+
+class eos_tov_interp(eos_tov):
+    """
+    Python interface for class :ref:`eos_tov_interp <o2scle:eos_tov_interp>`.
+    """
+
+    def __init__(self,dll):
+        """
+        Init function for class eos_tov_interp .
+        """
+
+        f=dll.o2scl_create_eos_tov_interp
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_tov_interp .
+        """
+
+        f=self._dll.o2scl_free_eos_tov_interp
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def err_nonconv(self):
+        """
+        Getter function for eos_tov_interp::err_nonconv .
+        """
+        func=self._dll.o2scl_eos_tov_interp_get_err_nonconv
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @err_nonconv.setter
+    def err_nonconv(self,value):
+        """
+        Setter function for eos_tov_interp::err_nonconv .
+        """
+        func=self._dll.o2scl_eos_tov_interp_set_err_nonconv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def read_table(self,eos,s_cole,s_colp,s_colnb):
+        """
+        Wrapper for eos_tov_interp::read_table() .
+        wrapper for :ref:`o2sclp:eos_tov_interp::read_table()`.
+        """
+        s_cole_=ctypes.c_char_p(force_bytes(s_cole))
+        s_colp_=ctypes.c_char_p(force_bytes(s_colp))
+        s_colnb_=ctypes.c_char_p(force_bytes(s_colnb))
+        func=self._dll.o2scl_eos_tov_interp_read_table
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,eos._ptr,s_cole_,s_colp_,s_colnb_)
+        return
+
+    def default_low_dens_eos(self):
+        """
+        Wrapper for eos_tov_interp::default_low_dens_eos() .
+        wrapper for :ref:`o2sclp:eos_tov_interp::default_low_dens_eos()`.
+        """
+        func=self._dll.o2scl_eos_tov_interp_default_low_dens_eos
+        func.argtypes=[ctypes.c_void_p,]
+        func(self._ptr,)
+        return
+
+    def sho11_low_dens_eos(self):
+        """
+        Wrapper for eos_tov_interp::sho11_low_dens_eos() .
+        wrapper for :ref:`o2sclp:eos_tov_interp::sho11_low_dens_eos()`.
+        """
+        func=self._dll.o2scl_eos_tov_interp_sho11_low_dens_eos
+        func.argtypes=[ctypes.c_void_p,]
+        func(self._ptr,)
+        return
+
+    def s12_low_dens_eos(self,model,external):
+        """
+        Wrapper for eos_tov_interp::s12_low_dens_eos() .
+        wrapper for :ref:`o2sclp:eos_tov_interp::s12_low_dens_eos()`.
+        """
+        model_=ctypes.c_char_p(force_bytes(model))
+        func=self._dll.o2scl_eos_tov_interp_s12_low_dens_eos
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
+        func(self._ptr,model_,external)
+        return
+
+    def gcp10_low_dens_eos(self,model,external):
+        """
+        Wrapper for eos_tov_interp::gcp10_low_dens_eos() .
+        wrapper for :ref:`o2sclp:eos_tov_interp::gcp10_low_dens_eos()`.
+        """
+        model_=ctypes.c_char_p(force_bytes(model))
+        func=self._dll.o2scl_eos_tov_interp_gcp10_low_dens_eos
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
+        func(self._ptr,model_,external)
+        return
+
+    def ngl13_low_dens_eos(self,L,model,external):
+        """
+        Wrapper for eos_tov_interp::ngl13_low_dens_eos() .
+        wrapper for :ref:`o2sclp:eos_tov_interp::ngl13_low_dens_eos()`.
+        """
+        model_=ctypes.c_char_p(force_bytes(model))
+        func=self._dll.o2scl_eos_tov_interp_ngl13_low_dens_eos
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_char_p,ctypes.c_bool]
+        func(self._ptr,L,model_,external)
+        return
+
+    def ngl13_low_dens_eos2(self,S,L,nt,fname):
+        """
+        Wrapper for eos_tov_interp::ngl13_low_dens_eos2() .
+        wrapper for :ref:`o2sclp:eos_tov_interp::ngl13_low_dens_eos2()`.
+        """
+        fname_=ctypes.c_char_p(force_bytes(fname))
+        func=self._dll.o2scl_eos_tov_interp_ngl13_low_dens_eos2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
+        func(self._ptr,S,L,nt,fname_)
+        return
+
+    def no_low_dens_eos(self):
+        """
+        Wrapper for eos_tov_interp::no_low_dens_eos() .
+        wrapper for :ref:`o2sclp:eos_tov_interp::no_low_dens_eos()`.
+        """
+        func=self._dll.o2scl_eos_tov_interp_no_low_dens_eos
+        func.argtypes=[ctypes.c_void_p,]
+        func(self._ptr,)
+        return
+
+class tov_solve:
+    """
+    Python interface for class :ref:`tov_solve <o2scle:tov_solve>`.
+    """
+
+    _ptr=0
+    _dll=0
+
+    def __init__(self,dll):
+        """
+        Init function for class tov_solve .
+        """
+
+        f=dll.o2scl_create_tov_solve
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class tov_solve .
+        """
+
+        f=self._dll.o2scl_free_tov_solve
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def buffer_size(self):
+        """
+        Getter function for tov_solve::buffer_size .
+        """
+        func=self._dll.o2scl_tov_solve_get_buffer_size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @buffer_size.setter
+    def buffer_size(self,value):
+        """
+        Setter function for tov_solve::buffer_size .
+        """
+        func=self._dll.o2scl_tov_solve_set_buffer_size
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def max_table_size(self):
+        """
+        Getter function for tov_solve::max_table_size .
+        """
+        func=self._dll.o2scl_tov_solve_get_max_table_size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @max_table_size.setter
+    def max_table_size(self,value):
+        """
+        Setter function for tov_solve::max_table_size .
+        """
+        func=self._dll.o2scl_tov_solve_set_max_table_size
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def mass(self):
+        """
+        Getter function for tov_solve::mass .
+        """
+        func=self._dll.o2scl_tov_solve_get_mass
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @mass.setter
+    def mass(self,value):
+        """
+        Setter function for tov_solve::mass .
+        """
+        func=self._dll.o2scl_tov_solve_set_mass
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def rad(self):
+        """
+        Getter function for tov_solve::rad .
+        """
+        func=self._dll.o2scl_tov_solve_get_rad
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @rad.setter
+    def rad(self,value):
+        """
+        Setter function for tov_solve::rad .
+        """
+        func=self._dll.o2scl_tov_solve_set_rad
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def bmass(self):
+        """
+        Getter function for tov_solve::bmass .
+        """
+        func=self._dll.o2scl_tov_solve_get_bmass
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @bmass.setter
+    def bmass(self,value):
+        """
+        Setter function for tov_solve::bmass .
+        """
+        func=self._dll.o2scl_tov_solve_set_bmass
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def gpot(self):
+        """
+        Getter function for tov_solve::gpot .
+        """
+        func=self._dll.o2scl_tov_solve_get_gpot
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @gpot.setter
+    def gpot(self,value):
+        """
+        Setter function for tov_solve::gpot .
+        """
+        func=self._dll.o2scl_tov_solve_set_gpot
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def last_rjw(self):
+        """
+        Getter function for tov_solve::last_rjw .
+        """
+        func=self._dll.o2scl_tov_solve_get_last_rjw
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @last_rjw.setter
+    def last_rjw(self,value):
+        """
+        Setter function for tov_solve::last_rjw .
+        """
+        func=self._dll.o2scl_tov_solve_set_last_rjw
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def last_f(self):
+        """
+        Getter function for tov_solve::last_f .
+        """
+        func=self._dll.o2scl_tov_solve_get_last_f
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @last_f.setter
+    def last_f(self,value):
+        """
+        Setter function for tov_solve::last_f .
+        """
+        func=self._dll.o2scl_tov_solve_set_last_f
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def domega_rat(self):
+        """
+        Getter function for tov_solve::domega_rat .
+        """
+        func=self._dll.o2scl_tov_solve_get_domega_rat
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @domega_rat.setter
+    def domega_rat(self,value):
+        """
+        Setter function for tov_solve::domega_rat .
+        """
+        func=self._dll.o2scl_tov_solve_set_domega_rat
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def pcent_max(self):
+        """
+        Getter function for tov_solve::pcent_max .
+        """
+        func=self._dll.o2scl_tov_solve_get_pcent_max
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @pcent_max.setter
+    def pcent_max(self,value):
+        """
+        Setter function for tov_solve::pcent_max .
+        """
+        func=self._dll.o2scl_tov_solve_set_pcent_max
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def reformat_results(self):
+        """
+        Getter function for tov_solve::reformat_results .
+        """
+        func=self._dll.o2scl_tov_solve_get_reformat_results
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @reformat_results.setter
+    def reformat_results(self,value):
+        """
+        Setter function for tov_solve::reformat_results .
+        """
+        func=self._dll.o2scl_tov_solve_set_reformat_results
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def baryon_mass(self):
+        """
+        Getter function for tov_solve::baryon_mass .
+        """
+        func=self._dll.o2scl_tov_solve_get_baryon_mass
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @baryon_mass.setter
+    def baryon_mass(self,value):
+        """
+        Setter function for tov_solve::baryon_mass .
+        """
+        func=self._dll.o2scl_tov_solve_set_baryon_mass
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def ang_vel(self):
+        """
+        Getter function for tov_solve::ang_vel .
+        """
+        func=self._dll.o2scl_tov_solve_get_ang_vel
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @ang_vel.setter
+    def ang_vel(self,value):
+        """
+        Setter function for tov_solve::ang_vel .
+        """
+        func=self._dll.o2scl_tov_solve_set_ang_vel
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def gen_rel(self):
+        """
+        Getter function for tov_solve::gen_rel .
+        """
+        func=self._dll.o2scl_tov_solve_get_gen_rel
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @gen_rel.setter
+    def gen_rel(self,value):
+        """
+        Setter function for tov_solve::gen_rel .
+        """
+        func=self._dll.o2scl_tov_solve_set_gen_rel
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def calc_gpot(self):
+        """
+        Getter function for tov_solve::calc_gpot .
+        """
+        func=self._dll.o2scl_tov_solve_get_calc_gpot
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @calc_gpot.setter
+    def calc_gpot(self,value):
+        """
+        Setter function for tov_solve::calc_gpot .
+        """
+        func=self._dll.o2scl_tov_solve_set_calc_gpot
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def step_min(self):
+        """
+        Getter function for tov_solve::step_min .
+        """
+        func=self._dll.o2scl_tov_solve_get_step_min
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @step_min.setter
+    def step_min(self,value):
+        """
+        Setter function for tov_solve::step_min .
+        """
+        func=self._dll.o2scl_tov_solve_set_step_min
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def step_max(self):
+        """
+        Getter function for tov_solve::step_max .
+        """
+        func=self._dll.o2scl_tov_solve_get_step_max
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @step_max.setter
+    def step_max(self,value):
+        """
+        Setter function for tov_solve::step_max .
+        """
+        func=self._dll.o2scl_tov_solve_set_step_max
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def step_start(self):
+        """
+        Getter function for tov_solve::step_start .
+        """
+        func=self._dll.o2scl_tov_solve_get_step_start
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @step_start.setter
+    def step_start(self,value):
+        """
+        Setter function for tov_solve::step_start .
+        """
+        func=self._dll.o2scl_tov_solve_set_step_start
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def verbose(self):
+        """
+        Getter function for tov_solve::verbose .
+        """
+        func=self._dll.o2scl_tov_solve_get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for tov_solve::verbose .
+        """
+        func=self._dll.o2scl_tov_solve_set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def max_integ_steps(self):
+        """
+        Getter function for tov_solve::max_integ_steps .
+        """
+        func=self._dll.o2scl_tov_solve_get_max_integ_steps
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @max_integ_steps.setter
+    def max_integ_steps(self,value):
+        """
+        Setter function for tov_solve::max_integ_steps .
+        """
+        func=self._dll.o2scl_tov_solve_set_max_integ_steps
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def err_nonconv(self):
+        """
+        Getter function for tov_solve::err_nonconv .
+        """
+        func=self._dll.o2scl_tov_solve_get_err_nonconv
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @err_nonconv.setter
+    def err_nonconv(self,value):
+        """
+        Setter function for tov_solve::err_nonconv .
+        """
+        func=self._dll.o2scl_tov_solve_set_err_nonconv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def pmax_default(self):
+        """
+        Getter function for tov_solve::pmax_default .
+        """
+        func=self._dll.o2scl_tov_solve_get_pmax_default
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @pmax_default.setter
+    def pmax_default(self,value):
+        """
+        Setter function for tov_solve::pmax_default .
+        """
+        func=self._dll.o2scl_tov_solve_set_pmax_default
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def prbegin(self):
+        """
+        Getter function for tov_solve::prbegin .
+        """
+        func=self._dll.o2scl_tov_solve_get_prbegin
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @prbegin.setter
+    def prbegin(self,value):
+        """
+        Setter function for tov_solve::prbegin .
+        """
+        func=self._dll.o2scl_tov_solve_set_prbegin
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def prend(self):
+        """
+        Getter function for tov_solve::prend .
+        """
+        func=self._dll.o2scl_tov_solve_get_prend
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @prend.setter
+    def prend(self,value):
+        """
+        Setter function for tov_solve::prend .
+        """
+        func=self._dll.o2scl_tov_solve_set_prend
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def princ(self):
+        """
+        Getter function for tov_solve::princ .
+        """
+        func=self._dll.o2scl_tov_solve_get_princ
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @princ.setter
+    def princ(self,value):
+        """
+        Setter function for tov_solve::princ .
+        """
+        func=self._dll.o2scl_tov_solve_set_princ
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def fixed_pr_guess(self):
+        """
+        Getter function for tov_solve::fixed_pr_guess .
+        """
+        func=self._dll.o2scl_tov_solve_get_fixed_pr_guess
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @fixed_pr_guess.setter
+    def fixed_pr_guess(self,value):
+        """
+        Setter function for tov_solve::fixed_pr_guess .
+        """
+        func=self._dll.o2scl_tov_solve_set_fixed_pr_guess
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def max_begin(self):
+        """
+        Getter function for tov_solve::max_begin .
+        """
+        func=self._dll.o2scl_tov_solve_get_max_begin
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @max_begin.setter
+    def max_begin(self,value):
+        """
+        Setter function for tov_solve::max_begin .
+        """
+        func=self._dll.o2scl_tov_solve_set_max_begin
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def max_end(self):
+        """
+        Getter function for tov_solve::max_end .
+        """
+        func=self._dll.o2scl_tov_solve_get_max_end
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @max_end.setter
+    def max_end(self,value):
+        """
+        Setter function for tov_solve::max_end .
+        """
+        func=self._dll.o2scl_tov_solve_set_max_end
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def max_inc(self):
+        """
+        Getter function for tov_solve::max_inc .
+        """
+        func=self._dll.o2scl_tov_solve_get_max_inc
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @max_inc.setter
+    def max_inc(self,value):
+        """
+        Setter function for tov_solve::max_inc .
+        """
+        func=self._dll.o2scl_tov_solve_set_max_inc
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    def set_eos(self,eos):
+        """
+        Wrapper for tov_solve::set_eos() .
+        wrapper for :ref:`o2sclp:tov_solve::set_eos()`.
+        """
+        func=self._dll.o2scl_tov_solve_set_eos
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,eos._ptr)
+        return
+
+    def mvsr(self):
+        """
+        Wrapper for tov_solve::mvsr() .
+        wrapper for :ref:`o2sclp:tov_solve::mvsr()`.
+        """
+        func=self._dll.o2scl_tov_solve_mvsr
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
+    def fixed(self,mass):
+        """
+        Wrapper for tov_solve::fixed() .
+        wrapper for :ref:`o2sclp:tov_solve::fixed()`.
+        """
+        func=self._dll.o2scl_tov_solve_fixed
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,mass)
+        return ret
+
+    def max(self):
+        """
+        Wrapper for tov_solve::max() .
+        wrapper for :ref:`o2sclp:tov_solve::max()`.
+        """
+        func=self._dll.o2scl_tov_solve_max
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
+    def get_results(self):
+        """
+        Wrapper for tov_solve::get_results() .
+        wrapper for :ref:`o2sclp:tov_solve::get_results()`.
+        """
+        func=self._dll.o2scl_tov_solve_get_results
+        func.restype=ctypes.c_table_units<>
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
+class tov_love:
+    """
+    Python interface for class :ref:`tov_love <o2scle:tov_love>`.
+    """
+
+    _ptr=0
+    _dll=0
+
+    def __init__(self,dll):
+        """
+        Init function for class tov_love .
+        """
+
+        f=dll.o2scl_create_tov_love
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class tov_love .
+        """
+
+        f=self._dll.o2scl_free_tov_love
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def show_ode(self):
+        """
+        Getter function for tov_love::show_ode .
+        """
+        func=self._dll.o2scl_tov_love_get_show_ode
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @show_ode.setter
+    def show_ode(self,value):
+        """
+        Setter function for tov_love::show_ode .
+        """
+        func=self._dll.o2scl_tov_love_set_show_ode
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def addl_testing(self):
+        """
+        Getter function for tov_love::addl_testing .
+        """
+        func=self._dll.o2scl_tov_love_get_addl_testing
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @addl_testing.setter
+    def addl_testing(self,value):
+        """
+        Setter function for tov_love::addl_testing .
+        """
+        func=self._dll.o2scl_tov_love_set_addl_testing
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def err_nonconv(self):
+        """
+        Getter function for tov_love::err_nonconv .
+        """
+        func=self._dll.o2scl_tov_love_get_err_nonconv
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @err_nonconv.setter
+    def err_nonconv(self,value):
+        """
+        Setter function for tov_love::err_nonconv .
+        """
+        func=self._dll.o2scl_tov_love_set_err_nonconv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def get_results(self,results):
+        """
+        Getter function for tov_love::results .
+        """
+        func=self._dll.o2scl_tov_love_get_results
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,results._ptr)
+        return
+
+    def set_results(self,value):
+        """
+        Setter function for tov_love::results .
+        """
+        func=self._dll.o2scl_tov_love_set_results
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def delta(self):
+        """
+        Getter function for tov_love::delta .
+        """
+        func=self._dll.o2scl_tov_love_get_delta
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @delta.setter
+    def delta(self,value):
+        """
+        Setter function for tov_love::delta .
+        """
+        func=self._dll.o2scl_tov_love_set_delta
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def eps(self):
+        """
+        Getter function for tov_love::eps .
+        """
+        func=self._dll.o2scl_tov_love_get_eps
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @eps.setter
+    def eps(self,value):
+        """
+        Setter function for tov_love::eps .
+        """
+        func=self._dll.o2scl_tov_love_set_eps
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    def calc_y(self,yR,beta,k2,lambda_km5,lambda_cgs,tabulate):
+        """
+        Wrapper for tov_love::calc_y() .
+        wrapper for :ref:`o2sclp:tov_love::calc_y()`.
+        """
+        func=self._dll.o2scl_tov_love_calc_y
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        ret=func(self._ptr,yR._ptr,beta._ptr,k2._ptr,lambda_km5._ptr,lambda_cgs._ptr,tabulate)
+        return ret
+
+    def add_disc(self,rd):
+        """
+        Wrapper for tov_love::add_disc() .
+        wrapper for :ref:`o2sclp:tov_love::add_disc()`.
+        """
+        func=self._dll.o2scl_tov_love_add_disc
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,rd)
+        return
+
+    def clear_discs(self):
+        """
+        Wrapper for tov_love::clear_discs() .
+        wrapper for :ref:`o2sclp:tov_love::clear_discs()`.
+        """
+        func=self._dll.o2scl_tov_love_clear_discs
+        func.argtypes=[ctypes.c_void_p,]
+        func(self._ptr,)
+        return
+
+    def calc_H(self,yR,beta,k2,lambda_km5,lambda_cgs):
+        """
+        Wrapper for tov_love::calc_H() .
+        wrapper for :ref:`o2sclp:tov_love::calc_H()`.
+        """
+        func=self._dll.o2scl_tov_love_calc_H
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,yR._ptr,beta._ptr,k2._ptr,lambda_km5._ptr,lambda_cgs._ptr)
+        return ret
+
+class nstar_cold:
+    """
+    Python interface for class :ref:`nstar_cold <o2scle:nstar_cold>`.
+    """
+
+    _ptr=0
+    _dll=0
+
+    def __init__(self,dll):
+        """
+        Init function for class nstar_cold .
+        """
+
+        f=dll.o2scl_create_nstar_cold
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._dll=dll
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nstar_cold .
+        """
+
+        f=self._dll.o2scl_free_nstar_cold
+        f.argtypes=[ctypes.c_void_p]
+        f(self._ptr)
+        return
+
+    @property
+    def well_formed(self):
+        """
+        Getter function for nstar_cold::well_formed .
+        """
+        func=self._dll.o2scl_nstar_cold_get_well_formed
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @well_formed.setter
+    def well_formed(self,value):
+        """
+        Setter function for nstar_cold::well_formed .
+        """
+        func=self._dll.o2scl_nstar_cold_set_well_formed
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def pressure_dec(self):
+        """
+        Getter function for nstar_cold::pressure_dec .
+        """
+        func=self._dll.o2scl_nstar_cold_get_pressure_dec
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @pressure_dec.setter
+    def pressure_dec(self,value):
+        """
+        Setter function for nstar_cold::pressure_dec .
+        """
+        func=self._dll.o2scl_nstar_cold_set_pressure_dec
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def allow_urca(self):
+        """
+        Getter function for nstar_cold::allow_urca .
+        """
+        func=self._dll.o2scl_nstar_cold_get_allow_urca
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @allow_urca.setter
+    def allow_urca(self,value):
+        """
+        Setter function for nstar_cold::allow_urca .
+        """
+        func=self._dll.o2scl_nstar_cold_set_allow_urca
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def deny_urca(self):
+        """
+        Getter function for nstar_cold::deny_urca .
+        """
+        func=self._dll.o2scl_nstar_cold_get_deny_urca
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @deny_urca.setter
+    def deny_urca(self,value):
+        """
+        Setter function for nstar_cold::deny_urca .
+        """
+        func=self._dll.o2scl_nstar_cold_set_deny_urca
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def acausal(self):
+        """
+        Getter function for nstar_cold::acausal .
+        """
+        func=self._dll.o2scl_nstar_cold_get_acausal
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @acausal.setter
+    def acausal(self,value):
+        """
+        Setter function for nstar_cold::acausal .
+        """
+        func=self._dll.o2scl_nstar_cold_set_acausal
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def acausal_ed(self):
+        """
+        Getter function for nstar_cold::acausal_ed .
+        """
+        func=self._dll.o2scl_nstar_cold_get_acausal_ed
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @acausal_ed.setter
+    def acausal_ed(self,value):
+        """
+        Setter function for nstar_cold::acausal_ed .
+        """
+        func=self._dll.o2scl_nstar_cold_set_acausal_ed
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def acausal_pr(self):
+        """
+        Getter function for nstar_cold::acausal_pr .
+        """
+        func=self._dll.o2scl_nstar_cold_get_acausal_pr
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @acausal_pr.setter
+    def acausal_pr(self,value):
+        """
+        Setter function for nstar_cold::acausal_pr .
+        """
+        func=self._dll.o2scl_nstar_cold_set_acausal_pr
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def solver_tol(self):
+        """
+        Getter function for nstar_cold::solver_tol .
+        """
+        func=self._dll.o2scl_nstar_cold_get_solver_tol
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @solver_tol.setter
+    def solver_tol(self,value):
+        """
+        Setter function for nstar_cold::solver_tol .
+        """
+        func=self._dll.o2scl_nstar_cold_set_solver_tol
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def verbose(self):
+        """
+        Getter function for nstar_cold::verbose .
+        """
+        func=self._dll.o2scl_nstar_cold_get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for nstar_cold::verbose .
+        """
+        func=self._dll.o2scl_nstar_cold_set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def nb_start(self):
+        """
+        Getter function for nstar_cold::nb_start .
+        """
+        func=self._dll.o2scl_nstar_cold_get_nb_start
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @nb_start.setter
+    def nb_start(self,value):
+        """
+        Setter function for nstar_cold::nb_start .
+        """
+        func=self._dll.o2scl_nstar_cold_set_nb_start
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def nb_end(self):
+        """
+        Getter function for nstar_cold::nb_end .
+        """
+        func=self._dll.o2scl_nstar_cold_get_nb_end
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @nb_end.setter
+    def nb_end(self,value):
+        """
+        Setter function for nstar_cold::nb_end .
+        """
+        func=self._dll.o2scl_nstar_cold_set_nb_end
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def dnb(self):
+        """
+        Getter function for nstar_cold::dnb .
+        """
+        func=self._dll.o2scl_nstar_cold_get_dnb
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @dnb.setter
+    def dnb(self,value):
+        """
+        Setter function for nstar_cold::dnb .
+        """
+        func=self._dll.o2scl_nstar_cold_set_dnb
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def include_muons(self):
+        """
+        Getter function for nstar_cold::include_muons .
+        """
+        func=self._dll.o2scl_nstar_cold_get_include_muons
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @include_muons.setter
+    def include_muons(self,value):
+        """
+        Setter function for nstar_cold::include_muons .
+        """
+        func=self._dll.o2scl_nstar_cold_set_include_muons
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def err_nonconv(self):
+        """
+        Getter function for nstar_cold::err_nonconv .
+        """
+        func=self._dll.o2scl_nstar_cold_get_err_nonconv
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @err_nonconv.setter
+    def err_nonconv(self,value):
+        """
+        Setter function for nstar_cold::err_nonconv .
+        """
+        func=self._dll.o2scl_nstar_cold_set_err_nonconv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def set_eos(self,eos):
+        """
+        Wrapper for nstar_cold::set_eos() .
+        wrapper for :ref:`o2sclp:nstar_cold::set_eos()`.
+        """
+        func=self._dll.o2scl_nstar_cold_set_eos
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,eos._ptr)
+        return
+
+    def calc_eos(self,np_0):
+        """
+        Wrapper for nstar_cold::calc_eos() .
+        wrapper for :ref:`o2sclp:nstar_cold::calc_eos()`.
+        """
+        func=self._dll.o2scl_nstar_cold_calc_eos
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,np_0)
+        return ret
+
+    def calc_nstar(self):
+        """
+        Wrapper for nstar_cold::calc_nstar() .
+        wrapper for :ref:`o2sclp:nstar_cold::calc_nstar()`.
+        """
+        func=self._dll.o2scl_nstar_cold_calc_nstar
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
+    def fixed(self,target_mass):
+        """
+        Wrapper for nstar_cold::fixed() .
+        wrapper for :ref:`o2sclp:nstar_cold::fixed()`.
+        """
+        func=self._dll.o2scl_nstar_cold_fixed
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,target_mass)
+        return ret
+
+    def get_eos_results(self):
+        """
+        Wrapper for nstar_cold::get_eos_results() .
+        wrapper for :ref:`o2sclp:nstar_cold::get_eos_results()`.
+        """
+        func=self._dll.o2scl_nstar_cold_get_eos_results
+        func.restype=ctypes.c_table_units<>
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
+    def get_tov_results(self):
+        """
+        Wrapper for nstar_cold::get_tov_results() .
+        wrapper for :ref:`o2sclp:nstar_cold::get_tov_results()`.
+        """
+        func=self._dll.o2scl_nstar_cold_get_tov_results
+        func.restype=ctypes.c_table_units<>
+        func.argtypes=[ctypes.c_void_p,]
+        ret=func(self._ptr,)
+        return ret
+
 def skyrme_load(dll,sk,model,external,verbose):
     """
     Wrapper for skyrme_load() .

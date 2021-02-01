@@ -172,7 +172,7 @@ class table:
         func(self._ptr,)
         return
 
-class table_units(table<>):
+class table_units(table):
     """
     Python interface for class :ref:`table_units<> <o2scl:table_units<>>`.
     """
