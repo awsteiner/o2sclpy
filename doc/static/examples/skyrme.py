@@ -18,3 +18,14 @@ o2sclpy.skyrme_load(l.o2scl_eos,sk,'NRAPR',False,2)
 sk.saturation()
 print('NRAPR: n0=%7.6e 1/fm^3, E/A=%7.6e MeV' % (sk.n0,sk.eoa*197.33))
 
+# Create the nstar_cold object for automatically computing the
+# beta-equilibrium EOS and solving the TOV equations.
+nc=o2sclpy.nstar_cold(l.o2scl_eos)
+nc.set_eos(sk)
+ret1=nc.calc_eos(0.01)
+#eos_table=nc.get_eos_results()
+#ret2=nc.calc_nstar()
+#mvsr_table=nc.get_tov_results()
+
+
+

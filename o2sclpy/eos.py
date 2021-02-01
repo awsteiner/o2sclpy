@@ -24,6 +24,7 @@ import ctypes
 from abc import abstractmethod
 from o2sclpy.utils import force_bytes
 
+from o2sclpy.base import *
 
 class eos_base:
     """
