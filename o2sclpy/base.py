@@ -180,11 +180,12 @@ class table:
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___index_operator
-        func.restype=ctypes.POINTER(ctypes.c_double)
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,col_)
-        ret2=numpy.ctypeslib.as_array(ret,shape=(n,))
-        return ret2
+        n_=ctypes.c_int(0)
+        ptr_=ctypes.POINTER(ctypes.c_double)()
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
+        func(self._ptr,col_,ctypes.byref(ptr_),ctypes.byref(n_))
+        ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
+        return ret
 
 class table_units(table):
     """
