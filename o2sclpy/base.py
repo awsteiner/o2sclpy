@@ -23,6 +23,7 @@
 import ctypes
 from abc import abstractmethod
 from o2sclpy.utils import force_bytes
+import numpy
 
 
 class table:
@@ -171,6 +172,19 @@ class table:
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr,)
         return
+
+    def __getitem__(self,col):
+        """
+        Wrapper for table<>::index_operator() .
+        wrapper for :ref:`o2sclp:table<>::index_operator()`.
+        """
+        col_=ctypes.c_char_p(force_bytes(col))
+        func=self._link.o2scl.o2scl_table___index_operator
+        func.restype=ctypes.POINTER(ctypes.c_double)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,col_)
+        ret2=numpy.ctypeslib.as_array(ret,shape=(n,))
+        return ret2
 
 class table_units(table):
     """
