@@ -26,6 +26,53 @@ from o2sclpy.utils import force_bytes
 import numpy
 
 
+class lib_settings_class:
+    """
+    Python interface for class :ref:`lib_settings_class <o2scl:lib_settings_class>`.
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class lib_settings_class .
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_lib_settings_class
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class lib_settings_class .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_lib_settings_class
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+        return
+
+    def eos_installed(self):
+        """
+        Wrapper for lib_settings_class::eos_installed() .
+        wrapper for :ref:`o2sclp:lib_settings_class::eos_installed()`.
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_eos_installed
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr,)
+        return ret
+
 class table:
     """
     Python interface for class :ref:`table<> <o2scl:table<>>`.
@@ -33,16 +80,21 @@ class table:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class table<> .
         """
 
-        f=link.o2scl.o2scl_create_table__
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl.o2scl_create_table__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -51,9 +103,10 @@ class table:
         Delete function for class table<> .
         """
 
-        f=self._link.o2scl.o2scl_free_table__
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_table__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def set(self,col,row,val):
@@ -192,15 +245,19 @@ class table_units(table):
     Python interface for class :ref:`table_units<> <o2scl:table_units<>>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class table_units<> .
         """
 
-        f=link.o2scl.o2scl_create_table_units__
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl.o2scl_create_table_units__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -209,9 +266,10 @@ class table_units(table):
         Delete function for class table_units<> .
         """
 
-        f=self._link.o2scl.o2scl_free_table_units__
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_table_units__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def get_unit(self,col):
@@ -268,16 +326,21 @@ class table3d:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class table3d .
         """
 
-        f=link.o2scl.o2scl_create_table3d
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl.o2scl_create_table3d
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -286,9 +349,10 @@ class table3d:
         Delete function for class table3d .
         """
 
-        f=self._link.o2scl.o2scl_free_table3d
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_table3d
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def set(self,ix,iy,name,val):
@@ -365,16 +429,21 @@ class tensor:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class tensor<> .
         """
 
-        f=link.o2scl.o2scl_create_tensor__
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl.o2scl_create_tensor__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -383,9 +452,10 @@ class tensor:
         Delete function for class tensor<> .
         """
 
-        f=self._link.o2scl.o2scl_free_tensor__
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_tensor__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def clear(self):
@@ -405,16 +475,21 @@ class find_constants:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class find_constants .
         """
 
-        f=link.o2scl.o2scl_create_find_constants
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl.o2scl_create_find_constants
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -423,9 +498,10 @@ class find_constants:
         Delete function for class find_constants .
         """
 
-        f=self._link.o2scl.o2scl_free_find_constants
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_find_constants
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def find_print(self,name,unit,prec,verbose):
@@ -460,16 +536,21 @@ class convert_units:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class convert_units<> .
         """
 
-        f=link.o2scl.o2scl_create_convert_units__
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl.o2scl_create_convert_units__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -478,9 +559,10 @@ class convert_units:
         Delete function for class convert_units<> .
         """
 
-        f=self._link.o2scl.o2scl_free_convert_units__
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_convert_units__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property

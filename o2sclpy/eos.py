@@ -33,16 +33,21 @@ class eos_base:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_base .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_base
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_base
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -51,9 +56,10 @@ class eos_base:
         Delete function for class eos_base .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_base
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_base
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def get_def_thermo(self,def_thermo):
@@ -80,15 +86,19 @@ class eos_had_base(eos_base):
     """
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_base .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_had_base
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_had_base
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -97,9 +107,10 @@ class eos_had_base(eos_base):
         Delete function for class eos_had_base .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_had_base
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_had_base
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -645,15 +656,19 @@ class eos_had_eden_base(eos_had_base):
     """
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_eden_base .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_had_eden_base
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_had_eden_base
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -662,9 +677,10 @@ class eos_had_eden_base(eos_had_base):
         Delete function for class eos_had_eden_base .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_had_eden_base
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_had_eden_base
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class eos_had_pres_base(eos_had_base):
@@ -673,15 +689,19 @@ class eos_had_pres_base(eos_had_base):
     """
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_pres_base .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_had_pres_base
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_had_pres_base
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -690,9 +710,10 @@ class eos_had_pres_base(eos_had_base):
         Delete function for class eos_had_pres_base .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_had_pres_base
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_had_pres_base
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class eos_had_temp_base(eos_had_base):
@@ -701,15 +722,19 @@ class eos_had_temp_base(eos_had_base):
     """
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_temp_base .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_had_temp_base
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_had_temp_base
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -718,9 +743,10 @@ class eos_had_temp_base(eos_had_base):
         Delete function for class eos_had_temp_base .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_had_temp_base
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_had_temp_base
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class eos_had_temp_eden_base(eos_had_temp_base):
@@ -729,15 +755,19 @@ class eos_had_temp_eden_base(eos_had_temp_base):
     """
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_temp_eden_base .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_had_temp_eden_base
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_had_temp_eden_base
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -746,9 +776,10 @@ class eos_had_temp_eden_base(eos_had_temp_base):
         Delete function for class eos_had_temp_eden_base .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_had_temp_eden_base
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_had_temp_eden_base
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class eos_had_temp_pres_base(eos_had_temp_base):
@@ -757,15 +788,19 @@ class eos_had_temp_pres_base(eos_had_temp_base):
     """
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_temp_pres_base .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_had_temp_pres_base
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_had_temp_pres_base
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -774,9 +809,10 @@ class eos_had_temp_pres_base(eos_had_temp_base):
         Delete function for class eos_had_temp_pres_base .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_had_temp_pres_base
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_had_temp_pres_base
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class eos_had_skyrme(eos_had_temp_eden_base):
@@ -784,15 +820,19 @@ class eos_had_skyrme(eos_had_temp_eden_base):
     Python interface for class :ref:`eos_had_skyrme <o2scle:eos_had_skyrme>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_skyrme .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_had_skyrme
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_had_skyrme
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -801,9 +841,10 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         Delete function for class eos_had_skyrme .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_had_skyrme
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_had_skyrme
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1148,15 +1189,19 @@ class eos_had_apr(eos_had_temp_eden_base):
     Python interface for class :ref:`eos_had_apr <o2scle:eos_had_apr>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_apr .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_had_apr
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_had_apr
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1165,9 +1210,10 @@ class eos_had_apr(eos_had_temp_eden_base):
         Delete function for class eos_had_apr .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_had_apr
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_had_apr
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1215,15 +1261,19 @@ class eos_had_rmf(eos_had_temp_pres_base):
     Python interface for class :ref:`eos_had_rmf <o2scle:eos_had_rmf>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_rmf .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_had_rmf
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_had_rmf
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1232,9 +1282,10 @@ class eos_had_rmf(eos_had_temp_pres_base):
         Delete function for class eos_had_rmf .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_had_rmf
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_had_rmf
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1742,15 +1793,19 @@ class eos_quark(eos_base):
     Python interface for class :ref:`eos_quark <o2scle:eos_quark>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_quark .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_quark
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_quark
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1759,9 +1814,10 @@ class eos_quark(eos_base):
         Delete function for class eos_quark .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_quark
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_quark
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class eos_quark_bag(eos_quark):
@@ -1769,15 +1825,19 @@ class eos_quark_bag(eos_quark):
     Python interface for class :ref:`eos_quark_bag <o2scle:eos_quark_bag>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_quark_bag .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_quark_bag
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_quark_bag
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1786,9 +1846,10 @@ class eos_quark_bag(eos_quark):
         Delete function for class eos_quark_bag .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_quark_bag
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_quark_bag
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1816,15 +1877,19 @@ class eos_quark_njl(eos_quark):
     Python interface for class :ref:`eos_quark_njl <o2scle:eos_quark_njl>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_quark_njl .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_quark_njl
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_quark_njl
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1833,9 +1898,10 @@ class eos_quark_njl(eos_quark):
         Delete function for class eos_quark_njl .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_quark_njl
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_quark_njl
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1965,17 +2031,22 @@ class eos_tov:
 
     _ptr=0
     _link=0
+    _owner=True
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_tov .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_tov
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_tov
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1984,9 +2055,10 @@ class eos_tov:
         Delete function for class eos_tov .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_tov
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_tov
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -2025,15 +2097,19 @@ class eos_tov_buchdahl(eos_tov):
     Python interface for class :ref:`eos_tov_buchdahl <o2scle:eos_tov_buchdahl>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_tov_buchdahl .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_tov_buchdahl
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_tov_buchdahl
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -2042,9 +2118,10 @@ class eos_tov_buchdahl(eos_tov):
         Delete function for class eos_tov_buchdahl .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_tov_buchdahl
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_tov_buchdahl
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -2072,15 +2149,19 @@ class eos_tov_polytrope(eos_tov):
     Python interface for class :ref:`eos_tov_polytrope <o2scle:eos_tov_polytrope>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_tov_polytrope .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_tov_polytrope
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_tov_polytrope
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -2089,9 +2170,10 @@ class eos_tov_polytrope(eos_tov):
         Delete function for class eos_tov_polytrope .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_tov_polytrope
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_tov_polytrope
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def set_coeff_index(self,coeff,index):
@@ -2109,15 +2191,19 @@ class eos_tov_linear(eos_tov):
     Python interface for class :ref:`eos_tov_linear <o2scle:eos_tov_linear>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_tov_linear .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_tov_linear
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_tov_linear
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -2126,9 +2212,10 @@ class eos_tov_linear(eos_tov):
         Delete function for class eos_tov_linear .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_tov_linear
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_tov_linear
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def set_cs2_eps0(self,cs2,eps0):
@@ -2146,15 +2233,19 @@ class eos_tov_interp(eos_tov):
     Python interface for class :ref:`eos_tov_interp <o2scle:eos_tov_interp>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class eos_tov_interp .
         """
 
-        f=link.o2scl_eos.o2scl_create_eos_tov_interp
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_eos_tov_interp
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -2163,9 +2254,10 @@ class eos_tov_interp(eos_tov):
         Delete function for class eos_tov_interp .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_eos_tov_interp
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_eos_tov_interp
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -2282,16 +2374,21 @@ class tov_solve:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class tov_solve .
         """
 
-        f=link.o2scl_eos.o2scl_create_tov_solve
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_tov_solve
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -2300,9 +2397,10 @@ class tov_solve:
         Delete function for class tov_solve .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_tov_solve
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_tov_solve
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -2948,16 +3046,21 @@ class tov_love:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class tov_love .
         """
 
-        f=link.o2scl_eos.o2scl_create_tov_love
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_tov_love
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -2966,9 +3069,10 @@ class tov_love:
         Delete function for class tov_love .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_tov_love
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_tov_love
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -3138,16 +3242,21 @@ class nstar_cold:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nstar_cold .
         """
 
-        f=link.o2scl_eos.o2scl_create_nstar_cold
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_eos.o2scl_create_nstar_cold
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -3156,9 +3265,10 @@ class nstar_cold:
         Delete function for class nstar_cold .
         """
 
-        f=self._link.o2scl_eos.o2scl_free_nstar_cold
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_eos.o2scl_free_nstar_cold
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property

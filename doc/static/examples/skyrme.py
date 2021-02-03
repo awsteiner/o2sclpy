@@ -19,19 +19,33 @@ prot.m=938.4/hc
 
 # Create the Skyrme object
 sk=o2sclpy.eos_had_skyrme(link)
-o2sclpy.skyrme_load(link,sk,'NRAPR',False,2)
+o2sclpy.skyrme_load(link,sk,'NRAPR',False,0)
 sk.saturation()
 print('NRAPR: n0=%7.6e 1/fm^3, E/A=%7.6e MeV' % (sk.n0,sk.eoa*hc))
+print('')
 
 # Create the nstar_cold object for automatically computing the
 # beta-equilibrium EOS and solving the TOV equations.
 nc=o2sclpy.nstar_cold(link)
 nc.set_eos(sk)
 ret1=nc.calc_eos(0.01)
+
 eos_table=nc.get_eos_results()
-arr=eos_table['nb']
-arr2=eos_table['ed']
-print(type(eos_table))
+print('EOS table:')
+for i in range(0,eos_table.get_ncolumns()):
+    col=eos_table.get_column_name(i)
+    unit=eos_table.get_unit(col)
+    print('Column',i,str(col,'UTF-8'),str(unit,'UTF-8'))
+print('')
+          
 ret2=nc.calc_nstar()
-mvsr_table=nc.get_tov_results()
+tov_table=nc.get_tov_results()
+print('')
+
+print('TOV table:')
+for i in range(0,tov_table.get_ncolumns()):
+    col=tov_table.get_column_name(i)
+    unit=tov_table.get_unit(col)
+    print('Column',i,str(col,'UTF-8'),str(unit,'UTF-8'))
+print('')
 

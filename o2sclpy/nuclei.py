@@ -31,15 +31,19 @@ class nucleus(part):
     Python interface for class :ref:`nucleus <o2sclp:nucleus>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucleus .
         """
 
-        f=link.o2scl_part.o2scl_create_nucleus
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucleus
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -48,9 +52,10 @@ class nucleus(part):
         Delete function for class nucleus .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucleus
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucleus
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -160,16 +165,21 @@ class nucmass_info:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_info .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_info
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_info
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -178,9 +188,10 @@ class nucmass_info:
         Delete function for class nucmass_info .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_info
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_info
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def parse_elstring(self,ela,Z,N,A):
@@ -270,17 +281,22 @@ class nucmass:
 
     _ptr=0
     _link=0
+    _owner=True
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -289,9 +305,10 @@ class nucmass:
         Delete function for class nucmass .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -545,15 +562,19 @@ class nucmass_table(nucmass):
     """
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_table .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_table
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_table
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -562,9 +583,10 @@ class nucmass_table(nucmass):
         Delete function for class nucmass_table .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_table
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_table
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -634,15 +656,19 @@ class nucmass_fit_base(nucmass):
     """
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_fit_base .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_fit_base
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_fit_base
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -651,9 +677,10 @@ class nucmass_fit_base(nucmass):
         Delete function for class nucmass_fit_base .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_fit_base
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_fit_base
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -681,15 +708,19 @@ class nucmass_semi_empirical(nucmass_fit_base):
     Python interface for class :ref:`nucmass_semi_empirical <o2sclp:nucmass_semi_empirical>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_semi_empirical .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_semi_empirical
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_semi_empirical
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -698,9 +729,10 @@ class nucmass_semi_empirical(nucmass_fit_base):
         Delete function for class nucmass_semi_empirical .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_semi_empirical
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_semi_empirical
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -830,15 +862,19 @@ class nucmass_ame(nucmass_table):
     Python interface for class :ref:`nucmass_ame <o2sclp:nucmass_ame>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_ame .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_ame
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_ame
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -847,9 +883,10 @@ class nucmass_ame(nucmass_table):
         Delete function for class nucmass_ame .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_ame
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_ame
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_dz_table(nucmass_table):
@@ -857,15 +894,19 @@ class nucmass_dz_table(nucmass_table):
     Python interface for class :ref:`nucmass_dz_table <o2sclp:nucmass_dz_table>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_dz_table .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_dz_table
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_dz_table
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -874,9 +915,10 @@ class nucmass_dz_table(nucmass_table):
         Delete function for class nucmass_dz_table .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_dz_table
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_dz_table
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_dz_fit(nucmass_fit_base):
@@ -884,15 +926,19 @@ class nucmass_dz_fit(nucmass_fit_base):
     Python interface for class :ref:`nucmass_dz_fit <o2sclp:nucmass_dz_fit>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_dz_fit .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_dz_fit
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_dz_fit
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -901,9 +947,10 @@ class nucmass_dz_fit(nucmass_fit_base):
         Delete function for class nucmass_dz_fit .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_dz_fit
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_dz_fit
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_dz_fit_33(nucmass_fit_base):
@@ -911,15 +958,19 @@ class nucmass_dz_fit_33(nucmass_fit_base):
     Python interface for class :ref:`nucmass_dz_fit_33 <o2sclp:nucmass_dz_fit_33>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_dz_fit_33 .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_dz_fit_33
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_dz_fit_33
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -928,9 +979,10 @@ class nucmass_dz_fit_33(nucmass_fit_base):
         Delete function for class nucmass_dz_fit_33 .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_dz_fit_33
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_dz_fit_33
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_frdm(nucmass_fit_base):
@@ -938,15 +990,19 @@ class nucmass_frdm(nucmass_fit_base):
     Python interface for class :ref:`nucmass_frdm <o2sclp:nucmass_frdm>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_frdm .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_frdm
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_frdm
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -955,9 +1011,10 @@ class nucmass_frdm(nucmass_fit_base):
         Delete function for class nucmass_frdm .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_frdm
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_frdm
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1485,15 +1542,19 @@ class nucmass_mnmsk(nucmass_table):
     Python interface for class :ref:`nucmass_mnmsk <o2sclp:nucmass_mnmsk>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_mnmsk .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_mnmsk
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_mnmsk
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1502,9 +1563,10 @@ class nucmass_mnmsk(nucmass_table):
         Delete function for class nucmass_mnmsk .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_mnmsk
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_mnmsk
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_mnmsk_exp(nucmass_mnmsk):
@@ -1512,15 +1574,19 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
     Python interface for class :ref:`nucmass_mnmsk_exp <o2sclp:nucmass_mnmsk_exp>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_mnmsk_exp .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_mnmsk_exp
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_mnmsk_exp
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1529,9 +1595,10 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
         Delete function for class nucmass_mnmsk_exp .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_mnmsk_exp
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_mnmsk_exp
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_gen(nucmass_table):
@@ -1539,15 +1606,19 @@ class nucmass_gen(nucmass_table):
     Python interface for class :ref:`nucmass_gen <o2sclp:nucmass_gen>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_gen .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_gen
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_gen
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1556,9 +1627,10 @@ class nucmass_gen(nucmass_table):
         Delete function for class nucmass_gen .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_gen
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_gen
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_dglg(nucmass_table):
@@ -1566,15 +1638,19 @@ class nucmass_dglg(nucmass_table):
     Python interface for class :ref:`nucmass_dglg <o2sclp:nucmass_dglg>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_dglg .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_dglg
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_dglg
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1583,9 +1659,10 @@ class nucmass_dglg(nucmass_table):
         Delete function for class nucmass_dglg .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_dglg
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_dglg
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_hfb(nucmass_table):
@@ -1593,15 +1670,19 @@ class nucmass_hfb(nucmass_table):
     Python interface for class :ref:`nucmass_hfb <o2sclp:nucmass_hfb>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_hfb .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_hfb
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_hfb
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1610,9 +1691,10 @@ class nucmass_hfb(nucmass_table):
         Delete function for class nucmass_hfb .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_hfb
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_hfb
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_hfb_sp(nucmass_table):
@@ -1620,15 +1702,19 @@ class nucmass_hfb_sp(nucmass_table):
     Python interface for class :ref:`nucmass_hfb_sp <o2sclp:nucmass_hfb_sp>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_hfb_sp .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_hfb_sp
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_hfb_sp
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1637,9 +1723,10 @@ class nucmass_hfb_sp(nucmass_table):
         Delete function for class nucmass_hfb_sp .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_hfb_sp
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_hfb_sp
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_ktuy(nucmass_table):
@@ -1647,15 +1734,19 @@ class nucmass_ktuy(nucmass_table):
     Python interface for class :ref:`nucmass_ktuy <o2sclp:nucmass_ktuy>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_ktuy .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_ktuy
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_ktuy
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1664,9 +1755,10 @@ class nucmass_ktuy(nucmass_table):
         Delete function for class nucmass_ktuy .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_ktuy
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_ktuy
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_sdnp(nucmass_table):
@@ -1674,15 +1766,19 @@ class nucmass_sdnp(nucmass_table):
     Python interface for class :ref:`nucmass_sdnp <o2sclp:nucmass_sdnp>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_sdnp .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_sdnp
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_sdnp
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1691,9 +1787,10 @@ class nucmass_sdnp(nucmass_table):
         Delete function for class nucmass_sdnp .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_sdnp
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_sdnp
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class nucmass_wlw(nucmass_table):
@@ -1701,15 +1798,19 @@ class nucmass_wlw(nucmass_table):
     Python interface for class :ref:`nucmass_wlw <o2sclp:nucmass_wlw>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class nucmass_wlw .
         """
 
-        f=link.o2scl_part.o2scl_create_nucmass_wlw
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_nucmass_wlw
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1718,9 +1819,10 @@ class nucmass_wlw(nucmass_table):
         Delete function for class nucmass_wlw .
         """
 
-        f=self._link.o2scl_part.o2scl_free_nucmass_wlw
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_nucmass_wlw
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 def ame_load(link,ame,name,exp_only):

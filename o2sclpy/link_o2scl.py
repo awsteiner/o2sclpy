@@ -34,6 +34,8 @@ from o2sclpy.utils import force_bytes, if_yt_then_Agg
 # For find_library() in link_o2scl_o2graph()
 from ctypes.util import find_library
 
+from o2sclpy.base import lib_settings_class
+
 class linker:
 
     # O2scl library directory from command-line or environment variables
@@ -71,12 +73,18 @@ class linker:
 
     # System C++ library handle
     systcpp=0
+
+    # The o2scl_settings pointer
+    o2scl_settings=0
     
     def link_o2scl_o2graph(self,include_part=False,include_eos=False):
         """
         A new function for linking o2scl which came originally from
         the o2graph script
         """
+
+        if include_eos==True and include_part==False:
+            raise Exception('Cannot include EOS without part.')
     
         # Future: it appears we may need to fix the string comparisons in the
         # code below and force conversion to byte strings (even though for now
@@ -266,11 +274,20 @@ class linker:
             if self.debug_first_pass:
                 print('Done loading o2scl libraries.')
 
-        if include_part:
-            if self.debug_first_pass:
-                print('Setting alternate error handler.')
-            self.o2scl.o2scl_set_err_hnd_gsl()
-            
+        # This is necessary even if we're only including o2scl because
+        # the o2scl error handler is sometimes used by GSL functions
+        if self.debug_first_pass:
+            print('Setting alternate error handler.')
+        self.o2scl.o2scl_set_err_hnd_gsl()
+
+        # Get the global library settings pointer
+        func=self.o2scl.o2scl_get_o2scl_settings
+        func.restype=ctypes.c_void_p
+        ptr=func()
+
+        # Create a library settings object with the pointer
+        self.o2scl_settings=lib_settings_class(self,ptr)
+        
         return
     
     def get_library_settings(self,argv=[]):

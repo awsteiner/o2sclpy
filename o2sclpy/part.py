@@ -32,16 +32,21 @@ class thermo:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class thermo .
         """
 
-        f=link.o2scl_part.o2scl_create_thermo
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_thermo
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -50,9 +55,10 @@ class thermo:
         Delete function for class thermo .
         """
 
-        f=self._link.o2scl_part.o2scl_free_thermo
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_thermo
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -122,16 +128,21 @@ class part:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class part .
         """
 
-        f=link.o2scl_part.o2scl_create_part
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_part
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -140,9 +151,10 @@ class part:
         Delete function for class part .
         """
 
-        f=self._link.o2scl_part.o2scl_free_part
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_part
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -390,15 +402,19 @@ class fermion(part):
     Python interface for class :ref:`fermion <o2sclp:fermion_tl>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class fermion .
         """
 
-        f=link.o2scl_part.o2scl_create_fermion
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_fermion
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -407,9 +423,10 @@ class fermion(part):
         Delete function for class fermion .
         """
 
-        f=self._link.o2scl_part.o2scl_free_fermion
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_fermion
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -457,15 +474,19 @@ class quark(fermion):
     Python interface for class :ref:`quark <o2sclp:quark>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class quark .
         """
 
-        f=link.o2scl_part.o2scl_create_quark
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_quark
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -474,9 +495,10 @@ class quark(fermion):
         Delete function for class quark .
         """
 
-        f=self._link.o2scl_part.o2scl_free_quark
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_quark
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -526,16 +548,21 @@ class fermion_zerot:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class fermion_zerot .
         """
 
-        f=link.o2scl_part.o2scl_create_fermion_zerot
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_fermion_zerot
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -544,9 +571,10 @@ class fermion_zerot:
         Delete function for class fermion_zerot .
         """
 
-        f=self._link.o2scl_part.o2scl_free_fermion_zerot
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_fermion_zerot
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def kf_from_density(self,f):
@@ -605,15 +633,19 @@ class fermion_thermo(fermion_zerot):
     """
 
     @abstractmethod
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class fermion_thermo .
         """
 
-        f=link.o2scl_part.o2scl_create_fermion_thermo
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_fermion_thermo
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -622,9 +654,10 @@ class fermion_thermo(fermion_zerot):
         Delete function for class fermion_thermo .
         """
 
-        f=self._link.o2scl_part.o2scl_free_fermion_thermo
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_fermion_thermo
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def calc_mu_deg(self,f,T,prec):
@@ -694,15 +727,19 @@ class fermion_rel(fermion_thermo):
     Python interface for class :ref:`fermion_rel <o2sclp:fermion_rel_tl>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class fermion_rel .
         """
 
-        f=link.o2scl_part.o2scl_create_fermion_rel
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_fermion_rel
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -711,9 +748,10 @@ class fermion_rel(fermion_thermo):
         Delete function for class fermion_rel .
         """
 
-        f=self._link.o2scl_part.o2scl_free_fermion_rel
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_fermion_rel
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1012,15 +1050,19 @@ class fermion_nonrel(fermion_zerot):
     Python interface for class :ref:`fermion_nonrel <o2sclp:fermion_nonrel_tl>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class fermion_nonrel .
         """
 
-        f=link.o2scl_part.o2scl_create_fermion_nonrel
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_fermion_nonrel
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1029,9 +1071,10 @@ class fermion_nonrel(fermion_zerot):
         Delete function for class fermion_nonrel .
         """
 
-        f=self._link.o2scl_part.o2scl_free_fermion_nonrel
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_fermion_nonrel
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def calc_density(self,f,T):
@@ -1070,15 +1113,19 @@ class boson(part):
     Python interface for class :ref:`boson <o2sclp:boson>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class boson .
         """
 
-        f=link.o2scl_part.o2scl_create_boson
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_boson
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1087,9 +1134,10 @@ class boson(part):
         Delete function for class boson .
         """
 
-        f=self._link.o2scl_part.o2scl_free_boson
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_boson
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1119,16 +1167,21 @@ class boson_rel:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class boson_rel .
         """
 
-        f=link.o2scl_part.o2scl_create_boson_rel
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_boson_rel
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1137,9 +1190,10 @@ class boson_rel:
         Delete function for class boson_rel .
         """
 
-        f=self._link.o2scl_part.o2scl_free_boson_rel
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_boson_rel
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def calc_density(self,b,T):
@@ -1199,16 +1253,21 @@ class classical_thermo:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class classical_thermo .
         """
 
-        f=link.o2scl_part.o2scl_create_classical_thermo
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_classical_thermo
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1217,9 +1276,10 @@ class classical_thermo:
         Delete function for class classical_thermo .
         """
 
-        f=self._link.o2scl_part.o2scl_free_classical_thermo
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_classical_thermo
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def calc_density(self,p,T):
@@ -1249,16 +1309,21 @@ class thermo_np_deriv_press:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class thermo_np_deriv_press .
         """
 
-        f=link.o2scl_part.o2scl_create_thermo_np_deriv_press
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_thermo_np_deriv_press
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1267,9 +1332,10 @@ class thermo_np_deriv_press:
         Delete function for class thermo_np_deriv_press .
         """
 
-        f=self._link.o2scl_part.o2scl_free_thermo_np_deriv_press
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_thermo_np_deriv_press
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1399,16 +1465,21 @@ class thermo_np_deriv_helm:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class thermo_np_deriv_helm .
         """
 
-        f=link.o2scl_part.o2scl_create_thermo_np_deriv_helm
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_thermo_np_deriv_helm
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1417,9 +1488,10 @@ class thermo_np_deriv_helm:
         Delete function for class thermo_np_deriv_helm .
         """
 
-        f=self._link.o2scl_part.o2scl_free_thermo_np_deriv_helm
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_thermo_np_deriv_helm
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1549,16 +1621,21 @@ class part_deriv_press:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class part_deriv_press .
         """
 
-        f=link.o2scl_part.o2scl_create_part_deriv_press
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_part_deriv_press
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1567,9 +1644,10 @@ class part_deriv_press:
         Delete function for class part_deriv_press .
         """
 
-        f=self._link.o2scl_part.o2scl_free_part_deriv_press
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_part_deriv_press
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -1647,15 +1725,19 @@ class part_deriv(part):
     Python interface for class :ref:`part_deriv <o2sclp:part_deriv_tl>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class part_deriv .
         """
 
-        f=link.o2scl_part.o2scl_create_part_deriv
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_part_deriv
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1664,9 +1746,10 @@ class part_deriv(part):
         Delete function for class part_deriv .
         """
 
-        f=self._link.o2scl_part.o2scl_free_part_deriv
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_part_deriv
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class fermion_deriv(fermion):
@@ -1674,15 +1757,19 @@ class fermion_deriv(fermion):
     Python interface for class :ref:`fermion_deriv <o2sclp:fermion_deriv_tl>`.
     """
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class fermion_deriv .
         """
 
-        f=link.o2scl_part.o2scl_create_fermion_deriv
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_fermion_deriv
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1691,9 +1778,10 @@ class fermion_deriv(fermion):
         Delete function for class fermion_deriv .
         """
 
-        f=self._link.o2scl_part.o2scl_free_fermion_deriv
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_fermion_deriv
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
 class deriv_thermo_base:
@@ -1703,16 +1791,21 @@ class deriv_thermo_base:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class deriv_thermo_base .
         """
 
-        f=link.o2scl_part.o2scl_create_deriv_thermo_base
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_deriv_thermo_base
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1721,9 +1814,10 @@ class deriv_thermo_base:
         Delete function for class deriv_thermo_base .
         """
 
-        f=self._link.o2scl_part.o2scl_free_deriv_thermo_base
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_deriv_thermo_base
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def heat_cap_ppart_const_vol(self,p,T):
@@ -1799,16 +1893,21 @@ class fermion_deriv_rel:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class fermion_deriv_rel .
         """
 
-        f=link.o2scl_part.o2scl_create_fermion_deriv_rel
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_fermion_deriv_rel
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -1817,9 +1916,10 @@ class fermion_deriv_rel:
         Delete function for class fermion_deriv_rel .
         """
 
-        f=self._link.o2scl_part.o2scl_free_fermion_deriv_rel
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_fermion_deriv_rel
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -2022,16 +2122,21 @@ class fermion_deriv_nr:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class fermion_deriv_nr .
         """
 
-        f=link.o2scl_part.o2scl_create_fermion_deriv_nr
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_fermion_deriv_nr
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -2040,9 +2145,10 @@ class fermion_deriv_nr:
         Delete function for class fermion_deriv_nr .
         """
 
-        f=self._link.o2scl_part.o2scl_free_fermion_deriv_nr
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_fermion_deriv_nr
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
@@ -2143,16 +2249,21 @@ class classical_deriv_thermo:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class classical_deriv_thermo .
         """
 
-        f=link.o2scl_part.o2scl_create_classical_deriv_thermo
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_classical_deriv_thermo
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -2161,9 +2272,10 @@ class classical_deriv_thermo:
         Delete function for class classical_deriv_thermo .
         """
 
-        f=self._link.o2scl_part.o2scl_free_classical_deriv_thermo
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_classical_deriv_thermo
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     def calc_density(self,p,T):
@@ -2193,16 +2305,21 @@ class fermion_mag_zerot:
 
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,pointer=0):
         """
         Init function for class fermion_mag_zerot .
         """
 
-        f=link.o2scl_part.o2scl_create_fermion_mag_zerot
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
+        if pointer==0:
+            f=link.o2scl_part.o2scl_create_fermion_mag_zerot
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
         self._link=link
         return
 
@@ -2211,9 +2328,10 @@ class fermion_mag_zerot:
         Delete function for class fermion_mag_zerot .
         """
 
-        f=self._link.o2scl_part.o2scl_free_fermion_mag_zerot
-        f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        if self._owner==True:
+            f=self._link.o2scl_part.o2scl_free_fermion_mag_zerot
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
         return
 
     @property
