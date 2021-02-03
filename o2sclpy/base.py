@@ -70,8 +70,20 @@ class lib_settings_class:
         func=self._link.o2scl.o2scl_lib_settings_class_eos_installed
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr,)
+        ret=func(self._ptr)
         return ret
+
+    def get_convert_units(self):
+        """
+        Wrapper for lib_settings_class::get_convert_units() .
+        wrapper for :ref:`o2sclp:lib_settings_class::get_convert_units()`.
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_get_convert_units
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        ret2=convert_units(self._link,ret)
+        return ret2
 
 class table:
     """
@@ -140,7 +152,7 @@ class table:
         func=self._link.o2scl.o2scl_table___get_ncolumns
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr,)
+        ret=func(self._ptr)
         return ret
 
     def get_nlines(self):
@@ -151,7 +163,7 @@ class table:
         func=self._link.o2scl.o2scl_table___get_nlines
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr,)
+        ret=func(self._ptr)
         return ret
 
     def set_nlines(self,lines):
@@ -193,7 +205,7 @@ class table:
         """
         func=self._link.o2scl.o2scl_table___clear
         func.argtypes=[ctypes.c_void_p]
-        func(self._ptr,)
+        func(self._ptr)
         return
 
     def clear_data(self):
@@ -203,7 +215,7 @@ class table:
         """
         func=self._link.o2scl.o2scl_table___clear_data
         func.argtypes=[ctypes.c_void_p]
-        func(self._ptr,)
+        func(self._ptr)
         return
 
     def clear_table(self):
@@ -213,7 +225,7 @@ class table:
         """
         func=self._link.o2scl.o2scl_table___clear_table
         func.argtypes=[ctypes.c_void_p]
-        func(self._ptr,)
+        func(self._ptr)
         return
 
     def clear_constants(self):
@@ -223,7 +235,7 @@ class table:
         """
         func=self._link.o2scl.o2scl_table___clear_constants
         func.argtypes=[ctypes.c_void_p]
-        func(self._ptr,)
+        func(self._ptr)
         return
 
     def __getitem__(self,col):
@@ -316,7 +328,7 @@ class table_units(table):
         """
         func=self._link.o2scl.o2scl_table_units___clear_table
         func.argtypes=[ctypes.c_void_p]
-        func(self._ptr,)
+        func(self._ptr)
         return
 
 class table3d:
@@ -397,7 +409,7 @@ class table3d:
         func=self._link.o2scl.o2scl_table3d_get_nx
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr,)
+        ret=func(self._ptr)
         return ret
 
     def get_ny(self):
@@ -408,7 +420,7 @@ class table3d:
         func=self._link.o2scl.o2scl_table3d_get_ny
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr,)
+        ret=func(self._ptr)
         return ret
 
     def get_nslices(self):
@@ -419,7 +431,7 @@ class table3d:
         func=self._link.o2scl.o2scl_table3d_get_nslices
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr,)
+        ret=func(self._ptr)
         return ret
 
 class tensor:
@@ -465,7 +477,7 @@ class tensor:
         """
         func=self._link.o2scl.o2scl_tensor___clear
         func.argtypes=[ctypes.c_void_p]
-        func(self._ptr,)
+        func(self._ptr)
         return
 
 class find_constants:
@@ -697,7 +709,7 @@ class convert_units:
         """
         func=self._link.o2scl.o2scl_convert_units___print_cache
         func.argtypes=[ctypes.c_void_p]
-        func(self._ptr,)
+        func(self._ptr)
         return
 
 class shared_ptr_table_units(table_units):

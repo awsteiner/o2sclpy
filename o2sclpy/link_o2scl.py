@@ -84,7 +84,7 @@ class linker:
         """
 
         if include_eos==True and include_part==False:
-            raise Exception('Cannot include EOS without part.')
+            raise Exception('Cannot include o2scl_eos without o2scl_part.')
     
         # Future: it appears we may need to fix the string comparisons in the
         # code below and force conversion to byte strings (even though for now
