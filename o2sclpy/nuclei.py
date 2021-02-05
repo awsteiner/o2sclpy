@@ -196,7 +196,7 @@ class nucmass_info:
 
     def parse_elstring(self,ela,Z,N,A):
         """
-        Wrapper for nucmass_info::parse_elstring() .
+        This function returns a ctypes.c_int object.
         """
         ela_=ctypes.c_char_p(force_bytes(ela))
         func=self._link.o2scl_part.o2scl_nucmass_info_parse_elstring
@@ -207,7 +207,7 @@ class nucmass_info:
 
     def eltoZ(self,el):
         """
-        Wrapper for nucmass_info::eltoZ() .
+        This function returns a ctypes.c_int object.
         """
         el_=ctypes.c_char_p(force_bytes(el))
         func=self._link.o2scl_part.o2scl_nucmass_info_eltoZ
@@ -218,7 +218,7 @@ class nucmass_info:
 
     def Ztoel(self,Z):
         """
-        Wrapper for nucmass_info::Ztoel() .
+        This function returns a python bytes object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_Ztoel
         func.restype=ctypes.c_char_p
@@ -228,7 +228,7 @@ class nucmass_info:
 
     def Ztoname(self,Z):
         """
-        Wrapper for nucmass_info::Ztoname() .
+        This function returns a python bytes object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_Ztoname
         func.restype=ctypes.c_char_p
@@ -238,7 +238,7 @@ class nucmass_info:
 
     def tostring(self,Z,N):
         """
-        Wrapper for nucmass_info::tostring() .
+        This function returns a python bytes object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_tostring
         func.restype=ctypes.c_char_p
@@ -248,7 +248,7 @@ class nucmass_info:
 
     def int_to_spinp(self,g):
         """
-        Wrapper for nucmass_info::int_to_spinp() .
+        This function returns a python bytes object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_int_to_spinp
         func.restype=ctypes.c_char_p
@@ -258,7 +258,7 @@ class nucmass_info:
 
     def spinp_to_int(self,s):
         """
-        Wrapper for nucmass_info::spinp_to_int() .
+        This function returns a ctypes.c_int object.
         """
         s_=ctypes.c_char_p(force_bytes(s))
         func=self._link.o2scl_part.o2scl_nucmass_info_spinp_to_int
@@ -386,7 +386,7 @@ class nucmass:
 
     def is_included(self,Z,N):
         """
-        Wrapper for nucmass::is_included() .
+        This function returns a ctypes.c_bool object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_is_included
         func.restype=ctypes.c_bool
@@ -396,7 +396,7 @@ class nucmass:
 
     def get_nucleus(self,Z,N,n):
         """
-        Wrapper for nucmass::get_nucleus() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_get_nucleus
         func.restype=ctypes.c_int
@@ -406,7 +406,7 @@ class nucmass:
 
     def mass_excess(self,Z,N):
         """
-        Wrapper for nucmass::mass_excess() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_mass_excess
         func.restype=ctypes.c_double
@@ -416,7 +416,7 @@ class nucmass:
 
     def mass_excess_d(self,Z,N):
         """
-        Wrapper for nucmass::mass_excess_d() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_mass_excess_d
         func.restype=ctypes.c_double
@@ -426,7 +426,7 @@ class nucmass:
 
     def electron_binding(self,Z):
         """
-        Wrapper for nucmass::electron_binding() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_electron_binding
         func.restype=ctypes.c_double
@@ -436,7 +436,7 @@ class nucmass:
 
     def binding_energy(self,Z,N):
         """
-        Wrapper for nucmass::binding_energy() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_binding_energy
         func.restype=ctypes.c_double
@@ -446,7 +446,7 @@ class nucmass:
 
     def binding_energy_d(self,Z,N):
         """
-        Wrapper for nucmass::binding_energy_d() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_binding_energy_d
         func.restype=ctypes.c_double
@@ -456,7 +456,7 @@ class nucmass:
 
     def total_mass(self,Z,N):
         """
-        Wrapper for nucmass::total_mass() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_total_mass
         func.restype=ctypes.c_double
@@ -466,7 +466,7 @@ class nucmass:
 
     def total_mass_d(self,Z,N):
         """
-        Wrapper for nucmass::total_mass_d() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_total_mass_d
         func.restype=ctypes.c_double
@@ -476,7 +476,7 @@ class nucmass:
 
     def neutron_sep(self,Z,N):
         """
-        Wrapper for nucmass::neutron_sep() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_neutron_sep
         func.restype=ctypes.c_double
@@ -486,7 +486,7 @@ class nucmass:
 
     def two_neutron_sep(self,Z,N):
         """
-        Wrapper for nucmass::two_neutron_sep() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_two_neutron_sep
         func.restype=ctypes.c_double
@@ -496,7 +496,7 @@ class nucmass:
 
     def proton_sep(self,Z,N):
         """
-        Wrapper for nucmass::proton_sep() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_proton_sep
         func.restype=ctypes.c_double
@@ -506,7 +506,7 @@ class nucmass:
 
     def two_proton_sep(self,Z,N):
         """
-        Wrapper for nucmass::two_proton_sep() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_two_proton_sep
         func.restype=ctypes.c_double
@@ -516,7 +516,7 @@ class nucmass:
 
     def atomic_mass(self,Z,N):
         """
-        Wrapper for nucmass::atomic_mass() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_atomic_mass
         func.restype=ctypes.c_double
@@ -526,7 +526,7 @@ class nucmass:
 
     def atomic_mass_d(self,Z,N):
         """
-        Wrapper for nucmass::atomic_mass_d() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_atomic_mass_d
         func.restype=ctypes.c_double
@@ -608,7 +608,7 @@ class nucmass_table(nucmass):
 
     def is_loaded(self):
         """
-        Wrapper for nucmass_table::is_loaded() .
+        This function returns a ctypes.c_bool object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_table_is_loaded
         func.restype=ctypes.c_bool
@@ -618,7 +618,7 @@ class nucmass_table(nucmass):
 
     def get_nentries(self):
         """
-        Wrapper for nucmass_table::get_nentries() .
+        This function returns a ctypes.c_size_t object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_table_get_nentries
         func.restype=ctypes.c_size_t
@@ -813,7 +813,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
 
     def mass_excess(self,Z,N):
         """
-        Wrapper for nucmass_semi_empirical::mass_excess() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_semi_empirical_mass_excess
         func.restype=ctypes.c_double
@@ -823,7 +823,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
 
     def mass_excess_d(self,Z,N):
         """
-        Wrapper for nucmass_semi_empirical::mass_excess_d() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_part.o2scl_nucmass_semi_empirical_mass_excess_d
         func.restype=ctypes.c_double

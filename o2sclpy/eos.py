@@ -291,7 +291,7 @@ class eos_had_base(eos_base):
 
     def calc_e(self,n,p,th):
         """
-        Wrapper for eos_had_base::calc_e() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_e
         func.restype=ctypes.c_int
@@ -301,7 +301,7 @@ class eos_had_base(eos_base):
 
     def calc_p(self,n,p,th):
         """
-        Wrapper for eos_had_base::calc_p() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_p
         func.restype=ctypes.c_int
@@ -311,7 +311,7 @@ class eos_had_base(eos_base):
 
     def fcomp(self,nb,delta):
         """
-        Wrapper for eos_had_base::fcomp() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp
         func.restype=ctypes.c_double
@@ -321,7 +321,7 @@ class eos_had_base(eos_base):
 
     def fcomp_err(self,nb,delta,unc):
         """
-        Wrapper for eos_had_base::fcomp_err() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp_err
         func.restype=ctypes.c_double
@@ -331,7 +331,7 @@ class eos_had_base(eos_base):
 
     def feoa(self,nb,delta):
         """
-        Wrapper for eos_had_base::feoa() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feoa
         func.restype=ctypes.c_double
@@ -341,7 +341,7 @@ class eos_had_base(eos_base):
 
     def fesym(self,nb,delta):
         """
-        Wrapper for eos_had_base::fesym() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym
         func.restype=ctypes.c_double
@@ -351,7 +351,7 @@ class eos_had_base(eos_base):
 
     def fesym_err(self,nb,delta,unc):
         """
-        Wrapper for eos_had_base::fesym_err() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_err
         func.restype=ctypes.c_double
@@ -361,7 +361,7 @@ class eos_had_base(eos_base):
 
     def fesym_slope(self,nb,delta):
         """
-        Wrapper for eos_had_base::fesym_slope() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_slope
         func.restype=ctypes.c_double
@@ -371,7 +371,7 @@ class eos_had_base(eos_base):
 
     def fesym_curve(self,nb,delta):
         """
-        Wrapper for eos_had_base::fesym_curve() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_curve
         func.restype=ctypes.c_double
@@ -381,7 +381,7 @@ class eos_had_base(eos_base):
 
     def fesym_skew(self,nb,delta):
         """
-        Wrapper for eos_had_base::fesym_skew() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_skew
         func.restype=ctypes.c_double
@@ -391,7 +391,7 @@ class eos_had_base(eos_base):
 
     def fesym_diff(self,nb):
         """
-        Wrapper for eos_had_base::fesym_diff() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_diff
         func.restype=ctypes.c_double
@@ -401,7 +401,7 @@ class eos_had_base(eos_base):
 
     def feta(self,nb):
         """
-        Wrapper for eos_had_base::feta() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feta
         func.restype=ctypes.c_double
@@ -411,7 +411,7 @@ class eos_had_base(eos_base):
 
     def feta_prime(self,nb):
         """
-        Wrapper for eos_had_base::feta_prime() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feta_prime
         func.restype=ctypes.c_double
@@ -421,7 +421,7 @@ class eos_had_base(eos_base):
 
     def fkprime(self,nb,delta):
         """
-        Wrapper for eos_had_base::fkprime() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fkprime
         func.restype=ctypes.c_double
@@ -431,7 +431,7 @@ class eos_had_base(eos_base):
 
     def fmsom(self,nb,delta):
         """
-        Wrapper for eos_had_base::fmsom() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fmsom
         func.restype=ctypes.c_double
@@ -441,7 +441,7 @@ class eos_had_base(eos_base):
 
     def f_effm_neut(self,nb,delta):
         """
-        Wrapper for eos_had_base::f_effm_neut() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_neut
         func.restype=ctypes.c_double
@@ -451,7 +451,7 @@ class eos_had_base(eos_base):
 
     def f_effm_prot(self,nb,delta):
         """
-        Wrapper for eos_had_base::f_effm_prot() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_prot
         func.restype=ctypes.c_double
@@ -461,7 +461,7 @@ class eos_had_base(eos_base):
 
     def f_effm_scalar(self,nb,delta):
         """
-        Wrapper for eos_had_base::f_effm_scalar() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_scalar
         func.restype=ctypes.c_double
@@ -471,7 +471,7 @@ class eos_had_base(eos_base):
 
     def f_effm_vector(self,nb,delta):
         """
-        Wrapper for eos_had_base::f_effm_vector() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_vector
         func.restype=ctypes.c_double
@@ -481,7 +481,7 @@ class eos_had_base(eos_base):
 
     def fn0(self,delta,leoa):
         """
-        Wrapper for eos_had_base::fn0() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fn0
         func.restype=ctypes.c_double
@@ -491,7 +491,6 @@ class eos_had_base(eos_base):
 
     def f_number_suscept(self,mun,mup,dPdnn,dPdnp,dPdpp):
         """
-        Wrapper for eos_had_base::f_number_suscept() .
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_number_suscept
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -500,7 +499,6 @@ class eos_had_base(eos_base):
 
     def f_inv_number_suscept(self,mun,mup,dednn,dednp,dedpp):
         """
-        Wrapper for eos_had_base::f_inv_number_suscept() .
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_inv_number_suscept
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -509,7 +507,7 @@ class eos_had_base(eos_base):
 
     def saturation(self):
         """
-        Wrapper for eos_had_base::saturation() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_saturation
         func.restype=ctypes.c_int
@@ -519,7 +517,7 @@ class eos_had_base(eos_base):
 
     def calc_mun_e(self,nn,np):
         """
-        Wrapper for eos_had_base::calc_mun_e() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_mun_e
         func.restype=ctypes.c_double
@@ -529,7 +527,7 @@ class eos_had_base(eos_base):
 
     def calc_mup_e(self,nn,np):
         """
-        Wrapper for eos_had_base::calc_mup_e() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_mup_e
         func.restype=ctypes.c_double
@@ -539,7 +537,7 @@ class eos_had_base(eos_base):
 
     def calc_ed(self,nn,np):
         """
-        Wrapper for eos_had_base::calc_ed() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_ed
         func.restype=ctypes.c_double
@@ -549,7 +547,7 @@ class eos_had_base(eos_base):
 
     def calc_pr(self,nn,np):
         """
-        Wrapper for eos_had_base::calc_pr() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_pr
         func.restype=ctypes.c_double
@@ -559,7 +557,7 @@ class eos_had_base(eos_base):
 
     def calc_nn_p(self,mun,mup):
         """
-        Wrapper for eos_had_base::calc_nn_p() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_nn_p
         func.restype=ctypes.c_double
@@ -569,7 +567,7 @@ class eos_had_base(eos_base):
 
     def calc_np_p(self,nn,mup):
         """
-        Wrapper for eos_had_base::calc_np_p() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_np_p
         func.restype=ctypes.c_double
@@ -579,7 +577,7 @@ class eos_had_base(eos_base):
 
     def calc_dmu_delta(self,nb,delta):
         """
-        Wrapper for eos_had_base::calc_dmu_delta() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_dmu_delta
         func.restype=ctypes.c_double
@@ -589,7 +587,7 @@ class eos_had_base(eos_base):
 
     def calc_musum_delta(self,nb,delta):
         """
-        Wrapper for eos_had_base::calc_musum_delta() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_musum_delta
         func.restype=ctypes.c_double
@@ -599,7 +597,7 @@ class eos_had_base(eos_base):
 
     def calc_pressure_nb(self,nb,delta):
         """
-        Wrapper for eos_had_base::calc_pressure_nb() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_pressure_nb
         func.restype=ctypes.c_double
@@ -609,7 +607,7 @@ class eos_had_base(eos_base):
 
     def calc_edensity_nb(self,nb,delta):
         """
-        Wrapper for eos_had_base::calc_edensity_nb() .
+        This function returns a ctypes.c_double object.
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_edensity_nb
         func.restype=ctypes.c_double
@@ -2050,7 +2048,7 @@ class eos_tov:
 
     def has_baryons(self):
         """
-        Wrapper for eos_tov::has_baryons() .
+        This function returns a ctypes.c_bool object.
         """
         func=self._link.o2scl_eos.o2scl_eos_tov_has_baryons
         func.restype=ctypes.c_bool
@@ -2144,7 +2142,6 @@ class eos_tov_polytrope(eos_tov):
 
     def set_coeff_index(self,coeff,index):
         """
-        Wrapper for eos_tov_polytrope::set_coeff_index() .
         """
         func=self._link.o2scl_eos.o2scl_eos_tov_polytrope_set_coeff_index
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
@@ -2185,7 +2182,6 @@ class eos_tov_linear(eos_tov):
 
     def set_cs2_eps0(self,cs2,eps0):
         """
-        Wrapper for eos_tov_linear::set_cs2_eps0() .
         """
         func=self._link.o2scl_eos.o2scl_eos_tov_linear_set_cs2_eps0
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
@@ -2246,7 +2242,6 @@ class eos_tov_interp(eos_tov):
 
     def read_table(self,eos,s_cole,s_colp,s_colnb):
         """
-        Wrapper for eos_tov_interp::read_table() .
         """
         s_cole_=ctypes.c_char_p(force_bytes(s_cole))
         s_colp_=ctypes.c_char_p(force_bytes(s_colp))
@@ -2258,7 +2253,6 @@ class eos_tov_interp(eos_tov):
 
     def default_low_dens_eos(self):
         """
-        Wrapper for eos_tov_interp::default_low_dens_eos() .
         """
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_default_low_dens_eos
         func.argtypes=[ctypes.c_void_p]
@@ -2267,7 +2261,6 @@ class eos_tov_interp(eos_tov):
 
     def sho11_low_dens_eos(self):
         """
-        Wrapper for eos_tov_interp::sho11_low_dens_eos() .
         """
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_sho11_low_dens_eos
         func.argtypes=[ctypes.c_void_p]
@@ -2276,7 +2269,6 @@ class eos_tov_interp(eos_tov):
 
     def s12_low_dens_eos(self,model,external):
         """
-        Wrapper for eos_tov_interp::s12_low_dens_eos() .
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_s12_low_dens_eos
@@ -2286,7 +2278,6 @@ class eos_tov_interp(eos_tov):
 
     def gcp10_low_dens_eos(self,model,external):
         """
-        Wrapper for eos_tov_interp::gcp10_low_dens_eos() .
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_gcp10_low_dens_eos
@@ -2296,7 +2287,6 @@ class eos_tov_interp(eos_tov):
 
     def ngl13_low_dens_eos(self,L,model,external):
         """
-        Wrapper for eos_tov_interp::ngl13_low_dens_eos() .
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_ngl13_low_dens_eos
@@ -2306,7 +2296,6 @@ class eos_tov_interp(eos_tov):
 
     def ngl13_low_dens_eos2(self,S,L,nt,fname):
         """
-        Wrapper for eos_tov_interp::ngl13_low_dens_eos2() .
         """
         fname_=ctypes.c_char_p(force_bytes(fname))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_ngl13_low_dens_eos2
@@ -2316,7 +2305,6 @@ class eos_tov_interp(eos_tov):
 
     def no_low_dens_eos(self):
         """
-        Wrapper for eos_tov_interp::no_low_dens_eos() .
         """
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_no_low_dens_eos
         func.argtypes=[ctypes.c_void_p]
@@ -2941,7 +2929,6 @@ class tov_solve:
 
     def set_eos(self,eos):
         """
-        Wrapper for tov_solve::set_eos() .
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_set_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -2950,7 +2937,7 @@ class tov_solve:
 
     def mvsr(self):
         """
-        Wrapper for tov_solve::mvsr() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_mvsr
         func.restype=ctypes.c_int
@@ -2960,7 +2947,7 @@ class tov_solve:
 
     def fixed(self,mass):
         """
-        Wrapper for tov_solve::fixed() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_fixed
         func.restype=ctypes.c_int
@@ -2970,7 +2957,7 @@ class tov_solve:
 
     def max(self):
         """
-        Wrapper for tov_solve::max() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_max
         func.restype=ctypes.c_int
@@ -2980,7 +2967,7 @@ class tov_solve:
 
     def get_results(self):
         """
-        Wrapper for tov_solve::get_results() .
+        This function returns an object of type :class:`shared_ptr_table_units`.
         """
         sp=shared_ptr_table_units(self._link)
         func=self._link.o2scl_eos.o2scl_tov_solve_get_results
@@ -3146,7 +3133,7 @@ class tov_love:
 
     def calc_y(self,yR,beta,k2,lambda_km5,lambda_cgs,tabulate):
         """
-        Wrapper for tov_love::calc_y() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_tov_love_calc_y
         func.restype=ctypes.c_int
@@ -3156,7 +3143,6 @@ class tov_love:
 
     def add_disc(self,rd):
         """
-        Wrapper for tov_love::add_disc() .
         """
         func=self._link.o2scl_eos.o2scl_tov_love_add_disc
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
@@ -3165,7 +3151,6 @@ class tov_love:
 
     def clear_discs(self):
         """
-        Wrapper for tov_love::clear_discs() .
         """
         func=self._link.o2scl_eos.o2scl_tov_love_clear_discs
         func.argtypes=[ctypes.c_void_p]
@@ -3174,7 +3159,7 @@ class tov_love:
 
     def calc_H(self,yR,beta,k2,lambda_km5,lambda_cgs):
         """
-        Wrapper for tov_love::calc_H() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_tov_love_calc_H
         func.restype=ctypes.c_int
@@ -3500,7 +3485,6 @@ class nstar_cold:
 
     def set_eos(self,eos):
         """
-        Wrapper for nstar_cold::set_eos() .
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_set_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -3509,7 +3493,7 @@ class nstar_cold:
 
     def calc_eos(self,np_0):
         """
-        Wrapper for nstar_cold::calc_eos() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_calc_eos
         func.restype=ctypes.c_int
@@ -3519,7 +3503,7 @@ class nstar_cold:
 
     def calc_nstar(self):
         """
-        Wrapper for nstar_cold::calc_nstar() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_calc_nstar
         func.restype=ctypes.c_int
@@ -3529,7 +3513,7 @@ class nstar_cold:
 
     def fixed(self,target_mass):
         """
-        Wrapper for nstar_cold::fixed() .
+        This function returns a ctypes.c_int object.
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_fixed
         func.restype=ctypes.c_int
@@ -3539,7 +3523,7 @@ class nstar_cold:
 
     def get_eos_results(self):
         """
-        Wrapper for nstar_cold::get_eos_results() .
+        This function returns an object of type :class:`shared_ptr_table_units`.
         """
         sp=shared_ptr_table_units(self._link)
         func=self._link.o2scl_eos.o2scl_nstar_cold_get_eos_results
@@ -3551,7 +3535,7 @@ class nstar_cold:
 
     def get_tov_results(self):
         """
-        Wrapper for nstar_cold::get_tov_results() .
+        This function returns an object of type :class:`shared_ptr_table_units`.
         """
         sp=shared_ptr_table_units(self._link)
         func=self._link.o2scl_eos.o2scl_nstar_cold_get_tov_results

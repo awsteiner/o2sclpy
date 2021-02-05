@@ -1,7 +1,8 @@
-  .. _EOS:
+.. _eos:
 
 EOS classes
 ===========
+
 
 .. autoclass:: o2sclpy.eos_base
         :members:

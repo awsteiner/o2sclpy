@@ -12,3 +12,10 @@ wrapped. In those O\ :sub:`2`\ scl classes which are wrapped in O\
 :sub:`2`\ sclpy, not all of their methods or data members are
 accessible in O\ :sub:`2`\ sclpy. If there is O\ :sub:`2`\ scl which
 is missing and you would like me to include, let me know.
+
+Throwing C++ exceptions across DLL boundaries is difficult, so
+O\ :sub:`2`\ sclpy ensures that uses an alternate error handler
+which calls ``exit()`` when an error occurs. As a result,
+O\ :sub:`2`\ sclpy does not support any interaction between
+Python and C++ exceptions.
+

@@ -1,7 +1,8 @@
-  .. _Particle:
+.. _part:
 
 Particle classes
-================
+===============================
+
 
 .. autoclass:: o2sclpy.thermo
         :members:

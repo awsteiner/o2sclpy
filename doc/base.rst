@@ -1,7 +1,8 @@
-.. _Base:
+.. _base:
 
-Base classes
-============
+Base classes from O2scl
+=======================
+
 
 .. autoclass:: o2sclpy.lib_settings_class
         :members:

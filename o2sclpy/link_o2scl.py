@@ -109,7 +109,7 @@ class linker:
     The o2scl_settings object
     """
 
-    def link_o2scl_o2graph(self,include_part=False,include_eos=False):
+    def link_o2scl_o2graph(self,include_part=True,include_eos=True):
         """
         A new function for linking o2scl which came originally from
         the o2graph script

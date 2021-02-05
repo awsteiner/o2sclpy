@@ -1,7 +1,8 @@
-  .. _Nuclei:
+.. _nuclei:
 
-Nuclei classes
-==============
+Nuclei and nuclear mass classes
+===============================
+
 
 .. autoclass:: o2sclpy.nucleus
         :members:
