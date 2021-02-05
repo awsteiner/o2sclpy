@@ -153,9 +153,11 @@ base_list=[
       "y_tick_len       float>0      length of y-axis major ticks\n"+
       "y_tick_wid       float>0      width of y-axis major ticks\n"+
       "y_visible        T/F          set y-axis visible or invisible\n")],
-    ["o2scl-libdir","Specify the directory where libo2scl.so is",
+    ["o2scl-addl-libs","Specify a list of additional libraries to load.",
      "<dir>",""],
-    ["o2scl-cpplib","Specify the location of the standard C++ library",
+    ["o2scl-cpp-lib","Specify the location of the standard C++ library.",
+     "<dir>",""],
+    ["o2scl-lib-dir","Specify the directory where libo2scl.so is.",
      "<dir>",""],
     ["plotv","Plot several vector-like data sets.",
      "[multiple vector spec. for x] <multiple vector spec. for y>",

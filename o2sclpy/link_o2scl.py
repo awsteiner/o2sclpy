@@ -37,46 +37,78 @@ from ctypes.util import find_library
 from o2sclpy.base import lib_settings_class
 
 class linker:
+    """
+    The class which controls the dynamic linking of the O2scl libraries
+    and also the setting of the matplotlib backend for o2graph. If
+    O2scl is successfully linked, this class also provides access
+    to the global O2scl library settings object.
+    """
 
-    # O2scl library directory from command-line or environment variables
     o2scl_lib_dir=''
+    """
+    O2scl library directory from command-line or environment variables
+    """
     
-    # C++ library from command-line or environment variables
     o2scl_cpp_lib=''
-    
-    # Backend specification from command-line
+    """
+    C++ library from command-line or environment variables
+    """
+
     backend=''
-    
-    # Additional library list from command-line or environment variables
+    """
+    Backend specification from command-line
+    """
+
     o2scl_addl_libs=[]
-    
-    # List of additional library objects
+    """
+    Additional library list from command-line or environment variables
+    """
+
     o2scl_addl=[]
-    
-    # If true, -debug-first-pass was specified on command-line
+    """
+    List of additional library objects
+    """
+
     debug_first_pass=False
-    
-    # Main o2scl library handle
+    """
+    If true, -debug-first-pass was specified on command-line
+    """
+
     o2scl=0
-    
-    # O2scl HDF library handle
+    """
+    Main o2scl library handle
+    """
+
     o2scl_hdf=0
-    
-    # O2scl particle library handle
+    """
+    O2scl HDF library handle
+    """
+
     o2scl_part=0
+    """
+    O2scl particle library handle
+    """
 
-    # O2scl EOS library handle
     o2scl_eos=0
+    """
+    O2scl EOS library handle
+    """
 
-    # Additional library handles
     o2scl_addl=[]
+    """
+    Additional library handles
+    """
 
-    # System C++ library handle
     systcpp=0
+    """
+    System C++ library handle
+    """
 
-    # The o2scl_settings pointer
     o2scl_settings=0
-    
+    """
+    The o2scl_settings object
+    """
+
     def link_o2scl_o2graph(self,include_part=False,include_eos=False):
         """
         A new function for linking o2scl which came originally from
@@ -292,7 +324,8 @@ class linker:
     
     def get_library_settings(self,argv=[]):
         """
-        Get the library settings from the command-line arguments
+        Get the library settings from environment variables or 
+        the command-line arguments
         """
     
         # Go through the argument list and determine settings for
