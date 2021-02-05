@@ -65,7 +65,6 @@ class lib_settings_class:
     def eos_installed(self):
         """
         Wrapper for lib_settings_class::eos_installed() .
-        wrapper for :ref:`o2sclp:lib_settings_class::eos_installed()`.
         """
         func=self._link.o2scl.o2scl_lib_settings_class_eos_installed
         func.restype=ctypes.c_bool
@@ -76,7 +75,6 @@ class lib_settings_class:
     def get_convert_units(self):
         """
         Wrapper for lib_settings_class::get_convert_units() .
-        wrapper for :ref:`o2sclp:lib_settings_class::get_convert_units()`.
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_convert_units
         func.restype=ctypes.c_void_p
@@ -124,7 +122,6 @@ class table:
     def set(self,col,row,val):
         """
         Wrapper for table<>::set() .
-        wrapper for :ref:`o2sclp:table<>::set()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___set
@@ -135,7 +132,6 @@ class table:
     def get(self,col,row):
         """
         Wrapper for table<>::get() .
-        wrapper for :ref:`o2sclp:table<>::get()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___get
@@ -147,7 +143,6 @@ class table:
     def get_ncolumns(self):
         """
         Wrapper for table<>::get_ncolumns() .
-        wrapper for :ref:`o2sclp:table<>::get_ncolumns()`.
         """
         func=self._link.o2scl.o2scl_table___get_ncolumns
         func.restype=ctypes.c_size_t
@@ -158,7 +153,6 @@ class table:
     def get_nlines(self):
         """
         Wrapper for table<>::get_nlines() .
-        wrapper for :ref:`o2sclp:table<>::get_nlines()`.
         """
         func=self._link.o2scl.o2scl_table___get_nlines
         func.restype=ctypes.c_size_t
@@ -169,7 +163,6 @@ class table:
     def set_nlines(self,lines):
         """
         Wrapper for table<>::set_nlines() .
-        wrapper for :ref:`o2sclp:table<>::set_nlines()`.
         """
         func=self._link.o2scl.o2scl_table___set_nlines
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
@@ -179,7 +172,6 @@ class table:
     def new_column(self,col):
         """
         Wrapper for table<>::new_column() .
-        wrapper for :ref:`o2sclp:table<>::new_column()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___new_column
@@ -190,7 +182,6 @@ class table:
     def get_column_name(self,icol):
         """
         Wrapper for table<>::get_column_name() .
-        wrapper for :ref:`o2sclp:table<>::get_column_name()`.
         """
         func=self._link.o2scl.o2scl_table___get_column_name
         func.restype=ctypes.c_char_p
@@ -201,7 +192,6 @@ class table:
     def clear(self):
         """
         Wrapper for table<>::clear() .
-        wrapper for :ref:`o2sclp:table<>::clear()`.
         """
         func=self._link.o2scl.o2scl_table___clear
         func.argtypes=[ctypes.c_void_p]
@@ -211,7 +201,6 @@ class table:
     def clear_data(self):
         """
         Wrapper for table<>::clear_data() .
-        wrapper for :ref:`o2sclp:table<>::clear_data()`.
         """
         func=self._link.o2scl.o2scl_table___clear_data
         func.argtypes=[ctypes.c_void_p]
@@ -221,7 +210,6 @@ class table:
     def clear_table(self):
         """
         Wrapper for table<>::clear_table() .
-        wrapper for :ref:`o2sclp:table<>::clear_table()`.
         """
         func=self._link.o2scl.o2scl_table___clear_table
         func.argtypes=[ctypes.c_void_p]
@@ -231,7 +219,6 @@ class table:
     def clear_constants(self):
         """
         Wrapper for table<>::clear_constants() .
-        wrapper for :ref:`o2sclp:table<>::clear_constants()`.
         """
         func=self._link.o2scl.o2scl_table___clear_constants
         func.argtypes=[ctypes.c_void_p]
@@ -241,7 +228,6 @@ class table:
     def __getitem__(self,col):
         """
         Wrapper for table<>::index_operator() .
-        wrapper for :ref:`o2sclp:table<>::index_operator()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___index_operator
@@ -287,7 +273,6 @@ class table_units(table):
     def get_unit(self,col):
         """
         Wrapper for table_units<>::get_unit() .
-        wrapper for :ref:`o2sclp:table_units<>::get_unit()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table_units___get_unit
@@ -299,7 +284,6 @@ class table_units(table):
     def set_unit(self,col,unit):
         """
         Wrapper for table_units<>::set_unit() .
-        wrapper for :ref:`o2sclp:table_units<>::set_unit()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
         unit_=ctypes.c_char_p(force_bytes(unit))
@@ -311,7 +295,6 @@ class table_units(table):
     def convert_to_unit(self,col,unit,err_on_fail):
         """
         Wrapper for table_units<>::convert_to_unit() .
-        wrapper for :ref:`o2sclp:table_units<>::convert_to_unit()`.
         """
         col_=ctypes.c_char_p(force_bytes(col))
         unit_=ctypes.c_char_p(force_bytes(unit))
@@ -324,7 +307,6 @@ class table_units(table):
     def clear_table(self):
         """
         Wrapper for table_units<>::clear_table() .
-        wrapper for :ref:`o2sclp:table_units<>::clear_table()`.
         """
         func=self._link.o2scl.o2scl_table_units___clear_table
         func.argtypes=[ctypes.c_void_p]
@@ -370,7 +352,6 @@ class table3d:
     def set(self,ix,iy,name,val):
         """
         Wrapper for table3d::set() .
-        wrapper for :ref:`o2sclp:table3d::set()`.
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_set
@@ -381,7 +362,6 @@ class table3d:
     def get(self,ix,iy,name):
         """
         Wrapper for table3d::get() .
-        wrapper for :ref:`o2sclp:table3d::get()`.
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_get
@@ -393,7 +373,6 @@ class table3d:
     def new_slice(self,slice):
         """
         Wrapper for table3d::new_slice() .
-        wrapper for :ref:`o2sclp:table3d::new_slice()`.
         """
         slice_=ctypes.c_char_p(force_bytes(slice))
         func=self._link.o2scl.o2scl_table3d_new_slice
@@ -404,7 +383,6 @@ class table3d:
     def get_nx(self):
         """
         Wrapper for table3d::get_nx() .
-        wrapper for :ref:`o2sclp:table3d::get_nx()`.
         """
         func=self._link.o2scl.o2scl_table3d_get_nx
         func.restype=ctypes.c_size_t
@@ -415,7 +393,6 @@ class table3d:
     def get_ny(self):
         """
         Wrapper for table3d::get_ny() .
-        wrapper for :ref:`o2sclp:table3d::get_ny()`.
         """
         func=self._link.o2scl.o2scl_table3d_get_ny
         func.restype=ctypes.c_size_t
@@ -426,7 +403,6 @@ class table3d:
     def get_nslices(self):
         """
         Wrapper for table3d::get_nslices() .
-        wrapper for :ref:`o2sclp:table3d::get_nslices()`.
         """
         func=self._link.o2scl.o2scl_table3d_get_nslices
         func.restype=ctypes.c_size_t
@@ -473,7 +449,6 @@ class tensor:
     def clear(self):
         """
         Wrapper for tensor<>::clear() .
-        wrapper for :ref:`o2sclp:tensor<>::clear()`.
         """
         func=self._link.o2scl.o2scl_tensor___clear
         func.argtypes=[ctypes.c_void_p]
@@ -519,7 +494,6 @@ class find_constants:
     def find_print(self,name,unit,prec,verbose):
         """
         Wrapper for find_constants::find_print() .
-        wrapper for :ref:`o2sclp:find_constants::find_print()`.
         """
         name_=ctypes.c_char_p(force_bytes(name))
         unit_=ctypes.c_char_p(force_bytes(unit))
@@ -531,7 +505,6 @@ class find_constants:
     def find_unique(self,name,unit):
         """
         Wrapper for find_constants::find_unique() .
-        wrapper for :ref:`o2sclp:find_constants::find_unique()`.
         """
         name_=ctypes.c_char_p(force_bytes(name))
         unit_=ctypes.c_char_p(force_bytes(unit))
@@ -679,7 +652,6 @@ class convert_units:
     def convert(self,frm,to,val):
         """
         Wrapper for convert_units<>::convert() .
-        wrapper for :ref:`o2sclp:convert_units<>::convert()`.
         """
         frm_=ctypes.c_char_p(force_bytes(frm))
         to_=ctypes.c_char_p(force_bytes(to))
@@ -692,7 +664,6 @@ class convert_units:
     def convert_ret(self,frm,to,val,converted):
         """
         Wrapper for convert_units<>::convert_ret() .
-        wrapper for :ref:`o2sclp:convert_units<>::convert_ret()`.
         """
         frm_=ctypes.c_char_p(force_bytes(frm))
         to_=ctypes.c_char_p(force_bytes(to))
@@ -705,7 +676,6 @@ class convert_units:
     def print_cache(self):
         """
         Wrapper for convert_units<>::print_cache() .
-        wrapper for :ref:`o2sclp:convert_units<>::print_cache()`.
         """
         func=self._link.o2scl.o2scl_convert_units___print_cache
         func.argtypes=[ctypes.c_void_p]
