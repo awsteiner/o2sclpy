@@ -469,7 +469,7 @@ class fermion(part):
 
 class quark(fermion):
     """
-    Python interface for class :ref:`quark <o2sclp:quark>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`quark <o2sclp:quark>`.
     """
 
     def __init__(self,link,pointer=0):
@@ -1089,7 +1089,7 @@ class fermion_nonrel(fermion_zerot):
 
 class boson(part):
     """
-    Python interface for class :ref:`boson <o2sclp:boson>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`boson <o2sclp:boson>`.
     """
 
     def __init__(self,link,pointer=0):
@@ -1141,7 +1141,7 @@ class boson(part):
 
 class boson_rel:
     """
-    Python interface for class :ref:`boson_rel <o2sclp:boson_rel>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`boson_rel <o2sclp:boson_rel>`.
     """
 
     _ptr=0
@@ -2253,7 +2253,7 @@ class classical_deriv_thermo:
 
 class fermion_mag_zerot:
     """
-    Python interface for class :ref:`fermion_mag_zerot <o2sclp:fermion_mag_zerot>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`fermion_mag_zerot <o2sclp:fermion_mag_zerot>`.
     """
 
     _ptr=0

@@ -28,7 +28,7 @@ import numpy
 
 class lib_settings_class:
     """
-    Python interface for class :ref:`lib_settings_class <o2scl:lib_settings_class>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`lib_settings_class <o2scl:lib_settings_class>`.
     """
 
     _ptr=0
@@ -85,7 +85,7 @@ class lib_settings_class:
 
 class table:
     """
-    Python interface for class :ref:`table<> <o2scl:table<>>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`table<> <o2scl:table<>>`.
     """
 
     _ptr=0
@@ -240,7 +240,7 @@ class table:
 
 class table_units(table):
     """
-    Python interface for class :ref:`table_units<> <o2scl:table_units<>>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`table_units<> <o2scl:table_units<>>`.
     """
 
     def __init__(self,link,pointer=0):
@@ -315,7 +315,7 @@ class table_units(table):
 
 class table3d:
     """
-    Python interface for class :ref:`table3d <o2scl:table3d>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`table3d <o2scl:table3d>`.
     """
 
     _ptr=0
@@ -412,7 +412,7 @@ class table3d:
 
 class tensor:
     """
-    Python interface for class :ref:`tensor<> <o2scl:tensor<>>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`tensor<> <o2scl:tensor<>>`.
     """
 
     _ptr=0
@@ -457,7 +457,7 @@ class tensor:
 
 class find_constants:
     """
-    Python interface for class :ref:`find_constants <o2scl:find_constants>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`find_constants <o2scl:find_constants>`.
     """
 
     _ptr=0
@@ -516,7 +516,7 @@ class find_constants:
 
 class convert_units:
     """
-    Python interface for class :ref:`convert_units<> <o2scl:convert_units<>>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`convert_units<> <o2scl:convert_units<>>`.
     """
 
     _ptr=0

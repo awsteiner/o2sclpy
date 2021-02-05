@@ -1,89 +1,89 @@
-  .. _Particle:
+  .. _EOS:
 
-Particle classes
-================
+EOS classes
+===========
 
-.. autoclass:: o2sclpy.thermo
+.. autoclass:: o2sclpy.eos_base
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.part
+.. autoclass:: o2sclpy.eos_had_base
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.fermion
+.. autoclass:: o2sclpy.eos_had_eden_base
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.quark
+.. autoclass:: o2sclpy.eos_had_pres_base
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.fermion_zerot
+.. autoclass:: o2sclpy.eos_had_temp_base
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.fermion_thermo
+.. autoclass:: o2sclpy.eos_had_temp_eden_base
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.fermion_rel
+.. autoclass:: o2sclpy.eos_had_temp_pres_base
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.fermion_nonrel
+.. autoclass:: o2sclpy.eos_had_skyrme
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.boson
+.. autoclass:: o2sclpy.eos_had_apr
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.boson_rel
+.. autoclass:: o2sclpy.eos_had_rmf
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.classical_thermo
+.. autoclass:: o2sclpy.eos_quark
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.thermo_np_deriv_press
+.. autoclass:: o2sclpy.eos_quark_bag
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.thermo_np_deriv_helm
+.. autoclass:: o2sclpy.eos_quark_njl
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.part_deriv_press
+.. autoclass:: o2sclpy.eos_tov
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.part_deriv
+.. autoclass:: o2sclpy.eos_tov_buchdahl
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.fermion_deriv
+.. autoclass:: o2sclpy.eos_tov_polytrope
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.deriv_thermo_base
+.. autoclass:: o2sclpy.eos_tov_linear
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.fermion_deriv_rel
+.. autoclass:: o2sclpy.eos_tov_interp
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.fermion_deriv_nr
+.. autoclass:: o2sclpy.tov_solve
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.classical_deriv_thermo
+.. autoclass:: o2sclpy.tov_love
         :members:
         :undoc-members:
 
-.. autoclass:: o2sclpy.fermion_mag_zerot
+.. autoclass:: o2sclpy.nstar_cold
         :members:
         :undoc-members:
 
