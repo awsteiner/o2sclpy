@@ -52,6 +52,9 @@ Class convert_units
         :members:
         :undoc-members:
 
+Class shared_ptr_table_units
+----------------------------
+
 .. autoclass:: o2sclpy.shared_ptr_table_units
         :members:
         :undoc-members:

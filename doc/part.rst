@@ -1,4 +1,4 @@
-.. _part:
+.. _particle:
 
 Particle classes
 ===============================

@@ -64,7 +64,7 @@ class thermo:
     @property
     def ed(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_get_ed
         func.restype=ctypes.c_double
@@ -84,7 +84,7 @@ class thermo:
     @property
     def pr(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_get_pr
         func.restype=ctypes.c_double
@@ -104,7 +104,7 @@ class thermo:
     @property
     def en(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_get_en
         func.restype=ctypes.c_double
@@ -160,7 +160,7 @@ class part:
     @property
     def g(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_get_g
         func.restype=ctypes.c_double
@@ -180,7 +180,7 @@ class part:
     @property
     def m(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_get_m
         func.restype=ctypes.c_double
@@ -200,7 +200,7 @@ class part:
     @property
     def ms(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_get_ms
         func.restype=ctypes.c_double
@@ -220,7 +220,7 @@ class part:
     @property
     def mu(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_get_mu
         func.restype=ctypes.c_double
@@ -240,7 +240,7 @@ class part:
     @property
     def nu(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_get_nu
         func.restype=ctypes.c_double
@@ -260,7 +260,7 @@ class part:
     @property
     def n(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_get_n
         func.restype=ctypes.c_double
@@ -280,7 +280,7 @@ class part:
     @property
     def ed(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_get_ed
         func.restype=ctypes.c_double
@@ -300,7 +300,7 @@ class part:
     @property
     def pr(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_get_pr
         func.restype=ctypes.c_double
@@ -320,7 +320,7 @@ class part:
     @property
     def en(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_get_en
         func.restype=ctypes.c_double
@@ -340,7 +340,7 @@ class part:
     @property
     def inc_rest_mass(self):
         """
-        Property of type ctypes.c_bool
+        Property of type ``ctypes.c_bool``
         """
         func=self._link.o2scl_part.o2scl_part_get_inc_rest_mass
         func.restype=ctypes.c_bool
@@ -360,7 +360,7 @@ class part:
     @property
     def non_interacting(self):
         """
-        Property of type ctypes.c_bool
+        Property of type ``ctypes.c_bool``
         """
         func=self._link.o2scl_part.o2scl_part_get_non_interacting
         func.restype=ctypes.c_bool
@@ -391,7 +391,7 @@ class part:
     def anti(self,ax):
         """
         | Parameters:
-        | *ax*: :ref:`part` object
+        | *ax*: :class:`part` object
         """
         func=self._link.o2scl_part.o2scl_part_anti
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -433,7 +433,7 @@ class fermion(part):
     @property
     def kf(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_get_kf
         func.restype=ctypes.c_double
@@ -453,7 +453,7 @@ class fermion(part):
     @property
     def delta(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_get_delta
         func.restype=ctypes.c_double
@@ -505,7 +505,7 @@ class quark(fermion):
     @property
     def B(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_quark_get_B
         func.restype=ctypes.c_double
@@ -525,7 +525,7 @@ class quark(fermion):
     @property
     def qq(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_quark_get_qq
         func.restype=ctypes.c_double
@@ -581,7 +581,7 @@ class fermion_zerot:
     def kf_from_density(self,f):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         """
         func=self._link.o2scl_part.o2scl_fermion_zerot_kf_from_density
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -591,7 +591,7 @@ class fermion_zerot:
     def energy_density_zerot(self,f):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         """
         func=self._link.o2scl_part.o2scl_fermion_zerot_energy_density_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -601,7 +601,7 @@ class fermion_zerot:
     def pressure_zerot(self,f):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         """
         func=self._link.o2scl_part.o2scl_fermion_zerot_pressure_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -611,7 +611,7 @@ class fermion_zerot:
     def calc_mu_zerot(self,f):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         """
         func=self._link.o2scl_part.o2scl_fermion_zerot_calc_mu_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -621,7 +621,7 @@ class fermion_zerot:
     def calc_density_zerot(self,f):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         """
         func=self._link.o2scl_part.o2scl_fermion_zerot_calc_density_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -664,7 +664,7 @@ class fermion_thermo(fermion_zerot):
     def calc_mu_deg(self,f,T,prec):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         | *prec*: ``double``
         | Returns: ``ctypes.c_bool`` object
@@ -678,7 +678,7 @@ class fermion_thermo(fermion_zerot):
     def calc_mu_ndeg(self,f,T,prec,inc_antip):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         | *prec*: ``double``
         | *inc_antip*: ``bool``
@@ -693,7 +693,7 @@ class fermion_thermo(fermion_zerot):
     def massless_calc_mu(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_fermion_thermo_massless_calc_mu
@@ -704,7 +704,7 @@ class fermion_thermo(fermion_zerot):
     def massless_pair_mu(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_fermion_thermo_massless_pair_mu
@@ -715,7 +715,7 @@ class fermion_thermo(fermion_zerot):
     def massless_calc_density(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_fermion_thermo_massless_calc_density
@@ -726,7 +726,7 @@ class fermion_thermo(fermion_zerot):
     def massless_pair_density(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_fermion_thermo_massless_pair_density
@@ -769,7 +769,7 @@ class fermion_rel(fermion_thermo):
     @property
     def err_nonconv(self):
         """
-        Property of type ctypes.c_bool
+        Property of type ``ctypes.c_bool``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_err_nonconv
         func.restype=ctypes.c_bool
@@ -789,7 +789,7 @@ class fermion_rel(fermion_thermo):
     @property
     def min_psi(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_min_psi
         func.restype=ctypes.c_double
@@ -809,7 +809,7 @@ class fermion_rel(fermion_thermo):
     @property
     def deg_limit(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_deg_limit
         func.restype=ctypes.c_double
@@ -829,7 +829,7 @@ class fermion_rel(fermion_thermo):
     @property
     def exp_limit(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_exp_limit
         func.restype=ctypes.c_double
@@ -849,7 +849,7 @@ class fermion_rel(fermion_thermo):
     @property
     def upper_limit_fac(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_upper_limit_fac
         func.restype=ctypes.c_double
@@ -869,7 +869,7 @@ class fermion_rel(fermion_thermo):
     @property
     def deg_entropy_fac(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_deg_entropy_fac
         func.restype=ctypes.c_double
@@ -889,7 +889,7 @@ class fermion_rel(fermion_thermo):
     @property
     def verbose(self):
         """
-        Property of type ctypes.c_int
+        Property of type ``ctypes.c_int``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_verbose
         func.restype=ctypes.c_int
@@ -909,7 +909,7 @@ class fermion_rel(fermion_thermo):
     @property
     def use_expansions(self):
         """
-        Property of type ctypes.c_bool
+        Property of type ``ctypes.c_bool``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_use_expansions
         func.restype=ctypes.c_bool
@@ -929,7 +929,7 @@ class fermion_rel(fermion_thermo):
     @property
     def tol_expan(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_tol_expan
         func.restype=ctypes.c_double
@@ -949,7 +949,7 @@ class fermion_rel(fermion_thermo):
     @property
     def verify_ti(self):
         """
-        Property of type ctypes.c_bool
+        Property of type ``ctypes.c_bool``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_verify_ti
         func.restype=ctypes.c_bool
@@ -969,7 +969,7 @@ class fermion_rel(fermion_thermo):
     @property
     def therm_ident(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_therm_ident
         func.restype=ctypes.c_double
@@ -1007,7 +1007,7 @@ class fermion_rel(fermion_thermo):
     def nu_from_n(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -1020,7 +1020,7 @@ class fermion_rel(fermion_thermo):
     def calc_density(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -1033,7 +1033,7 @@ class fermion_rel(fermion_thermo):
     def pair_density(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -1046,7 +1046,7 @@ class fermion_rel(fermion_thermo):
     def calc_mu(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_calc_mu
@@ -1057,7 +1057,7 @@ class fermion_rel(fermion_thermo):
     def pair_mu(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_pair_mu
@@ -1100,7 +1100,7 @@ class fermion_nonrel(fermion_zerot):
     def calc_density(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -1113,7 +1113,7 @@ class fermion_nonrel(fermion_zerot):
     def calc_mu(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_fermion_nonrel_calc_mu
@@ -1124,7 +1124,7 @@ class fermion_nonrel(fermion_zerot):
     def nu_from_n(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_fermion_nonrel_nu_from_n
@@ -1167,7 +1167,7 @@ class boson(part):
     @property
     def co(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_boson_get_co
         func.restype=ctypes.c_double
@@ -1223,7 +1223,7 @@ class boson_rel:
     def calc_density(self,b,T):
         """
         | Parameters:
-        | *b*: :ref:`boson` object
+        | *b*: :class:`boson` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_boson_rel_calc_density
@@ -1234,7 +1234,7 @@ class boson_rel:
     def calc_mu(self,b,T):
         """
         | Parameters:
-        | *b*: :ref:`boson` object
+        | *b*: :class:`boson` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_boson_rel_calc_mu
@@ -1245,7 +1245,7 @@ class boson_rel:
     def nu_from_n(self,b,T):
         """
         | Parameters:
-        | *b*: :ref:`boson` object
+        | *b*: :class:`boson` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_boson_rel_nu_from_n
@@ -1256,7 +1256,7 @@ class boson_rel:
     def pair_density(self,b,T):
         """
         | Parameters:
-        | *b*: :ref:`boson` object
+        | *b*: :class:`boson` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_boson_rel_pair_density
@@ -1267,7 +1267,7 @@ class boson_rel:
     def pair_mu(self,b,T):
         """
         | Parameters:
-        | *b*: :ref:`boson` object
+        | *b*: :class:`boson` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_boson_rel_pair_mu
@@ -1314,7 +1314,7 @@ class classical_thermo:
     def calc_density(self,p,T):
         """
         | Parameters:
-        | *p*: :ref:`part` object
+        | *p*: :class:`part` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_classical_thermo_calc_density
@@ -1325,7 +1325,7 @@ class classical_thermo:
     def calc_mu(self,p,T):
         """
         | Parameters:
-        | *p*: :ref:`part` object
+        | *p*: :class:`part` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_classical_thermo_calc_mu
@@ -1372,7 +1372,7 @@ class thermo_np_deriv_press:
     @property
     def dsdT(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dsdT
         func.restype=ctypes.c_double
@@ -1392,7 +1392,7 @@ class thermo_np_deriv_press:
     @property
     def dnndT(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnndT
         func.restype=ctypes.c_double
@@ -1412,7 +1412,7 @@ class thermo_np_deriv_press:
     @property
     def dnpdT(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnpdT
         func.restype=ctypes.c_double
@@ -1432,7 +1432,7 @@ class thermo_np_deriv_press:
     @property
     def dnndmun(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnndmun
         func.restype=ctypes.c_double
@@ -1452,7 +1452,7 @@ class thermo_np_deriv_press:
     @property
     def dndmu_mixed(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dndmu_mixed
         func.restype=ctypes.c_double
@@ -1472,7 +1472,7 @@ class thermo_np_deriv_press:
     @property
     def dnpdmup(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnpdmup
         func.restype=ctypes.c_double
@@ -1528,7 +1528,7 @@ class thermo_np_deriv_helm:
     @property
     def dsdT(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dsdT
         func.restype=ctypes.c_double
@@ -1548,7 +1548,7 @@ class thermo_np_deriv_helm:
     @property
     def dmundT(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmundT
         func.restype=ctypes.c_double
@@ -1568,7 +1568,7 @@ class thermo_np_deriv_helm:
     @property
     def dmupdT(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmupdT
         func.restype=ctypes.c_double
@@ -1588,7 +1588,7 @@ class thermo_np_deriv_helm:
     @property
     def dmundnn(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmundnn
         func.restype=ctypes.c_double
@@ -1608,7 +1608,7 @@ class thermo_np_deriv_helm:
     @property
     def dmudn_mixed(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmudn_mixed
         func.restype=ctypes.c_double
@@ -1628,7 +1628,7 @@ class thermo_np_deriv_helm:
     @property
     def dmupdnp(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmupdnp
         func.restype=ctypes.c_double
@@ -1684,7 +1684,7 @@ class part_deriv_press:
     @property
     def dndmu(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_deriv_press_get_dndmu
         func.restype=ctypes.c_double
@@ -1704,7 +1704,7 @@ class part_deriv_press:
     @property
     def dndT(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_deriv_press_get_dndT
         func.restype=ctypes.c_double
@@ -1724,7 +1724,7 @@ class part_deriv_press:
     @property
     def dsdT(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_deriv_press_get_dsdT
         func.restype=ctypes.c_double
@@ -1856,7 +1856,7 @@ class deriv_thermo_base:
     def heat_cap_ppart_const_vol(self,p,T):
         """
         | Parameters:
-        | *p*: :ref:`part_deriv` object
+        | *p*: :class:`part_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_double`` object
         """
@@ -1869,7 +1869,7 @@ class deriv_thermo_base:
     def heat_cap_ppart_const_press(self,p,T):
         """
         | Parameters:
-        | *p*: :ref:`part_deriv` object
+        | *p*: :class:`part_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_double`` object
         """
@@ -1882,7 +1882,7 @@ class deriv_thermo_base:
     def compress_adiabatic(self,p,T):
         """
         | Parameters:
-        | *p*: :ref:`part_deriv` object
+        | *p*: :class:`part_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_double`` object
         """
@@ -1895,7 +1895,7 @@ class deriv_thermo_base:
     def compress_const_tptr(self,p,T):
         """
         | Parameters:
-        | *p*: :ref:`part_deriv` object
+        | *p*: :class:`part_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_double`` object
         """
@@ -1908,7 +1908,7 @@ class deriv_thermo_base:
     def coeff_thermal_exp(self,p,T):
         """
         | Parameters:
-        | *p*: :ref:`part_deriv` object
+        | *p*: :class:`part_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_double`` object
         """
@@ -1921,7 +1921,7 @@ class deriv_thermo_base:
     def squared_sound_speed(self,p,T):
         """
         | Parameters:
-        | *p*: :ref:`part_deriv` object
+        | *p*: :class:`part_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_double`` object
         """
@@ -1970,7 +1970,7 @@ class fermion_deriv_rel:
     @property
     def exp_limit(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_exp_limit
         func.restype=ctypes.c_double
@@ -1990,7 +1990,7 @@ class fermion_deriv_rel:
     @property
     def deg_limit(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_deg_limit
         func.restype=ctypes.c_double
@@ -2010,7 +2010,7 @@ class fermion_deriv_rel:
     @property
     def upper_limit_fac(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_upper_limit_fac
         func.restype=ctypes.c_double
@@ -2048,7 +2048,7 @@ class fermion_deriv_rel:
     @property
     def method(self):
         """
-        Property of type ctypes.c_int
+        Property of type ``ctypes.c_int``
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_method
         func.restype=ctypes.c_int
@@ -2068,7 +2068,7 @@ class fermion_deriv_rel:
     @property
     def last_method(self):
         """
-        Property of type ctypes.c_int
+        Property of type ``ctypes.c_int``
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_last_method
         func.restype=ctypes.c_int
@@ -2088,7 +2088,7 @@ class fermion_deriv_rel:
     @property
     def err_nonconv(self):
         """
-        Property of type ctypes.c_bool
+        Property of type ``ctypes.c_bool``
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_err_nonconv
         func.restype=ctypes.c_bool
@@ -2108,7 +2108,7 @@ class fermion_deriv_rel:
     def nu_from_n(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion_deriv` object
+        | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -2121,7 +2121,7 @@ class fermion_deriv_rel:
     def calc_density(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion_deriv` object
+        | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -2134,7 +2134,7 @@ class fermion_deriv_rel:
     def pair_density(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion_deriv` object
+        | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -2147,7 +2147,7 @@ class fermion_deriv_rel:
     def calc_mu(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion_deriv` object
+        | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -2160,7 +2160,7 @@ class fermion_deriv_rel:
     def pair_mu(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion_deriv` object
+        | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -2209,7 +2209,7 @@ class fermion_deriv_nr:
     @property
     def flimit(self):
         """
-        Property of type ctypes.c_double
+        Property of type ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_get_flimit
         func.restype=ctypes.c_double
@@ -2247,7 +2247,7 @@ class fermion_deriv_nr:
     def calc_density_zerot(self,f):
         """
         | Parameters:
-        | *f*: :ref:`fermion_deriv` object
+        | *f*: :class:`fermion_deriv` object
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_calc_density_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -2257,7 +2257,7 @@ class fermion_deriv_nr:
     def calc_mu_zerot(self,f):
         """
         | Parameters:
-        | *f*: :ref:`fermion_deriv` object
+        | *f*: :class:`fermion_deriv` object
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_calc_mu_zerot
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -2267,7 +2267,7 @@ class fermion_deriv_nr:
     def nu_from_n(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion_deriv` object
+        | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -2280,7 +2280,7 @@ class fermion_deriv_nr:
     def calc_density(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion_deriv` object
+        | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -2293,7 +2293,7 @@ class fermion_deriv_nr:
     def calc_mu(self,f,T):
         """
         | Parameters:
-        | *f*: :ref:`fermion_deriv` object
+        | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
         | Returns: ``ctypes.c_int`` object
         """
@@ -2342,7 +2342,7 @@ class classical_deriv_thermo:
     def calc_density(self,p,T):
         """
         | Parameters:
-        | *p*: :ref:`part_deriv` object
+        | *p*: :class:`part_deriv` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_classical_deriv_thermo_calc_density
@@ -2353,7 +2353,7 @@ class classical_deriv_thermo:
     def calc_mu(self,p,T):
         """
         | Parameters:
-        | *p*: :ref:`part_deriv` object
+        | *p*: :class:`part_deriv` object
         | *T*: ``double``
         """
         func=self._link.o2scl_part.o2scl_classical_deriv_thermo_calc_mu
@@ -2400,7 +2400,7 @@ class fermion_mag_zerot:
     @property
     def nmax_up(self):
         """
-        Property of type ctypes.c_int
+        Property of type ``ctypes.c_int``
         """
         func=self._link.o2scl_part.o2scl_fermion_mag_zerot_get_nmax_up
         func.restype=ctypes.c_int
@@ -2420,7 +2420,7 @@ class fermion_mag_zerot:
     @property
     def nmax_dn(self):
         """
-        Property of type ctypes.c_int
+        Property of type ``ctypes.c_int``
         """
         func=self._link.o2scl_part.o2scl_fermion_mag_zerot_get_nmax_dn
         func.restype=ctypes.c_int
@@ -2440,7 +2440,7 @@ class fermion_mag_zerot:
     @property
     def sum_limit(self):
         """
-        Property of type ctypes.c_int
+        Property of type ``ctypes.c_int``
         """
         func=self._link.o2scl_part.o2scl_fermion_mag_zerot_get_sum_limit
         func.restype=ctypes.c_int
@@ -2460,7 +2460,7 @@ class fermion_mag_zerot:
     def calc_mu_zerot_mag(self,f,qB,kappa):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *qB*: ``double``
         | *kappa*: ``double``
         """
@@ -2472,7 +2472,7 @@ class fermion_mag_zerot:
     def calc_density_zerot_mag(self,f,qB,kappa):
         """
         | Parameters:
-        | *f*: :ref:`fermion` object
+        | *f*: :class:`fermion` object
         | *qB*: ``double``
         | *kappa*: ``double``
         """

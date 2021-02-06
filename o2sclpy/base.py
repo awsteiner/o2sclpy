@@ -74,7 +74,7 @@ class lib_settings_class:
 
     def get_convert_units(self):
         """
-        | Returns: :class:`convert_units`
+        | Returns: :class:`convert_units` object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_convert_units
         func.restype=ctypes.c_void_p
@@ -586,7 +586,7 @@ class convert_units:
     @property
     def verbose(self):
         """
-        Property of type ctypes.c_int
+        Property of type ``ctypes.c_int``
         """
         func=self._link.o2scl.o2scl_convert_units___get_verbose
         func.restype=ctypes.c_int
@@ -606,7 +606,7 @@ class convert_units:
     @property
     def use_gnu_units(self):
         """
-        Property of type ctypes.c_bool
+        Property of type ``ctypes.c_bool``
         """
         func=self._link.o2scl.o2scl_convert_units___get_use_gnu_units
         func.restype=ctypes.c_bool
@@ -626,7 +626,7 @@ class convert_units:
     @property
     def err_on_fail(self):
         """
-        Property of type ctypes.c_bool
+        Property of type ``ctypes.c_bool``
         """
         func=self._link.o2scl.o2scl_convert_units___get_err_on_fail
         func.restype=ctypes.c_bool
@@ -646,7 +646,7 @@ class convert_units:
     @property
     def combine_two_conv(self):
         """
-        Property of type ctypes.c_bool
+        Property of type ``ctypes.c_bool``
         """
         func=self._link.o2scl.o2scl_convert_units___get_combine_two_conv
         func.restype=ctypes.c_bool
