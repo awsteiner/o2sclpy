@@ -1,7 +1,7 @@
 .. _base:
 
-Base classes from O2scl
-=======================
+Base classes from O\ :sub:`2`\ scl
+==================================
 
 
 .. autoclass:: o2sclpy.lib_settings_class
@@ -29,6 +29,10 @@ Base classes from O2scl
         :undoc-members:
 
 .. autoclass:: o2sclpy.convert_units
+        :members:
+        :undoc-members:
+
+.. autoclass:: o2sclpy.shared_ptr_table_units
         :members:
         :undoc-members:
 

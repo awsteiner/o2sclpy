@@ -540,7 +540,7 @@ class convert_units:
     @property
     def verbose(self):
         """
-        Getter function for convert_units<>::verbose .
+        Property of type ctypes.c_int
         """
         func=self._link.o2scl.o2scl_convert_units___get_verbose
         func.restype=ctypes.c_int
@@ -560,7 +560,7 @@ class convert_units:
     @property
     def use_gnu_units(self):
         """
-        Getter function for convert_units<>::use_gnu_units .
+        Property of type ctypes.c_bool
         """
         func=self._link.o2scl.o2scl_convert_units___get_use_gnu_units
         func.restype=ctypes.c_bool
@@ -580,7 +580,7 @@ class convert_units:
     @property
     def err_on_fail(self):
         """
-        Getter function for convert_units<>::err_on_fail .
+        Property of type ctypes.c_bool
         """
         func=self._link.o2scl.o2scl_convert_units___get_err_on_fail
         func.restype=ctypes.c_bool
@@ -600,7 +600,7 @@ class convert_units:
     @property
     def combine_two_conv(self):
         """
-        Getter function for convert_units<>::combine_two_conv .
+        Property of type ctypes.c_bool
         """
         func=self._link.o2scl.o2scl_convert_units___get_combine_two_conv
         func.restype=ctypes.c_bool
@@ -619,7 +619,7 @@ class convert_units:
 
     def get_units_cmd_string(self,units_cmd_string):
         """
-        Getter function for convert_units<>::units_cmd_string .
+        Object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_convert_units___get_units_cmd_string
         func.restype=ctypes.c_char_p
@@ -673,15 +673,21 @@ class shared_ptr_table_units(table_units):
     _s_ptr=0
     _ptr=0
     _link=0
+    _owner=True
 
-    def __init__(self,link):
+    def __init__(self,link,shared_ptr):
         """
         Init function for sp table_units<> .
         """
 
-        self._s_ptr=0
-        self._ptr=0
         self._link=link
+        self._s_ptr=shared_ptr
+        
+        f=self._link.o2scl.o2scl_shared_ptr_table_units___ptr
+        f.argtypes=[ctypes.c_void_p]
+        f.restype=ctypes.c_void_p
+        self._ptr=f(self._s_ptr)
+        
         return
 
     def __del__(self):
@@ -693,15 +699,3 @@ class shared_ptr_table_units(table_units):
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
-
-    def set_pointer(self):
-        """
-        Set pointer function for sp table_units<> .
-        """
-
-        f=self._link.o2scl.o2scl_shared_ptr_table_units___ptr
-        f.argtypes=[ctypes.c_void_p]
-        f.restype=ctypes.c_void_p
-        self._ptr=f(self._s_ptr)
-        return
-

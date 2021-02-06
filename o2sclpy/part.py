@@ -64,7 +64,7 @@ class thermo:
     @property
     def ed(self):
         """
-        Getter function for thermo::ed .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_get_ed
         func.restype=ctypes.c_double
@@ -84,7 +84,7 @@ class thermo:
     @property
     def pr(self):
         """
-        Getter function for thermo::pr .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_get_pr
         func.restype=ctypes.c_double
@@ -104,7 +104,7 @@ class thermo:
     @property
     def en(self):
         """
-        Getter function for thermo::en .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_get_en
         func.restype=ctypes.c_double
@@ -160,7 +160,7 @@ class part:
     @property
     def g(self):
         """
-        Getter function for part::g .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_get_g
         func.restype=ctypes.c_double
@@ -180,7 +180,7 @@ class part:
     @property
     def m(self):
         """
-        Getter function for part::m .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_get_m
         func.restype=ctypes.c_double
@@ -200,7 +200,7 @@ class part:
     @property
     def ms(self):
         """
-        Getter function for part::ms .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_get_ms
         func.restype=ctypes.c_double
@@ -220,7 +220,7 @@ class part:
     @property
     def mu(self):
         """
-        Getter function for part::mu .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_get_mu
         func.restype=ctypes.c_double
@@ -240,7 +240,7 @@ class part:
     @property
     def nu(self):
         """
-        Getter function for part::nu .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_get_nu
         func.restype=ctypes.c_double
@@ -260,7 +260,7 @@ class part:
     @property
     def n(self):
         """
-        Getter function for part::n .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_get_n
         func.restype=ctypes.c_double
@@ -280,7 +280,7 @@ class part:
     @property
     def ed(self):
         """
-        Getter function for part::ed .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_get_ed
         func.restype=ctypes.c_double
@@ -300,7 +300,7 @@ class part:
     @property
     def pr(self):
         """
-        Getter function for part::pr .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_get_pr
         func.restype=ctypes.c_double
@@ -320,7 +320,7 @@ class part:
     @property
     def en(self):
         """
-        Getter function for part::en .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_get_en
         func.restype=ctypes.c_double
@@ -340,7 +340,7 @@ class part:
     @property
     def inc_rest_mass(self):
         """
-        Getter function for part::inc_rest_mass .
+        Property of type ctypes.c_bool
         """
         func=self._link.o2scl_part.o2scl_part_get_inc_rest_mass
         func.restype=ctypes.c_bool
@@ -360,7 +360,7 @@ class part:
     @property
     def non_interacting(self):
         """
-        Getter function for part::non_interacting .
+        Property of type ctypes.c_bool
         """
         func=self._link.o2scl_part.o2scl_part_get_non_interacting
         func.restype=ctypes.c_bool
@@ -428,7 +428,7 @@ class fermion(part):
     @property
     def kf(self):
         """
-        Getter function for fermion::kf .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_get_kf
         func.restype=ctypes.c_double
@@ -448,7 +448,7 @@ class fermion(part):
     @property
     def delta(self):
         """
-        Getter function for fermion::delta .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_get_delta
         func.restype=ctypes.c_double
@@ -500,7 +500,7 @@ class quark(fermion):
     @property
     def B(self):
         """
-        Getter function for quark::B .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_quark_get_B
         func.restype=ctypes.c_double
@@ -520,7 +520,7 @@ class quark(fermion):
     @property
     def qq(self):
         """
-        Getter function for quark::qq .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_quark_get_qq
         func.restype=ctypes.c_double
@@ -733,7 +733,7 @@ class fermion_rel(fermion_thermo):
     @property
     def err_nonconv(self):
         """
-        Getter function for fermion_rel::err_nonconv .
+        Property of type ctypes.c_bool
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_err_nonconv
         func.restype=ctypes.c_bool
@@ -753,7 +753,7 @@ class fermion_rel(fermion_thermo):
     @property
     def min_psi(self):
         """
-        Getter function for fermion_rel::min_psi .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_min_psi
         func.restype=ctypes.c_double
@@ -773,7 +773,7 @@ class fermion_rel(fermion_thermo):
     @property
     def deg_limit(self):
         """
-        Getter function for fermion_rel::deg_limit .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_deg_limit
         func.restype=ctypes.c_double
@@ -793,7 +793,7 @@ class fermion_rel(fermion_thermo):
     @property
     def exp_limit(self):
         """
-        Getter function for fermion_rel::exp_limit .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_exp_limit
         func.restype=ctypes.c_double
@@ -813,7 +813,7 @@ class fermion_rel(fermion_thermo):
     @property
     def upper_limit_fac(self):
         """
-        Getter function for fermion_rel::upper_limit_fac .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_upper_limit_fac
         func.restype=ctypes.c_double
@@ -833,7 +833,7 @@ class fermion_rel(fermion_thermo):
     @property
     def deg_entropy_fac(self):
         """
-        Getter function for fermion_rel::deg_entropy_fac .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_deg_entropy_fac
         func.restype=ctypes.c_double
@@ -853,7 +853,7 @@ class fermion_rel(fermion_thermo):
     @property
     def verbose(self):
         """
-        Getter function for fermion_rel::verbose .
+        Property of type ctypes.c_int
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_verbose
         func.restype=ctypes.c_int
@@ -873,7 +873,7 @@ class fermion_rel(fermion_thermo):
     @property
     def use_expansions(self):
         """
-        Getter function for fermion_rel::use_expansions .
+        Property of type ctypes.c_bool
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_use_expansions
         func.restype=ctypes.c_bool
@@ -893,7 +893,7 @@ class fermion_rel(fermion_thermo):
     @property
     def tol_expan(self):
         """
-        Getter function for fermion_rel::tol_expan .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_tol_expan
         func.restype=ctypes.c_double
@@ -913,7 +913,7 @@ class fermion_rel(fermion_thermo):
     @property
     def verify_ti(self):
         """
-        Getter function for fermion_rel::verify_ti .
+        Property of type ctypes.c_bool
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_verify_ti
         func.restype=ctypes.c_bool
@@ -933,7 +933,7 @@ class fermion_rel(fermion_thermo):
     @property
     def therm_ident(self):
         """
-        Getter function for fermion_rel::therm_ident .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_therm_ident
         func.restype=ctypes.c_double
@@ -952,7 +952,7 @@ class fermion_rel(fermion_thermo):
 
     def get_unc(self,unc):
         """
-        Getter function for fermion_rel::unc .
+        Object of type :class:`fermion`
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -1107,7 +1107,7 @@ class boson(part):
     @property
     def co(self):
         """
-        Getter function for boson::co .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_boson_get_co
         func.restype=ctypes.c_double
@@ -1291,7 +1291,7 @@ class thermo_np_deriv_press:
     @property
     def dsdT(self):
         """
-        Getter function for thermo_np_deriv_press::dsdT .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dsdT
         func.restype=ctypes.c_double
@@ -1311,7 +1311,7 @@ class thermo_np_deriv_press:
     @property
     def dnndT(self):
         """
-        Getter function for thermo_np_deriv_press::dnndT .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnndT
         func.restype=ctypes.c_double
@@ -1331,7 +1331,7 @@ class thermo_np_deriv_press:
     @property
     def dnpdT(self):
         """
-        Getter function for thermo_np_deriv_press::dnpdT .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnpdT
         func.restype=ctypes.c_double
@@ -1351,7 +1351,7 @@ class thermo_np_deriv_press:
     @property
     def dnndmun(self):
         """
-        Getter function for thermo_np_deriv_press::dnndmun .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnndmun
         func.restype=ctypes.c_double
@@ -1371,7 +1371,7 @@ class thermo_np_deriv_press:
     @property
     def dndmu_mixed(self):
         """
-        Getter function for thermo_np_deriv_press::dndmu_mixed .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dndmu_mixed
         func.restype=ctypes.c_double
@@ -1391,7 +1391,7 @@ class thermo_np_deriv_press:
     @property
     def dnpdmup(self):
         """
-        Getter function for thermo_np_deriv_press::dnpdmup .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_press_get_dnpdmup
         func.restype=ctypes.c_double
@@ -1447,7 +1447,7 @@ class thermo_np_deriv_helm:
     @property
     def dsdT(self):
         """
-        Getter function for thermo_np_deriv_helm::dsdT .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dsdT
         func.restype=ctypes.c_double
@@ -1467,7 +1467,7 @@ class thermo_np_deriv_helm:
     @property
     def dmundT(self):
         """
-        Getter function for thermo_np_deriv_helm::dmundT .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmundT
         func.restype=ctypes.c_double
@@ -1487,7 +1487,7 @@ class thermo_np_deriv_helm:
     @property
     def dmupdT(self):
         """
-        Getter function for thermo_np_deriv_helm::dmupdT .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmupdT
         func.restype=ctypes.c_double
@@ -1507,7 +1507,7 @@ class thermo_np_deriv_helm:
     @property
     def dmundnn(self):
         """
-        Getter function for thermo_np_deriv_helm::dmundnn .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmundnn
         func.restype=ctypes.c_double
@@ -1527,7 +1527,7 @@ class thermo_np_deriv_helm:
     @property
     def dmudn_mixed(self):
         """
-        Getter function for thermo_np_deriv_helm::dmudn_mixed .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmudn_mixed
         func.restype=ctypes.c_double
@@ -1547,7 +1547,7 @@ class thermo_np_deriv_helm:
     @property
     def dmupdnp(self):
         """
-        Getter function for thermo_np_deriv_helm::dmupdnp .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_thermo_np_deriv_helm_get_dmupdnp
         func.restype=ctypes.c_double
@@ -1603,7 +1603,7 @@ class part_deriv_press:
     @property
     def dndmu(self):
         """
-        Getter function for part_deriv_press::dndmu .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_deriv_press_get_dndmu
         func.restype=ctypes.c_double
@@ -1623,7 +1623,7 @@ class part_deriv_press:
     @property
     def dndT(self):
         """
-        Getter function for part_deriv_press::dndT .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_deriv_press_get_dndT
         func.restype=ctypes.c_double
@@ -1643,7 +1643,7 @@ class part_deriv_press:
     @property
     def dsdT(self):
         """
-        Getter function for part_deriv_press::dsdT .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_part_deriv_press_get_dsdT
         func.restype=ctypes.c_double
@@ -1867,7 +1867,7 @@ class fermion_deriv_rel:
     @property
     def exp_limit(self):
         """
-        Getter function for fermion_deriv_rel::exp_limit .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_exp_limit
         func.restype=ctypes.c_double
@@ -1887,7 +1887,7 @@ class fermion_deriv_rel:
     @property
     def deg_limit(self):
         """
-        Getter function for fermion_deriv_rel::deg_limit .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_deg_limit
         func.restype=ctypes.c_double
@@ -1907,7 +1907,7 @@ class fermion_deriv_rel:
     @property
     def upper_limit_fac(self):
         """
-        Getter function for fermion_deriv_rel::upper_limit_fac .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_upper_limit_fac
         func.restype=ctypes.c_double
@@ -1926,7 +1926,7 @@ class fermion_deriv_rel:
 
     def get_unc(self,unc):
         """
-        Getter function for fermion_deriv_rel::unc .
+        Object of type :class:`fermion_deriv`
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -1945,7 +1945,7 @@ class fermion_deriv_rel:
     @property
     def method(self):
         """
-        Getter function for fermion_deriv_rel::method .
+        Property of type ctypes.c_int
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_method
         func.restype=ctypes.c_int
@@ -1965,7 +1965,7 @@ class fermion_deriv_rel:
     @property
     def last_method(self):
         """
-        Getter function for fermion_deriv_rel::last_method .
+        Property of type ctypes.c_int
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_last_method
         func.restype=ctypes.c_int
@@ -1985,7 +1985,7 @@ class fermion_deriv_rel:
     @property
     def err_nonconv(self):
         """
-        Getter function for fermion_deriv_rel::err_nonconv .
+        Property of type ctypes.c_bool
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_err_nonconv
         func.restype=ctypes.c_bool
@@ -2091,7 +2091,7 @@ class fermion_deriv_nr:
     @property
     def flimit(self):
         """
-        Getter function for fermion_deriv_nr::flimit .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_get_flimit
         func.restype=ctypes.c_double
@@ -2110,7 +2110,7 @@ class fermion_deriv_nr:
 
     def get_unc(self,unc):
         """
-        Getter function for fermion_deriv_nr::unc .
+        Object of type :class:`fermion_deriv`
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_get_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -2263,7 +2263,7 @@ class fermion_mag_zerot:
     @property
     def nmax_up(self):
         """
-        Getter function for fermion_mag_zerot::nmax_up .
+        Property of type ctypes.c_int
         """
         func=self._link.o2scl_part.o2scl_fermion_mag_zerot_get_nmax_up
         func.restype=ctypes.c_int
@@ -2283,7 +2283,7 @@ class fermion_mag_zerot:
     @property
     def nmax_dn(self):
         """
-        Getter function for fermion_mag_zerot::nmax_dn .
+        Property of type ctypes.c_int
         """
         func=self._link.o2scl_part.o2scl_fermion_mag_zerot_get_nmax_dn
         func.restype=ctypes.c_int
@@ -2303,7 +2303,7 @@ class fermion_mag_zerot:
     @property
     def sum_limit(self):
         """
-        Getter function for fermion_mag_zerot::sum_limit .
+        Property of type ctypes.c_int
         """
         func=self._link.o2scl_part.o2scl_fermion_mag_zerot_get_sum_limit
         func.restype=ctypes.c_int

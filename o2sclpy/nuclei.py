@@ -61,7 +61,7 @@ class nucleus(part):
     @property
     def Z(self):
         """
-        Getter function for nucleus::Z .
+        Property of type ctypes.c_int
         """
         func=self._link.o2scl_part.o2scl_nucleus_get_Z
         func.restype=ctypes.c_int
@@ -81,7 +81,7 @@ class nucleus(part):
     @property
     def N(self):
         """
-        Getter function for nucleus::N .
+        Property of type ctypes.c_int
         """
         func=self._link.o2scl_part.o2scl_nucleus_get_N
         func.restype=ctypes.c_int
@@ -101,7 +101,7 @@ class nucleus(part):
     @property
     def A(self):
         """
-        Getter function for nucleus::A .
+        Property of type ctypes.c_int
         """
         func=self._link.o2scl_part.o2scl_nucleus_get_A
         func.restype=ctypes.c_int
@@ -121,7 +121,7 @@ class nucleus(part):
     @property
     def mex(self):
         """
-        Getter function for nucleus::mex .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucleus_get_mex
         func.restype=ctypes.c_double
@@ -141,7 +141,7 @@ class nucleus(part):
     @property
     def be(self):
         """
-        Getter function for nucleus::be .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucleus_get_be
         func.restype=ctypes.c_double
@@ -307,7 +307,7 @@ class nucmass:
     @property
     def m_prot(self):
         """
-        Getter function for nucmass::m_prot .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_get_m_prot
         func.restype=ctypes.c_double
@@ -327,7 +327,7 @@ class nucmass:
     @property
     def m_neut(self):
         """
-        Getter function for nucmass::m_neut .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_get_m_neut
         func.restype=ctypes.c_double
@@ -347,7 +347,7 @@ class nucmass:
     @property
     def m_elec(self):
         """
-        Getter function for nucmass::m_elec .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_get_m_elec
         func.restype=ctypes.c_double
@@ -367,7 +367,7 @@ class nucmass:
     @property
     def m_amu(self):
         """
-        Getter function for nucmass::m_amu .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_get_m_amu
         func.restype=ctypes.c_double
@@ -570,7 +570,7 @@ class nucmass_table(nucmass):
     @property
     def n(self):
         """
-        Getter function for nucmass_table::n .
+        Property of type ctypes.c_size_t
         """
         func=self._link.o2scl_part.o2scl_nucmass_table_get_n
         func.restype=ctypes.c_size_t
@@ -589,7 +589,7 @@ class nucmass_table(nucmass):
 
     def get_reference(self,reference):
         """
-        Getter function for nucmass_table::reference .
+        Object of type :class:`std::string`
         """
         func=self._link.o2scl_part.o2scl_nucmass_table_get_reference
         func.restype=ctypes.c_char_p
@@ -662,7 +662,7 @@ class nucmass_fit_base(nucmass):
     @property
     def nfit(self):
         """
-        Getter function for nucmass_fit_base::nfit .
+        Property of type ctypes.c_size_t
         """
         func=self._link.o2scl_part.o2scl_nucmass_fit_base_get_nfit
         func.restype=ctypes.c_size_t
@@ -714,7 +714,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
     @property
     def B(self):
         """
-        Getter function for nucmass_semi_empirical::B .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_semi_empirical_get_B
         func.restype=ctypes.c_double
@@ -734,7 +734,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
     @property
     def Sv(self):
         """
-        Getter function for nucmass_semi_empirical::Sv .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_semi_empirical_get_Sv
         func.restype=ctypes.c_double
@@ -754,7 +754,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
     @property
     def Ss(self):
         """
-        Getter function for nucmass_semi_empirical::Ss .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_semi_empirical_get_Ss
         func.restype=ctypes.c_double
@@ -774,7 +774,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
     @property
     def Ec(self):
         """
-        Getter function for nucmass_semi_empirical::Ec .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_semi_empirical_get_Ec
         func.restype=ctypes.c_double
@@ -794,7 +794,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
     @property
     def Epair(self):
         """
-        Getter function for nucmass_semi_empirical::Epair .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_semi_empirical_get_Epair
         func.restype=ctypes.c_double
@@ -994,7 +994,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def a1(self):
         """
-        Getter function for nucmass_frdm::a1 .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_a1
         func.restype=ctypes.c_double
@@ -1014,7 +1014,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def J(self):
         """
-        Getter function for nucmass_frdm::J .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_J
         func.restype=ctypes.c_double
@@ -1034,7 +1034,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def K(self):
         """
-        Getter function for nucmass_frdm::K .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_K
         func.restype=ctypes.c_double
@@ -1054,7 +1054,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def a2(self):
         """
-        Getter function for nucmass_frdm::a2 .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_a2
         func.restype=ctypes.c_double
@@ -1074,7 +1074,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def Q(self):
         """
-        Getter function for nucmass_frdm::Q .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_Q
         func.restype=ctypes.c_double
@@ -1094,7 +1094,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def a3(self):
         """
-        Getter function for nucmass_frdm::a3 .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_a3
         func.restype=ctypes.c_double
@@ -1114,7 +1114,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def ca(self):
         """
-        Getter function for nucmass_frdm::ca .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_ca
         func.restype=ctypes.c_double
@@ -1134,7 +1134,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def W(self):
         """
-        Getter function for nucmass_frdm::W .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_W
         func.restype=ctypes.c_double
@@ -1154,7 +1154,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def ael(self):
         """
-        Getter function for nucmass_frdm::ael .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_ael
         func.restype=ctypes.c_double
@@ -1174,7 +1174,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def rp(self):
         """
-        Getter function for nucmass_frdm::rp .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_rp
         func.restype=ctypes.c_double
@@ -1194,7 +1194,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def r0(self):
         """
-        Getter function for nucmass_frdm::r0 .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_r0
         func.restype=ctypes.c_double
@@ -1214,7 +1214,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def MH(self):
         """
-        Getter function for nucmass_frdm::MH .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_MH
         func.restype=ctypes.c_double
@@ -1234,7 +1234,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def Mn(self):
         """
-        Getter function for nucmass_frdm::Mn .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_Mn
         func.restype=ctypes.c_double
@@ -1254,7 +1254,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def e2(self):
         """
-        Getter function for nucmass_frdm::e2 .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_e2
         func.restype=ctypes.c_double
@@ -1274,7 +1274,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def a(self):
         """
-        Getter function for nucmass_frdm::a .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_a
         func.restype=ctypes.c_double
@@ -1294,7 +1294,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def aden(self):
         """
-        Getter function for nucmass_frdm::aden .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_aden
         func.restype=ctypes.c_double
@@ -1314,7 +1314,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def rmac(self):
         """
-        Getter function for nucmass_frdm::rmac .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_rmac
         func.restype=ctypes.c_double
@@ -1334,7 +1334,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def h(self):
         """
-        Getter function for nucmass_frdm::h .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_h
         func.restype=ctypes.c_double
@@ -1354,7 +1354,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def L(self):
         """
-        Getter function for nucmass_frdm::L .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_L
         func.restype=ctypes.c_double
@@ -1374,7 +1374,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def C(self):
         """
-        Getter function for nucmass_frdm::C .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_C
         func.restype=ctypes.c_double
@@ -1394,7 +1394,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def gamma(self):
         """
-        Getter function for nucmass_frdm::gamma .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_gamma
         func.restype=ctypes.c_double
@@ -1414,7 +1414,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def amu(self):
         """
-        Getter function for nucmass_frdm::amu .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_amu
         func.restype=ctypes.c_double
@@ -1434,7 +1434,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def nn(self):
         """
-        Getter function for nucmass_frdm::nn .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_nn
         func.restype=ctypes.c_double
@@ -1454,7 +1454,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def np(self):
         """
-        Getter function for nucmass_frdm::np .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_np
         func.restype=ctypes.c_double
@@ -1474,7 +1474,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def Rn(self):
         """
-        Getter function for nucmass_frdm::Rn .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_Rn
         func.restype=ctypes.c_double
@@ -1494,7 +1494,7 @@ class nucmass_frdm(nucmass_fit_base):
     @property
     def Rp(self):
         """
-        Getter function for nucmass_frdm::Rp .
+        Property of type ctypes.c_double
         """
         func=self._link.o2scl_part.o2scl_nucmass_frdm_get_Rp
         func.restype=ctypes.c_double
