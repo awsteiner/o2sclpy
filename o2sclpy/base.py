@@ -677,22 +677,21 @@ class shared_ptr_table_units(table_units):
 
     def __init__(self,link,shared_ptr):
         """
-        Init function for sp table_units<> .
+        Init function for shared_ptr_table_units<> .
         """
 
         self._link=link
         self._s_ptr=shared_ptr
-        
+
         f=self._link.o2scl.o2scl_shared_ptr_table_units___ptr
         f.argtypes=[ctypes.c_void_p]
         f.restype=ctypes.c_void_p
         self._ptr=f(self._s_ptr)
-        
         return
 
     def __del__(self):
         """
-        Delete function for sp table_units<> .
+        Delete function for shared_ptr_table_units<> .
         """
 
         f=self._link.o2scl.o2scl_free_shared_ptr_table_units__
