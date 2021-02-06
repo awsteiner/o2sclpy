@@ -291,7 +291,11 @@ class eos_had_base(eos_base):
 
     def calc_e(self,n,p,th):
         """
-        This function returns a ctypes.c_int object.
+        | Parameters:
+        | *n*: :ref:`o2scl::fermion` object
+        | *p*: :ref:`o2scl::fermion` object
+        | *th*: :ref:`o2scl::thermo` object
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_e
         func.restype=ctypes.c_int
@@ -301,7 +305,11 @@ class eos_had_base(eos_base):
 
     def calc_p(self,n,p,th):
         """
-        This function returns a ctypes.c_int object.
+        | Parameters:
+        | *n*: :ref:`o2scl::fermion` object
+        | *p*: :ref:`o2scl::fermion` object
+        | *th*: :ref:`o2scl::thermo` object
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_p
         func.restype=ctypes.c_int
@@ -311,7 +319,10 @@ class eos_had_base(eos_base):
 
     def fcomp(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp
         func.restype=ctypes.c_double
@@ -321,7 +332,11 @@ class eos_had_base(eos_base):
 
     def fcomp_err(self,nb,delta,unc):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | *unc*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp_err
         func.restype=ctypes.c_double
@@ -331,7 +346,10 @@ class eos_had_base(eos_base):
 
     def feoa(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feoa
         func.restype=ctypes.c_double
@@ -341,7 +359,10 @@ class eos_had_base(eos_base):
 
     def fesym(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym
         func.restype=ctypes.c_double
@@ -351,7 +372,11 @@ class eos_had_base(eos_base):
 
     def fesym_err(self,nb,delta,unc):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | *unc*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_err
         func.restype=ctypes.c_double
@@ -361,7 +386,10 @@ class eos_had_base(eos_base):
 
     def fesym_slope(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_slope
         func.restype=ctypes.c_double
@@ -371,7 +399,10 @@ class eos_had_base(eos_base):
 
     def fesym_curve(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_curve
         func.restype=ctypes.c_double
@@ -381,7 +412,10 @@ class eos_had_base(eos_base):
 
     def fesym_skew(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_skew
         func.restype=ctypes.c_double
@@ -391,7 +425,9 @@ class eos_had_base(eos_base):
 
     def fesym_diff(self,nb):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_diff
         func.restype=ctypes.c_double
@@ -401,7 +437,9 @@ class eos_had_base(eos_base):
 
     def feta(self,nb):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feta
         func.restype=ctypes.c_double
@@ -411,7 +449,9 @@ class eos_had_base(eos_base):
 
     def feta_prime(self,nb):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feta_prime
         func.restype=ctypes.c_double
@@ -421,7 +461,10 @@ class eos_had_base(eos_base):
 
     def fkprime(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fkprime
         func.restype=ctypes.c_double
@@ -431,7 +474,10 @@ class eos_had_base(eos_base):
 
     def fmsom(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fmsom
         func.restype=ctypes.c_double
@@ -441,7 +487,10 @@ class eos_had_base(eos_base):
 
     def f_effm_neut(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_neut
         func.restype=ctypes.c_double
@@ -451,7 +500,10 @@ class eos_had_base(eos_base):
 
     def f_effm_prot(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_prot
         func.restype=ctypes.c_double
@@ -461,7 +513,10 @@ class eos_had_base(eos_base):
 
     def f_effm_scalar(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_scalar
         func.restype=ctypes.c_double
@@ -471,7 +526,10 @@ class eos_had_base(eos_base):
 
     def f_effm_vector(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_vector
         func.restype=ctypes.c_double
@@ -481,7 +539,10 @@ class eos_had_base(eos_base):
 
     def fn0(self,delta,leoa):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *delta*: ``double``
+        | *leoa*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fn0
         func.restype=ctypes.c_double
@@ -491,6 +552,12 @@ class eos_had_base(eos_base):
 
     def f_number_suscept(self,mun,mup,dPdnn,dPdnp,dPdpp):
         """
+        | Parameters:
+        | *mun*: ``double``
+        | *mup*: ``double``
+        | *dPdnn*: ``double``
+        | *dPdnp*: ``double``
+        | *dPdpp*: ``double``
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_number_suscept
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -499,6 +566,12 @@ class eos_had_base(eos_base):
 
     def f_inv_number_suscept(self,mun,mup,dednn,dednp,dedpp):
         """
+        | Parameters:
+        | *mun*: ``double``
+        | *mup*: ``double``
+        | *dednn*: ``double``
+        | *dednp*: ``double``
+        | *dedpp*: ``double``
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_inv_number_suscept
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -507,7 +580,7 @@ class eos_had_base(eos_base):
 
     def saturation(self):
         """
-        This function returns a ctypes.c_int object.
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_saturation
         func.restype=ctypes.c_int
@@ -517,7 +590,10 @@ class eos_had_base(eos_base):
 
     def calc_mun_e(self,nn,np):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nn*: ``double``
+        | *np*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_mun_e
         func.restype=ctypes.c_double
@@ -527,7 +603,10 @@ class eos_had_base(eos_base):
 
     def calc_mup_e(self,nn,np):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nn*: ``double``
+        | *np*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_mup_e
         func.restype=ctypes.c_double
@@ -537,7 +616,10 @@ class eos_had_base(eos_base):
 
     def calc_ed(self,nn,np):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nn*: ``double``
+        | *np*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_ed
         func.restype=ctypes.c_double
@@ -547,7 +629,10 @@ class eos_had_base(eos_base):
 
     def calc_pr(self,nn,np):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nn*: ``double``
+        | *np*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_pr
         func.restype=ctypes.c_double
@@ -557,7 +642,10 @@ class eos_had_base(eos_base):
 
     def calc_nn_p(self,mun,mup):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *mun*: ``double``
+        | *mup*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_nn_p
         func.restype=ctypes.c_double
@@ -567,7 +655,10 @@ class eos_had_base(eos_base):
 
     def calc_np_p(self,nn,mup):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nn*: ``double``
+        | *mup*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_np_p
         func.restype=ctypes.c_double
@@ -577,7 +668,10 @@ class eos_had_base(eos_base):
 
     def calc_dmu_delta(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_dmu_delta
         func.restype=ctypes.c_double
@@ -587,7 +681,10 @@ class eos_had_base(eos_base):
 
     def calc_musum_delta(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_musum_delta
         func.restype=ctypes.c_double
@@ -597,7 +694,10 @@ class eos_had_base(eos_base):
 
     def calc_pressure_nb(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_pressure_nb
         func.restype=ctypes.c_double
@@ -607,7 +707,10 @@ class eos_had_base(eos_base):
 
     def calc_edensity_nb(self,nb,delta):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *nb*: ``double``
+        | *delta*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_edensity_nb
         func.restype=ctypes.c_double
@@ -2048,7 +2151,7 @@ class eos_tov:
 
     def has_baryons(self):
         """
-        This function returns a ctypes.c_bool object.
+        | Returns: ``ctypes.c_bool`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_tov_has_baryons
         func.restype=ctypes.c_bool
@@ -2142,6 +2245,9 @@ class eos_tov_polytrope(eos_tov):
 
     def set_coeff_index(self,coeff,index):
         """
+        | Parameters:
+        | *coeff*: ``double``
+        | *index*: ``double``
         """
         func=self._link.o2scl_eos.o2scl_eos_tov_polytrope_set_coeff_index
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
@@ -2182,6 +2288,9 @@ class eos_tov_linear(eos_tov):
 
     def set_cs2_eps0(self,cs2,eps0):
         """
+        | Parameters:
+        | *cs2*: ``double``
+        | *eps0*: ``double``
         """
         func=self._link.o2scl_eos.o2scl_eos_tov_linear_set_cs2_eps0
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
@@ -2242,6 +2351,11 @@ class eos_tov_interp(eos_tov):
 
     def read_table(self,eos,s_cole,s_colp,s_colnb):
         """
+        | Parameters:
+        | *eos*: :ref:`table_units<>` object
+        | *s_cole*: string
+        | *s_colp*: string
+        | *s_colnb*: string
         """
         s_cole_=ctypes.c_char_p(force_bytes(s_cole))
         s_colp_=ctypes.c_char_p(force_bytes(s_colp))
@@ -2269,6 +2383,9 @@ class eos_tov_interp(eos_tov):
 
     def s12_low_dens_eos(self,model,external):
         """
+        | Parameters:
+        | *model*: string
+        | *external*: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_s12_low_dens_eos
@@ -2278,6 +2395,9 @@ class eos_tov_interp(eos_tov):
 
     def gcp10_low_dens_eos(self,model,external):
         """
+        | Parameters:
+        | *model*: string
+        | *external*: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_gcp10_low_dens_eos
@@ -2287,6 +2407,10 @@ class eos_tov_interp(eos_tov):
 
     def ngl13_low_dens_eos(self,L,model,external):
         """
+        | Parameters:
+        | *L*: ``double``
+        | *model*: string
+        | *external*: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_ngl13_low_dens_eos
@@ -2296,6 +2420,11 @@ class eos_tov_interp(eos_tov):
 
     def ngl13_low_dens_eos2(self,S,L,nt,fname):
         """
+        | Parameters:
+        | *S*: ``double``
+        | *L*: ``double``
+        | *nt*: ``double``
+        | *fname*: string
         """
         fname_=ctypes.c_char_p(force_bytes(fname))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_ngl13_low_dens_eos2
@@ -2929,6 +3058,8 @@ class tov_solve:
 
     def set_eos(self,eos):
         """
+        | Parameters:
+        | *eos*: :ref:`eos_tov` object
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_set_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -2937,7 +3068,7 @@ class tov_solve:
 
     def mvsr(self):
         """
-        This function returns a ctypes.c_int object.
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_mvsr
         func.restype=ctypes.c_int
@@ -2947,7 +3078,9 @@ class tov_solve:
 
     def fixed(self,mass):
         """
-        This function returns a ctypes.c_int object.
+        | Parameters:
+        | *mass*: ``double``
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_fixed
         func.restype=ctypes.c_int
@@ -2957,7 +3090,7 @@ class tov_solve:
 
     def max(self):
         """
-        This function returns a ctypes.c_int object.
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_max
         func.restype=ctypes.c_int
@@ -2967,7 +3100,7 @@ class tov_solve:
 
     def get_results(self):
         """
-        This function returns an object of type :class:`shared_ptr_table_units`.
+        | Returns: :class:`shared_ptr_table_units`.
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_get_results
         func.restype=ctypes.c_void_p
@@ -3131,7 +3264,14 @@ class tov_love:
 
     def calc_y(self,yR,beta,k2,lambda_km5,lambda_cgs,tabulate):
         """
-        This function returns a ctypes.c_int object.
+        | Parameters:
+        | *yR*: ``double``
+        | *beta*: ``double``
+        | *k2*: ``double``
+        | *lambda_km5*: ``double``
+        | *lambda_cgs*: ``double``
+        | *tabulate*: ``bool``
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_tov_love_calc_y
         func.restype=ctypes.c_int
@@ -3141,6 +3281,8 @@ class tov_love:
 
     def add_disc(self,rd):
         """
+        | Parameters:
+        | *rd*: ``double``
         """
         func=self._link.o2scl_eos.o2scl_tov_love_add_disc
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
@@ -3157,7 +3299,13 @@ class tov_love:
 
     def calc_H(self,yR,beta,k2,lambda_km5,lambda_cgs):
         """
-        This function returns a ctypes.c_int object.
+        | Parameters:
+        | *yR*: ``double``
+        | *beta*: ``double``
+        | *k2*: ``double``
+        | *lambda_km5*: ``double``
+        | *lambda_cgs*: ``double``
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_tov_love_calc_H
         func.restype=ctypes.c_int
@@ -3483,6 +3631,8 @@ class nstar_cold:
 
     def set_eos(self,eos):
         """
+        | Parameters:
+        | *eos*: :ref:`eos_had_base` object
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_set_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -3491,7 +3641,9 @@ class nstar_cold:
 
     def calc_eos(self,np_0):
         """
-        This function returns a ctypes.c_int object.
+        | Parameters:
+        | *np_0*: ``double``
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_calc_eos
         func.restype=ctypes.c_int
@@ -3501,7 +3653,7 @@ class nstar_cold:
 
     def calc_nstar(self):
         """
-        This function returns a ctypes.c_int object.
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_calc_nstar
         func.restype=ctypes.c_int
@@ -3511,7 +3663,9 @@ class nstar_cold:
 
     def fixed(self,target_mass):
         """
-        This function returns a ctypes.c_int object.
+        | Parameters:
+        | *target_mass*: ``double``
+        | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_fixed
         func.restype=ctypes.c_int
@@ -3521,7 +3675,7 @@ class nstar_cold:
 
     def get_eos_results(self):
         """
-        This function returns an object of type :class:`shared_ptr_table_units`.
+        | Returns: :class:`shared_ptr_table_units`.
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_get_eos_results
         func.restype=ctypes.c_void_p
@@ -3531,7 +3685,7 @@ class nstar_cold:
 
     def get_tov_results(self):
         """
-        This function returns an object of type :class:`shared_ptr_table_units`.
+        | Returns: :class:`shared_ptr_table_units`.
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_get_tov_results
         func.restype=ctypes.c_void_p

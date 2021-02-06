@@ -64,7 +64,7 @@ class lib_settings_class:
 
     def eos_installed(self):
         """
-        This function returns a ctypes.c_bool object.
+        | Returns: ``ctypes.c_bool`` object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_eos_installed
         func.restype=ctypes.c_bool
@@ -74,7 +74,7 @@ class lib_settings_class:
 
     def get_convert_units(self):
         """
-        This function returns an object of type :class:`convert_units`.
+        | Returns: :class:`convert_units`
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_convert_units
         func.restype=ctypes.c_void_p
@@ -85,7 +85,7 @@ class lib_settings_class:
 
 class table:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`table<> <o2scl:table<>>`.
+    Python interface for O\ :sub:`2`\ scl class :ref:`table <o2scl:table>`.
     """
 
     _ptr=0
@@ -121,6 +121,10 @@ class table:
 
     def set(self,col,row,val):
         """
+        | Parameters:
+        | *col*: string
+        | *row*: ``size_t``
+        | *val*: ``double``
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___set
@@ -130,7 +134,10 @@ class table:
 
     def get(self,col,row):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *col*: string
+        | *row*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___get
@@ -141,7 +148,7 @@ class table:
 
     def get_ncolumns(self):
         """
-        This function returns a ctypes.c_size_t object.
+        | Returns: ``ctypes.c_size_t`` object
         """
         func=self._link.o2scl.o2scl_table___get_ncolumns
         func.restype=ctypes.c_size_t
@@ -151,7 +158,7 @@ class table:
 
     def get_nlines(self):
         """
-        This function returns a ctypes.c_size_t object.
+        | Returns: ``ctypes.c_size_t`` object
         """
         func=self._link.o2scl.o2scl_table___get_nlines
         func.restype=ctypes.c_size_t
@@ -161,6 +168,8 @@ class table:
 
     def set_nlines(self,lines):
         """
+        | Parameters:
+        | *lines*: ``size_t``
         """
         func=self._link.o2scl.o2scl_table___set_nlines
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
@@ -169,6 +178,8 @@ class table:
 
     def new_column(self,col):
         """
+        | Parameters:
+        | *col*: string
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___new_column
@@ -178,7 +189,9 @@ class table:
 
     def get_column_name(self,icol):
         """
-        This function returns a python bytes object.
+        | Parameters:
+        | *icol*: ``size_t``
+        | Returns: python bytes object
         """
         func=self._link.o2scl.o2scl_table___get_column_name
         func.restype=ctypes.c_char_p
@@ -220,7 +233,9 @@ class table:
 
     def __getitem__(self,col):
         """
-        This function returns a numpy array.
+        | Parameters:
+        | *col*: string
+        | Returns: ``numpy`` array
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___index_operator
@@ -233,7 +248,8 @@ class table:
 
 class table_units(table):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`table_units<> <o2scl:table_units<>>`.
+    Python interface for O\ :sub:`2`\ scl class
+    :ref:`table_units <o2scl:table_units>`.
     """
 
     def __init__(self,link,pointer=0):
@@ -265,7 +281,9 @@ class table_units(table):
 
     def get_unit(self,col):
         """
-        This function returns a python bytes object.
+        | Parameters:
+        | *col*: string
+        | Returns: python bytes object
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table_units___get_unit
@@ -276,6 +294,9 @@ class table_units(table):
 
     def set_unit(self,col,unit):
         """
+        | Parameters:
+        | *col*: string
+        | *unit*: string
         """
         col_=ctypes.c_char_p(force_bytes(col))
         unit_=ctypes.c_char_p(force_bytes(unit))
@@ -286,7 +307,11 @@ class table_units(table):
 
     def convert_to_unit(self,col,unit,err_on_fail):
         """
-        This function returns a ctypes.c_int object.
+        | Parameters:
+        | *col*: string
+        | *unit*: string
+        | *err_on_fail*: ``bool``
+        | Returns: ``ctypes.c_int`` object
         """
         col_=ctypes.c_char_p(force_bytes(col))
         unit_=ctypes.c_char_p(force_bytes(unit))
@@ -342,6 +367,11 @@ class table3d:
 
     def set(self,ix,iy,name,val):
         """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *iy*: ``size_t``
+        | *name*: string
+        | *val*: ``double``
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_set
@@ -351,7 +381,11 @@ class table3d:
 
     def get(self,ix,iy,name):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *ix*: ``size_t``
+        | *iy*: ``size_t``
+        | *name*: string
+        | Returns: ``ctypes.c_double`` object
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_get
@@ -362,6 +396,8 @@ class table3d:
 
     def new_slice(self,slice):
         """
+        | Parameters:
+        | *slice*: string
         """
         slice_=ctypes.c_char_p(force_bytes(slice))
         func=self._link.o2scl.o2scl_table3d_new_slice
@@ -371,7 +407,7 @@ class table3d:
 
     def get_nx(self):
         """
-        This function returns a ctypes.c_size_t object.
+        | Returns: ``ctypes.c_size_t`` object
         """
         func=self._link.o2scl.o2scl_table3d_get_nx
         func.restype=ctypes.c_size_t
@@ -381,7 +417,7 @@ class table3d:
 
     def get_ny(self):
         """
-        This function returns a ctypes.c_size_t object.
+        | Returns: ``ctypes.c_size_t`` object
         """
         func=self._link.o2scl.o2scl_table3d_get_ny
         func.restype=ctypes.c_size_t
@@ -391,7 +427,7 @@ class table3d:
 
     def get_nslices(self):
         """
-        This function returns a ctypes.c_size_t object.
+        | Returns: ``ctypes.c_size_t`` object
         """
         func=self._link.o2scl.o2scl_table3d_get_nslices
         func.restype=ctypes.c_size_t
@@ -401,7 +437,8 @@ class table3d:
 
 class tensor:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`tensor<> <o2scl:tensor<>>`.
+    Python interface for O\ :sub:`2`\ scl class
+    :ref:`tensor <o2scl:tensor>`.
     """
 
     _ptr=0
@@ -481,6 +518,11 @@ class find_constants:
 
     def find_print(self,name,unit,prec,verbose):
         """
+        | Parameters:
+        | *name*: string
+        | *unit*: string
+        | *prec*: ``size_t``
+        | *verbose*: ``int``
         """
         name_=ctypes.c_char_p(force_bytes(name))
         unit_=ctypes.c_char_p(force_bytes(unit))
@@ -491,7 +533,10 @@ class find_constants:
 
     def find_unique(self,name,unit):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *name*: string
+        | *unit*: string
+        | Returns: ``ctypes.c_double`` object
         """
         name_=ctypes.c_char_p(force_bytes(name))
         unit_=ctypes.c_char_p(force_bytes(unit))
@@ -503,7 +548,8 @@ class find_constants:
 
 class convert_units:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`convert_units<> <o2scl:convert_units<>>`.
+    Python interface for O\ :sub:`2`\ scl class
+    :ref:`convert_units <o2scl:convert_units>`.
     """
 
     _ptr=0
@@ -638,7 +684,11 @@ class convert_units:
 
     def convert(self,frm,to,val):
         """
-        This function returns a ctypes.c_double object.
+        | Parameters:
+        | *frm*: string
+        | *to*: string
+        | *val*: ``double``
+        | Returns: ``ctypes.c_double`` object
         """
         frm_=ctypes.c_char_p(force_bytes(frm))
         to_=ctypes.c_char_p(force_bytes(to))
@@ -650,7 +700,12 @@ class convert_units:
 
     def convert_ret(self,frm,to,val,converted):
         """
-        This function returns a ctypes.c_int object.
+        | Parameters:
+        | *frm*: string
+        | *to*: string
+        | *val*: ``double``
+        | *converted*: ``double``
+        | Returns: ``ctypes.c_int`` object
         """
         frm_=ctypes.c_char_p(force_bytes(frm))
         to_=ctypes.c_char_p(force_bytes(to))
@@ -698,3 +753,4 @@ class shared_ptr_table_units(table_units):
         f.argtypes=[ctypes.c_void_p]
         f(self._ptr)
         return
+
