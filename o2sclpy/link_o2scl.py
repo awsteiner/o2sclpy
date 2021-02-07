@@ -310,7 +310,7 @@ class linker:
         # the o2scl error handler is sometimes used by GSL functions
         if self.debug_first_pass:
             print('Setting alternate error handler.')
-        self.o2scl.o2scl_set_err_hnd_gsl()
+        self.o2scl.o2scl_python_prep()
 
         # Get the global library settings pointer
         func=self.o2scl.o2scl_get_o2scl_settings
