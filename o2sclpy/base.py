@@ -38,6 +38,11 @@ class lib_settings_class:
     def __init__(self,link,pointer=0):
         """
         Init function for class lib_settings_class .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -62,6 +67,52 @@ class lib_settings_class:
             f(self._ptr)
         return
 
+    def get_data_dir(self):
+        """
+        | Returns: python bytes object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_get_data_dir
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def set_data_dir(self,dir):
+        """
+        | Parameters:
+        | *dir*: string
+        | Returns: ``ctypes.c_int`` object
+        """
+        dir_=ctypes.c_char_p(force_bytes(dir))
+        func=self._link.o2scl.o2scl_lib_settings_class_set_data_dir
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,dir_)
+        return ret
+
+    def get_doc_dir(self):
+        """
+        | Returns: python bytes object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_get_doc_dir
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def set_doc_dir(self,dir):
+        """
+        | Parameters:
+        | *dir*: string
+        | Returns: ``ctypes.c_int`` object
+        """
+        dir_=ctypes.c_char_p(force_bytes(dir))
+        func=self._link.o2scl.o2scl_lib_settings_class_set_doc_dir
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,dir_)
+        return ret
+
     def eos_installed(self):
         """
         | Returns: ``ctypes.c_bool`` object
@@ -71,6 +122,174 @@ class lib_settings_class:
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
+
+    def part_installed(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_part_installed
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def hdf_support(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_hdf_support
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def openmp_support(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_openmp_support
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def readline_support(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_readline_support
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def ncurses_support(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_ncurses_support
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def gsl2_support(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_gsl2_support
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def armadillo_support(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_armadillo_support
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def eigen_support(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_eigen_support
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def fftw_support(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_fftw_support
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def python_support(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_python_support
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def hdf5_compression_support(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_hdf5_compression_support
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def system_type(self):
+        """
+        | Returns: python bytes object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_system_type
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def range_check(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_range_check
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def time_compiled(self):
+        """
+        | Returns: python bytes object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_time_compiled
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def date_compiled(self):
+        """
+        | Returns: python bytes object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_date_compiled
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def o2scl_version(self):
+        """
+        | Returns: python bytes object
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_o2scl_version
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def config_h_report(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_lib_settings_class_config_h_report
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
 
     def get_convert_units(self):
         """
@@ -95,6 +314,11 @@ class table:
     def __init__(self,link,pointer=0):
         """
         Init function for class table<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -176,6 +400,46 @@ class table:
         func(self._ptr,lines)
         return
 
+    def get_maxlines(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_table___get_maxlines
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def set_maxlines(self,llines):
+        """
+        | Parameters:
+        | *llines*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table___set_maxlines
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,llines)
+        return
+
+    def set_nlines_auto(self,il):
+        """
+        | Parameters:
+        | *il*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table___set_nlines_auto
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,il)
+        return
+
+    def inc_maxlines(self,llines):
+        """
+        | Parameters:
+        | *llines*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table___inc_maxlines
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,llines)
+        return
+
     def new_column(self,col):
         """
         | Parameters:
@@ -198,6 +462,179 @@ class table:
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
         return ret
+
+    def rename_column(self,src,dest):
+        """
+        | Parameters:
+        | *src*: string
+        | *dest*: string
+        """
+        src_=ctypes.c_char_p(force_bytes(src))
+        dest_=ctypes.c_char_p(force_bytes(dest))
+        func=self._link.o2scl.o2scl_table___rename_column
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,src_,dest_)
+        return
+
+    def delete_column(self,col):
+        """
+        | Parameters:
+        | *col*: string
+        """
+        col_=ctypes.c_char_p(force_bytes(col))
+        func=self._link.o2scl.o2scl_table___delete_column
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,col_)
+        return
+
+    def get_sorted_name(self,icol):
+        """
+        | Parameters:
+        | *icol*: ``size_t``
+        | Returns: python bytes object
+        """
+        func=self._link.o2scl.o2scl_table___get_sorted_name
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,icol)
+        return ret
+
+    def is_column(self,scol):
+        """
+        | Parameters:
+        | *scol*: string
+        | Returns: ``ctypes.c_bool`` object
+        """
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        func=self._link.o2scl.o2scl_table___is_column
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,scol_)
+        return ret
+
+    def lookup_column(self,scol):
+        """
+        | Parameters:
+        | *scol*: string
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        func=self._link.o2scl.o2scl_table___lookup_column
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,scol_)
+        return ret
+
+    def copy_column(self,src,dest):
+        """
+        | Parameters:
+        | *src*: string
+        | *dest*: string
+        """
+        src_=ctypes.c_char_p(force_bytes(src))
+        dest_=ctypes.c_char_p(force_bytes(dest))
+        func=self._link.o2scl.o2scl_table___copy_column
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,src_,dest_)
+        return
+
+    def add_col_from_table(self,source,src_index,src_col,dest_index,dest_col):
+        """
+        | Parameters:
+        | *source*: :class:`table<>` object
+        | *src_index*: string
+        | *src_col*: string
+        | *dest_index*: string
+        | *dest_col*: string
+        """
+        src_index_=ctypes.c_char_p(force_bytes(src_index))
+        src_col_=ctypes.c_char_p(force_bytes(src_col))
+        dest_index_=ctypes.c_char_p(force_bytes(dest_index))
+        dest_col_=ctypes.c_char_p(force_bytes(dest_col))
+        func=self._link.o2scl.o2scl_table___add_col_from_table
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,source._ptr,src_index_,src_col_,dest_index_,dest_col_)
+        return
+
+    def insert_table(self,source,src_index,allow_extrap,dest_index):
+        """
+        | Parameters:
+        | *source*: :class:`table<>` object
+        | *src_index*: string
+        | *allow_extrap*: ``bool``
+        | *dest_index*: string
+        """
+        src_index_=ctypes.c_char_p(force_bytes(src_index))
+        dest_index_=ctypes.c_char_p(force_bytes(dest_index))
+        func=self._link.o2scl.o2scl_table___insert_table
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool,ctypes.c_char_p]
+        func(self._ptr,source._ptr,src_index_,allow_extrap,dest_index_)
+        return
+
+    def add_table(self,source):
+        """
+        | Parameters:
+        | *source*: :class:`table<>` object
+        """
+        func=self._link.o2scl.o2scl_table___add_table
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,source._ptr)
+        return
+
+    def new_row(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table___new_row
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def copy_row(self,src,dest):
+        """
+        | Parameters:
+        | *src*: ``size_t``
+        | *dest*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table___copy_row
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        func(self._ptr,src,dest)
+        return
+
+    def delete_row(self,scol,val):
+        """
+        | Parameters:
+        | *scol*: string
+        | *val*: ``double``
+        """
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        func=self._link.o2scl.o2scl_table___delete_row
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
+        func(self._ptr,scol_,val)
+        return
+
+    def delete_rows_func(self,func):
+        """
+        | Parameters:
+        | *func*: string
+        """
+        func_=ctypes.c_char_p(force_bytes(func))
+        func=self._link.o2scl.o2scl_table___delete_rows_func
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,func_)
+        return
+
+    def line_of_names(self,names):
+        """
+        | Parameters:
+        | *names*: string
+        """
+        names_=ctypes.c_char_p(force_bytes(names))
+        func=self._link.o2scl.o2scl_table___line_of_names
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,names_)
+        return
 
     def clear(self):
         """
@@ -255,6 +692,11 @@ class table_units(table):
     def __init__(self,link,pointer=0):
         """
         Init function for class table_units<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -341,6 +783,11 @@ class table3d:
     def __init__(self,link,pointer=0):
         """
         Init function for class table3d .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -448,6 +895,11 @@ class tensor:
     def __init__(self,link,pointer=0):
         """
         Init function for class tensor<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -492,6 +944,11 @@ class find_constants:
     def __init__(self,link,pointer=0):
         """
         Init function for class find_constants .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -559,6 +1016,11 @@ class convert_units:
     def __init__(self,link,pointer=0):
         """
         Init function for class convert_units<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -674,9 +1136,6 @@ class convert_units:
         return
 
     def set_units_cmd_string(self,value):
-        """
-        Setter function for convert_units<>::units_cmd_string .
-        """
         func=self._link.o2scl.o2scl_convert_units___set_units_cmd_string
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)

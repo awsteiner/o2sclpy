@@ -38,6 +38,11 @@ class eos_base:
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_base .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -72,9 +77,6 @@ class eos_base:
         return
 
     def set_def_thermo(self,value):
-        """
-        Setter function for eos_base::def_thermo .
-        """
         func=self._link.o2scl_eos.o2scl_eos_base_set_def_thermo
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -89,6 +91,11 @@ class eos_had_base(eos_base):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_base .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -263,9 +270,6 @@ class eos_had_base(eos_base):
         return
 
     def set_def_neutron(self,value):
-        """
-        Setter function for eos_had_base::def_neutron .
-        """
         func=self._link.o2scl_eos.o2scl_eos_had_base_set_def_neutron
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -281,9 +285,6 @@ class eos_had_base(eos_base):
         return
 
     def set_def_proton(self,value):
-        """
-        Setter function for eos_had_base::def_proton .
-        """
         func=self._link.o2scl_eos.o2scl_eos_had_base_set_def_proton
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -727,6 +728,11 @@ class eos_had_eden_base(eos_had_base):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_eden_base .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -760,6 +766,11 @@ class eos_had_pres_base(eos_had_base):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_pres_base .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -793,6 +804,11 @@ class eos_had_temp_base(eos_had_base):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_temp_base .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -826,6 +842,11 @@ class eos_had_temp_eden_base(eos_had_temp_base):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_temp_eden_base .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -859,6 +880,11 @@ class eos_had_temp_pres_base(eos_had_temp_base):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_temp_pres_base .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -891,6 +917,11 @@ class eos_had_skyrme(eos_had_temp_eden_base):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_skyrme .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1226,9 +1257,6 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         return
 
     def set_reference(self,value):
-        """
-        Setter function for eos_had_skyrme::reference .
-        """
         func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_reference
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -1244,9 +1272,6 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         return
 
     def set_nrfd(self,value):
-        """
-        Setter function for eos_had_skyrme::nrfd .
-        """
         func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_nrfd
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -1260,6 +1285,11 @@ class eos_had_apr(eos_had_temp_eden_base):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_apr .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1332,6 +1362,11 @@ class eos_had_rmf(eos_had_temp_pres_base):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_had_rmf .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1864,6 +1899,11 @@ class eos_quark(eos_base):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_quark .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1896,6 +1936,11 @@ class eos_quark_bag(eos_quark):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_quark_bag .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1948,6 +1993,11 @@ class eos_quark_njl(eos_quark):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_quark_njl .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -2105,6 +2155,11 @@ class eos_tov:
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_tov .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -2167,6 +2222,11 @@ class eos_tov_buchdahl(eos_tov):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_tov_buchdahl .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -2219,6 +2279,11 @@ class eos_tov_polytrope(eos_tov):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_tov_polytrope .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -2262,6 +2327,11 @@ class eos_tov_linear(eos_tov):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_tov_linear .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -2305,6 +2375,11 @@ class eos_tov_interp(eos_tov):
     def __init__(self,link,pointer=0):
         """
         Init function for class eos_tov_interp .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -2452,6 +2527,11 @@ class tov_solve:
     def __init__(self,link,pointer=0):
         """
         Init function for class tov_solve .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -3120,6 +3200,11 @@ class tov_love:
     def __init__(self,link,pointer=0):
         """
         Init function for class tov_love .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -3214,9 +3299,6 @@ class tov_love:
         return
 
     def set_results(self,value):
-        """
-        Setter function for tov_love::results .
-        """
         func=self._link.o2scl_eos.o2scl_tov_love_set_results
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -3325,6 +3407,11 @@ class nstar_cold:
     def __init__(self,link,pointer=0):
         """
         Init function for class nstar_cold .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -3695,7 +3782,12 @@ class nstar_cold:
 
 def skyrme_load(link,sk,model,external,verbose):
     """
-    Wrapper for skyrme_load() .
+        | Parameters:
+        | *link* :class:`linker` object
+        | *sk*: :class:`eos_had_skyrme` object
+        | *model*: string
+        | *external*: ``bool``
+        | *verbose*: ``int``
     """
     model_=ctypes.c_char_p(force_bytes(model))
     func=link.o2scl_eos.o2scl_skyrme_load_wrapper
@@ -3705,7 +3797,11 @@ def skyrme_load(link,sk,model,external,verbose):
 
 def rmf_load(link,rmf,model,external):
     """
-    Wrapper for rmf_load() .
+        | Parameters:
+        | *link* :class:`linker` object
+        | *rmf*: :class:`eos_had_rmf` object
+        | *model*: string
+        | *external*: ``bool``
     """
     model_=ctypes.c_char_p(force_bytes(model))
     func=link.o2scl_eos.o2scl_rmf_load_wrapper

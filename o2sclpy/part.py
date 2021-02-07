@@ -37,6 +37,11 @@ class thermo:
     def __init__(self,link,pointer=0):
         """
         Init function for class thermo .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -133,6 +138,11 @@ class part:
     def __init__(self,link,pointer=0):
         """
         Init function for class part .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -406,6 +416,11 @@ class fermion(part):
     def __init__(self,link,pointer=0):
         """
         Init function for class fermion .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -478,6 +493,11 @@ class quark(fermion):
     def __init__(self,link,pointer=0):
         """
         Init function for class quark .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -554,6 +574,11 @@ class fermion_zerot:
     def __init__(self,link,pointer=0):
         """
         Init function for class fermion_zerot .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -637,6 +662,11 @@ class fermion_thermo(fermion_zerot):
     def __init__(self,link,pointer=0):
         """
         Init function for class fermion_thermo .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -742,6 +772,11 @@ class fermion_rel(fermion_thermo):
     def __init__(self,link,pointer=0):
         """
         Init function for class fermion_rel .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -996,9 +1031,6 @@ class fermion_rel(fermion_thermo):
         return
 
     def set_unc(self,value):
-        """
-        Setter function for fermion_rel::unc .
-        """
         func=self._link.o2scl_part.o2scl_fermion_rel_set_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -1073,6 +1105,11 @@ class fermion_nonrel(fermion_zerot):
     def __init__(self,link,pointer=0):
         """
         Init function for class fermion_nonrel .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1140,6 +1177,11 @@ class boson(part):
     def __init__(self,link,pointer=0):
         """
         Init function for class boson .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1196,6 +1238,11 @@ class boson_rel:
     def __init__(self,link,pointer=0):
         """
         Init function for class boson_rel .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1287,6 +1334,11 @@ class classical_thermo:
     def __init__(self,link,pointer=0):
         """
         Init function for class classical_thermo .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1345,6 +1397,11 @@ class thermo_np_deriv_press:
     def __init__(self,link,pointer=0):
         """
         Init function for class thermo_np_deriv_press .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1501,6 +1558,11 @@ class thermo_np_deriv_helm:
     def __init__(self,link,pointer=0):
         """
         Init function for class thermo_np_deriv_helm .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1657,6 +1719,11 @@ class part_deriv_press:
     def __init__(self,link,pointer=0):
         """
         Init function for class part_deriv_press .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1761,6 +1828,11 @@ class part_deriv(part):
     def __init__(self,link,pointer=0):
         """
         Init function for class part_deriv .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1793,6 +1865,11 @@ class fermion_deriv(fermion):
     def __init__(self,link,pointer=0):
         """
         Init function for class fermion_deriv .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1829,6 +1906,11 @@ class deriv_thermo_base:
     def __init__(self,link,pointer=0):
         """
         Init function for class deriv_thermo_base .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -1943,6 +2025,11 @@ class fermion_deriv_rel:
     def __init__(self,link,pointer=0):
         """
         Init function for class fermion_deriv_rel .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -2037,9 +2124,6 @@ class fermion_deriv_rel:
         return
 
     def set_unc(self,value):
-        """
-        Setter function for fermion_deriv_rel::unc .
-        """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_set_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -2182,6 +2266,11 @@ class fermion_deriv_nr:
     def __init__(self,link,pointer=0):
         """
         Init function for class fermion_deriv_nr .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -2236,9 +2325,6 @@ class fermion_deriv_nr:
         return
 
     def set_unc(self,value):
-        """
-        Setter function for fermion_deriv_nr::unc .
-        """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_set_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -2315,6 +2401,11 @@ class classical_deriv_thermo:
     def __init__(self,link,pointer=0):
         """
         Init function for class classical_deriv_thermo .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:
@@ -2373,6 +2464,11 @@ class fermion_mag_zerot:
     def __init__(self,link,pointer=0):
         """
         Init function for class fermion_mag_zerot .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
 
         if pointer==0:

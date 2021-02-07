@@ -10,12 +10,16 @@ Class lib_settings_class
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class table
 -----------
 
 .. autoclass:: o2sclpy.table
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class table_units
 -----------------
@@ -24,12 +28,16 @@ Class table_units
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class table3d
 -------------
 
 .. autoclass:: o2sclpy.table3d
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class tensor
 ------------
@@ -38,6 +46,8 @@ Class tensor
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class find_constants
 --------------------
 
@@ -45,12 +55,16 @@ Class find_constants
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class convert_units
 -------------------
 
 .. autoclass:: o2sclpy.convert_units
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class shared_ptr_table_units
 ----------------------------

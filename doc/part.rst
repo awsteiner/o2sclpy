@@ -10,12 +10,16 @@ Class thermo
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class part
 ----------
 
 .. autoclass:: o2sclpy.part
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class fermion
 -------------
@@ -24,12 +28,16 @@ Class fermion
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class quark
 -----------
 
 .. autoclass:: o2sclpy.quark
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class fermion_zerot
 -------------------
@@ -38,12 +46,16 @@ Class fermion_zerot
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class fermion_thermo
 --------------------
 
 .. autoclass:: o2sclpy.fermion_thermo
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class fermion_rel
 -----------------
@@ -52,12 +64,16 @@ Class fermion_rel
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class fermion_nonrel
 --------------------
 
 .. autoclass:: o2sclpy.fermion_nonrel
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class boson
 -----------
@@ -66,12 +82,16 @@ Class boson
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class boson_rel
 ---------------
 
 .. autoclass:: o2sclpy.boson_rel
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class classical_thermo
 ----------------------
@@ -80,12 +100,16 @@ Class classical_thermo
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class thermo_np_deriv_press
 ---------------------------
 
 .. autoclass:: o2sclpy.thermo_np_deriv_press
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class thermo_np_deriv_helm
 --------------------------
@@ -94,12 +118,16 @@ Class thermo_np_deriv_helm
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class part_deriv_press
 ----------------------
 
 .. autoclass:: o2sclpy.part_deriv_press
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class part_deriv
 ----------------
@@ -108,12 +136,16 @@ Class part_deriv
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class fermion_deriv
 -------------------
 
 .. autoclass:: o2sclpy.fermion_deriv
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class deriv_thermo_base
 -----------------------
@@ -122,12 +154,16 @@ Class deriv_thermo_base
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class fermion_deriv_rel
 -----------------------
 
 .. autoclass:: o2sclpy.fermion_deriv_rel
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
 Class fermion_deriv_nr
 ----------------------
@@ -136,6 +172,8 @@ Class fermion_deriv_nr
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class classical_deriv_thermo
 ----------------------------
 
@@ -143,10 +181,14 @@ Class classical_deriv_thermo
         :members:
         :undoc-members:
 
+        .. automethod:: __init__
+
 Class fermion_mag_zerot
 -----------------------
 
 .. autoclass:: o2sclpy.fermion_mag_zerot
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
 
