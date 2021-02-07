@@ -51,6 +51,11 @@ cmaps:
 		temp.png
 	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
 
+skyrme.ipynb: empty
+	jupytext --to ipynb --set-kernel python3 --execute skyrme.py
+
+empty:
+
 colors_near:
 	./colors_near.scr
 	convert +append ../figures/near_blue_doc.png near_blue.png \
