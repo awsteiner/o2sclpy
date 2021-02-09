@@ -39,6 +39,7 @@ from o2sclpy.base import *
 from o2sclpy.part import *
 from o2sclpy.nuclei import *
 from o2sclpy.eos import *
+from o2sclpy.cap_cout import *
 
 """
 The version number string
