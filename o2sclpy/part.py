@@ -64,6 +64,8 @@ class thermo:
             f=self._link.o2scl_part.o2scl_free_thermo
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -165,6 +167,8 @@ class part:
             f=self._link.o2scl_part.o2scl_free_part
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -410,9 +414,9 @@ class part:
 
 class fermion(part):
     """
-    Python interface for O\ :sub:`2`\ scl class fermion, which is a typedef of
-    fermion_tl<double>. See
-    http://neutronstars.utk.edu/code/o2scl-dev/part/html/class/fermion_tl.html
+    Python interface for O\ :sub:`2`\ scl class ``fermion``,
+    which is a typedef of ``fermion_tl<double>``. See
+    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/fermion_tl.html
     .
     """
 
@@ -446,6 +450,8 @@ class fermion(part):
             f=self._link.o2scl_part.o2scl_free_fermion
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -490,7 +496,9 @@ class fermion(part):
 
 class quark(fermion):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`quark <o2sclp:quark>`.
+    Python interface for O\ :sub:`2`\ scl class ``quark``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/quark.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -523,6 +531,8 @@ class quark(fermion):
             f=self._link.o2scl_part.o2scl_free_quark
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -604,6 +614,8 @@ class fermion_zerot:
             f=self._link.o2scl_part.o2scl_free_fermion_zerot
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def kf_from_density(self,f):
@@ -692,6 +704,8 @@ class fermion_thermo(fermion_zerot):
             f=self._link.o2scl_part.o2scl_free_fermion_thermo
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def calc_mu_deg(self,f,T,prec):
@@ -802,6 +816,8 @@ class fermion_rel(fermion_thermo):
             f=self._link.o2scl_part.o2scl_free_fermion_rel
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -1026,7 +1042,7 @@ class fermion_rel(fermion_thermo):
 
     def get_unc(self,unc):
         """
-        Object of type :class:`fermion`
+        Get object of type :class:`fermion`
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_get_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -1034,6 +1050,9 @@ class fermion_rel(fermion_thermo):
         return
 
     def set_unc(self,value):
+        """
+        Set object of type :class:`fermion`
+        """
         func=self._link.o2scl_part.o2scl_fermion_rel_set_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -1135,6 +1154,8 @@ class fermion_nonrel(fermion_zerot):
             f=self._link.o2scl_part.o2scl_free_fermion_nonrel
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def calc_density(self,f,T):
@@ -1174,7 +1195,9 @@ class fermion_nonrel(fermion_zerot):
 
 class boson(part):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`boson <o2sclp:boson>`.
+    Python interface for O\ :sub:`2`\ scl class ``boson``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/boson.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1207,6 +1230,8 @@ class boson(part):
             f=self._link.o2scl_part.o2scl_free_boson
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -1231,7 +1256,9 @@ class boson(part):
 
 class boson_rel:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`boson_rel <o2sclp:boson_rel>`.
+    Python interface for O\ :sub:`2`\ scl class ``boson_rel``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/boson_rel.html .
     """
 
     _ptr=0
@@ -1268,6 +1295,8 @@ class boson_rel:
             f=self._link.o2scl_part.o2scl_free_boson_rel
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def calc_density(self,b,T):
@@ -1364,6 +1393,8 @@ class classical_thermo:
             f=self._link.o2scl_part.o2scl_free_classical_thermo
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def calc_density(self,p,T):
@@ -1427,6 +1458,8 @@ class thermo_np_deriv_press:
             f=self._link.o2scl_part.o2scl_free_thermo_np_deriv_press
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -1588,6 +1621,8 @@ class thermo_np_deriv_helm:
             f=self._link.o2scl_part.o2scl_free_thermo_np_deriv_helm
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -1749,6 +1784,8 @@ class part_deriv_press:
             f=self._link.o2scl_part.o2scl_free_part_deriv_press
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -1858,6 +1895,8 @@ class part_deriv(part):
             f=self._link.o2scl_part.o2scl_free_part_deriv
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
 class fermion_deriv(fermion):
@@ -1895,6 +1934,8 @@ class fermion_deriv(fermion):
             f=self._link.o2scl_part.o2scl_free_fermion_deriv
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
 class deriv_thermo_base:
@@ -1936,6 +1977,8 @@ class deriv_thermo_base:
             f=self._link.o2scl_part.o2scl_free_deriv_thermo_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def heat_cap_ppart_const_vol(self,p,T):
@@ -2055,6 +2098,8 @@ class fermion_deriv_rel:
             f=self._link.o2scl_part.o2scl_free_fermion_deriv_rel
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -2119,7 +2164,7 @@ class fermion_deriv_rel:
 
     def get_unc(self,unc):
         """
-        Object of type :class:`fermion_deriv`
+        Get object of type :class:`fermion_deriv`
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_get_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -2127,6 +2172,9 @@ class fermion_deriv_rel:
         return
 
     def set_unc(self,value):
+        """
+        Set object of type :class:`fermion_deriv`
+        """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_set_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -2296,6 +2344,8 @@ class fermion_deriv_nr:
             f=self._link.o2scl_part.o2scl_free_fermion_deriv_nr
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -2320,7 +2370,7 @@ class fermion_deriv_nr:
 
     def get_unc(self,unc):
         """
-        Object of type :class:`fermion_deriv`
+        Get object of type :class:`fermion_deriv`
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_get_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -2328,6 +2378,9 @@ class fermion_deriv_nr:
         return
 
     def set_unc(self,value):
+        """
+        Set object of type :class:`fermion_deriv`
+        """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_set_unc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -2431,6 +2484,8 @@ class classical_deriv_thermo:
             f=self._link.o2scl_part.o2scl_free_classical_deriv_thermo
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def calc_density(self,p,T):
@@ -2457,7 +2512,9 @@ class classical_deriv_thermo:
 
 class fermion_mag_zerot:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`fermion_mag_zerot <o2sclp:fermion_mag_zerot>`.
+    Python interface for O\ :sub:`2`\ scl class ``fermion_mag_zerot``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/fermion_mag_zerot.html .
     """
 
     _ptr=0
@@ -2494,6 +2551,8 @@ class fermion_mag_zerot:
             f=self._link.o2scl_part.o2scl_free_fermion_mag_zerot
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property

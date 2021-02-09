@@ -28,7 +28,9 @@ import numpy
 
 class lib_settings_class:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`lib_settings_class <o2scl:lib_settings_class>`.
+    Python interface for O\ :sub:`2`\ scl class ``lib_settings_class``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/lib_settings_class.html .
     """
 
     _ptr=0
@@ -65,6 +67,8 @@ class lib_settings_class:
             f=self._link.o2scl.o2scl_free_lib_settings_class
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def get_data_dir(self):
@@ -304,7 +308,9 @@ class lib_settings_class:
 
 class table:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`table <o2scl:table>`.
+    Python interface for O\ :sub:`2`\ scl class ``table<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/table<>.html .
     """
 
     _ptr=0
@@ -341,6 +347,8 @@ class table:
             f=self._link.o2scl.o2scl_free_table__
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def set(self,col,row,val):
@@ -685,8 +693,9 @@ class table:
 
 class table_units(table):
     """
-    Python interface for O\ :sub:`2`\ scl class
-    :ref:`table_units <o2scl:table_units>`.
+    Python interface for O\ :sub:`2`\ scl class ``table_units<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/table_units<>.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -719,6 +728,8 @@ class table_units(table):
             f=self._link.o2scl.o2scl_free_table_units__
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def get_unit(self,col):
@@ -773,7 +784,9 @@ class table_units(table):
 
 class table3d:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`table3d <o2scl:table3d>`.
+    Python interface for O\ :sub:`2`\ scl class ``table3d``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/table3d.html .
     """
 
     _ptr=0
@@ -810,6 +823,8 @@ class table3d:
             f=self._link.o2scl.o2scl_free_table3d
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def set(self,ix,iy,name,val):
@@ -884,8 +899,9 @@ class table3d:
 
 class tensor:
     """
-    Python interface for O\ :sub:`2`\ scl class
-    :ref:`tensor <o2scl:tensor>`.
+    Python interface for O\ :sub:`2`\ scl class ``tensor<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/tensor<>.html .
     """
 
     _ptr=0
@@ -922,6 +938,8 @@ class tensor:
             f=self._link.o2scl.o2scl_free_tensor__
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def clear(self):
@@ -934,7 +952,9 @@ class tensor:
 
 class find_constants:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`find_constants <o2scl:find_constants>`.
+    Python interface for O\ :sub:`2`\ scl class ``find_constants``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/find_constants.html .
     """
 
     _ptr=0
@@ -971,6 +991,8 @@ class find_constants:
             f=self._link.o2scl.o2scl_free_find_constants
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def find_print(self,name,unit,prec,verbose):
@@ -1005,8 +1027,9 @@ class find_constants:
 
 class convert_units:
     """
-    Python interface for O\ :sub:`2`\ scl class
-    :ref:`convert_units <o2scl:convert_units>`.
+    Python interface for O\ :sub:`2`\ scl class ``convert_units<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/convert_units<>.html .
     """
 
     _ptr=0
@@ -1043,6 +1066,8 @@ class convert_units:
             f=self._link.o2scl.o2scl_free_convert_units__
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -1127,7 +1152,7 @@ class convert_units:
 
     def get_units_cmd_string(self,units_cmd_string):
         """
-        Object of type :class:`std::string`
+        Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_convert_units___get_units_cmd_string
         func.restype=ctypes.c_char_p
@@ -1136,6 +1161,9 @@ class convert_units:
         return
 
     def set_units_cmd_string(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
         func=self._link.o2scl.o2scl_convert_units___set_units_cmd_string
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -1189,13 +1217,18 @@ class shared_ptr_table_units(table_units):
     _link=0
     _owner=True
 
-    def __init__(self,link,shared_ptr):
+    def __init__(self,link,shared_ptr=0):
         """
         Init function for shared_ptr_table_units<> .
         """
 
         self._link=link
-        self._s_ptr=shared_ptr
+        if shared_ptr==0:
+            f2=self._link.o2scl.o2sclcreate_shared_ptr_table_units__
+            f2.restype=ctypes.c_void_p
+            self._s_ptr=f2()
+        else:
+            self._s_ptr=shared_ptr
 
         f=self._link.o2scl.o2scl_shared_ptr_table_units___ptr
         f.argtypes=[ctypes.c_void_p]
@@ -1210,6 +1243,6 @@ class shared_ptr_table_units(table_units):
 
         f=self._link.o2scl.o2scl_free_shared_ptr_table_units__
         f.argtypes=[ctypes.c_void_p]
-        f(self._ptr)
+        f(self._s_ptr)
         return
 

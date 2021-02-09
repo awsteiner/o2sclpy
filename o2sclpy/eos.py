@@ -67,11 +67,13 @@ class eos_base:
             f=self._link.o2scl_eos.o2scl_free_eos_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def get_def_thermo(self,def_thermo):
         """
-        Object of type :class:`o2scl::thermo`
+        Get object of type :class:`o2scl::thermo`
         """
         func=self._link.o2scl_eos.o2scl_eos_base_get_def_thermo
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -79,6 +81,9 @@ class eos_base:
         return
 
     def set_def_thermo(self,value):
+        """
+        Set object of type :class:`o2scl::thermo`
+        """
         func=self._link.o2scl_eos.o2scl_eos_base_set_def_thermo
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -122,6 +127,8 @@ class eos_had_base(eos_base):
             f=self._link.o2scl_eos.o2scl_free_eos_had_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -266,7 +273,7 @@ class eos_had_base(eos_base):
 
     def get_def_neutron(self,def_neutron):
         """
-        Object of type :class:`o2scl::fermion`
+        Get object of type :class:`o2scl::fermion`
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_get_def_neutron
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -274,6 +281,9 @@ class eos_had_base(eos_base):
         return
 
     def set_def_neutron(self,value):
+        """
+        Set object of type :class:`o2scl::fermion`
+        """
         func=self._link.o2scl_eos.o2scl_eos_had_base_set_def_neutron
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -281,7 +291,7 @@ class eos_had_base(eos_base):
 
     def get_def_proton(self,def_proton):
         """
-        Object of type :class:`o2scl::fermion`
+        Get object of type :class:`o2scl::fermion`
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_get_def_proton
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -289,6 +299,9 @@ class eos_had_base(eos_base):
         return
 
     def set_def_proton(self,value):
+        """
+        Set object of type :class:`o2scl::fermion`
+        """
         func=self._link.o2scl_eos.o2scl_eos_had_base_set_def_proton
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -761,6 +774,8 @@ class eos_had_eden_base(eos_had_base):
             f=self._link.o2scl_eos.o2scl_free_eos_had_eden_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
 class eos_had_pres_base(eos_had_base):
@@ -801,6 +816,8 @@ class eos_had_pres_base(eos_had_base):
             f=self._link.o2scl_eos.o2scl_free_eos_had_pres_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
 class eos_had_temp_base(eos_had_base):
@@ -841,6 +858,8 @@ class eos_had_temp_base(eos_had_base):
             f=self._link.o2scl_eos.o2scl_free_eos_had_temp_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
 class eos_had_temp_eden_base(eos_had_temp_base):
@@ -881,6 +900,8 @@ class eos_had_temp_eden_base(eos_had_temp_base):
             f=self._link.o2scl_eos.o2scl_free_eos_had_temp_eden_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
 class eos_had_temp_pres_base(eos_had_temp_base):
@@ -921,6 +942,8 @@ class eos_had_temp_pres_base(eos_had_temp_base):
             f=self._link.o2scl_eos.o2scl_free_eos_had_temp_pres_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
 class eos_had_skyrme(eos_had_temp_eden_base):
@@ -960,6 +983,8 @@ class eos_had_skyrme(eos_had_temp_eden_base):
             f=self._link.o2scl_eos.o2scl_free_eos_had_skyrme
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -1264,7 +1289,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
     def get_reference(self,reference):
         """
-        Object of type :class:`std::string`
+        Get object of type :class:`std::string`
         """
         func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_reference
         func.restype=ctypes.c_char_p
@@ -1273,6 +1298,9 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         return
 
     def set_reference(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
         func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_reference
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -1280,7 +1308,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
     def get_nrfd(self,nrfd):
         """
-        Object of type :class:`o2scl::fermion_deriv_nr`
+        Get object of type :class:`o2scl::fermion_deriv_nr`
         """
         func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_nrfd
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -1288,6 +1316,9 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         return
 
     def set_nrfd(self,value):
+        """
+        Set object of type :class:`o2scl::fermion_deriv_nr`
+        """
         func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_nrfd
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -1330,6 +1361,8 @@ class eos_had_apr(eos_had_temp_eden_base):
             f=self._link.o2scl_eos.o2scl_free_eos_had_apr
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -1409,6 +1442,8 @@ class eos_had_rmf(eos_had_temp_pres_base):
             f=self._link.o2scl_eos.o2scl_free_eos_had_rmf
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -1948,6 +1983,8 @@ class eos_quark(eos_base):
             f=self._link.o2scl_eos.o2scl_free_eos_quark
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
 class eos_quark_bag(eos_quark):
@@ -1987,6 +2024,8 @@ class eos_quark_bag(eos_quark):
             f=self._link.o2scl_eos.o2scl_free_eos_quark_bag
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -2046,6 +2085,8 @@ class eos_quark_njl(eos_quark):
             f=self._link.o2scl_eos.o2scl_free_eos_quark_njl
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -2210,6 +2251,8 @@ class eos_tov:
             f=self._link.o2scl_eos.o2scl_free_eos_tov
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -2279,6 +2322,8 @@ class eos_tov_buchdahl(eos_tov):
             f=self._link.o2scl_eos.o2scl_free_eos_tov_buchdahl
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -2338,6 +2383,8 @@ class eos_tov_polytrope(eos_tov):
             f=self._link.o2scl_eos.o2scl_free_eos_tov_polytrope
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def set_coeff_index(self,coeff,index):
@@ -2388,6 +2435,8 @@ class eos_tov_linear(eos_tov):
             f=self._link.o2scl_eos.o2scl_free_eos_tov_linear
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     def set_cs2_eps0(self,cs2,eps0):
@@ -2438,6 +2487,8 @@ class eos_tov_interp(eos_tov):
             f=self._link.o2scl_eos.o2scl_free_eos_tov_interp
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -2592,6 +2643,8 @@ class tov_solve:
             f=self._link.o2scl_eos.o2scl_free_tov_solve
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -3267,6 +3320,8 @@ class tov_love:
             f=self._link.o2scl_eos.o2scl_free_tov_love
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
@@ -3331,7 +3386,7 @@ class tov_love:
 
     def get_results(self,results):
         """
-        Object of type :class:`table_units<>`
+        Get object of type :class:`table_units<>`
         """
         func=self._link.o2scl_eos.o2scl_tov_love_get_results
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -3339,6 +3394,9 @@ class tov_love:
         return
 
     def set_results(self,value):
+        """
+        Set object of type :class:`table_units<>`
+        """
         func=self._link.o2scl_eos.o2scl_tov_love_set_results
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
@@ -3382,6 +3440,25 @@ class tov_love:
         func=self._link.o2scl_eos.o2scl_tov_love_set_eps
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
+        return
+
+    def get_tab(self,tab):
+        """
+        Object of type :class:`table_units<>`
+        """
+        sp=shared_ptr_table_units(self._link)
+        func=self._link.o2scl_eos.o2scl_tov_love_get_tab
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,sp._s_ptr)
+        return
+
+    def set_tab(self,value):
+        """
+        Set object of type :class:`table_units<>`
+        """
+        func=self._link.o2scl_eos.o2scl_tov_love_set_tab
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._s_ptr)
         return
 
     def calc_y(self,yR,beta,k2,lambda_km5,lambda_cgs,tabulate):
@@ -3476,6 +3553,8 @@ class nstar_cold:
             f=self._link.o2scl_eos.o2scl_free_nstar_cold
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
+            self._owner=False
+            self._ptr=0
         return
 
     @property
