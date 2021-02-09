@@ -28,7 +28,9 @@ from o2sclpy.base import *
 
 class eos_base:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_base <o2scle:eos_base>`.
+    Python interface for O\ :sub:`2`\ scl class eos_base.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_base.html .
     """
 
     _ptr=0
@@ -84,7 +86,9 @@ class eos_base:
 
 class eos_had_base(eos_base):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_had_base <o2scle:eos_had_base>`.
+    Python interface for O\ :sub:`2`\ scl class eos_had_base.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_base.html .
     """
 
     @abstractmethod
@@ -721,7 +725,9 @@ class eos_had_base(eos_base):
 
 class eos_had_eden_base(eos_had_base):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_had_eden_base <o2scle:eos_had_eden_base>`.
+    Python interface for O\ :sub:`2`\ scl class eos_had_eden_base.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_eden_base.html .
     """
 
     @abstractmethod
@@ -759,7 +765,9 @@ class eos_had_eden_base(eos_had_base):
 
 class eos_had_pres_base(eos_had_base):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_had_pres_base <o2scle:eos_had_pres_base>`.
+    Python interface for O\ :sub:`2`\ scl class eos_had_pres_base.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_pres_base.html .
     """
 
     @abstractmethod
@@ -797,7 +805,9 @@ class eos_had_pres_base(eos_had_base):
 
 class eos_had_temp_base(eos_had_base):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_had_temp_base <o2scle:eos_had_temp_base>`.
+    Python interface for O\ :sub:`2`\ scl class eos_had_temp_base.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_temp_base.html .
     """
 
     @abstractmethod
@@ -835,7 +845,9 @@ class eos_had_temp_base(eos_had_base):
 
 class eos_had_temp_eden_base(eos_had_temp_base):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_had_temp_eden_base <o2scle:eos_had_temp_eden_base>`.
+    Python interface for O\ :sub:`2`\ scl class eos_had_temp_eden_base.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_temp_eden_base.html .
     """
 
     @abstractmethod
@@ -873,7 +885,9 @@ class eos_had_temp_eden_base(eos_had_temp_base):
 
 class eos_had_temp_pres_base(eos_had_temp_base):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_had_temp_pres_base <o2scle:eos_had_temp_pres_base>`.
+    Python interface for O\ :sub:`2`\ scl class eos_had_temp_pres_base.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_temp_pres_base.html .
     """
 
     @abstractmethod
@@ -911,7 +925,9 @@ class eos_had_temp_pres_base(eos_had_temp_base):
 
 class eos_had_skyrme(eos_had_temp_eden_base):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_had_skyrme <o2scle:eos_had_skyrme>`.
+    Python interface for O\ :sub:`2`\ scl class eos_had_skyrme.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_skyrme.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1279,7 +1295,9 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
 class eos_had_apr(eos_had_temp_eden_base):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_had_apr <o2scle:eos_had_apr>`.
+    Python interface for O\ :sub:`2`\ scl class eos_had_apr.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_apr.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1356,7 +1374,9 @@ class eos_had_apr(eos_had_temp_eden_base):
 
 class eos_had_rmf(eos_had_temp_pres_base):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_had_rmf <o2scle:eos_had_rmf>`.
+    Python interface for O\ :sub:`2`\ scl class eos_had_rmf.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_rmf.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1893,7 +1913,9 @@ class eos_had_rmf(eos_had_temp_pres_base):
 
 class eos_quark(eos_base):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_quark <o2scle:eos_quark>`.
+    Python interface for O\ :sub:`2`\ scl class eos_quark.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_quark.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1930,7 +1952,9 @@ class eos_quark(eos_base):
 
 class eos_quark_bag(eos_quark):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_quark_bag <o2scle:eos_quark_bag>`.
+    Python interface for O\ :sub:`2`\ scl class eos_quark_bag.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_quark_bag.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1987,7 +2011,9 @@ class eos_quark_bag(eos_quark):
 
 class eos_quark_njl(eos_quark):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_quark_njl <o2scle:eos_quark_njl>`.
+    Python interface for O\ :sub:`2`\ scl class eos_quark_njl.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_quark_njl.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2144,7 +2170,9 @@ class eos_quark_njl(eos_quark):
 
 class eos_tov:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_tov <o2scle:eos_tov>`.
+    Python interface for O\ :sub:`2`\ scl class eos_tov.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_tov.html .
     """
 
     _ptr=0
@@ -2216,7 +2244,9 @@ class eos_tov:
 
 class eos_tov_buchdahl(eos_tov):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_tov_buchdahl <o2scle:eos_tov_buchdahl>`.
+    Python interface for O\ :sub:`2`\ scl class eos_tov_buchdahl.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_tov_buchdahl.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2273,7 +2303,9 @@ class eos_tov_buchdahl(eos_tov):
 
 class eos_tov_polytrope(eos_tov):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_tov_polytrope <o2scle:eos_tov_polytrope>`.
+    Python interface for O\ :sub:`2`\ scl class eos_tov_polytrope.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_tov_polytrope.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2321,7 +2353,9 @@ class eos_tov_polytrope(eos_tov):
 
 class eos_tov_linear(eos_tov):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_tov_linear <o2scle:eos_tov_linear>`.
+    Python interface for O\ :sub:`2`\ scl class eos_tov_linear.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_tov_linear.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2369,7 +2403,9 @@ class eos_tov_linear(eos_tov):
 
 class eos_tov_interp(eos_tov):
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`eos_tov_interp <o2scle:eos_tov_interp>`.
+    Python interface for O\ :sub:`2`\ scl class eos_tov_interp.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_tov_interp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2517,7 +2553,9 @@ class eos_tov_interp(eos_tov):
 
 class tov_solve:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`tov_solve <o2scle:tov_solve>`.
+    Python interface for O\ :sub:`2`\ scl class tov_solve.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/tov_solve.html .
     """
 
     _ptr=0
@@ -3190,7 +3228,9 @@ class tov_solve:
 
 class tov_love:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`tov_love <o2scle:tov_love>`.
+    Python interface for O\ :sub:`2`\ scl class tov_love.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/tov_love.html .
     """
 
     _ptr=0
@@ -3397,7 +3437,9 @@ class tov_love:
 
 class nstar_cold:
     """
-    Python interface for O\ :sub:`2`\ scl class :ref:`nstar_cold <o2scle:nstar_cold>`.
+    Python interface for O\ :sub:`2`\ scl class nstar_cold.
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/nstar_cold.html .
     """
 
     _ptr=0

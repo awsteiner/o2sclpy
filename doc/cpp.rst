@@ -21,9 +21,23 @@ the :class:`o2sclpy.linker` object. The ``pointer`` argument is optional
 and only needed if one is performing a shallow copy of an
 O\ :sub:`2`\ scl-based class.
 
+Generally, O\ :sub:`2`\ sclpy should take care of the memory
+management for you. If they have ownership over their pointer,
+then their ``_owner`` data is ``True``, and their ``__del__``
+method will call the C++ function necessary to free the underlying
+object. O\ :sub:`2`\ sclpy contains wrappers to some
+``std::shared_ptr`` objects, and these objects may not be
+destructed until the Python garbage collector deletes the last
+O\ :sub:`2`\ sclpy class which owns a copy of the ``shared_ptr``.
+
 Throwing C++ exceptions across DLL boundaries is difficult, so O\
 :sub:`2`\ sclpy ensures that O\ :sub:`2`\ scl uses an alternate error
 handler which calls ``exit()`` when an error occurs. As a result, O\
 :sub:`2`\ sclpy does not support any interaction between Python and
 C++ exceptions.
+
+Finally, some O\ :sub:`2`\ scl classes output information to
+``std::cout``, and in a Jupyter notebook this normally goes to the
+Jupyter console. If you want this output to go to the Jupyter notebook
+instead, you will need to use the :class:`o2sclpy.cap_cout` class.
 

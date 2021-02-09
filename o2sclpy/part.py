@@ -410,7 +410,10 @@ class part:
 
 class fermion(part):
     """
-    Python interface for class :ref:`fermion <o2sclp:fermion_tl>`.
+    Python interface for O\ :sub:`2`\ scl class fermion, which is a typedef of
+    fermion_tl<double>. See
+    http://neutronstars.utk.edu/code/o2scl-dev/part/html/class/fermion_tl.html
+    .
     """
 
     def __init__(self,link,pointer=0):
@@ -655,7 +658,7 @@ class fermion_zerot:
 
 class fermion_thermo(fermion_zerot):
     """
-    Python interface for class :ref:`fermion_thermo <o2sclp:fermion_thermo_tl>`.
+    Python interface for :ref:`fermion_thermo <o2sclp:fermion_thermo_tl>`.
     """
 
     @abstractmethod
