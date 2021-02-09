@@ -43,12 +43,13 @@ Contents
    :maxdepth: 2
 
    licensing
-   link
    cpp
+   link
    base
    part
    nuclei
    eos
+   skyrme_ex
    o2graph
    yt
    plot_ref
@@ -58,6 +59,7 @@ Contents
    class_plot_base
    class_yt_plot_base
    class_o2graph_plotter
+   class_cap_cout
    other
    todos
 

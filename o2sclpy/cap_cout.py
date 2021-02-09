@@ -25,8 +25,11 @@ import threading
 class cap_cout:
     """
 
-    Capture std::cout into a python string in order to 
-    output it to a jupyter notebook
+    Capture ``std::cout`` into a python string in order to 
+    output it to a jupyter notebook. One should use
+    open() to begin reading ``std::cout`` and then close()
+    to stop reading and output the contents using the Python
+    print() functions.
 
     Based on 
 
@@ -37,8 +40,6 @@ class cap_cout:
 
     https://dzone.com/articles/redirecting-all-kinds-stdout
 
-    and 
-
     """
     
     stdout_fileno=1
@@ -48,6 +49,9 @@ class cap_cout:
     thr=0
     
     def drain_pipe(self):
+        """
+        Desc
+        """
         while True:
             data=os.read(self.stdout_pipe[0],1024)
             if not data:
@@ -56,14 +60,21 @@ class cap_cout:
         return
         
     def open(self):
+        """
+        Desc
+        """
         self.stdout_save=os.dup(self.stdout_fileno)
         self.stdout_pipe=os.pipe()
         os.dup2(self.stdout_pipe[1],self.stdout_fileno)
         os.close(self.stdout_pipe[1])
         self.thr=threading.Thread(target=self.drain_pipe)
         self.thr.start()
+        return
 
     def close(self):
+        """
+        Desc
+        """
         os.close(self.stdout_fileno)
         self.thr.join()
 
@@ -73,3 +84,4 @@ class cap_cout:
         os.close(self.stdout_save)
         print('Contents of std::cout:')
         print(self.captured_stdout)
+        return
