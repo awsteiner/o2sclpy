@@ -644,6 +644,131 @@ class table:
         func(self._ptr,names_)
         return
 
+    def ordered_lookup(self,scol,val):
+        """
+        | Parameters:
+        | *scol*: string
+        | *val*: ``double``
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        func=self._link.o2scl.o2scl_table___ordered_lookup
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
+        ret=func(self._ptr,scol_,val)
+        return ret
+
+    def lookup(self,scol,val):
+        """
+        | Parameters:
+        | *scol*: string
+        | *val*: ``double``
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        func=self._link.o2scl.o2scl_table___lookup
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
+        ret=func(self._ptr,scol_,val)
+        return ret
+
+    def lookup_val(self,scol,val,scol2):
+        """
+        | Parameters:
+        | *scol*: string
+        | *val*: ``double``
+        | *scol2*: string
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        scol2_=ctypes.c_char_p(force_bytes(scol2))
+        func=self._link.o2scl.o2scl_table___lookup_val
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,scol_,val,scol2_)
+        return ret
+
+    def set_interp_type(self,interp_type):
+        """
+        | Parameters:
+        | *interp_type*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table___set_interp_type
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,interp_type)
+        return
+
+    def get_interp_type(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_table___get_interp_type
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def interp(self,sx,x0,sy):
+        """
+        | Parameters:
+        | *sx*: string
+        | *x0*: ``double``
+        | *sy*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        sx_=ctypes.c_char_p(force_bytes(sx))
+        sy_=ctypes.c_char_p(force_bytes(sy))
+        func=self._link.o2scl.o2scl_table___interp
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,sx_,x0,sy_)
+        return ret
+
+    def interp(self,ix,x0,iy):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *x0*: ``double``
+        | *iy*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_table___interp
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_size_t]
+        ret=func(self._ptr,ix,x0,iy)
+        return ret
+
+    def deriv(self,x,y,yp):
+        """
+        | Parameters:
+        | *x*: string
+        | *y*: string
+        | *yp*: string
+        """
+        x_=ctypes.c_char_p(force_bytes(x))
+        y_=ctypes.c_char_p(force_bytes(y))
+        yp_=ctypes.c_char_p(force_bytes(yp))
+        func=self._link.o2scl.o2scl_table___deriv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,x_,y_,yp_)
+        return
+
+    def deriv(self,sx,x0,sy):
+        """
+        | Parameters:
+        | *sx*: string
+        | *x0*: ``double``
+        | *sy*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        sx_=ctypes.c_char_p(force_bytes(sx))
+        sy_=ctypes.c_char_p(force_bytes(sy))
+        func=self._link.o2scl.o2scl_table___deriv
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,sx_,x0,sy_)
+        return ret
+
     def clear(self):
         """
         """
