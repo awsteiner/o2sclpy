@@ -73,8 +73,8 @@ class thermo:
         Shallow copy function for class thermo .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -186,8 +186,8 @@ class part:
         Shallow copy function for class part .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -479,8 +479,8 @@ class fermion(part):
         Shallow copy function for class fermion .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -570,8 +570,8 @@ class quark(fermion):
         Shallow copy function for class quark .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -663,8 +663,8 @@ class fermion_zerot:
         Shallow copy function for class fermion_zerot .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -763,8 +763,8 @@ class fermion_thermo(fermion_zerot):
         Shallow copy function for class fermion_thermo .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -885,8 +885,8 @@ class fermion_rel(fermion_thermo):
         Shallow copy function for class fermion_rel .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1233,8 +1233,8 @@ class fermion_nonrel(fermion_zerot):
         Shallow copy function for class fermion_nonrel .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1319,8 +1319,8 @@ class boson(part):
         Shallow copy function for class boson .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1394,8 +1394,8 @@ class boson_rel:
         Shallow copy function for class boson_rel .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1502,8 +1502,8 @@ class classical_thermo:
         Shallow copy function for class classical_thermo .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1577,8 +1577,8 @@ class thermo_np_deriv_press:
         Shallow copy function for class thermo_np_deriv_press .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1750,8 +1750,8 @@ class thermo_np_deriv_helm:
         Shallow copy function for class thermo_np_deriv_helm .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1923,8 +1923,8 @@ class part_deriv_press:
         Shallow copy function for class part_deriv_press .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2044,8 +2044,8 @@ class part_deriv(part):
         Shallow copy function for class part_deriv .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2093,8 +2093,8 @@ class fermion_deriv(fermion):
         Shallow copy function for class fermion_deriv .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2146,8 +2146,8 @@ class deriv_thermo_base:
         Shallow copy function for class deriv_thermo_base .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2277,8 +2277,8 @@ class fermion_deriv_rel:
         Shallow copy function for class fermion_deriv_rel .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2533,8 +2533,8 @@ class fermion_deriv_nr:
         Shallow copy function for class fermion_deriv_nr .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2683,8 +2683,8 @@ class classical_deriv_thermo:
         Shallow copy function for class classical_deriv_thermo .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2760,8 +2760,8 @@ class fermion_mag_zerot:
         Shallow copy function for class fermion_mag_zerot .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 

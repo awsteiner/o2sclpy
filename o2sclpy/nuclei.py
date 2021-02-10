@@ -72,8 +72,8 @@ class nucleus(part):
         Shallow copy function for class nucleus .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -227,8 +227,8 @@ class nucmass_info:
         Shallow copy function for class nucmass_info .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -374,8 +374,8 @@ class nucmass:
         Shallow copy function for class nucmass .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -701,8 +701,8 @@ class nucmass_table(nucmass):
         Shallow copy function for class nucmass_table .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -812,8 +812,8 @@ class nucmass_fit_base(nucmass):
         Shallow copy function for class nucmass_fit_base .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -883,8 +883,8 @@ class nucmass_semi_empirical(nucmass_fit_base):
         Shallow copy function for class nucmass_semi_empirical .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1060,8 +1060,8 @@ class nucmass_ame(nucmass_table):
         Shallow copy function for class nucmass_ame .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1111,8 +1111,8 @@ class nucmass_dz_table(nucmass_table):
         Shallow copy function for class nucmass_dz_table .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1162,8 +1162,8 @@ class nucmass_dz_fit(nucmass_fit_base):
         Shallow copy function for class nucmass_dz_fit .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1213,8 +1213,8 @@ class nucmass_dz_fit_33(nucmass_fit_base):
         Shallow copy function for class nucmass_dz_fit_33 .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1264,8 +1264,8 @@ class nucmass_frdm(nucmass_fit_base):
         Shallow copy function for class nucmass_frdm .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1835,8 +1835,8 @@ class nucmass_mnmsk(nucmass_table):
         Shallow copy function for class nucmass_mnmsk .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1886,8 +1886,8 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
         Shallow copy function for class nucmass_mnmsk_exp .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1937,8 +1937,8 @@ class nucmass_gen(nucmass_table):
         Shallow copy function for class nucmass_gen .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1988,8 +1988,8 @@ class nucmass_dglg(nucmass_table):
         Shallow copy function for class nucmass_dglg .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2039,8 +2039,8 @@ class nucmass_hfb(nucmass_table):
         Shallow copy function for class nucmass_hfb .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2090,8 +2090,8 @@ class nucmass_hfb_sp(nucmass_table):
         Shallow copy function for class nucmass_hfb_sp .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2141,8 +2141,8 @@ class nucmass_ktuy(nucmass_table):
         Shallow copy function for class nucmass_ktuy .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2192,8 +2192,8 @@ class nucmass_sdnp(nucmass_table):
         Shallow copy function for class nucmass_sdnp .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2243,8 +2243,8 @@ class nucmass_wlw(nucmass_table):
         Shallow copy function for class nucmass_wlw .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 

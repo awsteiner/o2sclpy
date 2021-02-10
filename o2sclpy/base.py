@@ -76,8 +76,8 @@ class lib_settings_class:
         Shallow copy function for class lib_settings_class .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -366,9 +366,25 @@ class table:
         Shallow copy function for class table<> .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
+        return
+
+    def deepcopy(self,src):
+        """
+        Deep copy function for class table<> .
+        """
+
+        self._link=src._link
+        f=self._link.o2scl.o2scl_create_table__
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._owner=True
+        f2=self._link.o2scl.o2scl_copy_table__
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(src._ptr,self._ptr)
         return
 
     def set(self,col,row,val):
@@ -882,8 +898,8 @@ class table_units(table):
         Shallow copy function for class table_units<> .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -987,8 +1003,8 @@ class table3d:
         Shallow copy function for class table3d .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1112,8 +1128,8 @@ class tensor:
         Shallow copy function for class tensor<> .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1175,8 +1191,8 @@ class find_constants:
         Shallow copy function for class find_constants .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1260,8 +1276,8 @@ class convert_units:
         Shallow copy function for class convert_units<> .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 

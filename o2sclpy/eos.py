@@ -76,8 +76,8 @@ class eos_base:
         Shallow copy function for class eos_base .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -146,8 +146,8 @@ class eos_had_base(eos_base):
         Shallow copy function for class eos_had_base .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -803,8 +803,8 @@ class eos_had_eden_base(eos_had_base):
         Shallow copy function for class eos_had_eden_base .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -855,8 +855,8 @@ class eos_had_pres_base(eos_had_base):
         Shallow copy function for class eos_had_pres_base .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -907,8 +907,8 @@ class eos_had_temp_base(eos_had_base):
         Shallow copy function for class eos_had_temp_base .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -959,8 +959,8 @@ class eos_had_temp_eden_base(eos_had_temp_base):
         Shallow copy function for class eos_had_temp_eden_base .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1011,8 +1011,8 @@ class eos_had_temp_pres_base(eos_had_temp_base):
         Shallow copy function for class eos_had_temp_pres_base .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1062,8 +1062,8 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         Shallow copy function for class eos_had_skyrme .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1450,8 +1450,8 @@ class eos_had_apr(eos_had_temp_eden_base):
         Shallow copy function for class eos_had_apr .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -1541,8 +1541,8 @@ class eos_had_rmf(eos_had_temp_pres_base):
         Shallow copy function for class eos_had_rmf .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2092,8 +2092,8 @@ class eos_quark(eos_base):
         Shallow copy function for class eos_quark .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2143,8 +2143,8 @@ class eos_quark_bag(eos_quark):
         Shallow copy function for class eos_quark_bag .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2214,8 +2214,8 @@ class eos_quark_njl(eos_quark):
         Shallow copy function for class eos_quark_njl .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2390,8 +2390,8 @@ class eos_tov:
         Shallow copy function for class eos_tov .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2471,8 +2471,8 @@ class eos_tov_buchdahl(eos_tov):
         Shallow copy function for class eos_tov_buchdahl .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2542,8 +2542,8 @@ class eos_tov_polytrope(eos_tov):
         Shallow copy function for class eos_tov_polytrope .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2604,8 +2604,8 @@ class eos_tov_linear(eos_tov):
         Shallow copy function for class eos_tov_linear .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2666,8 +2666,8 @@ class eos_tov_interp(eos_tov):
         Shallow copy function for class eos_tov_interp .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -2832,8 +2832,8 @@ class tov_solve:
         Shallow copy function for class tov_solve .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -3519,8 +3519,8 @@ class tov_love:
         Shallow copy function for class tov_love .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
@@ -3762,8 +3762,8 @@ class nstar_cold:
         Shallow copy function for class nstar_cold .
         """
 
-        self._link=x._link
-        self._ptr=x._ptr
+        self._link=src._link
+        self._ptr=src._ptr
         self._owner=False
         return
 
