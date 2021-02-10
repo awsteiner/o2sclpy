@@ -71,6 +71,16 @@ class lib_settings_class:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class lib_settings_class .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     def get_data_dir(self):
         """
         | Returns: python bytes object
@@ -349,6 +359,16 @@ class table:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class table<> .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     def set(self,col,row,val):
@@ -724,7 +744,7 @@ class table:
         ret=func(self._ptr,sx_,x0,sy_)
         return ret
 
-    def interp(self,ix,x0,iy):
+    def interp_index(self,ix,x0,iy):
         """
         | Parameters:
         | *ix*: ``size_t``
@@ -732,13 +752,13 @@ class table:
         | *iy*: ``size_t``
         | Returns: ``ctypes.c_double`` object
         """
-        func=self._link.o2scl.o2scl_table___interp
+        func=self._link.o2scl.o2scl_table___interp_index
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_size_t]
         ret=func(self._ptr,ix,x0,iy)
         return ret
 
-    def deriv(self,x,y,yp):
+    def deriv_col(self,x,y,yp):
         """
         | Parameters:
         | *x*: string
@@ -748,7 +768,7 @@ class table:
         x_=ctypes.c_char_p(force_bytes(x))
         y_=ctypes.c_char_p(force_bytes(y))
         yp_=ctypes.c_char_p(force_bytes(yp))
-        func=self._link.o2scl.o2scl_table___deriv
+        func=self._link.o2scl.o2scl_table___deriv_col
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,x_,y_,yp_)
         return
@@ -857,6 +877,16 @@ class table_units(table):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class table_units<> .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     def get_unit(self,col):
         """
         | Parameters:
@@ -950,6 +980,16 @@ class table3d:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class table3d .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     def set(self,ix,iy,name,val):
@@ -1067,6 +1107,16 @@ class tensor:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class tensor<> .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     def clear(self):
         """
         """
@@ -1118,6 +1168,16 @@ class find_constants:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class find_constants .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     def find_print(self,name,unit,prec,verbose):
@@ -1193,6 +1253,16 @@ class convert_units:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class convert_units<> .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property

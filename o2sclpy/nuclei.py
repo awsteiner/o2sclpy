@@ -67,6 +67,16 @@ class nucleus(part):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucleus .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def Z(self):
         """
@@ -212,6 +222,16 @@ class nucmass_info:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_info .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     def parse_elstring(self,ela,Z,N,A):
         """
         | Parameters:
@@ -347,6 +367,16 @@ class nucmass:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -666,6 +696,16 @@ class nucmass_table(nucmass):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_table .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def n(self):
         """
@@ -767,6 +807,16 @@ class nucmass_fit_base(nucmass):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_fit_base .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def nfit(self):
         """
@@ -826,6 +876,16 @@ class nucmass_semi_empirical(nucmass_fit_base):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_semi_empirical .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -995,6 +1055,16 @@ class nucmass_ame(nucmass_table):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_ame .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class nucmass_dz_table(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_table``,
@@ -1034,6 +1104,16 @@ class nucmass_dz_table(nucmass_table):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_dz_table .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
 class nucmass_dz_fit(nucmass_fit_base):
@@ -1077,6 +1157,16 @@ class nucmass_dz_fit(nucmass_fit_base):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_dz_fit .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class nucmass_dz_fit_33(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_fit_33``,
@@ -1118,6 +1208,16 @@ class nucmass_dz_fit_33(nucmass_fit_base):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_dz_fit_33 .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class nucmass_frdm(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_frdm``,
@@ -1157,6 +1257,16 @@ class nucmass_frdm(nucmass_fit_base):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_frdm .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -1720,6 +1830,16 @@ class nucmass_mnmsk(nucmass_table):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_mnmsk .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class nucmass_mnmsk_exp(nucmass_mnmsk):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_mnmsk_exp``,
@@ -1759,6 +1879,16 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_mnmsk_exp .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
 class nucmass_gen(nucmass_table):
@@ -1802,6 +1932,16 @@ class nucmass_gen(nucmass_table):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_gen .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class nucmass_dglg(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dglg``,
@@ -1841,6 +1981,16 @@ class nucmass_dglg(nucmass_table):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_dglg .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
 class nucmass_hfb(nucmass_table):
@@ -1884,6 +2034,16 @@ class nucmass_hfb(nucmass_table):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_hfb .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class nucmass_hfb_sp(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_hfb_sp``,
@@ -1923,6 +2083,16 @@ class nucmass_hfb_sp(nucmass_table):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_hfb_sp .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
 class nucmass_ktuy(nucmass_table):
@@ -1966,6 +2136,16 @@ class nucmass_ktuy(nucmass_table):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_ktuy .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class nucmass_sdnp(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_sdnp``,
@@ -2007,6 +2187,16 @@ class nucmass_sdnp(nucmass_table):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_sdnp .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class nucmass_wlw(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_wlw``,
@@ -2046,6 +2236,16 @@ class nucmass_wlw(nucmass_table):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class nucmass_wlw .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
 def ame_load(link,ame,name,exp_only):

@@ -68,6 +68,16 @@ class thermo:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class thermo .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def ed(self):
         """
@@ -169,6 +179,16 @@ class part:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class part .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -454,6 +474,16 @@ class fermion(part):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class fermion .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def kf(self):
         """
@@ -533,6 +563,16 @@ class quark(fermion):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class quark .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -616,6 +656,16 @@ class fermion_zerot:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class fermion_zerot .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     def kf_from_density(self,f):
@@ -706,6 +756,16 @@ class fermion_thermo(fermion_zerot):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class fermion_thermo .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     def calc_mu_deg(self,f,T,prec):
@@ -818,6 +878,16 @@ class fermion_rel(fermion_thermo):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class fermion_rel .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -1158,6 +1228,16 @@ class fermion_nonrel(fermion_zerot):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class fermion_nonrel .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     def calc_density(self,f,T):
         """
         | Parameters:
@@ -1234,6 +1314,16 @@ class boson(part):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class boson .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def co(self):
         """
@@ -1297,6 +1387,16 @@ class boson_rel:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class boson_rel .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     def calc_density(self,b,T):
@@ -1397,6 +1497,16 @@ class classical_thermo:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class classical_thermo .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     def calc_density(self,p,T):
         """
         | Parameters:
@@ -1460,6 +1570,16 @@ class thermo_np_deriv_press:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class thermo_np_deriv_press .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -1625,6 +1745,16 @@ class thermo_np_deriv_helm:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class thermo_np_deriv_helm .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def dsdT(self):
         """
@@ -1788,6 +1918,16 @@ class part_deriv_press:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class part_deriv_press .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def dndmu(self):
         """
@@ -1899,6 +2039,16 @@ class part_deriv(part):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class part_deriv .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class fermion_deriv(fermion):
     """
     Python interface for class :ref:`fermion_deriv <o2sclp:fermion_deriv_tl>`.
@@ -1936,6 +2086,16 @@ class fermion_deriv(fermion):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class fermion_deriv .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
 class deriv_thermo_base:
@@ -1979,6 +2139,16 @@ class deriv_thermo_base:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class deriv_thermo_base .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     def heat_cap_ppart_const_vol(self,p,T):
@@ -2100,6 +2270,16 @@ class fermion_deriv_rel:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class fermion_deriv_rel .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -2348,6 +2528,16 @@ class fermion_deriv_nr:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class fermion_deriv_nr .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def flimit(self):
         """
@@ -2488,6 +2678,16 @@ class classical_deriv_thermo:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class classical_deriv_thermo .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     def calc_density(self,p,T):
         """
         | Parameters:
@@ -2553,6 +2753,16 @@ class fermion_mag_zerot:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class fermion_mag_zerot .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property

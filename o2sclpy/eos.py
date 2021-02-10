@@ -71,6 +71,16 @@ class eos_base:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_base .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     def get_def_thermo(self,def_thermo):
         """
         Get object of type :class:`o2scl::thermo`
@@ -129,6 +139,16 @@ class eos_had_base(eos_base):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_had_base .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -778,6 +798,16 @@ class eos_had_eden_base(eos_had_base):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_had_eden_base .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class eos_had_pres_base(eos_had_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_pres_base.
@@ -818,6 +848,16 @@ class eos_had_pres_base(eos_had_base):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_had_pres_base .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
 class eos_had_temp_base(eos_had_base):
@@ -862,6 +902,16 @@ class eos_had_temp_base(eos_had_base):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_had_temp_base .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class eos_had_temp_eden_base(eos_had_temp_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_temp_eden_base.
@@ -902,6 +952,16 @@ class eos_had_temp_eden_base(eos_had_temp_base):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_had_temp_eden_base .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
 class eos_had_temp_pres_base(eos_had_temp_base):
@@ -946,6 +1006,16 @@ class eos_had_temp_pres_base(eos_had_temp_base):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_had_temp_pres_base .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class eos_had_skyrme(eos_had_temp_eden_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_skyrme.
@@ -985,6 +1055,16 @@ class eos_had_skyrme(eos_had_temp_eden_base):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_had_skyrme .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -1365,6 +1445,16 @@ class eos_had_apr(eos_had_temp_eden_base):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_had_apr .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def pion(self):
         """
@@ -1444,6 +1534,16 @@ class eos_had_rmf(eos_had_temp_pres_base):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_had_rmf .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -1987,6 +2087,16 @@ class eos_quark(eos_base):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_quark .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
 class eos_quark_bag(eos_quark):
     """
     Python interface for O\ :sub:`2`\ scl class eos_quark_bag.
@@ -2026,6 +2136,16 @@ class eos_quark_bag(eos_quark):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_quark_bag .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -2087,6 +2207,16 @@ class eos_quark_njl(eos_quark):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_quark_njl .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -2255,6 +2385,16 @@ class eos_tov:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_tov .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def verbose(self):
         """
@@ -2326,6 +2466,16 @@ class eos_tov_buchdahl(eos_tov):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_tov_buchdahl .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def Pstar(self):
         """
@@ -2387,6 +2537,16 @@ class eos_tov_polytrope(eos_tov):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_tov_polytrope .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     def set_coeff_index(self,coeff,index):
         """
         | Parameters:
@@ -2439,6 +2599,16 @@ class eos_tov_linear(eos_tov):
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_tov_linear .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     def set_cs2_eps0(self,cs2,eps0):
         """
         | Parameters:
@@ -2489,6 +2659,16 @@ class eos_tov_interp(eos_tov):
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class eos_tov_interp .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -2645,6 +2825,16 @@ class tov_solve:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class tov_solve .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
@@ -3324,6 +3514,16 @@ class tov_love:
             self._ptr=0
         return
 
+    def copy(self,src):
+        """
+        Shallow copy function for class tov_love .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
+        return
+
     @property
     def show_ode(self):
         """
@@ -3555,6 +3755,16 @@ class nstar_cold:
             f(self._ptr)
             self._owner=False
             self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class nstar_cold .
+        """
+
+        self._link=x._link
+        self._ptr=x._ptr
+        self._owner=False
         return
 
     @property
