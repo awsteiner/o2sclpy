@@ -1851,13 +1851,13 @@ class part_deriv_press:
     def deriv_f(self,dmudn,dmudT,dsdT_n):
         """
         | Parameters:
-        | *dmudn*: ``double``
-        | *dmudT*: ``double``
-        | *dsdT_n*: ``double``
+        | *dmudn*: ``ctypes.POINTER(ctypes.c_double)``
+        | *dmudT*: ``ctypes.POINTER(ctypes.c_double)``
+        | *dsdT_n*: ``ctypes.POINTER(ctypes.c_double)``
         """
         func=self._link.o2scl_part.o2scl_part_deriv_press_deriv_f
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,dmudn._ptr,dmudT._ptr,dsdT_n._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
+        func(self._ptr,dmudn,dmudT,dsdT_n)
         return
 
 class part_deriv(part):

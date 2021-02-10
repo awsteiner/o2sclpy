@@ -1224,7 +1224,7 @@ class shared_ptr_table_units(table_units):
 
         self._link=link
         if shared_ptr==0:
-            f2=self._link.o2scl.o2sclcreate_shared_ptr_table_units__
+            f2=self._link.o2scl.o2scl_create_shared_ptr_table_units__
             f2.restype=ctypes.c_void_p
             self._s_ptr=f2()
         else:
