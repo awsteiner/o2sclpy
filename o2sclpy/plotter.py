@@ -24,6 +24,7 @@ import matplotlib.pyplot as plot
 
 from o2sclpy.hdf5 import hdf5_reader
 from o2sclpy.plot_base import plot_base, yt_plot_base
+from o2sclpy.utils import *
 
 class plotter(yt_plot_base):
     """ 
@@ -269,6 +270,7 @@ class plotter(yt_plot_base):
         if self.verbose>0:
             print('Reading object named',name,'in file',filename,'.')
         atuple=self.h5r.h5read_name(filename,name)
+        print('here',atuple)
         self.dset=atuple[0]
         self.dtype=atuple[1]
         return
@@ -325,10 +327,11 @@ class plotter(yt_plot_base):
         """
         if force_bytes(self.dtype)==b'table3d':
             name='data/'+slice_name
-            sl=self.dset[name].value
-            sl=sl.transpose()
-            xgrid=self.dset['xval'].value
-            ygrid=self.dset['yval'].value
+            (nxt,nyt)=self.dset[name].shape
+            sl=[[self.dset[name][j,i] for i in range(0,nxt)]
+                for j in range(0,nyt)]
+            xgrid=self.dset['xval']
+            ygrid=self.dset['yval']
             if self.canvas_flag==False:
                 self.canvas()
             if self.logx==True:

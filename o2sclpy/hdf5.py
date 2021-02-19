@@ -106,7 +106,7 @@ class hdf5_reader:
     def h5read_name(self,fname,name):
         """
         Read object named ``name`` from file named ``fname``
-        and return 'object,type'
+        and return the 'object,type'
         """
         # If a different file has been opened, then close it
         # and open the new file
@@ -118,7 +118,9 @@ class hdf5_reader:
             self.filet=h5py.File(fname,'r')
             self.filename=fname
         obj=self.filet[name]
-        return obj
+        o2scl_type_dset=obj['o2scl_type']
+        loc_type=o2scl_type_dset.__getitem__(0)
+        return (obj,loc_type)
     
     def h5read_type_named(self,fname,loc_type,name):
         """
