@@ -45,7 +45,7 @@ class hdf5_reader:
     Current filename
     """
 
-    def hdf5_is_object_type(self,name,obj):
+    def is_object_type(self,name,obj):
         """
         This is an internal function not intended for use by the end-user.
         If object ``obj`` named ``name`` is of type 'search_type',
@@ -60,9 +60,10 @@ class hdf5_reader:
                     self.list_of_dsets.append(name)
         return
 
-    def h5read_first_type(self,fname,loc_type):
+    def read_first_type(self,fname,loc_type):
         """
-        Read the first object of type ``loc_type`` from file named ``fname``
+        Read the first O2scl object of type ``loc_type`` from file 
+        named ``fname``
         """
         # We have to delete the previous list, because it
         # may have been generated from a different type
@@ -78,13 +79,13 @@ class hdf5_reader:
             self.filet=h5py.File(fname,'r')
             self.filename=fname
         self.search_type=loc_type
-        self.filet.visititems(self.hdf5_is_object_type)
+        self.filet.visititems(self.is_object_type)
         if len(self.list_of_dsets)==0:
             str='Could not object of type '+loc_type+' in file '+fname+'.'
             raise RuntimeError(str)
         return self.filet[self.list_of_dsets[0]]
 
-    def h5read_name_type(self,fname,name):
+    def read_name_type(self,fname,name):
         """
         Read o2scl object named ``name`` from file named ``fname``
         and return 'object,type'
@@ -103,9 +104,9 @@ class hdf5_reader:
         loc_type=o2scl_type_dset.__getitem__(0)
         return (obj,loc_type)
     
-    def h5read_name(self,fname,name):
+    def read_name(self,fname,name):
         """
-        Read object named ``name`` from file named ``fname``
+        Read O2scl object named ``name`` from file named ``fname``
         and return the 'object,type'
         """
         # If a different file has been opened, then close it
@@ -122,9 +123,26 @@ class hdf5_reader:
         loc_type=o2scl_type_dset.__getitem__(0)
         return (obj,loc_type)
     
-    def h5read_type_named(self,fname,loc_type,name):
+    def read_gen(self,fname,name):
         """
-        Read object of type ``loc_type`` named ``name`` from file 
+        Read non-O2scl object named ``name`` from file named ``fname``
+        and return the 'object,type'
+        """
+        # If a different file has been opened, then close it
+        # and open the new file
+        if fname!=self.filename and self.filename!='':
+            #print('closing',self.filename)
+            self.filet.close()
+        if fname!=self.filename:
+            #print('opening',fname)
+            self.filet=h5py.File(fname,'r')
+            self.filename=fname
+        obj=self.filet[name]
+        return obj
+    
+    def read_type_named(self,fname,loc_type,name):
+        """
+        Read O2scl object of type ``loc_type`` named ``name`` from file 
         named ``fname``
         """
         # We have to delete the previous list, because it
@@ -139,7 +157,7 @@ class hdf5_reader:
             self.filet=h5py.File(fname,'r')
             self.filename=fname
         self.search_type=loc_type
-        self.filet.visititems(self.hdf5_is_object_type)
+        self.filet.visititems(self.is_object_type)
         if name in self.list_of_dsets:
             return self.filet[name]
         str='No object of type '+loc_type+' named '+name+' in file '+fname+'.'
@@ -148,7 +166,7 @@ class hdf5_reader:
 
     def table_row_to_dict(self,obj,row):
         """
-        Desc
+        Read a row from an O2scl table and convert it to a dictionary
         """
         col_names=obj['col_names']
         col_names2=get_str_array(col_names)
@@ -158,6 +176,9 @@ class hdf5_reader:
         return dct
 
     def uniform_grid_to_array(self,obj):
+        """
+        Convert a uniform grid object to an array
+        """
         start=obj["start"][0]
         end=obj["end"][0]
         n_bins=obj["n_bins"][0]
@@ -176,6 +197,9 @@ class hdf5_reader:
         return arr
     
     def close_file(self):
+        """
+        Close the HDF5 file
+        """
         self.filet.close()
         self.filename=''
         return

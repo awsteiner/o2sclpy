@@ -248,7 +248,7 @@ class plotter(yt_plot_base):
         """
         if self.verbose>0:
             print('Reading file',filename,'.')
-        self.dset=self.h5r.h5read_first_type(filename,'table')
+        self.dset=self.h5r.read_first_type(filename,'table')
         self.dtype='table'
         return
 
@@ -259,7 +259,7 @@ class plotter(yt_plot_base):
         if self.verbose>0:
             print('Reading object of type',loc_type,
                   'in file',filename,'.')
-        self.dset=self.h5r.h5read_first_type(filename,loc_type)
+        self.dset=self.h5r.read_first_type(filename,loc_type)
         self.dtype=loc_type
         return
 
@@ -269,7 +269,7 @@ class plotter(yt_plot_base):
         """
         if self.verbose>0:
             print('Reading object named',name,'in file',filename,'.')
-        atuple=self.h5r.h5read_name(filename,name)
+        atuple=self.h5r.read_name(filename,name)
         print('here',atuple)
         self.dset=atuple[0]
         self.dtype=atuple[1]
