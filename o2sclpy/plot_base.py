@@ -984,11 +984,10 @@ class plot_base:
         Plot text in the native coordinate system using a transAxes
         transformation. This function uses the class font size and and
         centering in the horizontal and vertical directions by
-        default. A figure and axes are created using 
-        :py:func:`o2sclpy.plot_base.canvas()`,
-        if they
-        have not been created already. If ``tx`` and ``ty`` are strings, then
-        they are passed through the ``eval()`` function and converted to
+        default. A figure and axes are created using
+        :py:func:`o2sclpy.plot_base.canvas()`, if they have not been
+        created already. If ``tx`` and ``ty`` are strings, then they
+        are passed through the ``eval()`` function and converted to
         floating-point numbers.
         """
         if self.canvas_flag==False:
