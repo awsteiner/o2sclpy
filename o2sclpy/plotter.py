@@ -328,7 +328,7 @@ class plotter(yt_plot_base):
         if force_bytes(self.dtype)==b'table3d':
             name='data/'+slice_name
             (nxt,nyt)=self.dset[name].shape
-            sl=[[self.dset[name][j,i] for i in range(0,nxt)]
+            sl=[[self.dset[name][i][j] for i in range(0,nxt)]
                 for j in range(0,nyt)]
             xgrid=self.dset['xval']
             ygrid=self.dset['yval']
