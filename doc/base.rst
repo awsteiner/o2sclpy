@@ -3,6 +3,15 @@
 Base classes from O\ :sub:`2`\ scl
 ==================================
 
+Class vector
+------------
+
+.. autoclass:: o2sclpy.vector
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
 Class lib_settings_class
 ------------------------
 
@@ -25,6 +34,69 @@ Class table_units
 -----------------
 
 .. autoclass:: o2sclpy.table_units
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
+Class uniform_grid
+------------------
+
+.. autoclass:: o2sclpy.uniform_grid
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
+Class uniform_grid_end
+----------------------
+
+.. autoclass:: o2sclpy.uniform_grid_end
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
+Class uniform_grid_width
+------------------------
+
+.. autoclass:: o2sclpy.uniform_grid_width
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
+Class uniform_grid_end_width
+----------------------------
+
+.. autoclass:: o2sclpy.uniform_grid_end_width
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
+Class uniform_grid_log_end
+--------------------------
+
+.. autoclass:: o2sclpy.uniform_grid_log_end
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
+Class uniform_grid_log_width
+----------------------------
+
+.. autoclass:: o2sclpy.uniform_grid_log_width
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
+Class uniform_grid_log_end_width
+--------------------------------
+
+.. autoclass:: o2sclpy.uniform_grid_log_end_width
         :members:
         :undoc-members:
 

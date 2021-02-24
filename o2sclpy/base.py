@@ -26,6 +26,93 @@ from o2sclpy.utils import force_bytes
 import numpy
 
 
+class vector:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``vector<double>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/vector<double>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class vector<double> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_vector_double_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class vector<double> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_vector_double_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class vector<double> .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
+        return
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_vector_double__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def size(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_vector_double__size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_vector_double__index_operator
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        return ret
+
 class lib_settings_class:
     """
     Python interface for O\ :sub:`2`\ scl class ``lib_settings_class``,
@@ -387,6 +474,21 @@ class table:
         f2(src._ptr,self._ptr)
         return
 
+    def __getitem__(self,col):
+        """
+        | Parameters:
+        | *col*: string
+        | Returns: ``numpy`` array
+        """
+        col_=ctypes.c_char_p(force_bytes(col))
+        func=self._link.o2scl.o2scl_table___index_operator
+        n_=ctypes.c_int(0)
+        ptr_=ctypes.POINTER(ctypes.c_double)()
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
+        func(self._ptr,col_,ctypes.byref(ptr_),ctypes.byref(n_))
+        ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
+        return ret
+
     def set(self,col,row,val):
         """
         | Parameters:
@@ -495,6 +597,21 @@ class table:
         func(self._ptr,col_)
         return
 
+    def get_column(self,col):
+        """
+        | Parameters:
+        | *col*: string
+        | Returns: ``numpy`` array
+        """
+        col_=ctypes.c_char_p(force_bytes(col))
+        func=self._link.o2scl.o2scl_table___get_column
+        n_=ctypes.c_int(0)
+        ptr_=ctypes.POINTER(ctypes.c_double)()
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
+        func(self._ptr,col_,ctypes.byref(ptr_),ctypes.byref(n_))
+        ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
+        return ret
+
     def get_column_name(self,icol):
         """
         | Parameters:
@@ -542,6 +659,18 @@ class table:
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
         return ret
+
+    def init_column(self,scol,val):
+        """
+        | Parameters:
+        | *scol*: string
+        | *val*: ``double``
+        """
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        func=self._link.o2scl.o2scl_table___init_column
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
+        func(self._ptr,scol_,val)
+        return
 
     def is_column(self,scol):
         """
@@ -805,6 +934,146 @@ class table:
         ret=func(self._ptr,sx_,x0,sy_)
         return ret
 
+    def deriv_index(self,ix,x0,iy):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *x0*: ``double``
+        | *iy*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_table___deriv_index
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_size_t]
+        ret=func(self._ptr,ix,x0,iy)
+        return ret
+
+    def deriv2_col(self,x,y,yp):
+        """
+        | Parameters:
+        | *x*: string
+        | *y*: string
+        | *yp*: string
+        """
+        x_=ctypes.c_char_p(force_bytes(x))
+        y_=ctypes.c_char_p(force_bytes(y))
+        yp_=ctypes.c_char_p(force_bytes(yp))
+        func=self._link.o2scl.o2scl_table___deriv2_col
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,x_,y_,yp_)
+        return
+
+    def deriv2(self,sx,x0,sy):
+        """
+        | Parameters:
+        | *sx*: string
+        | *x0*: ``double``
+        | *sy*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        sx_=ctypes.c_char_p(force_bytes(sx))
+        sy_=ctypes.c_char_p(force_bytes(sy))
+        func=self._link.o2scl.o2scl_table___deriv2
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,sx_,x0,sy_)
+        return ret
+
+    def deriv2_index(self,ix,x0,iy):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *x0*: ``double``
+        | *iy*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_table___deriv2_index
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_size_t]
+        ret=func(self._ptr,ix,x0,iy)
+        return ret
+
+    def integ(self,sx,x1,x2,sy):
+        """
+        | Parameters:
+        | *sx*: string
+        | *x1*: ``double``
+        | *x2*: ``double``
+        | *sy*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        sx_=ctypes.c_char_p(force_bytes(sx))
+        sy_=ctypes.c_char_p(force_bytes(sy))
+        func=self._link.o2scl.o2scl_table___integ
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,sx_,x1,x2,sy_)
+        return ret
+
+    def integ_index(self,ix,x1,x2,iy):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *x1*: ``double``
+        | *x2*: ``double``
+        | *iy*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_table___integ_index
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
+        ret=func(self._ptr,ix,x1,x2,iy)
+        return ret
+
+    def integ_col(self,x,y,yi):
+        """
+        | Parameters:
+        | *x*: string
+        | *y*: string
+        | *yi*: string
+        """
+        x_=ctypes.c_char_p(force_bytes(x))
+        y_=ctypes.c_char_p(force_bytes(y))
+        yi_=ctypes.c_char_p(force_bytes(yi))
+        func=self._link.o2scl.o2scl_table___integ_col
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,x_,y_,yi_)
+        return
+
+    def max(self,max):
+        """
+        | Parameters:
+        | *max*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        max_=ctypes.c_char_p(force_bytes(max))
+        func=self._link.o2scl.o2scl_table___max
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,max_)
+        return ret
+
+    def min(self,min):
+        """
+        | Parameters:
+        | *min*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        min_=ctypes.c_char_p(force_bytes(min))
+        func=self._link.o2scl.o2scl_table___min
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,min_)
+        return ret
+
+    def zero_table(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_table___zero_table
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
     def clear(self):
         """
         """
@@ -837,19 +1106,108 @@ class table:
         func(self._ptr)
         return
 
-    def __getitem__(self,col):
+    def sort_table(self,scol):
         """
         | Parameters:
-        | *col*: string
-        | Returns: ``numpy`` array
+        | *scol*: string
         """
-        col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table___index_operator
-        n_=ctypes.c_int(0)
-        ptr_=ctypes.POINTER(ctypes.c_double)()
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
-        func(self._ptr,col_,ctypes.byref(ptr_),ctypes.byref(n_))
-        ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        func=self._link.o2scl.o2scl_table___sort_table
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,scol_)
+        return
+
+    def sort_column(self,scol):
+        """
+        | Parameters:
+        | *scol*: string
+        """
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        func=self._link.o2scl.o2scl_table___sort_column
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,scol_)
+        return
+
+    def average_col_roll(self,col_name,window):
+        """
+        | Parameters:
+        | *col_name*: string
+        | *window*: ``size_t``
+        """
+        col_name_=ctypes.c_char_p(force_bytes(col_name))
+        func=self._link.o2scl.o2scl_table___average_col_roll
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
+        func(self._ptr,col_name_,window)
+        return
+
+    def average_rows(self,window,rolling):
+        """
+        | Parameters:
+        | *window*: ``size_t``
+        | *rolling*: ``bool``
+        """
+        func=self._link.o2scl.o2scl_table___average_rows
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_bool]
+        func(self._ptr,window,rolling)
+        return
+
+    def is_valid(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_table___is_valid
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def functions_columns(self,list):
+        """
+        | Parameters:
+        | *list*: string
+        """
+        list_=ctypes.c_char_p(force_bytes(list))
+        func=self._link.o2scl.o2scl_table___functions_columns
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,list_)
+        return
+
+    def function_column(self,function,scol):
+        """
+        | Parameters:
+        | *function*: string
+        | *scol*: string
+        """
+        function_=ctypes.c_char_p(force_bytes(function))
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        func=self._link.o2scl.o2scl_table___function_column
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,function_,scol_)
+        return
+
+    def row_function(self,scol,row):
+        """
+        | Parameters:
+        | *scol*: string
+        | *row*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        scol_=ctypes.c_char_p(force_bytes(scol))
+        func=self._link.o2scl.o2scl_table___row_function
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
+        ret=func(self._ptr,scol_,row)
+        return ret
+
+    def function_find_row(self,function):
+        """
+        | Parameters:
+        | *function*: string
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        function_=ctypes.c_char_p(force_bytes(function))
+        func=self._link.o2scl.o2scl_table___function_find_row
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,function_)
         return ret
 
 class table_units(table):
@@ -903,6 +1261,35 @@ class table_units(table):
         self._owner=False
         return
 
+    def deepcopy(self,src):
+        """
+        Deep copy function for class table_units<> .
+        """
+
+        self._link=src._link
+        f=self._link.o2scl.o2scl_create_table_units__
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._owner=True
+        f2=self._link.o2scl.o2scl_copy_table_units__
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(src._ptr,self._ptr)
+        return
+
+    def set_unit(self,col,unit):
+        """
+        | Parameters:
+        | *col*: string
+        | *unit*: string
+        """
+        col_=ctypes.c_char_p(force_bytes(col))
+        unit_=ctypes.c_char_p(force_bytes(unit))
+        func=self._link.o2scl.o2scl_table_units___set_unit
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,col_,unit_)
+        return
+
     def get_unit(self,col):
         """
         | Parameters:
@@ -916,17 +1303,26 @@ class table_units(table):
         ret=func(self._ptr,col_)
         return ret
 
-    def set_unit(self,col,unit):
+    def line_of_units(self,unit_line):
+        """
+        | Parameters:
+        | *unit_line*: string
+        """
+        unit_line_=ctypes.c_char_p(force_bytes(unit_line))
+        func=self._link.o2scl.o2scl_table_units___line_of_units
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,unit_line_)
+        return
+
+    def remove_unit(self,col):
         """
         | Parameters:
         | *col*: string
-        | *unit*: string
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        unit_=ctypes.c_char_p(force_bytes(unit))
-        func=self._link.o2scl.o2scl_table_units___set_unit
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,col_,unit_)
+        func=self._link.o2scl.o2scl_table_units___remove_unit
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,col_)
         return
 
     def convert_to_unit(self,col,unit,err_on_fail):
@@ -945,12 +1341,437 @@ class table_units(table):
         ret=func(self._ptr,col_,unit_,err_on_fail)
         return ret
 
-    def clear_table(self):
+class uniform_grid:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid<>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
         """
+        Init function for class uniform_grid<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
         """
-        func=self._link.o2scl.o2scl_table_units___clear_table
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_uniform_grid__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class uniform_grid<> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_uniform_grid__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class uniform_grid<> .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
+        return
+
+    def get_nbins(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_uniform_grid___get_nbins
+        func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
-        func(self._ptr)
+        ret=func(self._ptr)
+        return ret
+
+    def get_npoints(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_uniform_grid___get_npoints
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def is_log(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_uniform_grid___is_log
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def get_start(self):
+        """
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_uniform_grid___get_start
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def get_end(self):
+        """
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_uniform_grid___get_end
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def get_width(self):
+        """
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_uniform_grid___get_width
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_uniform_grid___index_operator
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        return ret
+
+class uniform_grid_end(uniform_grid):
+    """
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_end<>.html .
+    """
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class uniform_grid_end<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_uniform_grid_end__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class uniform_grid_end<> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_uniform_grid_end__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class uniform_grid_end<> .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
+        return
+
+class uniform_grid_width(uniform_grid):
+    """
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_width<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_width<>.html .
+    """
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class uniform_grid_width<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_uniform_grid_width__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class uniform_grid_width<> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_uniform_grid_width__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class uniform_grid_width<> .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
+        return
+
+class uniform_grid_end_width(uniform_grid):
+    """
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end_width<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_end_width<>.html .
+    """
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class uniform_grid_end_width<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_uniform_grid_end_width__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class uniform_grid_end_width<> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_uniform_grid_end_width__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class uniform_grid_end_width<> .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
+        return
+
+class uniform_grid_log_end(uniform_grid):
+    """
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_end<>.html .
+    """
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class uniform_grid_log_end<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_uniform_grid_log_end__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class uniform_grid_log_end<> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_uniform_grid_log_end__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class uniform_grid_log_end<> .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
+        return
+
+class uniform_grid_log_width(uniform_grid):
+    """
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_width<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_width<>.html .
+    """
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class uniform_grid_log_width<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_uniform_grid_log_width__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class uniform_grid_log_width<> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_uniform_grid_log_width__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class uniform_grid_log_width<> .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
+        return
+
+class uniform_grid_log_end_width(uniform_grid):
+    """
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end_width<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_end_width<>.html .
+    """
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class uniform_grid_log_end_width<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_uniform_grid_log_end_width__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class uniform_grid_log_end_width<> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_uniform_grid_log_end_width__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class uniform_grid_log_end_width<> .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
         return
 
 class table3d:
@@ -1006,6 +1827,39 @@ class table3d:
         self._link=src._link
         self._ptr=src._ptr
         self._owner=False
+        return
+
+    def deepcopy(self,src):
+        """
+        Deep copy function for class table3d .
+        """
+
+        self._link=src._link
+        f=self._link.o2scl.o2scl_create_table3d
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._owner=True
+        f2=self._link.o2scl.o2scl_copy_table3d
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(src._ptr,self._ptr)
+        return
+
+    def set_xy(self,x_name,nx,x,y_name,ny,y):
+        """
+        | Parameters:
+        | *x_name*: string
+        | *nx*: ``size_t``
+        | *x*: :class:`vector` object
+        | *y_name*: string
+        | *ny*: ``size_t``
+        | *y*: :class:`vector` object
+        """
+        x_name_=ctypes.c_char_p(force_bytes(x_name))
+        y_name_=ctypes.c_char_p(force_bytes(y_name))
+        func=self._link.o2scl.o2scl_table3d_set_xy
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,x_name_,nx,x._ptr,y_name_,ny,y._ptr)
         return
 
     def set(self,ix,iy,name,val):
@@ -1131,6 +1985,22 @@ class tensor:
         self._link=src._link
         self._ptr=src._ptr
         self._owner=False
+        return
+
+    def deepcopy(self,src):
+        """
+        Deep copy function for class tensor<> .
+        """
+
+        self._link=src._link
+        f=self._link.o2scl.o2scl_create_tensor__
+        f.restype=ctypes.c_void_p
+        f.argtypes=[]
+        self._ptr=f()
+        self._owner=True
+        f2=self._link.o2scl.o2scl_copy_tensor__
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(src._ptr,self._ptr)
         return
 
     def clear(self):
