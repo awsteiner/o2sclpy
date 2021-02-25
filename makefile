@@ -7,6 +7,7 @@ help:
 	@echo "doc:       Make the documentation (requires sphinx & breathe)"
 	@echo "sync-doc:  Copies documentation to webserver"
 	@echo "open-doc:  Open local documentation in browser"
+	@echo "web-doc:   Open web documentation in browser (after sync-doc)"
 	@echo "test-sync:"
 	@echo "reinstall: Reinstall o2sclpy using pip3"
 	@echo "statfiles: Make the images and extra files for the docs"
@@ -27,6 +28,9 @@ endif
 
 open-doc: .empty
 	$(BROWSER) doc/build/html/index.html
+
+web-doc: .empty
+	$(BROWSER) "https://neutronstars.utk.edu/code/o2sclpy"
 
 doc: .empty
 	cd doc; $(MAKE) html

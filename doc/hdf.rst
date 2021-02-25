@@ -1,4 +1,4 @@
-.. _base:
+.. _hdf:
 
 HDF5 classes from O\ :sub:`2`\ scl
 ==================================
