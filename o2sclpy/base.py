@@ -26,7 +26,7 @@ from o2sclpy.utils import force_bytes
 import numpy
 
 
-class vector:
+class std_vector:
     """
     Python interface for O\ :sub:`2`\ scl class ``vector<double>``,
     See
@@ -112,6 +112,183 @@ class vector:
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         return ret
+
+
+class std_vector_int:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``vector<int>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/vector<int>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class vector<int> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_vector_int_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class vector<int> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_vector_int_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class vector<int> .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
+        return
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_vector_int__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def size(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_vector_int__size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | Returns: ``ctypes.c_int`` object
+        """
+        func=self._link.o2scl.o2scl_vector_int__index_operator
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        return ret
+
+
+class std_vector_size_t:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``vector<size_t>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/vector<size_t>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class vector<size_t> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_vector_size_t_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class vector<size_t> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_vector_size_t_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class vector<size_t> .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
+        return
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_vector_size_t__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def size(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_vector_size_t__size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_vector_size_t__index_operator
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        return ret
+
 
 class lib_settings_class:
     """
@@ -402,6 +579,7 @@ class lib_settings_class:
         ret=func(self._ptr)
         ret2=convert_units(self._link,ret)
         return ret2
+
 
 class table:
     """
@@ -807,6 +985,16 @@ class table:
         func=self._link.o2scl.o2scl_table___line_of_names
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,names_)
+        return
+
+    def line_of_data_vector(self,data):
+        """
+        | Parameters:
+        | *data*: :class:`std_vector` object
+        """
+        func=self._link.o2scl.o2scl_table___line_of_data
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,data._ptr)
         return
 
     def ordered_lookup(self,scol,val):
@@ -1218,6 +1406,15 @@ class table:
         func(self._ptr)
         return
 
+    def line_of_data(self,v):
+        # Create a std_vector object and copy the data over
+        vec=o2sclpy.std_vector(self._link)
+        vec.resize(len(v))
+        for i in range(0,len(v)):
+            vec[i]=v[i]
+        line_of_data_vector(vec)
+        return
+
 class table_units(table):
     """
     Python interface for O\ :sub:`2`\ scl class ``table_units<>``,
@@ -1349,6 +1546,7 @@ class table_units(table):
         ret=func(self._ptr,col_,unit_,err_on_fail)
         return ret
 
+
 class uniform_grid:
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid<>``,
@@ -1476,6 +1674,7 @@ class uniform_grid:
         ret=func(self._ptr,n)
         return ret
 
+
 class uniform_grid_end(uniform_grid):
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end<>``,
@@ -1543,6 +1742,7 @@ class uniform_grid_end(uniform_grid):
         cls._ptr=f(start,end,n_bins)
         cls._link=link
         return
+
 
 class uniform_grid_width(uniform_grid):
     """
@@ -1612,6 +1812,7 @@ class uniform_grid_width(uniform_grid):
         cls._link=link
         return
 
+
 class uniform_grid_end_width(uniform_grid):
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end_width<>``,
@@ -1679,6 +1880,7 @@ class uniform_grid_end_width(uniform_grid):
         cls._ptr=f(start,end,width)
         cls._link=link
         return
+
 
 class uniform_grid_log_end(uniform_grid):
     """
@@ -1748,6 +1950,7 @@ class uniform_grid_log_end(uniform_grid):
         cls._link=link
         return
 
+
 class uniform_grid_log_width(uniform_grid):
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_width<>``,
@@ -1816,6 +2019,7 @@ class uniform_grid_log_width(uniform_grid):
         cls._link=link
         return
 
+
 class uniform_grid_log_end_width(uniform_grid):
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end_width<>``,
@@ -1883,6 +2087,7 @@ class uniform_grid_log_end_width(uniform_grid):
         cls._ptr=f(start,end,width)
         cls._link=link
         return
+
 
 class table3d:
     """
@@ -1960,10 +2165,10 @@ class table3d:
         | Parameters:
         | *x_name*: string
         | *nx*: ``size_t``
-        | *x*: :class:`vector` object
+        | *x*: :class:`std_vector` object
         | *y_name*: string
         | *ny*: ``size_t``
-        | *y*: :class:`vector` object
+        | *y*: :class:`std_vector` object
         """
         x_name_=ctypes.c_char_p(force_bytes(x_name))
         y_name_=ctypes.c_char_p(force_bytes(y_name))
@@ -2041,6 +2246,7 @@ class table3d:
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
+
 
 class tensor:
     """
@@ -2120,6 +2326,7 @@ class tensor:
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
+
 
 class find_constants:
     """
@@ -2205,6 +2412,7 @@ class find_constants:
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         ret=func(self._ptr,name_,unit_)
         return ret
+
 
 class convert_units:
     """
@@ -2400,6 +2608,7 @@ class convert_units:
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
+
 
 class shared_ptr_table_units(table_units):
 

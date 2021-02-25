@@ -138,6 +138,7 @@ class thermo:
         func(self._ptr,value)
         return
 
+
 class part:
     """
     Python interface for class :ref:`part <o2sclp:part_tl>`.
@@ -432,6 +433,7 @@ class part:
         func(self._ptr,ax._ptr)
         return
 
+
 class fermion(part):
     """
     Python interface for O\ :sub:`2`\ scl class ``fermion``,
@@ -524,6 +526,7 @@ class fermion(part):
         func(self._ptr,value)
         return
 
+
 class quark(fermion):
     """
     Python interface for O\ :sub:`2`\ scl class ``quark``,
@@ -614,6 +617,7 @@ class quark(fermion):
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
+
 
 class fermion_zerot:
     """
@@ -717,6 +721,7 @@ class fermion_zerot:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,f._ptr)
         return
+
 
 class fermion_thermo(fermion_zerot):
     """
@@ -840,6 +845,7 @@ class fermion_thermo(fermion_zerot):
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,f._ptr,T)
         return
+
 
 class fermion_rel(fermion_thermo):
     """
@@ -1189,6 +1195,7 @@ class fermion_rel(fermion_thermo):
         func(self._ptr,f._ptr,T)
         return
 
+
 class fermion_nonrel(fermion_zerot):
     """
     Python interface for class :ref:`fermion_nonrel <o2sclp:fermion_nonrel_tl>`.
@@ -1273,6 +1280,7 @@ class fermion_nonrel(fermion_zerot):
         func(self._ptr,f._ptr,T)
         return
 
+
 class boson(part):
     """
     Python interface for O\ :sub:`2`\ scl class ``boson``,
@@ -1343,6 +1351,7 @@ class boson(part):
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
+
 
 class boson_rel:
     """
@@ -1454,6 +1463,7 @@ class boson_rel:
         func(self._ptr,b._ptr,T)
         return
 
+
 class classical_thermo:
     """
     Python interface for class :ref:`classical_thermo <o2sclp:classical_thermo_tl>`.
@@ -1528,6 +1538,7 @@ class classical_thermo:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,p._ptr,T)
         return
+
 
 class thermo_np_deriv_press:
     """
@@ -1702,6 +1713,7 @@ class thermo_np_deriv_press:
         func(self._ptr,value)
         return
 
+
 class thermo_np_deriv_helm:
     """
     Python interface for class :ref:`thermo_np_deriv_helm <o2sclp:thermo_np_deriv_helm_tl>`.
@@ -1875,6 +1887,7 @@ class thermo_np_deriv_helm:
         func(self._ptr,value)
         return
 
+
 class part_deriv_press:
     """
     Python interface for class :ref:`part_deriv_press <o2sclp:part_deriv_press_tl>`.
@@ -2000,6 +2013,7 @@ class part_deriv_press:
         func(self._ptr,dmudn,dmudT,dsdT_n)
         return
 
+
 class part_deriv(part):
     """
     Python interface for class :ref:`part_deriv <o2sclp:part_deriv_tl>`.
@@ -2049,6 +2063,7 @@ class part_deriv(part):
         self._owner=False
         return
 
+
 class fermion_deriv(fermion):
     """
     Python interface for class :ref:`fermion_deriv <o2sclp:fermion_deriv_tl>`.
@@ -2097,6 +2112,7 @@ class fermion_deriv(fermion):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class deriv_thermo_base:
     """
@@ -2228,6 +2244,7 @@ class deriv_thermo_base:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,p._ptr,T)
         return ret
+
 
 class fermion_deriv_rel:
     """
@@ -2485,6 +2502,7 @@ class fermion_deriv_rel:
         ret=func(self._ptr,f._ptr,T)
         return ret
 
+
 class fermion_deriv_nr:
     """
     Python interface for class :ref:`fermion_deriv_nr <o2sclp:fermion_deriv_nr_tl>`.
@@ -2635,6 +2653,7 @@ class fermion_deriv_nr:
         ret=func(self._ptr,f._ptr,T)
         return ret
 
+
 class classical_deriv_thermo:
     """
     Python interface for class :ref:`classical_deriv_thermo <o2sclp:classical_deriv_thermo_tl>`.
@@ -2709,6 +2728,7 @@ class classical_deriv_thermo:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,p._ptr,T)
         return
+
 
 class fermion_mag_zerot:
     """
@@ -2848,4 +2868,5 @@ class fermion_mag_zerot:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         func(self._ptr,f._ptr,qB,kappa)
         return
+
 

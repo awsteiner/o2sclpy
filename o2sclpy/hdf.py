@@ -84,21 +84,25 @@ class hdf_file:
     def open(self,fname,write_access,err_on_fail):
         """
         | Parameters:
+        | *fname*: string
         | *write_access*: ``bool``
         | *err_on_fail*: ``bool``
         """
+        fname_=ctypes.c_char_p(force_bytes(fname))
         func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_open
-        func.argtypes=[ctypes.c_void_p,ctypes.c_string,ctypes.c_bool,ctypes.c_bool]
-        func(self._ptr,fname,write_access,err_on_fail)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool,ctypes.c_bool]
+        func(self._ptr,fname_,write_access,err_on_fail)
         return
 
     def open_or_create(self,fname):
         """
         | Parameters:
+        | *fname*: string
         """
+        fname_=ctypes.c_char_p(force_bytes(fname))
         func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_open_or_create
-        func.argtypes=[ctypes.c_void_p,ctypes.c_string]
-        func(self._ptr,fname)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,fname_)
         return
 
     def close(self):
@@ -114,11 +118,13 @@ def hdf_input(link,hf,t,name):
         | Parameters:
         | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
-        | *t*: :class:`table` object
+        | *t*: :class:`table<>` object
+        | *name*: string
     """
+    name_=ctypes.c_char_p(force_bytes(name))
     func=link.o2scl_hdf.o2scl_hdf_hdf_input_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_string]
-    func(hf._ptr,t._ptr,name)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,t._ptr,name_)
     return
 
 def hdf_output(link,hf,t,name):
@@ -126,10 +132,12 @@ def hdf_output(link,hf,t,name):
         | Parameters:
         | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
-        | *t*: :class:`table` object
+        | *t*: :class:`table<>` object
+        | *name*: string
     """
+    name_=ctypes.c_char_p(force_bytes(name))
     func=link.o2scl_hdf.o2scl_hdf_hdf_output_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_string]
-    func(hf._ptr,t._ptr,name)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,t._ptr,name_)
     return
 

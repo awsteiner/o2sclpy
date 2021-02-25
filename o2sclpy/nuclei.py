@@ -177,6 +177,7 @@ class nucleus(part):
         func(self._ptr,value)
         return
 
+
 class nucmass_info:
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_info``,
@@ -322,6 +323,7 @@ class nucmass_info:
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,s_)
         return ret
+
 
 class nucmass:
     """
@@ -654,6 +656,7 @@ class nucmass:
         ret=func(self._ptr,Z,N)
         return ret
 
+
 class nucmass_table(nucmass):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_table``,
@@ -765,6 +768,7 @@ class nucmass_table(nucmass):
         ret=func(self._ptr)
         return ret
 
+
 class nucmass_fit_base(nucmass):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_fit_base``,
@@ -836,6 +840,7 @@ class nucmass_fit_base(nucmass):
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
+
 
 class nucmass_semi_empirical(nucmass_fit_base):
     """
@@ -1014,6 +1019,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
         ret=func(self._ptr,Z,N)
         return ret
 
+
 class nucmass_ame(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_ame``,
@@ -1064,6 +1070,7 @@ class nucmass_ame(nucmass_table):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class nucmass_dz_table(nucmass_table):
     """
@@ -1116,6 +1123,7 @@ class nucmass_dz_table(nucmass_table):
         self._owner=False
         return
 
+
 class nucmass_dz_fit(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_fit``,
@@ -1167,6 +1175,7 @@ class nucmass_dz_fit(nucmass_fit_base):
         self._owner=False
         return
 
+
 class nucmass_dz_fit_33(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_fit_33``,
@@ -1217,6 +1226,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class nucmass_frdm(nucmass_fit_base):
     """
@@ -1789,6 +1799,7 @@ class nucmass_frdm(nucmass_fit_base):
         func(self._ptr,value)
         return
 
+
 class nucmass_mnmsk(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_mnmsk``,
@@ -1839,6 +1850,7 @@ class nucmass_mnmsk(nucmass_table):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class nucmass_mnmsk_exp(nucmass_mnmsk):
     """
@@ -1891,6 +1903,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
         self._owner=False
         return
 
+
 class nucmass_gen(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_gen``,
@@ -1941,6 +1954,7 @@ class nucmass_gen(nucmass_table):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class nucmass_dglg(nucmass_table):
     """
@@ -1993,6 +2007,7 @@ class nucmass_dglg(nucmass_table):
         self._owner=False
         return
 
+
 class nucmass_hfb(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_hfb``,
@@ -2043,6 +2058,7 @@ class nucmass_hfb(nucmass_table):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class nucmass_hfb_sp(nucmass_table):
     """
@@ -2095,6 +2111,7 @@ class nucmass_hfb_sp(nucmass_table):
         self._owner=False
         return
 
+
 class nucmass_ktuy(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_ktuy``,
@@ -2145,6 +2162,7 @@ class nucmass_ktuy(nucmass_table):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class nucmass_sdnp(nucmass_table):
     """
@@ -2197,6 +2215,7 @@ class nucmass_sdnp(nucmass_table):
         self._owner=False
         return
 
+
 class nucmass_wlw(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_wlw``,
@@ -2247,6 +2266,7 @@ class nucmass_wlw(nucmass_table):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 def ame_load(link,ame,name,exp_only):
     """

@@ -3,10 +3,28 @@
 Base classes from O\ :sub:`2`\ scl
 ==================================
 
-Class vector
-------------
+Class std_vector
+----------------
 
-.. autoclass:: o2sclpy.vector
+.. autoclass:: o2sclpy.std_vector
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
+Class std_vector_int
+--------------------
+
+.. autoclass:: o2sclpy.std_vector_int
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
+Class std_vector_size_t
+-----------------------
+
+.. autoclass:: o2sclpy.std_vector_size_t
         :members:
         :undoc-members:
 

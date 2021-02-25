@@ -99,6 +99,7 @@ class eos_base:
         func(self._ptr,value._ptr)
         return
 
+
 class eos_had_base(eos_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_base.
@@ -756,6 +757,7 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta)
         return ret
 
+
 class eos_had_eden_base(eos_had_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_eden_base.
@@ -807,6 +809,7 @@ class eos_had_eden_base(eos_had_base):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class eos_had_pres_base(eos_had_base):
     """
@@ -860,6 +863,7 @@ class eos_had_pres_base(eos_had_base):
         self._owner=False
         return
 
+
 class eos_had_temp_base(eos_had_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_temp_base.
@@ -911,6 +915,7 @@ class eos_had_temp_base(eos_had_base):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class eos_had_temp_eden_base(eos_had_temp_base):
     """
@@ -964,6 +969,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
         self._owner=False
         return
 
+
 class eos_had_temp_pres_base(eos_had_temp_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_temp_pres_base.
@@ -1015,6 +1021,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class eos_had_skyrme(eos_had_temp_eden_base):
     """
@@ -1404,6 +1411,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         func(self._ptr,value._ptr)
         return
 
+
 class eos_had_apr(eos_had_temp_eden_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_apr.
@@ -1494,6 +1502,7 @@ class eos_had_apr(eos_had_temp_eden_base):
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
+
 
 class eos_had_rmf(eos_had_temp_pres_base):
     """
@@ -2046,6 +2055,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         func(self._ptr,value)
         return
 
+
 class eos_quark(eos_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_quark.
@@ -2096,6 +2106,7 @@ class eos_quark(eos_base):
         self._ptr=src._ptr
         self._owner=False
         return
+
 
 class eos_quark_bag(eos_quark):
     """
@@ -2167,6 +2178,7 @@ class eos_quark_bag(eos_quark):
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
+
 
 class eos_quark_njl(eos_quark):
     """
@@ -2339,6 +2351,7 @@ class eos_quark_njl(eos_quark):
         func(self._ptr,value)
         return
 
+
 class eos_tov:
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov.
@@ -2425,6 +2438,7 @@ class eos_tov:
         ret=func(self._ptr)
         return ret
 
+
 class eos_tov_buchdahl(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_buchdahl.
@@ -2496,6 +2510,7 @@ class eos_tov_buchdahl(eos_tov):
         func(self._ptr,value)
         return
 
+
 class eos_tov_polytrope(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_polytrope.
@@ -2558,6 +2573,7 @@ class eos_tov_polytrope(eos_tov):
         func(self._ptr,coeff,index)
         return
 
+
 class eos_tov_linear(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_linear.
@@ -2619,6 +2635,7 @@ class eos_tov_linear(eos_tov):
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         func(self._ptr,cs2,eps0)
         return
+
 
 class eos_tov_interp(eos_tov):
     """
@@ -2781,6 +2798,7 @@ class eos_tov_interp(eos_tov):
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
+
 
 class tov_solve:
     """
@@ -3469,6 +3487,7 @@ class tov_solve:
         sp=shared_ptr_table_units(self._link,func(self._ptr))
         return sp
 
+
 class tov_love:
     """
     Python interface for O\ :sub:`2`\ scl class tov_love.
@@ -3711,6 +3730,7 @@ class tov_love:
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
         ret=func(self._ptr,yR,beta,k2,lambda_km5,lambda_cgs)
         return ret
+
 
 class nstar_cold:
     """
@@ -4110,6 +4130,7 @@ class nstar_cold:
         func.argtypes=[ctypes.c_void_p]
         sp=shared_ptr_table_units(self._link,func(self._ptr))
         return sp
+
 
 def skyrme_load(link,sk,model,external,verbose):
     """
