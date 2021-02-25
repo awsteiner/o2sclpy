@@ -1210,6 +1210,14 @@ class table:
         ret=func(self._ptr,function_)
         return ret
 
+    def summary(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_table___summary
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
 class table_units(table):
     """
     Python interface for O\ :sub:`2`\ scl class ``table_units<>``,
