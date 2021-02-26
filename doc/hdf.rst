@@ -22,3 +22,13 @@ Function hdf_output
 
 .. autofunction:: o2sclpy.hdf_output(link,hf,t,name)
 
+Function hdf_input
+------------------
+
+.. autofunction:: o2sclpy.hdf_input(link,hf,t,name)
+
+Function hdf_output
+-------------------
+
+.. autofunction:: o2sclpy.hdf_output(link,hf,t,name)
+

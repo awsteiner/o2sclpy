@@ -114,7 +114,7 @@ class hdf_file:
         return
 
 
-def hdf_input(link,hf,t,name):
+def hdf_input_table(link,hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -123,12 +123,12 @@ def hdf_input(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_wrapper
+    func=link.o2scl_hdf.o2scl_hdf_hdf_input_table_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_output(link,hf,t,name):
+def hdf_output_table(link,hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -137,7 +137,35 @@ def hdf_output(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_output_wrapper
+    func=link.o2scl_hdf.o2scl_hdf_hdf_output_table_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,t._ptr,name_)
+    return
+
+def hdf_input_table_units(link,hf,t,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *t*: :class:`table_units<>` object
+        | *name*: string
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=link.o2scl_hdf.o2scl_hdf_hdf_input_table_units_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,t._ptr,name_)
+    return
+
+def hdf_output_table_units(link,hf,t,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *t*: :class:`table_units<>` object
+        | *name*: string
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=link.o2scl_hdf.o2scl_hdf_hdf_output_table_units_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
