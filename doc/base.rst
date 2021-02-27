@@ -3,6 +3,15 @@
 Base classes from O\ :sub:`2`\ scl
 ==================================
 
+Class std_string
+----------------
+
+.. autoclass:: o2sclpy.std_string
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+
 Class std_vector
 ----------------
 

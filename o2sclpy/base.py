@@ -26,11 +26,11 @@ from o2sclpy.utils import force_bytes
 import numpy
 
 
-class std_vector:
+class std_string:
     """
-    Python interface for O\ :sub:`2`\ scl class ``vector<double>``,
+    Python interface for O\ :sub:`2`\ scl class ``std::string``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/vector<double>.html .
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/std::string.html .
     """
 
     _ptr=0
@@ -39,7 +39,7 @@ class std_vector:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class vector<double> .
+        Init function for class std::string .
 
         | Parameters:
         | *link* :class:`linker` object
@@ -48,7 +48,7 @@ class std_vector:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_vector_double_
+            f=link.o2scl.o2scl_create_std__string
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -60,11 +60,11 @@ class std_vector:
 
     def __del__(self):
         """
-        Delete function for class vector<double> .
+        Delete function for class std::string .
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_vector_double_
+            f=self._link.o2scl.o2scl_free_std__string
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -73,7 +73,121 @@ class std_vector:
 
     def copy(self,src):
         """
-        Shallow copy function for class vector<double> .
+        Shallow copy function for class std::string .
+        """
+
+        self._link=src._link
+        self._ptr=src._ptr
+        self._owner=False
+        return
+
+    def length(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_std__string_length
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | Returns: :class:`char` object
+        """
+        func=self._link.o2scl.o2scl_std__string_operator[]
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        ret2=char(self._link,ret)
+        return ret2
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_std__string_resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def c_str(self):
+        """
+        | Returns: ``ctypes.c_char`` object
+        """
+        func=self._link.o2scl.o2scl_std__string_c_str
+        func.restype=ctypes.c_char
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def __len__(self):
+        return length()
+     
+    def init_bytes(self,s):
+        # Initialize the string from a Python bytes object
+        resize(len(s))
+        for i in range(0,len(s)):
+            self.__setitem__(i,s[i])
+        return
+    
+    def to_bytes(self):
+        ret=b''
+        for i in range(0,self.length()):
+            ret=ret+self.__getitem__(i)
+        return ret
+
+class std_vector:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``std::vector<double>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/std::vector<double>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class std::vector<double> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_std__vector_double_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class std::vector<double> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_std__vector_double_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def copy(self,src):
+        """
+        Shallow copy function for class std::vector<double> .
         """
 
         self._link=src._link
@@ -86,7 +200,7 @@ class std_vector:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_vector_double__resize
+        func=self._link.o2scl.o2scl_std__vector_double__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -95,7 +209,7 @@ class std_vector:
         """
         | Returns: ``ctypes.c_size_t`` object
         """
-        func=self._link.o2scl.o2scl_vector_double__size
+        func=self._link.o2scl.o2scl_std__vector_double__size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -105,14 +219,23 @@ class std_vector:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: :class:`double` object
         """
-        func=self._link.o2scl.o2scl_vector_double__index_operator
-        func.restype=ctypes.c_double
+        func=self._link.o2scl.o2scl_std__vector_double__operator[]
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        return ret
+        ret2=double(self._link,ret)
+        return ret2
 
+    def __len__(self):
+        return size()
+    
+    def to_numpy(self):
+        ret=numpy.zeros((self.size()))
+        for i in range(0,self.length()):
+            ret[i]=self.__getitem__(i)
+        return ret
 
 class std_vector_int:
     """
@@ -193,14 +316,23 @@ class std_vector_int:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: :class:`int` object
         """
-        func=self._link.o2scl.o2scl_vector_int__index_operator
-        func.restype=ctypes.c_int
+        func=self._link.o2scl.o2scl_vector_int__operator[]
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        return ret
+        ret2=int(self._link,ret)
+        return ret2
 
+    def __len__(self):
+        return size()
+    
+    def to_numpy(self):
+        ret=numpy.zeros((self.size()),dtype=numpy.int32_t)
+        for i in range(0,self.length()):
+            ret[i]=self.__getitem__(i)
+        return ret
 
 class std_vector_size_t:
     """
@@ -281,14 +413,23 @@ class std_vector_size_t:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: :class:`size_t` object
         """
-        func=self._link.o2scl.o2scl_vector_size_t__index_operator
-        func.restype=ctypes.c_size_t
+        func=self._link.o2scl.o2scl_vector_size_t__operator[]
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        return ret
+        ret2=size_t(self._link,ret)
+        return ret2
 
+    def __len__(self):
+        return size()
+    
+    def to_numpy(self):
+        ret=numpy.zeros((self.size()),dtype=numpy.uint64_t)
+        for i in range(0,self.length()):
+            ret[i]=self.__getitem__(i)
+        return ret
 
 class lib_settings_class:
     """
@@ -659,7 +800,7 @@ class table:
         | Returns: ``numpy`` array
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table___index_operator
+        func=self._link.o2scl.o2scl_table___operator[]
         n_=ctypes.c_int(0)
         ptr_=ctypes.POINTER(ctypes.c_double)()
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
@@ -1668,7 +1809,7 @@ class uniform_grid:
         | *n*: ``size_t``
         | Returns: ``ctypes.c_double`` object
         """
-        func=self._link.o2scl.o2scl_uniform_grid___index_operator
+        func=self._link.o2scl.o2scl_uniform_grid___operator[]
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
