@@ -96,16 +96,15 @@ class std_string:
         | Returns: :class:`char` object
         """
         func=self._link.o2scl.o2scl_std__string_getitem
-        func.restype=ctypes.c_void_p
+        func.restype=ctypes.c_char
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        ret2=char(self._link,ret)
-        return ret2
+        return ret
 
-    def __setitem__(self,n,value):
+    def __setitem__(self,i,value):
         func=self._link.o2scl.o2scl_std__string_setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char]
-        func(self._ptr,n,val)
+        func(self._ptr,i,value)
         return
 
     def resize(self,n):
@@ -133,7 +132,7 @@ class std_string:
      
     def init_bytes(self,s):
         # Initialize the string from a Python bytes object
-        resize(len(s))
+        self.resize(len(s))
         for i in range(0,len(s)):
             self.__setitem__(i,s[i])
         return
@@ -224,16 +223,15 @@ class std_vector:
         | Returns: :class:`double` object
         """
         func=self._link.o2scl.o2scl_std__vector_double__getitem
-        func.restype=ctypes.c_void_p
+        func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        ret2=double(self._link,ret)
-        return ret2
+        return ret
 
-    def __setitem__(self,n,value):
+    def __setitem__(self,i,value):
         func=self._link.o2scl.o2scl_std__vector_double__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
-        func(self._ptr,n,val)
+        func(self._ptr,i,value)
         return
 
     def __len__(self):
@@ -241,7 +239,7 @@ class std_vector:
     
     def to_numpy(self):
         ret=numpy.zeros((self.size()))
-        for i in range(0,self.length()):
+        for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
         return ret
 
@@ -325,16 +323,15 @@ class std_vector_int:
         | Returns: :class:`int` object
         """
         func=self._link.o2scl.o2scl_vector_int__getitem
-        func.restype=ctypes.c_void_p
+        func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        ret2=int(self._link,ret)
-        return ret2
+        return ret
 
-    def __setitem__(self,n,value):
+    def __setitem__(self,i,value):
         func=self._link.o2scl.o2scl_vector_int__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int]
-        func(self._ptr,n,val)
+        func(self._ptr,i,value)
         return
 
     def __len__(self):
@@ -342,7 +339,7 @@ class std_vector_int:
     
     def to_numpy(self):
         ret=numpy.zeros((self.size()),dtype=numpy.int32_t)
-        for i in range(0,self.length()):
+        for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
         return ret
 
@@ -426,16 +423,15 @@ class std_vector_size_t:
         | Returns: :class:`size_t` object
         """
         func=self._link.o2scl.o2scl_vector_size_t__getitem
-        func.restype=ctypes.c_void_p
+        func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        ret2=size_t(self._link,ret)
-        return ret2
+        return ret
 
-    def __setitem__(self,n,value):
+    def __setitem__(self,i,value):
         func=self._link.o2scl.o2scl_vector_size_t__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
-        func(self._ptr,n,val)
+        func(self._ptr,i,value)
         return
 
     def __len__(self):
@@ -443,7 +439,7 @@ class std_vector_size_t:
     
     def to_numpy(self):
         ret=numpy.zeros((self.size()),dtype=numpy.uint64_t)
-        for i in range(0,self.length()):
+        for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
         return ret
 
