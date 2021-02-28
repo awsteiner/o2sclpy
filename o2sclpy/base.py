@@ -491,10 +491,12 @@ class lib_settings_class:
         | Returns: python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_data_dir
-        func.restype=ctypes.c_char_p
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        return ret
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
 
     def set_data_dir(self,dir):
         """
@@ -514,10 +516,12 @@ class lib_settings_class:
         | Returns: python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_doc_dir
-        func.restype=ctypes.c_char_p
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        return ret
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
 
     def set_doc_dir(self,dir):
         """
@@ -657,10 +661,12 @@ class lib_settings_class:
         | Returns: python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_system_type
-        func.restype=ctypes.c_char_p
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        return ret
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
 
     def range_check(self):
         """
@@ -677,30 +683,36 @@ class lib_settings_class:
         | Returns: python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_time_compiled
-        func.restype=ctypes.c_char_p
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        return ret
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
 
     def date_compiled(self):
         """
         | Returns: python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_date_compiled
-        func.restype=ctypes.c_char_p
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        return ret
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
 
     def o2scl_version(self):
         """
         | Returns: python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_o2scl_version
-        func.restype=ctypes.c_char_p
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        return ret
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
 
     def config_h_report(self):
         """
@@ -931,10 +943,12 @@ class table:
         | Returns: python bytes object
         """
         func=self._link.o2scl.o2scl_table___get_column_name
-        func.restype=ctypes.c_char_p
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
-        return ret
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
 
     def rename_column(self,src,dest):
         """
@@ -967,10 +981,12 @@ class table:
         | Returns: python bytes object
         """
         func=self._link.o2scl.o2scl_table___get_sorted_name
-        func.restype=ctypes.c_char_p
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
-        return ret
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
 
     def init_column(self,scol,val):
         """
@@ -1630,10 +1646,12 @@ class table_units(table):
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table_units___get_unit
-        func.restype=ctypes.c_char_p
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,col_)
-        return ret
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
 
     def line_of_units(self,unit_line):
         """
