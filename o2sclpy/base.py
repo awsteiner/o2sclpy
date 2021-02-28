@@ -117,16 +117,6 @@ class std_string:
         func(self._ptr,n)
         return
 
-    def c_str(self):
-        """
-        | Returns: ``ctypes.c_char`` object
-        """
-        func=self._link.o2scl.o2scl_std__string_c_str
-        func.restype=ctypes.c_char
-        func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr)
-        return ret
-
     def __len__(self):
         return length()
      
@@ -785,15 +775,15 @@ class table:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def __deepcopy__(self):
+    def __deepcopy__(self,memo):
         """
         Deep copy function for class table<> .
         """
 
-        new_obj=type(self)(self._link,self._ptr)
-        f=self._link.o2scl.o2scl_copy_table__
-        f.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        f(src._ptr,new_obj._ptr)
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_table__
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def __getitem__(self,col):
@@ -1608,15 +1598,15 @@ class table_units(table):
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def __deepcopy__(self):
+    def __deepcopy__(self,memo):
         """
         Deep copy function for class table_units<> .
         """
 
-        new_obj=type(self)(self._link,self._ptr)
-        f=self._link.o2scl.o2scl_copy_table_units__
-        f.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        f(src._ptr,new_obj._ptr)
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_table_units__
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def set_unit(self,col,unit):
@@ -2265,15 +2255,15 @@ class table3d:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def __deepcopy__(self):
+    def __deepcopy__(self,memo):
         """
         Deep copy function for class table3d .
         """
 
-        new_obj=type(self)(self._link,self._ptr)
-        f=self._link.o2scl.o2scl_copy_table3d
-        f.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        f(src._ptr,new_obj._ptr)
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_table3d
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def set_xy(self,x_name,nx,x,y_name,ny,y):
@@ -2417,15 +2407,15 @@ class tensor:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def __deepcopy__(self):
+    def __deepcopy__(self,memo):
         """
         Deep copy function for class tensor<> .
         """
 
-        new_obj=type(self)(self._link,self._ptr)
-        f=self._link.o2scl.o2scl_copy_tensor__
-        f.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        f(src._ptr,new_obj._ptr)
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_tensor__
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def clear(self):
