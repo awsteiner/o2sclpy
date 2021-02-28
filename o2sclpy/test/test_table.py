@@ -38,13 +38,15 @@ def subtest_copying(link):
     assert tab1.get('col1',2)==3,'Show deep copy produces unique table'
     return
 
-# def test_hdf5():
-#     link=o2sclpy.linker()
-#     link.link_o2scl_o2graph()
+def subtest_hdf5(link):
     
-#     tab1=def_table(link)
-#     hf=o2sclpy.hdf_file(link)
-#     hf.open_or_create(b'temp.o2')
+    tab1=def_table(link)
+    hf=o2sclpy.hdf_file(link)
+    hf.open_or_create(b'temp.o2')
+    o2sclpy.hdf_output(link,hf,tab1)
+    hf.close()
+    hf.open(b'temp.o2',False,True)
+    name=o2sclpy.std_string()
 
 def test_table_all():
     link=o2sclpy.linker()
