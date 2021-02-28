@@ -71,15 +71,13 @@ class hdf_file:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class hdf_file .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     def open(self,fname,write_access,err_on_fail):
         """

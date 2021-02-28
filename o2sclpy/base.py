@@ -71,15 +71,13 @@ class std_string:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class std::string .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     def length(self):
         """
@@ -97,12 +95,18 @@ class std_string:
         | *n*: ``size_t``
         | Returns: :class:`char` object
         """
-        func=self._link.o2scl.o2scl_std__string_operator[]
+        func=self._link.o2scl.o2scl_std__string_getitem
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         ret2=char(self._link,ret)
         return ret2
+
+    def __setitem__(self,n,value):
+        func=self._link.o2scl.o2scl_std__string_setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char]
+        func(self._ptr,n,val)
+        return
 
     def resize(self,n):
         """
@@ -185,15 +189,13 @@ class std_vector:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class std::vector<double> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     def resize(self,n):
         """
@@ -221,12 +223,18 @@ class std_vector:
         | *n*: ``size_t``
         | Returns: :class:`double` object
         """
-        func=self._link.o2scl.o2scl_std__vector_double__operator[]
+        func=self._link.o2scl.o2scl_std__vector_double__getitem
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         ret2=double(self._link,ret)
         return ret2
+
+    def __setitem__(self,n,value):
+        func=self._link.o2scl.o2scl_std__vector_double__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
+        func(self._ptr,n,val)
+        return
 
     def __len__(self):
         return size()
@@ -282,15 +290,13 @@ class std_vector_int:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class vector<int> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     def resize(self,n):
         """
@@ -318,12 +324,18 @@ class std_vector_int:
         | *n*: ``size_t``
         | Returns: :class:`int` object
         """
-        func=self._link.o2scl.o2scl_vector_int__operator[]
+        func=self._link.o2scl.o2scl_vector_int__getitem
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         ret2=int(self._link,ret)
         return ret2
+
+    def __setitem__(self,n,value):
+        func=self._link.o2scl.o2scl_vector_int__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int]
+        func(self._ptr,n,val)
+        return
 
     def __len__(self):
         return size()
@@ -379,15 +391,13 @@ class std_vector_size_t:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class vector<size_t> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     def resize(self,n):
         """
@@ -415,12 +425,18 @@ class std_vector_size_t:
         | *n*: ``size_t``
         | Returns: :class:`size_t` object
         """
-        func=self._link.o2scl.o2scl_vector_size_t__operator[]
+        func=self._link.o2scl.o2scl_vector_size_t__getitem
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         ret2=size_t(self._link,ret)
         return ret2
+
+    def __setitem__(self,n,value):
+        func=self._link.o2scl.o2scl_vector_size_t__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        func(self._ptr,n,val)
+        return
 
     def __len__(self):
         return size()
@@ -476,15 +492,13 @@ class lib_settings_class:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class lib_settings_class .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     def get_data_dir(self):
         """
@@ -767,31 +781,24 @@ class table:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class table<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
-    def deepcopy(self,src):
+    def __deepcopy__(self):
         """
         Deep copy function for class table<> .
         """
 
-        self._link=src._link
-        f=self._link.o2scl.o2scl_create_table__
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
-        self._owner=True
-        f2=self._link.o2scl.o2scl_copy_table__
-        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        f2(src._ptr,self._ptr)
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        f=self._link.o2scl.o2scl_copy_table__
+        f.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f(src._ptr,new_obj._ptr)
+        return new_obj
 
     def __getitem__(self,col):
         """
@@ -800,7 +807,7 @@ class table:
         | Returns: ``numpy`` array
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table___operator[]
+        func=self._link.o2scl.o2scl_table___getitem
         n_=ctypes.c_int(0)
         ptr_=ctypes.POINTER(ctypes.c_double)()
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
@@ -1597,31 +1604,24 @@ class table_units(table):
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class table_units<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
-    def deepcopy(self,src):
+    def __deepcopy__(self):
         """
         Deep copy function for class table_units<> .
         """
 
-        self._link=src._link
-        f=self._link.o2scl.o2scl_create_table_units__
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
-        self._owner=True
-        f2=self._link.o2scl.o2scl_copy_table_units__
-        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        f2(src._ptr,self._ptr)
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        f=self._link.o2scl.o2scl_copy_table_units__
+        f.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f(src._ptr,new_obj._ptr)
+        return new_obj
 
     def set_unit(self,col,unit):
         """
@@ -1733,15 +1733,13 @@ class uniform_grid:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class uniform_grid<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     def get_nbins(self):
         """
@@ -1809,7 +1807,7 @@ class uniform_grid:
         | *n*: ``size_t``
         | Returns: ``ctypes.c_double`` object
         """
-        func=self._link.o2scl.o2scl_uniform_grid___operator[]
+        func=self._link.o2scl.o2scl_uniform_grid___getitem
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
@@ -1858,15 +1856,13 @@ class uniform_grid_end(uniform_grid):
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class uniform_grid_end<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     @classmethod
     def init(cls,link,start,end,n_bins):
@@ -1927,15 +1923,13 @@ class uniform_grid_width(uniform_grid):
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class uniform_grid_width<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     @classmethod
     def init(cls,link,start,width,n_bins):
@@ -1996,15 +1990,13 @@ class uniform_grid_end_width(uniform_grid):
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class uniform_grid_end_width<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     @classmethod
     def init(cls,link,start,end,width):
@@ -2065,15 +2057,13 @@ class uniform_grid_log_end(uniform_grid):
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class uniform_grid_log_end<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     @classmethod
     def init(cls,link,start,end,n_bins):
@@ -2134,15 +2124,13 @@ class uniform_grid_log_width(uniform_grid):
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class uniform_grid_log_width<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     @classmethod
     def init(cls,link,start,width,n_bins):
@@ -2203,15 +2191,13 @@ class uniform_grid_log_end_width(uniform_grid):
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class uniform_grid_log_end_width<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     @classmethod
     def init(cls,link,start,end,width):
@@ -2275,31 +2261,24 @@ class table3d:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class table3d .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
-    def deepcopy(self,src):
+    def __deepcopy__(self):
         """
         Deep copy function for class table3d .
         """
 
-        self._link=src._link
-        f=self._link.o2scl.o2scl_create_table3d
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
-        self._owner=True
-        f2=self._link.o2scl.o2scl_copy_table3d
-        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        f2(src._ptr,self._ptr)
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        f=self._link.o2scl.o2scl_copy_table3d
+        f.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f(src._ptr,new_obj._ptr)
+        return new_obj
 
     def set_xy(self,x_name,nx,x,y_name,ny,y):
         """
@@ -2434,31 +2413,24 @@ class tensor:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class tensor<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
-    def deepcopy(self,src):
+    def __deepcopy__(self):
         """
         Deep copy function for class tensor<> .
         """
 
-        self._link=src._link
-        f=self._link.o2scl.o2scl_create_tensor__
-        f.restype=ctypes.c_void_p
-        f.argtypes=[]
-        self._ptr=f()
-        self._owner=True
-        f2=self._link.o2scl.o2scl_copy_tensor__
-        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        f2(src._ptr,self._ptr)
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        f=self._link.o2scl.o2scl_copy_tensor__
+        f.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f(src._ptr,new_obj._ptr)
+        return new_obj
 
     def clear(self):
         """
@@ -2514,15 +2486,13 @@ class find_constants:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class find_constants .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     def find_print(self,name,unit,prec,verbose):
         """
@@ -2600,15 +2570,13 @@ class convert_units:
             self._ptr=0
         return
 
-    def copy(self,src):
+    def __copy__(self):
         """
         Shallow copy function for class convert_units<> .
         """
 
-        self._link=src._link
-        self._ptr=src._ptr
-        self._owner=False
-        return
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
     @property
     def verbose(self):
