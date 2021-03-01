@@ -50,11 +50,10 @@ def subtest_hdf5(link):
 
     # Open the file and read into tab2
     hf.open(b'temp.o2',False,True)
-    name=o2sclpy.std_string(link)
+    name=b''
     tab2=o2sclpy.table(link)
     o2sclpy.hdf_input_table(link,hf,tab2,name)
     hf.close()
-    assert name.to_bytes()==b'table',"name after hdf_input()"
     assert tab2.get_nlines()==tab1.get_nlines(),"nlines after hdf_input()"
     return
 
