@@ -11,6 +11,9 @@ Class std_string
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
 
 Class std_vector
 ----------------
@@ -20,6 +23,9 @@ Class std_vector
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
 
 Class std_vector_int
 --------------------
@@ -29,6 +35,9 @@ Class std_vector_int
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
 
 Class std_vector_size_t
 -----------------------
@@ -38,6 +47,9 @@ Class std_vector_size_t
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
 
 Class lib_settings_class
 ------------------------
@@ -47,6 +59,8 @@ Class lib_settings_class
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class table
 -----------
@@ -56,6 +70,9 @@ Class table
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
 
 Class table_units
 -----------------
@@ -65,6 +82,8 @@ Class table_units
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class uniform_grid
 ------------------
@@ -74,6 +93,9 @@ Class uniform_grid
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
 
 Class uniform_grid_end
 ----------------------
@@ -83,6 +105,8 @@ Class uniform_grid_end
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class uniform_grid_width
 ------------------------
@@ -92,6 +116,8 @@ Class uniform_grid_width
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class uniform_grid_end_width
 ----------------------------
@@ -101,6 +127,8 @@ Class uniform_grid_end_width
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class uniform_grid_log_end
 --------------------------
@@ -110,6 +138,8 @@ Class uniform_grid_log_end
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class uniform_grid_log_width
 ----------------------------
@@ -119,6 +149,8 @@ Class uniform_grid_log_width
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class uniform_grid_log_end_width
 --------------------------------
@@ -128,6 +160,8 @@ Class uniform_grid_log_end_width
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class table3d
 -------------
@@ -137,6 +171,8 @@ Class table3d
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class tensor
 ------------
@@ -146,6 +182,8 @@ Class tensor
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class find_constants
 --------------------
@@ -155,6 +193,8 @@ Class find_constants
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class convert_units
 -------------------
@@ -164,6 +204,8 @@ Class convert_units
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class shared_ptr_table_units
 ----------------------------
@@ -171,4 +213,7 @@ Class shared_ptr_table_units
 .. autoclass:: o2sclpy.shared_ptr_table_units
         :members:
         :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
 

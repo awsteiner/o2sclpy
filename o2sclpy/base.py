@@ -28,9 +28,7 @@ import numpy
 
 class std_string:
     """
-    Python interface for O\ :sub:`2`\ scl class ``std::string``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/std::string.html .
+    Python interface for C++ class ``std::string``.
     """
 
     _ptr=0
@@ -93,7 +91,6 @@ class std_string:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: :class:`char` object
         """
         func=self._link.o2scl.o2scl_std__string_getitem
         func.restype=ctypes.c_char
@@ -121,13 +118,18 @@ class std_string:
         return length()
      
     def init_bytes(self,s):
-        # Initialize the string from a Python bytes object
+        """
+        Initialize the string from a Python bytes object
+        """
         self.resize(len(s))
         for i in range(0,len(s)):
             self.__setitem__(i,s[i])
         return
     
     def to_bytes(self):
+        """
+        Copy the string to a Python bytes object
+        """
         ret=b''
         for i in range(0,self.length()):
             ret=ret+self.__getitem__(i)
@@ -135,9 +137,7 @@ class std_string:
 
 class std_vector:
     """
-    Python interface for O\ :sub:`2`\ scl class ``std::vector<double>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/std::vector<double>.html .
+    Python interface for C++ class ``std::vector<double>``.
     """
 
     _ptr=0
@@ -210,7 +210,6 @@ class std_vector:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: :class:`double` object
         """
         func=self._link.o2scl.o2scl_std__vector_double__getitem
         func.restype=ctypes.c_double
@@ -235,9 +234,7 @@ class std_vector:
 
 class std_vector_int:
     """
-    Python interface for O\ :sub:`2`\ scl class ``vector<int>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/vector<int>.html .
+    Python interface for C++ class ``vector<int>``.
     """
 
     _ptr=0
@@ -310,7 +307,6 @@ class std_vector_int:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: :class:`int` object
         """
         func=self._link.o2scl.o2scl_vector_int__getitem
         func.restype=ctypes.c_int
@@ -328,6 +324,9 @@ class std_vector_int:
         return size()
     
     def to_numpy(self):
+        """
+        Copy the string to a numpy array
+        """
         ret=numpy.zeros((self.size()),dtype=numpy.int32_t)
         for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
@@ -335,9 +334,7 @@ class std_vector_int:
 
 class std_vector_size_t:
     """
-    Python interface for O\ :sub:`2`\ scl class ``vector<size_t>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/vector<size_t>.html .
+    Python interface for C++ class ``vector<size_t>``.
     """
 
     _ptr=0
@@ -410,7 +407,6 @@ class std_vector_size_t:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: :class:`size_t` object
         """
         func=self._link.o2scl.o2scl_vector_size_t__getitem
         func.restype=ctypes.c_size_t
@@ -425,9 +421,15 @@ class std_vector_size_t:
         return
 
     def __len__(self):
+        """
+        Test
+        """
         return size()
     
     def to_numpy(self):
+        """
+        Copy the string to a numpy array
+        """
         ret=numpy.zeros((self.size()),dtype=numpy.uint64_t)
         for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
@@ -436,7 +438,7 @@ class std_vector_size_t:
 class lib_settings_class:
     """
     Python interface for O\ :sub:`2`\ scl class ``lib_settings_class``,
-    See
+    see
     https://neutronstars.utk.edu/code/o2scl-dev/html/class/lib_settings_class.html .
     """
 
@@ -488,10 +490,9 @@ class lib_settings_class:
 
     def get_data_dir(self):
         """
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_data_dir
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -513,10 +514,9 @@ class lib_settings_class:
 
     def get_doc_dir(self):
         """
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_doc_dir
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -658,10 +658,9 @@ class lib_settings_class:
 
     def system_type(self):
         """
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_system_type
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -680,10 +679,9 @@ class lib_settings_class:
 
     def time_compiled(self):
         """
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_time_compiled
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -692,10 +690,9 @@ class lib_settings_class:
 
     def date_compiled(self):
         """
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_date_compiled
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -704,10 +701,9 @@ class lib_settings_class:
 
     def o2scl_version(self):
         """
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_o2scl_version
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -727,7 +723,6 @@ class lib_settings_class:
         | Returns: :class:`convert_units` object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_convert_units
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         ret2=convert_units(self._link,ret)
@@ -736,9 +731,9 @@ class lib_settings_class:
 
 class table:
     """
-    Python interface for O\ :sub:`2`\ scl class ``table<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/table<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``table``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/table.html .
     """
 
     _ptr=0
@@ -802,12 +797,12 @@ class table:
         """
         | Parameters:
         | *col*: string
-        | Returns: ``numpy`` array
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___getitem
         n_=ctypes.c_int(0)
         ptr_=ctypes.POINTER(ctypes.c_double)()
+        func.restype=ctypes.c_std::vector<double>
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
         func(self._ptr,col_,ctypes.byref(ptr_),ctypes.byref(n_))
         ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
@@ -940,10 +935,9 @@ class table:
         """
         | Parameters:
         | *icol*: ``size_t``
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_table___get_column_name
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
         strt=std_string(self._link,ret)
@@ -978,10 +972,9 @@ class table:
         """
         | Parameters:
         | *icol*: ``size_t``
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_table___get_sorted_name
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
         strt=std_string(self._link,ret)
@@ -1567,9 +1560,9 @@ class table:
 
 class table_units(table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``table_units<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/table_units<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``table_units``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/table_units.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1642,11 +1635,10 @@ class table_units(table):
         """
         | Parameters:
         | *col*: string
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table_units___get_unit
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,col_)
         strt=std_string(self._link,ret)
@@ -1694,9 +1686,9 @@ class table_units(table):
 
 class uniform_grid:
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid.html .
     """
 
     _ptr=0
@@ -1809,7 +1801,6 @@ class uniform_grid:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl.o2scl_uniform_grid___getitem
         func.restype=ctypes.c_double
@@ -1820,9 +1811,9 @@ class uniform_grid:
 
 class uniform_grid_end(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_end<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_end.html .
     """
 
     @abstractmethod
@@ -1887,9 +1878,9 @@ class uniform_grid_end(uniform_grid):
 
 class uniform_grid_width(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_width<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_width<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_width``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_width.html .
     """
 
     @abstractmethod
@@ -1954,9 +1945,9 @@ class uniform_grid_width(uniform_grid):
 
 class uniform_grid_end_width(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end_width<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_end_width<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end_width``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_end_width.html .
     """
 
     @abstractmethod
@@ -2021,9 +2012,9 @@ class uniform_grid_end_width(uniform_grid):
 
 class uniform_grid_log_end(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_end<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_end.html .
     """
 
     @abstractmethod
@@ -2088,9 +2079,9 @@ class uniform_grid_log_end(uniform_grid):
 
 class uniform_grid_log_width(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_width<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_width<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_width``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_width.html .
     """
 
     @abstractmethod
@@ -2155,9 +2146,9 @@ class uniform_grid_log_width(uniform_grid):
 
 class uniform_grid_log_end_width(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end_width<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_end_width<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end_width``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_end_width.html .
     """
 
     @abstractmethod
@@ -2223,7 +2214,7 @@ class uniform_grid_log_end_width(uniform_grid):
 class table3d:
     """
     Python interface for O\ :sub:`2`\ scl class ``table3d``,
-    See
+    see
     https://neutronstars.utk.edu/code/o2scl-dev/html/class/table3d.html .
     """
 
@@ -2374,9 +2365,9 @@ class table3d:
 
 class tensor:
     """
-    Python interface for O\ :sub:`2`\ scl class ``tensor<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/tensor<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``tensor``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/tensor.html .
     """
 
     _ptr=0
@@ -2448,7 +2439,7 @@ class tensor:
 class find_constants:
     """
     Python interface for O\ :sub:`2`\ scl class ``find_constants``,
-    See
+    see
     https://neutronstars.utk.edu/code/o2scl-dev/html/class/find_constants.html .
     """
 
@@ -2531,9 +2522,9 @@ class find_constants:
 
 class convert_units:
     """
-    Python interface for O\ :sub:`2`\ scl class ``convert_units<>``,
-    See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/convert_units<>.html .
+    Python interface for O\ :sub:`2`\ scl class ``convert_units``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/convert_units.html .
     """
 
     _ptr=0
@@ -2724,6 +2715,9 @@ class convert_units:
 
 
 class shared_ptr_table_units(table_units):
+    """
+    Python interface for a shared pointer to a class of type ``table_units<>``
+    """
 
     _s_ptr=0
     _ptr=0
@@ -2732,7 +2726,7 @@ class shared_ptr_table_units(table_units):
 
     def __init__(self,link,shared_ptr=0):
         """
-        Init function for shared_ptr_table_units<> .
+        Init function for shared_ptr_table_units .
         """
 
         self._link=link
@@ -2751,7 +2745,7 @@ class shared_ptr_table_units(table_units):
 
     def __del__(self):
         """
-        Delete function for shared_ptr_table_units<> .
+        Delete function for shared_ptr_table_units .
         """
 
         f=self._link.o2scl.o2scl_free_shared_ptr_table_units__

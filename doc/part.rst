@@ -11,6 +11,8 @@ Class thermo
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class part
 ----------
@@ -20,6 +22,8 @@ Class part
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class fermion
 -------------
@@ -29,6 +33,8 @@ Class fermion
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class quark
 -----------
@@ -38,6 +44,8 @@ Class quark
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class fermion_zerot
 -------------------
@@ -47,6 +55,8 @@ Class fermion_zerot
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class fermion_thermo
 --------------------
@@ -56,6 +66,8 @@ Class fermion_thermo
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class fermion_rel
 -----------------
@@ -65,6 +77,8 @@ Class fermion_rel
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class fermion_nonrel
 --------------------
@@ -74,6 +88,8 @@ Class fermion_nonrel
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class boson
 -----------
@@ -83,6 +99,8 @@ Class boson
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class boson_rel
 ---------------
@@ -92,6 +110,8 @@ Class boson_rel
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class classical_thermo
 ----------------------
@@ -101,6 +121,8 @@ Class classical_thermo
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class thermo_np_deriv_press
 ---------------------------
@@ -110,6 +132,8 @@ Class thermo_np_deriv_press
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class thermo_np_deriv_helm
 --------------------------
@@ -119,6 +143,8 @@ Class thermo_np_deriv_helm
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class part_deriv_press
 ----------------------
@@ -128,6 +154,8 @@ Class part_deriv_press
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class part_deriv
 ----------------
@@ -137,6 +165,8 @@ Class part_deriv
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class fermion_deriv
 -------------------
@@ -146,6 +176,8 @@ Class fermion_deriv
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class deriv_thermo_base
 -----------------------
@@ -155,6 +187,8 @@ Class deriv_thermo_base
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class fermion_deriv_rel
 -----------------------
@@ -164,6 +198,8 @@ Class fermion_deriv_rel
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class fermion_deriv_nr
 ----------------------
@@ -173,6 +209,8 @@ Class fermion_deriv_nr
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class classical_deriv_thermo
 ----------------------------
@@ -182,6 +220,8 @@ Class classical_deriv_thermo
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class fermion_mag_zerot
 -----------------------
@@ -191,4 +231,6 @@ Class fermion_mag_zerot
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 

@@ -11,6 +11,8 @@ Class eos_base
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_had_base
 ------------------
@@ -20,6 +22,8 @@ Class eos_had_base
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_had_eden_base
 -----------------------
@@ -29,6 +33,8 @@ Class eos_had_eden_base
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_had_pres_base
 -----------------------
@@ -38,6 +44,8 @@ Class eos_had_pres_base
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_had_temp_base
 -----------------------
@@ -47,6 +55,8 @@ Class eos_had_temp_base
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_had_temp_eden_base
 ----------------------------
@@ -56,6 +66,8 @@ Class eos_had_temp_eden_base
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_had_temp_pres_base
 ----------------------------
@@ -65,6 +77,8 @@ Class eos_had_temp_pres_base
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_had_skyrme
 --------------------
@@ -74,6 +88,8 @@ Class eos_had_skyrme
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_had_apr
 -----------------
@@ -83,6 +99,8 @@ Class eos_had_apr
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_had_rmf
 -----------------
@@ -92,6 +110,8 @@ Class eos_had_rmf
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_quark
 ---------------
@@ -101,6 +121,8 @@ Class eos_quark
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_quark_bag
 -------------------
@@ -110,6 +132,8 @@ Class eos_quark_bag
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_quark_njl
 -------------------
@@ -119,6 +143,8 @@ Class eos_quark_njl
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_tov
 -------------
@@ -128,6 +154,8 @@ Class eos_tov
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_tov_buchdahl
 ----------------------
@@ -137,6 +165,8 @@ Class eos_tov_buchdahl
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_tov_polytrope
 -----------------------
@@ -146,6 +176,8 @@ Class eos_tov_polytrope
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_tov_linear
 --------------------
@@ -155,6 +187,8 @@ Class eos_tov_linear
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class eos_tov_interp
 --------------------
@@ -164,6 +198,8 @@ Class eos_tov_interp
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class tov_solve
 ---------------
@@ -173,6 +209,8 @@ Class tov_solve
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class tov_love
 --------------
@@ -182,6 +220,8 @@ Class tov_love
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nstar_cold
 ----------------
@@ -191,6 +231,8 @@ Class nstar_cold
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Function skyrme_load
 --------------------

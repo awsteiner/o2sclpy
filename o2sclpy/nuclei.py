@@ -262,10 +262,9 @@ class nucmass_info:
         """
         | Parameters:
         | *Z*: ``size_t``
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_Ztoel
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,Z)
         strt=std_string(self._link,ret)
@@ -276,10 +275,9 @@ class nucmass_info:
         """
         | Parameters:
         | *Z*: ``size_t``
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_Ztoname
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,Z)
         strt=std_string(self._link,ret)
@@ -291,10 +289,9 @@ class nucmass_info:
         | Parameters:
         | *Z*: ``size_t``
         | *N*: ``size_t``
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_tostring
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         ret=func(self._ptr,Z,N)
         strt=std_string(self._link,ret)
@@ -305,10 +302,9 @@ class nucmass_info:
         """
         | Parameters:
         | *g*: ``int``
-        | Returns: python bytes object
+        | Returns: std_string object
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_int_to_spinp
-        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         ret=func(self._ptr,g)
         strt=std_string(self._link,ret)

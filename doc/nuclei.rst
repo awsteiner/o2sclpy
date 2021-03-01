@@ -11,6 +11,8 @@ Class nucleus
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_info
 ------------------
@@ -20,6 +22,8 @@ Class nucmass_info
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass
 -------------
@@ -29,6 +33,8 @@ Class nucmass
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_table
 -------------------
@@ -38,6 +44,8 @@ Class nucmass_table
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_fit_base
 ----------------------
@@ -47,6 +55,8 @@ Class nucmass_fit_base
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_semi_empirical
 ----------------------------
@@ -56,6 +66,8 @@ Class nucmass_semi_empirical
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_ame
 -----------------
@@ -65,6 +77,8 @@ Class nucmass_ame
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_dz_table
 ----------------------
@@ -74,6 +88,8 @@ Class nucmass_dz_table
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_dz_fit
 --------------------
@@ -83,6 +99,8 @@ Class nucmass_dz_fit
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_dz_fit_33
 -----------------------
@@ -92,6 +110,8 @@ Class nucmass_dz_fit_33
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_frdm
 ------------------
@@ -101,6 +121,8 @@ Class nucmass_frdm
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_mnmsk
 -------------------
@@ -110,6 +132,8 @@ Class nucmass_mnmsk
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_mnmsk_exp
 -----------------------
@@ -119,6 +143,8 @@ Class nucmass_mnmsk_exp
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_gen
 -----------------
@@ -128,6 +154,8 @@ Class nucmass_gen
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_dglg
 ------------------
@@ -137,6 +165,8 @@ Class nucmass_dglg
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_hfb
 -----------------
@@ -146,6 +176,8 @@ Class nucmass_hfb
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_hfb_sp
 --------------------
@@ -155,6 +187,8 @@ Class nucmass_hfb_sp
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_ktuy
 ------------------
@@ -164,6 +198,8 @@ Class nucmass_ktuy
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_sdnp
 ------------------
@@ -173,6 +209,8 @@ Class nucmass_sdnp
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Class nucmass_wlw
 -----------------
@@ -182,6 +220,8 @@ Class nucmass_wlw
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
 Function ame_load
 -----------------

@@ -11,24 +11,26 @@ Class hdf_file
         :undoc-members:
 
         .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
-Function hdf_input
-------------------
+Function hdf_input_table
+------------------------
 
-.. autofunction:: o2sclpy.hdf_input(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_table(link,hf,t,name)
 
-Function hdf_output
--------------------
+Function hdf_output_table
+-------------------------
 
-.. autofunction:: o2sclpy.hdf_output(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_output_table(link,hf,t,name)
 
-Function hdf_input
-------------------
+Function hdf_input_table_units
+------------------------------
 
-.. autofunction:: o2sclpy.hdf_input(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_table_units(link,hf,t,name)
 
-Function hdf_output
--------------------
+Function hdf_output_table_units
+-------------------------------
 
-.. autofunction:: o2sclpy.hdf_output(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_output_table_units(link,hf,t,name)
 

@@ -46,6 +46,7 @@ Contents
    cpp
    link
    base
+   hdf
    part
    nuclei
    eos
