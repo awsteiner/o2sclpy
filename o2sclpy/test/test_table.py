@@ -41,12 +41,22 @@ def subtest_copying(link):
 def subtest_hdf5(link):
     
     tab1=def_table(link)
+
+    # Write tab1 to a file
     hf=o2sclpy.hdf_file(link)
     hf.open_or_create(b'temp.o2')
-    o2sclpy.hdf_output(link,hf,tab1)
+    o2sclpy.hdf_output_table(link,hf,tab1,b'table')
     hf.close()
+
+    # Open the file and read into tab2
     hf.open(b'temp.o2',False,True)
-    name=o2sclpy.std_string()
+    name=o2sclpy.std_string(link)
+    tab2=o2sclpy.table(link)
+    o2sclpy.hdf_input_table(link,hf,tab2,name)
+    hf.close()
+    assert name.to_bytes()==b'table',"name after hdf_input()"
+    assert tab2.get_nlines()==tab1.get_nlines(),"nlines after hdf_input()"
+    return
 
 def test_table_all():
     link=o2sclpy.linker()
@@ -54,6 +64,7 @@ def test_table_all():
 
     subtest_basic(link)
     subtest_copying(link)
+    subtest_hdf5(link)
     return
     
     
