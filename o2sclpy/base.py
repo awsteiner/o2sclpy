@@ -493,6 +493,7 @@ class lib_settings_class:
         | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_data_dir
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -517,6 +518,7 @@ class lib_settings_class:
         | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_doc_dir
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -661,6 +663,7 @@ class lib_settings_class:
         | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_system_type
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -682,6 +685,7 @@ class lib_settings_class:
         | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_time_compiled
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -693,6 +697,7 @@ class lib_settings_class:
         | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_date_compiled
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -704,6 +709,7 @@ class lib_settings_class:
         | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_o2scl_version
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
@@ -723,6 +729,7 @@ class lib_settings_class:
         | Returns: :class:`convert_units` object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_convert_units
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         ret2=convert_units(self._link,ret)
@@ -797,12 +804,13 @@ class table:
         """
         | Parameters:
         | *col*: string
+        | Returns: :class:`std::vector<double>` object
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___getitem
         n_=ctypes.c_int(0)
         ptr_=ctypes.POINTER(ctypes.c_double)()
-        func.restype=ctypes.c_std::vector<double>
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
         func(self._ptr,col_,ctypes.byref(ptr_),ctypes.byref(n_))
         ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
@@ -938,6 +946,7 @@ class table:
         | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_table___get_column_name
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
         strt=std_string(self._link,ret)
@@ -975,6 +984,7 @@ class table:
         | Returns: std_string object
         """
         func=self._link.o2scl.o2scl_table___get_sorted_name
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
         strt=std_string(self._link,ret)
@@ -1639,6 +1649,7 @@ class table_units(table):
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table_units___get_unit
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,col_)
         strt=std_string(self._link,ret)

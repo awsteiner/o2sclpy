@@ -3444,6 +3444,7 @@ class tov_solve:
         | Returns: :class:`shared_ptr_table_units`.
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_get_results
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         sp=shared_ptr_table_units(self._link,func(self._ptr))
         return sp
@@ -4073,6 +4074,7 @@ class nstar_cold:
         | Returns: :class:`shared_ptr_table_units`.
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_get_eos_results
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         sp=shared_ptr_table_units(self._link,func(self._ptr))
         return sp
@@ -4082,6 +4084,7 @@ class nstar_cold:
         | Returns: :class:`shared_ptr_table_units`.
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_get_tov_results
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         sp=shared_ptr_table_units(self._link,func(self._ptr))
         return sp
