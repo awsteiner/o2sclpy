@@ -227,6 +227,9 @@ class std_vector:
         return size()
     
     def to_numpy(self):
+        """
+        Copy the vector to a numpy array
+        """
         ret=numpy.zeros((self.size()))
         for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
@@ -325,7 +328,7 @@ class std_vector_int:
     
     def to_numpy(self):
         """
-        Copy the string to a numpy array
+        Copy the vector to a numpy array
         """
         ret=numpy.zeros((self.size()),dtype=numpy.int32_t)
         for i in range(0,self.size()):
@@ -428,7 +431,7 @@ class std_vector_size_t:
     
     def to_numpy(self):
         """
-        Copy the string to a numpy array
+        Copy the vector to a numpy array
         """
         ret=numpy.zeros((self.size()),dtype=numpy.uint64_t)
         for i in range(0,self.size()):
@@ -1140,7 +1143,7 @@ class table:
         func(self._ptr,names_)
         return
 
-    def line_of_data(self,data):
+    def line_of_data_vector(self,data):
         """
         | Parameters:
         | *data*: :class:`std_vector` object
@@ -1560,12 +1563,16 @@ class table:
         return
 
     def line_of_data(self,v):
+        """
+        Copy ``v`` to an :class:`std_vector` object and add the line of
+        data to the table
+        """
         # Create a std_vector object and copy the data over
-        vec=o2sclpy.std_vector(self._link)
+        vec=std_vector(self._link)
         vec.resize(len(v))
         for i in range(0,len(v)):
             vec[i]=v[i]
-        line_of_data_vector(vec)
+        self.line_of_data_vector(vec)
         return
 
 class table_units(table):
