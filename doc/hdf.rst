@@ -19,6 +19,11 @@ Function hdf_input_table
 
 .. autofunction:: o2sclpy.hdf_input_table(link,hf,t,name)
 
+Function hdf_input_n_table
+--------------------------
+
+.. autofunction:: o2sclpy.hdf_input_n_table(link,hf,t,name)
+
 Function hdf_output_table
 -------------------------
 
@@ -28,6 +33,11 @@ Function hdf_input_table_units
 ------------------------------
 
 .. autofunction:: o2sclpy.hdf_input_table_units(link,hf,t,name)
+
+Function hdf_input_n_table_units
+--------------------------------
+
+.. autofunction:: o2sclpy.hdf_input_n_table_units(link,hf,t,name)
 
 Function hdf_output_table_units
 -------------------------------

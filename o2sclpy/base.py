@@ -1140,7 +1140,7 @@ class table:
         func(self._ptr,names_)
         return
 
-    def line_of_data_vector(self,data):
+    def line_of_data(self,data):
         """
         | Parameters:
         | *data*: :class:`std_vector` object

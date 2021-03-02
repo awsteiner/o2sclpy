@@ -118,11 +118,25 @@ def hdf_input_table(link,hf,t,name):
         | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table<>` object
+        | *name*: string
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=link.o2scl_hdf.o2scl_hdf_hdf_input_table_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,t._ptr,name_)
+    return
+
+def hdf_input_n_table(link,hf,t,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *t*: :class:`table<>` object
         | *name*: :class:`std::string` object
     """
     name.__del__()
     name._ptr=ctypes.c_void_p()
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_table_wrapper
+    func=link.o2scl_hdf.o2scl_hdf_hdf_input_n_table_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
     func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
     name._owner=True
@@ -148,11 +162,25 @@ def hdf_input_table_units(link,hf,t,name):
         | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table_units<>` object
+        | *name*: string
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=link.o2scl_hdf.o2scl_hdf_hdf_input_table_units_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,t._ptr,name_)
+    return
+
+def hdf_input_n_table_units(link,hf,t,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *t*: :class:`table_units<>` object
         | *name*: :class:`std::string` object
     """
     name.__del__()
     name._ptr=ctypes.c_void_p()
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_table_units_wrapper
+    func=link.o2scl_hdf.o2scl_hdf_hdf_input_n_table_units_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
     func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
     name._owner=True

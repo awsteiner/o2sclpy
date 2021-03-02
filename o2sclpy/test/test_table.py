@@ -18,11 +18,17 @@ def subtest_basic(link):
 
     table=def_table(link)
     assert table.get_nlines()==5,'get_nlines()'
+    assert table.get_ncolumns()==3,'get_ncolumns()'
     assert table.get('col1',2)==4,'get()'
     assert table.get_column_name(2).to_bytes()==b'col3','get_column_name()'
     assert table.get('col2',2)==8.0,'function_column()'
+    print(table.get_column('col2'))
     table.init_column('col3',3)
     assert table.get('col3',4)==3.0,'init_column()'
+    table.delete_column('col3')
+    assert table.is_column('col3')==False,'is_column()'
+    table.line_of_data([2,1])
+    assert table.get('col1',5)==2.0,'line_of_data'
     table.summary()
     return
 
@@ -52,8 +58,9 @@ def subtest_hdf5(link):
     hf.open(b'temp.o2',False,True)
     name=b''
     tab2=o2sclpy.table(link)
-    o2sclpy.hdf_input_table(link,hf,tab2,name)
+    o2sclpy.hdf_input_n_table(link,hf,tab2,name)
     hf.close()
+    assert name==b'table','name after hdf_input()'
     assert tab2.get_nlines()==tab1.get_nlines(),"nlines after hdf_input()"
     return
 
