@@ -1,3 +1,5 @@
+.snapcraft
+*.bz2
 o2graph*.png
 build
 parts
