@@ -2025,6 +2025,16 @@ class uniform_grid:
         ret=func(self._ptr,n)
         return ret
 
+    def vector(self,v):
+        """
+        | Parameters:
+        | *v*: :class:`std::vector<double>` object
+        """
+        func=self._link.o2scl.o2scl_uniform_grid___vector
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,v._ptr)
+        return
+
 
 class uniform_grid_end(uniform_grid):
     """
@@ -3303,6 +3313,166 @@ class tensor:
         syst.init_py(index)
         self.resize_vector(syst)
         return
+
+class tensor_grid:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``tensor_grid``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/tensor_grid.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class tensor_grid<> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_tensor_grid__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class tensor_grid<> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_tensor_grid__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class tensor_grid<> .
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class tensor_grid<> .
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_tensor_grid__
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
+        return new_obj
+
+    def is_valid(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_tensor_grid___is_valid
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def set_val_vector(self,grid_point,val):
+        """
+        | Parameters:
+        | *grid_point*: :class:`vector<double>` object
+        | *val*: ``double``
+        """
+        func=self._link.o2scl.o2scl_tensor_grid___set_val
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,grid_point._ptr,val)
+        return
+
+    def get_val_vector(self,grid_point):
+        """
+        | Parameters:
+        | *grid_point*: :class:`vector<double>` object
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_tensor_grid___get_val
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,grid_point._ptr)
+        return ret
+
+    def is_grid_set(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_tensor_grid___is_grid_set
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def set_grid_packed(self,grid):
+        """
+        | Parameters:
+        | *grid*: :class:`vector<double>` object
+        """
+        func=self._link.o2scl.o2scl_tensor_grid___set_grid_packed
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,grid._ptr)
+        return
+
+    def default_grid(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_tensor_grid___default_grid
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def set_grid_i_vec(self,i,grid):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *grid*: :class:`vector<double>` object
+        """
+        func=self._link.o2scl.o2scl_tensor_grid___set_grid_i_vec
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,i,grid._ptr)
+        return
+
+    def get_grid(self,i,j):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *j*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_tensor_grid___get_grid
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        ret=func(self._ptr,i,j)
+        return ret
+
+    def set_grid(self,i,j,val):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *j*: ``size_t``
+        | *val*: ``double``
+        """
+        func=self._link.o2scl.o2scl_tensor_grid___set_grid
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_double]
+        func(self._ptr,i,j,val)
+        return
+
 
 class find_constants:
     """

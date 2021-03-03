@@ -220,6 +220,17 @@ Class tensor
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class tensor_grid
+-----------------
+
+.. autoclass:: o2sclpy.tensor_grid
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class find_constants
 --------------------
 
