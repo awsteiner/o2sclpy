@@ -437,6 +437,205 @@ class std_vector_size_t:
         for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
         return ret
+     
+    def init_py(self,v):
+        """
+        Initialize the vector from a python array
+        """
+        self.resize(len(v))
+        for i in range(0,len(v)):
+            self.__setitem__(i,v[i])
+        return
+
+class ublas_vector:
+    """
+    Python interface for C++ class ``boost::numeric::ublas::vector<double>``.
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class boost::numeric::ublas::vector<double> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_boost__numeric__ublas__vector_double_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class boost::numeric::ublas::vector<double> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_boost__numeric__ublas__vector_double_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class boost::numeric::ublas::vector<double> .
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def size(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__vector_double__size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__vector_double__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def __getitem__(self,i):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__vector_double__getitem
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,i)
+        return ret
+
+    def __setitem__(self,i,value):
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__vector_double__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
+        func(self._ptr,i,value)
+        return
+
+
+class ublas_matrix:
+    """
+    Python interface for C++ class ``boost::numeric::ublas::matrix<double>``.
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class boost::numeric::ublas::matrix<double> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_boost__numeric__ublas__matrix_double_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class boost::numeric::ublas::matrix<double> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_boost__numeric__ublas__matrix_double_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class boost::numeric::ublas::matrix<double> .
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def size1(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__size1
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def size2(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__size2
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def resize(self,m,n):
+        """
+        | Parameters:
+        | *m*: ``size_t``
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        func(self._ptr,m,n)
+        return
+
+    def __getitem__(self,m,n):
+        """
+        | Parameters:
+        | *m*: ``size_t``
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__getitem
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        ret=func(self._ptr,m,n)
+        return ret
+
+    def __setitem__(self,i,j,value):
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_double]
+        func(self._ptr,i,j,value)
+        return
+
 
 class lib_settings_class:
     """
@@ -2293,6 +2492,17 @@ class table3d:
         f2(self._ptr,new_obj._ptr)
         return new_obj
 
+    def set_size(self,nx,ny):
+        """
+        | Parameters:
+        | *nx*: ``size_t``
+        | *ny*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table3d_set_size
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        func(self._ptr,nx,ny)
+        return
+
     def set_xy(self,x_name,nx,x,y_name,ny,y):
         """
         | Parameters:
@@ -2310,44 +2520,90 @@ class table3d:
         func(self._ptr,x_name_,nx,x._ptr,y_name_,ny,y._ptr)
         return
 
-    def set(self,ix,iy,name,val):
+    def set_val(self,x,y,name,val):
         """
         | Parameters:
-        | *ix*: ``size_t``
-        | *iy*: ``size_t``
+        | *x*: ``double``
+        | *y*: ``double``
         | *name*: string
         | *val*: ``double``
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl.o2scl_table3d_set
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_char_p,ctypes.c_double]
-        func(self._ptr,ix,iy,name_,val)
+        func=self._link.o2scl.o2scl_table3d_set_val
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p,ctypes.c_double]
+        func(self._ptr,x,y,name_,val)
         return
 
-    def get(self,ix,iy,name):
+    def get_val(self,x,y,name):
         """
         | Parameters:
-        | *ix*: ``size_t``
-        | *iy*: ``size_t``
+        | *x*: ``double``
+        | *y*: ``double``
         | *name*: string
         | Returns: ``ctypes.c_double`` object
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl.o2scl_table3d_get
+        func=self._link.o2scl.o2scl_table3d_get_val
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_char_p]
-        ret=func(self._ptr,ix,iy,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,x,y,name_)
         return ret
 
-    def new_slice(self,slice):
+    def set_grid_x(self,ix,val):
         """
         | Parameters:
-        | *slice*: string
+        | *ix*: ``size_t``
+        | *val*: ``double``
         """
-        slice_=ctypes.c_char_p(force_bytes(slice))
-        func=self._link.o2scl.o2scl_table3d_new_slice
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,slice_)
+        func=self._link.o2scl.o2scl_table3d_set_grid_x
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
+        func(self._ptr,ix,val)
+        return
+
+    def set_grid_y(self,iy,val):
+        """
+        | Parameters:
+        | *iy*: ``size_t``
+        | *val*: ``double``
+        """
+        func=self._link.o2scl.o2scl_table3d_set_grid_y
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
+        func(self._ptr,iy,val)
+        return
+
+    def get_grid_x(self,ix):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_table3d_get_grid_x
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,ix)
+        return ret
+
+    def get_grid_y(self,iy):
+        """
+        | Parameters:
+        | *iy*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_table3d_get_grid_y
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,iy)
+        return ret
+
+    def get_size(self,nx,ny):
+        """
+        | Parameters:
+        | *nx*: ``ctypes.POINTER(ctypes.c_size_t)``
+        | *ny*: ``ctypes.POINTER(ctypes.c_size_t)``
+        """
+        func=self._link.o2scl.o2scl_table3d_get_size
+        func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_size_t),ctypes.POINTER(ctypes.c_size_t)]
+        func(self._ptr,nx,ny)
         return
 
     def get_nx(self):
@@ -2379,6 +2635,469 @@ class table3d:
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
+
+    def is_size_set(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_table3d_is_size_set
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def is_xy_set(self):
+        """
+        | Returns: ``ctypes.c_bool`` object
+        """
+        func=self._link.o2scl.o2scl_table3d_is_xy_set
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def get_slice_name(self,i):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | Returns: std_string object
+        """
+        func=self._link.o2scl.o2scl_table3d_get_slice_name
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,i)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
+
+    def new_slice(self,slice):
+        """
+        | Parameters:
+        | *slice*: string
+        """
+        slice_=ctypes.c_char_p(force_bytes(slice))
+        func=self._link.o2scl.o2scl_table3d_new_slice
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,slice_)
+        return
+
+    def set_slice_all(self,name,val):
+        """
+        | Parameters:
+        | *name*: string
+        | *val*: ``double``
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_set_slice_all
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
+        func(self._ptr,name_,val)
+        return
+
+    def lookup_slice(self,name):
+        """
+        | Parameters:
+        | *name*: string
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_lookup_slice
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,name_)
+        return ret
+
+    def rename_slice(self,name1,name2):
+        """
+        | Parameters:
+        | *name1*: string
+        | *name2*: string
+        """
+        name1_=ctypes.c_char_p(force_bytes(name1))
+        name2_=ctypes.c_char_p(force_bytes(name2))
+        func=self._link.o2scl.o2scl_table3d_rename_slice
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,name1_,name2_)
+        return
+
+    def get_slice(self,slice):
+        """
+        | Parameters:
+        | *slice*: string
+        | Returns: :class:`boost::numeric::ublas::matrix<double>` object
+        """
+        slice_=ctypes.c_char_p(force_bytes(slice))
+        func=self._link.o2scl.o2scl_table3d_
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,slice_)
+        ret2=boost__numeric__ublas__matrix_double_(self._link,ret)
+        return ret2
+
+    def get_slice_i(self,slice):
+        """
+        | Parameters:
+        | *slice*: string
+        | Returns: :class:`boost::numeric::ublas::matrix<double>` object
+        """
+        slice_=ctypes.c_char_p(force_bytes(slice))
+        func=self._link.o2scl.o2scl_table3d_get_slice_i
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,slice_)
+        ret2=boost__numeric__ublas__matrix_double_(self._link,ret)
+        return ret2
+
+    def lookup_x(self,val,ix):
+        """
+        | Parameters:
+        | *val*: ``double``
+        | *ix*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table3d_lookup_x
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t]
+        func(self._ptr,val,ix)
+        return
+
+    def lookup_y(self,val,iy):
+        """
+        | Parameters:
+        | *val*: ``double``
+        | *iy*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table3d_lookup_y
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t]
+        func(self._ptr,val,iy)
+        return
+
+    def interp(self,x,y,name):
+        """
+        | Parameters:
+        | *x*: ``double``
+        | *y*: ``double``
+        | *name*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_interp
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,x,y,name_)
+        return ret
+
+    def deriv_x(self,x,y,name):
+        """
+        | Parameters:
+        | *x*: ``double``
+        | *y*: ``double``
+        | *name*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_deriv_x
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,x,y,name_)
+        return ret
+
+    def deriv_y(self,x,y,name):
+        """
+        | Parameters:
+        | *x*: ``double``
+        | *y*: ``double``
+        | *name*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_deriv_y
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,x,y,name_)
+        return ret
+
+    def deriv_xy(self,x,y,name):
+        """
+        | Parameters:
+        | *x*: ``double``
+        | *y*: ``double``
+        | *name*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_deriv_xy
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,x,y,name_)
+        return ret
+
+    def integ_x(self,x1,x2,y,name):
+        """
+        | Parameters:
+        | *x1*: ``double``
+        | *x2*: ``double``
+        | *y*: ``double``
+        | *name*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_integ_x
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,x1,x2,y,name_)
+        return ret
+
+    def integ_y(self,x,y1,y2,name):
+        """
+        | Parameters:
+        | *x*: ``double``
+        | *y1*: ``double``
+        | *y2*: ``double``
+        | *name*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_integ_y
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
+        ret=func(self._ptr,x,y1,y2,name_)
+        return ret
+
+    def zero_table(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_table3d_zero_table
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def clear(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_table3d_clear
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def function_matrix(self,function,mat,throw_on_err):
+        """
+        | Parameters:
+        | *function*: string
+        | *mat*: :class:`boost::numeric::ublas::matrix<double>` object
+        | *throw_on_err*: ``bool``
+        | Returns: ``ctypes.c_int`` object
+        """
+        function_=ctypes.c_char_p(force_bytes(function))
+        func=self._link.o2scl.o2scl_table3d_function_matrix
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_bool]
+        ret=func(self._ptr,function_,mat._ptr,throw_on_err)
+        return ret
+
+    def function_slice(self,function,slice):
+        """
+        | Parameters:
+        | *function*: string
+        | *slice*: string
+        """
+        function_=ctypes.c_char_p(force_bytes(function))
+        slice_=ctypes.c_char_p(force_bytes(slice))
+        func=self._link.o2scl.o2scl_table3d_function_slice
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,function_,slice_)
+        return
+
+
+class index_spec:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``index_spec``,
+    see
+    https://neutronstars.utk.edu/code/o2scl-dev/html/class/index_spec.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class index_spec .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_index_spec
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class index_spec .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_index_spec
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class index_spec .
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @property
+    def type(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_index_spec_get_type
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @type.setter
+    def type(self,value):
+        """
+        Setter function for index_spec::type .
+        """
+        func=self._link.o2scl.o2scl_index_spec_set_type
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def ix1(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_index_spec_get_ix1
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @ix1.setter
+    def ix1(self,value):
+        """
+        Setter function for index_spec::ix1 .
+        """
+        func=self._link.o2scl.o2scl_index_spec_set_ix1
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def ix2(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_index_spec_get_ix2
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @ix2.setter
+    def ix2(self,value):
+        """
+        Setter function for index_spec::ix2 .
+        """
+        func=self._link.o2scl.o2scl_index_spec_set_ix2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def ix3(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_index_spec_get_ix3
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @ix3.setter
+    def ix3(self,value):
+        """
+        Setter function for index_spec::ix3 .
+        """
+        func=self._link.o2scl.o2scl_index_spec_set_ix3
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def val1(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_index_spec_get_val1
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @val1.setter
+    def val1(self,value):
+        """
+        Setter function for index_spec::val1 .
+        """
+        func=self._link.o2scl.o2scl_index_spec_set_val1
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def val2(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_index_spec_get_val2
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @val2.setter
+    def val2(self,value):
+        """
+        Setter function for index_spec::val2 .
+        """
+        func=self._link.o2scl.o2scl_index_spec_set_val2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def val3(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_index_spec_get_val3
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @val3.setter
+    def val3(self,value):
+        """
+        Setter function for index_spec::val3 .
+        """
+        func=self._link.o2scl.o2scl_index_spec_set_val3
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
 
 
 class tensor:
@@ -2445,6 +3164,14 @@ class tensor:
         f2(self._ptr,new_obj._ptr)
         return new_obj
 
+    def is_valid(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_tensor___is_valid
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
     def clear(self):
         """
         """
@@ -2453,6 +3180,129 @@ class tensor:
         func(self._ptr)
         return
 
+    def set_vector(self,index,val):
+        """
+        | Parameters:
+        | *index*: :class:`vector<size_t>` object
+        | *val*: ``double``
+        """
+        func=self._link.o2scl.o2scl_tensor___set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,index._ptr,val)
+        return
+
+    def set_all(self,x):
+        """
+        | Parameters:
+        | *x*: ``double``
+        """
+        func=self._link.o2scl.o2scl_tensor___set_all
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,x)
+        return
+
+    def get_vector(self,index):
+        """
+        | Parameters:
+        | *index*: :class:`vector<size_t>` object
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_tensor___get
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,index._ptr)
+        return ret
+
+    def get_rank(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_tensor___get_rank
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def get_size(self,i):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_tensor___get_size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,i)
+        return ret
+
+    def total_size(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_tensor___total_size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def min_value(self):
+        """
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_tensor___min_value
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def max_value(self):
+        """
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_tensor___max_value
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def total_sum(self):
+        """
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_tensor___total_sum
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def set(self,index,val):
+        """
+        Copy ``index`` to an :class:`std_vector_size_t` object and add the 
+        data to the table
+        """
+        svst=o2sclpy.std_vector_size_t(self._link)
+        syst.init_py(index)
+        self.set_vector(syst,val)
+        return
+     
+    def get(self,index):
+        """
+        Copy ``index`` to an :class:`std_vector_size_t` object and get the 
+        data from the table
+        """
+        svst=o2sclpy.std_vector_size_t(self._link)
+        syst.init_py(index)
+        return self.get_vector(syst)
+    
+    def resize(self,index):
+        """
+        Copy ``index`` to an :class:`std_vector_size_t` object 
+        and resize
+        """
+        svst=o2sclpy.std_vector_size_t(self._link)
+        syst.init_py(index)
+        self.resize_vector(syst)
+        return
 
 class find_constants:
     """

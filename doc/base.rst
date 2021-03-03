@@ -51,6 +51,30 @@ Class std_vector_size_t
         .. automethod:: __copy__
         .. automethod:: __getitem__
 
+Class ublas_vector
+------------------
+
+.. autoclass:: o2sclpy.ublas_vector
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
+
+Class ublas_matrix
+------------------
+
+.. autoclass:: o2sclpy.ublas_matrix
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
+
 Class lib_settings_class
 ------------------------
 
@@ -167,6 +191,17 @@ Class table3d
 -------------
 
 .. autoclass:: o2sclpy.table3d
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class index_spec
+----------------
+
+.. autoclass:: o2sclpy.index_spec
         :members:
         :undoc-members:
 
