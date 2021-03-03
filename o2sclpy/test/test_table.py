@@ -1,5 +1,6 @@
 import o2sclpy
 import copy
+import numpy
 
 def def_table(link):
     table=o2sclpy.table(link)
@@ -25,6 +26,8 @@ def subtest_basic(link):
     v=table.get_column('col2')
     assert len(v)==5, 'get_column()'
     assert v[4]==10.0, 'get_column()'
+    v2=table['col2']
+    numpy.testing.assert_array_equal(v,v2,'operator[] vs. get_column')
     table.init_column('col3',3)
     assert table.get('col3',4)==3.0,'init_column()'
     table.delete_column('col3')
