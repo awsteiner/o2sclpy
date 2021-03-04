@@ -2097,7 +2097,7 @@ class uniform_grid_end(uniform_grid):
         f=link.o2scl.o2scl_uniform_grid_end___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        return cls(link,f(start,end,n_bins)
+        return cls(link,f(start,end,n_bins))
 
 
 class uniform_grid_width(uniform_grid):
@@ -2161,7 +2161,7 @@ class uniform_grid_width(uniform_grid):
         f=link.o2scl.o2scl_uniform_grid_width___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        return cls(link,f(start,width,n_bins)
+        return cls(link,f(start,width,n_bins))
 
 
 class uniform_grid_end_width(uniform_grid):
@@ -2225,7 +2225,7 @@ class uniform_grid_end_width(uniform_grid):
         f=link.o2scl.o2scl_uniform_grid_end_width___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double]
-        return cls(link,f(start,end,width)
+        return cls(link,f(start,end,width))
 
 
 class uniform_grid_log_end(uniform_grid):
@@ -2289,7 +2289,7 @@ class uniform_grid_log_end(uniform_grid):
         f=link.o2scl.o2scl_uniform_grid_log_end___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        return cls(link,f(start,end,n_bins)
+        return cls(link,f(start,end,n_bins))
 
 
 class uniform_grid_log_width(uniform_grid):
@@ -2353,7 +2353,7 @@ class uniform_grid_log_width(uniform_grid):
         f=link.o2scl.o2scl_uniform_grid_log_width___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        return cls(link,f(start,width,n_bins)
+        return cls(link,f(start,width,n_bins))
 
 
 class uniform_grid_log_end_width(uniform_grid):
@@ -2417,7 +2417,7 @@ class uniform_grid_log_end_width(uniform_grid):
         f=link.o2scl.o2scl_uniform_grid_log_end_width___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double]
-        return cls(link,f(start,end,width)
+        return cls(link,f(start,end,width))
 
 
 class table3d:
