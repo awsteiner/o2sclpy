@@ -2043,7 +2043,6 @@ class uniform_grid_end(uniform_grid):
     https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_end.html .
     """
 
-    @abstractmethod
     def __init__(self,link,pointer=0):
         """
         Init function for class uniform_grid_end<> .
@@ -2095,12 +2094,10 @@ class uniform_grid_end(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_create_uniform_grid_end___init
+        f=link.o2scl.o2scl_uniform_grid_end___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        cls._ptr=f(start,end,n_bins)
-        cls._link=link
-        return
+        return cls(link,f(start,end,n_bins)
 
 
 class uniform_grid_width(uniform_grid):
@@ -2110,7 +2107,6 @@ class uniform_grid_width(uniform_grid):
     https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_width.html .
     """
 
-    @abstractmethod
     def __init__(self,link,pointer=0):
         """
         Init function for class uniform_grid_width<> .
@@ -2162,12 +2158,10 @@ class uniform_grid_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_create_uniform_grid_width___init
+        f=link.o2scl.o2scl_uniform_grid_width___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        cls._ptr=f(start,width,n_bins)
-        cls._link=link
-        return
+        return cls(link,f(start,width,n_bins)
 
 
 class uniform_grid_end_width(uniform_grid):
@@ -2177,7 +2171,6 @@ class uniform_grid_end_width(uniform_grid):
     https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_end_width.html .
     """
 
-    @abstractmethod
     def __init__(self,link,pointer=0):
         """
         Init function for class uniform_grid_end_width<> .
@@ -2229,12 +2222,10 @@ class uniform_grid_end_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_create_uniform_grid_end_width___init
+        f=link.o2scl.o2scl_uniform_grid_end_width___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double]
-        cls._ptr=f(start,end,width)
-        cls._link=link
-        return
+        return cls(link,f(start,end,width)
 
 
 class uniform_grid_log_end(uniform_grid):
@@ -2244,7 +2235,6 @@ class uniform_grid_log_end(uniform_grid):
     https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_end.html .
     """
 
-    @abstractmethod
     def __init__(self,link,pointer=0):
         """
         Init function for class uniform_grid_log_end<> .
@@ -2296,12 +2286,10 @@ class uniform_grid_log_end(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_create_uniform_grid_log_end___init
+        f=link.o2scl.o2scl_uniform_grid_log_end___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        cls._ptr=f(start,end,n_bins)
-        cls._link=link
-        return
+        return cls(link,f(start,end,n_bins)
 
 
 class uniform_grid_log_width(uniform_grid):
@@ -2311,7 +2299,6 @@ class uniform_grid_log_width(uniform_grid):
     https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_width.html .
     """
 
-    @abstractmethod
     def __init__(self,link,pointer=0):
         """
         Init function for class uniform_grid_log_width<> .
@@ -2363,12 +2350,10 @@ class uniform_grid_log_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_create_uniform_grid_log_width___init
+        f=link.o2scl.o2scl_uniform_grid_log_width___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        cls._ptr=f(start,width,n_bins)
-        cls._link=link
-        return
+        return cls(link,f(start,width,n_bins)
 
 
 class uniform_grid_log_end_width(uniform_grid):
@@ -2378,7 +2363,6 @@ class uniform_grid_log_end_width(uniform_grid):
     https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_end_width.html .
     """
 
-    @abstractmethod
     def __init__(self,link,pointer=0):
         """
         Init function for class uniform_grid_log_end_width<> .
@@ -2430,12 +2414,10 @@ class uniform_grid_log_end_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_create_uniform_grid_log_end_width___init
+        f=link.o2scl.o2scl_uniform_grid_log_end_width___init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double]
-        cls._ptr=f(start,end,width)
-        cls._link=link
-        return
+        return cls(link,f(start,end,width)
 
 
 class table3d:
