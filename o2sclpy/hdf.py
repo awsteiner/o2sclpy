@@ -200,3 +200,91 @@ def hdf_output_table_units(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
+def hdf_input_table3d(link,hf,t,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *t*: :class:`table3d` object
+        | *name*: string
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=link.o2scl_hdf.o2scl_hdf_hdf_input_table3d_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,t._ptr,name_)
+    return
+
+def hdf_input_n_table3d(link,hf,t,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *t*: :class:`table3d` object
+        | *name*: :class:`std::string` object
+    """
+    name.__del__()
+    name._ptr=ctypes.c_void_p()
+    func=link.o2scl_hdf.o2scl_hdf_hdf_input_n_table3d_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
+    func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
+    name._owner=True
+    return
+
+def hdf_output_table3d(link,hf,t,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *t*: :class:`table3d` object
+        | *name*: string
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=link.o2scl_hdf.o2scl_hdf_hdf_output_table3d_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,t._ptr,name_)
+    return
+
+def hdf_input_uniform_grid(link,hf,t,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *t*: :class:`uniform_grid<>` object
+        | *name*: string
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=link.o2scl_hdf.o2scl_hdf_hdf_input_uniform_grid_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,t._ptr,name_)
+    return
+
+def hdf_input_n_uniform_grid(link,hf,t,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *t*: :class:`uniform_grid<>` object
+        | *name*: :class:`std::string` object
+    """
+    name.__del__()
+    name._ptr=ctypes.c_void_p()
+    func=link.o2scl_hdf.o2scl_hdf_hdf_input_n_uniform_grid_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
+    func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
+    name._owner=True
+    return
+
+def hdf_output_uniform_grid(link,hf,t,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *t*: :class:`uniform_grid<>` object
+        | *name*: string
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=link.o2scl_hdf.o2scl_hdf_hdf_output_uniform_grid_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,t._ptr,name_)
+    return
+

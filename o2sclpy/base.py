@@ -2512,6 +2512,77 @@ class table3d:
         func(self._ptr,x_name_,nx,x._ptr,y_name_,ny,y._ptr)
         return
 
+    def set_xy_grid(self,x_name,x_grid,y_name,y_grid):
+        """
+        | Parameters:
+        | *x_name*: string
+        | *x_grid*: :class:`uniform_grid<double>` object
+        | *y_name*: string
+        | *y_grid*: :class:`uniform_grid<double>` object
+        """
+        x_name_=ctypes.c_char_p(force_bytes(x_name))
+        y_name_=ctypes.c_char_p(force_bytes(y_name))
+        func=self._link.o2scl.o2scl_table3d_set_xy_grid
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
+        func(self._ptr,x_name_,x_grid._ptr,y_name_,y_grid._ptr)
+        return
+
+    def set(self,ix,iy,name,val):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *iy*: ``size_t``
+        | *name*: string
+        | *val*: ``double``
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_char_p,ctypes.c_double]
+        func(self._ptr,ix,iy,name_,val)
+        return
+
+    def get(self,ix,iy,name):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *iy*: ``size_t``
+        | *name*: string
+        | Returns: ``ctypes.c_double`` object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_get
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_char_p]
+        ret=func(self._ptr,ix,iy,name_)
+        return ret
+
+    def get_i(self,ix,iy,iz):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *iy*: ``size_t``
+        | *iz*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+        """
+        func=self._link.o2scl.o2scl_table3d_get_i
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_size_t]
+        ret=func(self._ptr,ix,iy,iz)
+        return ret
+
+    def set_i(self,ix,iy,iz,val):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *iy*: ``size_t``
+        | *iz*: ``size_t``
+        | *val*: ``double``
+        """
+        func=self._link.o2scl.o2scl_table3d_set_i
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_double]
+        func(self._ptr,ix,iy,iz,val)
+        return
+
     def set_val(self,x,y,name,val):
         """
         | Parameters:
@@ -2698,6 +2769,20 @@ class table3d:
         ret=func(self._ptr,name_)
         return ret
 
+    def is_slice(self,name,ix):
+        """
+        | Parameters:
+        | *name*: string
+        | *ix*: ``ctypes.POINTER(ctypes.c_size_t)``
+        | Returns: ``ctypes.c_bool`` object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_is_slice
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_size_t)]
+        ret=func(self._ptr,name_,ix)
+        return ret
+
     def rename_slice(self,name1,name2):
         """
         | Parameters:
@@ -2707,6 +2792,19 @@ class table3d:
         name1_=ctypes.c_char_p(force_bytes(name1))
         name2_=ctypes.c_char_p(force_bytes(name2))
         func=self._link.o2scl.o2scl_table3d_rename_slice
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,name1_,name2_)
+        return
+
+    def copy_slice(self,name1,name2):
+        """
+        | Parameters:
+        | *name1*: string
+        | *name2*: string
+        """
+        name1_=ctypes.c_char_p(force_bytes(name1))
+        name2_=ctypes.c_char_p(force_bytes(name2))
+        func=self._link.o2scl.o2scl_table3d_copy_slice
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,name1_,name2_)
         return
@@ -2895,6 +2993,14 @@ class table3d:
         func=self._link.o2scl.o2scl_table3d_function_slice
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,function_,slice_)
+        return
+
+    def summary(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_table3d_summary
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
         return
 
 
