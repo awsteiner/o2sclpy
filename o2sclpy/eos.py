@@ -3746,101 +3746,81 @@ class nstar_cold:
         return new_obj
 
     @property
-    def well_formed(self):
-        """
-        Property of type ``ctypes.c_bool``
-        """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_well_formed
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @well_formed.setter
-    def well_formed(self,value):
-        """
-        Setter function for nstar_cold::well_formed .
-        """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_well_formed
-        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
-        func(self._ptr,value)
-        return
-
-    @property
-    def pressure_dec(self):
+    def pressure_dec_nb(self):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_pressure_dec
+        func=self._link.o2scl_eos.o2scl_nstar_cold_get_pressure_dec_nb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
 
-    @pressure_dec.setter
-    def pressure_dec(self,value):
+    @pressure_dec_nb.setter
+    def pressure_dec_nb(self,value):
         """
-        Setter function for nstar_cold::pressure_dec .
+        Setter function for nstar_cold::pressure_dec_nb .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_pressure_dec
+        func=self._link.o2scl_eos.o2scl_nstar_cold_set_pressure_dec_nb
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
 
     @property
-    def allow_urca(self):
+    def allow_urca_nb(self):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_allow_urca
+        func=self._link.o2scl_eos.o2scl_nstar_cold_get_allow_urca_nb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
 
-    @allow_urca.setter
-    def allow_urca(self,value):
+    @allow_urca_nb.setter
+    def allow_urca_nb(self,value):
         """
-        Setter function for nstar_cold::allow_urca .
+        Setter function for nstar_cold::allow_urca_nb .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_allow_urca
+        func=self._link.o2scl_eos.o2scl_nstar_cold_set_allow_urca_nb
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
 
     @property
-    def deny_urca(self):
+    def deny_urca_nb(self):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_deny_urca
+        func=self._link.o2scl_eos.o2scl_nstar_cold_get_deny_urca_nb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
 
-    @deny_urca.setter
-    def deny_urca(self,value):
+    @deny_urca_nb.setter
+    def deny_urca_nb(self,value):
         """
-        Setter function for nstar_cold::deny_urca .
+        Setter function for nstar_cold::deny_urca_nb .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_deny_urca
+        func=self._link.o2scl_eos.o2scl_nstar_cold_set_deny_urca_nb
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
 
     @property
-    def acausal(self):
+    def acausal_nb(self):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_acausal
+        func=self._link.o2scl_eos.o2scl_nstar_cold_get_acausal_nb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
 
-    @acausal.setter
-    def acausal(self,value):
+    @acausal_nb.setter
+    def acausal_nb(self,value):
         """
-        Setter function for nstar_cold::acausal .
+        Setter function for nstar_cold::acausal_nb .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_acausal
+        func=self._link.o2scl_eos.o2scl_nstar_cold_set_acausal_nb
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3902,6 +3882,26 @@ class nstar_cold:
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_set_solver_tol
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def eos_neg(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl_eos.o2scl_nstar_cold_get_eos_neg
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @eos_neg.setter
+    def eos_neg(self,value):
+        """
+        Setter function for nstar_cold::eos_neg .
+        """
+        func=self._link.o2scl_eos.o2scl_nstar_cold_set_eos_neg
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
 
@@ -3982,6 +3982,46 @@ class nstar_cold:
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_set_dnb
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def max_row(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl_eos.o2scl_nstar_cold_get_max_row
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @max_row.setter
+    def max_row(self,value):
+        """
+        Setter function for nstar_cold::max_row .
+        """
+        func=self._link.o2scl_eos.o2scl_nstar_cold_set_max_row
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def remove_rows(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl_eos.o2scl_nstar_cold_get_remove_rows
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @remove_rows.setter
+    def remove_rows(self,value):
+        """
+        Setter function for nstar_cold::remove_rows .
+        """
+        func=self._link.o2scl_eos.o2scl_nstar_cold_set_remove_rows
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
 
