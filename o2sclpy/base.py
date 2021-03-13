@@ -718,7 +718,7 @@ class ublas_matrix:
         func(self._ptr,m,n)
         return
 
-    def __getitem__(self,m,n):
+    def __getitem__(self,tup):
         """
         | Parameters:
         | *m*: ``size_t``
@@ -727,13 +727,15 @@ class ublas_matrix:
         func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__getitem
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        m,n=tup
         ret=func(self._ptr,m,n)
         return ret
 
-    def __setitem__(self,i,j,value):
+    def __setitem__(self,tup,value):
+        m,n=tup
         func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_double]
-        func(self._ptr,i,j,value)
+        func(self._ptr,m,n,value)
         return
 
     def to_numpy(self):
@@ -743,7 +745,7 @@ class ublas_matrix:
         ret=numpy.zeros((self.size1(),self.size2()))
         for i in range(0,self.size1()):
             for j in range(0,self.size2()):
-                ret[i][j]=self.__getitem__(i,j)
+                ret[i,j]=self.__getitem__((i,j))
         return ret
 
 class lib_settings_class:

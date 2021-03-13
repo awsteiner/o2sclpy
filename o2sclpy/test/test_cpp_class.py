@@ -102,6 +102,28 @@ def subtest_ublas_vector(link):
     
     return
 
+def subtest_ublas_matrix(link):
+    # Test the ublas_matrix class
+    v=o2sclpy.ublas_matrix(link)
+    v.resize(2,3)
+    v[0,0]=3.0
+    v[0,1]=1.0
+    v[0,2]=4.0
+    v[1,0]=1.0
+    v[1,1]=5.0
+    v[1,2]=9.0
+    v2=v.to_numpy()
+    for i in range(0,2):
+        for j in range(0,3):
+            assert v2[i,j]==v[i,j],'resize(), setitem(), to_numpy()'
+    v3=v
+    v3[0,0]=1.0
+    assert v[0,0]==1.0,'getitem and shallow copy'
+    assert v3.size1()==2,'size1()'
+    assert v3.size2()==3,'size2()'
+    
+    return
+
 def test():
     link=o2sclpy.linker()
     link.link_o2scl_o2graph()
@@ -111,6 +133,7 @@ def test():
     subtest_std_vector_int(link)
     subtest_std_vector_size_t(link)
     subtest_ublas_vector(link)
+    subtest_ublas_matrix(link)
 
     return
     
