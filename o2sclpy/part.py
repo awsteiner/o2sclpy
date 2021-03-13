@@ -36,7 +36,7 @@ class thermo:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class thermo .
+        Init function for class thermo
 
         | Parameters:
         | *link* :class:`linker` object
@@ -57,7 +57,7 @@ class thermo:
 
     def __del__(self):
         """
-        Delete function for class thermo .
+        Delete function for class thermo
         """
 
         if self._owner==True:
@@ -70,7 +70,9 @@ class thermo:
 
     def __copy__(self):
         """
-        Shallow copy function for class thermo .
+        Shallow copy function for class thermo
+        
+        Returns: a thermo object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -148,7 +150,7 @@ class part:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class part .
+        Init function for class part
 
         | Parameters:
         | *link* :class:`linker` object
@@ -169,7 +171,7 @@ class part:
 
     def __del__(self):
         """
-        Delete function for class part .
+        Delete function for class part
         """
 
         if self._owner==True:
@@ -182,7 +184,9 @@ class part:
 
     def __copy__(self):
         """
-        Shallow copy function for class part .
+        Shallow copy function for class part
+        
+        Returns: a part object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -440,7 +444,7 @@ class fermion(part):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class fermion .
+        Init function for class fermion
 
         | Parameters:
         | *link* :class:`linker` object
@@ -461,7 +465,7 @@ class fermion(part):
 
     def __del__(self):
         """
-        Delete function for class fermion .
+        Delete function for class fermion
         """
 
         if self._owner==True:
@@ -474,7 +478,9 @@ class fermion(part):
 
     def __copy__(self):
         """
-        Shallow copy function for class fermion .
+        Shallow copy function for class fermion
+        
+        Returns: a fermion object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -530,7 +536,7 @@ class quark(fermion):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class quark .
+        Init function for class quark
 
         | Parameters:
         | *link* :class:`linker` object
@@ -551,7 +557,7 @@ class quark(fermion):
 
     def __del__(self):
         """
-        Delete function for class quark .
+        Delete function for class quark
         """
 
         if self._owner==True:
@@ -564,7 +570,9 @@ class quark(fermion):
 
     def __copy__(self):
         """
-        Shallow copy function for class quark .
+        Shallow copy function for class quark
+        
+        Returns: a quark object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -622,7 +630,7 @@ class fermion_zerot:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class fermion_zerot .
+        Init function for class fermion_zerot
 
         | Parameters:
         | *link* :class:`linker` object
@@ -643,7 +651,7 @@ class fermion_zerot:
 
     def __del__(self):
         """
-        Delete function for class fermion_zerot .
+        Delete function for class fermion_zerot
         """
 
         if self._owner==True:
@@ -656,7 +664,9 @@ class fermion_zerot:
 
     def __copy__(self):
         """
-        Shallow copy function for class fermion_zerot .
+        Shallow copy function for class fermion_zerot
+        
+        Returns: a fermion_zerot object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -721,7 +731,7 @@ class fermion_thermo(fermion_zerot):
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class fermion_thermo .
+        Init function for class fermion_thermo
 
         | Parameters:
         | *link* :class:`linker` object
@@ -742,7 +752,7 @@ class fermion_thermo(fermion_zerot):
 
     def __del__(self):
         """
-        Delete function for class fermion_thermo .
+        Delete function for class fermion_thermo
         """
 
         if self._owner==True:
@@ -755,7 +765,9 @@ class fermion_thermo(fermion_zerot):
 
     def __copy__(self):
         """
-        Shallow copy function for class fermion_thermo .
+        Shallow copy function for class fermion_thermo
+        
+        Returns: a fermion_thermo object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -842,7 +854,7 @@ class fermion_rel(fermion_thermo):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class fermion_rel .
+        Init function for class fermion_rel
 
         | Parameters:
         | *link* :class:`linker` object
@@ -863,7 +875,7 @@ class fermion_rel(fermion_thermo):
 
     def __del__(self):
         """
-        Delete function for class fermion_rel .
+        Delete function for class fermion_rel
         """
 
         if self._owner==True:
@@ -876,7 +888,9 @@ class fermion_rel(fermion_thermo):
 
     def __copy__(self):
         """
-        Shallow copy function for class fermion_rel .
+        Shallow copy function for class fermion_rel
+        
+        Returns: a fermion_rel object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1125,7 +1139,7 @@ class fermion_rel(fermion_thermo):
         | Parameters:
         | *f*: :class:`fermion` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_nu_from_n
         func.restype=ctypes.c_int
@@ -1138,7 +1152,7 @@ class fermion_rel(fermion_thermo):
         | Parameters:
         | *f*: :class:`fermion` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_calc_density
         func.restype=ctypes.c_int
@@ -1151,7 +1165,7 @@ class fermion_rel(fermion_thermo):
         | Parameters:
         | *f*: :class:`fermion` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_rel_pair_density
         func.restype=ctypes.c_int
@@ -1189,7 +1203,7 @@ class fermion_nonrel(fermion_zerot):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class fermion_nonrel .
+        Init function for class fermion_nonrel
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1210,7 +1224,7 @@ class fermion_nonrel(fermion_zerot):
 
     def __del__(self):
         """
-        Delete function for class fermion_nonrel .
+        Delete function for class fermion_nonrel
         """
 
         if self._owner==True:
@@ -1223,7 +1237,9 @@ class fermion_nonrel(fermion_zerot):
 
     def __copy__(self):
         """
-        Shallow copy function for class fermion_nonrel .
+        Shallow copy function for class fermion_nonrel
+        
+        Returns: a fermion_nonrel object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1234,7 +1250,7 @@ class fermion_nonrel(fermion_zerot):
         | Parameters:
         | *f*: :class:`fermion` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_nonrel_calc_density
         func.restype=ctypes.c_int
@@ -1274,7 +1290,7 @@ class boson(part):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class boson .
+        Init function for class boson
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1295,7 +1311,7 @@ class boson(part):
 
     def __del__(self):
         """
-        Delete function for class boson .
+        Delete function for class boson
         """
 
         if self._owner==True:
@@ -1308,7 +1324,9 @@ class boson(part):
 
     def __copy__(self):
         """
-        Shallow copy function for class boson .
+        Shallow copy function for class boson
+        
+        Returns: a boson object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1348,7 +1366,7 @@ class boson_rel:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class boson_rel .
+        Init function for class boson_rel
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1369,7 +1387,7 @@ class boson_rel:
 
     def __del__(self):
         """
-        Delete function for class boson_rel .
+        Delete function for class boson_rel
         """
 
         if self._owner==True:
@@ -1382,7 +1400,9 @@ class boson_rel:
 
     def __copy__(self):
         """
-        Shallow copy function for class boson_rel .
+        Shallow copy function for class boson_rel
+        
+        Returns: a boson_rel object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1455,7 +1475,7 @@ class classical_thermo:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class classical_thermo .
+        Init function for class classical_thermo
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1476,7 +1496,7 @@ class classical_thermo:
 
     def __del__(self):
         """
-        Delete function for class classical_thermo .
+        Delete function for class classical_thermo
         """
 
         if self._owner==True:
@@ -1489,7 +1509,9 @@ class classical_thermo:
 
     def __copy__(self):
         """
-        Shallow copy function for class classical_thermo .
+        Shallow copy function for class classical_thermo
+        
+        Returns: a classical_thermo object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1529,7 +1551,7 @@ class thermo_np_deriv_press:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class thermo_np_deriv_press .
+        Init function for class thermo_np_deriv_press
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1550,7 +1572,7 @@ class thermo_np_deriv_press:
 
     def __del__(self):
         """
-        Delete function for class thermo_np_deriv_press .
+        Delete function for class thermo_np_deriv_press
         """
 
         if self._owner==True:
@@ -1563,7 +1585,9 @@ class thermo_np_deriv_press:
 
     def __copy__(self):
         """
-        Shallow copy function for class thermo_np_deriv_press .
+        Shallow copy function for class thermo_np_deriv_press
+        
+        Returns: a thermo_np_deriv_press object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1701,7 +1725,7 @@ class thermo_np_deriv_helm:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class thermo_np_deriv_helm .
+        Init function for class thermo_np_deriv_helm
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1722,7 +1746,7 @@ class thermo_np_deriv_helm:
 
     def __del__(self):
         """
-        Delete function for class thermo_np_deriv_helm .
+        Delete function for class thermo_np_deriv_helm
         """
 
         if self._owner==True:
@@ -1735,7 +1759,9 @@ class thermo_np_deriv_helm:
 
     def __copy__(self):
         """
-        Shallow copy function for class thermo_np_deriv_helm .
+        Shallow copy function for class thermo_np_deriv_helm
+        
+        Returns: a thermo_np_deriv_helm object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1873,7 +1899,7 @@ class part_deriv_press:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class part_deriv_press .
+        Init function for class part_deriv_press
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1894,7 +1920,7 @@ class part_deriv_press:
 
     def __del__(self):
         """
-        Delete function for class part_deriv_press .
+        Delete function for class part_deriv_press
         """
 
         if self._owner==True:
@@ -1907,7 +1933,9 @@ class part_deriv_press:
 
     def __copy__(self):
         """
-        Shallow copy function for class part_deriv_press .
+        Shallow copy function for class part_deriv_press
+        
+        Returns: a part_deriv_press object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1999,7 +2027,7 @@ class part_deriv(part):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class part_deriv .
+        Init function for class part_deriv
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2020,7 +2048,7 @@ class part_deriv(part):
 
     def __del__(self):
         """
-        Delete function for class part_deriv .
+        Delete function for class part_deriv
         """
 
         if self._owner==True:
@@ -2033,7 +2061,9 @@ class part_deriv(part):
 
     def __copy__(self):
         """
-        Shallow copy function for class part_deriv .
+        Shallow copy function for class part_deriv
+        
+        Returns: a part_deriv object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2047,7 +2077,7 @@ class fermion_deriv(fermion):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class fermion_deriv .
+        Init function for class fermion_deriv
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2068,7 +2098,7 @@ class fermion_deriv(fermion):
 
     def __del__(self):
         """
-        Delete function for class fermion_deriv .
+        Delete function for class fermion_deriv
         """
 
         if self._owner==True:
@@ -2081,7 +2111,9 @@ class fermion_deriv(fermion):
 
     def __copy__(self):
         """
-        Shallow copy function for class fermion_deriv .
+        Shallow copy function for class fermion_deriv
+        
+        Returns: a fermion_deriv object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2099,7 +2131,7 @@ class deriv_thermo_base:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class deriv_thermo_base .
+        Init function for class deriv_thermo_base
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2120,7 +2152,7 @@ class deriv_thermo_base:
 
     def __del__(self):
         """
-        Delete function for class deriv_thermo_base .
+        Delete function for class deriv_thermo_base
         """
 
         if self._owner==True:
@@ -2133,7 +2165,9 @@ class deriv_thermo_base:
 
     def __copy__(self):
         """
-        Shallow copy function for class deriv_thermo_base .
+        Shallow copy function for class deriv_thermo_base
+        
+        Returns: a deriv_thermo_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2144,7 +2178,7 @@ class deriv_thermo_base:
         | Parameters:
         | *p*: :class:`part_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_deriv_thermo_base_heat_cap_ppart_const_vol
         func.restype=ctypes.c_double
@@ -2157,7 +2191,7 @@ class deriv_thermo_base:
         | Parameters:
         | *p*: :class:`part_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_deriv_thermo_base_heat_cap_ppart_const_press
         func.restype=ctypes.c_double
@@ -2170,7 +2204,7 @@ class deriv_thermo_base:
         | Parameters:
         | *p*: :class:`part_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_deriv_thermo_base_compress_adiabatic
         func.restype=ctypes.c_double
@@ -2183,7 +2217,7 @@ class deriv_thermo_base:
         | Parameters:
         | *p*: :class:`part_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_deriv_thermo_base_compress_const_tptr
         func.restype=ctypes.c_double
@@ -2196,7 +2230,7 @@ class deriv_thermo_base:
         | Parameters:
         | *p*: :class:`part_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_deriv_thermo_base_coeff_thermal_exp
         func.restype=ctypes.c_double
@@ -2209,7 +2243,7 @@ class deriv_thermo_base:
         | Parameters:
         | *p*: :class:`part_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_deriv_thermo_base_squared_sound_speed
         func.restype=ctypes.c_double
@@ -2229,7 +2263,7 @@ class fermion_deriv_rel:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class fermion_deriv_rel .
+        Init function for class fermion_deriv_rel
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2250,7 +2284,7 @@ class fermion_deriv_rel:
 
     def __del__(self):
         """
-        Delete function for class fermion_deriv_rel .
+        Delete function for class fermion_deriv_rel
         """
 
         if self._owner==True:
@@ -2263,7 +2297,9 @@ class fermion_deriv_rel:
 
     def __copy__(self):
         """
-        Shallow copy function for class fermion_deriv_rel .
+        Shallow copy function for class fermion_deriv_rel
+        
+        Returns: a fermion_deriv_rel object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2412,7 +2448,7 @@ class fermion_deriv_rel:
         | Parameters:
         | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_nu_from_n
         func.restype=ctypes.c_int
@@ -2425,7 +2461,7 @@ class fermion_deriv_rel:
         | Parameters:
         | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_calc_density
         func.restype=ctypes.c_int
@@ -2438,7 +2474,7 @@ class fermion_deriv_rel:
         | Parameters:
         | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_pair_density
         func.restype=ctypes.c_int
@@ -2451,7 +2487,7 @@ class fermion_deriv_rel:
         | Parameters:
         | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_calc_mu
         func.restype=ctypes.c_int
@@ -2464,7 +2500,7 @@ class fermion_deriv_rel:
         | Parameters:
         | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_rel_pair_mu
         func.restype=ctypes.c_int
@@ -2484,7 +2520,7 @@ class fermion_deriv_nr:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class fermion_deriv_nr .
+        Init function for class fermion_deriv_nr
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2505,7 +2541,7 @@ class fermion_deriv_nr:
 
     def __del__(self):
         """
-        Delete function for class fermion_deriv_nr .
+        Delete function for class fermion_deriv_nr
         """
 
         if self._owner==True:
@@ -2518,7 +2554,9 @@ class fermion_deriv_nr:
 
     def __copy__(self):
         """
-        Shallow copy function for class fermion_deriv_nr .
+        Shallow copy function for class fermion_deriv_nr
+        
+        Returns: a fermion_deriv_nr object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2587,7 +2625,7 @@ class fermion_deriv_nr:
         | Parameters:
         | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_nu_from_n
         func.restype=ctypes.c_int
@@ -2600,7 +2638,7 @@ class fermion_deriv_nr:
         | Parameters:
         | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_calc_density
         func.restype=ctypes.c_int
@@ -2613,7 +2651,7 @@ class fermion_deriv_nr:
         | Parameters:
         | *f*: :class:`fermion_deriv` object
         | *T*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_fermion_deriv_nr_calc_mu
         func.restype=ctypes.c_int
@@ -2633,7 +2671,7 @@ class classical_deriv_thermo:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class classical_deriv_thermo .
+        Init function for class classical_deriv_thermo
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2654,7 +2692,7 @@ class classical_deriv_thermo:
 
     def __del__(self):
         """
-        Delete function for class classical_deriv_thermo .
+        Delete function for class classical_deriv_thermo
         """
 
         if self._owner==True:
@@ -2667,7 +2705,9 @@ class classical_deriv_thermo:
 
     def __copy__(self):
         """
-        Shallow copy function for class classical_deriv_thermo .
+        Shallow copy function for class classical_deriv_thermo
+        
+        Returns: a classical_deriv_thermo object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2709,7 +2749,7 @@ class fermion_mag_zerot:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class fermion_mag_zerot .
+        Init function for class fermion_mag_zerot
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2730,7 +2770,7 @@ class fermion_mag_zerot:
 
     def __del__(self):
         """
-        Delete function for class fermion_mag_zerot .
+        Delete function for class fermion_mag_zerot
         """
 
         if self._owner==True:
@@ -2743,7 +2783,9 @@ class fermion_mag_zerot:
 
     def __copy__(self):
         """
-        Shallow copy function for class fermion_mag_zerot .
+        Shallow copy function for class fermion_mag_zerot
+        
+        Returns: a fermion_mag_zerot object
         """
 
         new_obj=type(self)(self._link,self._ptr)

@@ -113,6 +113,7 @@ def subtest_ublas_matrix(link):
     v[1,1]=5.0
     v[1,2]=9.0
     v2=v.to_numpy()
+    assert v2.shape==(v.size1(),v.size2())
     for i in range(0,2):
         for j in range(0,3):
             assert v2[i,j]==v[i,j],'resize(), setitem(), to_numpy()'

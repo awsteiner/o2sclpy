@@ -39,7 +39,7 @@ class hdf_file:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class hdf_file .
+        Init function for class hdf_file
 
         | Parameters:
         | *link* :class:`linker` object
@@ -60,7 +60,7 @@ class hdf_file:
 
     def __del__(self):
         """
-        Delete function for class hdf_file .
+        Delete function for class hdf_file
         """
 
         if self._owner==True:
@@ -73,7 +73,9 @@ class hdf_file:
 
     def __copy__(self):
         """
-        Shallow copy function for class hdf_file .
+        Shallow copy function for class hdf_file
+        
+        Returns: a hdf_file object
         """
 
         new_obj=type(self)(self._link,self._ptr)

@@ -3,6 +3,10 @@
 Base classes from O\ :sub:`2`\ scl
 ==================================
 
+Note that these classes are experimental. They are not intended
+to provide the full functionality
+of the corresponding C++ class.
+
 Class std_string
 ----------------
 
@@ -107,6 +111,7 @@ Class table
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
 
 Class table_units
@@ -119,6 +124,7 @@ Class table_units
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
 
 Class uniform_grid
 ------------------
@@ -208,6 +214,7 @@ Class table3d
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
 
 Class index_spec
 ----------------
@@ -230,6 +237,7 @@ Class tensor
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
 
 Class tensor_grid
 -----------------
@@ -241,6 +249,7 @@ Class tensor_grid
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
 
 Class find_constants
 --------------------

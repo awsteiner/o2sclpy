@@ -51,6 +51,8 @@ def subtest_basic(link):
     assert table.get('col1',3)==4.0,'new_row()'
     table.copy_row(3,2)
     assert table.get('col1',2)==4.0,'copy_row()'
+    table.functions_columns('col5=col1+col2 col6=col1-col2')
+    assert table.get('col5',1)==table.get('col1',1)+table.get('col2',1)
     # Make sure summary() works
     table.summary()
     return

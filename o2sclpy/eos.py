@@ -39,7 +39,7 @@ class eos_base:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_base .
+        Init function for class eos_base
 
         | Parameters:
         | *link* :class:`linker` object
@@ -60,7 +60,7 @@ class eos_base:
 
     def __del__(self):
         """
-        Delete function for class eos_base .
+        Delete function for class eos_base
         """
 
         if self._owner==True:
@@ -73,7 +73,9 @@ class eos_base:
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_base .
+        Shallow copy function for class eos_base
+        
+        Returns: a eos_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -108,7 +110,7 @@ class eos_had_base(eos_base):
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_had_base .
+        Init function for class eos_had_base
 
         | Parameters:
         | *link* :class:`linker` object
@@ -129,7 +131,7 @@ class eos_had_base(eos_base):
 
     def __del__(self):
         """
-        Delete function for class eos_had_base .
+        Delete function for class eos_had_base
         """
 
         if self._owner==True:
@@ -142,7 +144,9 @@ class eos_had_base(eos_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_had_base .
+        Shallow copy function for class eos_had_base
+        
+        Returns: a eos_had_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -330,7 +334,7 @@ class eos_had_base(eos_base):
         | *n*: :class:`o2scl::fermion` object
         | *p*: :class:`o2scl::fermion` object
         | *th*: :class:`o2scl::thermo` object
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_e
         func.restype=ctypes.c_int
@@ -344,7 +348,7 @@ class eos_had_base(eos_base):
         | *n*: :class:`o2scl::fermion` object
         | *p*: :class:`o2scl::fermion` object
         | *th*: :class:`o2scl::thermo` object
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_p
         func.restype=ctypes.c_int
@@ -357,7 +361,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp
         func.restype=ctypes.c_double
@@ -371,7 +375,7 @@ class eos_had_base(eos_base):
         | *nb*: ``double``
         | *delta*: ``double``
         | *unc*: ``ctypes.c_double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp_err
         func.restype=ctypes.c_double
@@ -386,7 +390,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feoa
         func.restype=ctypes.c_double
@@ -399,7 +403,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym
         func.restype=ctypes.c_double
@@ -413,7 +417,7 @@ class eos_had_base(eos_base):
         | *nb*: ``double``
         | *delta*: ``double``
         | *unc*: ``ctypes.c_double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_err
         func.restype=ctypes.c_double
@@ -428,7 +432,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_slope
         func.restype=ctypes.c_double
@@ -441,7 +445,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_curve
         func.restype=ctypes.c_double
@@ -454,7 +458,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_skew
         func.restype=ctypes.c_double
@@ -466,7 +470,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_diff
         func.restype=ctypes.c_double
@@ -478,7 +482,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feta
         func.restype=ctypes.c_double
@@ -490,7 +494,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feta_prime
         func.restype=ctypes.c_double
@@ -503,7 +507,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fkprime
         func.restype=ctypes.c_double
@@ -516,7 +520,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fmsom
         func.restype=ctypes.c_double
@@ -529,7 +533,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_neut
         func.restype=ctypes.c_double
@@ -542,7 +546,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_prot
         func.restype=ctypes.c_double
@@ -555,7 +559,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_scalar
         func.restype=ctypes.c_double
@@ -568,7 +572,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_vector
         func.restype=ctypes.c_double
@@ -581,7 +585,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *delta*: ``double``
         | *leoa*: ``ctypes.c_double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fn0
         func.restype=ctypes.c_double
@@ -633,7 +637,7 @@ class eos_had_base(eos_base):
 
     def saturation(self):
         """
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_saturation
         func.restype=ctypes.c_int
@@ -646,7 +650,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nn*: ``double``
         | *np*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_mun_e
         func.restype=ctypes.c_double
@@ -659,7 +663,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nn*: ``double``
         | *np*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_mup_e
         func.restype=ctypes.c_double
@@ -672,7 +676,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nn*: ``double``
         | *np*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_ed
         func.restype=ctypes.c_double
@@ -685,7 +689,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nn*: ``double``
         | *np*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_pr
         func.restype=ctypes.c_double
@@ -698,7 +702,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *mun*: ``double``
         | *mup*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_nn_p
         func.restype=ctypes.c_double
@@ -711,7 +715,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nn*: ``double``
         | *mup*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_np_p
         func.restype=ctypes.c_double
@@ -724,7 +728,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_dmu_delta
         func.restype=ctypes.c_double
@@ -737,7 +741,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_musum_delta
         func.restype=ctypes.c_double
@@ -750,7 +754,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_pressure_nb
         func.restype=ctypes.c_double
@@ -763,7 +767,7 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_calc_edensity_nb
         func.restype=ctypes.c_double
@@ -782,7 +786,7 @@ class eos_had_eden_base(eos_had_base):
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_had_eden_base .
+        Init function for class eos_had_eden_base
 
         | Parameters:
         | *link* :class:`linker` object
@@ -803,7 +807,7 @@ class eos_had_eden_base(eos_had_base):
 
     def __del__(self):
         """
-        Delete function for class eos_had_eden_base .
+        Delete function for class eos_had_eden_base
         """
 
         if self._owner==True:
@@ -816,7 +820,9 @@ class eos_had_eden_base(eos_had_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_had_eden_base .
+        Shallow copy function for class eos_had_eden_base
+        
+        Returns: a eos_had_eden_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -833,7 +839,7 @@ class eos_had_pres_base(eos_had_base):
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_had_pres_base .
+        Init function for class eos_had_pres_base
 
         | Parameters:
         | *link* :class:`linker` object
@@ -854,7 +860,7 @@ class eos_had_pres_base(eos_had_base):
 
     def __del__(self):
         """
-        Delete function for class eos_had_pres_base .
+        Delete function for class eos_had_pres_base
         """
 
         if self._owner==True:
@@ -867,7 +873,9 @@ class eos_had_pres_base(eos_had_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_had_pres_base .
+        Shallow copy function for class eos_had_pres_base
+        
+        Returns: a eos_had_pres_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -884,7 +892,7 @@ class eos_had_temp_base(eos_had_base):
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_had_temp_base .
+        Init function for class eos_had_temp_base
 
         | Parameters:
         | *link* :class:`linker` object
@@ -905,7 +913,7 @@ class eos_had_temp_base(eos_had_base):
 
     def __del__(self):
         """
-        Delete function for class eos_had_temp_base .
+        Delete function for class eos_had_temp_base
         """
 
         if self._owner==True:
@@ -918,7 +926,9 @@ class eos_had_temp_base(eos_had_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_had_temp_base .
+        Shallow copy function for class eos_had_temp_base
+        
+        Returns: a eos_had_temp_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -935,7 +945,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_had_temp_eden_base .
+        Init function for class eos_had_temp_eden_base
 
         | Parameters:
         | *link* :class:`linker` object
@@ -956,7 +966,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
 
     def __del__(self):
         """
-        Delete function for class eos_had_temp_eden_base .
+        Delete function for class eos_had_temp_eden_base
         """
 
         if self._owner==True:
@@ -969,7 +979,9 @@ class eos_had_temp_eden_base(eos_had_temp_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_had_temp_eden_base .
+        Shallow copy function for class eos_had_temp_eden_base
+        
+        Returns: a eos_had_temp_eden_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -986,7 +998,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_had_temp_pres_base .
+        Init function for class eos_had_temp_pres_base
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1007,7 +1019,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
 
     def __del__(self):
         """
-        Delete function for class eos_had_temp_pres_base .
+        Delete function for class eos_had_temp_pres_base
         """
 
         if self._owner==True:
@@ -1020,7 +1032,9 @@ class eos_had_temp_pres_base(eos_had_temp_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_had_temp_pres_base .
+        Shallow copy function for class eos_had_temp_pres_base
+        
+        Returns: a eos_had_temp_pres_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1036,7 +1050,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_had_skyrme .
+        Init function for class eos_had_skyrme
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1057,7 +1071,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
     def __del__(self):
         """
-        Delete function for class eos_had_skyrme .
+        Delete function for class eos_had_skyrme
         """
 
         if self._owner==True:
@@ -1070,7 +1084,9 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_had_skyrme .
+        Shallow copy function for class eos_had_skyrme
+        
+        Returns: a eos_had_skyrme object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1423,7 +1439,7 @@ class eos_had_apr(eos_had_temp_eden_base):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_had_apr .
+        Init function for class eos_had_apr
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1444,7 +1460,7 @@ class eos_had_apr(eos_had_temp_eden_base):
 
     def __del__(self):
         """
-        Delete function for class eos_had_apr .
+        Delete function for class eos_had_apr
         """
 
         if self._owner==True:
@@ -1457,7 +1473,9 @@ class eos_had_apr(eos_had_temp_eden_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_had_apr .
+        Shallow copy function for class eos_had_apr
+        
+        Returns: a eos_had_apr object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1513,7 +1531,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_had_rmf .
+        Init function for class eos_had_rmf
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1534,7 +1552,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
 
     def __del__(self):
         """
-        Delete function for class eos_had_rmf .
+        Delete function for class eos_had_rmf
         """
 
         if self._owner==True:
@@ -1547,7 +1565,9 @@ class eos_had_rmf(eos_had_temp_pres_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_had_rmf .
+        Shallow copy function for class eos_had_rmf
+        
+        Returns: a eos_had_rmf object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2063,7 +2083,7 @@ class eos_quark(eos_base):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_quark .
+        Init function for class eos_quark
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2084,7 +2104,7 @@ class eos_quark(eos_base):
 
     def __del__(self):
         """
-        Delete function for class eos_quark .
+        Delete function for class eos_quark
         """
 
         if self._owner==True:
@@ -2097,7 +2117,9 @@ class eos_quark(eos_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_quark .
+        Shallow copy function for class eos_quark
+        
+        Returns: a eos_quark object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2113,7 +2135,7 @@ class eos_quark_bag(eos_quark):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_quark_bag .
+        Init function for class eos_quark_bag
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2134,7 +2156,7 @@ class eos_quark_bag(eos_quark):
 
     def __del__(self):
         """
-        Delete function for class eos_quark_bag .
+        Delete function for class eos_quark_bag
         """
 
         if self._owner==True:
@@ -2147,7 +2169,9 @@ class eos_quark_bag(eos_quark):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_quark_bag .
+        Shallow copy function for class eos_quark_bag
+        
+        Returns: a eos_quark_bag object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2183,7 +2207,7 @@ class eos_quark_njl(eos_quark):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_quark_njl .
+        Init function for class eos_quark_njl
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2204,7 +2228,7 @@ class eos_quark_njl(eos_quark):
 
     def __del__(self):
         """
-        Delete function for class eos_quark_njl .
+        Delete function for class eos_quark_njl
         """
 
         if self._owner==True:
@@ -2217,7 +2241,9 @@ class eos_quark_njl(eos_quark):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_quark_njl .
+        Shallow copy function for class eos_quark_njl
+        
+        Returns: a eos_quark_njl object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2358,7 +2384,7 @@ class eos_tov:
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_tov .
+        Init function for class eos_tov
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2379,7 +2405,7 @@ class eos_tov:
 
     def __del__(self):
         """
-        Delete function for class eos_tov .
+        Delete function for class eos_tov
         """
 
         if self._owner==True:
@@ -2392,7 +2418,9 @@ class eos_tov:
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_tov .
+        Shallow copy function for class eos_tov
+        
+        Returns: a eos_tov object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2438,7 +2466,7 @@ class eos_tov_buchdahl(eos_tov):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_tov_buchdahl .
+        Init function for class eos_tov_buchdahl
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2459,7 +2487,7 @@ class eos_tov_buchdahl(eos_tov):
 
     def __del__(self):
         """
-        Delete function for class eos_tov_buchdahl .
+        Delete function for class eos_tov_buchdahl
         """
 
         if self._owner==True:
@@ -2472,7 +2500,9 @@ class eos_tov_buchdahl(eos_tov):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_tov_buchdahl .
+        Shallow copy function for class eos_tov_buchdahl
+        
+        Returns: a eos_tov_buchdahl object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2508,7 +2538,7 @@ class eos_tov_polytrope(eos_tov):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_tov_polytrope .
+        Init function for class eos_tov_polytrope
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2529,7 +2559,7 @@ class eos_tov_polytrope(eos_tov):
 
     def __del__(self):
         """
-        Delete function for class eos_tov_polytrope .
+        Delete function for class eos_tov_polytrope
         """
 
         if self._owner==True:
@@ -2542,7 +2572,9 @@ class eos_tov_polytrope(eos_tov):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_tov_polytrope .
+        Shallow copy function for class eos_tov_polytrope
+        
+        Returns: a eos_tov_polytrope object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2569,7 +2601,7 @@ class eos_tov_linear(eos_tov):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_tov_linear .
+        Init function for class eos_tov_linear
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2590,7 +2622,7 @@ class eos_tov_linear(eos_tov):
 
     def __del__(self):
         """
-        Delete function for class eos_tov_linear .
+        Delete function for class eos_tov_linear
         """
 
         if self._owner==True:
@@ -2603,7 +2635,9 @@ class eos_tov_linear(eos_tov):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_tov_linear .
+        Shallow copy function for class eos_tov_linear
+        
+        Returns: a eos_tov_linear object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2630,7 +2664,7 @@ class eos_tov_interp(eos_tov):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class eos_tov_interp .
+        Init function for class eos_tov_interp
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2651,7 +2685,7 @@ class eos_tov_interp(eos_tov):
 
     def __del__(self):
         """
-        Delete function for class eos_tov_interp .
+        Delete function for class eos_tov_interp
         """
 
         if self._owner==True:
@@ -2664,7 +2698,9 @@ class eos_tov_interp(eos_tov):
 
     def __copy__(self):
         """
-        Shallow copy function for class eos_tov_interp .
+        Shallow copy function for class eos_tov_interp
+        
+        Returns: a eos_tov_interp object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2795,7 +2831,7 @@ class tov_solve:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class tov_solve .
+        Init function for class tov_solve
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2816,7 +2852,7 @@ class tov_solve:
 
     def __del__(self):
         """
-        Delete function for class tov_solve .
+        Delete function for class tov_solve
         """
 
         if self._owner==True:
@@ -2829,7 +2865,9 @@ class tov_solve:
 
     def __copy__(self):
         """
-        Shallow copy function for class tov_solve .
+        Shallow copy function for class tov_solve
+        
+        Returns: a tov_solve object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3427,7 +3465,7 @@ class tov_solve:
 
     def mvsr(self):
         """
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_mvsr
         func.restype=ctypes.c_int
@@ -3439,7 +3477,7 @@ class tov_solve:
         """
         | Parameters:
         | *mass*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_fixed
         func.restype=ctypes.c_int
@@ -3449,7 +3487,7 @@ class tov_solve:
 
     def max(self):
         """
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_max
         func.restype=ctypes.c_int
@@ -3481,7 +3519,7 @@ class tov_love:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class tov_love .
+        Init function for class tov_love
 
         | Parameters:
         | *link* :class:`linker` object
@@ -3502,7 +3540,7 @@ class tov_love:
 
     def __del__(self):
         """
-        Delete function for class tov_love .
+        Delete function for class tov_love
         """
 
         if self._owner==True:
@@ -3515,7 +3553,9 @@ class tov_love:
 
     def __copy__(self):
         """
-        Shallow copy function for class tov_love .
+        Shallow copy function for class tov_love
+        
+        Returns: a tov_love object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3667,7 +3707,7 @@ class tov_love:
         | *lambda_km5*: ``ctypes.c_double``
         | *lambda_cgs*: ``ctypes.c_double``
         | *tabulate*: ``bool``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_tov_love_calc_y
         func.restype=ctypes.c_int
@@ -3711,7 +3751,7 @@ class tov_love:
         | *k2*: ``ctypes.c_double``
         | *lambda_km5*: ``ctypes.c_double``
         | *lambda_cgs*: ``ctypes.c_double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_tov_love_calc_H
         func.restype=ctypes.c_int
@@ -3743,7 +3783,7 @@ class nstar_cold:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nstar_cold .
+        Init function for class nstar_cold
 
         | Parameters:
         | *link* :class:`linker` object
@@ -3764,7 +3804,7 @@ class nstar_cold:
 
     def __del__(self):
         """
-        Delete function for class nstar_cold .
+        Delete function for class nstar_cold
         """
 
         if self._owner==True:
@@ -3777,7 +3817,9 @@ class nstar_cold:
 
     def __copy__(self):
         """
-        Shallow copy function for class nstar_cold .
+        Shallow copy function for class nstar_cold
+        
+        Returns: a nstar_cold object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4117,7 +4159,7 @@ class nstar_cold:
         """
         | Parameters:
         | *np_0*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_calc_eos
         func.restype=ctypes.c_int
@@ -4127,7 +4169,7 @@ class nstar_cold:
 
     def calc_nstar(self):
         """
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_calc_nstar
         func.restype=ctypes.c_int
@@ -4139,7 +4181,7 @@ class nstar_cold:
         """
         | Parameters:
         | *target_mass*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_fixed
         func.restype=ctypes.c_int

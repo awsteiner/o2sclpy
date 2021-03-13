@@ -35,7 +35,7 @@ class nucleus(part):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucleus .
+        Init function for class nucleus
 
         | Parameters:
         | *link* :class:`linker` object
@@ -56,7 +56,7 @@ class nucleus(part):
 
     def __del__(self):
         """
-        Delete function for class nucleus .
+        Delete function for class nucleus
         """
 
         if self._owner==True:
@@ -69,7 +69,9 @@ class nucleus(part):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucleus .
+        Shallow copy function for class nucleus
+        
+        Returns: a nucleus object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -189,7 +191,7 @@ class nucmass_info:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_info .
+        Init function for class nucmass_info
 
         | Parameters:
         | *link* :class:`linker` object
@@ -210,7 +212,7 @@ class nucmass_info:
 
     def __del__(self):
         """
-        Delete function for class nucmass_info .
+        Delete function for class nucmass_info
         """
 
         if self._owner==True:
@@ -223,7 +225,9 @@ class nucmass_info:
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_info .
+        Shallow copy function for class nucmass_info
+        
+        Returns: a nucmass_info object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -236,7 +240,7 @@ class nucmass_info:
         | *Z*: ``ctypes.c_int``
         | *N*: ``ctypes.c_int``
         | *A*: ``ctypes.c_int``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         ela_=ctypes.c_char_p(force_bytes(ela))
         func=self._link.o2scl_part.o2scl_nucmass_info_parse_elstring
@@ -255,7 +259,7 @@ class nucmass_info:
         """
         | Parameters:
         | *el*: string
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         el_=ctypes.c_char_p(force_bytes(el))
         func=self._link.o2scl_part.o2scl_nucmass_info_eltoZ
@@ -325,7 +329,7 @@ class nucmass_info:
         """
         | Parameters:
         | *s*: string
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         s_=ctypes.c_char_p(force_bytes(s))
         func=self._link.o2scl_part.o2scl_nucmass_info_spinp_to_int
@@ -349,7 +353,7 @@ class nucmass:
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass .
+        Init function for class nucmass
 
         | Parameters:
         | *link* :class:`linker` object
@@ -370,7 +374,7 @@ class nucmass:
 
     def __del__(self):
         """
-        Delete function for class nucmass .
+        Delete function for class nucmass
         """
 
         if self._owner==True:
@@ -383,7 +387,9 @@ class nucmass:
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass .
+        Shallow copy function for class nucmass
+        
+        Returns: a nucmass object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -488,7 +494,7 @@ class nucmass:
         | *Z*: ``int``
         | *N*: ``int``
         | *n*: :class:`nucleus` object
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_nucmass_get_nucleus
         func.restype=ctypes.c_int
@@ -501,7 +507,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``int``
         | *N*: ``int``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_mass_excess
         func.restype=ctypes.c_double
@@ -514,7 +520,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``double``
         | *N*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_mass_excess_d
         func.restype=ctypes.c_double
@@ -526,7 +532,7 @@ class nucmass:
         """
         | Parameters:
         | *Z*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_electron_binding
         func.restype=ctypes.c_double
@@ -539,7 +545,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``int``
         | *N*: ``int``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_binding_energy
         func.restype=ctypes.c_double
@@ -552,7 +558,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``double``
         | *N*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_binding_energy_d
         func.restype=ctypes.c_double
@@ -565,7 +571,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``int``
         | *N*: ``int``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_total_mass
         func.restype=ctypes.c_double
@@ -578,7 +584,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``double``
         | *N*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_total_mass_d
         func.restype=ctypes.c_double
@@ -591,7 +597,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``int``
         | *N*: ``int``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_neutron_sep
         func.restype=ctypes.c_double
@@ -604,7 +610,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``int``
         | *N*: ``int``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_two_neutron_sep
         func.restype=ctypes.c_double
@@ -617,7 +623,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``int``
         | *N*: ``int``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_proton_sep
         func.restype=ctypes.c_double
@@ -630,7 +636,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``int``
         | *N*: ``int``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_two_proton_sep
         func.restype=ctypes.c_double
@@ -643,7 +649,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``int``
         | *N*: ``int``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_atomic_mass
         func.restype=ctypes.c_double
@@ -656,7 +662,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``double``
         | *N*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_atomic_mass_d
         func.restype=ctypes.c_double
@@ -675,7 +681,7 @@ class nucmass_table(nucmass):
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_table .
+        Init function for class nucmass_table
 
         | Parameters:
         | *link* :class:`linker` object
@@ -696,7 +702,7 @@ class nucmass_table(nucmass):
 
     def __del__(self):
         """
-        Delete function for class nucmass_table .
+        Delete function for class nucmass_table
         """
 
         if self._owner==True:
@@ -709,7 +715,9 @@ class nucmass_table(nucmass):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_table .
+        Shallow copy function for class nucmass_table
+        
+        Returns: a nucmass_table object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -766,7 +774,7 @@ class nucmass_table(nucmass):
 
     def get_nentries(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl_part.o2scl_nucmass_table_get_nentries
         func.restype=ctypes.c_size_t
@@ -785,7 +793,7 @@ class nucmass_fit_base(nucmass):
     @abstractmethod
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_fit_base .
+        Init function for class nucmass_fit_base
 
         | Parameters:
         | *link* :class:`linker` object
@@ -806,7 +814,7 @@ class nucmass_fit_base(nucmass):
 
     def __del__(self):
         """
-        Delete function for class nucmass_fit_base .
+        Delete function for class nucmass_fit_base
         """
 
         if self._owner==True:
@@ -819,7 +827,9 @@ class nucmass_fit_base(nucmass):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_fit_base .
+        Shallow copy function for class nucmass_fit_base
+        
+        Returns: a nucmass_fit_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -855,7 +865,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_semi_empirical .
+        Init function for class nucmass_semi_empirical
 
         | Parameters:
         | *link* :class:`linker` object
@@ -876,7 +886,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
 
     def __del__(self):
         """
-        Delete function for class nucmass_semi_empirical .
+        Delete function for class nucmass_semi_empirical
         """
 
         if self._owner==True:
@@ -889,7 +899,9 @@ class nucmass_semi_empirical(nucmass_fit_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_semi_empirical .
+        Shallow copy function for class nucmass_semi_empirical
+        
+        Returns: a nucmass_semi_empirical object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1000,7 +1012,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
         | Parameters:
         | *Z*: ``int``
         | *N*: ``int``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_semi_empirical_mass_excess
         func.restype=ctypes.c_double
@@ -1013,7 +1025,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
         | Parameters:
         | *Z*: ``double``
         | *N*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl_part.o2scl_nucmass_semi_empirical_mass_excess_d
         func.restype=ctypes.c_double
@@ -1031,7 +1043,7 @@ class nucmass_ame(nucmass_table):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_ame .
+        Init function for class nucmass_ame
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1052,7 +1064,7 @@ class nucmass_ame(nucmass_table):
 
     def __del__(self):
         """
-        Delete function for class nucmass_ame .
+        Delete function for class nucmass_ame
         """
 
         if self._owner==True:
@@ -1065,7 +1077,9 @@ class nucmass_ame(nucmass_table):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_ame .
+        Shallow copy function for class nucmass_ame
+        
+        Returns: a nucmass_ame object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1081,7 +1095,7 @@ class nucmass_dz_table(nucmass_table):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_dz_table .
+        Init function for class nucmass_dz_table
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1102,7 +1116,7 @@ class nucmass_dz_table(nucmass_table):
 
     def __del__(self):
         """
-        Delete function for class nucmass_dz_table .
+        Delete function for class nucmass_dz_table
         """
 
         if self._owner==True:
@@ -1115,7 +1129,9 @@ class nucmass_dz_table(nucmass_table):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_dz_table .
+        Shallow copy function for class nucmass_dz_table
+        
+        Returns: a nucmass_dz_table object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1131,7 +1147,7 @@ class nucmass_dz_fit(nucmass_fit_base):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_dz_fit .
+        Init function for class nucmass_dz_fit
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1152,7 +1168,7 @@ class nucmass_dz_fit(nucmass_fit_base):
 
     def __del__(self):
         """
-        Delete function for class nucmass_dz_fit .
+        Delete function for class nucmass_dz_fit
         """
 
         if self._owner==True:
@@ -1165,7 +1181,9 @@ class nucmass_dz_fit(nucmass_fit_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_dz_fit .
+        Shallow copy function for class nucmass_dz_fit
+        
+        Returns: a nucmass_dz_fit object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1181,7 +1199,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_dz_fit_33 .
+        Init function for class nucmass_dz_fit_33
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1202,7 +1220,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
 
     def __del__(self):
         """
-        Delete function for class nucmass_dz_fit_33 .
+        Delete function for class nucmass_dz_fit_33
         """
 
         if self._owner==True:
@@ -1215,7 +1233,9 @@ class nucmass_dz_fit_33(nucmass_fit_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_dz_fit_33 .
+        Shallow copy function for class nucmass_dz_fit_33
+        
+        Returns: a nucmass_dz_fit_33 object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1231,7 +1251,7 @@ class nucmass_frdm(nucmass_fit_base):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_frdm .
+        Init function for class nucmass_frdm
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1252,7 +1272,7 @@ class nucmass_frdm(nucmass_fit_base):
 
     def __del__(self):
         """
-        Delete function for class nucmass_frdm .
+        Delete function for class nucmass_frdm
         """
 
         if self._owner==True:
@@ -1265,7 +1285,9 @@ class nucmass_frdm(nucmass_fit_base):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_frdm .
+        Shallow copy function for class nucmass_frdm
+        
+        Returns: a nucmass_frdm object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1801,7 +1823,7 @@ class nucmass_mnmsk(nucmass_table):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_mnmsk .
+        Init function for class nucmass_mnmsk
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1822,7 +1844,7 @@ class nucmass_mnmsk(nucmass_table):
 
     def __del__(self):
         """
-        Delete function for class nucmass_mnmsk .
+        Delete function for class nucmass_mnmsk
         """
 
         if self._owner==True:
@@ -1835,7 +1857,9 @@ class nucmass_mnmsk(nucmass_table):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_mnmsk .
+        Shallow copy function for class nucmass_mnmsk
+        
+        Returns: a nucmass_mnmsk object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1851,7 +1875,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_mnmsk_exp .
+        Init function for class nucmass_mnmsk_exp
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1872,7 +1896,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
 
     def __del__(self):
         """
-        Delete function for class nucmass_mnmsk_exp .
+        Delete function for class nucmass_mnmsk_exp
         """
 
         if self._owner==True:
@@ -1885,7 +1909,9 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_mnmsk_exp .
+        Shallow copy function for class nucmass_mnmsk_exp
+        
+        Returns: a nucmass_mnmsk_exp object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1901,7 +1927,7 @@ class nucmass_gen(nucmass_table):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_gen .
+        Init function for class nucmass_gen
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1922,7 +1948,7 @@ class nucmass_gen(nucmass_table):
 
     def __del__(self):
         """
-        Delete function for class nucmass_gen .
+        Delete function for class nucmass_gen
         """
 
         if self._owner==True:
@@ -1935,7 +1961,9 @@ class nucmass_gen(nucmass_table):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_gen .
+        Shallow copy function for class nucmass_gen
+        
+        Returns: a nucmass_gen object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1951,7 +1979,7 @@ class nucmass_dglg(nucmass_table):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_dglg .
+        Init function for class nucmass_dglg
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1972,7 +2000,7 @@ class nucmass_dglg(nucmass_table):
 
     def __del__(self):
         """
-        Delete function for class nucmass_dglg .
+        Delete function for class nucmass_dglg
         """
 
         if self._owner==True:
@@ -1985,7 +2013,9 @@ class nucmass_dglg(nucmass_table):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_dglg .
+        Shallow copy function for class nucmass_dglg
+        
+        Returns: a nucmass_dglg object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2001,7 +2031,7 @@ class nucmass_hfb(nucmass_table):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_hfb .
+        Init function for class nucmass_hfb
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2022,7 +2052,7 @@ class nucmass_hfb(nucmass_table):
 
     def __del__(self):
         """
-        Delete function for class nucmass_hfb .
+        Delete function for class nucmass_hfb
         """
 
         if self._owner==True:
@@ -2035,7 +2065,9 @@ class nucmass_hfb(nucmass_table):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_hfb .
+        Shallow copy function for class nucmass_hfb
+        
+        Returns: a nucmass_hfb object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2051,7 +2083,7 @@ class nucmass_hfb_sp(nucmass_table):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_hfb_sp .
+        Init function for class nucmass_hfb_sp
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2072,7 +2104,7 @@ class nucmass_hfb_sp(nucmass_table):
 
     def __del__(self):
         """
-        Delete function for class nucmass_hfb_sp .
+        Delete function for class nucmass_hfb_sp
         """
 
         if self._owner==True:
@@ -2085,7 +2117,9 @@ class nucmass_hfb_sp(nucmass_table):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_hfb_sp .
+        Shallow copy function for class nucmass_hfb_sp
+        
+        Returns: a nucmass_hfb_sp object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2101,7 +2135,7 @@ class nucmass_ktuy(nucmass_table):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_ktuy .
+        Init function for class nucmass_ktuy
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2122,7 +2156,7 @@ class nucmass_ktuy(nucmass_table):
 
     def __del__(self):
         """
-        Delete function for class nucmass_ktuy .
+        Delete function for class nucmass_ktuy
         """
 
         if self._owner==True:
@@ -2135,7 +2169,9 @@ class nucmass_ktuy(nucmass_table):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_ktuy .
+        Shallow copy function for class nucmass_ktuy
+        
+        Returns: a nucmass_ktuy object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2151,7 +2187,7 @@ class nucmass_sdnp(nucmass_table):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_sdnp .
+        Init function for class nucmass_sdnp
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2172,7 +2208,7 @@ class nucmass_sdnp(nucmass_table):
 
     def __del__(self):
         """
-        Delete function for class nucmass_sdnp .
+        Delete function for class nucmass_sdnp
         """
 
         if self._owner==True:
@@ -2185,7 +2221,9 @@ class nucmass_sdnp(nucmass_table):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_sdnp .
+        Shallow copy function for class nucmass_sdnp
+        
+        Returns: a nucmass_sdnp object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2201,7 +2239,7 @@ class nucmass_wlw(nucmass_table):
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class nucmass_wlw .
+        Init function for class nucmass_wlw
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2222,7 +2260,7 @@ class nucmass_wlw(nucmass_table):
 
     def __del__(self):
         """
-        Delete function for class nucmass_wlw .
+        Delete function for class nucmass_wlw
         """
 
         if self._owner==True:
@@ -2235,7 +2273,9 @@ class nucmass_wlw(nucmass_table):
 
     def __copy__(self):
         """
-        Shallow copy function for class nucmass_wlw .
+        Shallow copy function for class nucmass_wlw
+        
+        Returns: a nucmass_wlw object
         """
 
         new_obj=type(self)(self._link,self._ptr)

@@ -37,7 +37,7 @@ class std_string:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class std::string .
+        Init function for class std_string
 
         | Parameters:
         | *link* :class:`linker` object
@@ -58,7 +58,7 @@ class std_string:
 
     def __del__(self):
         """
-        Delete function for class std::string .
+        Delete function for class std_string
         """
 
         if self._owner==True:
@@ -71,7 +71,9 @@ class std_string:
 
     def __copy__(self):
         """
-        Shallow copy function for class std::string .
+        Shallow copy function for class std_string
+        
+        Returns: a std_string object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -79,7 +81,7 @@ class std_string:
 
     def length(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_std__string_length
         func.restype=ctypes.c_size_t
@@ -117,12 +119,17 @@ class std_string:
     def __len__(self):
         """
         Return the length of the vector
+    
+        Returns: an int
         """
         return self.length()
      
     def init_bytes(self,s):
         """
         Initialize the string from a Python bytes object
+    
+        | Parameters:
+        | *s* a Python bytes string
         """
         self.resize(len(s))
         for i in range(0,len(s)):
@@ -132,6 +139,8 @@ class std_string:
     def to_bytes(self):
         """
         Copy the string to a Python bytes object
+    
+        Returns: a Python bytes string
         """
         ret=b''
         for i in range(0,self.length()):
@@ -149,7 +158,7 @@ class std_vector:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class std::vector<double> .
+        Init function for class std_vector
 
         | Parameters:
         | *link* :class:`linker` object
@@ -170,7 +179,7 @@ class std_vector:
 
     def __del__(self):
         """
-        Delete function for class std::vector<double> .
+        Delete function for class std_vector
         """
 
         if self._owner==True:
@@ -183,7 +192,9 @@ class std_vector:
 
     def __copy__(self):
         """
-        Shallow copy function for class std::vector<double> .
+        Shallow copy function for class std_vector
+        
+        Returns: a std_vector object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -201,7 +212,7 @@ class std_vector:
 
     def size(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_std__vector_double__size
         func.restype=ctypes.c_size_t
@@ -229,12 +240,16 @@ class std_vector:
     def __len__(self):
         """
         Return the length of the vector
+    
+        Returns: a Python int
         """
         return self.size()
     
     def to_numpy(self):
         """
         Copy the vector to a numpy array
+    
+        Returns: a one-dimensional ``numpy`` array
         """
         ret=numpy.zeros((self.size()))
         for i in range(0,self.size()):
@@ -252,7 +267,7 @@ class std_vector_int:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class std::vector<int> .
+        Init function for class std_vector_int
 
         | Parameters:
         | *link* :class:`linker` object
@@ -273,7 +288,7 @@ class std_vector_int:
 
     def __del__(self):
         """
-        Delete function for class std::vector<int> .
+        Delete function for class std_vector_int
         """
 
         if self._owner==True:
@@ -286,7 +301,9 @@ class std_vector_int:
 
     def __copy__(self):
         """
-        Shallow copy function for class std::vector<int> .
+        Shallow copy function for class std_vector_int
+        
+        Returns: a std_vector_int object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -304,7 +321,7 @@ class std_vector_int:
 
     def size(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_std__vector_int__size
         func.restype=ctypes.c_size_t
@@ -332,12 +349,16 @@ class std_vector_int:
     def __len__(self):
         """
         Return the length of the vector
+    
+        Returns: a Python int
         """
         return self.size()
     
     def to_numpy(self):
         """
         Copy the vector to a numpy array
+    
+        Returns: a one-dimensional ``numpy`` array with dtype ``int32``
         """
         ret=numpy.zeros((self.size()),dtype=numpy.int32)
         for i in range(0,self.size()):
@@ -355,7 +376,7 @@ class std_vector_size_t:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class std::vector<size_t> .
+        Init function for class std_vector_size_t
 
         | Parameters:
         | *link* :class:`linker` object
@@ -376,7 +397,7 @@ class std_vector_size_t:
 
     def __del__(self):
         """
-        Delete function for class std::vector<size_t> .
+        Delete function for class std_vector_size_t
         """
 
         if self._owner==True:
@@ -389,7 +410,9 @@ class std_vector_size_t:
 
     def __copy__(self):
         """
-        Shallow copy function for class std::vector<size_t> .
+        Shallow copy function for class std_vector_size_t
+        
+        Returns: a std_vector_size_t object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -407,7 +430,7 @@ class std_vector_size_t:
 
     def size(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_std__vector_size_t__size
         func.restype=ctypes.c_size_t
@@ -435,12 +458,16 @@ class std_vector_size_t:
     def __len__(self):
         """
         Return the length of the vector
+    
+        Returns: a Python int
         """
         return self.size()
     
     def to_numpy(self):
         """
         Copy the vector to a numpy array
+    
+        Returns: a one-dimensional ``numpy`` array with dtype ``uint64``
         """
         ret=numpy.zeros((self.size()),dtype=numpy.uint64)
         for i in range(0,self.size()):
@@ -467,7 +494,7 @@ class std_vector_string:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class std::vector<std::string> .
+        Init function for class std_vector_string
 
         | Parameters:
         | *link* :class:`linker` object
@@ -488,7 +515,7 @@ class std_vector_string:
 
     def __del__(self):
         """
-        Delete function for class std::vector<std::string> .
+        Delete function for class std_vector_string
         """
 
         if self._owner==True:
@@ -501,7 +528,9 @@ class std_vector_string:
 
     def __copy__(self):
         """
-        Shallow copy function for class std::vector<std::string> .
+        Shallow copy function for class std_vector_string
+        
+        Returns: a std_vector_string object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -519,7 +548,7 @@ class std_vector_string:
 
     def size(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_std__vector_std__string__size
         func.restype=ctypes.c_size_t
@@ -530,6 +559,8 @@ class std_vector_string:
     def __len__(self):
         """
         Return the length of the vector
+    
+        Returns: a Python int
         """
         return self.size()
 
@@ -544,7 +575,7 @@ class ublas_vector:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class boost::numeric::ublas::vector<double> .
+        Init function for class ublas_vector
 
         | Parameters:
         | *link* :class:`linker` object
@@ -565,7 +596,7 @@ class ublas_vector:
 
     def __del__(self):
         """
-        Delete function for class boost::numeric::ublas::vector<double> .
+        Delete function for class ublas_vector
         """
 
         if self._owner==True:
@@ -578,7 +609,9 @@ class ublas_vector:
 
     def __copy__(self):
         """
-        Shallow copy function for class boost::numeric::ublas::vector<double> .
+        Shallow copy function for class ublas_vector
+        
+        Returns: a ublas_vector object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -586,7 +619,7 @@ class ublas_vector:
 
     def size(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_boost__numeric__ublas__vector_double__size
         func.restype=ctypes.c_size_t
@@ -624,12 +657,16 @@ class ublas_vector:
     def __len__(self):
         """
         Return the length of the vector
+    
+        Returns: a Python int
         """
         return self.size()
     
     def to_numpy(self):
         """
         Copy the vector to a numpy array
+    
+        Returns: a one-dimensional ``numpy`` array
         """
         ret=numpy.zeros((self.size()))
         for i in range(0,self.size()):
@@ -647,7 +684,7 @@ class ublas_matrix:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class boost::numeric::ublas::matrix<double> .
+        Init function for class ublas_matrix
 
         | Parameters:
         | *link* :class:`linker` object
@@ -668,7 +705,7 @@ class ublas_matrix:
 
     def __del__(self):
         """
-        Delete function for class boost::numeric::ublas::matrix<double> .
+        Delete function for class ublas_matrix
         """
 
         if self._owner==True:
@@ -681,7 +718,9 @@ class ublas_matrix:
 
     def __copy__(self):
         """
-        Shallow copy function for class boost::numeric::ublas::matrix<double> .
+        Shallow copy function for class ublas_matrix
+        
+        Returns: a ublas_matrix object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -689,7 +728,7 @@ class ublas_matrix:
 
     def size1(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__size1
         func.restype=ctypes.c_size_t
@@ -699,7 +738,7 @@ class ublas_matrix:
 
     def size2(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__size2
         func.restype=ctypes.c_size_t
@@ -741,6 +780,9 @@ class ublas_matrix:
     def to_numpy(self):
         """
         Copy the vector to a numpy matrix
+    
+        Returns: a two-dimensional ``numpy`` array, with dimension
+        ``size1(),size2()``.
         """
         ret=numpy.zeros((self.size1(),self.size2()))
         for i in range(0,self.size1()):
@@ -752,7 +794,7 @@ class lib_settings_class:
     """
     Python interface for O\ :sub:`2`\ scl class ``lib_settings_class``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/lib_settings_class.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/lib_settings_class.html .
     """
 
     _ptr=0
@@ -761,7 +803,7 @@ class lib_settings_class:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class lib_settings_class .
+        Init function for class lib_settings_class
 
         | Parameters:
         | *link* :class:`linker` object
@@ -782,7 +824,7 @@ class lib_settings_class:
 
     def __del__(self):
         """
-        Delete function for class lib_settings_class .
+        Delete function for class lib_settings_class
         """
 
         if self._owner==True:
@@ -795,7 +837,9 @@ class lib_settings_class:
 
     def __copy__(self):
         """
-        Shallow copy function for class lib_settings_class .
+        Shallow copy function for class lib_settings_class
+        
+        Returns: a lib_settings_class object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -817,7 +861,7 @@ class lib_settings_class:
         """
         | Parameters:
         | *dir*: string
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         dir_=ctypes.c_char_p(force_bytes(dir))
         func=self._link.o2scl.o2scl_lib_settings_class_set_data_dir
@@ -842,7 +886,7 @@ class lib_settings_class:
         """
         | Parameters:
         | *dir*: string
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         dir_=ctypes.c_char_p(force_bytes(dir))
         func=self._link.o2scl.o2scl_lib_settings_class_set_doc_dir
@@ -1053,7 +1097,7 @@ class table:
     """
     Python interface for O\ :sub:`2`\ scl class ``table``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/table.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/table.html .
     """
 
     _ptr=0
@@ -1062,7 +1106,7 @@ class table:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class table<> .
+        Init function for class table
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1083,7 +1127,7 @@ class table:
 
     def __del__(self):
         """
-        Delete function for class table<> .
+        Delete function for class table
         """
 
         if self._owner==True:
@@ -1096,7 +1140,9 @@ class table:
 
     def __copy__(self):
         """
-        Shallow copy function for class table<> .
+        Shallow copy function for class table
+        
+        Returns: a table object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1104,7 +1150,9 @@ class table:
 
     def __deepcopy__(self,memo):
         """
-        Deep copy function for class table<> .
+        Deep copy function for class table
+        
+        Returns: a new table object
         """
 
         new_obj=type(self)(self._link)
@@ -1147,7 +1195,7 @@ class table:
         | Parameters:
         | *col*: string
         | *row*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table___get
@@ -1158,7 +1206,7 @@ class table:
 
     def get_ncolumns(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_table___get_ncolumns
         func.restype=ctypes.c_size_t
@@ -1168,7 +1216,7 @@ class table:
 
     def get_nlines(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_table___get_nlines
         func.restype=ctypes.c_size_t
@@ -1188,7 +1236,7 @@ class table:
 
     def get_maxlines(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_table___get_maxlines
         func.restype=ctypes.c_size_t
@@ -1333,7 +1381,7 @@ class table:
         """
         | Parameters:
         | *scol*: string
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
         func=self._link.o2scl.o2scl_table___lookup_column
@@ -1468,7 +1516,7 @@ class table:
         | Parameters:
         | *scol*: string
         | *val*: ``double``
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
         func=self._link.o2scl.o2scl_table___ordered_lookup
@@ -1482,7 +1530,7 @@ class table:
         | Parameters:
         | *scol*: string
         | *val*: ``double``
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
         func=self._link.o2scl.o2scl_table___lookup
@@ -1497,7 +1545,7 @@ class table:
         | *scol*: string
         | *val*: ``double``
         | *scol2*: string
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
         scol2_=ctypes.c_char_p(force_bytes(scol2))
@@ -1519,7 +1567,7 @@ class table:
 
     def get_interp_type(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_table___get_interp_type
         func.restype=ctypes.c_size_t
@@ -1533,7 +1581,7 @@ class table:
         | *sx*: string
         | *x0*: ``double``
         | *sy*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         sx_=ctypes.c_char_p(force_bytes(sx))
         sy_=ctypes.c_char_p(force_bytes(sy))
@@ -1549,7 +1597,7 @@ class table:
         | *ix*: ``size_t``
         | *x0*: ``double``
         | *iy*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_table___interp_index
         func.restype=ctypes.c_double
@@ -1578,7 +1626,7 @@ class table:
         | *sx*: string
         | *x0*: ``double``
         | *sy*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         sx_=ctypes.c_char_p(force_bytes(sx))
         sy_=ctypes.c_char_p(force_bytes(sy))
@@ -1594,7 +1642,7 @@ class table:
         | *ix*: ``size_t``
         | *x0*: ``double``
         | *iy*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_table___deriv_index
         func.restype=ctypes.c_double
@@ -1623,7 +1671,7 @@ class table:
         | *sx*: string
         | *x0*: ``double``
         | *sy*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         sx_=ctypes.c_char_p(force_bytes(sx))
         sy_=ctypes.c_char_p(force_bytes(sy))
@@ -1639,7 +1687,7 @@ class table:
         | *ix*: ``size_t``
         | *x0*: ``double``
         | *iy*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_table___deriv2_index
         func.restype=ctypes.c_double
@@ -1654,7 +1702,7 @@ class table:
         | *x1*: ``double``
         | *x2*: ``double``
         | *sy*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         sx_=ctypes.c_char_p(force_bytes(sx))
         sy_=ctypes.c_char_p(force_bytes(sy))
@@ -1671,7 +1719,7 @@ class table:
         | *x1*: ``double``
         | *x2*: ``double``
         | *iy*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_table___integ_index
         func.restype=ctypes.c_double
@@ -1698,7 +1746,7 @@ class table:
         """
         | Parameters:
         | *max*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         max_=ctypes.c_char_p(force_bytes(max))
         func=self._link.o2scl.o2scl_table___max
@@ -1711,7 +1759,7 @@ class table:
         """
         | Parameters:
         | *min*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         min_=ctypes.c_char_p(force_bytes(min))
         func=self._link.o2scl.o2scl_table___min
@@ -1842,7 +1890,7 @@ class table:
         | Parameters:
         | *scol*: string
         | *row*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
         func=self._link.o2scl.o2scl_table___row_function
@@ -1855,7 +1903,7 @@ class table:
         """
         | Parameters:
         | *function*: string
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         function_=ctypes.c_char_p(force_bytes(function))
         func=self._link.o2scl.o2scl_table___function_find_row
@@ -1889,12 +1937,12 @@ class table_units(table):
     """
     Python interface for O\ :sub:`2`\ scl class ``table_units``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/table_units.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/table_units.html .
     """
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class table_units<> .
+        Init function for class table_units
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1915,7 +1963,7 @@ class table_units(table):
 
     def __del__(self):
         """
-        Delete function for class table_units<> .
+        Delete function for class table_units
         """
 
         if self._owner==True:
@@ -1928,7 +1976,9 @@ class table_units(table):
 
     def __copy__(self):
         """
-        Shallow copy function for class table_units<> .
+        Shallow copy function for class table_units
+        
+        Returns: a table_units object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1936,7 +1986,9 @@ class table_units(table):
 
     def __deepcopy__(self,memo):
         """
-        Deep copy function for class table_units<> .
+        Deep copy function for class table_units
+        
+        Returns: a new table_units object
         """
 
         new_obj=type(self)(self._link)
@@ -2001,7 +2053,7 @@ class table_units(table):
         | *col*: string
         | *unit*: string
         | *err_on_fail*: ``bool``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         col_=ctypes.c_char_p(force_bytes(col))
         unit_=ctypes.c_char_p(force_bytes(unit))
@@ -2016,7 +2068,7 @@ class uniform_grid:
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid.html .
     """
 
     _ptr=0
@@ -2025,7 +2077,7 @@ class uniform_grid:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class uniform_grid<> .
+        Init function for class uniform_grid
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2046,7 +2098,7 @@ class uniform_grid:
 
     def __del__(self):
         """
-        Delete function for class uniform_grid<> .
+        Delete function for class uniform_grid
         """
 
         if self._owner==True:
@@ -2059,7 +2111,9 @@ class uniform_grid:
 
     def __copy__(self):
         """
-        Shallow copy function for class uniform_grid<> .
+        Shallow copy function for class uniform_grid
+        
+        Returns: a uniform_grid object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2067,7 +2121,7 @@ class uniform_grid:
 
     def get_nbins(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_uniform_grid___get_nbins
         func.restype=ctypes.c_size_t
@@ -2077,7 +2131,7 @@ class uniform_grid:
 
     def get_npoints(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_uniform_grid___get_npoints
         func.restype=ctypes.c_size_t
@@ -2097,7 +2151,7 @@ class uniform_grid:
 
     def get_start(self):
         """
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_uniform_grid___get_start
         func.restype=ctypes.c_double
@@ -2107,7 +2161,7 @@ class uniform_grid:
 
     def get_end(self):
         """
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_uniform_grid___get_end
         func.restype=ctypes.c_double
@@ -2117,7 +2171,7 @@ class uniform_grid:
 
     def get_width(self):
         """
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_uniform_grid___get_width
         func.restype=ctypes.c_double
@@ -2151,12 +2205,12 @@ class uniform_grid_end(uniform_grid):
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_end.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end.html .
     """
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class uniform_grid_end<> .
+        Init function for class uniform_grid_end
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2177,7 +2231,7 @@ class uniform_grid_end(uniform_grid):
 
     def __del__(self):
         """
-        Delete function for class uniform_grid_end<> .
+        Delete function for class uniform_grid_end
         """
 
         if self._owner==True:
@@ -2190,7 +2244,9 @@ class uniform_grid_end(uniform_grid):
 
     def __copy__(self):
         """
-        Shallow copy function for class uniform_grid_end<> .
+        Shallow copy function for class uniform_grid_end
+        
+        Returns: a uniform_grid_end object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2215,12 +2271,12 @@ class uniform_grid_width(uniform_grid):
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid_width``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_width.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_width.html .
     """
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class uniform_grid_width<> .
+        Init function for class uniform_grid_width
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2241,7 +2297,7 @@ class uniform_grid_width(uniform_grid):
 
     def __del__(self):
         """
-        Delete function for class uniform_grid_width<> .
+        Delete function for class uniform_grid_width
         """
 
         if self._owner==True:
@@ -2254,7 +2310,9 @@ class uniform_grid_width(uniform_grid):
 
     def __copy__(self):
         """
-        Shallow copy function for class uniform_grid_width<> .
+        Shallow copy function for class uniform_grid_width
+        
+        Returns: a uniform_grid_width object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2279,12 +2337,12 @@ class uniform_grid_end_width(uniform_grid):
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end_width``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_end_width.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end_width.html .
     """
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class uniform_grid_end_width<> .
+        Init function for class uniform_grid_end_width
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2305,7 +2363,7 @@ class uniform_grid_end_width(uniform_grid):
 
     def __del__(self):
         """
-        Delete function for class uniform_grid_end_width<> .
+        Delete function for class uniform_grid_end_width
         """
 
         if self._owner==True:
@@ -2318,7 +2376,9 @@ class uniform_grid_end_width(uniform_grid):
 
     def __copy__(self):
         """
-        Shallow copy function for class uniform_grid_end_width<> .
+        Shallow copy function for class uniform_grid_end_width
+        
+        Returns: a uniform_grid_end_width object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2343,12 +2403,12 @@ class uniform_grid_log_end(uniform_grid):
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_end.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_end.html .
     """
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class uniform_grid_log_end<> .
+        Init function for class uniform_grid_log_end
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2369,7 +2429,7 @@ class uniform_grid_log_end(uniform_grid):
 
     def __del__(self):
         """
-        Delete function for class uniform_grid_log_end<> .
+        Delete function for class uniform_grid_log_end
         """
 
         if self._owner==True:
@@ -2382,7 +2442,9 @@ class uniform_grid_log_end(uniform_grid):
 
     def __copy__(self):
         """
-        Shallow copy function for class uniform_grid_log_end<> .
+        Shallow copy function for class uniform_grid_log_end
+        
+        Returns: a uniform_grid_log_end object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2407,12 +2469,12 @@ class uniform_grid_log_width(uniform_grid):
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_width``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_width.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_width.html .
     """
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class uniform_grid_log_width<> .
+        Init function for class uniform_grid_log_width
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2433,7 +2495,7 @@ class uniform_grid_log_width(uniform_grid):
 
     def __del__(self):
         """
-        Delete function for class uniform_grid_log_width<> .
+        Delete function for class uniform_grid_log_width
         """
 
         if self._owner==True:
@@ -2446,7 +2508,9 @@ class uniform_grid_log_width(uniform_grid):
 
     def __copy__(self):
         """
-        Shallow copy function for class uniform_grid_log_width<> .
+        Shallow copy function for class uniform_grid_log_width
+        
+        Returns: a uniform_grid_log_width object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2471,12 +2535,12 @@ class uniform_grid_log_end_width(uniform_grid):
     """
     Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end_width``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/uniform_grid_log_end_width.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_end_width.html .
     """
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class uniform_grid_log_end_width<> .
+        Init function for class uniform_grid_log_end_width
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2497,7 +2561,7 @@ class uniform_grid_log_end_width(uniform_grid):
 
     def __del__(self):
         """
-        Delete function for class uniform_grid_log_end_width<> .
+        Delete function for class uniform_grid_log_end_width
         """
 
         if self._owner==True:
@@ -2510,7 +2574,9 @@ class uniform_grid_log_end_width(uniform_grid):
 
     def __copy__(self):
         """
-        Shallow copy function for class uniform_grid_log_end_width<> .
+        Shallow copy function for class uniform_grid_log_end_width
+        
+        Returns: a uniform_grid_log_end_width object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2535,7 +2601,7 @@ class table3d:
     """
     Python interface for O\ :sub:`2`\ scl class ``table3d``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/table3d.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/table3d.html .
     """
 
     _ptr=0
@@ -2544,7 +2610,7 @@ class table3d:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class table3d .
+        Init function for class table3d
 
         | Parameters:
         | *link* :class:`linker` object
@@ -2565,7 +2631,7 @@ class table3d:
 
     def __del__(self):
         """
-        Delete function for class table3d .
+        Delete function for class table3d
         """
 
         if self._owner==True:
@@ -2578,7 +2644,9 @@ class table3d:
 
     def __copy__(self):
         """
-        Shallow copy function for class table3d .
+        Shallow copy function for class table3d
+        
+        Returns: a table3d object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2586,7 +2654,9 @@ class table3d:
 
     def __deepcopy__(self,memo):
         """
-        Deep copy function for class table3d .
+        Deep copy function for class table3d
+        
+        Returns: a new table3d object
         """
 
         new_obj=type(self)(self._link)
@@ -2658,7 +2728,7 @@ class table3d:
         | *ix*: ``size_t``
         | *iy*: ``size_t``
         | *name*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_get
@@ -2673,7 +2743,7 @@ class table3d:
         | *ix*: ``size_t``
         | *iy*: ``size_t``
         | *iz*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_table3d_get_i
         func.restype=ctypes.c_double
@@ -2714,7 +2784,7 @@ class table3d:
         | *x*: ``double``
         | *y*: ``double``
         | *name*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_get_val
@@ -2749,7 +2819,7 @@ class table3d:
         """
         | Parameters:
         | *ix*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_table3d_get_grid_x
         func.restype=ctypes.c_double
@@ -2761,7 +2831,7 @@ class table3d:
         """
         | Parameters:
         | *iy*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_table3d_get_grid_y
         func.restype=ctypes.c_double
@@ -2786,7 +2856,7 @@ class table3d:
 
     def get_nx(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_table3d_get_nx
         func.restype=ctypes.c_size_t
@@ -2796,7 +2866,7 @@ class table3d:
 
     def get_ny(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_table3d_get_ny
         func.restype=ctypes.c_size_t
@@ -2806,7 +2876,7 @@ class table3d:
 
     def get_nslices(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_table3d_get_nslices
         func.restype=ctypes.c_size_t
@@ -2875,7 +2945,7 @@ class table3d:
         """
         | Parameters:
         | *name*: string
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_lookup_slice
@@ -2982,7 +3052,7 @@ class table3d:
         | *x*: ``double``
         | *y*: ``double``
         | *name*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_interp
@@ -2997,7 +3067,7 @@ class table3d:
         | *x*: ``double``
         | *y*: ``double``
         | *name*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_deriv_x
@@ -3012,7 +3082,7 @@ class table3d:
         | *x*: ``double``
         | *y*: ``double``
         | *name*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_deriv_y
@@ -3027,7 +3097,7 @@ class table3d:
         | *x*: ``double``
         | *y*: ``double``
         | *name*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_deriv_xy
@@ -3043,7 +3113,7 @@ class table3d:
         | *x2*: ``double``
         | *y*: ``double``
         | *name*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_integ_x
@@ -3059,7 +3129,7 @@ class table3d:
         | *y1*: ``double``
         | *y2*: ``double``
         | *name*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_integ_y
@@ -3090,7 +3160,7 @@ class table3d:
         | *function*: string
         | *mat*: :class:`ublas_matrix` object
         | *throw_on_err*: ``bool``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         function_=ctypes.c_char_p(force_bytes(function))
         func=self._link.o2scl.o2scl_table3d_function_matrix
@@ -3125,7 +3195,7 @@ class index_spec:
     """
     Python interface for O\ :sub:`2`\ scl class ``index_spec``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/index_spec.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/index_spec.html .
     """
 
     _ptr=0
@@ -3134,7 +3204,7 @@ class index_spec:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class index_spec .
+        Init function for class index_spec
 
         | Parameters:
         | *link* :class:`linker` object
@@ -3155,7 +3225,7 @@ class index_spec:
 
     def __del__(self):
         """
-        Delete function for class index_spec .
+        Delete function for class index_spec
         """
 
         if self._owner==True:
@@ -3168,7 +3238,9 @@ class index_spec:
 
     def __copy__(self):
         """
-        Shallow copy function for class index_spec .
+        Shallow copy function for class index_spec
+        
+        Returns: a index_spec object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3319,7 +3391,7 @@ class tensor:
     """
     Python interface for O\ :sub:`2`\ scl class ``tensor``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/tensor.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/tensor.html .
     """
 
     _ptr=0
@@ -3328,7 +3400,7 @@ class tensor:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class tensor<> .
+        Init function for class tensor
 
         | Parameters:
         | *link* :class:`linker` object
@@ -3349,7 +3421,7 @@ class tensor:
 
     def __del__(self):
         """
-        Delete function for class tensor<> .
+        Delete function for class tensor
         """
 
         if self._owner==True:
@@ -3362,7 +3434,9 @@ class tensor:
 
     def __copy__(self):
         """
-        Shallow copy function for class tensor<> .
+        Shallow copy function for class tensor
+        
+        Returns: a tensor object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3370,7 +3444,9 @@ class tensor:
 
     def __deepcopy__(self,memo):
         """
-        Deep copy function for class tensor<> .
+        Deep copy function for class tensor
+        
+        Returns: a new tensor object
         """
 
         new_obj=type(self)(self._link)
@@ -3420,7 +3496,7 @@ class tensor:
         """
         | Parameters:
         | *index*: :class:`vector<size_t>` object
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_tensor___get
         func.restype=ctypes.c_double
@@ -3430,7 +3506,7 @@ class tensor:
 
     def get_rank(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_tensor___get_rank
         func.restype=ctypes.c_size_t
@@ -3442,7 +3518,7 @@ class tensor:
         """
         | Parameters:
         | *i*: ``size_t``
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_tensor___get_size
         func.restype=ctypes.c_size_t
@@ -3452,7 +3528,7 @@ class tensor:
 
     def total_size(self):
         """
-        | Returns: ``ctypes.c_size_t`` object
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_tensor___total_size
         func.restype=ctypes.c_size_t
@@ -3462,7 +3538,7 @@ class tensor:
 
     def min_value(self):
         """
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_tensor___min_value
         func.restype=ctypes.c_double
@@ -3472,7 +3548,7 @@ class tensor:
 
     def max_value(self):
         """
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_tensor___max_value
         func.restype=ctypes.c_double
@@ -3482,7 +3558,7 @@ class tensor:
 
     def total_sum(self):
         """
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_tensor___total_sum
         func.restype=ctypes.c_double
@@ -3523,7 +3599,7 @@ class tensor_grid:
     """
     Python interface for O\ :sub:`2`\ scl class ``tensor_grid``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/tensor_grid.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/tensor_grid.html .
     """
 
     _ptr=0
@@ -3532,7 +3608,7 @@ class tensor_grid:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class tensor_grid<> .
+        Init function for class tensor_grid
 
         | Parameters:
         | *link* :class:`linker` object
@@ -3553,7 +3629,7 @@ class tensor_grid:
 
     def __del__(self):
         """
-        Delete function for class tensor_grid<> .
+        Delete function for class tensor_grid
         """
 
         if self._owner==True:
@@ -3566,7 +3642,9 @@ class tensor_grid:
 
     def __copy__(self):
         """
-        Shallow copy function for class tensor_grid<> .
+        Shallow copy function for class tensor_grid
+        
+        Returns: a tensor_grid object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3574,7 +3652,9 @@ class tensor_grid:
 
     def __deepcopy__(self,memo):
         """
-        Deep copy function for class tensor_grid<> .
+        Deep copy function for class tensor_grid
+        
+        Returns: a new tensor_grid object
         """
 
         new_obj=type(self)(self._link)
@@ -3606,7 +3686,7 @@ class tensor_grid:
         """
         | Parameters:
         | *grid_point*: :class:`vector<double>` object
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_tensor_grid___get_val
         func.restype=ctypes.c_double
@@ -3658,7 +3738,7 @@ class tensor_grid:
         | Parameters:
         | *i*: ``size_t``
         | *j*: ``size_t``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_tensor_grid___get_grid
         func.restype=ctypes.c_double
@@ -3683,7 +3763,7 @@ class find_constants:
     """
     Python interface for O\ :sub:`2`\ scl class ``find_constants``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/find_constants.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/find_constants.html .
     """
 
     _ptr=0
@@ -3692,7 +3772,7 @@ class find_constants:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class find_constants .
+        Init function for class find_constants
 
         | Parameters:
         | *link* :class:`linker` object
@@ -3713,7 +3793,7 @@ class find_constants:
 
     def __del__(self):
         """
-        Delete function for class find_constants .
+        Delete function for class find_constants
         """
 
         if self._owner==True:
@@ -3726,7 +3806,9 @@ class find_constants:
 
     def __copy__(self):
         """
-        Shallow copy function for class find_constants .
+        Shallow copy function for class find_constants
+        
+        Returns: a find_constants object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3752,7 +3834,7 @@ class find_constants:
         | Parameters:
         | *name*: string
         | *unit*: string
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         name_=ctypes.c_char_p(force_bytes(name))
         unit_=ctypes.c_char_p(force_bytes(unit))
@@ -3767,7 +3849,7 @@ class convert_units:
     """
     Python interface for O\ :sub:`2`\ scl class ``convert_units``,
     see
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/convert_units.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/convert_units.html .
     """
 
     _ptr=0
@@ -3776,7 +3858,7 @@ class convert_units:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class convert_units<> .
+        Init function for class convert_units
 
         | Parameters:
         | *link* :class:`linker` object
@@ -3797,7 +3879,7 @@ class convert_units:
 
     def __del__(self):
         """
-        Delete function for class convert_units<> .
+        Delete function for class convert_units
         """
 
         if self._owner==True:
@@ -3810,7 +3892,9 @@ class convert_units:
 
     def __copy__(self):
         """
-        Shallow copy function for class convert_units<> .
+        Shallow copy function for class convert_units
+        
+        Returns: a convert_units object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3921,7 +4005,7 @@ class convert_units:
         | *frm*: string
         | *to*: string
         | *val*: ``double``
-        | Returns: ``ctypes.c_double`` object
+        | Returns: a Python float
         """
         frm_=ctypes.c_char_p(force_bytes(frm))
         to_=ctypes.c_char_p(force_bytes(to))
@@ -3938,7 +4022,7 @@ class convert_units:
         | *to*: string
         | *val*: ``double``
         | *converted*: ``double``
-        | Returns: ``ctypes.c_int`` object
+        | Returns: a Python int
         """
         frm_=ctypes.c_char_p(force_bytes(frm))
         to_=ctypes.c_char_p(force_bytes(to))

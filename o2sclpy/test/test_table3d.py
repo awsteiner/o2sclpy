@@ -13,6 +13,8 @@ def def_table3d(link):
 def subtest_basic(link):
 
     t3d=def_table3d(link)
+    #z=t3d.get_slice('z')
+    #print('herex',z.shape,z)
     # Make sure summary() works
     t3d.summary()
     return
