@@ -118,7 +118,7 @@ class std_string:
         """
         Return the length of the vector
         """
-        return length()
+        return self.length()
      
     def init_bytes(self,s):
         """
@@ -230,7 +230,7 @@ class std_vector:
         """
         Return the length of the vector
         """
-        return size()
+        return self.size()
     
     def to_numpy(self):
         """
@@ -333,13 +333,13 @@ class std_vector_int:
         """
         Return the length of the vector
         """
-        return size()
+        return self.size()
     
     def to_numpy(self):
         """
         Copy the vector to a numpy array
         """
-        ret=numpy.zeros((self.size()),dtype=numpy.int32_t)
+        ret=numpy.zeros((self.size()),dtype=numpy.int32)
         for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
         return ret
@@ -436,13 +436,13 @@ class std_vector_size_t:
         """
         Return the length of the vector
         """
-        return size()
+        return self.size()
     
     def to_numpy(self):
         """
         Copy the vector to a numpy array
         """
-        ret=numpy.zeros((self.size()),dtype=numpy.uint64_t)
+        ret=numpy.zeros((self.size()),dtype=numpy.uint64)
         for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
         return ret
@@ -531,7 +531,7 @@ class std_vector_string:
         """
         Return the length of the vector
         """
-        return size()
+        return self.size()
 
 class ublas_vector:
     """
@@ -621,6 +621,20 @@ class ublas_vector:
         func(self._ptr,i,value)
         return
 
+    def __len__(self):
+        """
+        Return the length of the vector
+        """
+        return self.size()
+    
+    def to_numpy(self):
+        """
+        Copy the vector to a numpy array
+        """
+        ret=numpy.zeros((self.size()))
+        for i in range(0,self.size()):
+            ret[i]=self.__getitem__(i)
+        return ret
 
 class ublas_matrix:
     """
