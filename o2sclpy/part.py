@@ -1976,13 +1976,19 @@ class part_deriv_press:
     def deriv_f(self,dmudn,dmudT,dsdT_n):
         """
         | Parameters:
-        | *dmudn*: ``ctypes.POINTER(ctypes.c_double)``
-        | *dmudT*: ``ctypes.POINTER(ctypes.c_double)``
-        | *dsdT_n*: ``ctypes.POINTER(ctypes.c_double)``
+        | *dmudn*: ``ctypes.c_double``
+        | *dmudT*: ``ctypes.c_double``
+        | *dsdT_n*: ``ctypes.c_double``
         """
         func=self._link.o2scl_part.o2scl_part_deriv_press_deriv_f
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
-        func(self._ptr,dmudn,dmudT,dsdT_n)
+        dmudn_conv=ctypes.c_double(dmudn)
+        dmudT_conv=ctypes.c_double(dmudT)
+        dsdT_n_conv=ctypes.c_double(dsdT_n)
+        func(self._ptr,ctypes.byref(dmudn_conv),ctypes.byref(dmudT_conv),ctypes.byref(dsdT_n_conv))
+        dmudn=dmudn_conv.value()
+        dmudT=dmudT_conv.value()
+        dsdT_n=dsdT_n_conv.value()
         return
 
 

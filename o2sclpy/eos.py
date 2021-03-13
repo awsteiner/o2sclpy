@@ -370,13 +370,15 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | *unc*: ``ctypes.POINTER(ctypes.c_double)``
+        | *unc*: ``ctypes.c_double``
         | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp_err
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
-        ret=func(self._ptr,nb,delta,unc)
+        unc_conv=ctypes.c_double(unc)
+        ret=func(self._ptr,nb,delta,ctypes.byref(unc_conv))
+        unc=unc_conv.value()
         return ret
 
     def feoa(self,nb,delta):
@@ -410,13 +412,15 @@ class eos_had_base(eos_base):
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | *unc*: ``ctypes.POINTER(ctypes.c_double)``
+        | *unc*: ``ctypes.c_double``
         | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_err
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
-        ret=func(self._ptr,nb,delta,unc)
+        unc_conv=ctypes.c_double(unc)
+        ret=func(self._ptr,nb,delta,ctypes.byref(unc_conv))
+        unc=unc_conv.value()
         return ret
 
     def fesym_slope(self,nb,delta):
@@ -576,13 +580,15 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *delta*: ``double``
-        | *leoa*: ``ctypes.POINTER(ctypes.c_double)``
+        | *leoa*: ``ctypes.c_double``
         | Returns: ``ctypes.c_double`` object
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fn0
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
-        ret=func(self._ptr,delta,leoa)
+        leoa_conv=ctypes.c_double(leoa)
+        ret=func(self._ptr,delta,ctypes.byref(leoa_conv))
+        leoa=leoa_conv.value()
         return ret
 
     def f_number_suscept(self,mun,mup,dPdnn,dPdnp,dPdpp):
@@ -590,13 +596,19 @@ class eos_had_base(eos_base):
         | Parameters:
         | *mun*: ``double``
         | *mup*: ``double``
-        | *dPdnn*: ``ctypes.POINTER(ctypes.c_double)``
-        | *dPdnp*: ``ctypes.POINTER(ctypes.c_double)``
-        | *dPdpp*: ``ctypes.POINTER(ctypes.c_double)``
+        | *dPdnn*: ``ctypes.c_double``
+        | *dPdnp*: ``ctypes.c_double``
+        | *dPdpp*: ``ctypes.c_double``
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_number_suscept
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
-        func(self._ptr,mun,mup,dPdnn,dPdnp,dPdpp)
+        dPdnn_conv=ctypes.c_double(dPdnn)
+        dPdnp_conv=ctypes.c_double(dPdnp)
+        dPdpp_conv=ctypes.c_double(dPdpp)
+        func(self._ptr,mun,mup,ctypes.byref(dPdnn_conv),ctypes.byref(dPdnp_conv),ctypes.byref(dPdpp_conv))
+        dPdnn=dPdnn_conv.value()
+        dPdnp=dPdnp_conv.value()
+        dPdpp=dPdpp_conv.value()
         return
 
     def f_inv_number_suscept(self,mun,mup,dednn,dednp,dedpp):
@@ -604,13 +616,19 @@ class eos_had_base(eos_base):
         | Parameters:
         | *mun*: ``double``
         | *mup*: ``double``
-        | *dednn*: ``ctypes.POINTER(ctypes.c_double)``
-        | *dednp*: ``ctypes.POINTER(ctypes.c_double)``
-        | *dedpp*: ``ctypes.POINTER(ctypes.c_double)``
+        | *dednn*: ``ctypes.c_double``
+        | *dednp*: ``ctypes.c_double``
+        | *dedpp*: ``ctypes.c_double``
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_inv_number_suscept
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
-        func(self._ptr,mun,mup,dednn,dednp,dedpp)
+        dednn_conv=ctypes.c_double(dednn)
+        dednp_conv=ctypes.c_double(dednp)
+        dedpp_conv=ctypes.c_double(dedpp)
+        func(self._ptr,mun,mup,ctypes.byref(dednn_conv),ctypes.byref(dednp_conv),ctypes.byref(dedpp_conv))
+        dednn=dednn_conv.value()
+        dednp=dednp_conv.value()
+        dedpp=dedpp_conv.value()
         return
 
     def saturation(self):
@@ -3643,18 +3661,28 @@ class tov_love:
     def calc_y(self,yR,beta,k2,lambda_km5,lambda_cgs,tabulate):
         """
         | Parameters:
-        | *yR*: ``ctypes.POINTER(ctypes.c_double)``
-        | *beta*: ``ctypes.POINTER(ctypes.c_double)``
-        | *k2*: ``ctypes.POINTER(ctypes.c_double)``
-        | *lambda_km5*: ``ctypes.POINTER(ctypes.c_double)``
-        | *lambda_cgs*: ``ctypes.POINTER(ctypes.c_double)``
+        | *yR*: ``ctypes.c_double``
+        | *beta*: ``ctypes.c_double``
+        | *k2*: ``ctypes.c_double``
+        | *lambda_km5*: ``ctypes.c_double``
+        | *lambda_cgs*: ``ctypes.c_double``
         | *tabulate*: ``bool``
         | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_tov_love_calc_y
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.c_bool]
-        ret=func(self._ptr,yR,beta,k2,lambda_km5,lambda_cgs,tabulate)
+        yR_conv=ctypes.c_double(yR)
+        beta_conv=ctypes.c_double(beta)
+        k2_conv=ctypes.c_double(k2)
+        lambda_km5_conv=ctypes.c_double(lambda_km5)
+        lambda_cgs_conv=ctypes.c_double(lambda_cgs)
+        ret=func(self._ptr,ctypes.byref(yR_conv),ctypes.byref(beta_conv),ctypes.byref(k2_conv),ctypes.byref(lambda_km5_conv),ctypes.byref(lambda_cgs_conv),tabulate)
+        yR=yR_conv.value()
+        beta=beta_conv.value()
+        k2=k2_conv.value()
+        lambda_km5=lambda_km5_conv.value()
+        lambda_cgs=lambda_cgs_conv.value()
         return ret
 
     def add_disc(self,rd):
@@ -3678,17 +3706,27 @@ class tov_love:
     def calc_H(self,yR,beta,k2,lambda_km5,lambda_cgs):
         """
         | Parameters:
-        | *yR*: ``ctypes.POINTER(ctypes.c_double)``
-        | *beta*: ``ctypes.POINTER(ctypes.c_double)``
-        | *k2*: ``ctypes.POINTER(ctypes.c_double)``
-        | *lambda_km5*: ``ctypes.POINTER(ctypes.c_double)``
-        | *lambda_cgs*: ``ctypes.POINTER(ctypes.c_double)``
+        | *yR*: ``ctypes.c_double``
+        | *beta*: ``ctypes.c_double``
+        | *k2*: ``ctypes.c_double``
+        | *lambda_km5*: ``ctypes.c_double``
+        | *lambda_cgs*: ``ctypes.c_double``
         | Returns: ``ctypes.c_int`` object
         """
         func=self._link.o2scl_eos.o2scl_tov_love_calc_H
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
-        ret=func(self._ptr,yR,beta,k2,lambda_km5,lambda_cgs)
+        yR_conv=ctypes.c_double(yR)
+        beta_conv=ctypes.c_double(beta)
+        k2_conv=ctypes.c_double(k2)
+        lambda_km5_conv=ctypes.c_double(lambda_km5)
+        lambda_cgs_conv=ctypes.c_double(lambda_cgs)
+        ret=func(self._ptr,ctypes.byref(yR_conv),ctypes.byref(beta_conv),ctypes.byref(k2_conv),ctypes.byref(lambda_km5_conv),ctypes.byref(lambda_cgs_conv))
+        yR=yR_conv.value()
+        beta=beta_conv.value()
+        k2=k2_conv.value()
+        lambda_km5=lambda_km5_conv.value()
+        lambda_cgs=lambda_cgs_conv.value()
         return ret
 
 

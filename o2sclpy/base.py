@@ -115,6 +115,9 @@ class std_string:
         return
 
     def __len__(self):
+        """
+        Return the length of the vector
+        """
         return length()
      
     def init_bytes(self,s):
@@ -224,6 +227,9 @@ class std_vector:
         return
 
     def __len__(self):
+        """
+        Return the length of the vector
+        """
         return size()
     
     def to_numpy(self):
@@ -237,7 +243,7 @@ class std_vector:
 
 class std_vector_int:
     """
-    Python interface for C++ class ``vector<int>``.
+    Python interface for C++ class ``std::vector<int>``.
     """
 
     _ptr=0
@@ -246,7 +252,7 @@ class std_vector_int:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class vector<int> .
+        Init function for class std::vector<int> .
 
         | Parameters:
         | *link* :class:`linker` object
@@ -255,7 +261,7 @@ class std_vector_int:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_vector_int_
+            f=link.o2scl.o2scl_create_std__vector_int_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -267,11 +273,11 @@ class std_vector_int:
 
     def __del__(self):
         """
-        Delete function for class vector<int> .
+        Delete function for class std::vector<int> .
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_vector_int_
+            f=self._link.o2scl.o2scl_free_std__vector_int_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -280,7 +286,7 @@ class std_vector_int:
 
     def __copy__(self):
         """
-        Shallow copy function for class vector<int> .
+        Shallow copy function for class std::vector<int> .
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -291,7 +297,7 @@ class std_vector_int:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_vector_int__resize
+        func=self._link.o2scl.o2scl_std__vector_int__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -300,7 +306,7 @@ class std_vector_int:
         """
         | Returns: ``ctypes.c_size_t`` object
         """
-        func=self._link.o2scl.o2scl_vector_int__size
+        func=self._link.o2scl.o2scl_std__vector_int__size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -311,19 +317,22 @@ class std_vector_int:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_vector_int__getitem
+        func=self._link.o2scl.o2scl_std__vector_int__getitem
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         return ret
 
     def __setitem__(self,i,value):
-        func=self._link.o2scl.o2scl_vector_int__setitem
+        func=self._link.o2scl.o2scl_std__vector_int__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int]
         func(self._ptr,i,value)
         return
 
     def __len__(self):
+        """
+        Return the length of the vector
+        """
         return size()
     
     def to_numpy(self):
@@ -337,7 +346,7 @@ class std_vector_int:
 
 class std_vector_size_t:
     """
-    Python interface for C++ class ``vector<size_t>``.
+    Python interface for C++ class ``std::vector<size_t>``.
     """
 
     _ptr=0
@@ -346,7 +355,7 @@ class std_vector_size_t:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class vector<size_t> .
+        Init function for class std::vector<size_t> .
 
         | Parameters:
         | *link* :class:`linker` object
@@ -355,7 +364,7 @@ class std_vector_size_t:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_vector_size_t_
+            f=link.o2scl.o2scl_create_std__vector_size_t_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -367,11 +376,11 @@ class std_vector_size_t:
 
     def __del__(self):
         """
-        Delete function for class vector<size_t> .
+        Delete function for class std::vector<size_t> .
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_vector_size_t_
+            f=self._link.o2scl.o2scl_free_std__vector_size_t_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -380,7 +389,7 @@ class std_vector_size_t:
 
     def __copy__(self):
         """
-        Shallow copy function for class vector<size_t> .
+        Shallow copy function for class std::vector<size_t> .
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -391,7 +400,7 @@ class std_vector_size_t:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_vector_size_t__resize
+        func=self._link.o2scl.o2scl_std__vector_size_t__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -400,7 +409,7 @@ class std_vector_size_t:
         """
         | Returns: ``ctypes.c_size_t`` object
         """
-        func=self._link.o2scl.o2scl_vector_size_t__size
+        func=self._link.o2scl.o2scl_std__vector_size_t__size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -411,21 +420,21 @@ class std_vector_size_t:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_vector_size_t__getitem
+        func=self._link.o2scl.o2scl_std__vector_size_t__getitem
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         return ret
 
     def __setitem__(self,i,value):
-        func=self._link.o2scl.o2scl_vector_size_t__setitem
+        func=self._link.o2scl.o2scl_std__vector_size_t__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         func(self._ptr,i,value)
         return
 
     def __len__(self):
         """
-        Test
+        Return the length of the vector
         """
         return size()
     
@@ -446,6 +455,83 @@ class std_vector_size_t:
         for i in range(0,len(v)):
             self.__setitem__(i,v[i])
         return
+
+class std_vector_string:
+    """
+    Python interface for C++ class ``std::vector<std::string>``.
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class std::vector<std::string> .
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_std__vector_std__string_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class std::vector<std::string> .
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_std__vector_std__string_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class std::vector<std::string> .
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_std__vector_std__string__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def size(self):
+        """
+        | Returns: ``ctypes.c_size_t`` object
+        """
+        func=self._link.o2scl.o2scl_std__vector_std__string__size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def __len__(self):
+        """
+        Return the length of the vector
+        """
+        return size()
 
 class ublas_vector:
     """
@@ -636,6 +722,15 @@ class ublas_matrix:
         func(self._ptr,i,j,value)
         return
 
+    def to_numpy(self):
+        """
+        Copy the vector to a numpy matrix
+        """
+        ret=numpy.zeros((self.size1(),self.size2()))
+        for i in range(0,self.size1()):
+            for j in range(0,self.size2()):
+                ret[i][j]=self.__getitem__(i,j)
+        return ret
 
 class lib_settings_class:
     """
@@ -2028,7 +2123,7 @@ class uniform_grid:
     def vector(self,v):
         """
         | Parameters:
-        | *v*: :class:`std::vector<double>` object
+        | *v*: :class:`std_vector` object
         """
         func=self._link.o2scl.o2scl_uniform_grid___vector
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -2661,12 +2756,16 @@ class table3d:
     def get_size(self,nx,ny):
         """
         | Parameters:
-        | *nx*: ``ctypes.POINTER(ctypes.c_size_t)``
-        | *ny*: ``ctypes.POINTER(ctypes.c_size_t)``
+        | *nx*: ``ctypes.c_size_t``
+        | *ny*: ``ctypes.c_size_t``
         """
         func=self._link.o2scl.o2scl_table3d_get_size
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_size_t),ctypes.POINTER(ctypes.c_size_t)]
-        func(self._ptr,nx,ny)
+        nx_conv=ctypes.c_size_t(nx)
+        ny_conv=ctypes.c_size_t(ny)
+        func(self._ptr,ctypes.byref(nx_conv),ctypes.byref(ny_conv))
+        nx=nx_conv.value()
+        ny=ny_conv.value()
         return
 
     def get_nx(self):
@@ -2773,14 +2872,16 @@ class table3d:
         """
         | Parameters:
         | *name*: string
-        | *ix*: ``ctypes.POINTER(ctypes.c_size_t)``
+        | *ix*: ``ctypes.c_size_t``
         | Returns: ``ctypes.c_bool`` object
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_is_slice
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_size_t)]
-        ret=func(self._ptr,name_,ix)
+        ix_conv=ctypes.c_size_t(ix)
+        ret=func(self._ptr,name_,ctypes.byref(ix_conv))
+        ix=ix_conv.value()
         return ret
 
     def rename_slice(self,name1,name2):
@@ -2971,7 +3072,7 @@ class table3d:
         """
         | Parameters:
         | *function*: string
-        | *mat*: :class:`boost::numeric::ublas::matrix<double>` object
+        | *mat*: :class:`ublas_matrix` object
         | *throw_on_err*: ``bool``
         | Returns: ``ctypes.c_int`` object
         """

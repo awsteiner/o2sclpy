@@ -233,16 +233,22 @@ class nucmass_info:
         """
         | Parameters:
         | *ela*: string
-        | *Z*: ``ctypes.POINTER(ctypes.c_int)``
-        | *N*: ``ctypes.POINTER(ctypes.c_int)``
-        | *A*: ``ctypes.POINTER(ctypes.c_int)``
+        | *Z*: ``ctypes.c_int``
+        | *N*: ``ctypes.c_int``
+        | *A*: ``ctypes.c_int``
         | Returns: ``ctypes.c_int`` object
         """
         ela_=ctypes.c_char_p(force_bytes(ela))
         func=self._link.o2scl_part.o2scl_nucmass_info_parse_elstring
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int)]
-        ret=func(self._ptr,ela_,Z,N,A)
+        Z_conv=ctypes.c_int(Z)
+        N_conv=ctypes.c_int(N)
+        A_conv=ctypes.c_int(A)
+        ret=func(self._ptr,ela_,ctypes.byref(Z_conv),ctypes.byref(N_conv),ctypes.byref(A_conv))
+        Z=Z_conv.value()
+        N=N_conv.value()
+        A=A_conv.value()
         return ret
 
     def eltoZ(self,el):

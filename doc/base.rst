@@ -51,6 +51,17 @@ Class std_vector_size_t
         .. automethod:: __copy__
         .. automethod:: __getitem__
 
+Class std_vector_string
+-----------------------
+
+.. autoclass:: o2sclpy.std_vector_string
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class ublas_vector
 ------------------
 
