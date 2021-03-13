@@ -1,7 +1,7 @@
 import o2sclpy
 import numpy
 
-def test_ug_all():
+def test_all():
     link=o2sclpy.linker()
     link.link_o2scl_o2graph()
 

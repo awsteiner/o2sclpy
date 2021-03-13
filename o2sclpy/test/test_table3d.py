@@ -37,7 +37,7 @@ def subtest_hdf5(link):
     assert t3d2.get_nx()==t3d1.get_nx(),"nlines after hdf_input()"
     return
 
-def test_table3d_all():
+def test_all():
     link=o2sclpy.linker()
     link.link_o2scl_o2graph()
 

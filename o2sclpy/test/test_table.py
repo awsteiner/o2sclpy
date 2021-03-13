@@ -35,6 +35,22 @@ def subtest_basic(link):
     table.line_of_data([2,1])
     assert table.get('col1',5)==2.0,'line_of_data'
     assert table.get_nlines()==6,'line_of_data'
+    table.new_column('col4')
+    assert table.get_ncolumns()==3,'new_column() and get_ncolumns()'
+    table.rename_column('col4','col3')
+    assert table.get_column_name(2).to_bytes()==b'col3','rename_column()'
+    table.init_column('col3',9.0)
+    assert table.get('col3',4)==9.0,'init_column()'
+    assert table.lookup_column('col2')==1,'lookup_column()'
+    table.copy_column('col3','ccol3')
+    assert table.get('ccol3',4)==9.0,'copy_column()'
+    nrows1=table.get_nlines()
+    table.new_row(2)
+    nrows2=table.get_nlines()
+    assert nrows1+1==nrows2,'new_row()'
+    assert table.get('col1',3)==4.0,'new_row()'
+    table.copy_row(3,2)
+    assert table.get('col1',2)==4.0,'copy_row()'
     # Make sure summary() works
     table.summary()
     return
@@ -71,7 +87,7 @@ def subtest_hdf5(link):
     assert tab2.get_nlines()==tab1.get_nlines(),"nlines after hdf_input()"
     return
 
-def test_table_all():
+def test_all():
     link=o2sclpy.linker()
     link.link_o2scl_o2graph()
 
