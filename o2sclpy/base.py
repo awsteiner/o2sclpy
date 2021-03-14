@@ -1152,7 +1152,7 @@ class table:
         """
         Deep copy function for class table
         
-        Returns: a new table object
+        Returns: a new copy of the table object
         """
 
         new_obj=type(self)(self._link)
@@ -1988,7 +1988,7 @@ class table_units(table):
         """
         Deep copy function for class table_units
         
-        Returns: a new table_units object
+        Returns: a new copy of the table_units object
         """
 
         new_obj=type(self)(self._link)
@@ -2656,7 +2656,7 @@ class table3d:
         """
         Deep copy function for class table3d
         
-        Returns: a new table3d object
+        Returns: a new copy of the table3d object
         """
 
         new_obj=type(self)(self._link)
@@ -3003,7 +3003,7 @@ class table3d:
         | Returns: :class:`boost::numeric::ublas::matrix<double>` object
         """
         slice_=ctypes.c_char_p(force_bytes(slice))
-        func=self._link.o2scl.o2scl_table3d_
+        func=self._link.o2scl.o2scl_table3d_get_slice
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,slice_)
@@ -3446,7 +3446,7 @@ class tensor:
         """
         Deep copy function for class tensor
         
-        Returns: a new tensor object
+        Returns: a new copy of the tensor object
         """
 
         new_obj=type(self)(self._link)
@@ -3654,7 +3654,7 @@ class tensor_grid:
         """
         Deep copy function for class tensor_grid
         
-        Returns: a new tensor_grid object
+        Returns: a new copy of the tensor_grid object
         """
 
         new_obj=type(self)(self._link)
