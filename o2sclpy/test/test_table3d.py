@@ -1,6 +1,7 @@
 import o2sclpy
 import copy
 import numpy
+import ctypes
 
 def def_table3d(link):
     t3d=o2sclpy.table3d(link)
@@ -14,7 +15,15 @@ def subtest_basic(link):
 
     t3d=def_table3d(link)
     z=t3d.get_slice('z')
-    print('herex',z.shape,z)
+    assert z.to_numpy().shape==(z.size1(),z.size2()),'get_slice,etc.'
+    xtmp=t3d.get_grid_x(5)
+    ytmp=t3d.get_grid_y(5)
+    ztmp=t3d.get(5,5,'z')
+    assert (xtmp-5)**2+(ytmp-3)**2==ztmp,'get'
+    nx=ctypes.c_size_t(0)
+    ny=ctypes.c_size_t(0)
+    t3d.get_size(nx,ny)
+    print('herez',nx,ny)
     # Make sure summary() works
     t3d.summary()
     return

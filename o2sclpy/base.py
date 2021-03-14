@@ -3000,28 +3000,28 @@ class table3d:
         """
         | Parameters:
         | *slice*: string
-        | Returns: :class:`boost::numeric::ublas::matrix<double>` object
+        | Returns: :class:`ublas_matrix` object
         """
         slice_=ctypes.c_char_p(force_bytes(slice))
         func=self._link.o2scl.o2scl_table3d_get_slice
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,slice_)
-        ret2=boost__numeric__ublas__matrix_double_(self._link,ret)
+        ret2=ublas_matrix(self._link,ret)
         return ret2
 
     def get_slice_i(self,slice):
         """
         | Parameters:
         | *slice*: string
-        | Returns: :class:`boost::numeric::ublas::matrix<double>` object
+        | Returns: :class:`ublas_matrix` object
         """
         slice_=ctypes.c_char_p(force_bytes(slice))
         func=self._link.o2scl.o2scl_table3d_get_slice_i
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,slice_)
-        ret2=boost__numeric__ublas__matrix_double_(self._link,ret)
+        ret2=ublas_matrix(self._link,ret)
         return ret2
 
     def lookup_x(self,val,ix):
