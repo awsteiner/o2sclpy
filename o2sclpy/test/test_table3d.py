@@ -20,10 +20,8 @@ def subtest_basic(link):
     ytmp=t3d.get_grid_y(5)
     ztmp=t3d.get(5,5,'z')
     assert (xtmp-5)**2+(ytmp-3)**2==ztmp,'get'
-    nx=ctypes.c_size_t(0)
-    ny=ctypes.c_size_t(0)
-    t3d.get_size(nx,ny)
-    print('herez',nx,ny)
+    assert t3d.get_nx()==10,'get_nx()'
+    assert t3d.get_nx()==13,'get_ny()'
     # Make sure summary() works
     t3d.summary()
     return

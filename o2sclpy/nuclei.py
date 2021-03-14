@@ -250,9 +250,9 @@ class nucmass_info:
         N_conv=ctypes.c_int(N)
         A_conv=ctypes.c_int(A)
         ret=func(self._ptr,ela_,ctypes.byref(Z_conv),ctypes.byref(N_conv),ctypes.byref(A_conv))
-        Z=Z_conv.value()
-        N=N_conv.value()
-        A=A_conv.value()
+        Z=Z_conv.value
+        N=N_conv.value
+        A=A_conv.value
         return ret
 
     def eltoZ(self,el):

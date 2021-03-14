@@ -2014,9 +2014,9 @@ class part_deriv_press:
         dmudT_conv=ctypes.c_double(dmudT)
         dsdT_n_conv=ctypes.c_double(dsdT_n)
         func(self._ptr,ctypes.byref(dmudn_conv),ctypes.byref(dmudT_conv),ctypes.byref(dsdT_n_conv))
-        dmudn=dmudn_conv.value()
-        dmudT=dmudT_conv.value()
-        dsdT_n=dsdT_n_conv.value()
+        dmudn=dmudn_conv.value
+        dmudT=dmudT_conv.value
+        dsdT_n=dsdT_n_conv.value
         return
 
 

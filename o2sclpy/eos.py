@@ -382,7 +382,7 @@ class eos_had_base(eos_base):
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
         unc_conv=ctypes.c_double(unc)
         ret=func(self._ptr,nb,delta,ctypes.byref(unc_conv))
-        unc=unc_conv.value()
+        unc=unc_conv.value
         return ret
 
     def feoa(self,nb,delta):
@@ -424,7 +424,7 @@ class eos_had_base(eos_base):
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
         unc_conv=ctypes.c_double(unc)
         ret=func(self._ptr,nb,delta,ctypes.byref(unc_conv))
-        unc=unc_conv.value()
+        unc=unc_conv.value
         return ret
 
     def fesym_slope(self,nb,delta):
@@ -592,7 +592,7 @@ class eos_had_base(eos_base):
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
         leoa_conv=ctypes.c_double(leoa)
         ret=func(self._ptr,delta,ctypes.byref(leoa_conv))
-        leoa=leoa_conv.value()
+        leoa=leoa_conv.value
         return ret
 
     def f_number_suscept(self,mun,mup,dPdnn,dPdnp,dPdpp):
@@ -610,9 +610,9 @@ class eos_had_base(eos_base):
         dPdnp_conv=ctypes.c_double(dPdnp)
         dPdpp_conv=ctypes.c_double(dPdpp)
         func(self._ptr,mun,mup,ctypes.byref(dPdnn_conv),ctypes.byref(dPdnp_conv),ctypes.byref(dPdpp_conv))
-        dPdnn=dPdnn_conv.value()
-        dPdnp=dPdnp_conv.value()
-        dPdpp=dPdpp_conv.value()
+        dPdnn=dPdnn_conv.value
+        dPdnp=dPdnp_conv.value
+        dPdpp=dPdpp_conv.value
         return
 
     def f_inv_number_suscept(self,mun,mup,dednn,dednp,dedpp):
@@ -630,9 +630,9 @@ class eos_had_base(eos_base):
         dednp_conv=ctypes.c_double(dednp)
         dedpp_conv=ctypes.c_double(dedpp)
         func(self._ptr,mun,mup,ctypes.byref(dednn_conv),ctypes.byref(dednp_conv),ctypes.byref(dedpp_conv))
-        dednn=dednn_conv.value()
-        dednp=dednp_conv.value()
-        dedpp=dedpp_conv.value()
+        dednn=dednn_conv.value
+        dednp=dednp_conv.value
+        dedpp=dedpp_conv.value
         return
 
     def saturation(self):
@@ -3718,11 +3718,11 @@ class tov_love:
         lambda_km5_conv=ctypes.c_double(lambda_km5)
         lambda_cgs_conv=ctypes.c_double(lambda_cgs)
         ret=func(self._ptr,ctypes.byref(yR_conv),ctypes.byref(beta_conv),ctypes.byref(k2_conv),ctypes.byref(lambda_km5_conv),ctypes.byref(lambda_cgs_conv),tabulate)
-        yR=yR_conv.value()
-        beta=beta_conv.value()
-        k2=k2_conv.value()
-        lambda_km5=lambda_km5_conv.value()
-        lambda_cgs=lambda_cgs_conv.value()
+        yR=yR_conv.value
+        beta=beta_conv.value
+        k2=k2_conv.value
+        lambda_km5=lambda_km5_conv.value
+        lambda_cgs=lambda_cgs_conv.value
         return ret
 
     def add_disc(self,rd):
@@ -3762,11 +3762,11 @@ class tov_love:
         lambda_km5_conv=ctypes.c_double(lambda_km5)
         lambda_cgs_conv=ctypes.c_double(lambda_cgs)
         ret=func(self._ptr,ctypes.byref(yR_conv),ctypes.byref(beta_conv),ctypes.byref(k2_conv),ctypes.byref(lambda_km5_conv),ctypes.byref(lambda_cgs_conv))
-        yR=yR_conv.value()
-        beta=beta_conv.value()
-        k2=k2_conv.value()
-        lambda_km5=lambda_km5_conv.value()
-        lambda_cgs=lambda_cgs_conv.value()
+        yR=yR_conv.value
+        beta=beta_conv.value
+        k2=k2_conv.value
+        lambda_km5=lambda_km5_conv.value
+        lambda_cgs=lambda_cgs_conv.value
         return ret
 
 

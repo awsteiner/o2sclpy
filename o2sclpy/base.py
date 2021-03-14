@@ -2839,21 +2839,6 @@ class table3d:
         ret=func(self._ptr,iy)
         return ret
 
-    def get_size(self,nx,ny):
-        """
-        | Parameters:
-        | *nx*: ``ctypes.c_size_t``
-        | *ny*: ``ctypes.c_size_t``
-        """
-        func=self._link.o2scl.o2scl_table3d_get_size
-        func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_size_t),ctypes.POINTER(ctypes.c_size_t)]
-        nx_conv=ctypes.c_size_t(nx)
-        ny_conv=ctypes.c_size_t(ny)
-        func(self._ptr,ctypes.byref(nx_conv),ctypes.byref(ny_conv))
-        nx=nx_conv.value()
-        ny=ny_conv.value()
-        return
-
     def get_nx(self):
         """
         | Returns: a Python int
@@ -2967,7 +2952,7 @@ class table3d:
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_size_t)]
         ix_conv=ctypes.c_size_t(ix)
         ret=func(self._ptr,name_,ctypes.byref(ix_conv))
-        ix=ix_conv.value()
+        ix=ix_conv.value
         return ret
 
     def rename_slice(self,name1,name2):
