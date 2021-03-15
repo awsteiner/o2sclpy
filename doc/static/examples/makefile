@@ -38,6 +38,10 @@ VIEW_COMMAND = open
 VIEW_SUFFIX = 
 endif
 
+testx:
+	jupytext --to py skyrme.ipynb
+	python3 skyrme.py
+
 # The yt_scatter script is included here but the other yt plots are
 # not because they are more time-consuming.
 all: subplots1 subplots2 subplots3 table_plot \
