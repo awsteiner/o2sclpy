@@ -1,4 +1,4 @@
-.. _ref:
+.. _ref_cpp:
 
 Reference for C++ interface
 ===========================

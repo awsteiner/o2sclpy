@@ -1,4 +1,4 @@
-.. _ref:
+.. _ref_python:
 
 Reference for Python objects
 ============================

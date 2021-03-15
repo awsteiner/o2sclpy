@@ -46,7 +46,7 @@ instead, you will need to use the :class:`o2sclpy.cap_cout` class.
 .. _link:
 
 Linking with O\ :sub:`2`\ scl
-=============================
+-----------------------------
 
 The :class:`o2sclpy.linker` class (see below) controls the dynamical loading
 of the O\ :sub:`2`\ scl libraries. This class may require some
