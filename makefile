@@ -41,6 +41,9 @@ sync-doc:
 test-sync:
 	cd doc; $(MAKE) test-sync
 
+testx:
+	cd doc/static/examples; $(MAKE) testx
+
 ifeq ($(MACHINE),isospin)
 PIP3_CMD = sudo pip3
 else

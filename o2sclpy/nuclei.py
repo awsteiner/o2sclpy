@@ -30,7 +30,7 @@ class nucleus(part):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucleus``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucleus.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucleus.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -182,7 +182,7 @@ class nucmass_info:
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_info``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_info.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_info.html .
     """
 
     _ptr=0
@@ -233,27 +233,21 @@ class nucmass_info:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def parse_elstring(self,ela,Z,N,A):
+    def parse_elstring(self,ela):
         """
         | Parameters:
         | *ela*: string
-        | *Z*: ``ctypes.c_int``
-        | *N*: ``ctypes.c_int``
-        | *A*: ``ctypes.c_int``
-        | Returns: a Python int
+        | Returns: a Python int, a Python int, a Python int, a Python int
         """
         ela_=ctypes.c_char_p(force_bytes(ela))
         func=self._link.o2scl_part.o2scl_nucmass_info_parse_elstring
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int)]
-        Z_conv=ctypes.c_int(Z)
-        N_conv=ctypes.c_int(N)
-        A_conv=ctypes.c_int(A)
+        Z_conv=ctypes.c_int(0)
+        N_conv=ctypes.c_int(0)
+        A_conv=ctypes.c_int(0)
         ret=func(self._ptr,ela_,ctypes.byref(Z_conv),ctypes.byref(N_conv),ctypes.byref(A_conv))
-        Z=Z_conv.value
-        N=N_conv.value
-        A=A_conv.value
-        return ret
+        return ret,Z_conv.value,N_conv.value,A_conv.value
 
     def eltoZ(self,el):
         """
@@ -272,7 +266,7 @@ class nucmass_info:
         """
         | Parameters:
         | *Z*: ``size_t``
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_Ztoel
         func.restype=ctypes.c_void_p
@@ -280,13 +274,13 @@ class nucmass_info:
         ret=func(self._ptr,Z)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def Ztoname(self,Z):
         """
         | Parameters:
         | *Z*: ``size_t``
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_Ztoname
         func.restype=ctypes.c_void_p
@@ -294,14 +288,14 @@ class nucmass_info:
         ret=func(self._ptr,Z)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def tostring(self,Z,N):
         """
         | Parameters:
         | *Z*: ``size_t``
         | *N*: ``size_t``
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_tostring
         func.restype=ctypes.c_void_p
@@ -309,13 +303,13 @@ class nucmass_info:
         ret=func(self._ptr,Z,N)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def int_to_spinp(self,g):
         """
         | Parameters:
         | *g*: ``int``
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl_part.o2scl_nucmass_info_int_to_spinp
         func.restype=ctypes.c_void_p
@@ -323,7 +317,7 @@ class nucmass_info:
         ret=func(self._ptr,g)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def spinp_to_int(self,s):
         """
@@ -343,7 +337,7 @@ class nucmass:
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass.html .
     """
 
     _ptr=0
@@ -675,7 +669,7 @@ class nucmass_table(nucmass):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_table``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_table.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_table.html .
     """
 
     @abstractmethod
@@ -787,7 +781,7 @@ class nucmass_fit_base(nucmass):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_fit_base``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_fit_base.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_fit_base.html .
     """
 
     @abstractmethod
@@ -860,7 +854,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_semi_empirical``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_semi_empirical.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_semi_empirical.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1038,7 +1032,7 @@ class nucmass_ame(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_ame``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_ame.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_ame.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1090,7 +1084,7 @@ class nucmass_dz_table(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_table``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_dz_table.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_dz_table.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1142,7 +1136,7 @@ class nucmass_dz_fit(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_fit``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_dz_fit.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_dz_fit.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1194,7 +1188,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_fit_33``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_dz_fit_33.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_dz_fit_33.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1246,7 +1240,7 @@ class nucmass_frdm(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_frdm``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_frdm.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_frdm.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1818,7 +1812,7 @@ class nucmass_mnmsk(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_mnmsk``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_mnmsk.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_mnmsk.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1870,7 +1864,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_mnmsk_exp``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_mnmsk_exp.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_mnmsk_exp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1922,7 +1916,7 @@ class nucmass_gen(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_gen``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_gen.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_gen.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1974,7 +1968,7 @@ class nucmass_dglg(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dglg``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_dglg.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_dglg.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2026,7 +2020,7 @@ class nucmass_hfb(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_hfb``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_hfb.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_hfb.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2078,7 +2072,7 @@ class nucmass_hfb_sp(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_hfb_sp``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_hfb_sp.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_hfb_sp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2130,7 +2124,7 @@ class nucmass_ktuy(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_ktuy``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_ktuy.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_ktuy.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2182,7 +2176,7 @@ class nucmass_sdnp(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_sdnp``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_sdnp.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_sdnp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2234,7 +2228,7 @@ class nucmass_wlw(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_wlw``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/nucmass_wlw.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_wlw.html .
     """
 
     def __init__(self,link,pointer=0):

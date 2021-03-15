@@ -21,7 +21,7 @@ def subtest_basic(link):
     assert table.get_nlines()==5,'get_nlines()'
     assert table.get_ncolumns()==3,'get_ncolumns()'
     assert table.get('col1',2)==4,'get()'
-    assert table.get_column_name(2).to_bytes()==b'col3','get_column_name()'
+    assert table.get_column_name(2)==b'col3','get_column_name()'
     assert table.get('col2',2)==8.0,'function_column()'
     v=table.get_column('col2')
     assert len(v)==5, 'get_column()'
@@ -38,7 +38,7 @@ def subtest_basic(link):
     table.new_column('col4')
     assert table.get_ncolumns()==3,'new_column() and get_ncolumns()'
     table.rename_column('col4','col3')
-    assert table.get_column_name(2).to_bytes()==b'col3','rename_column()'
+    assert table.get_column_name(2)==b'col3','rename_column()'
     table.init_column('col3',9.0)
     assert table.get('col3',4)==9.0,'init_column()'
     assert table.lookup_column('col2')==1,'lookup_column()'

@@ -10,7 +10,7 @@ def test_all():
 
     obj=ls.date_compiled()
     s='check type of string properties'
-    assert str(type(obj))=="<class 'o2sclpy.base.std_string'>",s
+    assert str(type(obj))=="<class 'bytes'>",s
 
     val=ls.range_check()
     assert val==True or val==False,'check the type of a bool property'

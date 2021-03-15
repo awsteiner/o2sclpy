@@ -30,7 +30,7 @@ class eos_base:
     """
     Python interface for O\ :sub:`2`\ scl class eos_base.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_base.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_base.html .
     """
 
     _ptr=0
@@ -104,7 +104,7 @@ class eos_had_base(eos_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_base.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_base.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_base.html .
     """
 
     @abstractmethod
@@ -369,21 +369,19 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta)
         return ret
 
-    def fcomp_err(self,nb,delta,unc):
+    def fcomp_err(self,nb,delta):
         """
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | *unc*: ``ctypes.c_double``
-        | Returns: a Python float
+        | Returns: a Python float, a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp_err
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
-        unc_conv=ctypes.c_double(unc)
+        unc_conv=ctypes.c_double(0)
         ret=func(self._ptr,nb,delta,ctypes.byref(unc_conv))
-        unc=unc_conv.value
-        return ret
+        return ret,unc_conv.value
 
     def feoa(self,nb,delta):
         """
@@ -411,21 +409,19 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta)
         return ret
 
-    def fesym_err(self,nb,delta,unc):
+    def fesym_err(self,nb,delta):
         """
         | Parameters:
         | *nb*: ``double``
         | *delta*: ``double``
-        | *unc*: ``ctypes.c_double``
-        | Returns: a Python float
+        | Returns: a Python float, a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_err
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
-        unc_conv=ctypes.c_double(unc)
+        unc_conv=ctypes.c_double(0)
         ret=func(self._ptr,nb,delta,ctypes.byref(unc_conv))
-        unc=unc_conv.value
-        return ret
+        return ret,unc_conv.value
 
     def fesym_slope(self,nb,delta):
         """
@@ -580,60 +576,48 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta)
         return ret
 
-    def fn0(self,delta,leoa):
+    def fn0(self,delta):
         """
         | Parameters:
         | *delta*: ``double``
-        | *leoa*: ``ctypes.c_double``
-        | Returns: a Python float
+        | Returns: a Python float, a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fn0
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
-        leoa_conv=ctypes.c_double(leoa)
+        leoa_conv=ctypes.c_double(0)
         ret=func(self._ptr,delta,ctypes.byref(leoa_conv))
-        leoa=leoa_conv.value
-        return ret
+        return ret,leoa_conv.value
 
-    def f_number_suscept(self,mun,mup,dPdnn,dPdnp,dPdpp):
+    def f_number_suscept(self,mun,mup):
         """
         | Parameters:
         | *mun*: ``double``
         | *mup*: ``double``
-        | *dPdnn*: ``ctypes.c_double``
-        | *dPdnp*: ``ctypes.c_double``
-        | *dPdpp*: ``ctypes.c_double``
+        | Returns: , a Python float, a Python float, a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_number_suscept
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
-        dPdnn_conv=ctypes.c_double(dPdnn)
-        dPdnp_conv=ctypes.c_double(dPdnp)
-        dPdpp_conv=ctypes.c_double(dPdpp)
+        dPdnn_conv=ctypes.c_double(0)
+        dPdnp_conv=ctypes.c_double(0)
+        dPdpp_conv=ctypes.c_double(0)
         func(self._ptr,mun,mup,ctypes.byref(dPdnn_conv),ctypes.byref(dPdnp_conv),ctypes.byref(dPdpp_conv))
-        dPdnn=dPdnn_conv.value
-        dPdnp=dPdnp_conv.value
-        dPdpp=dPdpp_conv.value
-        return
+        return dPdnn_conv.value,dPdnp_conv.value,dPdpp_conv.value
 
-    def f_inv_number_suscept(self,mun,mup,dednn,dednp,dedpp):
+    def f_inv_number_suscept(self,mun,mup):
         """
         | Parameters:
         | *mun*: ``double``
         | *mup*: ``double``
-        | *dednn*: ``ctypes.c_double``
-        | *dednp*: ``ctypes.c_double``
-        | *dedpp*: ``ctypes.c_double``
+        | Returns: , a Python float, a Python float, a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_inv_number_suscept
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
-        dednn_conv=ctypes.c_double(dednn)
-        dednp_conv=ctypes.c_double(dednp)
-        dedpp_conv=ctypes.c_double(dedpp)
+        dednn_conv=ctypes.c_double(0)
+        dednp_conv=ctypes.c_double(0)
+        dedpp_conv=ctypes.c_double(0)
         func(self._ptr,mun,mup,ctypes.byref(dednn_conv),ctypes.byref(dednp_conv),ctypes.byref(dedpp_conv))
-        dednn=dednn_conv.value
-        dednp=dednp_conv.value
-        dedpp=dedpp_conv.value
-        return
+        return dednn_conv.value,dednp_conv.value,dedpp_conv.value
 
     def saturation(self):
         """
@@ -780,7 +764,7 @@ class eos_had_eden_base(eos_had_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_eden_base.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_eden_base.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_eden_base.html .
     """
 
     @abstractmethod
@@ -833,7 +817,7 @@ class eos_had_pres_base(eos_had_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_pres_base.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_pres_base.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_pres_base.html .
     """
 
     @abstractmethod
@@ -886,7 +870,7 @@ class eos_had_temp_base(eos_had_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_temp_base.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_temp_base.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_temp_base.html .
     """
 
     @abstractmethod
@@ -939,7 +923,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_temp_eden_base.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_temp_eden_base.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_temp_eden_base.html .
     """
 
     @abstractmethod
@@ -992,7 +976,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_temp_pres_base.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_temp_pres_base.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_temp_pres_base.html .
     """
 
     @abstractmethod
@@ -1045,7 +1029,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_skyrme.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_skyrme.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_skyrme.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1434,7 +1418,7 @@ class eos_had_apr(eos_had_temp_eden_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_apr.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_apr.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_apr.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1526,7 +1510,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_rmf.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_had_rmf.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_rmf.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2078,7 +2062,7 @@ class eos_quark(eos_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_quark.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_quark.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_quark.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2130,7 +2114,7 @@ class eos_quark_bag(eos_quark):
     """
     Python interface for O\ :sub:`2`\ scl class eos_quark_bag.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_quark_bag.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_quark_bag.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2202,7 +2186,7 @@ class eos_quark_njl(eos_quark):
     """
     Python interface for O\ :sub:`2`\ scl class eos_quark_njl.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_quark_njl.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_quark_njl.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2374,7 +2358,7 @@ class eos_tov:
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_tov.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_tov.html .
     """
 
     _ptr=0
@@ -2461,7 +2445,7 @@ class eos_tov_buchdahl(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_buchdahl.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_tov_buchdahl.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_tov_buchdahl.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2533,7 +2517,7 @@ class eos_tov_polytrope(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_polytrope.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_tov_polytrope.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_tov_polytrope.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2596,7 +2580,7 @@ class eos_tov_linear(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_linear.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_tov_linear.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_tov_linear.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2659,7 +2643,7 @@ class eos_tov_interp(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_interp.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/eos_tov_interp.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_tov_interp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2822,7 +2806,7 @@ class tov_solve:
     """
     Python interface for O\ :sub:`2`\ scl class tov_solve.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/tov_solve.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/tov_solve.html .
     """
 
     _ptr=0
@@ -3510,7 +3494,7 @@ class tov_love:
     """
     Python interface for O\ :sub:`2`\ scl class tov_love.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/tov_love.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/tov_love.html .
     """
 
     _ptr=0
@@ -3698,32 +3682,22 @@ class tov_love:
         func(self._ptr,value._s_ptr)
         return
 
-    def calc_y(self,yR,beta,k2,lambda_km5,lambda_cgs,tabulate):
+    def calc_y(self,tabulate):
         """
         | Parameters:
-        | *yR*: ``ctypes.c_double``
-        | *beta*: ``ctypes.c_double``
-        | *k2*: ``ctypes.c_double``
-        | *lambda_km5*: ``ctypes.c_double``
-        | *lambda_cgs*: ``ctypes.c_double``
         | *tabulate*: ``bool``
-        | Returns: a Python int
+        | Returns: a Python int, a Python float, a Python float, a Python float, a Python float, a Python float
         """
         func=self._link.o2scl_eos.o2scl_tov_love_calc_y
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.c_bool]
-        yR_conv=ctypes.c_double(yR)
-        beta_conv=ctypes.c_double(beta)
-        k2_conv=ctypes.c_double(k2)
-        lambda_km5_conv=ctypes.c_double(lambda_km5)
-        lambda_cgs_conv=ctypes.c_double(lambda_cgs)
+        yR_conv=ctypes.c_double(0)
+        beta_conv=ctypes.c_double(0)
+        k2_conv=ctypes.c_double(0)
+        lambda_km5_conv=ctypes.c_double(0)
+        lambda_cgs_conv=ctypes.c_double(0)
         ret=func(self._ptr,ctypes.byref(yR_conv),ctypes.byref(beta_conv),ctypes.byref(k2_conv),ctypes.byref(lambda_km5_conv),ctypes.byref(lambda_cgs_conv),tabulate)
-        yR=yR_conv.value
-        beta=beta_conv.value
-        k2=k2_conv.value
-        lambda_km5=lambda_km5_conv.value
-        lambda_cgs=lambda_cgs_conv.value
-        return ret
+        return ret,yR_conv.value,beta_conv.value,k2_conv.value,lambda_km5_conv.value,lambda_cgs_conv.value
 
     def add_disc(self,rd):
         """
@@ -3743,38 +3717,28 @@ class tov_love:
         func(self._ptr)
         return
 
-    def calc_H(self,yR,beta,k2,lambda_km5,lambda_cgs):
+    def calc_H(self):
         """
         | Parameters:
-        | *yR*: ``ctypes.c_double``
-        | *beta*: ``ctypes.c_double``
-        | *k2*: ``ctypes.c_double``
-        | *lambda_km5*: ``ctypes.c_double``
-        | *lambda_cgs*: ``ctypes.c_double``
-        | Returns: a Python int
+        | Returns: a Python int, a Python float, a Python float, a Python float, a Python float, a Python float
         """
         func=self._link.o2scl_eos.o2scl_tov_love_calc_H
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
-        yR_conv=ctypes.c_double(yR)
-        beta_conv=ctypes.c_double(beta)
-        k2_conv=ctypes.c_double(k2)
-        lambda_km5_conv=ctypes.c_double(lambda_km5)
-        lambda_cgs_conv=ctypes.c_double(lambda_cgs)
+        yR_conv=ctypes.c_double(0)
+        beta_conv=ctypes.c_double(0)
+        k2_conv=ctypes.c_double(0)
+        lambda_km5_conv=ctypes.c_double(0)
+        lambda_cgs_conv=ctypes.c_double(0)
         ret=func(self._ptr,ctypes.byref(yR_conv),ctypes.byref(beta_conv),ctypes.byref(k2_conv),ctypes.byref(lambda_km5_conv),ctypes.byref(lambda_cgs_conv))
-        yR=yR_conv.value
-        beta=beta_conv.value
-        k2=k2_conv.value
-        lambda_km5=lambda_km5_conv.value
-        lambda_cgs=lambda_cgs_conv.value
-        return ret
+        return ret,yR_conv.value,beta_conv.value,k2_conv.value,lambda_km5_conv.value,lambda_cgs_conv.value
 
 
 class nstar_cold:
     """
     Python interface for O\ :sub:`2`\ scl class nstar_cold.
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/eos/html/class/nstar_cold.html .
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/nstar_cold.html .
     """
 
     _ptr=0

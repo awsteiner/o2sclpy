@@ -25,7 +25,6 @@ from abc import abstractmethod
 from o2sclpy.utils import force_bytes
 import numpy
 
-
 class std_string:
     """
     Python interface for C++ class ``std::string``.
@@ -847,7 +846,7 @@ class lib_settings_class:
 
     def get_data_dir(self):
         """
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_data_dir
         func.restype=ctypes.c_void_p
@@ -855,7 +854,7 @@ class lib_settings_class:
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def set_data_dir(self,dir):
         """
@@ -872,7 +871,7 @@ class lib_settings_class:
 
     def get_doc_dir(self):
         """
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_get_doc_dir
         func.restype=ctypes.c_void_p
@@ -880,7 +879,7 @@ class lib_settings_class:
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def set_doc_dir(self,dir):
         """
@@ -1017,7 +1016,7 @@ class lib_settings_class:
 
     def system_type(self):
         """
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_system_type
         func.restype=ctypes.c_void_p
@@ -1025,7 +1024,7 @@ class lib_settings_class:
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def range_check(self):
         """
@@ -1039,7 +1038,7 @@ class lib_settings_class:
 
     def time_compiled(self):
         """
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_time_compiled
         func.restype=ctypes.c_void_p
@@ -1047,11 +1046,11 @@ class lib_settings_class:
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def date_compiled(self):
         """
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_date_compiled
         func.restype=ctypes.c_void_p
@@ -1059,11 +1058,11 @@ class lib_settings_class:
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def o2scl_version(self):
         """
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_lib_settings_class_o2scl_version
         func.restype=ctypes.c_void_p
@@ -1071,7 +1070,7 @@ class lib_settings_class:
         ret=func(self._ptr)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def config_h_report(self):
         """
@@ -1304,7 +1303,7 @@ class table:
         """
         | Parameters:
         | *icol*: ``size_t``
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_table___get_column_name
         func.restype=ctypes.c_void_p
@@ -1312,7 +1311,7 @@ class table:
         ret=func(self._ptr,icol)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def rename_column(self,src,dest):
         """
@@ -1342,7 +1341,7 @@ class table:
         """
         | Parameters:
         | *icol*: ``size_t``
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_table___get_sorted_name
         func.restype=ctypes.c_void_p
@@ -1350,7 +1349,7 @@ class table:
         ret=func(self._ptr,icol)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def init_column(self,scol,val):
         """
@@ -2014,7 +2013,7 @@ class table_units(table):
         """
         | Parameters:
         | *col*: string
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table_units___get_unit
@@ -2023,7 +2022,7 @@ class table_units(table):
         ret=func(self._ptr,col_)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def line_of_units(self,unit_line):
         """
@@ -2893,7 +2892,7 @@ class table3d:
         """
         | Parameters:
         | *i*: ``size_t``
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_table3d_get_slice_name
         func.restype=ctypes.c_void_p
@@ -2901,7 +2900,7 @@ class table3d:
         ret=func(self._ptr,i)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def new_slice(self,slice):
         """
@@ -2939,21 +2938,19 @@ class table3d:
         ret=func(self._ptr,name_)
         return ret
 
-    def is_slice(self,name,ix):
+    def is_slice(self,name):
         """
         | Parameters:
         | *name*: string
-        | *ix*: ``ctypes.c_size_t``
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: ``ctypes.c_bool`` object, a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_is_slice
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_size_t)]
-        ix_conv=ctypes.c_size_t(ix)
+        ix_conv=ctypes.c_size_t(0)
         ret=func(self._ptr,name_,ctypes.byref(ix_conv))
-        ix=ix_conv.value
-        return ret
+        return ret,ix_conv.value
 
     def rename_slice(self,name1,name2):
         """

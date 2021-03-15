@@ -24,7 +24,6 @@ import ctypes
 from abc import abstractmethod
 from o2sclpy.utils import force_bytes
 
-
 class thermo:
     """
     Python interface for class :ref:`thermo <o2sclp:thermo_tl>`.
@@ -531,7 +530,7 @@ class quark(fermion):
     """
     Python interface for O\ :sub:`2`\ scl class ``quark``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/quark.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/quark.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1285,7 +1284,7 @@ class boson(part):
     """
     Python interface for O\ :sub:`2`\ scl class ``boson``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/boson.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/boson.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1357,7 +1356,7 @@ class boson_rel:
     """
     Python interface for O\ :sub:`2`\ scl class ``boson_rel``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/boson_rel.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/boson_rel.html .
     """
 
     _ptr=0
@@ -2001,23 +2000,18 @@ class part_deriv_press:
         func(self._ptr,value)
         return
 
-    def deriv_f(self,dmudn,dmudT,dsdT_n):
+    def deriv_f(self):
         """
         | Parameters:
-        | *dmudn*: ``ctypes.c_double``
-        | *dmudT*: ``ctypes.c_double``
-        | *dsdT_n*: ``ctypes.c_double``
+        | Returns: , a Python float, a Python float, a Python float
         """
         func=self._link.o2scl_part.o2scl_part_deriv_press_deriv_f
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
-        dmudn_conv=ctypes.c_double(dmudn)
-        dmudT_conv=ctypes.c_double(dmudT)
-        dsdT_n_conv=ctypes.c_double(dsdT_n)
+        dmudn_conv=ctypes.c_double(0)
+        dmudT_conv=ctypes.c_double(0)
+        dsdT_n_conv=ctypes.c_double(0)
         func(self._ptr,ctypes.byref(dmudn_conv),ctypes.byref(dmudT_conv),ctypes.byref(dsdT_n_conv))
-        dmudn=dmudn_conv.value
-        dmudT=dmudT_conv.value
-        dsdT_n=dsdT_n_conv.value
-        return
+        return dmudn_conv.value,dmudT_conv.value,dsdT_n_conv.value
 
 
 class part_deriv(part):
@@ -2740,7 +2734,7 @@ class fermion_mag_zerot:
     """
     Python interface for O\ :sub:`2`\ scl class ``fermion_mag_zerot``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/fermion_mag_zerot.html .
+    https://neutronstars.utk.edu/code/o2scl/part/html/class/fermion_mag_zerot.html .
     """
 
     _ptr=0

@@ -30,7 +30,7 @@ class hdf_file:
     """
     Python interface for O\ :sub:`2`\ scl class ``hdf_file``,
     See
-    https://neutronstars.utk.edu/code/o2scl-dev/html/class/hdf_file.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/hdf_file.html .
     """
 
     _ptr=0
