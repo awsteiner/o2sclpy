@@ -43,6 +43,8 @@ Finally, some O\ :sub:`2`\ scl classes output information to
 Jupyter console. If you want this output to go to the Jupyter notebook
 instead, you will need to use the :class:`o2sclpy.cap_cout` class.
 
+.. _link:
+
 Linking with O\ :sub:`2`\ scl
 =============================
 

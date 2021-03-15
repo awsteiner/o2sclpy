@@ -43,20 +43,12 @@ Contents
    :maxdepth: 3
 
    licensing
-   cpp
-   skyrme_ex
-   reference
+   link_cpp
+   examples
+   ref_cpp
+   ref_py
    o2graph
    yt
-   plot_ref
-   class_plotter
-   class_hdf5_reader
-   class_cloud_file
-   class_plot_base
-   class_yt_plot_base
-   class_o2graph_plotter
-   class_cap_cout
-   other
    todos
 
 --------------------------------------------------------------
