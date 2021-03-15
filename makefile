@@ -41,8 +41,9 @@ sync-doc:
 test-sync:
 	cd doc; $(MAKE) test-sync
 
-testx:
-	cd doc/static/examples; $(MAKE) testx
+test:
+	cd doc/static/examples; $(MAKE) convert
+	pytest o2sclpy/test doc/static/examples/skyrme.py -s -v
 
 ifeq ($(MACHINE),isospin)
 PIP3_CMD = sudo pip3

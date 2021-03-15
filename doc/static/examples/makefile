@@ -38,9 +38,8 @@ VIEW_COMMAND = open
 VIEW_SUFFIX = 
 endif
 
-testx:
+convert:
 	jupytext --to py skyrme.ipynb
-	python3 skyrme.py
 
 # The yt_scatter script is included here but the other yt plots are
 # not because they are more time-consuming.
