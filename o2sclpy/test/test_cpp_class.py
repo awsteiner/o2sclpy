@@ -127,7 +127,7 @@ def subtest_ublas_matrix(link):
 
 def test_all():
     link=o2sclpy.linker()
-    link.link_o2scl_o2graph()
+    link.link_o2scl()
 
     subtest_std_string(link)
     subtest_std_vector(link)

@@ -3,7 +3,7 @@ import numpy
 
 def test_all():
     link=o2sclpy.linker()
-    link.link_o2scl_o2graph()
+    link.link_o2scl()
 
     ls=link.o2scl_settings
     assert ls.eos_installed()==True, 'eos_installed()'

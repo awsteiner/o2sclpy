@@ -28,10 +28,10 @@ import platform
 # For build_o2scl()
 import urllib.request
 
-# For force_bytes() in link_o2scl_o2graph()
+# For force_bytes() in link_o2scl()
 from o2sclpy.utils import force_bytes, if_yt_then_Agg
 
-# For find_library() in link_o2scl_o2graph()
+# For find_library() in link_o2scl()
 from ctypes.util import find_library
 
 from o2sclpy.base import lib_settings_class
@@ -109,7 +109,7 @@ class linker:
     The o2scl_settings object
     """
 
-    def link_o2scl_o2graph(self,include_part=True,include_eos=True):
+    def link_o2scl(self,include_part=True,include_eos=True):
         """
         A new function for linking o2scl which came originally from
         the o2graph script

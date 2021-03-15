@@ -58,7 +58,7 @@ def subtest_hdf5(link):
 
 def test_all():
     link=o2sclpy.linker()
-    link.link_o2scl_o2graph()
+    link.link_o2scl()
 
     subtest_basic(link)
     subtest_copying(link)

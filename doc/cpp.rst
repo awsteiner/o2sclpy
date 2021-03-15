@@ -15,7 +15,7 @@ is missing and you would like me to include, let me know.
 
 One :class:`o2sclpy.linker` object should be created and then that
 object should be used to link the O\ :sub:`2`\ scl libraries with the
-:meth:`o2sclpy.linker.link_o2scl_o2graph()` function. Then, all O\
+:meth:`o2sclpy.linker.link_o2scl()` function. Then, all O\
 :sub:`2`\ scl-based classes can be instantiated with the
 :class:`o2sclpy.linker` object. In the ``__init__`` methods of python
 wrappers of O\ :sub:`2`\ scl classes, the ``pointer`` argument is
