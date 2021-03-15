@@ -40,17 +40,12 @@ Contents
 --------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    licensing
    cpp
-   link
-   base
-   hdf
-   part
-   nuclei
-   eos
    skyrme_ex
+   reference
    o2graph
    yt
    plot_ref
