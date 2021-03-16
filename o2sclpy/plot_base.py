@@ -1457,7 +1457,7 @@ class plot_base:
 
 class yt_plot_base(plot_base):
     """
-    Desc
+    A base class with simplifications for plots generated in yt
     """
 
     # yt settings modifiable by get and set

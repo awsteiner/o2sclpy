@@ -50,7 +50,7 @@ class cap_cout:
     
     def drain_pipe(self):
         """
-        Desc
+        Collect the pipe output to ``captured_stdout``
         """
         while True:
             data=os.read(self.stdout_pipe[0],1024)
@@ -61,7 +61,7 @@ class cap_cout:
         
     def open(self):
         """
-        Desc
+        Duplicate stdout and create a new pipe
         """
         self.stdout_save=os.dup(self.stdout_fileno)
         self.stdout_pipe=os.pipe()
@@ -73,12 +73,11 @@ class cap_cout:
 
     def close(self):
         """
-        Desc
+        Close the pipe and restore the original stdout
         """
         os.close(self.stdout_fileno)
         self.thr.join()
 
-        # Clean up the pipe and restore the original stdout
         os.close(self.stdout_pipe[0])
         os.dup2(self.stdout_save,self.stdout_fileno)
         os.close(self.stdout_save)

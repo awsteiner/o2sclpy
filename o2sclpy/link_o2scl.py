@@ -111,8 +111,11 @@ class linker:
 
     def link_o2scl(self,include_part=True,include_eos=True):
         """
-        A new function for linking o2scl which came originally from
-        the o2graph script
+        A function for linking the o2scl libraries. If 
+        ``include_part`` is true, then the ``o2scl_part`` library is
+        loaded. If 
+        ``include_eos`` is true, then the ``o2scl_eos`` library is
+        loaded. The ``o2scl_hdf`` library is always loaded.
         """
 
         if include_eos==True and include_part==False:

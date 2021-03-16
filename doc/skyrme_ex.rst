@@ -1,9 +1,11 @@
 Skyrme example
 ==============
 
-The Skyrme EOS example loads a Skyrme model and computes the
-associated neutron star M-R curve. It is stored in
-``doc/static/examples/skyrme.py`` and
-``doc/static/examples/skyrme.ipynb`` and can be viewed at
-https://nbviewer.jupyter.org/github/awsteiner/o2sclpy/blob/master/doc/static/examples/skyrme.ipynb
-.
+The Skyrme equation of state example loads a Skyrme model, computes
+the associated neutron star mass-radius curve, and computes the tidal
+deformability of a 1.4 solar mass neutron star. The jupyter notebook
+can be viewed at
+`Skyrme example <https://nbviewer.jupyter.org/github/awsteiner/o2sclpy/blob/master/doc/static/examples/skyrme.ipynb>`_
+
+.. literalinclude:: static/examples/skyrme.py
+
