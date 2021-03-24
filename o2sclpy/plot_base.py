@@ -1246,10 +1246,10 @@ class plot_base:
         print('Created new axes named',axname)
         
         # the same defaults as default_plot()
-        axis_temp.minorticks_on()
-        axis_temp.tick_params('both',length=12,width=1,which='major')
-        axis_temp.tick_params('both',length=5,width=1,which='minor')
-        axis_temp.tick_params(labelsize=self.font*0.8)
+        self.axes.minorticks_on()
+        self.axes.tick_params('both',length=12,width=1,which='major')
+        self.axes.tick_params('both',length=5,width=1,which='minor')
+        self.axes.tick_params(labelsize=self.font*0.8)
         
     def modax(self,**kwargs):
         """
