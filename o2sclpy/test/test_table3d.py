@@ -32,12 +32,12 @@ def subtest_hdf5(link):
 
     # Write t3d1 to a file
     hf=o2sclpy.hdf_file(link)
-    hf.open_or_create(b'temp.o2')
+    hf.open_or_create(b'o2sclpy/test/temp.o2')
     o2sclpy.hdf_output_table3d(link,hf,t3d1,b'table3d')
     hf.close()
 
     # Open the file and read into t3d2
-    hf.open(b'temp.o2',False,True)
+    hf.open(b'o2sclpy/test/temp.o2',False,True)
     name=o2sclpy.std_string(link)
     t3d2=o2sclpy.table3d(link)
     o2sclpy.hdf_input_n_table3d(link,hf,t3d2,name)

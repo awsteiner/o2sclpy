@@ -42,12 +42,12 @@ def subtest_hdf5(link):
 
     # Write tab1 to a file
     hf=o2sclpy.hdf_file(link)
-    hf.open_or_create(b'temp2.o2')
+    hf.open_or_create(b'o2sclpy/test/temp2.o2')
     o2sclpy.hdf_output_table_units(link,hf,tab1,b'table_units')
     hf.close()
 
     # Open the file and read into tab2
-    hf.open(b'temp2.o2',False,True)
+    hf.open(b'o2sclpy/test/temp2.o2',False,True)
     name=o2sclpy.std_string(link)
     tab2=o2sclpy.table_units(link)
     o2sclpy.hdf_input_n_table_units(link,hf,tab2,name)

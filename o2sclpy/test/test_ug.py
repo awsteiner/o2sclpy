@@ -18,12 +18,12 @@ def test_all():
 
     # Write to a file
     hf=o2sclpy.hdf_file(link)
-    hf.open_or_create(b'temp.o2')
+    hf.open_or_create(b'o2sclpy/test/temp.o2')
     o2sclpy.hdf_output_uniform_grid(link,hf,ug_end,b'ug_end')
     hf.close()
 
     # Open the file and read into tab2
-    hf.open(b'temp.o2',False,True)
+    hf.open(b'o2sclpy/test/temp.o2',False,True)
     name=o2sclpy.std_string(link)
     ug=o2sclpy.uniform_grid(link)
     o2sclpy.hdf_input_n_uniform_grid(link,hf,ug,name)
