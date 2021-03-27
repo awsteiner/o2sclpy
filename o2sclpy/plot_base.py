@@ -613,6 +613,8 @@ class plot_base:
                 err4=float(eval(err4))
             if isinstance(err3,str):
                 err3=float(eval(err3))
+            if isinstance(err1,str):
+                err1=float(eval(err1))
             self.axes.errorbar([xval],[yval],
                                yerr=[[err3],[err4]],
                                xerr=[err1],**kwargs)
