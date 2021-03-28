@@ -24,7 +24,6 @@ import sys
 import numpy
 import textwrap
 
-import matplotlib.pyplot as plot
 # For rectangles
 import matplotlib.patches as patches
 
@@ -77,6 +76,9 @@ def markers_plot(fname=''):
     Plot the matplotlib markers which work in o2graph
     command-line arguments.
     """
+    
+    import matplotlib.pyplot as plot
+    
     mlist=[['.',"'.'",'point'],
            [',',"','",'pixel'],
            ['o',"'o'",'circle'],
@@ -171,7 +173,9 @@ def colors_near(col='',fname=''):
     Possible values of 'col' are red, orange, yellow, green,
     cyan, blue, purple, magenta, pink, grey, and gray.
     """
-
+    
+    import matplotlib.pyplot as plot
+    
     if col=='all':
         
         from matplotlib import colors as mc
@@ -368,6 +372,8 @@ def cmaps_plot(fname=''):
     """
     print('Generating colormap summary figure.')
                         
+    import matplotlib.pyplot as plot
+    
     # An internal implementation of
     # https://matplotlib.org/3.1.0/gallery/
     # color/colormap_reference.html
@@ -472,6 +478,7 @@ def colors_plot(fname=''):
     store the plot in file named 'fname'.
     """
     from matplotlib import colors as mc
+    import matplotlib.pyplot as plot
 
     colors=dict(**mc.CSS4_COLORS)
     by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)

@@ -27,8 +27,6 @@ import os
 # For numpy.bytes_
 import numpy
 
-import matplotlib.pyplot as plot
-
 # To test between Linux/OSX using system()
 import platform
 
@@ -168,6 +166,9 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
                  right_margin=0.04,top_margin=0.04,fontsize=16,
                  fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,
                  rt_ticks=False,editor=False):
+    
+    import matplotlib.pyplot as plot
+
     """
     This function sets up the O\ :sub:`2`\ sclpy ``matplotlib``
     defaults. It returns a pair of objects, the figure object and axes
