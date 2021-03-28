@@ -33,7 +33,7 @@ l.link_o2scl()
 if backend!='':
     import matplotlib
     matplotlib.use(backend)
-    print('Set matplotlib backend to',backend)
+    print('o2graph: Set matplotlib backend to',backend,'.')
 
 import o2sclpy
 gc=o2sclpy.o2graph_plotter()

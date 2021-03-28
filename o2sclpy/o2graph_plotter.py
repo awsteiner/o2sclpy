@@ -1827,7 +1827,7 @@ class o2graph_plotter(yt_plot_base):
         creates the pointer to the o2scl acol_manager object 
         called `amp`.
         """
-        
+
         # Create an acol_manager object and get the pointer
         o2scl_hdf.o2scl_create_acol_manager.restype=ctypes.c_void_p
         amp=o2scl_hdf.o2scl_create_acol_manager()
@@ -3991,9 +3991,7 @@ class o2graph_plotter(yt_plot_base):
 
         This function is called by parse_argv().
         """
-        
-        import matplotlib.pyplot as plot
-        
+
         if self.verbose>2:
             print('In parse_string_list()',strlist)
         
@@ -4480,6 +4478,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for save option.')
                     else:
+                        import matplotlib.pyplot as plot
                         plot.savefig(strlist[ix+1])
                         
                 elif cmd_name=='subplots':
@@ -4569,6 +4568,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for subadj option.')
                     else:
+                        import matplotlib.pyplot as plot
                         plot.subplots_adjust(**string_to_dict(strlist[ix+1]))
                         
                 elif cmd_name=='xtitle':
@@ -4777,6 +4777,7 @@ class o2graph_plotter(yt_plot_base):
                     import matplotlib.image as img
                     im = img.imread(strlist[ix+1])
                     default_plot(0.0,0.0,0.0,0.0)
+                    import matplotlib.pyplot as plot
                     plot.imshow(im)
                     plot.show()
                     
@@ -4841,6 +4842,7 @@ class o2graph_plotter(yt_plot_base):
                     if self.verbose>2:
                         print('Process clf.')
                         print('args:',strlist[ix:ix_next])
+                    import matplotlib.pyplot as plot
                     plot.clf()
                     self.canvas_flag=False
                 elif cmd_name=='backend':

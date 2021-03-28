@@ -182,6 +182,9 @@ class plot_base:
     ax_right_panel=0
     
     def __init__(self):
+        """
+        Desc
+        """
         self.new_cmaps()
     
     def new_cmaps(self):
