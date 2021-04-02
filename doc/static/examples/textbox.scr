@@ -3,7 +3,7 @@
 o2graph -set font 30 -textbox 0.5 0.9 test1 fc=#ffdddd color=red \
 	-set usetex 0 \
 	-textbox 0.5 0.7 test2 fc=#ddffdd,boxstyle=Circle,ec=blue,ls=: \
-	fontfamily=cursive,ha=left \
+	fontfamily=serif,ha=left \
 	-textbox 0.5 0.5 test3 \
 	"fill=False,boxstyle=Sawtooth,ec=orange,ls=--,hatch=///" \
 	"fontstyle=italic,rotation=10" \

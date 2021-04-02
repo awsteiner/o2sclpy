@@ -4,6 +4,6 @@
 o2graph -create table3d x grid:0,1,0.05 y "grid:(-1),0,0.05" \
 	z "sin(x*6)*cos(y*6)" \
 	-xtitle "$ \phi$" -ytitle "$ \eta$" \
-	-new-cmaps -den-plot z cmap=jet2 -contours 0.2 z \
+	-den-plot z cmap=jet2 -contours 0.2 z \
 	-plot lw=2,color=black -save table3d_den_plot.png
 	
