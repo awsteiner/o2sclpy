@@ -24,22 +24,6 @@
 # For sys.argv
 import sys
 
-# O2scl library directory from command-line or environment variables
-#o2scl_lib_dir=''
-
-# C++ library from command-line or environment variables
-#o2scl_cpp_lib=''
-
-# Additional library list from command-line or environment variables
-#o2scl_addl_libs=[]
-
-# List of additional library objects
-#o2scl_addl=[]
-
-# Backend specification from command-line
-#backend=''
-
-from o2sclpy.utils import force_bytes, if_yt_then_Agg
 from o2sclpy.link_o2scl import linker
 
 l=linker()
@@ -49,7 +33,7 @@ l.link_o2scl()
 if backend!='':
     import matplotlib
     matplotlib.use(backend)
-    print('Set matplotlib backend to',backend)
+    print('o2graph: Set matplotlib backend to',backend,'.')
 
 import o2sclpy
 gc=o2sclpy.o2graph_plotter()

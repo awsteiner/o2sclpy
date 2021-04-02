@@ -26,8 +26,6 @@ import numpy
 import os
 import readline
 
-import matplotlib.pyplot as plot
-
 # For wrapping help text
 import textwrap
 
@@ -1128,6 +1126,8 @@ class o2graph_plotter(yt_plot_base):
         Generate a scatter plot.
         """
 
+        import matplotlib.pyplot as plot
+        
         # Useful pointer types
         double_ptr=ctypes.POINTER(ctypes.c_double)
         char_ptr=ctypes.POINTER(ctypes.c_char)
@@ -1351,6 +1351,8 @@ class o2graph_plotter(yt_plot_base):
         Plot a two-dimensional histogram.
         """
 
+        import matplotlib.pyplot as plot
+        
         # Useful pointer types
         double_ptr=ctypes.POINTER(ctypes.c_double)
         char_ptr=ctypes.POINTER(ctypes.c_char)
@@ -1394,7 +1396,8 @@ class o2graph_plotter(yt_plot_base):
                 if len(args)<3:
                     c,x,y,self.last_image=self.axes.hist2d(xv,yv)
                 else:
-                    c,x,y,self.last_image=self.axes.hist2d(xv,yv,**string_to_dict(args[2]))
+                    c,x,y,self.last_image=self.axes.hist2d(xv,yv,
+                                                           **string_to_dict(args[2]))
                 
                 if self.colbar==True:
                     cbar=plot.colorbar(self.last_image,ax=self.axes)
@@ -1824,7 +1827,7 @@ class o2graph_plotter(yt_plot_base):
         creates the pointer to the o2scl acol_manager object 
         called `amp`.
         """
-        
+
         # Create an acol_manager object and get the pointer
         o2scl_hdf.o2scl_create_acol_manager.restype=ctypes.c_void_p
         amp=o2scl_hdf.o2scl_create_acol_manager()
@@ -2072,6 +2075,8 @@ class o2graph_plotter(yt_plot_base):
         Experimental.
         """
 
+        import matplotlib.pyplot as plot
+        
         int_ptr=ctypes.POINTER(ctypes.c_int)
         char_ptr=ctypes.POINTER(ctypes.c_char)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
@@ -3345,6 +3350,8 @@ class o2graph_plotter(yt_plot_base):
         
         """
         
+        import matplotlib.pyplot as plot
+        
         if len(self.yt_ann)==0:
             
             # No animation and no annotation, so just call
@@ -3984,6 +3991,7 @@ class o2graph_plotter(yt_plot_base):
 
         This function is called by parse_argv().
         """
+
         if self.verbose>2:
             print('In parse_string_list()',strlist)
         
@@ -4470,6 +4478,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for save option.')
                     else:
+                        import matplotlib.pyplot as plot
                         plot.savefig(strlist[ix+1])
                         
                 elif cmd_name=='subplots':
@@ -4559,6 +4568,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for subadj option.')
                     else:
+                        import matplotlib.pyplot as plot
                         plot.subplots_adjust(**string_to_dict(strlist[ix+1]))
                         
                 elif cmd_name=='xtitle':
@@ -4767,6 +4777,7 @@ class o2graph_plotter(yt_plot_base):
                     import matplotlib.image as img
                     im = img.imread(strlist[ix+1])
                     default_plot(0.0,0.0,0.0,0.0)
+                    import matplotlib.pyplot as plot
                     plot.imshow(im)
                     plot.show()
                     
@@ -4831,6 +4842,7 @@ class o2graph_plotter(yt_plot_base):
                     if self.verbose>2:
                         print('Process clf.')
                         print('args:',strlist[ix:ix_next])
+                    import matplotlib.pyplot as plot
                     plot.clf()
                     self.canvas_flag=False
                 elif cmd_name=='backend':

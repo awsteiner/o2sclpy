@@ -26,8 +26,6 @@ import os
 # For system type detection
 import platform
 
-import matplotlib.pyplot as plot
-
 # To create new color maps
 from matplotlib.colors import LinearSegmentedColormap
 
@@ -184,6 +182,9 @@ class plot_base:
     ax_right_panel=0
     
     def __init__(self):
+        """
+        Desc
+        """
         self.new_cmaps()
     
     def new_cmaps(self):
@@ -191,6 +192,8 @@ class plot_base:
         Add a few new colormaps
         """
 
+        import matplotlib.pyplot as plot
+        
         # LinearSegmentedColormap
         # 
         # Each row in the table for a given color is a sequence of x,
@@ -282,6 +285,9 @@ class plot_base:
         """
         Set the value of parameter named ``name`` to value ``value``
         """
+        
+        import matplotlib.pyplot as plot
+
         if name=='logx':
             if value=='False' or value=='0':
                 self.logx=False
@@ -704,6 +710,8 @@ class plot_base:
         Call the ``matplotlib`` show function.
         """
 
+        import matplotlib.pyplot as plot
+
         if self.editor:
             
             def disable(ax):
@@ -975,6 +983,9 @@ class plot_base:
         greater than zero, then this function prints the filename to
         the screen.
         """
+        
+        import matplotlib.pyplot as plot
+        
         if self.verbose>0:
             print('Saving as',filename,'.')
         plot.savefig(filename)
@@ -1122,6 +1133,9 @@ class plot_base:
         objects are extracted and placed in a (one-dimensional) list
         in ``axes_dict``.
         """
+        
+        import matplotlib.pyplot as plot
+        
         plot.rc('text',usetex=True)
         plot.rc('font',family='serif')
         plot.rcParams['lines.linewidth']=0.5
@@ -1257,6 +1271,8 @@ class plot_base:
         """
         Modify the current axes properties
         """
+
+        import matplotlib.pyplot as plot
         
         if 'x_major_loc' in kwargs:
             self.axes.get_xaxis().set_major_locator(plot.MultipleLocator
@@ -1367,6 +1383,8 @@ class plot_base:
         used to create the colorbar. 
         """
 
+        import matplotlib.pyplot as plot
+        
         # Create a unique axes label i.e. cbar0
         ifound=9
         for i in range(0,8):
@@ -2071,6 +2089,9 @@ class yt_plot_base(plot_base):
         characters fit in the temporary figure which this function
         generates.
         """
+        
+        import matplotlib.pyplot as plot
+        
         plot.rc('text',usetex=True)
         fig=plot.figure(1,figsize=(6.4,4.8),dpi=dpi)
         axes=plot.axes([0,0,1,1])
