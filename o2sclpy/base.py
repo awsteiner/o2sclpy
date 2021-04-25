@@ -567,7 +567,7 @@ class std_vector_string:
         ret=func(self._ptr,n)
         strt=std_string(self._link,ret)
         strt._owner=True
-        return strt
+        return strt.to_bytes()
 
     def __setitem__(self,i,value):
         func=self._link.o2scl.o2scl_std__vector_std__string__setitem
@@ -916,7 +916,7 @@ class lib_settings_class:
 
     def eos_installed(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_eos_installed
         func.restype=ctypes.c_bool
@@ -926,7 +926,7 @@ class lib_settings_class:
 
     def part_installed(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_part_installed
         func.restype=ctypes.c_bool
@@ -936,7 +936,7 @@ class lib_settings_class:
 
     def hdf_support(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_hdf_support
         func.restype=ctypes.c_bool
@@ -946,7 +946,7 @@ class lib_settings_class:
 
     def openmp_support(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_openmp_support
         func.restype=ctypes.c_bool
@@ -956,7 +956,7 @@ class lib_settings_class:
 
     def readline_support(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_readline_support
         func.restype=ctypes.c_bool
@@ -966,7 +966,7 @@ class lib_settings_class:
 
     def ncurses_support(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_ncurses_support
         func.restype=ctypes.c_bool
@@ -976,7 +976,7 @@ class lib_settings_class:
 
     def gsl2_support(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_gsl2_support
         func.restype=ctypes.c_bool
@@ -986,7 +986,7 @@ class lib_settings_class:
 
     def armadillo_support(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_armadillo_support
         func.restype=ctypes.c_bool
@@ -996,7 +996,7 @@ class lib_settings_class:
 
     def eigen_support(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_eigen_support
         func.restype=ctypes.c_bool
@@ -1006,7 +1006,7 @@ class lib_settings_class:
 
     def fftw_support(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_fftw_support
         func.restype=ctypes.c_bool
@@ -1016,7 +1016,7 @@ class lib_settings_class:
 
     def python_support(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_python_support
         func.restype=ctypes.c_bool
@@ -1026,7 +1026,7 @@ class lib_settings_class:
 
     def hdf5_compression_support(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_hdf5_compression_support
         func.restype=ctypes.c_bool
@@ -1048,7 +1048,7 @@ class lib_settings_class:
 
     def range_check(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_lib_settings_class_range_check
         func.restype=ctypes.c_bool
@@ -1387,7 +1387,7 @@ class table:
         """
         | Parameters:
         | *scol*: string
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
         func=self._link.o2scl.o2scl_table___is_column
@@ -2160,7 +2160,7 @@ class uniform_grid:
 
     def is_log(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_uniform_grid___is_log
         func.restype=ctypes.c_bool
@@ -2902,7 +2902,7 @@ class table3d:
 
     def is_size_set(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_table3d_is_size_set
         func.restype=ctypes.c_bool
@@ -2912,7 +2912,7 @@ class table3d:
 
     def is_xy_set(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_table3d_is_xy_set
         func.restype=ctypes.c_bool
@@ -2974,7 +2974,7 @@ class table3d:
         """
         | Parameters:
         | *name*: string
-        | Returns: ``ctypes.c_bool`` object, a Python int
+        | Returns: a Python boolean, a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_table3d_is_slice
@@ -3400,6 +3400,20 @@ class index_spec:
         func(self._ptr,value)
         return
 
+    def ix_index(self,ix):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | Returns: :class:`index_spec` object
+        """
+        func=self._link.o2scl.o2scl_index_spec_ix_index
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret2=func(self._ptr,ix)
+        ret=index_spec(self._link,ret2)
+        ret.owner=True
+        return ret
+
 
 class tensor:
     """
@@ -3710,7 +3724,7 @@ class tensor_grid:
 
     def is_grid_set(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl.o2scl_tensor_grid___is_grid_set
         func.restype=ctypes.c_bool

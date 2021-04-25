@@ -94,7 +94,7 @@ def subtest_std_vector_string(link):
     # Test shallow copy
     v3=v
     v3[0]=b'pqr'
-    #assert v[0]==b'pqr','getitem and shallow copy'
+    assert v[0]==b'pqr','getitem and shallow copy'
     assert v3.size()==5,'size()'
     assert len(v3)==5,'len()'
 
