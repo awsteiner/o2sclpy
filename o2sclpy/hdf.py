@@ -81,12 +81,12 @@ class hdf_file:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def open(self,fname,write_access,err_on_fail):
+    def open(self,fname,write_access=False,err_on_fail=True):
         """
         | Parameters:
         | *fname*: string
-        | *write_access*: ``bool``
-        | *err_on_fail*: ``bool``
+        | *write_access*=false: ``bool``
+        | *err_on_fail*=true: ``bool``
         """
         fname_=ctypes.c_char_p(force_bytes(fname))
         func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_open

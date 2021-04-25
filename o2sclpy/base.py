@@ -555,6 +555,26 @@ class std_vector_string:
         ret=func(self._ptr)
         return ret
 
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | Returns: std_string object
+        """
+        func=self._link.o2scl.o2scl_std__vector_std__string__getitem
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt
+
+    def __setitem__(self,i,value):
+        func=self._link.o2scl.o2scl_std__vector_std__string__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char_p]
+        func(self._ptr,i,value)
+        return
+
     def __len__(self):
         """
         Return the length of the vector
@@ -2046,12 +2066,12 @@ class table_units(table):
         func(self._ptr,col_)
         return
 
-    def convert_to_unit(self,col,unit,err_on_fail):
+    def convert_to_unit(self,col,unit,err_on_fail=True):
         """
         | Parameters:
         | *col*: string
         | *unit*: string
-        | *err_on_fail*: ``bool``
+        | *err_on_fail*=True: ``bool``
         | Returns: a Python int
         """
         col_=ctypes.c_char_p(force_bytes(col))
@@ -2837,6 +2857,18 @@ class table3d:
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,iy)
         return ret
+
+    def get_size(self):
+        """
+        | Parameters:
+        | Returns: , a Python int, a Python int
+        """
+        func=self._link.o2scl.o2scl_table3d_get_size
+        func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_size_t),ctypes.POINTER(ctypes.c_size_t)]
+        nx_conv=ctypes.c_size_t(0)
+        ny_conv=ctypes.c_size_t(0)
+        func(self._ptr,ctypes.byref(nx_conv),ctypes.byref(ny_conv))
+        return nx_conv.value,ny_conv.value
 
     def get_nx(self):
         """

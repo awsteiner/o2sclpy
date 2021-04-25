@@ -356,11 +356,11 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,n._ptr,p._ptr,th._ptr)
         return ret
 
-    def fcomp(self,nb,delta):
+    def fcomp(self,nb,delta=0.0):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*: ``double``
+        | *delta*=0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp
@@ -383,11 +383,11 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta,ctypes.byref(unc_conv))
         return ret,unc_conv.value
 
-    def feoa(self,nb,delta):
+    def feoa(self,nb,delta=0.0):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*: ``double``
+        | *delta*=0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feoa
@@ -396,11 +396,11 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta)
         return ret
 
-    def fesym(self,nb,delta):
+    def fesym(self,nb,delta=0.0):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*: ``double``
+        | *delta*=0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym
@@ -423,11 +423,11 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta,ctypes.byref(unc_conv))
         return ret,unc_conv.value
 
-    def fesym_slope(self,nb,delta):
+    def fesym_slope(self,nb,delta=0.0):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*: ``double``
+        | *delta*=0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_slope
@@ -436,11 +436,11 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta)
         return ret
 
-    def fesym_curve(self,nb,delta):
+    def fesym_curve(self,nb,delta=0.0):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*: ``double``
+        | *delta*=0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_curve
@@ -449,11 +449,11 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta)
         return ret
 
-    def fesym_skew(self,nb,delta):
+    def fesym_skew(self,nb,delta=0.0):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*: ``double``
+        | *delta*=0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_skew
@@ -498,11 +498,11 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb)
         return ret
 
-    def fkprime(self,nb,delta):
+    def fkprime(self,nb,delta=0.0):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*: ``double``
+        | *delta*=0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fkprime
@@ -511,11 +511,11 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta)
         return ret
 
-    def fmsom(self,nb,delta):
+    def fmsom(self,nb,delta=0.0):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*: ``double``
+        | *delta*=0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fmsom
@@ -524,11 +524,11 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta)
         return ret
 
-    def f_effm_neut(self,nb,delta):
+    def f_effm_neut(self,nb,delta=0.0):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*: ``double``
+        | *delta*=0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_neut
@@ -537,11 +537,11 @@ class eos_had_base(eos_base):
         ret=func(self._ptr,nb,delta)
         return ret
 
-    def f_effm_prot(self,nb,delta):
+    def f_effm_prot(self,nb,delta=0.0):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*: ``double``
+        | *delta*=0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_prot
@@ -2710,13 +2710,13 @@ class eos_tov_interp(eos_tov):
         func(self._ptr,value)
         return
 
-    def read_table(self,eos,s_cole,s_colp,s_colnb):
+    def read_table(self,eos,s_cole,s_colp,s_colnb=""):
         """
         | Parameters:
         | *eos*: :class:`table_units<>` object
         | *s_cole*: string
         | *s_colp*: string
-        | *s_colnb*: string
+        | *s_colnb*="": string
         """
         s_cole_=ctypes.c_char_p(force_bytes(s_cole))
         s_colp_=ctypes.c_char_p(force_bytes(s_colp))
@@ -2742,11 +2742,11 @@ class eos_tov_interp(eos_tov):
         func(self._ptr)
         return
 
-    def s12_low_dens_eos(self,model,external):
+    def s12_low_dens_eos(self,model="SLy4",external=False):
         """
         | Parameters:
-        | *model*: string
-        | *external*: ``bool``
+        | *model*="SLy4": string
+        | *external*=false: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_s12_low_dens_eos
@@ -2754,11 +2754,11 @@ class eos_tov_interp(eos_tov):
         func(self._ptr,model_,external)
         return
 
-    def gcp10_low_dens_eos(self,model,external):
+    def gcp10_low_dens_eos(self,model="BSk20",external=False):
         """
         | Parameters:
-        | *model*: string
-        | *external*: ``bool``
+        | *model*="BSk20": string
+        | *external*=false: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_gcp10_low_dens_eos
@@ -2766,12 +2766,12 @@ class eos_tov_interp(eos_tov):
         func(self._ptr,model_,external)
         return
 
-    def ngl13_low_dens_eos(self,L,model,external):
+    def ngl13_low_dens_eos(self,L,model="PNM",external=False):
         """
         | Parameters:
         | *L*: ``double``
-        | *model*: string
-        | *external*: ``bool``
+        | *model*="PNM": string
+        | *external*=false: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_ngl13_low_dens_eos
@@ -2779,13 +2779,13 @@ class eos_tov_interp(eos_tov):
         func(self._ptr,L,model_,external)
         return
 
-    def ngl13_low_dens_eos2(self,S,L,nt,fname):
+    def ngl13_low_dens_eos2(self,S,L,nt,fname=""):
         """
         | Parameters:
         | *S*: ``double``
         | *L*: ``double``
         | *nt*: ``double``
-        | *fname*: string
+        | *fname*="": string
         """
         fname_=ctypes.c_char_p(force_bytes(fname))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_ngl13_low_dens_eos2
@@ -3457,16 +3457,17 @@ class tov_solve:
         ret=func(self._ptr)
         return ret
 
-    def fixed(self,mass):
+    def fixed(self,mass,pmax=1.0e20):
         """
         | Parameters:
         | *mass*: ``double``
+        | *pmax*=1.0e20: ``double``
         | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_fixed
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
-        ret=func(self._ptr,mass)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,mass,pmax)
         return ret
 
     def max(self):
@@ -4119,10 +4120,10 @@ class nstar_cold:
         func(self._ptr,eos._ptr)
         return
 
-    def calc_eos(self,np_0):
+    def calc_eos(self,np_0=0.0):
         """
         | Parameters:
-        | *np_0*: ``double``
+        | *np_0*=0.0: ``double``
         | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_calc_eos
@@ -4174,7 +4175,7 @@ class nstar_cold:
         return sp
 
 
-def skyrme_load(link,sk,model,external,verbose):
+def skyrme_load(link,sk,model,external=False,verbose=0):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -4189,7 +4190,7 @@ def skyrme_load(link,sk,model,external,verbose):
     func(sk._ptr,model_,external,verbose)
     return
 
-def rmf_load(link,rmf,model,external):
+def rmf_load(link,rmf,model,external=False):
     """
         | Parameters:
         | *link* :class:`linker` object

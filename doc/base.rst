@@ -65,6 +65,7 @@ Class std_vector_string
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __getitem__
 
 Class ublas_vector
 ------------------

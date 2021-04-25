@@ -82,6 +82,24 @@ def subtest_std_vector_size_t(link):
 
     return
 
+def subtest_std_vector_string(link):
+    # Test the std_vector_string class
+    v=o2sclpy.std_vector_string(link)
+    v.resize(5)
+    v[0]=b'abc'
+    v[1]=b'def'
+    v[2]=b'ghi'
+    v[3]=b'jkl'
+    v[4]=b'mno'
+    # Test shallow copy
+    v3=v
+    v3[0]=b'pqr'
+    #assert v[0]==b'pqr','getitem and shallow copy'
+    assert v3.size()==5,'size()'
+    assert len(v3)==5,'len()'
+
+    return
+
 def subtest_ublas_vector(link):
     # Test the ublas_vector class
     v=o2sclpy.ublas_vector(link)
@@ -133,6 +151,7 @@ def test_all():
     subtest_std_vector(link)
     subtest_std_vector_int(link)
     subtest_std_vector_size_t(link)
+    subtest_std_vector_string(link)
     subtest_ublas_vector(link)
     subtest_ublas_matrix(link)
 
