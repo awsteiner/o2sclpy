@@ -474,7 +474,7 @@ class nucmass:
         | Parameters:
         | *Z*: ``int``
         | *N*: ``int``
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl_part.o2scl_nucmass_is_included
         func.restype=ctypes.c_bool
@@ -758,7 +758,7 @@ class nucmass_table(nucmass):
 
     def is_loaded(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl_part.o2scl_nucmass_table_is_loaded
         func.restype=ctypes.c_bool

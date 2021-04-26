@@ -778,7 +778,7 @@ class fermion_thermo(fermion_zerot):
         | *f*: :class:`fermion` object
         | *T*: ``double``
         | *prec*: ``double``
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl_part.o2scl_fermion_thermo_calc_mu_deg
         func.restype=ctypes.c_bool
@@ -793,7 +793,7 @@ class fermion_thermo(fermion_zerot):
         | *T*: ``double``
         | *prec*: ``double``
         | *inc_antip*: ``bool``
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl_part.o2scl_fermion_thermo_calc_mu_ndeg
         func.restype=ctypes.c_bool

@@ -2432,7 +2432,7 @@ class eos_tov:
 
     def has_baryons(self):
         """
-        | Returns: ``ctypes.c_bool`` object
+        | Returns: a Python boolean
         """
         func=self._link.o2scl_eos.o2scl_eos_tov_has_baryons
         func.restype=ctypes.c_bool

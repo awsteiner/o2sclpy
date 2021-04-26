@@ -3400,20 +3400,6 @@ class index_spec:
         func(self._ptr,value)
         return
 
-    def ix_index(self,ix):
-        """
-        | Parameters:
-        | *ix*: ``size_t``
-        | Returns: :class:`index_spec` object
-        """
-        func=self._link.o2scl.o2scl_index_spec_ix_index
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
-        ret2=func(self._ptr,ix)
-        ret=index_spec(self._link,ret2)
-        ret.owner=True
-        return ret
-
 
 class tensor:
     """
@@ -3531,6 +3517,17 @@ class tensor:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,index._ptr)
         return ret
+
+    def resize_vector(self,n,index):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | *index*: :class:`vector<size_t>` object
+        """
+        func=self._link.o2scl.o2scl_tensor___resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,n,index._ptr)
+        return
 
     def get_rank(self):
         """
@@ -4107,4 +4104,134 @@ class shared_ptr_table_units(table_units):
         f.argtypes=[ctypes.c_void_p]
         f(self._s_ptr)
         return
+
+def ix_index(link,ix):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *ix*: ``size_t``
+        | Returns: ``ctypes.c_index_spec`` object
+    """
+    func=link.o2scl.o2scl_ix_index_wrapper
+    func.restype=ctypes.c_index_spec
+    func.argtypes=[ctypes.c_size_t]
+    ret=func(ix)
+    return ret
+
+def ix_fixed(link,ix,ix2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *ix*: ``size_t``
+        | *ix2*: ``size_t``
+        | Returns: ``ctypes.c_index_spec`` object
+    """
+    func=link.o2scl.o2scl_ix_fixed_wrapper
+    func.restype=ctypes.c_index_spec
+    func.argtypes=[ctypes.c_size_t,ctypes.c_size_t]
+    ret=func(ix,ix2)
+    return ret
+
+def ix_sum(link,ix):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *ix*: ``size_t``
+        | Returns: ``ctypes.c_index_spec`` object
+    """
+    func=link.o2scl.o2scl_ix_sum_wrapper
+    func.restype=ctypes.c_index_spec
+    func.argtypes=[ctypes.c_size_t]
+    ret=func(ix)
+    return ret
+
+def ix_trace(link,ix,ix2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *ix*: ``size_t``
+        | *ix2*: ``size_t``
+        | Returns: ``ctypes.c_index_spec`` object
+    """
+    func=link.o2scl.o2scl_ix_trace_wrapper
+    func.restype=ctypes.c_index_spec
+    func.argtypes=[ctypes.c_size_t,ctypes.c_size_t]
+    ret=func(ix,ix2)
+    return ret
+
+def ix_reverse(link,ix):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *ix*: ``size_t``
+        | Returns: ``ctypes.c_index_spec`` object
+    """
+    func=link.o2scl.o2scl_ix_reverse_wrapper
+    func.restype=ctypes.c_index_spec
+    func.argtypes=[ctypes.c_size_t]
+    ret=func(ix)
+    return ret
+
+def ix_range(link,ix,start,end):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *ix*: ``size_t``
+        | *start*: ``size_t``
+        | *end*: ``size_t``
+        | Returns: ``ctypes.c_index_spec`` object
+    """
+    func=link.o2scl.o2scl_ix_range_wrapper
+    func.restype=ctypes.c_index_spec
+    func.argtypes=[ctypes.c_size_t,ctypes.c_size_t,ctypes.c_size_t]
+    ret=func(ix,start,end)
+    return ret
+
+def ix_interp(link,ix,v):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *ix*: ``size_t``
+        | *v*: ``double``
+        | Returns: ``ctypes.c_index_spec`` object
+    """
+    func=link.o2scl.o2scl_ix_interp_wrapper
+    func.restype=ctypes.c_index_spec
+    func.argtypes=[ctypes.c_size_t,ctypes.c_double]
+    ret=func(ix,v)
+    return ret
+
+def ix_grid(link,ix,start,end,n_bins,log=False):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *ix*: ``size_t``
+        | *start*: ``double``
+        | *end*: ``double``
+        | *n_bins*: ``size_t``
+        | *log*: ``bool``
+        | Returns: ``ctypes.c_index_spec`` object
+    """
+    func=link.o2scl.o2scl_ix_grid_wrapper
+    func.restype=ctypes.c_index_spec
+    func.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_size_t,ctypes.c_bool]
+    ret=func(ix,start,end,n_bins,log)
+    return ret
+
+def ix_gridw(link,ix,start,end,width,log=False):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *ix*: ``size_t``
+        | *start*: ``double``
+        | *end*: ``double``
+        | *width*: ``double``
+        | *log*: ``bool``
+        | Returns: ``ctypes.c_index_spec`` object
+    """
+    func=link.o2scl.o2scl_ix_gridw_wrapper
+    func.restype=ctypes.c_index_spec
+    func.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
+    ret=func(ix,start,end,width,log)
+    return ret
 

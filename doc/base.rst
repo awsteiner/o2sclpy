@@ -284,3 +284,48 @@ Class shared_ptr_table_units
         .. automethod:: __init__
         .. automethod:: __del__
 
+Function ix_index
+-----------------
+
+.. autofunction:: o2sclpy.ix_index(link,ix)
+
+Function ix_fixed
+-----------------
+
+.. autofunction:: o2sclpy.ix_fixed(link,ix,ix2)
+
+Function ix_sum
+---------------
+
+.. autofunction:: o2sclpy.ix_sum(link,ix)
+
+Function ix_trace
+-----------------
+
+.. autofunction:: o2sclpy.ix_trace(link,ix,ix2)
+
+Function ix_reverse
+-------------------
+
+.. autofunction:: o2sclpy.ix_reverse(link,ix)
+
+Function ix_range
+-----------------
+
+.. autofunction:: o2sclpy.ix_range(link,ix,start,end)
+
+Function ix_interp
+------------------
+
+.. autofunction:: o2sclpy.ix_interp(link,ix,v)
+
+Function ix_grid
+----------------
+
+.. autofunction:: o2sclpy.ix_grid(link,ix,start,end,n_bins,log)
+
+Function ix_gridw
+-----------------
+
+.. autofunction:: o2sclpy.ix_gridw(link,ix,start,end,width,log)
+

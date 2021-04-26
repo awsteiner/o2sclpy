@@ -22,6 +22,7 @@ def subtest_basic(link):
     assert (xtmp-5)**2+(ytmp-3)**2==ztmp,'get'
     assert t3d.get_nx()==10,'get_nx()'
     assert t3d.get_ny()==13,'get_ny()'
+    assert t3d.get_size()==(10,13),'get_size()'
     # Make sure summary() works
     t3d.summary()
     return
