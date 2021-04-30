@@ -1304,21 +1304,6 @@ class table:
         func(self._ptr,col_)
         return
 
-    def get_column(self,col):
-        """
-        | Parameters:
-        | *col*: string
-        | Returns: ``numpy`` array
-        """
-        col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table___get_column
-        n_=ctypes.c_int(0)
-        ptr_=ctypes.POINTER(ctypes.c_double)()
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
-        func(self._ptr,col_,ctypes.byref(ptr_),ctypes.byref(n_))
-        ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
-        return ret
-
     def get_column_name(self,icol):
         """
         | Parameters:
@@ -3551,6 +3536,18 @@ class tensor:
         ret=func(self._ptr,i)
         return ret
 
+    def get_data(self):
+        """
+        | Returns: ``numpy`` array
+        """
+        func=self._link.o2scl.o2scl_tensor___get_data
+        n_=ctypes.c_int(0)
+        ptr_=ctypes.POINTER(ctypes.c_double)()
+        func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
+        func(self._ptr,ctypes.byref(ptr_),ctypes.byref(n_))
+        ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
+        return ret
+
     def total_size(self):
         """
         | Returns: a Python int
@@ -3590,6 +3587,20 @@ class tensor:
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
+
+    @classmethod
+    def create_size(cls,link,rank,sizes):
+        """
+        Constructor-like class method for tensor<> .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_tensor___create_size
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
+        return cls(link,f(rank,sizes._ptr))
 
     def set(self,index,val):
         """
