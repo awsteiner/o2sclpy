@@ -3602,6 +3602,18 @@ class tensor:
         f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
         return cls(link,f(rank,sizes._ptr))
 
+    def create_size(self,v):
+        """
+        Copy ``v`` to an :class:`std_vector_size_t` object and add the line of
+        data to the table
+        """
+        # Create a std_vector object and copy the data over
+        vec=std_vector_size_t(self._link)
+        vec.resize(len(v))
+        for i in range(0,len(v)):
+            vec[i]=v[i]
+        self.create_size_vector(vec)
+        return
     def set(self,index,val):
         """
         Copy ``index`` to an :class:`std_vector_size_t` object and add the 
@@ -4245,4 +4257,86 @@ def ix_gridw(link,ix,start,end,width,log=False):
     func.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
     ret=func(ix,start,end,width,log)
     return ret
+
+def fermi_function(link,E,mu,T,limit=40.0):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *E*: ``double``
+        | *mu*: ``double``
+        | *T*: ``double``
+        | *limit*: ``double``
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_fermi_function_wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+    ret=func(E,mu,T,limit)
+    return ret
+
+def bose_function(link,E,mu,T,limit=40.0):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *E*: ``double``
+        | *mu*: ``double``
+        | *T*: ``double``
+        | *limit*: ``double``
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_bose_function_wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+    ret=func(E,mu,T,limit)
+    return ret
+
+def quadratic_extremum_x(link,x1,x2,x3,y1,y2,y3):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *x1*: ``double``
+        | *x2*: ``double``
+        | *x3*: ``double``
+        | *y1*: ``double``
+        | *y2*: ``double``
+        | *y3*: ``double``
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_quadratic_extremum_x_double__wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+    ret=func(x1,x2,x3,y1,y2,y3)
+    return ret
+
+def quadratic_extremum_y(link,x1,x2,x3,y1,y2,y3):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *x1*: ``double``
+        | *x2*: ``double``
+        | *x3*: ``double``
+        | *y1*: ``double``
+        | *y2*: ``double``
+        | *y3*: ``double``
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_quadratic_extremum_y_double__wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+    ret=func(x1,x2,x3,y1,y2,y3)
+    return ret
+
+def screenify(link,nin,in_cols,out_cols,max_size=80):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *nin*: ``size_t``
+        | *in_cols*: :class:`vector<std::string>` object
+        | *out_cols*: :class:`vector<std::string>` object
+        | *max_size*: ``size_t``
+    """
+    func=link.o2scl.o2scl_screenify_vector_std__string___wrapper
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+    func(nin,in_cols._ptr,out_cols._ptr,max_size)
+    return
 
