@@ -160,7 +160,8 @@ def markers_plot(fname=''):
     import matplotlib
     if (matplotlib.get_backend()!='Agg' and 
         matplotlib.get_backend()!='agg'):
-        plot.show()
+        if fname=='':
+            plot.show()
     elif fname=='':
         print('Backend is Agg but no filename is specified',
               'so no output was created.')
@@ -326,7 +327,8 @@ def colors_near(col='',fname=''):
             import matplotlib
             if (matplotlib.get_backend()!='Agg' and 
                 matplotlib.get_backend()!='agg'):
-                plot.show()
+                if fname=='':
+                    plot.show()
             elif fname=='':
                 print('Backend is Agg but no filename is specified',
                       'so no output was created.')
@@ -466,13 +468,14 @@ def cmaps_plot(fname=''):
     import matplotlib
     if (matplotlib.get_backend()!='Agg' and 
         matplotlib.get_backend()!='agg'):
-        plot.show()
+        if fname=='':
+            plot.show()
     elif fname=='':
         print('Backend is Agg but no filename is specified',
               'so no output was created.')
     return
 
-def colors_plot(fname=''):
+def colors_plot(fname='',dpi=10):
     """
     Create a plot of the matplotlib CSS4 colors and, optionally,
     store the plot in file named 'fname'.
@@ -492,6 +495,7 @@ def colors_plot(fname=''):
     plot.rc('font',family='serif')
     fig,axes=plot.subplots(figsize=(8,6.6))
     # Get height and width
+    fig.set_dpi(dpi)
     X,Y=fig.get_dpi()*fig.get_size_inches()
     h=Y/(nrows+1+header)
     w=X/ncols
@@ -523,7 +527,9 @@ def colors_plot(fname=''):
     import matplotlib
     if (matplotlib.get_backend()!='Agg' and 
         matplotlib.get_backend()!='agg'):
-        plot.show()
+        if fname=='':
+            print('here')
+            plot.show()
     elif fname=='':
         print('Backend is Agg but no filename is specified',
               'so no output was created.')
