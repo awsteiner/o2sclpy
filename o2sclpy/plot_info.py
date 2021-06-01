@@ -528,7 +528,6 @@ def colors_plot(fname='',dpi=10):
     if (matplotlib.get_backend()!='Agg' and 
         matplotlib.get_backend()!='agg'):
         if fname=='':
-            print('here')
             plot.show()
     elif fname=='':
         print('Backend is Agg but no filename is specified',
