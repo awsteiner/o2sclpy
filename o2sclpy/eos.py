@@ -3911,26 +3911,6 @@ class nstar_cold:
         return
 
     @property
-    def solver_tol(self):
-        """
-        Property of type ``ctypes.c_double``
-        """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_solver_tol
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @solver_tol.setter
-    def solver_tol(self,value):
-        """
-        Setter function for nstar_cold::solver_tol .
-        """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_solver_tol
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
-        func(self._ptr,value)
-        return
-
-    @property
     def eos_neg(self):
         """
         Property of type ``ctypes.c_bool``

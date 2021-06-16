@@ -74,3 +74,33 @@ Function hdf_output_uniform_grid
 
 .. autofunction:: o2sclpy.hdf_output_uniform_grid(link,hf,t,name)
 
+Function hdf_input_tensor_grid
+------------------------------
+
+.. autofunction:: o2sclpy.hdf_input_tensor_grid(link,hf,t,name)
+
+Function hdf_input_n_tensor_grid
+--------------------------------
+
+.. autofunction:: o2sclpy.hdf_input_n_tensor_grid(link,hf,t,name)
+
+Function hdf_output_tensor_grid
+-------------------------------
+
+.. autofunction:: o2sclpy.hdf_output_tensor_grid(link,hf,t,name)
+
+Function value_spec
+-------------------
+
+.. autofunction:: o2sclpy.value_spec(link,spec,d,verbose,err_on_fail)
+
+Function vector_spec<std::vector<double>>
+-----------------------------------------
+
+.. autofunction:: o2sclpy.vector_spec<std::vector<double>>(link,spec,v,verbose,err_on_fail)
+
+Function strings_spec<std::vector<std::string>>
+-----------------------------------------------
+
+.. autofunction:: o2sclpy.strings_spec<std::vector<std::string>>(link,spec,v,verbose,err_on_fail)
+
