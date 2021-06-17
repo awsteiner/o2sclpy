@@ -1197,31 +1197,32 @@ class o2graph_plotter(yt_plot_base):
                 
                 if self.canvas_flag==False:
                     self.canvas()
+                ft=self.axes.scatter
                 if len(sv)>0:
                     if len(cv)>0:
                         if len(args)>4:
-                            self.axes.scatter(xv,yv,s=sv,c=cv,
+                            self.last_image=ft(xv,yv,s=sv,c=cv,
                                          **string_to_dict(args[4]))
                         else:
-                            self.axes.scatter(xv,yv,s=sv,c=cv)
+                            self.last_image=ft(xv,yv,s=sv,c=cv)
                     else:
                         if len(args)>4:
-                            self.axes.scatter(xv,yv,s=sv,
+                            self.last_image=ft(xv,yv,s=sv,
                                          **string_to_dict(args[4]))
                         else:
-                            self.axes.scatter(xv,yv,s=sv)
+                            self.last_image=ft(xv,yv,s=sv)
                 else:
                     if len(cv)>0:
                         if len(args)>4:
-                            self.axes.scatter(xv,yv,c=cv,
+                            self.last_image=ft(xv,yv,c=cv,
                                          **string_to_dict(args[4]))
                         else:
-                            self.axes.scatter(xv,yv,c=cv)
+                            self.last_image=ft(xv,yv,c=cv)
                     else:
                         if len(args)>4:
-                            self.axes.scatter(xv,yv,**string_to_dict(args[4]))
+                            self.last_image=ft(xv,yv,**string_to_dict(args[4]))
                         else:
-                            self.axes.scatter(xv,yv)
+                            self.last_image=ft(xv,yv)
 
                 if self.logx==True:
                     self.axes.set_xscale('log')
@@ -1233,7 +1234,7 @@ class o2graph_plotter(yt_plot_base):
                 if self.yset==True:
                     self.axes.set_ylim(self.ylo,self.yhi)
                 if self.colbar==True and len(cv)>0:
-                    cbar=plot.colorbar(ax=self.axes)
+                    cbar=plot.colorbar(self.last_image,ax=self.axes)
                     cbar.ax.tick_params('both',length=6,width=1,
                                         which='major')
                     cbar.ax.tick_params(labelsize=self.font*0.8)

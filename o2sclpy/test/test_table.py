@@ -23,7 +23,7 @@ def subtest_basic(link):
     assert table.get('col1',2)==4,'get()'
     assert table.get_column_name(2)==b'col3','get_column_name()'
     assert table.get('col2',2)==8.0,'function_column()'
-    v=table.get_column('col2')
+    v=table['col2']
     assert len(v)==5, 'get_column()'
     assert v[4]==10.0, 'get_column()'
     v2=table['col2']
