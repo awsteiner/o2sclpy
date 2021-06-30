@@ -1,30 +1,106 @@
-Other O\ :sub:`2`\ sclpy objects
-================================
+.. _hdf:
 
-Variables ``base_list``, ``param_list``, ``yt_param_list``,
-``extra_list`` are not listed here because their auto-docs are too
-long.
+Other classes from O\ :sub:`2`\ scl
+==================================
 
-Other O\ :sub:`2`\ sclpy functions
-----------------------------------
+Class slack_messenger
+---------------------
 
-.. autofunction:: o2sclpy.build_o2scl
-.. autofunction:: o2sclpy.default_plot
-.. autofunction:: o2sclpy.get_str_array
-.. autofunction:: o2sclpy.string_to_dict
-.. autofunction:: o2sclpy.parse_arguments
-.. autofunction:: o2sclpy.slack_notify
-.. autofunction:: o2sclpy.force_bytes
+.. autoclass:: o2sclpy.slack_messenger
+        :members:
+        :undoc-members:
 
-Other O\ :sub:`2`\ sclpy variables
-----------------------------------
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
-.. autodata:: o2sclpy.version		  
-.. autodata:: o2sclpy.cmaps
-.. autodata:: o2sclpy.new_cmaps
-.. autodata:: o2sclpy.extra_types
+Class quadratic_real_coeff_gsl
+------------------------------
 
+.. autoclass:: o2sclpy.quadratic_real_coeff_gsl
+        :members:
+        :undoc-members:
 
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 
+Class quadratic_real_coeff_gsl2<>
+---------------------------------
 
+.. autoclass:: o2sclpy.quadratic_real_coeff_gsl2<>
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class cubic_real_coeff_cern<>
+-----------------------------
+
+.. autoclass:: o2sclpy.cubic_real_coeff_cern<>
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class cubic_real_coeff_gsl
+--------------------------
+
+.. autoclass:: o2sclpy.cubic_real_coeff_gsl
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class quartic_real_coeff_cern<>
+-------------------------------
+
+.. autoclass:: o2sclpy.quartic_real_coeff_cern<>
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class fermi_dirac_integ_gsl
+---------------------------
+
+.. autoclass:: o2sclpy.fermi_dirac_integ_gsl
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class bessel_K_exp_integ_gsl
+----------------------------
+
+.. autoclass:: o2sclpy.bessel_K_exp_integ_gsl
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class hist
+----------
+
+.. autoclass:: o2sclpy.hist
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __deepcopy__
+        .. automethod:: __getitem__
 
