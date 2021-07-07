@@ -2269,7 +2269,7 @@ class yt_plot_base(plot_base):
         """
         import yt
         from yt.visualization.volume_rendering.api \
-            import VolumeSource
+            import create_volume_source
 
         if self.verbose>0:
             print('No volume object, adding yt volume.')
@@ -2282,7 +2282,7 @@ class yt_plot_base(plot_base):
         self.yt_data_sources.append(yt.load_uniform_grid(dict(density=arr),
                                                          arr.shape,bbox=bbox))
         ds=self.yt_data_sources[len(self.yt_data_sources)-1]
-        self.yt_vols.append(VolumeSource(ds,field='density'))
+        self.yt_vols.append(create_volume_source(ds,field='density'))
         vol=self.yt_vols[len(self.yt_vols)-1]
         vol.log_field=False
             
