@@ -1963,7 +1963,7 @@ class o2graph_plotter(yt_plot_base):
             self.yt_check_backend()
             import yt
             from yt.visualization.volume_rendering.api \
-                import VolumeSource
+                import create_volume_source
             from yt.visualization.volume_rendering.transfer_function_helper \
                 import TransferFunctionHelper
 
@@ -2033,7 +2033,7 @@ class o2graph_plotter(yt_plot_base):
                                              arr2.shape,bbox=bbox2))
             ds=self.yt_data_sources[len(self.yt_data_sources)-1]
 
-            self.yt_vols.append(VolumeSource(ds,field='density'))
+            self.yt_vols.append(create_volume_source(ds,field='density'))
             vol=self.yt_vols[len(self.yt_vols)-1]
             vol.log_field=False
 
