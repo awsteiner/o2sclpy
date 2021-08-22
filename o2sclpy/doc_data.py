@@ -408,6 +408,12 @@ This is a list of 4-element entries:
 4: full help text
 """
 
+acol_types=["char","double","double[]","hist","hist_2d","int",
+            "int[]","prob_dens_mdim_amr","size_t","size_t[]","string",
+            "string[]","table","table3d","tensor","tensor<int>",
+            "tensor<size_t>","tensor_grid",
+            "uniform_grid<double>","vector<contour_line>"]
+
 extra_types=["table","table3d","hist_2d","hist","double[]","int[]",
              "size_t[]","tensor","tensor<int>","tensor<size_t>",
              "tensor_grid"]
