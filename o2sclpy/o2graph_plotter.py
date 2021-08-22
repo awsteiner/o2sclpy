@@ -3244,39 +3244,55 @@ class o2graph_plotter(yt_plot_base):
         char_ptr=ctypes.POINTER(ctypes.c_char)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
             
-        #self.gen_acol(o2scl_hdf,amp,'commands',args)
+        # Function arguments
+        this_type=ctypes.c_char_p(b'')
+        size=ctypes.c_int(0)
+        iptr=int_ptr()
+        cptr=char_ptr()
+            
+        # Function interfaces
+        get_fn=o2scl_hdf.o2scl_acol_get_cli_options
+        get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
+                         char_ptr_ptr]
+        get_fn.restype=ctypes.c_int
+
+        get_type_fn=o2scl_hdf.o2scl_acol_get_cli_options_type
+        get_type_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,
+                              int_ptr_ptr,char_ptr_ptr]
+        get_type_fn.restype=ctypes.c_int
 
         if len(args)>0 and args[0]=='all':
 
-            print('Commands which do not require a current object:\n')
-            
-            # Function interface
-            get_fn=o2scl_hdf.o2scl_acol_get_cli_options_type
-            get_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,int_ptr_ptr,
-                             char_ptr_ptr]
-            get_fn.restype=ctypes.c_int
-    
-            # Arguments
-            size=ctypes.c_int(0)
-            iptr=int_ptr()
-            cptr=char_ptr()
-            this_type2=ctypes.c_char_p(force_bytes('char'))
+            print('Commands from acol which do not require a current',
+                  'object:\n')
             
             # Function call
-            get_ret=get_fn(amp,this_type2,ctypes.byref(size),
-                           ctypes.byref(iptr),ctypes.byref(cptr))
+            get_ret=get_type_fn(amp,this_type,ctypes.byref(size),
+                                ctypes.byref(iptr),ctypes.byref(cptr))
     
-            # comm_list is the list of acol commands for this type
             base_acol_comm_list=get_ic_ptrs_to_list(size,iptr,cptr)
-            base_acol_comm_list.remove(b'value')
-            comm_list=base_acol_comm_list
-                
+            base_acol_comm_list=sorted(base_acol_comm_list)
+            comm_list=[]
+            for i in range(0,len(base_acol_comm_list)):
+                st=base_acol_comm_list[i].decode('utf-8')
+                comm_list.append(ter.cmd_str(st))
+            
+            comm_rows=screenify(comm_list)
+            for i in range(0,len(comm_rows)):
+                print(comm_rows[i])
+
+            print(' ')
+            
+            print('O2graph commands which do not require a current',
+                  'object:\n')
+
+            comm_list=[]
             for line in base_list:
                 comm_list.append(force_bytes(line[0]))
-            comm_list2=sorted(comm_list)
-            for i in range(0,len(comm_list2)):
-                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
-            comm_rows=screenify(comm_list2)
+            comm_list_dec=sorted(comm_list)
+            for i in range(0,len(comm_list_dec)):
+                comm_list_dec[i]=ter.cmd_str(comm_list_dec[i].decode('utf-8'))
+            comm_rows=screenify(comm_list_dec)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
                 
@@ -3284,7 +3300,7 @@ class o2graph_plotter(yt_plot_base):
 
             for this_type in acol_types:
                 
-                print('O2graph commands for an object of type '+
+                print('Acol and o2graph commands for an object of type '+
                       ter.type_str(str(this_type))+':\n')
                 
                 # Function interface

@@ -847,8 +847,8 @@ def screenify(tlist,ncols=79):
     for i in range(0,nrows):
         row=''
         for j in range(0,ncolumns):
-            if j+i*ncolumns<len(tlist):
-                colt=tlist[j+i*ncolumns]
+            if i+j*nrows<len(tlist):
+                colt=tlist[i+j*nrows]
                 while length_without_colors(colt)<maxlen:
                     colt=colt+' '
                 row=row+colt
