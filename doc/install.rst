@@ -4,12 +4,14 @@ Installation and Requirements
 =============================
 
 O\ :sub:`2`\ sclpy requires an installation of the development version
-of O\ :sub:`2`\ scl. The release version, O\ :sub:`2`\ sclpy 0.925,
-requires the O\ :sub:`2`\ scl v0.925 release from
-<https://github.com/awsteiner/o2scl/releases/tag/v0.925> and the
-development version, O\ :sub:`2`\ sclpy 0.926a1, requires that the
-most recent version of O\ :sub:`2`\ scl from the master branch on
-github is installed on your machine.
+of O\ :sub:`2`\ scl. The release version, O\ :sub:`2`\ sclpy 0.926,
+requires the O\ :sub:`2`\ scl v0.926 release from
+<https://github.com/awsteiner/o2scl/releases/tag/v0.926>.
+
+.. and the
+   development version, O\ :sub:`2`\ sclpy 0.926a1, requires that the
+   most recent version of O\ :sub:`2`\ scl from the master branch on
+   github is installed on your machine.
 
 The python associated with O\ :sub:`2`\ sclpy can be installed with
 e.g. ``pip3 install o2sclpy``. If you want to install the development
