@@ -91,6 +91,40 @@ Class ublas_matrix
         .. automethod:: __copy__
         .. automethod:: __getitem__
 
+Class ublas_matrix_int
+----------------------
+
+.. autoclass:: o2sclpy.ublas_matrix_int
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
+
+Class std_vector_vector
+-----------------------
+
+.. autoclass:: o2sclpy.std_vector_vector
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class std_complex
+-----------------
+
+.. autoclass:: o2sclpy.std_complex
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class lib_settings_class
 ------------------------
 
@@ -252,6 +286,30 @@ Class tensor_grid
         .. automethod:: __copy__
         .. automethod:: __deepcopy__
 
+Class tensor_int
+----------------
+
+.. autoclass:: o2sclpy.tensor_int
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __deepcopy__
+
+Class tensor_size_t
+-------------------
+
+.. autoclass:: o2sclpy.tensor_size_t
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __deepcopy__
+
 Class find_constants
 --------------------
 
@@ -267,6 +325,28 @@ Class convert_units
 -------------------
 
 .. autoclass:: o2sclpy.convert_units
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class format_float
+------------------
+
+.. autoclass:: o2sclpy.format_float
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class interp
+------------
+
+.. autoclass:: o2sclpy.interp
         :members:
         :undoc-members:
 
@@ -353,4 +433,9 @@ Function screenify<vector<std::string>>
 ---------------------------------------
 
 .. autofunction:: o2sclpy.screenify<vector<std::string>>(link,nin,in_cols,out_cols,max_size)
+
+Function vector_level_count<std::vector<double>,std::vector<double>>
+--------------------------------------------------------------------
+
+.. autofunction:: o2sclpy.vector_level_count<std::vector<double>,std::vector<double>>(link,level,n,x,y)
 

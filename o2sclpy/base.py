@@ -809,6 +809,270 @@ class ublas_matrix:
                 ret[i,j]=self.__getitem__((i,j))
         return ret
 
+class ublas_matrix_int:
+    """
+    Python interface for C++ class ``boost::numeric::ublas::matrix<int>``.
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class ublas_matrix_int
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_boost__numeric__ublas__matrix_int_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class ublas_matrix_int
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_boost__numeric__ublas__matrix_int_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class ublas_matrix_int
+        
+        Returns: a ublas_matrix_int object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def size1(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_int__size1
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def size2(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_int__size2
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def resize(self,m,n):
+        """
+        | Parameters:
+        | *m*: ``size_t``
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_int__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        func(self._ptr,m,n)
+        return
+
+    def __getitem__(self,tup):
+        """
+        | Parameters:
+        | *m*: ``size_t``
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_int__getitem
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        m,n=tup
+        ret=func(self._ptr,m,n)
+        return ret
+
+    def __setitem__(self,tup,value):
+        m,n=tup
+        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_int__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_int]
+        func(self._ptr,m,n,value)
+        return
+
+
+class std_vector_vector:
+    """
+    Python interface for C++ class ``std::vector<std::vector<double>>``.
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class std_vector_vector
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_std__vector_std__vector_double__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class std_vector_vector
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_std__vector_std__vector_double__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class std_vector_vector
+        
+        Returns: a std_vector_vector object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_std__vector_std__vector_double___resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def size(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_std__vector_std__vector_double___size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def __len__(self):
+        """
+        Return the length of the vector
+    
+        Returns: a Python int
+        """
+        return self.size()
+
+class std_complex:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``std::complex<double>``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/std::complex<double>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class std_complex
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_std__complex_double_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class std_complex
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_std__complex_double_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class std_complex
+        
+        Returns: a std_complex object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @classmethod
+    def init(cls,link,re,im):
+        """
+        Constructor-like class method for std::complex<double> .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_std__complex_double__init
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_double,ctypes.c_double]
+        return cls(link,f(re,im))
+
+    def to_python(self):
+        """
+        Convert to a python complex number
+    
+        Returns: a python complex number
+        """
+        ret=self.real()+self.imag()*1j
+        return ret
+
 class lib_settings_class:
     """
     Python interface for O\ :sub:`2`\ scl class ``lib_settings_class``,
@@ -3491,6 +3755,16 @@ class tensor:
         func(self._ptr,x)
         return
 
+    def swap_data(self,data):
+        """
+        | Parameters:
+        | *data*: :class:`std_vector` object
+        """
+        func=self._link.o2scl.o2scl_tensor___swap_data
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,data._ptr)
+        return
+
     def get_vector(self,index):
         """
         | Parameters:
@@ -3558,6 +3832,29 @@ class tensor:
         ret=func(self._ptr)
         return ret
 
+    def pack_indices(self,index):
+        """
+        | Parameters:
+        | *index*: :class:`std_vector_size_t` object
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor___pack_indices
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,index._ptr)
+        return ret
+
+    def unpack_index(self,ix,index):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *index*: :class:`std_vector_size_t` object
+        """
+        func=self._link.o2scl.o2scl_tensor___unpack_index
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,ix,index._ptr)
+        return
+
     def min_value(self):
         """
         | Returns: a Python float
@@ -3578,6 +3875,18 @@ class tensor:
         ret=func(self._ptr)
         return ret
 
+    def minmax_value(self):
+        """
+        | Parameters:
+        | Returns: , a Python float, a Python float
+        """
+        func=self._link.o2scl.o2scl_tensor___minmax_value
+        func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
+        min_conv=ctypes.c_double(0)
+        max_conv=ctypes.c_double(0)
+        func(self._ptr,ctypes.byref(min_conv),ctypes.byref(max_conv))
+        return min_conv.value,max_conv.value
+
     def total_sum(self):
         """
         | Returns: a Python float
@@ -3587,6 +3896,24 @@ class tensor:
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
+
+    def convert_table3d_sum(self,ix_x,ix_y,tab,x_name="x",y_name="y",slice_name="z"):
+        """
+        | Parameters:
+        | *ix_x*: ``size_t``
+        | *ix_y*: ``size_t``
+        | *tab*: :class:`table3d` object
+        | *x_name*="x": string
+        | *y_name*="y": string
+        | *slice_name*="z": string
+        """
+        x_name_=ctypes.c_char_p(force_bytes(x_name))
+        y_name_=ctypes.c_char_p(force_bytes(y_name))
+        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        func=self._link.o2scl.o2scl_tensor___convert_table3d_sum
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
+        return
 
     @classmethod
     def create_size(cls,link,rank,sizes):
@@ -3807,6 +4134,496 @@ class tensor_grid:
         return
 
 
+class tensor_int:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``tensor``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/tensor.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class tensor_int
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_tensor_int_std__vector_int__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class tensor_int
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_tensor_int_std__vector_int__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class tensor_int
+        
+        Returns: a tensor_int object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class tensor_int
+        
+        Returns: a new copy of the tensor_int object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_tensor_int_std__vector_int__
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
+        return new_obj
+
+    def is_valid(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___is_valid
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def clear(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___clear
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def set_vector(self,index,val):
+        """
+        | Parameters:
+        | *index*: :class:`vector<size_t>` object
+        | *val*: ``int``
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,index._ptr,val)
+        return
+
+    def set_all(self,x):
+        """
+        | Parameters:
+        | *x*: ``int``
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___set_all
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,x)
+        return
+
+    def get_vector(self,index):
+        """
+        | Parameters:
+        | *index*: :class:`vector<size_t>` object
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___get
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,index._ptr)
+        return ret
+
+    def resize_vector(self,n,index):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | *index*: :class:`vector<size_t>` object
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,n,index._ptr)
+        return
+
+    def get_rank(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___get_rank
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def get_size(self,i):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___get_size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,i)
+        return ret
+
+    def total_size(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___total_size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def min_value(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___min_value
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def max_value(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___max_value
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def total_sum(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___total_sum
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    @classmethod
+    def create_size(cls,link,rank,sizes):
+        """
+        Constructor-like class method for tensor<int,std::vector<int>> .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_tensor_int_std__vector_int___create_size
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
+        return cls(link,f(rank,sizes._ptr))
+
+    def create_size(self,v):
+        """
+        Copy ``v`` to an :class:`std_vector_size_t` object and add the line of
+        data to the table
+        """
+        # Create a std_vector object and copy the data over
+        vec=std_vector_size_t(self._link)
+        vec.resize(len(v))
+        for i in range(0,len(v)):
+            vec[i]=v[i]
+        self.create_size_vector(vec)
+        return
+    def set(self,index,val):
+        """
+        Copy ``index`` to an :class:`std_vector_size_t` object and add the 
+        data to the table
+        """
+        svst=o2sclpy.std_vector_size_t(self._link)
+        syst.init_py(index)
+        self.set_vector(syst,val)
+        return
+     
+    def get(self,index):
+        """
+        Copy ``index`` to an :class:`std_vector_size_t` object and get the 
+        data from the table
+        """
+        svst=o2sclpy.std_vector_size_t(self._link)
+        syst.init_py(index)
+        return self.get_vector(syst)
+    
+    def resize(self,index):
+        """
+        Copy ``index`` to an :class:`std_vector_size_t` object 
+        and resize
+        """
+        svst=o2sclpy.std_vector_size_t(self._link)
+        syst.init_py(index)
+        self.resize_vector(syst)
+        return
+
+class tensor_size_t:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``tensor``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/tensor.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class tensor_size_t
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_tensor_size_t_std__vector_size_t__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class tensor_size_t
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_tensor_size_t_std__vector_size_t__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class tensor_size_t
+        
+        Returns: a tensor_size_t object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class tensor_size_t
+        
+        Returns: a new copy of the tensor_size_t object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_tensor_size_t_std__vector_size_t__
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
+        return new_obj
+
+    def is_valid(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___is_valid
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def clear(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___clear
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def set_vector(self,index,val):
+        """
+        | Parameters:
+        | *index*: :class:`vector<size_t>` object
+        | *val*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,index._ptr,val)
+        return
+
+    def set_all(self,x):
+        """
+        | Parameters:
+        | *x*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___set_all
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,x)
+        return
+
+    def get_vector(self,index):
+        """
+        | Parameters:
+        | *index*: :class:`vector<size_t>` object
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___get
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,index._ptr)
+        return ret
+
+    def resize_vector(self,n,index):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | *index*: :class:`vector<size_t>` object
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,n,index._ptr)
+        return
+
+    def get_rank(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___get_rank
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def get_size(self,i):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___get_size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,i)
+        return ret
+
+    def total_size(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___total_size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def min_value(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___min_value
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def max_value(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___max_value
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def total_sum(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___total_sum
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    @classmethod
+    def create_size(cls,link,rank,sizes):
+        """
+        Constructor-like class method for tensor<size_t,std::vector<size_t>> .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_tensor_size_t_std__vector_size_t___create_size
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
+        return cls(link,f(rank,sizes._ptr))
+
+    def create_size(self,v):
+        """
+        Copy ``v`` to an :class:`std_vector_size_t` object and add the line of
+        data to the table
+        """
+        # Create a std_vector object and copy the data over
+        vec=std_vector_size_t(self._link)
+        vec.resize(len(v))
+        for i in range(0,len(v)):
+            vec[i]=v[i]
+        self.create_size_vector(vec)
+        return
+    def set(self,index,val):
+        """
+        Copy ``index`` to an :class:`std_vector_size_t` object and add the 
+        data to the table
+        """
+        svst=o2sclpy.std_vector_size_t(self._link)
+        syst.init_py(index)
+        self.set_vector(syst,val)
+        return
+     
+    def get(self,index):
+        """
+        Copy ``index`` to an :class:`std_vector_size_t` object and get the 
+        data from the table
+        """
+        svst=o2sclpy.std_vector_size_t(self._link)
+        syst.init_py(index)
+        return self.get_vector(syst)
+    
+    def resize(self,index):
+        """
+        Copy ``index`` to an :class:`std_vector_size_t` object 
+        and resize
+        """
+        svst=o2sclpy.std_vector_size_t(self._link)
+        syst.init_py(index)
+        self.resize_vector(syst)
+        return
+
 class find_constants:
     """
     Python interface for O\ :sub:`2`\ scl class ``find_constants``,
@@ -3969,26 +4786,6 @@ class convert_units:
         return
 
     @property
-    def use_gnu_units(self):
-        """
-        Property of type ``ctypes.c_bool``
-        """
-        func=self._link.o2scl.o2scl_convert_units___get_use_gnu_units
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @use_gnu_units.setter
-    def use_gnu_units(self,value):
-        """
-        Setter function for convert_units<>::use_gnu_units .
-        """
-        func=self._link.o2scl.o2scl_convert_units___set_use_gnu_units
-        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
-        func(self._ptr,value)
-        return
-
-    @property
     def err_on_fail(self):
         """
         Property of type ``ctypes.c_bool``
@@ -4026,25 +4823,6 @@ class convert_units:
         func=self._link.o2scl.o2scl_convert_units___set_combine_two_conv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
-        return
-
-    def get_units_cmd_string(self,units_cmd_string):
-        """
-        Get object of type :class:`std::string`
-        """
-        func=self._link.o2scl.o2scl_convert_units___get_units_cmd_string
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,units_cmd_string._ptr)
-        return
-
-    def set_units_cmd_string(self,value):
-        """
-        Set object of type :class:`std::string`
-        """
-        func=self._link.o2scl.o2scl_convert_units___set_units_cmd_string
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
         return
 
     def convert(self,frm,to,val):
@@ -4086,6 +4864,280 @@ class convert_units:
         func=self._link.o2scl.o2scl_convert_units___print_cache
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
+        return
+
+
+class format_float:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``format_float``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/format_float.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class format_float
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_format_float
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class format_float
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_format_float
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class format_float
+        
+        Returns: a format_float object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def set_sig_figs(self,sig_figs):
+        """
+        | Parameters:
+        | *sig_figs*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_format_float_set_sig_figs
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,sig_figs)
+        return
+
+    def set_exp_limits(self,min,max):
+        """
+        | Parameters:
+        | *min*: ``int``
+        | *max*: ``int``
+        """
+        func=self._link.o2scl.o2scl_format_float_set_exp_limits
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
+        func(self._ptr,min,max)
+        return
+
+    def set_pad_zeros(self,pad):
+        """
+        | Parameters:
+        | *pad*: ``bool``
+        """
+        func=self._link.o2scl.o2scl_format_float_set_pad_zeros
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,pad)
+        return
+
+    def set_dec_point(self,dec_point):
+        """
+        | Parameters:
+        | *dec_point*: string
+        """
+        dec_point_=ctypes.c_char_p(force_bytes(dec_point))
+        func=self._link.o2scl.o2scl_format_float_set_dec_point
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,dec_point_)
+        return
+
+    def set_exp_digits(self,d):
+        """
+        | Parameters:
+        | *d*: ``int``
+        """
+        func=self._link.o2scl.o2scl_format_float_set_exp_digits
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,d)
+        return
+
+    def html_mode(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_format_float_html_mode
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def latex_mode(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_format_float_latex_mode
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def c_mode(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_format_float_c_mode
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def convert(self,x,debug=False):
+        """
+        | Parameters:
+        | *x*: ``double``
+        | *debug*=false: ``bool``
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_format_float_convert
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_bool]
+        ret=func(self._ptr,x,debug)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+
+class interp:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``interp<std::vector<double>>``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/interp<std::vector<double>>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class interp
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_interp_std__vector_double__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class interp
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_interp_std__vector_double__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class interp
+        
+        Returns: a interp object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def eval(self,x0,n,x,y):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | *n*: ``size_t``
+        | *x*: :class:`std_vector` object
+        | *y*: :class:`std_vector` object
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_std__vector_double___eval
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,x0,n,x._ptr,y._ptr)
+        return ret
+
+    def deriv(self,x0,n,x,y):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | *n*: ``size_t``
+        | *x*: :class:`std_vector` object
+        | *y*: :class:`std_vector` object
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_std__vector_double___deriv
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,x0,n,x._ptr,y._ptr)
+        return ret
+
+    def deriv2(self,x0,n,x,y):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | *n*: ``size_t``
+        | *x*: :class:`std_vector` object
+        | *y*: :class:`std_vector` object
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_std__vector_double___deriv2
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,x0,n,x._ptr,y._ptr)
+        return ret
+
+    def integ(self,x1,x2,n,x,y):
+        """
+        | Parameters:
+        | *x1*: ``double``
+        | *x2*: ``double``
+        | *n*: ``size_t``
+        | *x*: :class:`std_vector` object
+        | *y*: :class:`std_vector` object
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_std__vector_double___integ
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,x1,x2,n,x._ptr,y._ptr)
+        return ret
+
+    def set_type(self,interp_type):
+        """
+        | Parameters:
+        | *interp_type*: ``int``
+        """
+        func=self._link.o2scl.o2scl_interp_std__vector_double___set_type
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,interp_type)
         return
 
 
@@ -4339,4 +5391,20 @@ def screenify(link,nin,in_cols,out_cols,max_size=80):
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
     func(nin,in_cols._ptr,out_cols._ptr,max_size)
     return
+
+def vector_level_count(link,level,n,x,y):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *level*: ``double``
+        | *n*: ``size_t``
+        | *x*: :class:`std::vector<double>` object
+        | *y*: :class:`std::vector<double>` object
+        | Returns: ``ctypes.c_size_t`` object
+    """
+    func=link.o2scl.o2scl_vector_level_count_std__vector_double__std__vector_double___wrapper
+    func.restype=ctypes.c_size_t
+    func.argtypes=[ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
+    ret=func(level,n,x._ptr,y._ptr)
+    return ret
 
