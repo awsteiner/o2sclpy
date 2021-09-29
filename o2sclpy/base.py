@@ -1278,16 +1278,6 @@ class lib_settings_class:
         ret=func(self._ptr)
         return ret
 
-    def python_support(self):
-        """
-        | Returns: a Python boolean
-        """
-        func=self._link.o2scl.o2scl_lib_settings_class_python_support
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr)
-        return ret
-
     def hdf5_compression_support(self):
         """
         | Returns: a Python boolean
