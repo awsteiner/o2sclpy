@@ -2310,7 +2310,7 @@ class table_units(table):
         | Parameters:
         | *col*: string
         | *unit*: string
-        | *err_on_fail*=True: ``bool``
+        | *err_on_fail* =True: ``bool``
         | Returns: a Python int
         """
         col_=ctypes.c_char_p(force_bytes(col))
@@ -3893,9 +3893,9 @@ class tensor:
         | *ix_x*: ``size_t``
         | *ix_y*: ``size_t``
         | *tab*: :class:`table3d` object
-        | *x_name*="x": string
-        | *y_name*="y": string
-        | *slice_name*="z": string
+        | *x_name* ="x": string
+        | *y_name* ="y": string
+        | *slice_name* ="z": string
         """
         x_name_=ctypes.c_char_p(force_bytes(x_name))
         y_name_=ctypes.c_char_p(force_bytes(y_name))
@@ -4992,7 +4992,7 @@ class format_float:
         """
         | Parameters:
         | *x*: ``double``
-        | *debug*=false: ``bool``
+        | *debug* =false: ``bool``
         | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_format_float_convert

@@ -419,23 +419,3 @@ Function bose_function
 
 .. autofunction:: o2sclpy.bose_function(link,E,mu,T,limit)
 
-Function quadratic_extremum_x<double>
--------------------------------------
-
-.. autofunction:: o2sclpy.quadratic_extremum_x<double>(link,x1,x2,x3,y1,y2,y3)
-
-Function quadratic_extremum_y<double>
--------------------------------------
-
-.. autofunction:: o2sclpy.quadratic_extremum_y<double>(link,x1,x2,x3,y1,y2,y3)
-
-Function screenify<vector<std::string>>
----------------------------------------
-
-.. autofunction:: o2sclpy.screenify<vector<std::string>>(link,nin,in_cols,out_cols,max_size)
-
-Function vector_level_count<std::vector<double>,std::vector<double>>
---------------------------------------------------------------------
-
-.. autofunction:: o2sclpy.vector_level_count<std::vector<double>,std::vector<double>>(link,level,n,x,y)
-
