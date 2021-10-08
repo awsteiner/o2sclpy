@@ -1,7 +1,7 @@
 .. _o2sclpy:
 
-O\ :sub:`2`\ sclpy: v0.926
-==========================
+O\ :sub:`2`\ sclpy: v0.927a1
+============================
 
 O\ :sub:`2`\ sclpy principally consists of a python interface to the
 C++ library :ref:`O2scl <o2scl>` and a high-level plotting script,
