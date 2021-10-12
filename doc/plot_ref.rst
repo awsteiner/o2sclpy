@@ -1,6 +1,8 @@
 Plot reference
 ==============
 
+:ref:`O2sclpy <o2sclpy>`
+
 Color names and RGB values
 --------------------------
 

@@ -1,6 +1,8 @@
 Other O\ :sub:`2`\ sclpy objects
 ================================
 
+:ref:`O2sclpy <o2sclpy>`
+
 Variables ``base_list``, ``param_list``, ``yt_param_list``,
 ``extra_list`` are not listed here because their auto-docs are too
 long.

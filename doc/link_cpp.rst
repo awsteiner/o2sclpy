@@ -3,6 +3,8 @@
 Using the C++ interface
 =======================
 
+:ref:`O2sclpy <o2sclpy>`
+
 O\ :sub:`2`\ sclpy includes several classes and functions which are
 wrappers around the original O\ :sub:`2`\ scl classes and functions.
 The full documentation of these classes and functions is not
@@ -61,7 +63,7 @@ specify the C++ library on the command-line when using the
 :ref:`o2graph_script` using the ``o2scl-cpp-lib`` command. On a MacOS
 laptop, when using ``clang`` the C++ library is typically found
 automatically, but when using ``gcc`` I have to set this value to
-``/usr/local/lib/gcc/10/libstdc++.dylib``.
+``/usr/local/lib/gcc/11/libstdc++.dylib``.
 
 The variable :data:`link_o2scl.o2scl_lib_dir` specifies the directory
 where ``libo2scl.so`` is to be found, in case it cannot be found
@@ -80,10 +82,10 @@ You can also specify the C++ library on the command-line when using
 the :ref:`o2graph_script` using the ``o2scl-addl-libs`` command. If O\
 :sub:`2`\ scl is installed with OpenMP support, the OpenMP libraries
 are often not automatically linked in, and so you may need to include
-something similar to ``/usr/local/lib/gcc/10/libgomp.1.dylib``. Also,
+something similar to ``/usr/local/lib/gcc/11/libgomp.1.dylib``. Also,
 on my MacOS laptop, the readline library is not automatically
 included, so I typically use
-``O2SCL_ADDL_LIBS=/usr/lib/libreadline.dylib,/usr/local/lib/gcc/10/libgomp.1.dylib``. 
+``O2SCL_ADDL_LIBS=/usr/lib/libreadline.dylib,/usr/local/lib/gcc/11/libgomp.1.dylib``. 
 
 .. autoclass:: o2sclpy.linker
         :members:

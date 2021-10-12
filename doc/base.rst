@@ -3,6 +3,8 @@
 Base classes from O\ :sub:`2`\ scl
 ==================================
 
+:ref:`O2sclpy <o2sclpy>`
+
 Note that these classes are experimental. They are not intended
 to provide the full functionality
 of the corresponding C++ class.
@@ -418,4 +420,24 @@ Function bose_function
 ----------------------
 
 .. autofunction:: o2sclpy.bose_function(link,E,mu,T,limit)
+
+Function quadratic_extremum_x<double>
+-------------------------------------
+
+.. autofunction:: o2sclpy.quadratic_extremum_x(link,x1,x2,x3,y1,y2,y3)
+
+Function quadratic_extremum_y<double>
+-------------------------------------
+
+.. autofunction:: o2sclpy.quadratic_extremum_y(link,x1,x2,x3,y1,y2,y3)
+
+Function screenify<vector<std::string>>
+---------------------------------------
+
+.. autofunction:: o2sclpy.screenify(link,nin,in_cols,out_cols,max_size)
+
+Function vector_level_count<std::vector<double>,std::vector<double>>
+--------------------------------------------------------------------
+
+.. autofunction:: o2sclpy.vector_level_count(link,level,n,x,y)
 

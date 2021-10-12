@@ -240,7 +240,7 @@ class slack_messenger:
         """
         | Parameters:
         | *message*: string
-        | *err_on_fail*=true: ``bool``
+        | *err_on_fail* =true: ``bool``
         | Returns: a Python int
         """
         message_=ctypes.c_char_p(force_bytes(message))
@@ -353,7 +353,7 @@ class quadratic_real_coeff_gsl:
         return ret
 
 
-class quadratic_real_coeff_gsl2<>:
+class quadratic_real_coeff_gsl2:
     """
     Python interface for O\ :sub:`2`\ scl class ``quadratic_real_coeff_gsl2<>``,
     See
@@ -366,7 +366,7 @@ class quadratic_real_coeff_gsl2<>:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class quadratic_real_coeff_gsl2<>
+        Init function for class quadratic_real_coeff_gsl2
 
         | Parameters:
         | *link* :class:`linker` object
@@ -387,7 +387,7 @@ class quadratic_real_coeff_gsl2<>:
 
     def __del__(self):
         """
-        Delete function for class quadratic_real_coeff_gsl2<>
+        Delete function for class quadratic_real_coeff_gsl2
         """
 
         if self._owner==True:
@@ -400,9 +400,9 @@ class quadratic_real_coeff_gsl2<>:
 
     def __copy__(self):
         """
-        Shallow copy function for class quadratic_real_coeff_gsl2<>
+        Shallow copy function for class quadratic_real_coeff_gsl2
         
-        Returns: a quadratic_real_coeff_gsl2<> object
+        Returns: a quadratic_real_coeff_gsl2 object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -441,7 +441,7 @@ class quadratic_real_coeff_gsl2<>:
         return ret
 
 
-class cubic_real_coeff_cern<>:
+class cubic_real_coeff_cern:
     """
     Python interface for O\ :sub:`2`\ scl class ``cubic_real_coeff_cern<>``,
     See
@@ -454,7 +454,7 @@ class cubic_real_coeff_cern<>:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class cubic_real_coeff_cern<>
+        Init function for class cubic_real_coeff_cern
 
         | Parameters:
         | *link* :class:`linker` object
@@ -475,7 +475,7 @@ class cubic_real_coeff_cern<>:
 
     def __del__(self):
         """
-        Delete function for class cubic_real_coeff_cern<>
+        Delete function for class cubic_real_coeff_cern
         """
 
         if self._owner==True:
@@ -488,9 +488,9 @@ class cubic_real_coeff_cern<>:
 
     def __copy__(self):
         """
-        Shallow copy function for class cubic_real_coeff_cern<>
+        Shallow copy function for class cubic_real_coeff_cern
         
-        Returns: a cubic_real_coeff_cern<> object
+        Returns: a cubic_real_coeff_cern object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -625,7 +625,7 @@ class cubic_real_coeff_gsl:
         return ret,r1_conv.value
 
 
-class quartic_real_coeff_cern<>:
+class quartic_real_coeff_cern:
     """
     Python interface for O\ :sub:`2`\ scl class ``quartic_real_coeff_cern<>``,
     See
@@ -638,7 +638,7 @@ class quartic_real_coeff_cern<>:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class quartic_real_coeff_cern<>
+        Init function for class quartic_real_coeff_cern
 
         | Parameters:
         | *link* :class:`linker` object
@@ -659,7 +659,7 @@ class quartic_real_coeff_cern<>:
 
     def __del__(self):
         """
-        Delete function for class quartic_real_coeff_cern<>
+        Delete function for class quartic_real_coeff_cern
         """
 
         if self._owner==True:
@@ -672,9 +672,9 @@ class quartic_real_coeff_cern<>:
 
     def __copy__(self):
         """
-        Shallow copy function for class quartic_real_coeff_cern<>
+        Shallow copy function for class quartic_real_coeff_cern
         
-        Returns: a quartic_real_coeff_cern<> object
+        Returns: a quartic_real_coeff_cern object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1072,7 +1072,7 @@ class hist:
         """
         | Parameters:
         | *x*: ``double``
-        | *val*=1.0: ``double``
+        | *val* =1.0: ``double``
         """
         func=self._link.o2scl.o2scl_hist_update
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
@@ -1083,7 +1083,7 @@ class hist:
         """
         | Parameters:
         | *i*: ``size_t``
-        | *val*=1.0: ``double``
+        | *val* =1.0: ``double``
         """
         func=self._link.o2scl.o2scl_hist_update_i
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
@@ -1179,19 +1179,5 @@ class hist:
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
-
-    @classmethod
-    def init(cls,link,nv,v,n_bins):
-        """
-        Constructor-like class method for hist .
-
-        | Parameters:
-
-        """
-
-        f=link.o2scl.o2scl_hist_init
-        f.restype=ctypes.c_void_p
-        f.argtypes=[ctypes.c_size_t,ctypes.c_std::vector<double>,ctypes.c_size_t]
-        return cls(link,f(nv,v,n_bins))
 
 

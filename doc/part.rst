@@ -3,6 +3,8 @@
 Particle classes
 ===============================
 
+:ref:`O2sclpy <o2sclpy>`
+
 Class thermo
 ------------
 

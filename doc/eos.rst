@@ -3,6 +3,8 @@
 EOS classes
 ===========
 
+:ref:`O2sclpy <o2sclpy>`
+
 Class eos_base
 --------------
 

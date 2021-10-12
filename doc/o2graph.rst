@@ -3,6 +3,8 @@
 O\ :sub:`2`\ graph script
 =========================
 
+:ref:`O2sclpy <o2sclpy>`
+
 Sometimes it's helpful to be able to do some quick and dirty data
 analysis without having to write python directly. The O\ :sub:`2`\
 sclpy package includes a script called ``o2graph`` which is designed

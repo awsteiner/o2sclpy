@@ -3,6 +3,8 @@
 Reference for Python objects
 ============================
 
+:ref:`O2sclpy <o2sclpy>`
+
 .. toctree::
    :maxdepth: 3
 
@@ -14,4 +16,4 @@ Reference for Python objects
    class_yt_plot_base
    class_o2graph_plotter
    class_cap_cout
-   other
+   other_objs

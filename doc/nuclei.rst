@@ -3,6 +3,8 @@
 Nuclei and nuclear mass classes
 ===============================
 
+:ref:`O2sclpy <o2sclpy>`
+
 Class nucleus
 -------------
 

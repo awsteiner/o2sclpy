@@ -360,7 +360,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*=0.0: ``double``
+        | *delta* =0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp
@@ -387,7 +387,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*=0.0: ``double``
+        | *delta* =0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_feoa
@@ -400,7 +400,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*=0.0: ``double``
+        | *delta* =0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym
@@ -427,7 +427,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*=0.0: ``double``
+        | *delta* =0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_slope
@@ -440,7 +440,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*=0.0: ``double``
+        | *delta* =0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_curve
@@ -453,7 +453,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*=0.0: ``double``
+        | *delta* =0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_skew
@@ -502,7 +502,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*=0.0: ``double``
+        | *delta* =0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fkprime
@@ -515,7 +515,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*=0.0: ``double``
+        | *delta* =0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_fmsom
@@ -528,7 +528,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*=0.0: ``double``
+        | *delta* =0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_neut
@@ -541,7 +541,7 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *nb*: ``double``
-        | *delta*=0.0: ``double``
+        | *delta* =0.0: ``double``
         | Returns: a Python float
         """
         func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_prot
@@ -2716,7 +2716,7 @@ class eos_tov_interp(eos_tov):
         | *eos*: :class:`table_units<>` object
         | *s_cole*: string
         | *s_colp*: string
-        | *s_colnb*="": string
+        | *s_colnb* ="": string
         """
         s_cole_=ctypes.c_char_p(force_bytes(s_cole))
         s_colp_=ctypes.c_char_p(force_bytes(s_colp))
@@ -2745,8 +2745,8 @@ class eos_tov_interp(eos_tov):
     def s12_low_dens_eos(self,model="SLy4",external=False):
         """
         | Parameters:
-        | *model*="SLy4": string
-        | *external*=false: ``bool``
+        | *model* ="SLy4": string
+        | *external* =false: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_s12_low_dens_eos
@@ -2757,8 +2757,8 @@ class eos_tov_interp(eos_tov):
     def gcp10_low_dens_eos(self,model="BSk20",external=False):
         """
         | Parameters:
-        | *model*="BSk20": string
-        | *external*=false: ``bool``
+        | *model* ="BSk20": string
+        | *external* =false: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_gcp10_low_dens_eos
@@ -2770,8 +2770,8 @@ class eos_tov_interp(eos_tov):
         """
         | Parameters:
         | *L*: ``double``
-        | *model*="PNM": string
-        | *external*=false: ``bool``
+        | *model* ="PNM": string
+        | *external* =false: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_ngl13_low_dens_eos
@@ -2785,7 +2785,7 @@ class eos_tov_interp(eos_tov):
         | *S*: ``double``
         | *L*: ``double``
         | *nt*: ``double``
-        | *fname*="": string
+        | *fname* ="": string
         """
         fname_=ctypes.c_char_p(force_bytes(fname))
         func=self._link.o2scl_eos.o2scl_eos_tov_interp_ngl13_low_dens_eos2
@@ -3461,7 +3461,7 @@ class tov_solve:
         """
         | Parameters:
         | *mass*: ``double``
-        | *pmax*=1.0e20: ``double``
+        | *pmax* =1.0e20: ``double``
         | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_tov_solve_fixed
@@ -4103,7 +4103,7 @@ class nstar_cold:
     def calc_eos(self,np_0=0.0):
         """
         | Parameters:
-        | *np_0*=0.0: ``double``
+        | *np_0* =0.0: ``double``
         | Returns: a Python int
         """
         func=self._link.o2scl_eos.o2scl_nstar_cold_calc_eos

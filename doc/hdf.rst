@@ -3,6 +3,8 @@
 HDF5 classes from O\ :sub:`2`\ scl
 ==================================
 
+:ref:`O2sclpy <o2sclpy>`
+
 Class hdf_file
 --------------
 
@@ -97,10 +99,10 @@ Function value_spec
 Function vector_spec<std::vector<double>>
 -----------------------------------------
 
-.. autofunction:: o2sclpy.vector_spec<std::vector<double>>(link,spec,v,verbose,err_on_fail)
+.. autofunction:: o2sclpy.vector_spec(link,spec,v,verbose,err_on_fail)
 
 Function strings_spec<std::vector<std::string>>
 -----------------------------------------------
 
-.. autofunction:: o2sclpy.strings_spec<std::vector<std::string>>(link,spec,v,verbose,err_on_fail)
+.. autofunction:: o2sclpy.strings_spec(link,spec,v,verbose,err_on_fail)
 

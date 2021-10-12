@@ -3,11 +3,11 @@
 O\ :sub:`2`\ sclpy: v0.927a1
 ============================
 
-O\ :sub:`2`\ sclpy principally consists of a python interface to the
-C++ library :ref:`O2scl <o2scl>` and a high-level plotting script,
-``o2graph``, for quick `matplotlib <https://matplotlib.org>`_ or `yt
-<https://yt-project.org/>`_ plots from the command-line. Some
-parts of this python library are still experimental.
+O\ :sub:`2`\ sclpy is both a python interface to the C++ library
+:ref:`O2scl <o2scl>` and a high-level plotting script, ``o2graph``,
+for quick `matplotlib <https://matplotlib.org>`_ or `yt
+<https://yt-project.org/>`_ plots from the command-line. Some parts of
+this python library are still experimental.
 
 Contents
 --------

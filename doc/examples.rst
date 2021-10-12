@@ -3,6 +3,8 @@
 Examples
 ========
 
+:ref:`O2sclpy <o2sclpy>`
+
 .. toctree::
    :maxdepth: 3
 

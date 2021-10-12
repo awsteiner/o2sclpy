@@ -135,8 +135,8 @@ class hdf_file:
         """
         | Parameters:
         | *fname*: string
-        | *write_access*=false: ``bool``
-        | *err_on_fail*=true: ``bool``
+        | *write_access* =false: ``bool``
+        | *err_on_fail* =true: ``bool``
         """
         fname_=ctypes.c_char_p(force_bytes(fname))
         func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_open
@@ -539,7 +539,7 @@ class hdf_file:
         | Parameters:
         | *type*: string
         | *name*: :class:`std_string` object
-        | *verbose*=0: ``int``
+        | *verbose* =0: ``int``
         | Returns: a Python int
         """
         type_=ctypes.c_char_p(force_bytes(type))
@@ -555,7 +555,7 @@ class hdf_file:
         | Parameters:
         | *name*: string
         | *type*: :class:`std_string` object
-        | *verbose*=0: ``int``
+        | *verbose* =0: ``int``
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
@@ -571,7 +571,7 @@ class hdf_file:
         | Parameters:
         | *pattern*: string
         | *type*: :class:`std_string` object
-        | *verbose*=0: ``int``
+        | *verbose* =0: ``int``
         | Returns: a Python int
         """
         pattern_=ctypes.c_char_p(force_bytes(pattern))

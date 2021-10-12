@@ -1,6 +1,8 @@
 yt integration
 ==============
 
+:ref:`O2sclpy <o2sclpy>`
+
 O2sclpy uses yt to perform 3D volume renderings. A volume rendering
 can be built upon a O\ :sub:`2`\ scl tensor_grid object using
 ``yt-add-vol``. A 3D scatter plot can be created from an O\ :sub:`2`\
