@@ -19,10 +19,10 @@ Contents
    licensing
    link_cpp
    examples
-   ref_cpp
-   ref_python
    o2graph
    yt
+   ref_cpp
+   ref_python
    todos
 
 --------------------------------------------------------------
