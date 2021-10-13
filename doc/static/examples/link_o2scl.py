@@ -32,4 +32,6 @@ print(link.o2scl_settings.o2scl_version())
 
 help(o2sclpy.linker)
 
-
+def test_fun():
+    assert link.o2scl_settings.o2scl_version()=='0.927a1'
+    return

@@ -20,3 +20,7 @@ ame.get_nucleus(82,126,nuc)
 
 # Output the binding energy per nucleon in MeV
 print('Binding energy per nucleon in Pb-208 = %7.6e ' % (nuc.be/208*hc))
+
+def test_fun():
+    assert numpy.allclose(nuc.be/208*hc,rtol=1.0e-3)
+    return
