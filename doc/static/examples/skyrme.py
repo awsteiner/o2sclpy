@@ -78,9 +78,9 @@ print('')
 
 # Get the columns of the table as numpy arrays, and then plot the EOS:
 
-nb=eos_table['nb']
+nb=eos_table['nb'][0:eos_table.get_nlines()]
 print(type(nb))
-ed=eos_table['ed']
+ed=eos_table['ed'][0:eos_table.get_nlines()]
 edhc=[ed[i]*hc for i in range(0,eos_table.get_nlines())]
 plot.plot(nb,edhc)
 plot.xlabel('baryon density (1/fm^3)')
