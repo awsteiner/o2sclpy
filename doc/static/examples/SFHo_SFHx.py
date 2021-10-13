@@ -38,15 +38,15 @@ o2sclpy.rmf_load(link,sfhx,'SFHx')
 # and binding energy:
 
 sfho.saturation()
-print('SFHo: n0=%7.6e 1/fm^3, E/A=%7.6e MeV, K=%7.6e MeV, '+
-      'M*/M=%7.6e, S=%7.6e MeV, L=%7.6e MeV' % 
+print(('SFHo: n0=%7.6e 1/fm^3, E/A=%7.6e MeV, K=%7.6e MeV, '+
+       'M*/M=%7.6e, S=%7.6e MeV, L=%7.6e MeV') % 
       (sfho.n0,sfho.eoa*hc,sfho.comp*hc,sfho.msom,sfho.esym*hc,
        sfho.fesym_slope(sfho.n0)*hc))
 print('')
 
 sfhx.saturation()
-print('SFHx: n0=%7.6e 1/fm^3, E/A=%7.6e MeV, K=%7.6e MeV, '+
-      'M*/M=%7.6e, S=%7.6e MeV, L=%7.6e MeV' % 
+print(('SFHx: n0=%7.6e 1/fm^3, E/A=%7.6e MeV, K=%7.6e MeV, '+
+       'M*/M=%7.6e, S=%7.6e MeV, L=%7.6e MeV') % 
       (sfhx.n0,sfhx.eoa*hc,sfhx.comp*hc,sfhx.msom,sfhx.esym*hc,
        sfhx.fesym_slope(sfhx.n0)*hc))
 print('')

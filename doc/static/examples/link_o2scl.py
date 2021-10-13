@@ -28,10 +28,6 @@ link.link_o2scl()
 
 print(link.o2scl_settings.o2scl_version())
 
-# The linker class also has some documentation which may be helpful:
-
-help(o2sclpy.linker)
-
 def test_fun():
     assert link.o2scl_settings.o2scl_version()=='0.927a1'
     return

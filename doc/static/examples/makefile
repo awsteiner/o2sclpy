@@ -54,6 +54,15 @@ cmaps:
 skyrme.ipynb: empty
 	jupytext --to ipynb skyrme.py 
 
+link_o2scl.ipynb: empty
+	jupytext --to ipynb link_o2scl.py 
+
+nucmass.ipynb: empty
+	jupytext --to ipynb nucmass.py 
+
+SFHo_SFHx.ipynb: empty
+	jupytext --to ipynb SFHo_SFHx.py 
+
 empty:
 
 colors_near:
