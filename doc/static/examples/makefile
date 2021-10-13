@@ -38,9 +38,6 @@ VIEW_COMMAND = open
 VIEW_SUFFIX = 
 endif
 
-convert:
-	jupytext --to py skyrme.ipynb
-
 # The yt_scatter script is included here but the other yt plots are
 # not because they are more time-consuming.
 all: subplots1 subplots2 subplots3 table_plot \
@@ -55,7 +52,7 @@ cmaps:
 	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
 
 skyrme.ipynb: empty
-	jupytext --to ipynb --set-kernel python3 --execute skyrme.py
+	jupytext --to ipynb skyrme.py 
 
 empty:
 

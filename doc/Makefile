@@ -32,11 +32,6 @@ sphinx-help:
 %: Makefile
 	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-all:
-	$(MAKE) help.txt
-	$(MAKE) html
-	$(MAKE) sync-doc
-
 sync-doc:
 	rsync -Cavzu build/html/* $(STATIC_DOC_DIR)/o2sclpy
 
@@ -44,16 +39,15 @@ test-sync:
 	rsync -Cavzun build/html/* $(STATIC_DOC_DIR)/o2sclpy
 
 statfiles:
-	cd static; o2graph -h | grep -v "Set o2scl" | \
-		grep -v "Compiled at" | grep -v "New alias" > o2graph.help.txt
-	cd static; ./backend.scr
-	cd static; ./table3d_den_plot.scr
-	cd static; ./table_errorbar.scr
-	cd static; ./table_hist2dplot.scr
-	cd static; ./table_histplot.scr
-	cd static; ./table_plot.scr
-	cd static; ./table_plotv.scr
-	cd static; ./table_rplot.scr
-	cd static; ./table_scatter.scr
-	cd static; o2graph -help cmaps
-	cd static; o2graph -help markers
+	cd static/examples; ./backend.scr
+	cd static/examples; ./table3d_den_plot.scr
+	cd static/examples; ./table_errorbar.scr
+	cd static/examples; ./table_hist2dplot.scr
+	cd static/examples; ./table_histplot.scr
+	cd static/examples; ./table_plot.scr
+	cd static/examples; ./table_plotv.scr
+	cd static/examples; ./table_rplot.scr
+	cd static/examples; ./table_scatter.scr
+# AWS, 10/12/21: commented these out as it appears they didn't do anything
+#cd static/examples; o2graph -help cmaps
+#	cd static/examples; o2graph -help markers

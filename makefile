@@ -5,6 +5,7 @@ help:
 	@echo "-------------------------------------------------------------"
 	@echo "Developer targets:"
 	@echo "doc:       Make the documentation (requires sphinx & breathe)"
+	@echo "test:      Test the library"
 	@echo "sync-doc:  Copies documentation to webserver"
 	@echo "open-doc:  Open local documentation in browser"
 	@echo "web-doc:   Open web documentation in browser (after sync-doc)"
@@ -33,7 +34,10 @@ web-doc: .empty
 	$(BROWSER) "https://neutronstars.utk.edu/code/o2sclpy"
 
 doc: .empty
-	cd doc; $(MAKE) html
+	cd doc/static; o2graph -h | grep -v "Set o2scl" | \
+		grep -v "Compiled at" | grep -v "New alias" > o2graph.help.txt
+	cd doc/static/examples; $(MAKE) skyrme.ipynb
+	cd static/examples; $(MAKE) skyrme.ipynb
 
 sync-doc:
 	cd doc; $(MAKE) sync-doc
@@ -42,7 +46,8 @@ test-sync:
 	cd doc; $(MAKE) test-sync
 
 test:
-	cd doc/static/examples; $(MAKE) convert
+	cd doc/static/examples; jupytext --set-kernel python3 \
+		--execute skyrme.py
 	pytest o2sclpy/test doc/static/examples/skyrme.py -s -v
 
 ifeq ($(MACHINE),isospin)

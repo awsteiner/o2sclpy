@@ -14,13 +14,11 @@ most recent version of O\ :sub:`2`\ scl from the master branch on
 github is installed on your machine.
 
 The most recent release version of O\ :sub:`2`\ sclpy can be installed
-with e.g. ``pip3 install o2sclpy``.
-
-If you want to install the development version (v0.927a1), you can clone
-the git repository, change directory to the O\ :sub:`2`\ sclpy
-directory, and then use e.g. ``pip3 install .`` if you want to use the
-pip package manager or ``python3 setup.py install`` to do a direct
-installation.
+with e.g. ``pip3 install o2sclpy``. If you want to install the
+development version (v0.927a1), you can clone the git repository,
+change directory to the O\ :sub:`2`\ sclpy directory, and then use
+e.g. ``pip3 install .`` if you want to use the pip package manager or
+``python3 setup.py install`` to do a direct installation.
 
 O\ :sub:`2`\ sclpy requires
 python3 packages `requests <https://pypi.org/project/requests/>`_,
