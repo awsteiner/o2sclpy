@@ -1,141 +1,85 @@
 o2graph: A data viewing and processing program for O2scl.
+  Version: 0.926
+ 
+List of command-line options which do not require a current object:
 
-List of command-line options:
-
-   -alias       Create a command alias.                           
-   -autocorr    Compute the autocorrelation coefficients.         
-   -calc        Compute the value of a constant expression.       
-   -clear       Clear the current object.                         
-   -commands    List available commands.                          
--c -create      Create an object.                                 
-   -download    Download file from specified URL.                 
-   -exit        Exit (synonymous with 'quit').                    
-   -filelist    List objects in a HDF5 file.                      
--g -generic     Read in a generic text file.                      
-   -get         Get the value of a parameter.                     
-   -get-conv    Get a unit conversion factor.                     
--h -help        Show help information.                            
--q -interactive Toggle the interactive interface.                 
--i -internal    Output current object in the internal HDF5 format.
-   -license     Show license information.                         
-   -no-intro    Do not print introductory text.                   
--o -output      Output the current object as text.                
--P -preview     Preview the current object.                       
-   -quit        Quit (synonymous with 'exit').                    
--r -read        Read an object from an O2scl-style HDF5 file.     
-   -run         Run a file containing a list of commands.         
-   -set         Set the value of a parameter.                     
-   -shell       Run a shell command.                              
-   -show-units  Show the unit conversion table.                   
-   -slack       Send a slack message.                             
-   -type        Show current object type.                         
--v -version     Print version information and O2scl settings.     
-   -warranty    Show warranty information.                        
-------------------------------------------------------------------------------
-Notes:
-
-1. Help for general commands may be obtained with 'help <command>'. Help
-   for type-specific commands can be obtained by 'help <type> <command>'. A
-   list of commands for each type can be obtained with 'commands <type>'.
-   Required arguments are surrounded by <>'s and optional arguments are
-   surrounded by []'s.
-2. Options may also be specified in the environment variable
-   O2GRAPH_DEFAULTS.
-3. Long options may be preceeded by two dashes.
-4. In order to avoid confusion between arguments and functions, use
-   parenthesis and quotes, i.e. (-x*2) instead of -x*2.
-5. Also, do not use a unary minus next to a binary operator, i.e. use
-   a>(-1) instead of a>-1". "a>-1".
-------------------------------------------------------------------------------
-List of additional type-specific commands
-(use 'help <type> <command>' for more info):
-
-char: value
-double: value
-double[]: deriv, interp, max, min, sort, to-table, function, sum
-hist: to-table, function
-hist_2d: max, min, contours
-int: value
-int[]: deriv, interp, max, min, sort, to-table, function, sum
-prob_dens_mdim_amr: to-table3d
-size_t: value
-size_t[]: deriv, interp, max, min, sort, to-table, function, sum
-string: value
-table: assign, delete-col, delete-rows, delete-rows-tol, deriv, deriv2, cat,
-  convert-unit, entry-grid, find-row, fit, function, get-row, get-unit, entry,
-  index, insert, insert-full, integ, interp, list, max, min, nlines, rename,
-  select, select-rows, select-rows2, set-data, set-unit, sort, stats, sum,
-  to-hist, to-hist-2d, to-table3d, wstats
-table3d: cat, contours, deriv-x, deriv-y, function, entry, entry-grid,
-  insert, interp, stats, list, max, min, rename, set-data, slice, sum, x-name,
-  y-name
-tensor: list, diag, to-table3d, to-table3d-sum, max, min, to-tensor-grid,
-  rearrange, entry, function, sum, stats
-tensor<int>: list, min, max, to-table3d, rearrange
-tensor<size_t>: list, min, max, to-table3d, rearrange
-tensor_grid: list, to-table3d, slice, to-table, set-grid, max, min,
-  rearrange, get-grid, interp, entry, to-tensor, entry-grid, function, sum,
-  stats
-------------------------------------------------------------------------------
-List of additional help topics (e.g. "acol -help <topic>"): functions,
-mult-vector-spec, types, value-spec, and vector-spec.
-
-------------------------------------------------------------------------------
-
-O2graph command-line options:
-
-  -addcbar        Add color bar.
-  -arrow          Plot an arrow.
-  -backend        Select the matplotlib backend to use.
-  -canvas         Create a plotting canvas.
-  -clf            Clear the current figure.
-  -eval           Run the python eval() function.
-  -image          Plot an image.
-  -inset          Add an inset (unfinished).
-  -line           Plot a line.
-  -move-labels    Move the labels.
-  -new-cmaps      Define new color maps.
-  -plotv          Plot several vector-like data sets.
-  -point          Plot a single point.
-  -python         Begin an interactive python session.
-  -rect           Plot a rectangle.
-  -reset-xlim     Reset the x-axis limits.
-  -reset-ylim     Reset the y-axis limits.
-  -reset-zlim     Reset the z-azis limits.
-  -save           Save the current plot in a file.
-  -selax          Select axis.
-  -show           Show the current plot.
-  -subadj         Adjust subplots.
-  -subplots       Create subplots.
-  -text           Plot text in the data coordinates.
-  -textbox        Plot a box with text.
-  -ttext          Plot text in window coordinates [(0,0) to (1,1)].
-  -xlimits        Set the x-axis limits.
-  -xtitle         Add x title to plot (or subplot).
-  -ylimits        Set the y-axis limits.
-  -ytitle         Add y title to plot (or subplot).
-  -yt-axis        Add an axis to the yt volume.
-  -yt-render      Render the yt visualization.
-  -yt-source-list Source list.
-  -yt-tf          Edit the yt transfer function.
-  -zlimits        Set the z-azis limits.
-  -ztitle         Add z title to plot (yt only).
+  -addcbar         Add a color bar.
+  -alias           Create a command alias.
+  -arrow           Plot an arrow.
+  -autocorr        Compute the autocorrelation coefficients.
+  -backend         Select the matplotlib backend to use.
+  -calc            Compute the value of a constant expression.
+  -canvas          Create a plotting canvas.
+  -clear           Clear the current object.
+  -clf             Clear the current figure.
+  -commands        List available commands for current or specified type.
+  -constant        Get a physical or numerical constant.
+  -convert         Get a unit conversion factor.
+  -create          Create an object.
+  -docs            Open local HTML docs for acol or an O2scl topic.
+  -download        Download file from specified URL.
+  -ellipse         Plot an ellipse.
+  -error-point     Plot a single point with errorbars.
+  -eval            Run the python eval() function.
+  -exec            Run the python code specified in file
+  -exit            Exit (synonymous with 'quit').
+  -filelist        List objects in a HDF5 file.
+  -generic         Read in a generic text file.
+  -get             Get the value of a parameter.
+  -h5-copy         Copy hdf5 file (experimental).
+  -help            Show help information.
+  -image           Plot an image.
+  -inset           Add a new set of axes (e.g. for an inset).
+  -interactive     Toggle the interactive interface.
+  -internal        Output current object in the internal HDF5 format.
+  -license         Show license information.
+  -line            Plot a line.
+  -modax           Modify current axes properties.
+  -no-intro        Do not print introductory text.
+  -o2scl-addl-libs Specify a list of additional libraries to load.
+  -o2scl-cpp-lib   Specify the location of the standard C++ library.
+  -o2scl-lib-dir   Specify the directory where libo2scl.so is.
+  -output          Output the current object as text.
+  -plotv           Plot several vector-like data sets.
+  -point           Plot a single point.
+  -preview         Preview the current object.
+  -python          Begin an interactive python session.
+  -quit            Quit (synonymous with 'exit').
+  -read            Read an object from an O2scl-style HDF5 file.
+  -rect            Plot a rectangle.
+  -run             Run a file containing a list of commands.
+  -save            Save the current plot in a file.
+  -selax           Select axis.
+  -set             Set the value of a parameter.
+  -shell           Run a shell command.
+  -show            Show the current plot.
+  -slack           Send a slack message.
+  -subadj          Adjust spacing of subplots.
+  -subplots        Create subplots.
+  -text            Plot text in the data coordinates.
+  -textbox         Plot a box with text.
+  -ttext           Plot text in window coordinates [(0,0) to (1,1)].
+  -type            Show current object type.
+  -version         Print version information and O2scl settings.
+  -warranty        Show warranty information.
+  -wdocs           Open remote HTML docs for acol or an O2scl topic.
+  -xlimits         Set the x-axis limits.
+  -xtitle          Add x title to plot (or subplot).
+  -ylimits         Set the y-axis limits.
+  -yt-ann          Annotate a yt rendering (experimental).
+  -yt-arrow        Draw an arrow in the yt volume.
+  -yt-axis         Add an axis to the yt volume.
+  -yt-box          Draw a box in the yt volume.
+  -yt-line         Draw a line in the yt volume.
+  -yt-path         Add a path to the yt animation.
+  -yt-render       Render the yt volume visualization.
+  -yt-source-list  List all current yt sources.
+  -yt-text         Add text to the yt volume.
+  -yt-tf           Edit the yt transfer function.
+  -ytitle          Add y title to plot (or subplot).
+  -zlimits         Set the z-axis limits.
 
 ------------------------------------------------------------------------------
-O2graph type-specific commands:
-
-double[]: plot1
-hist: plot
-hist_2d: den-plot
-int[]: plot1
-size_t[]: plot1
-table: plot, rplot, scatter, errorbar, yt-scatter, plot1, histplot,
-  hist2dplot
-table3d: den-plot
-tensor: den-plot
-tensor<int>: den-plot
-tensor<size_t>: den-plot
-tensor_grid: den-plot, yt-add-vol
-
-------------------------------------------------------------------------------
-Additional o2graph help topics: markers, cmaps, colors
+Additional help topics: cmaps, cmaps-plot, colors, colors-near, colors-plot,
+functions, markers, markers-plot, mult-vector-spec, strings-spec, types,
+value-spec, vector-spec, and xkcd-colors.

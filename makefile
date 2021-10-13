@@ -37,7 +37,7 @@ doc: .empty
 	cd doc/static; o2graph -h | grep -v "Set o2scl" | \
 		grep -v "Compiled at" | grep -v "New alias" > o2graph.help.txt
 	cd doc/static/examples; $(MAKE) skyrme.ipynb
-	cd static/examples; $(MAKE) skyrme.ipynb
+	cd doc; $(MAKE) html
 
 sync-doc:
 	cd doc; $(MAKE) sync-doc
@@ -46,8 +46,6 @@ test-sync:
 	cd doc; $(MAKE) test-sync
 
 test:
-	cd doc/static/examples; jupytext --set-kernel python3 \
-		--execute skyrme.py
 	pytest o2sclpy/test doc/static/examples/skyrme.py -s -v
 
 ifeq ($(MACHINE),isospin)
