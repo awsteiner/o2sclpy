@@ -118,7 +118,8 @@ for i in range(0,tov_table.get_ncolumns()):
 print('')
 
 
-plot.plot(tov_table['r'],tov_table['gm'])
+plot.plot(tov_table['r'][0:tov_table.get_nlines()],
+          tov_table['gm'][0:tov_table.get_nlines()])
 plot.xlabel('radius (km)')
 plot.ylabel('gravitational mass (Msun))')
 if plots:
