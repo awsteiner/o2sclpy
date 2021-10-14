@@ -4700,6 +4700,260 @@ class find_constants:
         return ret
 
 
+class convert_units_der_unit:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``convert_units<>::der_unit``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/convert_units<>::der_unit.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class convert_units_der_unit
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_convert_units____der_unit
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class convert_units_der_unit
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_convert_units____der_unit
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class convert_units_der_unit
+        
+        Returns: a convert_units_der_unit object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def get_label(self,label):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_get_label
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,label._ptr)
+        return
+
+    def set_label(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_set_label
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def m(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_get_m
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @m.setter
+    def m(self,value):
+        """
+        Setter function for convert_units<>::der_unit::m .
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_set_m
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def k(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_get_k
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @k.setter
+    def k(self,value):
+        """
+        Setter function for convert_units<>::der_unit::k .
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_set_k
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def s(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_get_s
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @s.setter
+    def s(self,value):
+        """
+        Setter function for convert_units<>::der_unit::s .
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_set_s
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def K(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_get_K
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @K.setter
+    def K(self,value):
+        """
+        Setter function for convert_units<>::der_unit::K .
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_set_K
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def A(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_get_A
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @A.setter
+    def A(self,value):
+        """
+        Setter function for convert_units<>::der_unit::A .
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_set_A
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def mol(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_get_mol
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @mol.setter
+    def mol(self,value):
+        """
+        Setter function for convert_units<>::der_unit::mol .
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_set_mol
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def cd(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_get_cd
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @cd.setter
+    def cd(self,value):
+        """
+        Setter function for convert_units<>::der_unit::cd .
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_set_cd
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def val(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_get_val
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @val.setter
+    def val(self,value):
+        """
+        Setter function for convert_units<>::der_unit::val .
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_set_val
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    def get_name(self,name):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_get_name
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,name._ptr)
+        return
+
+    def set_name(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_convert_units____der_unit_set_name
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+
 class convert_units:
     """
     Python interface for O\ :sub:`2`\ scl class ``convert_units``,
@@ -4848,10 +5102,59 @@ class convert_units:
         ret=func(self._ptr,frm_,to_,val,converted)
         return ret
 
+    def del_unit(self,name):
+        """
+        | Parameters:
+        | *name*: :class:`std_string` object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_convert_units___del_unit
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,name._ptr)
+        return
+
+    def add_unit(self,d):
+        """
+        | Parameters:
+        | *d*: :class:`convert_units<>::der_unit` object
+        """
+        func=self._link.o2scl.o2scl_convert_units___add_unit
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,d._ptr)
+        return
+
+    def set_natural_units(self,c_is_one=True,hbar_is_one=True,kb_is_one=True):
+        """
+        | Parameters:
+        | *c_is_one* =true: ``bool``
+        | *hbar_is_one* =true: ``bool``
+        | *kb_is_one* =true: ``bool``
+        """
+        func=self._link.o2scl.o2scl_convert_units___set_natural_units
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool,ctypes.c_bool,ctypes.c_bool]
+        func(self._ptr,c_is_one,hbar_is_one,kb_is_one)
+        return
+
+    def test_unique(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_convert_units___test_unique
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
     def print_cache(self):
         """
         """
         func=self._link.o2scl.o2scl_convert_units___print_cache
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def print_units_cout(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_convert_units___print_units_cout
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return

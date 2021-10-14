@@ -323,6 +323,17 @@ Class find_constants
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class convert_units_der_unit
+----------------------------
+
+.. autoclass:: o2sclpy.convert_units_der_unit
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class convert_units
 -------------------
 
