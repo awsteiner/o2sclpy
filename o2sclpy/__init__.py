@@ -26,7 +26,6 @@
 #
 
 from o2sclpy.doc_data import *
-from o2sclpy.slack import *
 from o2sclpy.cloud_file import *
 from o2sclpy.hdf5 import *
 from o2sclpy.link_o2scl import *
@@ -93,9 +92,6 @@ class todo_list:
                 an o2scl table object?
               * Anti-alias text objects in yt (also anti-alias line 
                 sources?)
-              * Allow user to specify slack URL and slack username as
-                string specs?
-
     """
 
     def empty_class():

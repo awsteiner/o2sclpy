@@ -15,7 +15,6 @@ Other O\ :sub:`2`\ sclpy functions
 .. autofunction:: o2sclpy.get_str_array
 .. autofunction:: o2sclpy.string_to_dict
 .. autofunction:: o2sclpy.parse_arguments
-.. autofunction:: o2sclpy.slack_notify
 .. autofunction:: o2sclpy.force_bytes
 
 Other O\ :sub:`2`\ sclpy variables

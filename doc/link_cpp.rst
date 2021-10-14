@@ -5,6 +5,17 @@ Using the C++ interface
 
 :ref:`O2sclpy <o2sclpy>`
 
+C++ interface contents
+----------------------
+
+- :ref:`C++ interface introduction`
+- :ref:`Linking with O2scl <link2>`
+- :ref:`Linking with O2scl example <linkexample>`
+- :ref:`Class linker`
+
+C++ interface introduction
+--------------------------
+     
 O\ :sub:`2`\ sclpy includes several classes and functions which are
 wrappers around the original O\ :sub:`2`\ scl classes and functions.
 The full documentation of these classes and functions is not
@@ -45,7 +56,7 @@ Finally, some O\ :sub:`2`\ scl classes output information to
 Jupyter console. If you want this output to go to the Jupyter notebook
 instead, you will need to use the :class:`o2sclpy.cap_cout` class.
 
-.. _link:
+.. _link2:
 
 Linking with O\ :sub:`2`\ scl
 -----------------------------
@@ -87,10 +98,14 @@ on my MacOS laptop, the readline library is not automatically
 included, so I typically use
 ``O2SCL_ADDL_LIBS=/usr/lib/libreadline.dylib,/usr/local/lib/gcc/11/libgomp.1.dylib``. 
 
+.. _linkexample:
+
 Linking with O\ :sub:`2`\ scl example
 -------------------------------------
 
-`nbviewer version <https://nbviewer.org/urls/raw.githubusercontent.com/awsteiner/o2sclpy/main/doc/static/examples/link_o2scl.ipynb>`_.
+Use this `link
+<https://nbviewer.org/urls/raw.githubusercontent.com/awsteiner/o2sclpy/main/doc/static/examples/link_o2scl.ipynb>`_
+to view this example as a jupyter notebook on nbviewer.org.
 
 .. literalinclude:: static/examples/link_o2scl.py
 
