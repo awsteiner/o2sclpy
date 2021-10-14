@@ -87,6 +87,16 @@ on my MacOS laptop, the readline library is not automatically
 included, so I typically use
 ``O2SCL_ADDL_LIBS=/usr/lib/libreadline.dylib,/usr/local/lib/gcc/11/libgomp.1.dylib``. 
 
+Linking with O\ :sub:`2`\ scl example
+-------------------------------------
+
+`nbviewer version <https://nbviewer.org/urls/raw.githubusercontent.com/awsteiner/o2sclpy/main/doc/static/examples/link_o2scl.ipynb>`_.
+
+.. literalinclude:: static/examples/link_o2scl.py
+
+Class linker
+------------
+                    
 .. autoclass:: o2sclpy.linker
         :members:
         :undoc-members:

@@ -52,16 +52,16 @@ cmaps:
 	$(VIEW_COMMAND) temp.png $(VIEW_SUFFIX)
 
 skyrme.ipynb: empty
-	jupytext --to ipynb skyrme.py 
+	jupytext --to ipynb --update skyrme.py 
 
 link_o2scl.ipynb: empty
-	jupytext --to ipynb link_o2scl.py 
+	jupytext --to ipynb --update link_o2scl.py 
 
 nucmass.ipynb: empty
-	jupytext --to ipynb nucmass.py 
+	jupytext --to ipynb --update nucmass.py 
 
 SFHo_SFHx.ipynb: empty
-	jupytext --to ipynb SFHo_SFHx.py 
+	jupytext --to ipynb --update SFHo_SFHx.py 
 
 empty:
 

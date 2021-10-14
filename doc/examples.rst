@@ -8,4 +8,7 @@ Examples
 .. toctree::
    :maxdepth: 3
 
+   table_ex
    skyrme_ex
+   nucmass_ex
+   sfho_ex
