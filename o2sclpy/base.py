@@ -4953,6 +4953,21 @@ class convert_units_der_unit:
         func(self._ptr,value._ptr)
         return
 
+    def set(self,label,val,name='',m=0,k=0,s=0,K=0,A=0,mol=0,cd=0):
+        """
+        Create a derived unit
+        """
+        self.label=label
+        self.val=val
+        self.name=name
+        self.m=m
+        self.k=k
+        self.s=s
+        self.K=K
+        self.A=A
+        self.mol=mol
+        self.cd=cd
+        return
 
 class convert_units:
     """

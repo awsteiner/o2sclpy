@@ -51,9 +51,11 @@ print(('SFHx: n0=%7.6e 1/fm^3, E/A=%7.6e MeV, K=%7.6e MeV, '+
        sfhx.fesym_slope(sfhx.n0)*hc))
 print('')
 
+# +
 #xarr=[i*0.02+0.02 for i in range(0,16)]
 #for T in numpy.arange(0,20,5):
-#    sfho.calc_
+#   sfho.calc_
+# -
 
 def test_fun():
     assert numpy.allclose(sfho.n0,0.1582415,rtol=1.0e-4)
