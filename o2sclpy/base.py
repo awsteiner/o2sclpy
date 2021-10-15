@@ -4957,9 +4957,13 @@ class convert_units_der_unit:
         """
         Create a derived unit
         """
-        self.label=label
+        ltmp=std_string(self._link)
+        ltmp.init_bytes(label)
+        self.label=ltmp
         self.val=val
-        self.name=name
+        ntmp=std_string(self._link)
+        ntmp.init_bytes(name)
+        self.name=ntmp
         self.m=m
         self.k=k
         self.s=s
