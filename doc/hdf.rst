@@ -96,13 +96,13 @@ Function value_spec
 
 .. autofunction:: o2sclpy.value_spec(link,spec,d,verbose,err_on_fail)
 
-Function vector_spec<std::vector<double>>
------------------------------------------
+Function vector_spec
+--------------------
 
 .. autofunction:: o2sclpy.vector_spec(link,spec,v,verbose,err_on_fail)
 
-Function strings_spec<std::vector<std::string>>
------------------------------------------------
+Function strings_spec
+---------------------
 
 .. autofunction:: o2sclpy.strings_spec(link,spec,v,verbose,err_on_fail)
 

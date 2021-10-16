@@ -115,6 +115,7 @@ Class std_vector_vector
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __getitem__
 
 Class std_complex
 -----------------

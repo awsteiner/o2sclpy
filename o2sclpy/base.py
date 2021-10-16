@@ -45,7 +45,7 @@ class std_string:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std__string
+            f=link.o2scl.o2scl_create_std_string
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -61,7 +61,7 @@ class std_string:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_std__string
+            f=self._link.o2scl.o2scl_free_std_string
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -82,7 +82,7 @@ class std_string:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_std__string_length
+        func=self._link.o2scl.o2scl_std_string_length
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -93,14 +93,19 @@ class std_string:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_std__string_getitem
+        func=self._link.o2scl.o2scl_std_string_getitem
         func.restype=ctypes.c_char
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         return ret
 
     def __setitem__(self,i,value):
-        func=self._link.o2scl.o2scl_std__string_setitem
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: char
+        """
+        func=self._link.o2scl.o2scl_std_string_setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char]
         func(self._ptr,i,value)
         return
@@ -110,7 +115,7 @@ class std_string:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_std__string_resize
+        func=self._link.o2scl.o2scl_std_string_resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -166,7 +171,7 @@ class std_vector:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std__vector_double_
+            f=link.o2scl.o2scl_create_std_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -182,7 +187,7 @@ class std_vector:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_std__vector_double_
+            f=self._link.o2scl.o2scl_free_std_vector_double_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -204,7 +209,7 @@ class std_vector:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_std__vector_double__resize
+        func=self._link.o2scl.o2scl_std_vector_double__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -213,7 +218,7 @@ class std_vector:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_std__vector_double__size
+        func=self._link.o2scl.o2scl_std_vector_double__size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -224,14 +229,19 @@ class std_vector:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_std__vector_double__getitem
+        func=self._link.o2scl.o2scl_std_vector_double__getitem
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         return ret
 
     def __setitem__(self,i,value):
-        func=self._link.o2scl.o2scl_std__vector_double__setitem
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: double
+        """
+        func=self._link.o2scl.o2scl_std_vector_double__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
         func(self._ptr,i,value)
         return
@@ -275,7 +285,7 @@ class std_vector_int:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std__vector_int_
+            f=link.o2scl.o2scl_create_std_vector_int_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -291,7 +301,7 @@ class std_vector_int:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_std__vector_int_
+            f=self._link.o2scl.o2scl_free_std_vector_int_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -313,7 +323,7 @@ class std_vector_int:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_std__vector_int__resize
+        func=self._link.o2scl.o2scl_std_vector_int__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -322,7 +332,7 @@ class std_vector_int:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_std__vector_int__size
+        func=self._link.o2scl.o2scl_std_vector_int__size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -333,14 +343,19 @@ class std_vector_int:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_std__vector_int__getitem
+        func=self._link.o2scl.o2scl_std_vector_int__getitem
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         return ret
 
     def __setitem__(self,i,value):
-        func=self._link.o2scl.o2scl_std__vector_int__setitem
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: int
+        """
+        func=self._link.o2scl.o2scl_std_vector_int__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int]
         func(self._ptr,i,value)
         return
@@ -384,7 +399,7 @@ class std_vector_size_t:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std__vector_size_t_
+            f=link.o2scl.o2scl_create_std_vector_size_t_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -400,7 +415,7 @@ class std_vector_size_t:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_std__vector_size_t_
+            f=self._link.o2scl.o2scl_free_std_vector_size_t_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -422,7 +437,7 @@ class std_vector_size_t:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_std__vector_size_t__resize
+        func=self._link.o2scl.o2scl_std_vector_size_t__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -431,7 +446,7 @@ class std_vector_size_t:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_std__vector_size_t__size
+        func=self._link.o2scl.o2scl_std_vector_size_t__size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -442,14 +457,19 @@ class std_vector_size_t:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_std__vector_size_t__getitem
+        func=self._link.o2scl.o2scl_std_vector_size_t__getitem
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         return ret
 
     def __setitem__(self,i,value):
-        func=self._link.o2scl.o2scl_std__vector_size_t__setitem
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: size_t
+        """
+        func=self._link.o2scl.o2scl_std_vector_size_t__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         func(self._ptr,i,value)
         return
@@ -502,7 +522,7 @@ class std_vector_string:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std__vector_std__string_
+            f=link.o2scl.o2scl_create_std_vector_std_string_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -518,7 +538,7 @@ class std_vector_string:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_std__vector_std__string_
+            f=self._link.o2scl.o2scl_free_std_vector_std_string_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -540,7 +560,7 @@ class std_vector_string:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_std__vector_std__string__resize
+        func=self._link.o2scl.o2scl_std_vector_std_string__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -549,7 +569,7 @@ class std_vector_string:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_std__vector_std__string__size
+        func=self._link.o2scl.o2scl_std_vector_std_string__size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -561,7 +581,7 @@ class std_vector_string:
         | *n*: ``size_t``
         | Returns: std_string object
         """
-        func=self._link.o2scl.o2scl_std__vector_std__string__getitem
+        func=self._link.o2scl.o2scl_std_vector_std_string__getitem
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
@@ -570,7 +590,12 @@ class std_vector_string:
         return strt.to_bytes()
 
     def __setitem__(self,i,value):
-        func=self._link.o2scl.o2scl_std__vector_std__string__setitem
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: Python bytes string
+        """
+        func=self._link.o2scl.o2scl_std_vector_std_string__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char_p]
         func(self._ptr,i,value)
         return
@@ -603,7 +628,7 @@ class ublas_vector:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_boost__numeric__ublas__vector_double_
+            f=link.o2scl.o2scl_create_boost_numeric_ublas_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -619,7 +644,7 @@ class ublas_vector:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_boost__numeric__ublas__vector_double_
+            f=self._link.o2scl.o2scl_free_boost_numeric_ublas_vector_double_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -640,7 +665,7 @@ class ublas_vector:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__vector_double__size
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_vector_double__size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -651,7 +676,7 @@ class ublas_vector:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__vector_double__resize
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_vector_double__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -661,14 +686,19 @@ class ublas_vector:
         | Parameters:
         | *i*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__vector_double__getitem
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_vector_double__getitem
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,i)
         return ret
 
     def __setitem__(self,i,value):
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__vector_double__setitem
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: double
+        """
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_vector_double__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
         func(self._ptr,i,value)
         return
@@ -712,7 +742,7 @@ class ublas_matrix:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_boost__numeric__ublas__matrix_double_
+            f=link.o2scl.o2scl_create_boost_numeric_ublas_matrix_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -728,7 +758,7 @@ class ublas_matrix:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_boost__numeric__ublas__matrix_double_
+            f=self._link.o2scl.o2scl_free_boost_numeric_ublas_matrix_double_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -749,7 +779,7 @@ class ublas_matrix:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__size1
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_double__size1
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -759,7 +789,7 @@ class ublas_matrix:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__size2
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_double__size2
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -771,7 +801,7 @@ class ublas_matrix:
         | *m*: ``size_t``
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__resize
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_double__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         func(self._ptr,m,n)
         return
@@ -782,7 +812,7 @@ class ublas_matrix:
         | *m*: ``size_t``
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__getitem
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_double__getitem
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         m,n=tup
@@ -791,7 +821,7 @@ class ublas_matrix:
 
     def __setitem__(self,tup,value):
         m,n=tup
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_double__setitem
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_double__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_double]
         func(self._ptr,m,n,value)
         return
@@ -829,7 +859,7 @@ class ublas_matrix_int:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_boost__numeric__ublas__matrix_int_
+            f=link.o2scl.o2scl_create_boost_numeric_ublas_matrix_int_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -845,7 +875,7 @@ class ublas_matrix_int:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_boost__numeric__ublas__matrix_int_
+            f=self._link.o2scl.o2scl_free_boost_numeric_ublas_matrix_int_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -866,7 +896,7 @@ class ublas_matrix_int:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_int__size1
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_int__size1
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -876,7 +906,7 @@ class ublas_matrix_int:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_int__size2
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_int__size2
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -888,7 +918,7 @@ class ublas_matrix_int:
         | *m*: ``size_t``
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_int__resize
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_int__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         func(self._ptr,m,n)
         return
@@ -899,7 +929,7 @@ class ublas_matrix_int:
         | *m*: ``size_t``
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_int__getitem
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_int__getitem
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         m,n=tup
@@ -908,7 +938,7 @@ class ublas_matrix_int:
 
     def __setitem__(self,tup,value):
         m,n=tup
-        func=self._link.o2scl.o2scl_boost__numeric__ublas__matrix_int__setitem
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_int__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_int]
         func(self._ptr,m,n,value)
         return
@@ -946,7 +976,7 @@ class std_vector_vector:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std__vector_std__vector_double__
+            f=link.o2scl.o2scl_create_std_vector_std_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -962,7 +992,7 @@ class std_vector_vector:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_std__vector_std__vector_double__
+            f=self._link.o2scl.o2scl_free_std_vector_std_vector_double_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -984,7 +1014,7 @@ class std_vector_vector:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_std__vector_std__vector_double___resize
+        func=self._link.o2scl.o2scl_std_vector_std_vector_double__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -993,11 +1023,41 @@ class std_vector_vector:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_std__vector_std__vector_double___size
+        func=self._link.o2scl.o2scl_std_vector_std_vector_double__size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
+
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | Returns: :class:`std::vector<double>` object
+        """
+        func=self._link.o2scl.o2scl_std_vector_std_vector_double__getitem
+        n_=ctypes.c_int(0)
+        ptr_=ctypes.POINTER(ctypes.c_double)()
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
+        func(self._ptr,n,ctypes.byref(ptr_),ctypes.byref(n_))
+        ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
+        return ret
+
+    def __setitem__(self,i,value):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: :class:`std::vector<double>` object
+        """
+        func=self._link.o2scl.o2scl_std_vector_std_vector_double__setitem
+        sv=std_vector(self._link)
+        sv.resize(len(value))
+        for i in range(0,len(value)):
+            sv[i]=value[i]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,i,sv._ptr)
+        return
 
     def __len__(self):
         """
@@ -1012,6 +1072,11 @@ class std_complex:
     Python interface for O\ :sub:`2`\ scl class ``std::complex<double>``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/std::complex<double>.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
     """
 
     _ptr=0
@@ -1029,7 +1094,7 @@ class std_complex:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std__complex_double_
+            f=link.o2scl.o2scl_create_std_complex_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -1045,7 +1110,7 @@ class std_complex:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_std__complex_double_
+            f=self._link.o2scl.o2scl_free_std_complex_double_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -1066,7 +1131,7 @@ class std_complex:
         """
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_std__complex_double__real
+        func=self._link.o2scl.o2scl_std_complex_double__real
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -1077,7 +1142,7 @@ class std_complex:
         | Parameters:
         | *value*: ``double``
         """
-        func=self._link.o2scl.o2scl_std__complex_double__real_set
+        func=self._link.o2scl.o2scl_std_complex_double__real_set
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1086,7 +1151,7 @@ class std_complex:
         """
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_std__complex_double__imag
+        func=self._link.o2scl.o2scl_std_complex_double__imag
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -1097,7 +1162,7 @@ class std_complex:
         | Parameters:
         | *value*: ``double``
         """
-        func=self._link.o2scl.o2scl_std__complex_double__imag_set
+        func=self._link.o2scl.o2scl_std_complex_double__imag_set
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1111,7 +1176,7 @@ class std_complex:
 
         """
 
-        f=link.o2scl.o2scl_std__complex_double__init
+        f=link.o2scl.o2scl_std_complex_double__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double]
         return cls(link,f(re,im))
@@ -1130,6 +1195,11 @@ class lib_settings_class:
     Python interface for O\ :sub:`2`\ scl class ``lib_settings_class``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/lib_settings_class.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
     """
 
     _ptr=0
@@ -1440,7 +1510,7 @@ class table:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_table__
+            f=link.o2scl.o2scl_create_table_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -1456,7 +1526,7 @@ class table:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_table__
+            f=self._link.o2scl.o2scl_free_table_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -1481,7 +1551,7 @@ class table:
         """
 
         new_obj=type(self)(self._link)
-        f2=self._link.o2scl.o2scl_copy_table__
+        f2=self._link.o2scl.o2scl_copy_table_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
         return new_obj
@@ -1493,7 +1563,7 @@ class table:
         | Returns: :class:`std::vector<double>` object
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table___getitem
+        func=self._link.o2scl.o2scl_table__getitem
         n_=ctypes.c_int(0)
         ptr_=ctypes.POINTER(ctypes.c_double)()
         func.restype=ctypes.c_void_p
@@ -1510,7 +1580,7 @@ class table:
         | *val*: ``double``
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table___set
+        func=self._link.o2scl.o2scl_table__set
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_double]
         func(self._ptr,col_,row,val)
         return
@@ -1523,7 +1593,7 @@ class table:
         | Returns: a Python float
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table___get
+        func=self._link.o2scl.o2scl_table__get
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
         ret=func(self._ptr,col_,row)
@@ -1533,7 +1603,7 @@ class table:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_table___get_ncolumns
+        func=self._link.o2scl.o2scl_table__get_ncolumns
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -1543,7 +1613,7 @@ class table:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_table___get_nlines
+        func=self._link.o2scl.o2scl_table__get_nlines
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -1554,7 +1624,7 @@ class table:
         | Parameters:
         | *lines*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_table___set_nlines
+        func=self._link.o2scl.o2scl_table__set_nlines
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,lines)
         return
@@ -1563,7 +1633,7 @@ class table:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_table___get_maxlines
+        func=self._link.o2scl.o2scl_table__get_maxlines
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -1574,7 +1644,7 @@ class table:
         | Parameters:
         | *llines*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_table___set_maxlines
+        func=self._link.o2scl.o2scl_table__set_maxlines
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,llines)
         return
@@ -1584,7 +1654,7 @@ class table:
         | Parameters:
         | *il*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_table___set_nlines_auto
+        func=self._link.o2scl.o2scl_table__set_nlines_auto
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,il)
         return
@@ -1594,7 +1664,7 @@ class table:
         | Parameters:
         | *llines*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_table___inc_maxlines
+        func=self._link.o2scl.o2scl_table__inc_maxlines
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,llines)
         return
@@ -1605,7 +1675,7 @@ class table:
         | *col*: string
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table___new_column
+        func=self._link.o2scl.o2scl_table__new_column
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,col_)
         return
@@ -1616,7 +1686,7 @@ class table:
         | *icol*: ``size_t``
         | Returns: Python bytes object
         """
-        func=self._link.o2scl.o2scl_table___get_column_name
+        func=self._link.o2scl.o2scl_table__get_column_name
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
@@ -1632,7 +1702,7 @@ class table:
         """
         src_=ctypes.c_char_p(force_bytes(src))
         dest_=ctypes.c_char_p(force_bytes(dest))
-        func=self._link.o2scl.o2scl_table___rename_column
+        func=self._link.o2scl.o2scl_table__rename_column
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,src_,dest_)
         return
@@ -1643,7 +1713,7 @@ class table:
         | *col*: string
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table___delete_column
+        func=self._link.o2scl.o2scl_table__delete_column
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,col_)
         return
@@ -1654,7 +1724,7 @@ class table:
         | *icol*: ``size_t``
         | Returns: Python bytes object
         """
-        func=self._link.o2scl.o2scl_table___get_sorted_name
+        func=self._link.o2scl.o2scl_table__get_sorted_name
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
@@ -1669,7 +1739,7 @@ class table:
         | *val*: ``double``
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
-        func=self._link.o2scl.o2scl_table___init_column
+        func=self._link.o2scl.o2scl_table__init_column
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
         func(self._ptr,scol_,val)
         return
@@ -1681,7 +1751,7 @@ class table:
         | Returns: a Python boolean
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
-        func=self._link.o2scl.o2scl_table___is_column
+        func=self._link.o2scl.o2scl_table__is_column
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,scol_)
@@ -1694,7 +1764,7 @@ class table:
         | Returns: a Python int
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
-        func=self._link.o2scl.o2scl_table___lookup_column
+        func=self._link.o2scl.o2scl_table__lookup_column
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,scol_)
@@ -1708,7 +1778,7 @@ class table:
         """
         src_=ctypes.c_char_p(force_bytes(src))
         dest_=ctypes.c_char_p(force_bytes(dest))
-        func=self._link.o2scl.o2scl_table___copy_column
+        func=self._link.o2scl.o2scl_table__copy_column
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,src_,dest_)
         return
@@ -1726,7 +1796,7 @@ class table:
         src_col_=ctypes.c_char_p(force_bytes(src_col))
         dest_index_=ctypes.c_char_p(force_bytes(dest_index))
         dest_col_=ctypes.c_char_p(force_bytes(dest_col))
-        func=self._link.o2scl.o2scl_table___add_col_from_table
+        func=self._link.o2scl.o2scl_table__add_col_from_table
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,source._ptr,src_index_,src_col_,dest_index_,dest_col_)
         return
@@ -1741,7 +1811,7 @@ class table:
         """
         src_index_=ctypes.c_char_p(force_bytes(src_index))
         dest_index_=ctypes.c_char_p(force_bytes(dest_index))
-        func=self._link.o2scl.o2scl_table___insert_table
+        func=self._link.o2scl.o2scl_table__insert_table
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool,ctypes.c_char_p]
         func(self._ptr,source._ptr,src_index_,allow_extrap,dest_index_)
         return
@@ -1751,7 +1821,7 @@ class table:
         | Parameters:
         | *source*: :class:`table<>` object
         """
-        func=self._link.o2scl.o2scl_table___add_table
+        func=self._link.o2scl.o2scl_table__add_table
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,source._ptr)
         return
@@ -1761,7 +1831,7 @@ class table:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_table___new_row
+        func=self._link.o2scl.o2scl_table__new_row
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,n)
         return
@@ -1772,7 +1842,7 @@ class table:
         | *src*: ``size_t``
         | *dest*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_table___copy_row
+        func=self._link.o2scl.o2scl_table__copy_row
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         func(self._ptr,src,dest)
         return
@@ -1784,7 +1854,7 @@ class table:
         | *val*: ``double``
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
-        func=self._link.o2scl.o2scl_table___delete_row
+        func=self._link.o2scl.o2scl_table__delete_row
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
         func(self._ptr,scol_,val)
         return
@@ -1795,7 +1865,7 @@ class table:
         | *func*: string
         """
         func_=ctypes.c_char_p(force_bytes(func))
-        func=self._link.o2scl.o2scl_table___delete_rows_func
+        func=self._link.o2scl.o2scl_table__delete_rows_func
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,func_)
         return
@@ -1806,7 +1876,7 @@ class table:
         | *names*: string
         """
         names_=ctypes.c_char_p(force_bytes(names))
-        func=self._link.o2scl.o2scl_table___line_of_names
+        func=self._link.o2scl.o2scl_table__line_of_names
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,names_)
         return
@@ -1816,7 +1886,7 @@ class table:
         | Parameters:
         | *data*: :class:`std_vector` object
         """
-        func=self._link.o2scl.o2scl_table___line_of_data
+        func=self._link.o2scl.o2scl_table__line_of_data
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,data._ptr)
         return
@@ -1829,7 +1899,7 @@ class table:
         | Returns: a Python int
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
-        func=self._link.o2scl.o2scl_table___ordered_lookup
+        func=self._link.o2scl.o2scl_table__ordered_lookup
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
         ret=func(self._ptr,scol_,val)
@@ -1843,7 +1913,7 @@ class table:
         | Returns: a Python int
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
-        func=self._link.o2scl.o2scl_table___lookup
+        func=self._link.o2scl.o2scl_table__lookup
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
         ret=func(self._ptr,scol_,val)
@@ -1859,7 +1929,7 @@ class table:
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
         scol2_=ctypes.c_char_p(force_bytes(scol2))
-        func=self._link.o2scl.o2scl_table___lookup_val
+        func=self._link.o2scl.o2scl_table__lookup_val
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
         ret=func(self._ptr,scol_,val,scol2_)
@@ -1870,7 +1940,7 @@ class table:
         | Parameters:
         | *interp_type*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_table___set_interp_type
+        func=self._link.o2scl.o2scl_table__set_interp_type
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,interp_type)
         return
@@ -1879,7 +1949,7 @@ class table:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_table___get_interp_type
+        func=self._link.o2scl.o2scl_table__get_interp_type
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -1895,7 +1965,7 @@ class table:
         """
         sx_=ctypes.c_char_p(force_bytes(sx))
         sy_=ctypes.c_char_p(force_bytes(sy))
-        func=self._link.o2scl.o2scl_table___interp
+        func=self._link.o2scl.o2scl_table__interp
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
         ret=func(self._ptr,sx_,x0,sy_)
@@ -1909,7 +1979,7 @@ class table:
         | *iy*: ``size_t``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_table___interp_index
+        func=self._link.o2scl.o2scl_table__interp_index
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_size_t]
         ret=func(self._ptr,ix,x0,iy)
@@ -1925,7 +1995,7 @@ class table:
         x_=ctypes.c_char_p(force_bytes(x))
         y_=ctypes.c_char_p(force_bytes(y))
         yp_=ctypes.c_char_p(force_bytes(yp))
-        func=self._link.o2scl.o2scl_table___deriv_col
+        func=self._link.o2scl.o2scl_table__deriv_col
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,x_,y_,yp_)
         return
@@ -1940,7 +2010,7 @@ class table:
         """
         sx_=ctypes.c_char_p(force_bytes(sx))
         sy_=ctypes.c_char_p(force_bytes(sy))
-        func=self._link.o2scl.o2scl_table___deriv
+        func=self._link.o2scl.o2scl_table__deriv
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
         ret=func(self._ptr,sx_,x0,sy_)
@@ -1954,7 +2024,7 @@ class table:
         | *iy*: ``size_t``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_table___deriv_index
+        func=self._link.o2scl.o2scl_table__deriv_index
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_size_t]
         ret=func(self._ptr,ix,x0,iy)
@@ -1970,7 +2040,7 @@ class table:
         x_=ctypes.c_char_p(force_bytes(x))
         y_=ctypes.c_char_p(force_bytes(y))
         yp_=ctypes.c_char_p(force_bytes(yp))
-        func=self._link.o2scl.o2scl_table___deriv2_col
+        func=self._link.o2scl.o2scl_table__deriv2_col
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,x_,y_,yp_)
         return
@@ -1985,7 +2055,7 @@ class table:
         """
         sx_=ctypes.c_char_p(force_bytes(sx))
         sy_=ctypes.c_char_p(force_bytes(sy))
-        func=self._link.o2scl.o2scl_table___deriv2
+        func=self._link.o2scl.o2scl_table__deriv2
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
         ret=func(self._ptr,sx_,x0,sy_)
@@ -1999,7 +2069,7 @@ class table:
         | *iy*: ``size_t``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_table___deriv2_index
+        func=self._link.o2scl.o2scl_table__deriv2_index
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_size_t]
         ret=func(self._ptr,ix,x0,iy)
@@ -2016,7 +2086,7 @@ class table:
         """
         sx_=ctypes.c_char_p(force_bytes(sx))
         sy_=ctypes.c_char_p(force_bytes(sy))
-        func=self._link.o2scl.o2scl_table___integ
+        func=self._link.o2scl.o2scl_table__integ
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
         ret=func(self._ptr,sx_,x1,x2,sy_)
@@ -2031,7 +2101,7 @@ class table:
         | *iy*: ``size_t``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_table___integ_index
+        func=self._link.o2scl.o2scl_table__integ_index
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
         ret=func(self._ptr,ix,x1,x2,iy)
@@ -2047,7 +2117,7 @@ class table:
         x_=ctypes.c_char_p(force_bytes(x))
         y_=ctypes.c_char_p(force_bytes(y))
         yi_=ctypes.c_char_p(force_bytes(yi))
-        func=self._link.o2scl.o2scl_table___integ_col
+        func=self._link.o2scl.o2scl_table__integ_col
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,x_,y_,yi_)
         return
@@ -2059,7 +2129,7 @@ class table:
         | Returns: a Python float
         """
         max_=ctypes.c_char_p(force_bytes(max))
-        func=self._link.o2scl.o2scl_table___max
+        func=self._link.o2scl.o2scl_table__max
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,max_)
@@ -2072,7 +2142,7 @@ class table:
         | Returns: a Python float
         """
         min_=ctypes.c_char_p(force_bytes(min))
-        func=self._link.o2scl.o2scl_table___min
+        func=self._link.o2scl.o2scl_table__min
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,min_)
@@ -2081,7 +2151,7 @@ class table:
     def zero_table(self):
         """
         """
-        func=self._link.o2scl.o2scl_table___zero_table
+        func=self._link.o2scl.o2scl_table__zero_table
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -2089,7 +2159,7 @@ class table:
     def clear(self):
         """
         """
-        func=self._link.o2scl.o2scl_table___clear
+        func=self._link.o2scl.o2scl_table__clear
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -2097,7 +2167,7 @@ class table:
     def clear_data(self):
         """
         """
-        func=self._link.o2scl.o2scl_table___clear_data
+        func=self._link.o2scl.o2scl_table__clear_data
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -2105,7 +2175,7 @@ class table:
     def clear_table(self):
         """
         """
-        func=self._link.o2scl.o2scl_table___clear_table
+        func=self._link.o2scl.o2scl_table__clear_table
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -2113,7 +2183,7 @@ class table:
     def clear_constants(self):
         """
         """
-        func=self._link.o2scl.o2scl_table___clear_constants
+        func=self._link.o2scl.o2scl_table__clear_constants
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -2124,7 +2194,7 @@ class table:
         | *scol*: string
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
-        func=self._link.o2scl.o2scl_table___sort_table
+        func=self._link.o2scl.o2scl_table__sort_table
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,scol_)
         return
@@ -2135,7 +2205,7 @@ class table:
         | *scol*: string
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
-        func=self._link.o2scl.o2scl_table___sort_column
+        func=self._link.o2scl.o2scl_table__sort_column
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,scol_)
         return
@@ -2147,7 +2217,7 @@ class table:
         | *window*: ``size_t``
         """
         col_name_=ctypes.c_char_p(force_bytes(col_name))
-        func=self._link.o2scl.o2scl_table___average_col_roll
+        func=self._link.o2scl.o2scl_table__average_col_roll
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
         func(self._ptr,col_name_,window)
         return
@@ -2158,7 +2228,7 @@ class table:
         | *window*: ``size_t``
         | *rolling*: ``bool``
         """
-        func=self._link.o2scl.o2scl_table___average_rows
+        func=self._link.o2scl.o2scl_table__average_rows
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_bool]
         func(self._ptr,window,rolling)
         return
@@ -2166,7 +2236,7 @@ class table:
     def is_valid(self):
         """
         """
-        func=self._link.o2scl.o2scl_table___is_valid
+        func=self._link.o2scl.o2scl_table__is_valid
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -2177,7 +2247,7 @@ class table:
         | *list*: string
         """
         list_=ctypes.c_char_p(force_bytes(list))
-        func=self._link.o2scl.o2scl_table___functions_columns
+        func=self._link.o2scl.o2scl_table__functions_columns
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,list_)
         return
@@ -2190,7 +2260,7 @@ class table:
         """
         function_=ctypes.c_char_p(force_bytes(function))
         scol_=ctypes.c_char_p(force_bytes(scol))
-        func=self._link.o2scl.o2scl_table___function_column
+        func=self._link.o2scl.o2scl_table__function_column
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,function_,scol_)
         return
@@ -2203,7 +2273,7 @@ class table:
         | Returns: a Python float
         """
         scol_=ctypes.c_char_p(force_bytes(scol))
-        func=self._link.o2scl.o2scl_table___row_function
+        func=self._link.o2scl.o2scl_table__row_function
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
         ret=func(self._ptr,scol_,row)
@@ -2216,7 +2286,7 @@ class table:
         | Returns: a Python int
         """
         function_=ctypes.c_char_p(force_bytes(function))
-        func=self._link.o2scl.o2scl_table___function_find_row
+        func=self._link.o2scl.o2scl_table__function_find_row
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,function_)
@@ -2225,7 +2295,7 @@ class table:
     def summary(self):
         """
         """
-        func=self._link.o2scl.o2scl_table___summary
+        func=self._link.o2scl.o2scl_table__summary
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -2261,7 +2331,7 @@ class table_units(table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_table_units__
+            f=link.o2scl.o2scl_create_table_units_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2277,7 +2347,7 @@ class table_units(table):
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_table_units__
+            f=self._link.o2scl.o2scl_free_table_units_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2302,7 +2372,7 @@ class table_units(table):
         """
 
         new_obj=type(self)(self._link)
-        f2=self._link.o2scl.o2scl_copy_table_units__
+        f2=self._link.o2scl.o2scl_copy_table_units_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
         return new_obj
@@ -2315,7 +2385,7 @@ class table_units(table):
         """
         col_=ctypes.c_char_p(force_bytes(col))
         unit_=ctypes.c_char_p(force_bytes(unit))
-        func=self._link.o2scl.o2scl_table_units___set_unit
+        func=self._link.o2scl.o2scl_table_units__set_unit
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,col_,unit_)
         return
@@ -2327,7 +2397,7 @@ class table_units(table):
         | Returns: Python bytes object
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table_units___get_unit
+        func=self._link.o2scl.o2scl_table_units__get_unit
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,col_)
@@ -2341,7 +2411,7 @@ class table_units(table):
         | *unit_line*: string
         """
         unit_line_=ctypes.c_char_p(force_bytes(unit_line))
-        func=self._link.o2scl.o2scl_table_units___line_of_units
+        func=self._link.o2scl.o2scl_table_units__line_of_units
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,unit_line_)
         return
@@ -2352,7 +2422,7 @@ class table_units(table):
         | *col*: string
         """
         col_=ctypes.c_char_p(force_bytes(col))
-        func=self._link.o2scl.o2scl_table_units___remove_unit
+        func=self._link.o2scl.o2scl_table_units__remove_unit
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,col_)
         return
@@ -2367,7 +2437,7 @@ class table_units(table):
         """
         col_=ctypes.c_char_p(force_bytes(col))
         unit_=ctypes.c_char_p(force_bytes(unit))
-        func=self._link.o2scl.o2scl_table_units___convert_to_unit
+        func=self._link.o2scl.o2scl_table_units__convert_to_unit
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_bool]
         ret=func(self._ptr,col_,unit_,err_on_fail)
@@ -2396,7 +2466,7 @@ class uniform_grid:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid__
+            f=link.o2scl.o2scl_create_uniform_grid_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2412,7 +2482,7 @@ class uniform_grid:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_uniform_grid__
+            f=self._link.o2scl.o2scl_free_uniform_grid_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2433,7 +2503,7 @@ class uniform_grid:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_uniform_grid___get_nbins
+        func=self._link.o2scl.o2scl_uniform_grid__get_nbins
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -2443,7 +2513,7 @@ class uniform_grid:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_uniform_grid___get_npoints
+        func=self._link.o2scl.o2scl_uniform_grid__get_npoints
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -2453,7 +2523,7 @@ class uniform_grid:
         """
         | Returns: a Python boolean
         """
-        func=self._link.o2scl.o2scl_uniform_grid___is_log
+        func=self._link.o2scl.o2scl_uniform_grid__is_log
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -2463,7 +2533,7 @@ class uniform_grid:
         """
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_uniform_grid___get_start
+        func=self._link.o2scl.o2scl_uniform_grid__get_start
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -2473,7 +2543,7 @@ class uniform_grid:
         """
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_uniform_grid___get_end
+        func=self._link.o2scl.o2scl_uniform_grid__get_end
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -2483,7 +2553,7 @@ class uniform_grid:
         """
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_uniform_grid___get_width
+        func=self._link.o2scl.o2scl_uniform_grid__get_width
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -2494,7 +2564,7 @@ class uniform_grid:
         | Parameters:
         | *n*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_uniform_grid___getitem
+        func=self._link.o2scl.o2scl_uniform_grid__getitem
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
@@ -2505,7 +2575,7 @@ class uniform_grid:
         | Parameters:
         | *v*: :class:`std_vector` object
         """
-        func=self._link.o2scl.o2scl_uniform_grid___vector
+        func=self._link.o2scl.o2scl_uniform_grid__vector
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,v._ptr)
         return
@@ -2529,7 +2599,7 @@ class uniform_grid_end(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_end__
+            f=link.o2scl.o2scl_create_uniform_grid_end_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2545,7 +2615,7 @@ class uniform_grid_end(uniform_grid):
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_uniform_grid_end__
+            f=self._link.o2scl.o2scl_free_uniform_grid_end_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2571,7 +2641,7 @@ class uniform_grid_end(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_end___init
+        f=link.o2scl.o2scl_uniform_grid_end__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
         return cls(link,f(start,end,n_bins))
@@ -2595,7 +2665,7 @@ class uniform_grid_width(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_width__
+            f=link.o2scl.o2scl_create_uniform_grid_width_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2611,7 +2681,7 @@ class uniform_grid_width(uniform_grid):
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_uniform_grid_width__
+            f=self._link.o2scl.o2scl_free_uniform_grid_width_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2637,7 +2707,7 @@ class uniform_grid_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_width___init
+        f=link.o2scl.o2scl_uniform_grid_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
         return cls(link,f(start,width,n_bins))
@@ -2661,7 +2731,7 @@ class uniform_grid_end_width(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_end_width__
+            f=link.o2scl.o2scl_create_uniform_grid_end_width_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2677,7 +2747,7 @@ class uniform_grid_end_width(uniform_grid):
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_uniform_grid_end_width__
+            f=self._link.o2scl.o2scl_free_uniform_grid_end_width_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2703,7 +2773,7 @@ class uniform_grid_end_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_end_width___init
+        f=link.o2scl.o2scl_uniform_grid_end_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double]
         return cls(link,f(start,end,width))
@@ -2727,7 +2797,7 @@ class uniform_grid_log_end(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_log_end__
+            f=link.o2scl.o2scl_create_uniform_grid_log_end_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2743,7 +2813,7 @@ class uniform_grid_log_end(uniform_grid):
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_uniform_grid_log_end__
+            f=self._link.o2scl.o2scl_free_uniform_grid_log_end_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2769,7 +2839,7 @@ class uniform_grid_log_end(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_log_end___init
+        f=link.o2scl.o2scl_uniform_grid_log_end__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
         return cls(link,f(start,end,n_bins))
@@ -2793,7 +2863,7 @@ class uniform_grid_log_width(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_log_width__
+            f=link.o2scl.o2scl_create_uniform_grid_log_width_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2809,7 +2879,7 @@ class uniform_grid_log_width(uniform_grid):
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_uniform_grid_log_width__
+            f=self._link.o2scl.o2scl_free_uniform_grid_log_width_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2835,7 +2905,7 @@ class uniform_grid_log_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_log_width___init
+        f=link.o2scl.o2scl_uniform_grid_log_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
         return cls(link,f(start,width,n_bins))
@@ -2859,7 +2929,7 @@ class uniform_grid_log_end_width(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_log_end_width__
+            f=link.o2scl.o2scl_create_uniform_grid_log_end_width_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2875,7 +2945,7 @@ class uniform_grid_log_end_width(uniform_grid):
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_uniform_grid_log_end_width__
+            f=self._link.o2scl.o2scl_free_uniform_grid_log_end_width_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2901,7 +2971,7 @@ class uniform_grid_log_end_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_log_end_width___init
+        f=link.o2scl.o2scl_uniform_grid_log_end_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double]
         return cls(link,f(start,end,width))
@@ -2912,6 +2982,11 @@ class table3d:
     Python interface for O\ :sub:`2`\ scl class ``table3d``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/table3d.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
     """
 
     _ptr=0
@@ -3501,6 +3576,11 @@ class index_spec:
     Python interface for O\ :sub:`2`\ scl class ``index_spec``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/index_spec.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
     """
 
     _ptr=0
@@ -3714,7 +3794,7 @@ class tensor:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_tensor__
+            f=link.o2scl.o2scl_create_tensor_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -3730,7 +3810,7 @@ class tensor:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_tensor__
+            f=self._link.o2scl.o2scl_free_tensor_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -3755,7 +3835,7 @@ class tensor:
         """
 
         new_obj=type(self)(self._link)
-        f2=self._link.o2scl.o2scl_copy_tensor__
+        f2=self._link.o2scl.o2scl_copy_tensor_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
         return new_obj
@@ -3763,7 +3843,7 @@ class tensor:
     def is_valid(self):
         """
         """
-        func=self._link.o2scl.o2scl_tensor___is_valid
+        func=self._link.o2scl.o2scl_tensor__is_valid
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -3771,7 +3851,7 @@ class tensor:
     def clear(self):
         """
         """
-        func=self._link.o2scl.o2scl_tensor___clear
+        func=self._link.o2scl.o2scl_tensor__clear
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -3782,7 +3862,7 @@ class tensor:
         | *index*: :class:`vector<size_t>` object
         | *val*: ``double``
         """
-        func=self._link.o2scl.o2scl_tensor___set
+        func=self._link.o2scl.o2scl_tensor__set
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,index._ptr,val)
         return
@@ -3792,7 +3872,7 @@ class tensor:
         | Parameters:
         | *x*: ``double``
         """
-        func=self._link.o2scl.o2scl_tensor___set_all
+        func=self._link.o2scl.o2scl_tensor__set_all
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,x)
         return
@@ -3802,7 +3882,7 @@ class tensor:
         | Parameters:
         | *data*: :class:`std_vector` object
         """
-        func=self._link.o2scl.o2scl_tensor___swap_data
+        func=self._link.o2scl.o2scl_tensor__swap_data
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,data._ptr)
         return
@@ -3813,7 +3893,7 @@ class tensor:
         | *index*: :class:`vector<size_t>` object
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_tensor___get
+        func=self._link.o2scl.o2scl_tensor__get
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,index._ptr)
@@ -3825,7 +3905,7 @@ class tensor:
         | *n*: ``size_t``
         | *index*: :class:`vector<size_t>` object
         """
-        func=self._link.o2scl.o2scl_tensor___resize
+        func=self._link.o2scl.o2scl_tensor__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
         func(self._ptr,n,index._ptr)
         return
@@ -3834,7 +3914,7 @@ class tensor:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor___get_rank
+        func=self._link.o2scl.o2scl_tensor__get_rank
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -3846,7 +3926,7 @@ class tensor:
         | *i*: ``size_t``
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor___get_size
+        func=self._link.o2scl.o2scl_tensor__get_size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,i)
@@ -3856,7 +3936,7 @@ class tensor:
         """
         | Returns: ``numpy`` array
         """
-        func=self._link.o2scl.o2scl_tensor___get_data
+        func=self._link.o2scl.o2scl_tensor__get_data
         n_=ctypes.c_int(0)
         ptr_=ctypes.POINTER(ctypes.c_double)()
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
@@ -3868,7 +3948,7 @@ class tensor:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor___total_size
+        func=self._link.o2scl.o2scl_tensor__total_size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -3880,7 +3960,7 @@ class tensor:
         | *index*: :class:`std_vector_size_t` object
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor___pack_indices
+        func=self._link.o2scl.o2scl_tensor__pack_indices
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,index._ptr)
@@ -3892,7 +3972,7 @@ class tensor:
         | *ix*: ``size_t``
         | *index*: :class:`std_vector_size_t` object
         """
-        func=self._link.o2scl.o2scl_tensor___unpack_index
+        func=self._link.o2scl.o2scl_tensor__unpack_index
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
         func(self._ptr,ix,index._ptr)
         return
@@ -3901,7 +3981,7 @@ class tensor:
         """
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_tensor___min_value
+        func=self._link.o2scl.o2scl_tensor__min_value
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -3911,7 +3991,7 @@ class tensor:
         """
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_tensor___max_value
+        func=self._link.o2scl.o2scl_tensor__max_value
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -3922,7 +4002,7 @@ class tensor:
         | Parameters:
         | Returns: , a Python float, a Python float
         """
-        func=self._link.o2scl.o2scl_tensor___minmax_value
+        func=self._link.o2scl.o2scl_tensor__minmax_value
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
         min_conv=ctypes.c_double(0)
         max_conv=ctypes.c_double(0)
@@ -3933,7 +4013,7 @@ class tensor:
         """
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_tensor___total_sum
+        func=self._link.o2scl.o2scl_tensor__total_sum
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -3952,7 +4032,7 @@ class tensor:
         x_name_=ctypes.c_char_p(force_bytes(x_name))
         y_name_=ctypes.c_char_p(force_bytes(y_name))
         slice_name_=ctypes.c_char_p(force_bytes(slice_name))
-        func=self._link.o2scl.o2scl_tensor___convert_table3d_sum
+        func=self._link.o2scl.o2scl_tensor__convert_table3d_sum
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
         return
@@ -3966,7 +4046,7 @@ class tensor:
 
         """
 
-        f=link.o2scl.o2scl_tensor___create_size
+        f=link.o2scl.o2scl_tensor__create_size
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
         return cls(link,f(rank,sizes._ptr))
@@ -4034,7 +4114,7 @@ class tensor_grid:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_tensor_grid__
+            f=link.o2scl.o2scl_create_tensor_grid_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -4050,7 +4130,7 @@ class tensor_grid:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_tensor_grid__
+            f=self._link.o2scl.o2scl_free_tensor_grid_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -4075,7 +4155,7 @@ class tensor_grid:
         """
 
         new_obj=type(self)(self._link)
-        f2=self._link.o2scl.o2scl_copy_tensor_grid__
+        f2=self._link.o2scl.o2scl_copy_tensor_grid_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
         return new_obj
@@ -4083,7 +4163,7 @@ class tensor_grid:
     def is_valid(self):
         """
         """
-        func=self._link.o2scl.o2scl_tensor_grid___is_valid
+        func=self._link.o2scl.o2scl_tensor_grid__is_valid
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -4094,7 +4174,7 @@ class tensor_grid:
         | *grid_point*: :class:`vector<double>` object
         | *val*: ``double``
         """
-        func=self._link.o2scl.o2scl_tensor_grid___set_val
+        func=self._link.o2scl.o2scl_tensor_grid__set_val
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,grid_point._ptr,val)
         return
@@ -4105,7 +4185,7 @@ class tensor_grid:
         | *grid_point*: :class:`vector<double>` object
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_tensor_grid___get_val
+        func=self._link.o2scl.o2scl_tensor_grid__get_val
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,grid_point._ptr)
@@ -4115,7 +4195,7 @@ class tensor_grid:
         """
         | Returns: a Python boolean
         """
-        func=self._link.o2scl.o2scl_tensor_grid___is_grid_set
+        func=self._link.o2scl.o2scl_tensor_grid__is_grid_set
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4126,7 +4206,7 @@ class tensor_grid:
         | Parameters:
         | *grid*: :class:`vector<double>` object
         """
-        func=self._link.o2scl.o2scl_tensor_grid___set_grid_packed
+        func=self._link.o2scl.o2scl_tensor_grid__set_grid_packed
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,grid._ptr)
         return
@@ -4134,7 +4214,7 @@ class tensor_grid:
     def default_grid(self):
         """
         """
-        func=self._link.o2scl.o2scl_tensor_grid___default_grid
+        func=self._link.o2scl.o2scl_tensor_grid__default_grid
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -4145,7 +4225,7 @@ class tensor_grid:
         | *i*: ``size_t``
         | *grid*: :class:`vector<double>` object
         """
-        func=self._link.o2scl.o2scl_tensor_grid___set_grid_i_vec
+        func=self._link.o2scl.o2scl_tensor_grid__set_grid_i_vec
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
         func(self._ptr,i,grid._ptr)
         return
@@ -4157,7 +4237,7 @@ class tensor_grid:
         | *j*: ``size_t``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_tensor_grid___get_grid
+        func=self._link.o2scl.o2scl_tensor_grid__get_grid
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         ret=func(self._ptr,i,j)
@@ -4170,7 +4250,7 @@ class tensor_grid:
         | *j*: ``size_t``
         | *val*: ``double``
         """
-        func=self._link.o2scl.o2scl_tensor_grid___set_grid
+        func=self._link.o2scl.o2scl_tensor_grid__set_grid
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_double]
         func(self._ptr,i,j,val)
         return
@@ -4198,7 +4278,7 @@ class tensor_int:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_tensor_int_std__vector_int__
+            f=link.o2scl.o2scl_create_tensor_int_std_vector_int_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -4214,7 +4294,7 @@ class tensor_int:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_tensor_int_std__vector_int__
+            f=self._link.o2scl.o2scl_free_tensor_int_std_vector_int_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -4239,7 +4319,7 @@ class tensor_int:
         """
 
         new_obj=type(self)(self._link)
-        f2=self._link.o2scl.o2scl_copy_tensor_int_std__vector_int__
+        f2=self._link.o2scl.o2scl_copy_tensor_int_std_vector_int_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
         return new_obj
@@ -4247,7 +4327,7 @@ class tensor_int:
     def is_valid(self):
         """
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___is_valid
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__is_valid
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -4255,7 +4335,7 @@ class tensor_int:
     def clear(self):
         """
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___clear
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__clear
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -4266,7 +4346,7 @@ class tensor_int:
         | *index*: :class:`vector<size_t>` object
         | *val*: ``int``
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___set
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__set
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,index._ptr,val)
         return
@@ -4276,7 +4356,7 @@ class tensor_int:
         | Parameters:
         | *x*: ``int``
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___set_all
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__set_all
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,x)
         return
@@ -4287,7 +4367,7 @@ class tensor_int:
         | *index*: :class:`vector<size_t>` object
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___get
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__get
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,index._ptr)
@@ -4299,7 +4379,7 @@ class tensor_int:
         | *n*: ``size_t``
         | *index*: :class:`vector<size_t>` object
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___resize
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
         func(self._ptr,n,index._ptr)
         return
@@ -4308,7 +4388,7 @@ class tensor_int:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___get_rank
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__get_rank
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4320,7 +4400,7 @@ class tensor_int:
         | *i*: ``size_t``
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___get_size
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__get_size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,i)
@@ -4330,7 +4410,7 @@ class tensor_int:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___total_size
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__total_size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4340,7 +4420,7 @@ class tensor_int:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___min_value
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__min_value
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4350,7 +4430,7 @@ class tensor_int:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___max_value
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__max_value
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4360,7 +4440,7 @@ class tensor_int:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_int_std__vector_int___total_sum
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__total_sum
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4375,7 +4455,7 @@ class tensor_int:
 
         """
 
-        f=link.o2scl.o2scl_tensor_int_std__vector_int___create_size
+        f=link.o2scl.o2scl_tensor_int_std_vector_int__create_size
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
         return cls(link,f(rank,sizes._ptr))
@@ -4443,7 +4523,7 @@ class tensor_size_t:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_tensor_size_t_std__vector_size_t__
+            f=link.o2scl.o2scl_create_tensor_size_t_std_vector_size_t_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -4459,7 +4539,7 @@ class tensor_size_t:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_tensor_size_t_std__vector_size_t__
+            f=self._link.o2scl.o2scl_free_tensor_size_t_std_vector_size_t_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -4484,7 +4564,7 @@ class tensor_size_t:
         """
 
         new_obj=type(self)(self._link)
-        f2=self._link.o2scl.o2scl_copy_tensor_size_t_std__vector_size_t__
+        f2=self._link.o2scl.o2scl_copy_tensor_size_t_std_vector_size_t_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
         return new_obj
@@ -4492,7 +4572,7 @@ class tensor_size_t:
     def is_valid(self):
         """
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___is_valid
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__is_valid
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -4500,7 +4580,7 @@ class tensor_size_t:
     def clear(self):
         """
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___clear
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__clear
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -4511,7 +4591,7 @@ class tensor_size_t:
         | *index*: :class:`vector<size_t>` object
         | *val*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___set
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__set
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,index._ptr,val)
         return
@@ -4521,7 +4601,7 @@ class tensor_size_t:
         | Parameters:
         | *x*: ``size_t``
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___set_all
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__set_all
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,x)
         return
@@ -4532,7 +4612,7 @@ class tensor_size_t:
         | *index*: :class:`vector<size_t>` object
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___get
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__get
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,index._ptr)
@@ -4544,7 +4624,7 @@ class tensor_size_t:
         | *n*: ``size_t``
         | *index*: :class:`vector<size_t>` object
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___resize
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__resize
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
         func(self._ptr,n,index._ptr)
         return
@@ -4553,7 +4633,7 @@ class tensor_size_t:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___get_rank
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__get_rank
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4565,7 +4645,7 @@ class tensor_size_t:
         | *i*: ``size_t``
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___get_size
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__get_size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,i)
@@ -4575,7 +4655,7 @@ class tensor_size_t:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___total_size
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__total_size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4585,7 +4665,7 @@ class tensor_size_t:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___min_value
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__min_value
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4595,7 +4675,7 @@ class tensor_size_t:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___max_value
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__max_value
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4605,7 +4685,7 @@ class tensor_size_t:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_tensor_size_t_std__vector_size_t___total_sum
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__total_sum
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4620,7 +4700,7 @@ class tensor_size_t:
 
         """
 
-        f=link.o2scl.o2scl_tensor_size_t_std__vector_size_t___create_size
+        f=link.o2scl.o2scl_tensor_size_t_std_vector_size_t__create_size
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
         return cls(link,f(rank,sizes._ptr))
@@ -4671,6 +4751,11 @@ class find_constants:
     Python interface for O\ :sub:`2`\ scl class ``find_constants``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/find_constants.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
     """
 
     _ptr=0
@@ -4757,6 +4842,11 @@ class convert_units_der_unit:
     Python interface for O\ :sub:`2`\ scl class ``convert_units<>::der_unit``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/convert_units<>::der_unit.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
     """
 
     _ptr=0
@@ -4774,7 +4864,7 @@ class convert_units_der_unit:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_convert_units____der_unit
+            f=link.o2scl.o2scl_create_convert_units_der_unit
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -4790,7 +4880,7 @@ class convert_units_der_unit:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_convert_units____der_unit
+            f=self._link.o2scl.o2scl_free_convert_units_der_unit
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -4811,7 +4901,7 @@ class convert_units_der_unit:
         """
         Get object of type :class:`std::string`
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_get_label
+        func=self._link.o2scl.o2scl_convert_units_der_unit_get_label
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,label._ptr)
@@ -4821,7 +4911,7 @@ class convert_units_der_unit:
         """
         Set object of type :class:`std::string`
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_set_label
+        func=self._link.o2scl.o2scl_convert_units_der_unit_set_label
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -4831,7 +4921,7 @@ class convert_units_der_unit:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_get_m
+        func=self._link.o2scl.o2scl_convert_units_der_unit_get_m
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4841,7 +4931,7 @@ class convert_units_der_unit:
         """
         Setter function for convert_units<>::der_unit::m .
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_set_m
+        func=self._link.o2scl.o2scl_convert_units_der_unit_set_m
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -4851,7 +4941,7 @@ class convert_units_der_unit:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_get_k
+        func=self._link.o2scl.o2scl_convert_units_der_unit_get_k
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4861,7 +4951,7 @@ class convert_units_der_unit:
         """
         Setter function for convert_units<>::der_unit::k .
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_set_k
+        func=self._link.o2scl.o2scl_convert_units_der_unit_set_k
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -4871,7 +4961,7 @@ class convert_units_der_unit:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_get_s
+        func=self._link.o2scl.o2scl_convert_units_der_unit_get_s
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4881,7 +4971,7 @@ class convert_units_der_unit:
         """
         Setter function for convert_units<>::der_unit::s .
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_set_s
+        func=self._link.o2scl.o2scl_convert_units_der_unit_set_s
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -4891,7 +4981,7 @@ class convert_units_der_unit:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_get_K
+        func=self._link.o2scl.o2scl_convert_units_der_unit_get_K
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4901,7 +4991,7 @@ class convert_units_der_unit:
         """
         Setter function for convert_units<>::der_unit::K .
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_set_K
+        func=self._link.o2scl.o2scl_convert_units_der_unit_set_K
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -4911,7 +5001,7 @@ class convert_units_der_unit:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_get_A
+        func=self._link.o2scl.o2scl_convert_units_der_unit_get_A
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4921,7 +5011,7 @@ class convert_units_der_unit:
         """
         Setter function for convert_units<>::der_unit::A .
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_set_A
+        func=self._link.o2scl.o2scl_convert_units_der_unit_set_A
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -4931,7 +5021,7 @@ class convert_units_der_unit:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_get_mol
+        func=self._link.o2scl.o2scl_convert_units_der_unit_get_mol
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4941,7 +5031,7 @@ class convert_units_der_unit:
         """
         Setter function for convert_units<>::der_unit::mol .
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_set_mol
+        func=self._link.o2scl.o2scl_convert_units_der_unit_set_mol
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -4951,7 +5041,7 @@ class convert_units_der_unit:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_get_cd
+        func=self._link.o2scl.o2scl_convert_units_der_unit_get_cd
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4961,7 +5051,7 @@ class convert_units_der_unit:
         """
         Setter function for convert_units<>::der_unit::cd .
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_set_cd
+        func=self._link.o2scl.o2scl_convert_units_der_unit_set_cd
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -4971,7 +5061,7 @@ class convert_units_der_unit:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_get_val
+        func=self._link.o2scl.o2scl_convert_units_der_unit_get_val
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4981,7 +5071,7 @@ class convert_units_der_unit:
         """
         Setter function for convert_units<>::der_unit::val .
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_set_val
+        func=self._link.o2scl.o2scl_convert_units_der_unit_set_val
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -4990,7 +5080,7 @@ class convert_units_der_unit:
         """
         Get object of type :class:`std::string`
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_get_name
+        func=self._link.o2scl.o2scl_convert_units_der_unit_get_name
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,name._ptr)
@@ -5000,7 +5090,7 @@ class convert_units_der_unit:
         """
         Set object of type :class:`std::string`
         """
-        func=self._link.o2scl.o2scl_convert_units____der_unit_set_name
+        func=self._link.o2scl.o2scl_convert_units_der_unit_set_name
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -5047,7 +5137,7 @@ class convert_units:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_convert_units__
+            f=link.o2scl.o2scl_create_convert_units_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -5063,7 +5153,7 @@ class convert_units:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_convert_units__
+            f=self._link.o2scl.o2scl_free_convert_units_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -5085,7 +5175,7 @@ class convert_units:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl.o2scl_convert_units___get_verbose
+        func=self._link.o2scl.o2scl_convert_units__get_verbose
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -5095,7 +5185,7 @@ class convert_units:
         """
         Setter function for convert_units<>::verbose .
         """
-        func=self._link.o2scl.o2scl_convert_units___set_verbose
+        func=self._link.o2scl.o2scl_convert_units__set_verbose
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -5105,7 +5195,7 @@ class convert_units:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl.o2scl_convert_units___get_err_on_fail
+        func=self._link.o2scl.o2scl_convert_units__get_err_on_fail
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -5115,7 +5205,7 @@ class convert_units:
         """
         Setter function for convert_units<>::err_on_fail .
         """
-        func=self._link.o2scl.o2scl_convert_units___set_err_on_fail
+        func=self._link.o2scl.o2scl_convert_units__set_err_on_fail
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -5125,7 +5215,7 @@ class convert_units:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl.o2scl_convert_units___get_combine_two_conv
+        func=self._link.o2scl.o2scl_convert_units__get_combine_two_conv
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -5135,7 +5225,7 @@ class convert_units:
         """
         Setter function for convert_units<>::combine_two_conv .
         """
-        func=self._link.o2scl.o2scl_convert_units___set_combine_two_conv
+        func=self._link.o2scl.o2scl_convert_units__set_combine_two_conv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -5150,7 +5240,7 @@ class convert_units:
         """
         frm_=ctypes.c_char_p(force_bytes(frm))
         to_=ctypes.c_char_p(force_bytes(to))
-        func=self._link.o2scl.o2scl_convert_units___convert
+        func=self._link.o2scl.o2scl_convert_units__convert
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_double]
         ret=func(self._ptr,frm_,to_,val)
@@ -5167,7 +5257,7 @@ class convert_units:
         """
         frm_=ctypes.c_char_p(force_bytes(frm))
         to_=ctypes.c_char_p(force_bytes(to))
-        func=self._link.o2scl.o2scl_convert_units___convert_ret
+        func=self._link.o2scl.o2scl_convert_units__convert_ret
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,frm_,to_,val,converted)
@@ -5179,7 +5269,7 @@ class convert_units:
         | *name*: :class:`std_string` object
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl.o2scl_convert_units___del_unit
+        func=self._link.o2scl.o2scl_convert_units__del_unit
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,name._ptr)
         return
@@ -5189,7 +5279,7 @@ class convert_units:
         | Parameters:
         | *d*: :class:`convert_units<>::der_unit` object
         """
-        func=self._link.o2scl.o2scl_convert_units___add_unit
+        func=self._link.o2scl.o2scl_convert_units__add_unit
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,d._ptr)
         return
@@ -5201,7 +5291,7 @@ class convert_units:
         | *hbar_is_one* =true: ``bool``
         | *kb_is_one* =true: ``bool``
         """
-        func=self._link.o2scl.o2scl_convert_units___set_natural_units
+        func=self._link.o2scl.o2scl_convert_units__set_natural_units
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool,ctypes.c_bool,ctypes.c_bool]
         func(self._ptr,c_is_one,hbar_is_one,kb_is_one)
         return
@@ -5209,7 +5299,7 @@ class convert_units:
     def test_unique(self):
         """
         """
-        func=self._link.o2scl.o2scl_convert_units___test_unique
+        func=self._link.o2scl.o2scl_convert_units__test_unique
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -5217,7 +5307,7 @@ class convert_units:
     def print_cache(self):
         """
         """
-        func=self._link.o2scl.o2scl_convert_units___print_cache
+        func=self._link.o2scl.o2scl_convert_units__print_cache
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -5225,7 +5315,7 @@ class convert_units:
     def print_units_cout(self):
         """
         """
-        func=self._link.o2scl.o2scl_convert_units___print_units_cout
+        func=self._link.o2scl.o2scl_convert_units__print_units_cout
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -5236,6 +5326,11 @@ class format_float:
     Python interface for O\ :sub:`2`\ scl class ``format_float``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/format_float.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
     """
 
     _ptr=0
@@ -5383,6 +5478,11 @@ class interp:
     Python interface for O\ :sub:`2`\ scl class ``interp<std::vector<double>>``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/interp<std::vector<double>>.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
     """
 
     _ptr=0
@@ -5400,7 +5500,7 @@ class interp:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_interp_std__vector_double__
+            f=link.o2scl.o2scl_create_interp_std_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -5416,7 +5516,7 @@ class interp:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_interp_std__vector_double__
+            f=self._link.o2scl.o2scl_free_interp_std_vector_double_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -5442,7 +5542,7 @@ class interp:
         | *y*: :class:`std_vector` object
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_std__vector_double___eval
+        func=self._link.o2scl.o2scl_interp_std_vector_double__eval
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,x0,n,x._ptr,y._ptr)
@@ -5457,7 +5557,7 @@ class interp:
         | *y*: :class:`std_vector` object
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_std__vector_double___deriv
+        func=self._link.o2scl.o2scl_interp_std_vector_double__deriv
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,x0,n,x._ptr,y._ptr)
@@ -5472,7 +5572,7 @@ class interp:
         | *y*: :class:`std_vector` object
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_std__vector_double___deriv2
+        func=self._link.o2scl.o2scl_interp_std_vector_double__deriv2
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,x0,n,x._ptr,y._ptr)
@@ -5488,7 +5588,7 @@ class interp:
         | *y*: :class:`std_vector` object
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_std__vector_double___integ
+        func=self._link.o2scl.o2scl_interp_std_vector_double__integ
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,x1,x2,n,x._ptr,y._ptr)
@@ -5499,7 +5599,7 @@ class interp:
         | Parameters:
         | *interp_type*: ``int``
         """
-        func=self._link.o2scl.o2scl_interp_std__vector_double___set_type
+        func=self._link.o2scl.o2scl_interp_std_vector_double__set_type
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,interp_type)
         return
@@ -5510,6 +5610,11 @@ class interp_vec:
     Python interface for O\ :sub:`2`\ scl class ``interp_vec<std::vector<double>>``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/interp_vec<std::vector<double>>.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
     """
 
     _ptr=0
@@ -5527,7 +5632,7 @@ class interp_vec:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_interp_vec_std__vector_double__
+            f=link.o2scl.o2scl_create_interp_vec_std_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -5543,7 +5648,7 @@ class interp_vec:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_interp_vec_std__vector_double__
+            f=self._link.o2scl.o2scl_free_interp_vec_std_vector_double_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -5563,7 +5668,7 @@ class interp_vec:
     def clear(self):
         """
         """
-        func=self._link.o2scl.o2scl_interp_vec_std__vector_double___clear
+        func=self._link.o2scl.o2scl_interp_vec_std_vector_double__clear
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -5574,7 +5679,7 @@ class interp_vec:
         | *x0*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_vec_std__vector_double___eval
+        func=self._link.o2scl.o2scl_interp_vec_std_vector_double__eval
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,x0)
@@ -5586,7 +5691,7 @@ class interp_vec:
         | *x0*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_vec_std__vector_double___deriv
+        func=self._link.o2scl.o2scl_interp_vec_std_vector_double__deriv
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,x0)
@@ -5598,7 +5703,7 @@ class interp_vec:
         | *x0*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_vec_std__vector_double___deriv2
+        func=self._link.o2scl.o2scl_interp_vec_std_vector_double__deriv2
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,x0)
@@ -5611,7 +5716,7 @@ class interp_vec:
         | *x2*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_vec_std__vector_double___integ
+        func=self._link.o2scl.o2scl_interp_vec_std_vector_double__integ
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,x1,x2)
@@ -5623,6 +5728,11 @@ class interp_krige_optim:
     Python interface for O\ :sub:`2`\ scl class ``interp_krige_optim<std::vector<double>>``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/interp_krige_optim<std::vector<double>>.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
     """
 
     _ptr=0
@@ -5640,7 +5750,7 @@ class interp_krige_optim:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_interp_krige_optim_std__vector_double__
+            f=link.o2scl.o2scl_create_interp_krige_optim_std_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -5656,7 +5766,7 @@ class interp_krige_optim:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_interp_krige_optim_std__vector_double__
+            f=self._link.o2scl.o2scl_free_interp_krige_optim_std_vector_double_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -5678,7 +5788,7 @@ class interp_krige_optim:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___get_verbose
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_verbose
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -5688,7 +5798,7 @@ class interp_krige_optim:
         """
         Setter function for interp_krige_optim<std::vector<double>>::verbose .
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___set_verbose
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_verbose
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -5698,7 +5808,7 @@ class interp_krige_optim:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___get_mode
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_mode
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -5708,7 +5818,7 @@ class interp_krige_optim:
         """
         Setter function for interp_krige_optim<std::vector<double>>::mode .
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___set_mode
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_mode
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
@@ -5718,7 +5828,7 @@ class interp_krige_optim:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___get_nlen
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_nlen
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -5728,7 +5838,7 @@ class interp_krige_optim:
         """
         Setter function for interp_krige_optim<std::vector<double>>::nlen .
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___set_nlen
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_nlen
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
@@ -5738,7 +5848,7 @@ class interp_krige_optim:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___get_full_min
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_full_min
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -5748,7 +5858,7 @@ class interp_krige_optim:
         """
         Setter function for interp_krige_optim<std::vector<double>>::full_min .
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___set_full_min
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_full_min
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -5771,13 +5881,13 @@ class shared_ptr_table_units(table_units):
 
         self._link=link
         if shared_ptr==0:
-            f2=self._link.o2scl.o2scl_create_shared_ptr_table_units__
+            f2=self._link.o2scl.o2scl_create_shared_ptr_table_units_
             f2.restype=ctypes.c_void_p
             self._s_ptr=f2()
         else:
             self._s_ptr=shared_ptr
 
-        f=self._link.o2scl.o2scl_shared_ptr_table_units___ptr
+        f=self._link.o2scl.o2scl_shared_ptr_table_units__ptr
         f.argtypes=[ctypes.c_void_p]
         f.restype=ctypes.c_void_p
         self._ptr=f(self._s_ptr)
@@ -5788,7 +5898,7 @@ class shared_ptr_table_units(table_units):
         Delete function for shared_ptr_table_units .
         """
 
-        f=self._link.o2scl.o2scl_free_shared_ptr_table_units__
+        f=self._link.o2scl.o2scl_free_shared_ptr_table_units_
         f.argtypes=[ctypes.c_void_p]
         f(self._s_ptr)
         return
@@ -6000,7 +6110,7 @@ def screenify(link,nin,in_cols,out_cols,max_size=80):
         | *out_cols*: :class:`vector<std::string>` object
         | *max_size*: ``size_t``
     """
-    func=link.o2scl.o2scl_screenify_vector_std__string___wrapper
+    func=link.o2scl.o2scl_screenify_vector_std_string__wrapper
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
     func(nin,in_cols._ptr,out_cols._ptr,max_size)
     return
@@ -6015,7 +6125,7 @@ def vector_level_count(link,level,n,x,y):
         | *y*: :class:`std::vector<double>` object
         | Returns: ``ctypes.c_size_t`` object
     """
-    func=link.o2scl.o2scl_vector_level_count_std__vector_double__std__vector_double___wrapper
+    func=link.o2scl.o2scl_vector_level_count_std_vector_double_std_vector_double__wrapper
     func.restype=ctypes.c_size_t
     func.argtypes=[ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
     ret=func(level,n,x._ptr,y._ptr)
