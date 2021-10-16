@@ -367,6 +367,28 @@ Class interp
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class interp_vec
+----------------
+
+.. autoclass:: o2sclpy.interp_vec
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class interp_krige_optim
+------------------------
+
+.. autoclass:: o2sclpy.interp_krige_optim
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class shared_ptr_table_units
 ----------------------------
 
@@ -432,23 +454,23 @@ Function bose_function
 
 .. autofunction:: o2sclpy.bose_function(link,E,mu,T,limit)
 
-Function quadratic_extremum_x<double>
--------------------------------------
+Function quadratic_extremum_x
+-----------------------------
 
 .. autofunction:: o2sclpy.quadratic_extremum_x(link,x1,x2,x3,y1,y2,y3)
 
-Function quadratic_extremum_y<double>
--------------------------------------
+Function quadratic_extremum_y
+-----------------------------
 
 .. autofunction:: o2sclpy.quadratic_extremum_y(link,x1,x2,x3,y1,y2,y3)
 
-Function screenify<vector<std::string>>
----------------------------------------
+Function screenify
+------------------
 
 .. autofunction:: o2sclpy.screenify(link,nin,in_cols,out_cols,max_size)
 
-Function vector_level_count<std::vector<double>,std::vector<double>>
---------------------------------------------------------------------
+Function vector_level_count
+---------------------------
 
 .. autofunction:: o2sclpy.vector_level_count(link,level,n,x,y)
 

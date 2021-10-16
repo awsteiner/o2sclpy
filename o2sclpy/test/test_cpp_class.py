@@ -1,4 +1,5 @@
 import o2sclpy
+import numpy
 
 def subtest_std_string(link):
     # Test the std_string class
@@ -143,6 +144,19 @@ def subtest_ublas_matrix(link):
     
     return
 
+def subtest_std_complex(link):
+    # Test the std_complex class
+    c=o2sclpy.std_complex(link)
+    c.real_set(2)
+    c.imag_set(3)
+    assert numpy.allclose(c.real(),2,rtol=1.0e-12),'c real'
+    assert numpy.allclose(c.imag(),3,rtol=1.0e-12),'c imag'
+    c2=c.to_python()
+    assert numpy.allclose(c2.real,2,rtol=1.0e-12),'c2 real'
+    assert numpy.allclose(c2.imag,3,rtol=1.0e-12),'c2 imag'
+    return
+    
+
 def test_all():
     link=o2sclpy.linker()
     link.link_o2scl()
@@ -154,6 +168,7 @@ def test_all():
     subtest_std_vector_string(link)
     subtest_ublas_vector(link)
     subtest_ublas_matrix(link)
+    subtest_std_complex(link)
 
     return
     

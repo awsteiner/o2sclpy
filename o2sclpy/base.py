@@ -913,6 +913,18 @@ class ublas_matrix_int:
         func(self._ptr,m,n,value)
         return
 
+    def to_numpy(self):
+        """
+        Copy the ublas matrix to a numpy matrix
+    
+        Returns: a two-dimensional ``numpy`` array, with dimension
+        ``size1(),size2()``.
+        """
+        ret=numpy.zeros(self.size1(),self.size2(),dtype=numpy.intc)
+        for i in range(0,self.size1()):
+            for j in range(0,self.size2()):
+                ret[i,j]=self.__getitem__((i,j))
+        return ret
 
 class std_vector_vector:
     """
@@ -1049,6 +1061,46 @@ class std_complex:
 
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
+
+    def real(self):
+        """
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_std__complex_double__real
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def real_set(self,value):
+        """
+        | Parameters:
+        | *value*: ``double``
+        """
+        func=self._link.o2scl.o2scl_std__complex_double__real_set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    def imag(self):
+        """
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_std__complex_double__imag
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def imag_set(self,value):
+        """
+        | Parameters:
+        | *value*: ``double``
+        """
+        func=self._link.o2scl.o2scl_std__complex_double__imag_set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
 
     @classmethod
     def init(cls,link,re,im):
@@ -4955,7 +5007,7 @@ class convert_units_der_unit:
 
     def set(self,label,val,name='',m=0,k=0,s=0,K=0,A=0,mol=0,cd=0):
         """
-        Create a derived unit
+        Set the properties of a derived unit
         """
         ltmp=std_string(self._link)
         ltmp.init_bytes(label)
@@ -5450,6 +5502,255 @@ class interp:
         func=self._link.o2scl.o2scl_interp_std__vector_double___set_type
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,interp_type)
+        return
+
+
+class interp_vec:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``interp_vec<std::vector<double>>``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/interp_vec<std::vector<double>>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class interp_vec
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_interp_vec_std__vector_double__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class interp_vec
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_interp_vec_std__vector_double__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class interp_vec
+        
+        Returns: a interp_vec object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def clear(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_interp_vec_std__vector_double___clear
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def eval(self,x0):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_vec_std__vector_double___eval
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,x0)
+        return ret
+
+    def deriv(self,x0):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_vec_std__vector_double___deriv
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,x0)
+        return ret
+
+    def deriv2(self,x0):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_vec_std__vector_double___deriv2
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,x0)
+        return ret
+
+    def integ(self,x1,x2):
+        """
+        | Parameters:
+        | *x1*: ``double``
+        | *x2*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_vec_std__vector_double___integ
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,x1,x2)
+        return ret
+
+
+class interp_krige_optim:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``interp_krige_optim<std::vector<double>>``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/interp_krige_optim<std::vector<double>>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class interp_krige_optim
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_interp_krige_optim_std__vector_double__
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class interp_krige_optim
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_interp_krige_optim_std__vector_double__
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class interp_krige_optim
+        
+        Returns: a interp_krige_optim object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @property
+    def verbose(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for interp_krige_optim<std::vector<double>>::verbose .
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def mode(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___get_mode
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @mode.setter
+    def mode(self,value):
+        """
+        Setter function for interp_krige_optim<std::vector<double>>::mode .
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___set_mode
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def nlen(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___get_nlen
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @nlen.setter
+    def nlen(self,value):
+        """
+        Setter function for interp_krige_optim<std::vector<double>>::nlen .
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___set_nlen
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    @property
+    def full_min(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___get_full_min
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @full_min.setter
+    def full_min(self,value):
+        """
+        Setter function for interp_krige_optim<std::vector<double>>::full_min .
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std__vector_double___set_full_min
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
         return
 
 
