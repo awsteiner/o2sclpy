@@ -1048,7 +1048,7 @@ class std_vector_vector:
         """
         | Parameters:
         | *i*: ``size_t``
-        | *value*: :class:`std::vector<double>` object
+        | *value*: Python array
         """
         func=self._link.o2scl.o2scl_std_vector_std_vector_double__setitem
         sv=std_vector(self._link)
@@ -3932,6 +3932,17 @@ class tensor:
         ret=func(self._ptr,i)
         return ret
 
+    def get_size_arr(self):
+        """
+        | Returns: :class:`std::vector<size_t>` object
+        """
+        func=self._link.o2scl.o2scl_tensor__get_size_arr
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        ret2=std_vector_size_t_(self._link,ret)
+        return ret2
+
     def get_data(self):
         """
         | Returns: ``numpy`` array
@@ -3987,6 +3998,28 @@ class tensor:
         ret=func(self._ptr)
         return ret
 
+    def min_index(self,index):
+        """
+        | Parameters:
+        | *index*: :class:`std_vector_size_t` object
+        """
+        func=self._link.o2scl.o2scl_tensor__min_index
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,index._ptr)
+        return
+
+    def min(self,ix):
+        """
+        | Parameters:
+        | *ix*: :class:`std_vector_size_t` object
+        | Returns: , a Python float
+        """
+        func=self._link.o2scl.o2scl_tensor__min
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_double)]
+        value_conv=ctypes.c_double(0)
+        func(self._ptr,ix._ptr,ctypes.byref(value_conv))
+        return value_conv.value
+
     def max_value(self):
         """
         | Returns: a Python float
@@ -3996,6 +4029,28 @@ class tensor:
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
+
+    def max_index(self,index):
+        """
+        | Parameters:
+        | *index*: :class:`std_vector_size_t` object
+        """
+        func=self._link.o2scl.o2scl_tensor__max_index
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,index._ptr)
+        return
+
+    def max(self,ix):
+        """
+        | Parameters:
+        | *ix*: :class:`std_vector_size_t` object
+        | Returns: , a Python float
+        """
+        func=self._link.o2scl.o2scl_tensor__max
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_double)]
+        value_conv=ctypes.c_double(0)
+        func(self._ptr,ix._ptr,ctypes.byref(value_conv))
+        return value_conv.value
 
     def minmax_value(self):
         """
@@ -4008,6 +4063,31 @@ class tensor:
         max_conv=ctypes.c_double(0)
         func(self._ptr,ctypes.byref(min_conv),ctypes.byref(max_conv))
         return min_conv.value,max_conv.value
+
+    def minmax_index(self,min,max):
+        """
+        | Parameters:
+        | *min*: :class:`std_vector_size_t` object
+        | *max*: :class:`std_vector_size_t` object
+        """
+        func=self._link.o2scl.o2scl_tensor__minmax_index
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,min._ptr,max._ptr)
+        return
+
+    def minmax(self,min_ix,max_ix):
+        """
+        | Parameters:
+        | *min_ix*: :class:`std_vector_size_t` object
+        | *max_ix*: :class:`std_vector_size_t` object
+        | Returns: , a Python float, a Python float
+        """
+        func=self._link.o2scl.o2scl_tensor__minmax
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.c_void_p,ctypes.POINTER(ctypes.c_double)]
+        min_value_conv=ctypes.c_double(0)
+        max_value_conv=ctypes.c_double(0)
+        func(self._ptr,min_ix._ptr,ctypes.byref(min_value_conv),max_ix._ptr,ctypes.byref(max_value_conv))
+        return min_value_conv.value,max_value_conv.value
 
     def total_sum(self):
         """
@@ -4406,6 +4486,17 @@ class tensor_int:
         ret=func(self._ptr,i)
         return ret
 
+    def get_data(self):
+        """
+        | Returns: :class:`std::vector<int>` object
+        """
+        func=self._link.o2scl.o2scl_tensor_int_std_vector_int__get_data
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        ret2=std_vector_int_(self._link,ret)
+        return ret2
+
     def total_size(self):
         """
         | Returns: a Python int
@@ -4650,6 +4741,17 @@ class tensor_size_t:
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,i)
         return ret
+
+    def get_data(self):
+        """
+        | Returns: :class:`std::vector<size_t>` object
+        """
+        func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__get_data
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        ret2=std_vector_size_t_(self._link,ret)
+        return ret2
 
     def total_size(self):
         """
