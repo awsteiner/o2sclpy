@@ -375,7 +375,7 @@ class quadratic_real_coeff_gsl2:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_quadratic_real_coeff_gsl2__
+            f=link.o2scl.o2scl_create_quadratic_real_coeff_gsl2_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -391,7 +391,7 @@ class quadratic_real_coeff_gsl2:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_quadratic_real_coeff_gsl2__
+            f=self._link.o2scl.o2scl_free_quadratic_real_coeff_gsl2_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -416,7 +416,7 @@ class quadratic_real_coeff_gsl2:
         | *c2*: ``double``
         | Returns: a Python int, a Python float, a Python float
         """
-        func=self._link.o2scl.o2scl_quadratic_real_coeff_gsl2___solve_r
+        func=self._link.o2scl.o2scl_quadratic_real_coeff_gsl2__solve_r
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
         r1_conv=ctypes.c_double(0)
@@ -434,7 +434,7 @@ class quadratic_real_coeff_gsl2:
         | *r2*: :class:`std::complex<double>` object
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_quadratic_real_coeff_gsl2___solve_rc
+        func=self._link.o2scl.o2scl_quadratic_real_coeff_gsl2__solve_rc
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,a2,b2,c2,r1._ptr,r2._ptr)
@@ -463,7 +463,7 @@ class cubic_real_coeff_cern:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_cubic_real_coeff_cern__
+            f=link.o2scl.o2scl_create_cubic_real_coeff_cern_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -479,7 +479,7 @@ class cubic_real_coeff_cern:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_cubic_real_coeff_cern__
+            f=self._link.o2scl.o2scl_free_cubic_real_coeff_cern_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -505,7 +505,7 @@ class cubic_real_coeff_cern:
         | *d3*: ``double``
         | Returns: a Python int, a Python float, a Python float, a Python float
         """
-        func=self._link.o2scl.o2scl_cubic_real_coeff_cern___solve_r
+        func=self._link.o2scl.o2scl_cubic_real_coeff_cern__solve_r
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
         r1_conv=ctypes.c_double(0)
@@ -525,7 +525,7 @@ class cubic_real_coeff_cern:
         | *r3*: :class:`std::complex<double>` object
         | Returns: a Python int, a Python float
         """
-        func=self._link.o2scl.o2scl_cubic_real_coeff_cern___solve_rc
+        func=self._link.o2scl.o2scl_cubic_real_coeff_cern__solve_rc
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.c_void_p,ctypes.c_void_p]
         r1_conv=ctypes.c_double(0)
@@ -647,7 +647,7 @@ class quartic_real_coeff_cern:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_quartic_real_coeff_cern__
+            f=link.o2scl.o2scl_create_quartic_real_coeff_cern_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -663,7 +663,7 @@ class quartic_real_coeff_cern:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_quartic_real_coeff_cern__
+            f=self._link.o2scl.o2scl_free_quartic_real_coeff_cern_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -690,7 +690,7 @@ class quartic_real_coeff_cern:
         | *e4*: ``double``
         | Returns: a Python int, a Python float, a Python float, a Python float, a Python float
         """
-        func=self._link.o2scl.o2scl_quartic_real_coeff_cern___solve_r
+        func=self._link.o2scl.o2scl_quartic_real_coeff_cern__solve_r
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
         r1_conv=ctypes.c_double(0)
@@ -714,7 +714,7 @@ class quartic_real_coeff_cern:
         | *r4*: :class:`std::complex<double>` object
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_quartic_real_coeff_cern___solve_rc
+        func=self._link.o2scl.o2scl_quartic_real_coeff_cern__solve_rc
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,a4,b4,c4,d4,e4,r1._ptr,r2._ptr,r3._ptr,r4._ptr)

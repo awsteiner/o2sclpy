@@ -20,6 +20,7 @@ Class std_string
         .. automethod:: __del__
         .. automethod:: __copy__
         .. automethod:: __getitem__
+        .. automethod:: __setitem__
 
 Class std_vector
 ----------------
@@ -32,6 +33,7 @@ Class std_vector
         .. automethod:: __del__
         .. automethod:: __copy__
         .. automethod:: __getitem__
+        .. automethod:: __setitem__
 
 Class std_vector_int
 --------------------
@@ -44,6 +46,7 @@ Class std_vector_int
         .. automethod:: __del__
         .. automethod:: __copy__
         .. automethod:: __getitem__
+        .. automethod:: __setitem__
 
 Class std_vector_size_t
 -----------------------
@@ -56,6 +59,7 @@ Class std_vector_size_t
         .. automethod:: __del__
         .. automethod:: __copy__
         .. automethod:: __getitem__
+        .. automethod:: __setitem__
 
 Class std_vector_string
 -----------------------
@@ -68,6 +72,7 @@ Class std_vector_string
         .. automethod:: __del__
         .. automethod:: __copy__
         .. automethod:: __getitem__
+        .. automethod:: __setitem__
 
 Class ublas_vector
 ------------------
@@ -80,6 +85,7 @@ Class ublas_vector
         .. automethod:: __del__
         .. automethod:: __copy__
         .. automethod:: __getitem__
+        .. automethod:: __setitem__
 
 Class ublas_matrix
 ------------------
@@ -92,6 +98,7 @@ Class ublas_matrix
         .. automethod:: __del__
         .. automethod:: __copy__
         .. automethod:: __getitem__
+        .. automethod:: __setitem__
 
 Class ublas_matrix_int
 ----------------------
@@ -104,6 +111,7 @@ Class ublas_matrix_int
         .. automethod:: __del__
         .. automethod:: __copy__
         .. automethod:: __getitem__
+        .. automethod:: __setitem__
 
 Class std_vector_vector
 -----------------------
@@ -116,6 +124,7 @@ Class std_vector_vector
         .. automethod:: __del__
         .. automethod:: __copy__
         .. automethod:: __getitem__
+        .. automethod:: __setitem__
 
 Class std_complex
 -----------------

@@ -1,4 +1,5 @@
 import o2sclpy
+import numpy
 
 link=o2sclpy.linker()
 link.link_o2scl(True)
@@ -22,5 +23,5 @@ ame.get_nucleus(82,126,nuc)
 print('Binding energy per nucleon in Pb-208 = %7.6e ' % (nuc.be/208*hc))
 
 def test_fun():
-    assert numpy.allclose(nuc.be/208*hc,rtol=1.0e-3)
+    assert numpy.allclose(nuc.be/208*hc,-7.867,rtol=1.0e-3)
     return

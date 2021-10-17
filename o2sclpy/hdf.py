@@ -852,7 +852,7 @@ def vector_spec(link,spec,v,verbose=0,err_on_fail=True):
         | Returns: ``ctypes.c_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl_hdf.o2scl_hdf_vector_spec_std__vector_double___wrapper
+    func=link.o2scl_hdf.o2scl_hdf_vector_spec_std_vector_double__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
     ret=func(spec_,v._ptr,verbose,err_on_fail)
@@ -869,7 +869,7 @@ def strings_spec(link,spec,v,verbose=0,err_on_fail=True):
         | Returns: ``ctypes.c_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl_hdf.o2scl_hdf_strings_spec_std__vector_std__string___wrapper
+    func=link.o2scl_hdf.o2scl_hdf_strings_spec_std_vector_std_string__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
     ret=func(spec_,v._ptr,verbose,err_on_fail)

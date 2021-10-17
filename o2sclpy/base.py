@@ -1053,8 +1053,8 @@ class std_vector_vector:
         func=self._link.o2scl.o2scl_std_vector_std_vector_double__setitem
         sv=std_vector(self._link)
         sv.resize(len(value))
-        for i in range(0,len(value)):
-            sv[i]=value[i]
+        for j in range(0,len(value)):
+            sv[j]=value[j]
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
         func(self._ptr,i,sv._ptr)
         return
