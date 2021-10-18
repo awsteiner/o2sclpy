@@ -26,6 +26,15 @@ from abc import abstractmethod
 from o2sclpy.utils import force_bytes
 import numpy
 
+itp_linear=1
+itp_cspline=2
+itp_cspline_peri=3
+itp_akima=4
+itp_akima_peri=5
+itp_monotonic=6
+itp_steffen=7
+itp_nearest_neigh=8
+
 class std_string:
     """
     Python interface for C++ class ``std::string``.
@@ -5447,6 +5456,133 @@ class convert_units:
         return
 
 
+class columnify:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``columnify``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/columnify.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class columnify
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_columnify
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class columnify
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_columnify
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class columnify
+        
+        Returns: a columnify object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @property
+    def align_left(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_columnify_get_align_left
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+    @property
+    def align_right(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_columnify_get_align_right
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+    @property
+    def align_lmid(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_columnify_get_align_lmid
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+    @property
+    def align_rmid(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_columnify_get_align_rmid
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+    @property
+    def align_dp(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_columnify_get_align_dp
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+    @property
+    def align_lnum(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_columnify_get_align_lnum
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+
 class format_float:
     """
     Python interface for O\ :sub:`2`\ scl class ``format_float``,
@@ -5790,6 +5926,19 @@ class interp_vec:
 
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
+
+    def set(self,n,x,y,interp_type):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | *x*: :class:`std_vector` object
+        | *y*: :class:`std_vector` object
+        | *interp_type*: ``int``
+        """
+        func=self._link.o2scl.o2scl_interp_vec_std_vector_double__set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,n,x._ptr,y._ptr,interp_type)
+        return
 
     def clear(self):
         """
@@ -6256,4 +6405,312 @@ def vector_level_count(link,level,n,x,y):
     func.argtypes=[ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
     ret=func(level,n,x._ptr,y._ptr)
     return ret
+
+def vector_deriv_interp(link,n,v,dv,interp_type=2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *v*: :class:`std::vector<double>` object
+        | *dv*: :class:`std::vector<double>` object
+        | *interp_type*: ``size_t``
+    """
+    func=link.o2scl.o2scl_vector_deriv_interp_std_vector_double_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+    func(n,v._ptr,dv._ptr,interp_type)
+    return
+
+def vector_deriv2_interp(link,n,v,dv,interp_type=2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *v*: :class:`std::vector<double>` object
+        | *dv*: :class:`std::vector<double>` object
+        | *interp_type*: ``size_t``
+    """
+    func=link.o2scl.o2scl_vector_deriv2_interp_std_vector_double_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+    func(n,v._ptr,dv._ptr,interp_type)
+    return
+
+def vector_deriv_xy_interp(link,n,vx,vy,dv,interp_type=2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *vx*: :class:`std::vector<double>` object
+        | *vy*: :class:`std::vector<double>` object
+        | *dv*: :class:`std::vector<double>` object
+        | *interp_type*: ``size_t``
+    """
+    func=link.o2scl.o2scl_vector_deriv_xy_interp_std_vector_double_std_vector_double_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+    func(n,vx._ptr,vy._ptr,dv._ptr,interp_type)
+    return
+
+def vector_deriv2_xy_interp(link,n,vx,vy,dv,interp_type=2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *vx*: :class:`std::vector<double>` object
+        | *vy*: :class:`std::vector<double>` object
+        | *dv*: :class:`std::vector<double>` object
+        | *interp_type*: ``size_t``
+    """
+    func=link.o2scl.o2scl_vector_deriv2_xy_interp_std_vector_double_std_vector_double_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+    func(n,vx._ptr,vy._ptr,dv._ptr,interp_type)
+    return
+
+def vector_integ_interp(link,n,vx,interp_type=2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *vx*: :class:`std::vector<double>` object
+        | *interp_type*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_vector_integ_interp_std_vector_double__wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t]
+    ret=func(n,vx._ptr,interp_type)
+    return ret
+
+def vector_integ_xy_interp(link,n,vx,vy,interp_type=2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *vx*: :class:`std::vector<double>` object
+        | *vy*: :class:`std::vector<double>` object
+        | *interp_type*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_vector_integ_xy_interp_std_vector_double_std_vector_double__wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+    ret=func(n,vx._ptr,vy._ptr,interp_type)
+    return ret
+
+def vector_integ_xy_interp(link,n,x2,v,interp_type=2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *x2*: ``double``
+        | *v*: :class:`std::vector<double>` object
+        | *interp_type*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_vector_integ_ul_interp_std_vector_double__wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_void_p,ctypes.c_size_t]
+    ret=func(n,x2,v._ptr,interp_type)
+    return ret
+
+def vector_integ_ul_xy_interp(link,n,x2,vx,vy,interp_type=2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *x2*: ``double``
+        | *vx*: :class:`std::vector<double>` object
+        | *vy*: :class:`std::vector<double>` object
+        | *interp_type*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_vector_integ_ul_xy_interp_std_vector_double_std_vector_double__wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+    ret=func(n,x2,vx._ptr,vy._ptr,interp_type)
+    return ret
+
+def vector_find_level(link,level,n,x,y,locs):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *level*: ``double``
+        | *n*: ``size_t``
+        | *x*: :class:`std::vector<double>` object
+        | *y*: :class:`std::vector<double>` object
+        | *locs*: :class:`std::vector<double>` object
+    """
+    func=link.o2scl.o2scl_vector_find_level_std_vector_double_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(level,n,x._ptr,y._ptr,locs._ptr)
+    return
+
+def vector_invert_enclosed_sum(link,sum,n,x,y,lev,boundaries=0,verbose=0,err_on_fail=True):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *sum*: ``double``
+        | *n*: ``size_t``
+        | *x*: :class:`std::vector<double>` object
+        | *y*: :class:`std::vector<double>` object
+        | *lev*: ``double``
+        | *boundaries*: ``int``
+        | *verbose*: ``int``
+        | *err_on_fail*: ``bool``
+    """
+    func=link.o2scl.o2scl_vector_invert_enclosed_sum_std_vector_double_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_bool]
+    func(sum,n,x._ptr,y._ptr,lev._ptr,boundaries,verbose,err_on_fail)
+    return
+
+def vector_region_int(link,n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=True):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *x*: :class:`std::vector<double>` object
+        | *y*: :class:`std::vector<double>` object
+        | *intl*: ``double``
+        | *locs*: :class:`std::vector<double>` object
+        | *boundaries*: ``int``
+        | *verbose*: ``int``
+        | *err_on_fail*: ``bool``
+        | Returns: ``ctypes.c_int`` object
+    """
+    func=link.o2scl.o2scl_vector_region_int_std_vector_double_std_vector_double__wrapper
+    func.restype=ctypes.c_int
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_bool]
+    ret=func(n,x._ptr,y._ptr,intl,locs._ptr,boundaries,verbose,err_on_fail)
+    return ret
+
+def vector_region_fracint(link,n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=True):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *x*: :class:`std::vector<double>` object
+        | *y*: :class:`std::vector<double>` object
+        | *intl*: ``double``
+        | *locs*: :class:`std::vector<double>` object
+        | *boundaries*: ``int``
+        | *verbose*: ``int``
+        | *err_on_fail*: ``bool``
+        | Returns: ``ctypes.c_int`` object
+    """
+    func=link.o2scl.o2scl_vector_region_fracint_std_vector_double_std_vector_double__wrapper
+    func.restype=ctypes.c_int
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_bool]
+    ret=func(n,x._ptr,y._ptr,intl,locs._ptr,boundaries,verbose,err_on_fail)
+    return ret
+
+def vector_bound_fracint(link,n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail=True):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *x*: :class:`std::vector<double>` object
+        | *y*: :class:`std::vector<double>` object
+        | *frac*: ``double``
+        | *low*: ``double``
+        | *high*: ``double``
+        | *boundaries*: ``int``
+        | *verbose*: ``int``
+        | *err_on_fail*: ``bool``
+        | Returns: ``ctypes.c_int`` object
+    """
+    func=link.o2scl.o2scl_vector_bound_fracint_std_vector_double_std_vector_double__wrapper
+    func.restype=ctypes.c_int
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_bool]
+    ret=func(n,x._ptr,y._ptr,frac,low._ptr,high._ptr,boundaries,verbose,err_on_fail)
+    return ret
+
+def vector_bound_int(link,n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail=True):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *x*: :class:`std::vector<double>` object
+        | *y*: :class:`std::vector<double>` object
+        | *frac*: ``double``
+        | *low*: ``double``
+        | *high*: ``double``
+        | *boundaries*: ``int``
+        | *verbose*: ``int``
+        | *err_on_fail*: ``bool``
+        | Returns: ``ctypes.c_int`` object
+    """
+    func=link.o2scl.o2scl_vector_bound_int_std_vector_double_std_vector_double__wrapper
+    func.restype=ctypes.c_int
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_bool]
+    ret=func(n,x._ptr,y._ptr,frac,low._ptr,high._ptr,boundaries,verbose,err_on_fail)
+    return ret
+
+def rebin_xy(link,x,y,x_out,y_out,n_pts,interp_type):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *x*: :class:`std::vector<double>` object
+        | *y*: :class:`std::vector<double>` object
+        | *x_out*: :class:`std::vector<double>` object
+        | *y_out*: :class:`std::vector<double>` object
+        | *n_pts*: ``size_t``
+        | *interp_type*: ``size_t``
+    """
+    func=link.o2scl.o2scl_rebin_xy_std_vector_double_std_vector_double_std_vector_double_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+    func(x._ptr,y._ptr,x_out._ptr,y_out._ptr,n_pts,interp_type)
+    return
+
+def linear_or_log_chi2(link,x,y):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *x*: :class:`std::vector<double>` object
+        | *y*: :class:`std::vector<double>` object
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_linear_or_log_chi2_std_vector_double_std_vector_double__wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+    ret=func(x._ptr,y._ptr)
+    return ret
+
+def linear_or_log_pair(link,x,y,log_x,log_y):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *x*: :class:`std::vector<double>` object
+        | *y*: :class:`std::vector<double>` object
+        | *log_x*: ``bool``
+        | *log_y*: ``bool``
+    """
+    func=link.o2scl.o2scl_linear_or_log_std_vector_double_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(x._ptr,y._ptr,log_x._ptr,log_y._ptr)
+    return
+
+def vector_refine(link,n,index,data,factor,interp_type=2):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *index*: :class:`std::vector<double>` object
+        | *data*: :class:`std::vector<double>` object
+        | *factor*: ``size_t``
+        | *interp_type*: ``size_t``
+    """
+    func=link.o2scl.o2scl_vector_refine_std_vector_double_std_vector_double_double__wrapper
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+    func(n,index._ptr,data._ptr,factor,interp_type)
+    return
+
+def linear_or_log(link,x,log_x):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *x*: :class:`std::vector<double>` object
+        | *log_x*: ``bool``
+    """
+    func=link.o2scl.o2scl_linear_or_log_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+    func(x._ptr,log_x._ptr)
+    return
 

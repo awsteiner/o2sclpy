@@ -355,6 +355,17 @@ Class convert_units
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class columnify
+---------------
+
+.. autoclass:: o2sclpy.columnify
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class format_float
 ------------------
 
@@ -483,4 +494,99 @@ Function vector_level_count
 ---------------------------
 
 .. autofunction:: o2sclpy.vector_level_count(link,level,n,x,y)
+
+Function vector_deriv_interp
+----------------------------
+
+.. autofunction:: o2sclpy.vector_deriv_interp(link,n,v,dv,interp_type)
+
+Function vector_deriv2_interp
+-----------------------------
+
+.. autofunction:: o2sclpy.vector_deriv2_interp(link,n,v,dv,interp_type)
+
+Function vector_deriv_xy_interp
+-------------------------------
+
+.. autofunction:: o2sclpy.vector_deriv_xy_interp(link,n,vx,vy,dv,interp_type)
+
+Function vector_deriv2_xy_interp
+--------------------------------
+
+.. autofunction:: o2sclpy.vector_deriv2_xy_interp(link,n,vx,vy,dv,interp_type)
+
+Function vector_integ_interp
+----------------------------
+
+.. autofunction:: o2sclpy.vector_integ_interp(link,n,vx,interp_type)
+
+Function vector_integ_xy_interp
+-------------------------------
+
+.. autofunction:: o2sclpy.vector_integ_xy_interp(link,n,vx,vy,interp_type)
+
+Function vector_integ_xy_interp
+-------------------------------
+
+.. autofunction:: o2sclpy.vector_integ_xy_interp(link,n,x2,v,interp_type)
+
+Function vector_integ_ul_xy_interp
+----------------------------------
+
+.. autofunction:: o2sclpy.vector_integ_ul_xy_interp(link,n,x2,vx,vy,interp_type)
+
+Function vector_find_level
+--------------------------
+
+.. autofunction:: o2sclpy.vector_find_level(link,level,n,x,y,locs)
+
+Function vector_invert_enclosed_sum
+-----------------------------------
+
+.. autofunction:: o2sclpy.vector_invert_enclosed_sum(link,sum,n,x,y,lev,boundaries,verbose,err_on_fail)
+
+Function vector_region_int
+--------------------------
+
+.. autofunction:: o2sclpy.vector_region_int(link,n,x,y,intl,locs,boundaries,verbose,err_on_fail)
+
+Function vector_region_fracint
+------------------------------
+
+.. autofunction:: o2sclpy.vector_region_fracint(link,n,x,y,intl,locs,boundaries,verbose,err_on_fail)
+
+Function vector_bound_fracint
+-----------------------------
+
+.. autofunction:: o2sclpy.vector_bound_fracint(link,n,x,y,frac,low,high,boundaries,verbose,err_on_fail)
+
+Function vector_bound_int
+-------------------------
+
+.. autofunction:: o2sclpy.vector_bound_int(link,n,x,y,frac,low,high,boundaries,verbose,err_on_fail)
+
+Function rebin_xy
+-----------------
+
+.. autofunction:: o2sclpy.rebin_xy(link,x,y,x_out,y_out,n_pts,interp_type)
+
+Function linear_or_log_chi2
+---------------------------
+
+.. autofunction:: o2sclpy.linear_or_log_chi2(link,x,y)
+
+Function linear_or_log_pair
+---------------------------
+
+.. autofunction:: o2sclpy.linear_or_log_pair(link,x,y,log_x,log_y)
+
+Function vector_refine
+----------------------
+
+.. autofunction:: o2sclpy.vector_refine(link,n,index,data,factor,interp_type)
+
+Function linear_or_log
+----------------------
+
+.. autofunction:: o2sclpy.linear_or_log(link,x,log_x)
 
