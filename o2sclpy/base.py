@@ -17,6 +17,7 @@
 
   You should have received a copy of the GNU General Public License
   along with O2scl. If not, see <http://www.gnu.org/licenses/>.
+
   -------------------------------------------------------------------
 """
 
@@ -4937,6 +4938,26 @@ class find_constants:
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         ret=func(self._ptr,name_,unit_)
         return ret
+
+    def output_list_cout(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_find_constants_output_list_cout
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def del_constant(self,name,verbose=0):
+        """
+        | Parameters:
+        | *name*: :class:`std_string` object
+        | *verbose* =0: ``int``
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_find_constants_del_constant
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,name._ptr,verbose)
+        return
 
 
 class convert_units_der_unit:
