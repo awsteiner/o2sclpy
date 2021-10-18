@@ -1034,7 +1034,7 @@ class std_vector_vector:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: :class:`std::vector<double>` object
+        | Returns: :class:`std_vector` object
         """
         func=self._link.o2scl.o2scl_std_vector_std_vector_double__getitem
         n_=ctypes.c_int(0)
@@ -1561,7 +1561,7 @@ class table:
         """
         | Parameters:
         | *col*: string
-        | Returns: :class:`std::vector<double>` object
+        | Returns: :class:`std_vector` object
         """
         col_=ctypes.c_char_p(force_bytes(col))
         func=self._link.o2scl.o2scl_table__getitem
@@ -3935,13 +3935,13 @@ class tensor:
 
     def get_size_arr(self):
         """
-        | Returns: :class:`std::vector<size_t>` object
+        | Returns: :class:`std_vector_size_t` object
         """
         func=self._link.o2scl.o2scl_tensor__get_size_arr
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        ret2=std_vector_size_t_(self._link,ret)
+        ret2=std_vector_size_t(self._link,ret)
         return ret2
 
     def get_data(self):
@@ -4144,14 +4144,15 @@ class tensor:
             vec[i]=v[i]
         self.create_size_vector(vec)
         return
+     
     def set(self,index,val):
         """
         Copy ``index`` to an :class:`std_vector_size_t` object and add the 
         data to the table
         """
-        svst=o2sclpy.std_vector_size_t(self._link)
-        syst.init_py(index)
-        self.set_vector(syst,val)
+        svst=std_vector_size_t(self._link)
+        svst.init_py(index)
+        self.set_vector(svst,val)
         return
      
     def get(self,index):
@@ -4159,18 +4160,18 @@ class tensor:
         Copy ``index`` to an :class:`std_vector_size_t` object and get the 
         data from the table
         """
-        svst=o2sclpy.std_vector_size_t(self._link)
-        syst.init_py(index)
-        return self.get_vector(syst)
+        svst=std_vector_size_t(self._link)
+        svst.init_py(index)
+        return self.get_vector(svst)
     
     def resize(self,index):
         """
         Copy ``index`` to an :class:`std_vector_size_t` object 
         and resize
         """
-        svst=o2sclpy.std_vector_size_t(self._link)
-        syst.init_py(index)
-        self.resize_vector(syst)
+        svst=std_vector_size_t(self._link)
+        svst.init_py(index)
+        self.resize_vector(len(svst),svst)
         return
 
 class tensor_grid:
@@ -4489,13 +4490,13 @@ class tensor_int:
 
     def get_data(self):
         """
-        | Returns: :class:`std::vector<int>` object
+        | Returns: :class:`std_vector_int` object
         """
         func=self._link.o2scl.o2scl_tensor_int_std_vector_int__get_data
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        ret2=std_vector_int_(self._link,ret)
+        ret2=std_vector_int(self._link,ret)
         return ret2
 
     def total_size(self):
@@ -4564,14 +4565,15 @@ class tensor_int:
             vec[i]=v[i]
         self.create_size_vector(vec)
         return
+     
     def set(self,index,val):
         """
         Copy ``index`` to an :class:`std_vector_size_t` object and add the 
         data to the table
         """
-        svst=o2sclpy.std_vector_size_t(self._link)
-        syst.init_py(index)
-        self.set_vector(syst,val)
+        svst=std_vector_size_t(self._link)
+        svst.init_py(index)
+        self.set_vector(svst,val)
         return
      
     def get(self,index):
@@ -4579,18 +4581,18 @@ class tensor_int:
         Copy ``index`` to an :class:`std_vector_size_t` object and get the 
         data from the table
         """
-        svst=o2sclpy.std_vector_size_t(self._link)
-        syst.init_py(index)
-        return self.get_vector(syst)
+        svst=std_vector_size_t(self._link)
+        svst.init_py(index)
+        return self.get_vector(svst)
     
     def resize(self,index):
         """
         Copy ``index`` to an :class:`std_vector_size_t` object 
         and resize
         """
-        svst=o2sclpy.std_vector_size_t(self._link)
-        syst.init_py(index)
-        self.resize_vector(syst)
+        svst=std_vector_size_t(self._link)
+        svst.init_py(index)
+        self.resize_vector(svst)
         return
 
 class tensor_size_t:
@@ -4745,13 +4747,13 @@ class tensor_size_t:
 
     def get_data(self):
         """
-        | Returns: :class:`std::vector<size_t>` object
+        | Returns: :class:`std_vector_size_t` object
         """
         func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__get_data
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        ret2=std_vector_size_t_(self._link,ret)
+        ret2=std_vector_size_t(self._link,ret)
         return ret2
 
     def total_size(self):
@@ -4820,14 +4822,15 @@ class tensor_size_t:
             vec[i]=v[i]
         self.create_size_vector(vec)
         return
+      
     def set(self,index,val):
         """
         Copy ``index`` to an :class:`std_vector_size_t` object and add the 
         data to the table
         """
-        svst=o2sclpy.std_vector_size_t(self._link)
-        syst.init_py(index)
-        self.set_vector(syst,val)
+        svst=std_vector_size_t(self._link)
+        svst.init_py(index)
+        self.set_vector(svst,val)
         return
      
     def get(self,index):
@@ -4835,18 +4838,18 @@ class tensor_size_t:
         Copy ``index`` to an :class:`std_vector_size_t` object and get the 
         data from the table
         """
-        svst=o2sclpy.std_vector_size_t(self._link)
-        syst.init_py(index)
-        return self.get_vector(syst)
+        svst=std_vector_size_t(self._link)
+        svst.init_py(index)
+        return self.get_vector(svst)
     
     def resize(self,index):
         """
         Copy ``index`` to an :class:`std_vector_size_t` object 
         and resize
         """
-        svst=o2sclpy.std_vector_size_t(self._link)
-        syst.init_py(index)
-        self.resize_vector(syst)
+        svst=std_vector_size_t(self._link)
+        svst.init_py(index)
+        self.resize_vector(svst)
         return
 
 class find_constants:

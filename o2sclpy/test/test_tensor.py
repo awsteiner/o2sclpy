@@ -15,8 +15,9 @@ def def_tensor(link):
 def subtest_basic(link):
 
     tensor=def_tensor(link)
+    assert tensor.get_rank()==3,'get_rank()'
+    assert tensor.get_size(1)==3,'get_size()'
     """
-    assert tensor.get_nlines()==5,'get_nlines()'
     assert tensor.get_ncolumns()==3,'get_ncolumns()'
     assert tensor.get('col1',2)==4,'get()'
     assert tensor.get_column_name(2)==b'col3','get_column_name()'
@@ -80,17 +81,22 @@ def subtest_hdf5(link,tmp_path):
     # Write ten1 to a file
     hf=o2sclpy.hdf_file(link)
     hf.open_or_create(filename)
-    o2sclpy.hdf_output_tensor(link,hf,ten1,b'tensor')
+    hf.setd_ten(b'tensor',ten1)
     hf.close()
 
     # Open the file and read into ten2
     hf.open(filename,False,True)
     name=o2sclpy.std_string(link)
     ten2=o2sclpy.tensor(link)
-    o2sclpy.hdf_input_n_tensor(link,hf,ten2,name)
+    hf.getd_ten(b'tensor',ten2)
     hf.close()
-    
-    #assert ten2.get_nlines()==ten1.get_nlines(),"nlines after hdf_input()"
+
+    sz1=ten1.get_size_arr()
+    sz2=ten2.get_size_arr()
+    assert len(sz1)==len(sz2),"copy after hdf_input() 1"
+    assert sz1[0]==sz2[0],"copy after hdf_input() 2"
+    assert sz1[1]==sz2[1],"copy after hdf_input() 3"
+    assert sz1[2]==sz2[2],"copy after hdf_input() 4"
     
     return
 
