@@ -27,18 +27,21 @@ def subtest_basic(link):
     t3d.summary()
     return
 
-def subtest_hdf5(link):
+def subtest_hdf5(link,tmp_path):
+    
+    p=tmp_path/"table3d.o2"
+    filename=bytes(str(p),'utf-8')
     
     t3d1=def_table3d(link)
 
     # Write t3d1 to a file
     hf=o2sclpy.hdf_file(link)
-    hf.open_or_create(b'o2sclpy/test/temp.o2')
+    hf.open_or_create(filename)
     o2sclpy.hdf_output_table3d(link,hf,t3d1,b'table3d')
     hf.close()
 
     # Open the file and read into t3d2
-    hf.open(b'o2sclpy/test/temp.o2',False,True)
+    hf.open(filename,False,True)
     name=o2sclpy.std_string(link)
     t3d2=o2sclpy.table3d(link)
     o2sclpy.hdf_input_n_table3d(link,hf,t3d2,name)
@@ -47,12 +50,12 @@ def subtest_hdf5(link):
     assert t3d2.get_nx()==t3d1.get_nx(),"nlines after hdf_input()"
     return
 
-def test_all():
+def test_all(tmp_path):
     link=o2sclpy.linker()
     link.link_o2scl()
 
     subtest_basic(link)
-    subtest_hdf5(link)
+    subtest_hdf5(link,tmp_path)
     return
     
     
