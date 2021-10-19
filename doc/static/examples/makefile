@@ -54,6 +54,9 @@ cmaps:
 skyrme.ipynb: empty
 	jupytext --to ipynb --update skyrme.py 
 
+table.ipynb: empty
+	jupytext --to ipynb --update table.py 
+
 link_o2scl.ipynb: empty
 	jupytext --to ipynb --update link_o2scl.py 
 

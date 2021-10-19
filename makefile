@@ -37,6 +37,7 @@ doc: .empty
 	cd doc/static; o2graph -h | grep -v "Set o2scl" | \
 		grep -v "Compiled at" | grep -v "New alias" > o2graph.help.txt
 	cd doc/static/examples; $(MAKE) link_o2scl.ipynb
+	cd doc/static/examples; $(MAKE) table.ipynb
 	cd doc/static/examples; $(MAKE) skyrme.ipynb
 	cd doc/static/examples; $(MAKE) nucmass.ipynb
 	cd doc/static/examples; $(MAKE) SFHo_SFHx.ipynb
