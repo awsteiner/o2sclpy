@@ -525,10 +525,10 @@ Function vector_integ_xy_interp
 
 .. autofunction:: o2sclpy.vector_integ_xy_interp(link,n,vx,vy,interp_type)
 
-Function vector_integ_xy_interp
+Function vector_integ_ul_interp
 -------------------------------
 
-.. autofunction:: o2sclpy.vector_integ_xy_interp(link,n,x2,v,interp_type)
+.. autofunction:: o2sclpy.vector_integ_ul_interp(link,n,x2,v,interp_type)
 
 Function vector_integ_ul_xy_interp
 ----------------------------------

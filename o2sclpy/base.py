@@ -6495,7 +6495,7 @@ def vector_integ_xy_interp(link,n,vx,vy,interp_type=2):
     ret=func(n,vx._ptr,vy._ptr,interp_type)
     return ret
 
-def vector_integ_xy_interp(link,n,x2,v,interp_type=2):
+def vector_integ_ul_interp(link,n,x2,v,interp_type=2):
     """
         | Parameters:
         | *link* :class:`linker` object
