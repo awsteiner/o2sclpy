@@ -1182,3 +1182,77 @@ class hist:
         return
 
 
+class fract:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``fract``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/fract.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class fract
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_fract
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class fract
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_fract
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class fract
+        
+        Returns: a fract object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def nrf_z4m1(self,gx,gy,kmax,rmax,t3d,roots_x,roots_y,min,max):
+        """
+        | Parameters:
+        | *gx*: :class:`uniform_grid<>` object
+        | *gy*: :class:`uniform_grid<>` object
+        | *kmax*: ``size_t``
+        | *rmax*: ``double``
+        | *t3d*: :class:`o2scl::table3d` object
+        | *roots_x*: :class:`std_vector` object
+        | *roots_y*: :class:`std_vector` object
+        | *min*: :class:`std_vector` object
+        | *max*: :class:`std_vector` object
+        """
+        func=self._link.o2scl.o2scl_fract_nrf_z4m1
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,gx._ptr,gy._ptr,kmax,rmax,t3d._ptr,roots_x._ptr,roots_y._ptr,min._ptr,max._ptr)
+        return
+
+
