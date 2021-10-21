@@ -4861,6 +4861,303 @@ class tensor_size_t:
         self.resize_vector(svst)
         return
 
+class find_constants_const_entry:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``find_constants::const_entry``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/find_constants::const_entry.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class find_constants_const_entry
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_find_constants_const_entry
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class find_constants_const_entry
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_find_constants_const_entry
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class find_constants_const_entry
+        
+        Returns: a find_constants_const_entry object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def get_names(self,names):
+        """
+        Get object of type :class:`std::vector<std::string>`
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_names
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,names._ptr)
+        return
+
+    def set_names(self,value):
+        """
+        Set object of type :class:`std::vector<std::string>`
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_names
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_unit(self,unit):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_unit
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,unit._ptr)
+        return
+
+    def set_unit(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_unit
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def unit_flag(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_unit_flag
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @unit_flag.setter
+    def unit_flag(self,value):
+        """
+        Setter function for find_constants::const_entry::unit_flag .
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_unit_flag
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def val(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_val
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @val.setter
+    def val(self,value):
+        """
+        Setter function for find_constants::const_entry::val .
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_val
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    def get_source(self,source):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_source
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,source._ptr)
+        return
+
+    def set_source(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_source
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def m(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_m
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @m.setter
+    def m(self,value):
+        """
+        Setter function for find_constants::const_entry::m .
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_m
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def k(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_k
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @k.setter
+    def k(self,value):
+        """
+        Setter function for find_constants::const_entry::k .
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_k
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def s(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_s
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @s.setter
+    def s(self,value):
+        """
+        Setter function for find_constants::const_entry::s .
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_s
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def K(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_K
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @K.setter
+    def K(self,value):
+        """
+        Setter function for find_constants::const_entry::K .
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_K
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def A(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_A
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @A.setter
+    def A(self,value):
+        """
+        Setter function for find_constants::const_entry::A .
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_A
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def mol(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_mol
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @mol.setter
+    def mol(self,value):
+        """
+        Setter function for find_constants::const_entry::mol .
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_mol
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def cd(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_get_cd
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @cd.setter
+    def cd(self,value):
+        """
+        Setter function for find_constants::const_entry::cd .
+        """
+        func=self._link.o2scl.o2scl_find_constants_const_entry_set_cd
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+
 class find_constants:
     """
     Python interface for O\ :sub:`2`\ scl class ``find_constants``,
@@ -4957,6 +5254,17 @@ class find_constants:
         func=self._link.o2scl.o2scl_find_constants_output_list_cout
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
+        return
+
+    def add_constant(self,f,verbose=0):
+        """
+        | Parameters:
+        | *f*: :class:`find_constants::const_entry` object
+        | *verbose* =0: ``int``
+        """
+        func=self._link.o2scl.o2scl_find_constants_add_constant
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,f._ptr,verbose)
         return
 
     def del_constant(self,name,verbose=0):
@@ -5234,13 +5542,11 @@ class convert_units_der_unit:
         """
         Set the properties of a derived unit
         """
-        ltmp=std_string(self._link)
-        ltmp.init_bytes(label)
-        self.label=ltmp
+        self.label=std_string(self._link)
+        self.label.init_bytes(label)
         self.val=val
-        ntmp=std_string(self._link)
-        ntmp.init_bytes(name)
-        self.name=ntmp
+        self.name=std_string(self._link)
+        self.name.init_bytes(name)
         self.m=m
         self.k=k
         self.s=s
@@ -5409,7 +5715,7 @@ class convert_units:
         func(self._ptr,name._ptr)
         return
 
-    def add_unit(self,d):
+    def add_unit_internal(self,d):
         """
         | Parameters:
         | *d*: :class:`convert_units<>::der_unit` object
@@ -5455,6 +5761,14 @@ class convert_units:
         func(self._ptr)
         return
 
+    def add_unit(self,label,val,name='',m=0,k=0,s=0,K=0,A=0,mol=0,cd=0):
+        """
+        Add a unit
+        """
+        du=convert_units_der_unit(self._link)
+        du.set(label,val,name,m,k,s,K,A,mol,cd)
+        self.add_unit_internal(du)
+        return
 
 class columnify:
     """
@@ -6389,6 +6703,20 @@ def screenify(link,nin,in_cols,out_cols,max_size=80):
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
     func(nin,in_cols._ptr,out_cols._ptr,max_size)
     return
+
+def file_exists(link,fname):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *fname*: string
+        | Returns: ``ctypes.c_bool`` object
+    """
+    fname_=ctypes.c_char_p(force_bytes(fname))
+    func=link.o2scl.o2scl_file_exists_wrapper
+    func.restype=ctypes.c_bool
+    func.argtypes=[ctypes.c_char_p]
+    ret=func(fname_)
+    return ret
 
 def vector_level_count(link,level,n,x,y):
     """

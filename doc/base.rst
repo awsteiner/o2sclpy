@@ -322,6 +322,17 @@ Class tensor_size_t
         .. automethod:: __copy__
         .. automethod:: __deepcopy__
 
+Class find_constants_const_entry
+--------------------------------
+
+.. autoclass:: o2sclpy.find_constants_const_entry
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class find_constants
 --------------------
 
@@ -489,6 +500,11 @@ Function screenify
 ------------------
 
 .. autofunction:: o2sclpy.screenify(link,nin,in_cols,out_cols,max_size)
+
+Function file_exists
+--------------------
+
+.. autofunction:: o2sclpy.file_exists(link,fname)
 
 Function vector_level_count
 ---------------------------

@@ -34,7 +34,9 @@ unit.set(b'Bethe',cu.convert('erg','kg*m^2/s^2',1.0e51),b'fifty one ergs',2,1,-2
 
 print(unit.val,unit.name.to_bytes(),unit.label.to_bytes())
 
-cu.add_unit(unit)
+#cu.add_unit_internal(unit)
+cu.add_unit(b'Bethe',cu.convert('erg','kg*m^2/s^2',1.0e51),
+            b'fifty one ergs',2,1,-2)
 
 print(unit.val,unit.name.to_bytes(),unit.label.to_bytes())
 
