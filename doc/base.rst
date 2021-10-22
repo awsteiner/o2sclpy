@@ -421,6 +421,17 @@ Class interp_krige_optim
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class gen_test_number
+---------------------
+
+.. autoclass:: o2sclpy.gen_test_number
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class shared_ptr_table_units
 ----------------------------
 
@@ -505,6 +516,41 @@ Function file_exists
 --------------------
 
 .. autofunction:: o2sclpy.file_exists(link,fname)
+
+Function RGBtoHSV
+-----------------
+
+.. autofunction:: o2sclpy.RGBtoHSV(link,r,g,b,h,s,v)
+
+Function HSVtoRGB
+-----------------
+
+.. autofunction:: o2sclpy.HSVtoRGB(link,h,s,v,r,g,b)
+
+Function wordexp_single_file
+----------------------------
+
+.. autofunction:: o2sclpy.wordexp_single_file(link,fname)
+
+Function wordexp_wrapper
+------------------------
+
+.. autofunction:: o2sclpy.wordexp_wrapper(link,word,matches)
+
+Function function_to_double
+---------------------------
+
+.. autofunction:: o2sclpy.function_to_double(link,s,verbose)
+
+Function function_to_double_nothrow
+-----------------------------------
+
+.. autofunction:: o2sclpy.function_to_double_nothrow(link,s,result,verbose)
+
+Function string_to_uint_list
+----------------------------
+
+.. autofunction:: o2sclpy.string_to_uint_list(link,x,list)
 
 Function vector_level_count
 ---------------------------

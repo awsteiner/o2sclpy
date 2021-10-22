@@ -5311,7 +5311,6 @@ class convert_units_der_unit:
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
-            print('created der_unit object: ',self._ptr)
         else:
             self._ptr=pointer
             self._owner=False
@@ -5357,7 +5356,6 @@ class convert_units_der_unit:
         """
         func=self._link.o2scl.o2scl_convert_units_der_unit_set_label
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        print('calling func() in set_label to ',value.to_bytes())
         func(self._ptr,value._ptr)
         return
 
@@ -5543,13 +5541,14 @@ class convert_units_der_unit:
     def set(self,label,val,name='',m=0,k=0,s=0,K=0,A=0,mol=0,cd=0):
         """
         Set the properties of a derived unit
+        FIXME: beter docs here
         """
         label2=std_string(self._link)
-        label2.init_bytes(label)
+        label2.init_bytes(force_bytes(label))
         self.set_label(label2)
         self.val=val
         name2=std_string(self._link)
-        name2.init_bytes(name)
+        name2.init_bytes(force_bytes(name))
         self.set_name(name2)
         self.m=m
         self.k=k
@@ -5726,9 +5725,7 @@ class convert_units:
         """
         func=self._link.o2scl.o2scl_convert_units__add_unit
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        print('in aui',d._ptr)
         func(self._ptr,d._ptr)
-        print('done')
         return
 
     def set_natural_units(self,c_is_one=True,hbar_is_one=True,kb_is_one=True):
@@ -6459,6 +6456,95 @@ class interp_krige_optim:
         return
 
 
+class gen_test_number:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``gen_test_number<double>``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/gen_test_number<double>.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class gen_test_number
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_gen_test_number_double_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class gen_test_number
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_gen_test_number_double_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class gen_test_number
+        
+        Returns: a gen_test_number object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def reset(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_gen_test_number_double__reset
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def set_radix(self,r):
+        """
+        | Parameters:
+        | *r*: ``double``
+        """
+        func=self._link.o2scl.o2scl_gen_test_number_double__set_radix
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,r)
+        return
+
+    def gen(self):
+        """
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_gen_test_number_double__gen
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+
 class shared_ptr_table_units(table_units):
     """
     Python interface for a shared pointer to a class of type ``table_units<>``
@@ -6722,6 +6808,113 @@ def file_exists(link,fname):
     func.restype=ctypes.c_bool
     func.argtypes=[ctypes.c_char_p]
     ret=func(fname_)
+    return ret
+
+def RGBtoHSV(link,r,g,b,h,s,v):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *r*: ``double``
+        | *g*: ``double``
+        | *b*: ``double``
+        | *h*: ``double``
+        | *s*: ``double``
+        | *v*: ``double``
+    """
+    func=link.o2scl.o2scl_RGBtoHSV_wrapper
+    func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(r,g,b,h._ptr,s._ptr,v._ptr)
+    return
+
+def HSVtoRGB(link,h,s,v,r,g,b):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *h*: ``double``
+        | *s*: ``double``
+        | *v*: ``double``
+        | *r*: ``double``
+        | *g*: ``double``
+        | *b*: ``double``
+    """
+    func=link.o2scl.o2scl_HSVtoRGB_wrapper
+    func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(h,s,v,r._ptr,g._ptr,b._ptr)
+    return
+
+def wordexp_single_file(link,fname):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *fname*: :class:`std::string` object
+    """
+    fname.__del__()
+    fname._ptr=ctypes.c_void_p()
+    func=link.o2scl.o2scl_wordexp_single_file_wrapper
+    func.argtypes=[ctypes.POINTER(ctypes.c_void_p)]
+    func(ctypes.byref(fname._ptr))
+    fname._owner=True
+    return
+
+def wordexp_wrapper(link,word,matches):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *word*: string
+        | *matches*: :class:`std::vector<std::string>` object
+    """
+    word_=ctypes.c_char_p(force_bytes(word))
+    func=link.o2scl.o2scl_wordexp_wrapper_wrapper
+    func.argtypes=[ctypes.c_char_p,ctypes.c_void_p]
+    func(word_,matches._ptr)
+    return
+
+def function_to_double(link,s,verbose=0):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *s*: string
+        | *verbose*: ``int``
+        | Returns: ``ctypes.c_double`` object
+    """
+    s_=ctypes.c_char_p(force_bytes(s))
+    func=link.o2scl.o2scl_function_to_double_wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_char_p,ctypes.c_int]
+    ret=func(s_,verbose)
+    return ret
+
+def function_to_double_nothrow(link,s,result,verbose=0):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *s*: string
+        | *result*: ``double``
+        | *verbose*: ``int``
+        | Returns: ``ctypes.c_int`` object
+    """
+    s_=ctypes.c_char_p(force_bytes(s))
+    func=link.o2scl.o2scl_function_to_double_nothrow_wrapper
+    func.restype=ctypes.c_int
+    func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int]
+    ret=func(s_,result._ptr,verbose)
+    return ret
+
+def string_to_uint_list(link,x,list):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *x*: :class:`std::string` object
+        | *list*: :class:`vector<size_t>` object
+        | Returns: ``ctypes.c_int`` object
+    """
+    x.__del__()
+    x._ptr=ctypes.c_void_p()
+    func=link.o2scl.o2scl_string_to_uint_list_vector_size_t__wrapper
+    func.restype=ctypes.c_int
+    func.argtypes=[ctypes.POINTER(ctypes.c_void_p),ctypes.c_void_p]
+    ret=func(ctypes.byref(x._ptr),list._ptr)
+    x._owner=True
     return ret
 
 def vector_level_count(link,level,n,x,y):
