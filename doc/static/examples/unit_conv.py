@@ -28,17 +28,8 @@ cu=link.o2scl_settings.get_convert_units()
 val=cu.convert('MeV','1/fm',2.0)
 print('%7.6e' % val)
 
-unit=o2sclpy.convert_units_der_unit(link)
-
-unit.set(b'Bethe',cu.convert('erg','kg*m^2/s^2',1.0e51),b'fifty one ergs',2,1,-2)
-
-print(unit.val,unit.name.to_bytes(),unit.label.to_bytes())
-
-#cu.add_unit_internal(unit)
 cu.add_unit(b'Bethe',cu.convert('erg','kg*m^2/s^2',1.0e51),
             b'fifty one ergs',2,1,-2)
-
-print(unit.val,unit.name.to_bytes(),unit.label.to_bytes())
 
 cu.print_units_cout()
 

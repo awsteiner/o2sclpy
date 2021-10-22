@@ -5311,6 +5311,7 @@ class convert_units_der_unit:
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
+            print('created der_unit object: ',self._ptr)
         else:
             self._ptr=pointer
             self._owner=False
@@ -5356,6 +5357,7 @@ class convert_units_der_unit:
         """
         func=self._link.o2scl.o2scl_convert_units_der_unit_set_label
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        print('calling func() in set_label to ',value.to_bytes())
         func(self._ptr,value._ptr)
         return
 
@@ -5542,11 +5544,13 @@ class convert_units_der_unit:
         """
         Set the properties of a derived unit
         """
-        self.label=std_string(self._link)
-        self.label.init_bytes(label)
+        label2=std_string(self._link)
+        label2.init_bytes(label)
+        self.set_label(label2)
         self.val=val
-        self.name=std_string(self._link)
-        self.name.init_bytes(name)
+        name2=std_string(self._link)
+        name2.init_bytes(name)
+        self.set_name(name2)
         self.m=m
         self.k=k
         self.s=s
@@ -5722,7 +5726,9 @@ class convert_units:
         """
         func=self._link.o2scl.o2scl_convert_units__add_unit
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        print('in aui',d._ptr)
         func(self._ptr,d._ptr)
+        print('done')
         return
 
     def set_natural_units(self,c_is_one=True,hbar_is_one=True,kb_is_one=True):
