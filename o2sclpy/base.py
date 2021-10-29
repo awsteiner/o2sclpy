@@ -5740,6 +5740,44 @@ class convert_units:
         func(self._ptr,c_is_one,hbar_is_one,kb_is_one)
         return
 
+    def is_in_cache(self,frm,to):
+        """
+        | Parameters:
+        | *frm*: string
+        | *to*: string
+        | Returns: a Python int
+        """
+        frm_=ctypes.c_char_p(force_bytes(frm))
+        to_=ctypes.c_char_p(force_bytes(to))
+        func=self._link.o2scl.o2scl_convert_units__is_in_cache
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        ret=func(self._ptr,frm_,to_)
+        return ret
+
+    def remove_cache(self,frm,to):
+        """
+        | Parameters:
+        | *frm*: string
+        | *to*: string
+        | Returns: a Python int
+        """
+        frm_=ctypes.c_char_p(force_bytes(frm))
+        to_=ctypes.c_char_p(force_bytes(to))
+        func=self._link.o2scl.o2scl_convert_units__remove_cache
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        ret=func(self._ptr,frm_,to_)
+        return ret
+
+    def clear_cache(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_convert_units__clear_cache
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
     def test_unique(self):
         """
         """
