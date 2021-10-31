@@ -50,6 +50,11 @@ cu.print_units_cout()
 
 print(cu.convert('N/K','α',27))
 
+# Now, remove the use of natural units
+
+cu.set_natural_units(False,False,False)
+
+
 
 
 
