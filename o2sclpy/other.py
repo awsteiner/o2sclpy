@@ -1255,4 +1255,24 @@ class fract:
         func(self._ptr,gx._ptr,gy._ptr,kmax,rmax,t3d._ptr,roots_x._ptr,roots_y._ptr,min._ptr,max._ptr)
         return
 
+    def itf_mandel(self,gx,gy,kmax,rmax,t3d,min,max):
+        """
+        | Parameters:
+        | *gx*: :class:`uniform_grid<>` object
+        | *gy*: :class:`uniform_grid<>` object
+        | *kmax*: ``size_t``
+        | *rmax*: ``double``
+        | *t3d*: :class:`o2scl::table3d` object
+        | *min*: ``ctypes.c_size_t``
+        | *max*: ``ctypes.c_size_t``
+        | Returns: a Python int, a Python int, a Python int
+        """
+        func=self._link.o2scl.o2scl_fract_itf_mandel
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_void_p,ctypes.POINTER(ctypes.c_size_t),ctypes.POINTER(ctypes.c_size_t)]
+        min_conv=ctypes.c_size_t(min)
+        max_conv=ctypes.c_size_t(max)
+        ret=func(self._ptr,gx._ptr,gy._ptr,kmax,rmax,t3d._ptr,ctypes.byref(min_conv),ctypes.byref(max_conv))
+        return ret,min_conv.value,max_conv.value
+
 
