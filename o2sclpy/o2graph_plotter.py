@@ -1647,7 +1647,7 @@ class o2graph_plotter(yt_plot_base):
         conv_fn.restype=ctypes.c_int
 
         if (len(args)>=2 and force_bytes(args[1])!=b'none' and
-            force_args(args[1])!=b'None'):
+            force_bytes(args[1])!=b'None'):
             if self.verbose>1:
                 print('Calling mult_vectors_to_conts() with',
                       args[0],'and',args[1])
