@@ -77,10 +77,14 @@ class o2graph_plotter(yt_plot_base):
         for line in param_list:
             if args[0]==line[0]:
                 match=True
+                if self.verbose>2:
+                    print('Parameter',args[0],'is o2graph parameter.')
                 
         for line in yt_param_list:
             if args[0]==line[0]:
                 match=True
+                if self.verbose>2:
+                    print('Parameter',args[0],'is a yt parameter.')
 
         # If it's an o2graph or yt parameter, then call the parent
         # set() function
@@ -109,6 +113,8 @@ class o2graph_plotter(yt_plot_base):
         parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
                            size_type,ctypes.c_char_p]
             
+        if self.verbose>2:
+            print('Calling acol set function for parameter',args[0],'.')
         parse_fn(amp,len(args)+1,sizes,ccp)
 
         # End of function o2graph_plotter::set_wrapper()
@@ -4178,7 +4184,7 @@ class o2graph_plotter(yt_plot_base):
                            'r','read','rename','run',
                            's','S','select','select-rows',
                            'select_rows','select-rows2','select_rows2',
-                           'set-data','set_data','set-unit',
+                           'set-data','set_data','set-unit','set',
                            'set_unit','show-units','show_units','slice',
                            'sort','stats','sum','to-hist','to_hist',
                            'to-hist-2d' 'to_hist_2d',
@@ -4197,10 +4203,10 @@ class o2graph_plotter(yt_plot_base):
                     else:
                         self.set_wrapper(o2scl_hdf,amp,strlist[ix+1:ix_next])
                         
-                if cmd_name=='cmap':
+                elif cmd_name=='cmap':
 
                     if self.verbose>2:
-                        print('Process set.')
+                        print('Process cmap.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
