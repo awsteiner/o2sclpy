@@ -34,6 +34,25 @@ import platform
 import ctypes
 from ctypes.util import find_library
 
+def string_to_color(str_in):
+    """
+    Convert a string to a color
+    """
+
+    if str_in[0]=='(':
+        temps=str_in[1:len(str_in)-1]
+        print('temps:',temps)
+        temp2=temps.split(',')
+        print('temp2:',temp2)
+        return (float(temp2[0]),float(temp2[1]),float(temp2[2]))
+    elif str_in[0]=='[':
+        temps=str_in[1:len(str_in)-1]
+        temp2=temps.split(',')
+        return [float(temp2[0]),float(temp2[1]),float(temp2[2]),
+                float(temp2[3])]
+    
+    return str_in
+
 def if_yt_then_Agg(backend,argv):
     # Determine if yt commands are present
             

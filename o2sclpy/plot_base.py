@@ -34,6 +34,7 @@ import matplotlib.patches as patches
 
 from o2sclpy.utils import parse_arguments, string_to_dict
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
+from o2sclpy.utils import string_to_color
 
 class plot_base:
     """
@@ -210,7 +211,10 @@ class plot_base:
         rgb_list=[]
         from matplotlib.colors import to_rgba
         for i in range(0,N):
-            rgb_list.append(to_rgba(col_list[i]))
+            if isinstance(col_list[i],str):
+                rgb_list.append(to_rgba(string_to_color(col_list[i])))
+            else:
+                rgb_list.append(to_rgba(col_list[i]))
 
         if self.verbose>1:
             print('rgb_list:',rgb_list)
