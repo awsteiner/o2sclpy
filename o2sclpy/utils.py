@@ -41,9 +41,7 @@ def string_to_color(str_in):
 
     if str_in[0]=='(':
         temps=str_in[1:len(str_in)-1]
-        print('temps:',temps)
         temp2=temps.split(',')
-        print('temp2:',temp2)
         return (float(temp2[0]),float(temp2[1]),float(temp2[2]))
     elif str_in[0]=='[':
         temps=str_in[1:len(str_in)-1]
