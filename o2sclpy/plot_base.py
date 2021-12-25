@@ -264,6 +264,86 @@ class plot_base:
         
         return
         
+    def cmap2(self,cmap_name,col_list):
+        """
+        Add a colormap with sharp transitions
+        """
+
+        N=len(col_list)
+        
+        if N%2==1:
+            print('Must have an even number of arguments in cmap2.')
+            return
+        
+        if self.verbose>1:
+            print('cmap name:',cmap_name,'list:',col_list)
+        
+        # This value is used to indicate values in the colormap
+        # tuples that are ignored by LinearSegmentedColormap()
+        unused=0.0
+
+        col_r=numpy.ones((N/2+1,3))
+        col_g=numpy.ones((N/2+1,3))
+        col_b=numpy.ones((N/2+1,3))
+
+        # Convert the colors to RGBA arrays (the alpha value is
+        # ignored)
+        rgb_list=[]
+        from matplotlib.colors import to_rgba
+        for i in range(0,N):
+            if isinstance(col_list[i],str):
+                rgb_list.append(to_rgba(string_to_color(col_list[i])))
+            else:
+                rgb_list.append(to_rgba(col_list[i]))
+
+        if self.verbose>1:
+            print('rgb_list:',rgb_list)
+
+        for i in range(0,N/2+1):
+            col_r[i][0]=float(i)/float(N-1)
+            col_g[i][0]=float(i)/float(N-1)
+            col_b[i][0]=float(i)/float(N-1)
+            if i==0:
+                col_r[i][1]=unused
+                col_g[i][1]=unused
+                col_b[i][1]=unused
+                col_r[i][2]=rgb_list[0][0]
+                col_g[i][2]=rgb_list[0][1]
+                col_b[i][2]=rgb_list[0][2]
+            elif i==N/2:
+                col_r[i][1]=rgb_list[N-1][0]
+                col_g[i][1]=rgb_list[N-1][1]
+                col_b[i][1]=rgb_list[N-1][2]
+                col_r[i][2]=unused
+                col_g[i][2]=unused
+                col_b[i][2]=unused
+            else:
+                col_r[i][1]=rgb_list[i/2+1][0]
+                col_g[i][1]=rgb_list[i/2+1][1]
+                col_b[i][1]=rgb_list[i/2+1][2]
+                col_r[i][2]=rgb_list[i/2+2][0]
+                col_g[i][2]=rgb_list[i/2+2][1]
+                col_b[i][2]=rgb_list[i/2+2][2]
+
+            if self.verbose>1:
+                print('red',col_r[i][0],col_r[i][1],col_r[i][2])
+                print('green',col_g[i][0],col_g[i][1],col_g[i][2])
+                print('blue',col_b[i][0],col_b[i][1],col_b[i][2])
+                print('')
+
+        cdict={'red': col_r, 'green': col_g, 'blue': col_b}
+        
+        import matplotlib.pyplot as plot
+
+        cmap_obj=LinearSegmentedColormap(cmap_name,cdict)
+        plot.register_cmap(cmap=cmap_obj)
+            
+        # Colormap reversed
+        cmapr_obj=cmap_obj.reversed()
+        plot.register_cmap(cmap=cmapr_obj)
+        
+        return
+        
     def new_cmaps(self):
         """
         Add a few new colormaps

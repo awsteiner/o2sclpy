@@ -4214,6 +4214,17 @@ class o2graph_plotter(yt_plot_base):
                     else:
                         self.cmap(strlist[ix+1],strlist[ix+2:ix_next])
                         
+                elif cmd_name=='cmap2':
+
+                    if self.verbose>2:
+                        print('Process cmap2.')
+                        print('args:',strlist[ix:ix_next])
+                        
+                    if ix_next-ix<3:
+                        print('Not enough parameters for set option.')
+                    else:
+                        self.cmap2(strlist[ix+1],strlist[ix+2:ix_next])
+                        
                 elif cmd_name=='get':
                     
                     if self.verbose>2:
