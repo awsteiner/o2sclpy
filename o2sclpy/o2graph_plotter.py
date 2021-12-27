@@ -829,7 +829,8 @@ class o2graph_plotter(yt_plot_base):
                     if sl_all[j,i,2]>max_val:
                         max_val=sl_all[j,i,2]
 
-            print('Minimum is',min_val,'maximum is',max_val,'.')
+            print('o2graph::make-png(): Minimum is',
+                  min_val,'maximum is',max_val,'.')
                         
             for i in range(0,nx.value):
                 for j in range(0,ny.value):
