@@ -663,6 +663,192 @@ class o2graph_plotter(yt_plot_base):
             cbar.ax.tick_params('both',length=6,width=1,which='major')
             cbar.ax.tick_params(labelsize=self.font*0.8)
 
+    def make_png(self,o2scl_hdf,amp,args):
+        """
+        Create png from a ``table3d`` object using three slices
+        to specify the red, green, and blue values.
+        """
+
+        int_ptr=ctypes.POINTER(ctypes.c_int)
+        double_ptr=ctypes.POINTER(ctypes.c_double)
+        char_ptr=ctypes.POINTER(ctypes.c_char)
+        double_ptr_ptr=ctypes.POINTER(double_ptr)
+        char_ptr_ptr=ctypes.POINTER(char_ptr)
+
+        curr_type=o2scl_get_type(o2scl_hdf,amp)
+
+        # Handle tensor and table3d types
+        if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
+            curr_type==b'tensor_grid' or curr_type==b'tensor<int>' or
+            curr_type==b'table3d'):
+
+            # If the object is a tensor, convert to a table3d
+            # object before plotting
+            if curr_type!=b'table3d':
+                index1=0
+                index2=1
+                if len(args)==1:
+                    kwstring=args[0]
+                if len(args)>=2:
+                    index1=int(args[0])
+                    index2=int(args[1])
+                if index1+index2!=1 and index1*index2!=0:
+                    print('Indices must be "0 1" or "1 0" in',
+                          'in den-plot.')
+                    return
+                    
+                conv_fn=o2scl_hdf.o2scl_acol_tensor_to_table3d
+                conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
+                conv_fn.restype=ctypes.c_int
+                
+                conv_ret=conv_fn(amp,index1,index2)
+                if conv_ret!=0:
+                    print('Automatic conversion to table3d failed.')
+                    return
+                slice_name="tensor"
+            else:
+                r_slice_name=args[0]
+                g_slice_name=args[1]
+                b_slice_name=args[2]
+
+            # Now that we are guaranteed to have a table3d
+            # object to use, use that to create the density
+            # plot
+            get_fn=o2scl_hdf.o2scl_acol_get_slice
+            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+                             int_ptr,double_ptr_ptr,
+                             int_ptr,double_ptr_ptr,double_ptr_ptr]
+
+            r_slice=ctypes.c_char_p(force_bytes(r_slice_name))
+            nx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            ny=ctypes.c_int(0)
+            ptry=double_ptr()
+            ptrs_r=double_ptr()
+            get_fn(amp,r_slice,ctypes.byref(nx),ctypes.byref(ptrx),
+                   ctypes.byref(ny),ctypes.byref(ptry),
+                   ctypes.byref(ptrs_r))
+
+            # Allocate the python storage
+            sl_all=numpy.zeros((ny.value,nx.value,3))
+            xgrid=numpy.zeros((nx.value))
+            ygrid=numpy.zeros((ny.value))
+
+            # Copy from the C pointer to the python storage
+            ix=0
+            for i in range(0,nx.value):
+                for j in range(0,ny.value):
+                    sl_all[j,i,0]=ptrs_r[ix]
+                    ix=ix+1
+
+            # Copy the grid
+            for i in range(0,nx.value):
+                xgrid[i]=ptrx[i]
+            for j in range(0,ny.value):
+                ygrid[j]=ptry[j]
+            
+            g_slice=ctypes.c_char_p(force_bytes(g_slice_name))
+            nx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            ny=ctypes.c_int(0)
+            ptry=double_ptr()
+            ptrs_g=double_ptr()
+            get_fn(amp,g_slice,ctypes.byref(nx),ctypes.byref(ptrx),
+                   ctypes.byref(ny),ctypes.byref(ptry),
+                   ctypes.byref(ptrs_g))
+
+            # Copy from the C pointer to the python storage
+            ix=0
+            for i in range(0,nx.value):
+                for j in range(0,ny.value):
+                    sl_all[j,i,1]=ptrs_g[ix]
+                    ix=ix+1
+            
+            b_slice=ctypes.c_char_p(force_bytes(b_slice_name))
+            nx=ctypes.c_int(0)
+            ptrx=double_ptr()
+            ny=ctypes.c_int(0)
+            ptry=double_ptr()
+            ptrs_b=double_ptr()
+            get_fn(amp,b_slice,ctypes.byref(nx),ctypes.byref(ptrx),
+                   ctypes.byref(ny),ctypes.byref(ptry),
+                   ctypes.byref(ptrs_b))
+
+            # Copy from the C pointer to the python storage
+            ix=0
+            for i in range(0,nx.value):
+                for j in range(0,ny.value):
+                    sl_all[j,i,2]=ptrs_b[ix]
+                    ix=ix+1
+
+            
+            # If logz was specified, then manually apply the
+            # log to the data. Alternatively, we should consider
+            # using 'LogNorm' here, as suggested in
+            
+            # If the z range was specified, truncate all values
+            # outside that range (this truncation is done after
+            # the application of the log above)
+            
+            # if self.zset==True:
+            #     for i in range(0,ny.value):
+            #         for j in range(0,nx.value):
+            #             if sl_r[i][j]>self.zhi:
+            #                 sl_r[i][j]=self.zhi
+            #             elif sl_r[i][j]<self.zlo:
+            #                 sl_r[i][j]=self.zlo
+            #             if sl_g[i][j]>self.zhi:
+            #                 sl_g[i][j]=self.zhi
+            #             elif sl_g[i][j]<self.zlo:
+            #                 sl_g[i][j]=self.zlo
+            #             if sl_b[i][j]>self.zhi:
+            #                 sl_b[i][j]=self.zhi
+            #             elif sl_b[i][j]<self.zlo:
+            #                 sl_b[i][j]=self.zlo
+
+
+            from PIL import Image
+            im=Image.new(mode='RGB',size=(nx.value,ny.value))
+            pixels=im.load()
+            
+            min_val=sl_all[0,0,0]
+            max_val=sl_all[0,0,0]
+            
+            for i in range(0,nx.value):
+                for j in range(0,ny.value):
+                    if sl_all[j,i,0]<min_val:
+                        min_val=sl_all[j,i,0]
+                    if sl_all[j,i,1]<min_val:
+                        min_val=sl_all[j,i,1]
+                    if sl_all[j,i,2]<min_val:
+                        min_val=sl_all[j,i,2]
+                    if sl_all[j,i,0]>max_val:
+                        max_val=sl_all[j,i,0]
+                    if sl_all[j,i,1]>max_val:
+                        max_val=sl_all[j,i,1]
+                    if sl_all[j,i,2]>max_val:
+                        max_val=sl_all[j,i,2]
+
+            print('Minimum is',min_val,'maximum is',max_val,'.')
+                        
+            for i in range(0,nx.value):
+                for j in range(0,ny.value):
+                    pixels[i,j]=(int(256*(sl_all[j,i,0]-min_val)/
+                                     (max_val-min_val)),
+                                 int(256*(sl_all[j,i,1]-min_val)/
+                                     (max_val-min_val)),
+                                 int(256*(sl_all[j,i,2]-min_val)/
+                                     (max_val-min_val)))
+
+            im.save(args[3])
+            
+            # End of section for tensor types and table3d
+        else:
+            print("Command 'make-png' not supported for type",
+                  curr_type,".")
+            
+        return
+
     def plot(self,o2scl_hdf,amp,args):
         """
         Plot a two-dimensional set of data
@@ -4224,6 +4410,18 @@ class o2graph_plotter(yt_plot_base):
                         print('Not enough parameters for set option.')
                     else:
                         self.cmap2(strlist[ix+1],strlist[ix+2:ix_next])
+                        
+                elif cmd_name=='make-png':
+
+                    if self.verbose>2:
+                        print('Process make-png.')
+                        print('args:',strlist[ix:ix_next])
+                        
+                    if ix_next-ix<3:
+                        print('Not enough parameters for set option.')
+                    else:
+                        self.make_png(o2scl_hdf,amp,
+                                      strlist[ix+1:ix_next])
                         
                 elif cmd_name=='get':
                     

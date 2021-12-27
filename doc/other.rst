@@ -106,14 +106,3 @@ Class hist
         .. automethod:: __deepcopy__
         .. automethod:: __getitem__
 
-Class fract
------------
-
-.. autoclass:: o2sclpy.fract
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
