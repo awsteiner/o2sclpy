@@ -91,6 +91,24 @@ base_list=[
      " command is invoked "+
      "more than once, then only the last invocation will have any "+
      "effect."],
+    ["cmap","Create a continuous colormap.",
+     "<cmap name> <color 1> <color 2> [color3]...",
+     "Create a new color map named <cmap name> which consists of "+
+     "equal-sized gradients between the specified list of at least "+
+     "two colors. Matplotlib colors, (r,g,b) colors, and xkcd "+
+     "colors are all allowed. For example 'o2graph -cmap c "+
+     "forestgreen \"(0.5,0.5,0.7)\" \"xkcd:light red\" -create "+
+     "table3d x grid:0,40,1 y grid:0,40,1 z \"x+y\" -den-plot z "+
+     "cmap=c -show'."],
+    ["cmap2","Create a colormap.",
+     "<cmap name> <color 1> <color 2> [color3 color4]...",
+     "Create a new color map named <cmap name> which consists of "+
+     "equal-sized gradients between the list of specified color "+
+     "pairs. Matplotlib colors, (r,g,b) colors, and xkcd "+
+     "colors are all allowed. For example 'o2graph -cmap2 c "+
+     "\"(0.5,0.5,0.7)\" \"xkcd:light red\" -create "+
+     "table3d x grid:0,40,1 y grid:0,40,1 z \"x+y\" -den-plot z "+
+     "cmap=c -show'."],
     ["canvas","Create a plotting canvas.","",
      "Create an empty plotting canvas. For example 'o2graph "+
      "-canvas -show'. Typically, 'o2graph' creates "+
@@ -551,7 +569,13 @@ extra_list=[
      "(for imshow), alpha, vmin, and vmax."],
     ["table3d","den-plot-rgb","Create a (R,G,B) density plot from a table3d.",
      "<slice_r> <slice_g> <slice_b>","Create a density plot from "+
-     "the three specified slices. This command uses imshow()."],
+     "the three specified slices. This command uses imshow(). "+
+     "To directly create a .png file with no axes, use make-png instead."],
+    ["table3d","make-png","Create a png file from a table3d object.",
+     "<slice_r> <slice_g> <slice_b> <filename>",
+     "Create a .png file from "+
+     "the three specified table3d slices. This command requires pillow. "+
+     "To create a density-plot with axes instead, use den-plot-rgb."],
     ["hist","plot","Plot the histogram.","[kwargs]",
      "Plot the histogram weights as a function "+
      "of the bin representative values. "+
