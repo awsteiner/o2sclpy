@@ -241,7 +241,11 @@ base_list=[
      "command. All arguments are keyword arguments. The kwargs for "+
      "'subadj' are left, right, bottom, top, "+
      "wspace, and hspace. This just a wrapper to the "+
-     "pyplot.subplots_adjust() function."],
+     "pyplot.subplots_adjust() function. Note that, unlike the margin "+
+     "settings for the fig_dict parameter, the values 'right' and 'top' "+
+     "are defined relative to the lower-left corner, so a small right "+
+     "margin is 'right=0.99'. The subplots_adjust() function requires "+
+     "right>left and top>bottom."],
     ["subplots","Create subplots.","<nrows> <ncols> [kwargs]",
      "Create a grid of <nrows> by <ncols> subplots. "+
      "The kwargs currently supported are 'sharex=True|False', "+
