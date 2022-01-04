@@ -54,7 +54,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'O2sclpy'
-copyright = '2016-2020, Andrew W. Steiner'
+copyright = '2016-2022, Andrew W. Steiner'
 author = 'Andrew W. Steiner'
 
 # The version info for the project you're documenting, acts as replacement for
