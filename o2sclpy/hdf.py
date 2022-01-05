@@ -605,6 +605,291 @@ class hdf_file:
         return
 
 
+class acol_manager:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``acol_manager``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/acol_manager.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class acol_manager
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl_hdf.o2scl_hdf_create_acol_manager
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class acol_manager
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl_hdf.o2scl_hdf_free_acol_manager
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class acol_manager
+        
+        Returns: a acol_manager object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def get_env_var_name(self,env_var_name):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_env_var_name
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,env_var_name._ptr)
+        return
+
+    def set_env_var_name(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_env_var_name
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def verbose(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for acol_manager::verbose .
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    def get_type(self,type):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_type
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,type._ptr)
+        return
+
+    def set_type(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_type
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_table_obj(self,table_obj):
+        """
+        Get object of type :class:`table_units<>`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_table_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,table_obj._ptr)
+        return
+
+    def set_table_obj(self,value):
+        """
+        Set object of type :class:`table_units<>`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_table_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_table3d_obj(self,table3d_obj):
+        """
+        Get object of type :class:`table3d`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_table3d_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,table3d_obj._ptr)
+        return
+
+    def set_table3d_obj(self,value):
+        """
+        Set object of type :class:`table3d`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_table3d_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hist_obj(self,hist_obj):
+        """
+        Get object of type :class:`hist`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_hist_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,hist_obj._ptr)
+        return
+
+    def set_hist_obj(self,value):
+        """
+        Set object of type :class:`hist`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_hist_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hist_2d_obj(self,hist_2d_obj):
+        """
+        Get object of type :class:`hist_2d`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_hist_2d_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,hist_2d_obj._ptr)
+        return
+
+    def set_hist_2d_obj(self,value):
+        """
+        Set object of type :class:`hist_2d`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_hist_2d_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def int_obj(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_int_obj
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @int_obj.setter
+    def int_obj(self,value):
+        """
+        Setter function for acol_manager::int_obj .
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_int_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def char_obj(self):
+        """
+        Property of type ``ctypes.c_char``
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_char_obj
+        func.restype=ctypes.c_char
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @char_obj.setter
+    def char_obj(self,value):
+        """
+        Setter function for acol_manager::char_obj .
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_char_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char]
+        func(self._ptr,value)
+        return
+
+    @property
+    def double_obj(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_double_obj
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @double_obj.setter
+    def double_obj(self,value):
+        """
+        Setter function for acol_manager::double_obj .
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_double_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def size_t_obj(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_size_t_obj
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @size_t_obj.setter
+    def size_t_obj(self,value):
+        """
+        Setter function for acol_manager::size_t_obj .
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_size_t_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    def get_string_obj(self,string_obj):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_string_obj
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,string_obj._ptr)
+        return
+
+    def set_string_obj(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_string_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+
 def hdf_input_table(link,hf,t,name):
     """
         | Parameters:

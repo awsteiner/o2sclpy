@@ -6583,6 +6583,550 @@ class gen_test_number:
         return ret
 
 
+class comm_option_s:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``comm_option_s``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/comm_option_s.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class comm_option_s
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_comm_option_s
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class comm_option_s
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_comm_option_s
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class comm_option_s
+        
+        Returns: a comm_option_s object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @property
+    def shrt(self):
+        """
+        Property of type ``ctypes.c_char``
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_get_shrt
+        func.restype=ctypes.c_char
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @shrt.setter
+    def shrt(self,value):
+        """
+        Setter function for comm_option_s::shrt .
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_set_shrt
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char]
+        func(self._ptr,value)
+        return
+
+    def get_lng(self,lng):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_get_lng
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,lng._ptr)
+        return
+
+    def set_lng(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_set_lng
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_desc(self,desc):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_get_desc
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,desc._ptr)
+        return
+
+    def set_desc(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_set_desc
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def min_parms(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_get_min_parms
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @min_parms.setter
+    def min_parms(self,value):
+        """
+        Setter function for comm_option_s::min_parms .
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_set_min_parms
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def max_parms(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_get_max_parms
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @max_parms.setter
+    def max_parms(self,value):
+        """
+        Setter function for comm_option_s::max_parms .
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_set_max_parms
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    def get_parm_desc(self,parm_desc):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_get_parm_desc
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,parm_desc._ptr)
+        return
+
+    def set_parm_desc(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_set_parm_desc
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_help(self,help):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_get_help
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,help._ptr)
+        return
+
+    def set_help(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_set_help
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def type(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_get_type
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @type.setter
+    def type(self,value):
+        """
+        Setter function for comm_option_s::type .
+        """
+        func=self._link.o2scl.o2scl_comm_option_s_set_type
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+
+class cmd_line_arg:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``cmd_line_arg``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/cmd_line_arg.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class cmd_line_arg
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_cmd_line_arg
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class cmd_line_arg
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_cmd_line_arg
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class cmd_line_arg
+        
+        Returns: a cmd_line_arg object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def get_arg(self,arg):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_cmd_line_arg_get_arg
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,arg._ptr)
+        return
+
+    def set_arg(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_cmd_line_arg_set_arg
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def is_option(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_cmd_line_arg_get_is_option
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @is_option.setter
+    def is_option(self,value):
+        """
+        Setter function for cmd_line_arg::is_option .
+        """
+        func=self._link.o2scl.o2scl_cmd_line_arg_set_is_option
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def is_valid(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_cmd_line_arg_get_is_valid
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @is_valid.setter
+    def is_valid(self,value):
+        """
+        Setter function for cmd_line_arg::is_valid .
+        """
+        func=self._link.o2scl.o2scl_cmd_line_arg_set_is_valid
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def get_parms(self,parms):
+        """
+        Get object of type :class:`std::vector<std::string>`
+        """
+        func=self._link.o2scl.o2scl_cmd_line_arg_get_parms
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,parms._ptr)
+        return
+
+    def set_parms(self,value):
+        """
+        Set object of type :class:`std::vector<std::string>`
+        """
+        func=self._link.o2scl.o2scl_cmd_line_arg_set_parms
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+
+class cli:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``cli``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/cli.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class cli
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_cli
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class cli
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_cli
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class cli
+        
+        Returns: a cli object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @property
+    def sync_verbose(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_cli_get_sync_verbose
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @sync_verbose.setter
+    def sync_verbose(self,value):
+        """
+        Setter function for cli::sync_verbose .
+        """
+        func=self._link.o2scl.o2scl_cli_set_sync_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def gnu_intro(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_cli_get_gnu_intro
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @gnu_intro.setter
+    def gnu_intro(self,value):
+        """
+        Setter function for cli::gnu_intro .
+        """
+        func=self._link.o2scl.o2scl_cli_set_gnu_intro
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def get_desc(self,desc):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_cli_get_desc
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,desc._ptr)
+        return
+
+    def set_desc(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_cli_set_desc
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_cmd_name(self,cmd_name):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_cli_get_cmd_name
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,cmd_name._ptr)
+        return
+
+    def set_cmd_name(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_cli_set_cmd_name
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_addl_help_cmd(self,addl_help_cmd):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_cli_get_addl_help_cmd
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,addl_help_cmd._ptr)
+        return
+
+    def set_addl_help_cmd(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_cli_set_addl_help_cmd
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_addl_help_cli(self,addl_help_cli):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_cli_get_addl_help_cli
+        func.restype=ctypes.c_char_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,addl_help_cli._ptr)
+        return
+
+    def set_addl_help_cli(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_cli_set_addl_help_cli
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def set_verbose(self,v):
+        """
+        | Parameters:
+        | *v*: ``int``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_cli_set_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        ret=func(self._ptr,v)
+        return ret
+
+
 class shared_ptr_table_units(table_units):
     """
     Python interface for a shared pointer to a class of type ``table_units<>``

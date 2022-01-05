@@ -432,6 +432,39 @@ Class gen_test_number
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class comm_option_s
+-------------------
+
+.. autoclass:: o2sclpy.comm_option_s
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class cmd_line_arg
+------------------
+
+.. autoclass:: o2sclpy.cmd_line_arg
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class cli
+---------
+
+.. autoclass:: o2sclpy.cli
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class shared_ptr_table_units
 ----------------------------
 

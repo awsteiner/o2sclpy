@@ -3542,13 +3542,12 @@ class o2graph_plotter(yt_plot_base):
             curr_type=args[0]
 
             if curr_type not in acol_types:
-                print('cannot find',curr_type)
+                print("Command 'commands' cannot find type ",curr_type+'.')
+                print('List of valid types:')
+                print('')
                 print(acol_types)
                 return
 
-            print('O2graph commands for an object of type '+
-                  ter.type_str(str(curr_type))+':\n')
-            
             # C types
             int_ptr=ctypes.POINTER(ctypes.c_int)
             int_ptr_ptr=ctypes.POINTER(int_ptr)
@@ -3572,10 +3571,38 @@ class o2graph_plotter(yt_plot_base):
                            ctypes.byref(iptr),ctypes.byref(cptr))
 
             # comm_list is the list of acol commands for this type
+            print('Commands from acol for objects of type',
+                  ter.type_str(curr_type)+':')
+            print('')
             comm_list=get_ic_ptrs_to_list(size,iptr,cptr)
             
+            comm_list2=sorted(comm_list)
+            for i in range(0,len(comm_list2)):
+                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
+            comm_rows=screenify(comm_list2)
+            for i in range(0,len(comm_rows)):
+                print(comm_rows[i])
+            print('')
+
+            print('Commands from o2graph which do not require a current',
+                  'object.')
+            print('')
+            comm_list=[]
             for line in base_list:
                 comm_list.append(force_bytes(line[0]))
+
+            comm_list2=sorted(comm_list)
+            for i in range(0,len(comm_list2)):
+                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
+            comm_rows=screenify(comm_list2)
+            for i in range(0,len(comm_rows)):
+                print(comm_rows[i])
+            print('')
+                
+            print('Commands from o2graph for objects of type',
+                  ter.type_str(curr_type)+':')
+            print('')
+            comm_list=[]
             for line in extra_list:
                 if (curr_type==line[0] or
                     curr_type==force_bytes(line[0])):

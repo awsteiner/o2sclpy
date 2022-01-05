@@ -16,6 +16,17 @@ Class hdf_file
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class acol_manager
+------------------
+
+.. autoclass:: o2sclpy.acol_manager
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Function hdf_input_table
 ------------------------
 
