@@ -58,14 +58,14 @@ class o2graph_plotter(yt_plot_base):
     This class is not necessarily intended to be instantiated by the 
     end user. 
 
-    The function parameter `o2scl_hdf` must always be a ctypes DLL 
-    object which points to the libo2scl_hdf shared library (.so on
+    The function parameter `o2scl` must always be a ctypes DLL 
+    object which points to the libo2scl shared library (.so on
     linux and .dylib on OSX). The function parameter `amp` must
     always be a pointer to the 
     :ref:`o2scl_acol::acol_manager<o2scl:acol_manager>` object.
     """
 
-    def set_wrapper(self,o2scl_hdf,amp,args):
+    def set_wrapper(self,o2scl,amp,args):
         """
         Wrapper around :py:func:`o2sclpy.plot_base.set` which sets
         plot-related parameters and sends other parameters to
@@ -109,7 +109,7 @@ class o2graph_plotter(yt_plot_base):
             sizes[i+1]=len(args[i])
         ccp=ctypes.c_char_p(force_bytes(str_args))
     
-        parse_fn=o2scl_hdf.o2scl_acol_parse
+        parse_fn=o2scl.o2scl_acol_parse
         parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
                            size_type,ctypes.c_char_p]
             
@@ -120,7 +120,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::set_wrapper()
         return
 
-    def get_wrapper(self,o2scl_hdf,amp,args):
+    def get_wrapper(self,o2scl,amp,args):
         """
         Wrapper around :py:func:`o2sclpy.plot_base.get` which
         gets plot-related parameters and gets other parameters
@@ -151,7 +151,7 @@ class o2graph_plotter(yt_plot_base):
                 sizes[i+1]=len(args[i])
             ccp=ctypes.c_char_p(force_bytes(str_args))
         
-            parse_fn=o2scl_hdf.o2scl_acol_parse
+            parse_fn=o2scl.o2scl_acol_parse
             parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
                               size_type,ctypes.c_char_p]
         
@@ -160,7 +160,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::get_wrapper()
         return
             
-    def gen_acol(self,o2scl_hdf,amp,cmd_name,args):
+    def gen_acol(self,o2scl,amp,cmd_name,args):
         """
         Run a general ``acol`` command named ``cmd_name`` with arguments
         stored in ``args``. This function uses the O\ :sub:`2`\ scl function
@@ -177,7 +177,7 @@ class o2graph_plotter(yt_plot_base):
             sizes[i+1]=len(args[i])
         ccp=ctypes.c_char_p(force_bytes(str_args))
 
-        parse_fn=o2scl_hdf.o2scl_acol_parse
+        parse_fn=o2scl.o2scl_acol_parse
         parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
                            size_type,ctypes.c_char_p]
         
@@ -186,7 +186,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::gen_acol()
         return
 
-    def den_plot(self,o2scl_hdf,amp,args):
+    def den_plot(self,o2scl,amp,args):
         """
         Density plot from a ``table3d``, ``hist_2d``, ``tensor_grid``,
         ``tensor``, ``tensor<int>``, or ``tensor<size_t>`` object.
@@ -198,7 +198,7 @@ class o2graph_plotter(yt_plot_base):
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
 
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
 
         # Handle tensor and table3d types
         if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
@@ -224,7 +224,7 @@ class o2graph_plotter(yt_plot_base):
                           'in den-plot.')
                     return
                     
-                conv_fn=o2scl_hdf.o2scl_acol_tensor_to_table3d
+                conv_fn=o2scl.o2scl_acol_tensor_to_table3d
                 conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
                 conv_fn.restype=ctypes.c_int
                 
@@ -241,7 +241,7 @@ class o2graph_plotter(yt_plot_base):
             # Now that we are guaranteed to have a table3d
             # object to use, use that to create the density
             # plot
-            get_fn=o2scl_hdf.o2scl_acol_get_slice
+            get_fn=o2scl.o2scl_acol_get_slice
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr,
                              int_ptr,double_ptr_ptr,double_ptr_ptr]
@@ -375,7 +375,7 @@ class o2graph_plotter(yt_plot_base):
             # End of section for tensor types and table3d
         elif curr_type==b'hist_2d':
 
-            get_fn=o2scl_hdf.o2scl_acol_get_hist_2d
+            get_fn=o2scl.o2scl_acol_get_hist_2d
             get_fn.argtypes=[ctypes.c_void_p,int_ptr,double_ptr_ptr,
                              int_ptr,double_ptr_ptr,double_ptr_ptr]
 
@@ -449,7 +449,7 @@ class o2graph_plotter(yt_plot_base):
             cbar.ax.tick_params('both',length=6,width=1,which='major')
             cbar.ax.tick_params(labelsize=self.font*0.8)
 
-    def den_plot_rgb(self,o2scl_hdf,amp,args):
+    def den_plot_rgb(self,o2scl,amp,args):
         """
         Density plot from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
@@ -461,7 +461,7 @@ class o2graph_plotter(yt_plot_base):
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
 
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
 
         # Handle tensor and table3d types
         if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
@@ -485,7 +485,7 @@ class o2graph_plotter(yt_plot_base):
                           'in den-plot.')
                     return
                     
-                conv_fn=o2scl_hdf.o2scl_acol_tensor_to_table3d
+                conv_fn=o2scl.o2scl_acol_tensor_to_table3d
                 conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
                 conv_fn.restype=ctypes.c_int
                 
@@ -504,7 +504,7 @@ class o2graph_plotter(yt_plot_base):
             # Now that we are guaranteed to have a table3d
             # object to use, use that to create the density
             # plot
-            get_fn=o2scl_hdf.o2scl_acol_get_slice
+            get_fn=o2scl.o2scl_acol_get_slice
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr,
                              int_ptr,double_ptr_ptr,double_ptr_ptr]
@@ -663,7 +663,7 @@ class o2graph_plotter(yt_plot_base):
             cbar.ax.tick_params('both',length=6,width=1,which='major')
             cbar.ax.tick_params(labelsize=self.font*0.8)
 
-    def make_png(self,o2scl_hdf,amp,args):
+    def make_png(self,o2scl,amp,args):
         """
         Create png from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
@@ -675,7 +675,7 @@ class o2graph_plotter(yt_plot_base):
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
 
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
 
         # Handle tensor and table3d types
         if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
@@ -697,7 +697,7 @@ class o2graph_plotter(yt_plot_base):
                           'in den-plot.')
                     return
                     
-                conv_fn=o2scl_hdf.o2scl_acol_tensor_to_table3d
+                conv_fn=o2scl.o2scl_acol_tensor_to_table3d
                 conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
                 conv_fn.restype=ctypes.c_int
                 
@@ -714,7 +714,7 @@ class o2graph_plotter(yt_plot_base):
             # Now that we are guaranteed to have a table3d
             # object to use, use that to create the density
             # plot
-            get_fn=o2scl_hdf.o2scl_acol_get_slice
+            get_fn=o2scl.o2scl_acol_get_slice
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr,
                              int_ptr,double_ptr_ptr,double_ptr_ptr]
@@ -850,7 +850,7 @@ class o2graph_plotter(yt_plot_base):
             
         return
 
-    def plot(self,o2scl_hdf,amp,args):
+    def plot(self,o2scl,amp,args):
         """
         Plot a two-dimensional set of data
         """
@@ -862,13 +862,13 @@ class o2graph_plotter(yt_plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
                         
         if curr_type==b'table':
                             
             failed=False
 
-            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn=o2scl.o2scl_acol_get_column
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -921,11 +921,11 @@ class o2graph_plotter(yt_plot_base):
             # End of section for 'table' type
         elif curr_type==b'hist':
 
-            get_reps_fn=o2scl_hdf.o2scl_acol_get_hist_reps
+            get_reps_fn=o2scl.o2scl_acol_get_hist_reps
             get_reps_fn.argtypes=[ctypes.c_void_p,
                              int_ptr,double_ptr_ptr]
                             
-            get_wgts_fn=o2scl_hdf.o2scl_acol_get_hist_wgts
+            get_wgts_fn=o2scl.o2scl_acol_get_hist_wgts
             get_wgts_fn.argtypes=[ctypes.c_void_p,
                              int_ptr,double_ptr_ptr]
                             
@@ -970,11 +970,11 @@ class o2graph_plotter(yt_plot_base):
             # End of section for 'hist' type
         elif curr_type==b'prob_dens_mdim_amr':
 
-            get_base_fn=o2scl_hdf.o2scl_acol_pdma_get_base
+            get_base_fn=o2scl.o2scl_acol_pdma_get_base
             get_base_fn.argtypes=[ctypes.c_void_p,int_ptr,
                                   int_ptr,double_ptr_ptr,double_ptr_ptr]
                             
-            get_cube_fn=o2scl_hdf.o2scl_acol_pdma_get_cube
+            get_cube_fn=o2scl.o2scl_acol_pdma_get_cube
             get_cube_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
                                   double_ptr_ptr,double_ptr_ptr,
                                   double_ptr,double_ptr]
@@ -1042,13 +1042,13 @@ class o2graph_plotter(yt_plot_base):
         elif curr_type==b'vector<contour_line>':
 
             # Get the total number of contour lines
-            cont_n_fn=o2scl_hdf.o2scl_acol_contours_n
+            cont_n_fn=o2scl.o2scl_acol_contours_n
             cont_n_fn.argtypes=[ctypes.c_void_p]
             cont_n_fn.restype=ctypes.c_int
             nconts=cont_n_fn(amp)
 
             # Define types for extracting each contour line
-            cont_line_fn=o2scl_hdf.o2scl_acol_contours_line
+            cont_line_fn=o2scl.o2scl_acol_contours_line
             cont_line_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
                                    int_ptr,double_ptr_ptr,
                                    double_ptr_ptr]
@@ -1103,7 +1103,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::plot()
         return
                                  
-    def plot_color(self,o2scl_hdf,amp,args):
+    def plot_color(self,o2scl,amp,args):
         """
         Plot a set of line segments, coloring according to a third 
         variable.
@@ -1120,13 +1120,13 @@ class o2graph_plotter(yt_plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
                         
         if curr_type==b'table':
                             
             failed=False
 
-            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn=o2scl.o2scl_acol_get_column
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -1216,7 +1216,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::plot_color()
         return
                                  
-    def rplot(self,o2scl_hdf,amp,args):
+    def rplot(self,o2scl,amp,args):
         """
         Plot a region inside a curve or in between two curves
         """
@@ -1228,13 +1228,13 @@ class o2graph_plotter(yt_plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
                         
         if curr_type==b'table':
                             
             failed=False
 
-            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn=o2scl.o2scl_acol_get_column
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -1314,7 +1314,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::rplot()
         return
                                  
-    def scatter(self,o2scl_hdf,amp,args):
+    def scatter(self,o2scl,amp,args):
         """
         Generate a scatter plot.
         """
@@ -1328,13 +1328,13 @@ class o2graph_plotter(yt_plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
                         
         if curr_type==b'table':
                             
             failed=False
 
-            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn=o2scl.o2scl_acol_get_column
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -1446,7 +1446,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::scatter()
         return
                                  
-    def hist_plot(self,o2scl_hdf,amp,args):
+    def hist_plot(self,o2scl,amp,args):
         """
         Plot a histogram.
         """
@@ -1458,11 +1458,11 @@ class o2graph_plotter(yt_plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
                         
         if curr_type==b'table':
                             
-            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn=o2scl.o2scl_acol_get_column
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -1488,15 +1488,15 @@ class o2graph_plotter(yt_plot_base):
 
         elif curr_type==b'hist':
                     
-            get_reps_fn=o2scl_hdf.o2scl_acol_get_hist_reps
+            get_reps_fn=o2scl.o2scl_acol_get_hist_reps
             get_reps_fn.argtypes=[ctypes.c_void_p,
                              int_ptr,double_ptr_ptr]
                             
-            get_wgts_fn=o2scl_hdf.o2scl_acol_get_hist_wgts
+            get_wgts_fn=o2scl.o2scl_acol_get_hist_wgts
             get_wgts_fn.argtypes=[ctypes.c_void_p,
                              int_ptr,double_ptr_ptr]
                             
-            get_bins_fn=o2scl_hdf.o2scl_acol_get_hist_bins
+            get_bins_fn=o2scl.o2scl_acol_get_hist_bins
             get_bins_fn.argtypes=[ctypes.c_void_p,
                              int_ptr,double_ptr_ptr]
                             
@@ -1540,7 +1540,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::hist_plot()
         return
                                  
-    def hist2d_plot(self,o2scl_hdf,amp,args):
+    def hist2d_plot(self,o2scl,amp,args):
         """
         Plot a two-dimensional histogram.
         """
@@ -1554,11 +1554,11 @@ class o2graph_plotter(yt_plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
                         
         if curr_type==b'table':
                             
-            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn=o2scl.o2scl_acol_get_column
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -1613,28 +1613,28 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::hist2d_plot()
         return
                                  
-    def errorbar(self,o2scl_hdf,amp,args):
+    def errorbar(self,o2scl,amp,args):
         """
         Create a plot with error bars.
         """
 
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
                         
         if curr_type==b'table':
 
-            xv=table_get_column(o2scl_hdf,amp,args[0])
-            yv=table_get_column(o2scl_hdf,amp,args[1])
+            xv=table_get_column(o2scl,amp,args[0])
+            yv=table_get_column(o2scl,amp,args[1])
 
             if len(args)>=6 and args[2]=='None' or args[2]=='none':
                 if is_number(args[3]):
                     xerrv=float(args[3]);
                 else:
-                    xerrv=table_get_column(o2scl_hdf,amp,args[3])
+                    xerrv=table_get_column(o2scl,amp,args[3])
             if len(args)>=6 and args[3]=='None' or args[3]=='none':
                 if is_number(args[2]):
                     xerrv=float(args[2]);
                 else:
-                    xerrv=table_get_column(o2scl_hdf,amp,args[2])
+                    xerrv=table_get_column(o2scl,amp,args[2])
             elif len(args)>=6:
                 if is_number(args[2]):
                     if is_number(args[3]):
@@ -1676,14 +1676,14 @@ class o2graph_plotter(yt_plot_base):
                 elif is_number(args[2]):
                     xerrv=float(args[2])
                 else:
-                    xerrv=table_get_column(o2scl_hdf,amp,args[2])
+                    xerrv=table_get_column(o2scl,amp,args[2])
     
             if args[3]=='None' or args[3]=='none':
                 yerrv=0.0
             elif is_number(args[3]):
                 yerrv=float(args[3])
             else:
-                yerrv=table_get_column(o2scl_hdf,amp,args[3])
+                yerrv=table_get_column(o2scl,amp,args[3])
 
             if self.canvas_flag==False:
                 self.canvas()
@@ -1707,7 +1707,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::errorbar()
         return
                                  
-    def plot1(self,o2scl_hdf,amp,args):
+    def plot1(self,o2scl,amp,args):
         """
         Plot one array of data versus an integer x axis.
         """
@@ -1718,11 +1718,11 @@ class o2graph_plotter(yt_plot_base):
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
                         
         if curr_type==b'table':
             
-            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn=o2scl.o2scl_acol_get_column
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -1773,7 +1773,7 @@ class o2graph_plotter(yt_plot_base):
         elif (curr_type==b'double[]' or curr_type==b'int[]' or
               curr_type==b'size_t[]'):
 
-            get_fn=o2scl_hdf.o2scl_acol_get_double_arr
+            get_fn=o2scl.o2scl_acol_get_double_arr
             get_fn.argtypes=[ctypes.c_void_p,int_ptr,double_ptr_ptr]
                             
             id=ctypes.c_int(0)
@@ -1816,7 +1816,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::plot1()
         return
             
-    def plotv(self,o2scl_hdf,amp,args):
+    def plotv(self,o2scl,amp,args):
         """
         Plot one or two multiple vector specifications
         """
@@ -1827,14 +1827,14 @@ class o2graph_plotter(yt_plot_base):
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         int_ptr=ctypes.POINTER(ctypes.c_int)
         
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
         
         if curr_type==b'vector<contour_line>':
              print('Store and clear the vector<contour_line> object '+
                    'before using \'plotv\'.')
              return 1
         
-        conv_fn=o2scl_hdf.o2scl_acol_mult_vectors_to_conts
+        conv_fn=o2scl.o2scl_acol_mult_vectors_to_conts
         conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                           ctypes.c_char_p]
         conv_fn.restype=ctypes.c_int
@@ -1863,13 +1863,13 @@ class o2graph_plotter(yt_plot_base):
         
         
         # Get the total number of contour lines
-        cont_n_fn=o2scl_hdf.o2scl_acol_contours_n
+        cont_n_fn=o2scl.o2scl_acol_contours_n
         cont_n_fn.argtypes=[ctypes.c_void_p]
         cont_n_fn.restype=ctypes.c_int
         nconts=cont_n_fn(amp)
 
         # Define types for extracting each contour line
-        cont_line_fn=o2scl_hdf.o2scl_acol_contours_line
+        cont_line_fn=o2scl.o2scl_acol_contours_line
         cont_line_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
                                int_ptr,double_ptr_ptr,
                                double_ptr_ptr]
@@ -2012,7 +2012,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::print_param_docs()
         return
             
-    def parse_argv(self,argv,o2scl_hdf):
+    def parse_argv(self,argv,o2scl):
         """
         Parse command-line arguments.
 
@@ -2024,10 +2024,10 @@ class o2graph_plotter(yt_plot_base):
         """
 
         # Create an acol_manager object and get the pointer
-        o2scl_hdf.o2scl_create_acol_manager.restype=ctypes.c_void_p
-        amp=o2scl_hdf.o2scl_create_acol_manager()
+        o2scl.o2scl_create_acol_manager.restype=ctypes.c_void_p
+        amp=o2scl.o2scl_create_acol_manager()
 
-        names_fn=o2scl_hdf.o2scl_acol_set_names
+        names_fn=o2scl.o2scl_acol_set_names
         names_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_char_p,
                            ctypes.c_int,ctypes.c_char_p,ctypes.c_int,
                            ctypes.c_char_p]
@@ -2076,7 +2076,7 @@ class o2graph_plotter(yt_plot_base):
             # Call the alias_counts() function to find out how big the
             # destination arrays need to be. This two step-process
             # allows python to handle the memory allocation.
-            count_fn=o2scl_hdf.o2scl_acol_alias_counts
+            count_fn=o2scl.o2scl_acol_alias_counts
             count_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,int_ptr,
                                ctypes.c_char_p,int_ptr,int_ptr]
             n_new=ctypes.c_int(0)
@@ -2089,7 +2089,7 @@ class o2graph_plotter(yt_plot_base):
             tcarr2=(ctypes.c_char*s_new.value)()
 
             # Setup and call alias function
-            alias_fn=o2scl_hdf.o2scl_acol_apply_aliases
+            alias_fn=o2scl.o2scl_acol_apply_aliases
             alias_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,int_ptr,
                                ctypes.c_char_p,int_ptr,ctypes.c_char_p]
             alias_fn(amp,len(argv),tiarr,tcarr,tiarr2,tcarr2)
@@ -2128,18 +2128,18 @@ class o2graph_plotter(yt_plot_base):
                 else:
                     strlist=line.split(' ')
                     strlist[0]='-'+strlist[0]
-                    self.parse_string_list(strlist,o2scl_hdf,amp)
+                    self.parse_string_list(strlist,o2scl,amp)
         else:
             strlist=[str(argv[i]) for i in range(1,len(argv))]
             if self.verbose>2:
                 print('Number of arguments:',len(strlist),'arguments.')
                 print('Argument List:',strlist)
-            self.parse_string_list(strlist,o2scl_hdf,amp)
+            self.parse_string_list(strlist,o2scl,amp)
 
         # End of function o2graph_plotter::parse_argv()
         return
 
-    def yt_add_vol(self,o2scl_hdf,amp,keyname='o2graph_vol'):
+    def yt_add_vol(self,o2scl,amp,keyname='o2graph_vol'):
         """
         Add a volume source to a yt visualization from a
         tensor_grid object.
@@ -2151,7 +2151,7 @@ class o2graph_plotter(yt_plot_base):
         double_ptr=ctypes.POINTER(ctypes.c_double)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
 
         if curr_type==b'tensor_grid':
             self.yt_check_backend()
@@ -2162,7 +2162,7 @@ class o2graph_plotter(yt_plot_base):
                 import TransferFunctionHelper
 
             # Set up wrapper for get function
-            get_fn=o2scl_hdf.o2scl_acol_get_tensor_grid3
+            get_fn=o2scl.o2scl_acol_get_tensor_grid3
             get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr,
                              int_ptr,double_ptr_ptr,
                              double_ptr_ptr,double_ptr_ptr,
@@ -2259,7 +2259,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::yt_add_vol()
         return
         
-    def den_plot_anim(self,o2scl_hdf,amp,args):
+    def den_plot_anim(self,o2scl,amp,args):
         """
         Create an mp4 animation of a density plot from a tensor_grid3 
         object. The first argument specifies which tensor index is
@@ -2278,12 +2278,12 @@ class o2graph_plotter(yt_plot_base):
         double_ptr=ctypes.POINTER(ctypes.c_double)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
         
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
 
         if curr_type==b'tensor_grid':
 
             # Set up wrapper for get function
-            get_fn=o2scl_hdf.o2scl_acol_get_tensor_grid3
+            get_fn=o2scl.o2scl_acol_get_tensor_grid3
             get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr,
                              int_ptr,double_ptr_ptr,
                              double_ptr_ptr,double_ptr_ptr,
@@ -2552,7 +2552,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::den_plot_anim()
         return
         
-    def help_func(self,o2scl_hdf,amp,args):
+    def help_func(self,o2scl,amp,args):
         """
         Function to process the help command.
         """
@@ -2565,7 +2565,7 @@ class o2graph_plotter(yt_plot_base):
         str_line=ter.horiz_line()
 
         # Get current type
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
 
         if len(args)==1:
             cmd=args[0]
@@ -2723,7 +2723,7 @@ class o2graph_plotter(yt_plot_base):
                               cmd=='tensor_grid' or
                               cmd=='uniform_grid<double>' or
                               cmd=='vector<contour_line>')):
-            self.gen_acol(o2scl_hdf,amp,'help',args)
+            self.gen_acol(o2scl,amp,'help',args)
             finished=True
             
         if match==False and finished==False:
@@ -2744,7 +2744,7 @@ class o2graph_plotter(yt_plot_base):
             if len(args)>=2:
 
                 # Function interface
-                get_fn=o2scl_hdf.o2scl_acol_get_cli_options_type
+                get_fn=o2scl.o2scl_acol_get_cli_options_type
                 get_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,int_ptr_ptr,
                                  char_ptr_ptr]
                 get_fn.restype=ctypes.c_int
@@ -2775,7 +2775,7 @@ class o2graph_plotter(yt_plot_base):
                 # Check acol options based on the current type
                 
                 # Function interface
-                get_fn=o2scl_hdf.o2scl_acol_get_cli_options
+                get_fn=o2scl.o2scl_acol_get_cli_options
                 get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
                                  char_ptr_ptr]
                 get_fn.restype=ctypes.c_int
@@ -2803,7 +2803,7 @@ class o2graph_plotter(yt_plot_base):
             # If there was no match, do a command list
             if acol_match==False:
 
-                desc_fn=o2scl_hdf.o2scl_acol_cli_option_desc
+                desc_fn=o2scl.o2scl_acol_cli_option_desc
                 desc_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,
                                   char_ptr_ptr]
                 desc_fn.restype=ctypes.c_int
@@ -2873,7 +2873,7 @@ class o2graph_plotter(yt_plot_base):
                     print(tlist[j])
             else:
                 # Otherwise, it's an acol command so
-                self.gen_acol(o2scl_hdf,amp,'help',args)
+                self.gen_acol(o2scl,amp,'help',args)
             
         # If the user specified 'help set', then print
         # the o2graph parameter documentation
@@ -2965,7 +2965,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::yt_tf_func()
         return
 
-    def yt_path_func(self,o2scl_hdf,amp,args):
+    def yt_path_func(self,o2scl,amp,args):
         """
         Add a path to the list of yt animations for the next
         yt render.
@@ -2976,7 +2976,7 @@ class o2graph_plotter(yt_plot_base):
         
         return
 
-    def yt_ann_func(self,o2scl_hdf,amp,args):
+    def yt_ann_func(self,o2scl,amp,args):
         """
         Add the o2graph commands specified in `args` to the 
         list of yt annotations to be used in the next yt render.
@@ -2995,7 +2995,7 @@ class o2graph_plotter(yt_plot_base):
         
         return
 
-    def yt_scatter(self,o2scl_hdf,amp,args):
+    def yt_scatter(self,o2scl,amp,args):
         """
         Create a 3D scatter plot with yt using data from an
         O\ :sub:`2`\ scl table object
@@ -3031,7 +3031,7 @@ class o2graph_plotter(yt_plot_base):
         double_ptr=ctypes.POINTER(ctypes.c_double)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
                     
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
 
         if curr_type==b'table':
             if self.yt_check_backend()==1:
@@ -3041,7 +3041,7 @@ class o2graph_plotter(yt_plot_base):
             from yt.visualization.volume_rendering.api \
                 import PointSource
                         
-            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn=o2scl.o2scl_acol_get_column
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -3284,7 +3284,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::yt_scatter()
         return
         
-    def yt_vertex_list(self,o2scl_hdf,amp,args):
+    def yt_vertex_list(self,o2scl,amp,args):
         """
         Plot a series of line segments between a list of
         vertices specified in an O\ :sub:`2`\ scl table.
@@ -3313,7 +3313,7 @@ class o2graph_plotter(yt_plot_base):
         double_ptr=ctypes.POINTER(ctypes.c_double)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
                     
-        curr_type=o2scl_get_type(o2scl_hdf,amp)
+        curr_type=o2scl_get_type(o2scl,amp)
 
         if curr_type==b'table':
             if self.yt_check_backend()==1:
@@ -3323,7 +3323,7 @@ class o2graph_plotter(yt_plot_base):
             from yt.visualization.volume_rendering.api \
                 import LineSource
                         
-            get_fn=o2scl_hdf.o2scl_acol_get_column
+            get_fn=o2scl.o2scl_acol_get_column
             get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -3425,7 +3425,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::yt_vertex_list()
         return
         
-    def commands(self,o2scl_hdf,amp,args):
+    def commands(self,o2scl,amp,args):
         """
         Output the currently available commands.
         """
@@ -3445,12 +3445,12 @@ class o2graph_plotter(yt_plot_base):
         cptr=char_ptr()
             
         # Function interfaces
-        get_fn=o2scl_hdf.o2scl_acol_get_cli_options
+        get_fn=o2scl.o2scl_acol_get_cli_options
         get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
                          char_ptr_ptr]
         get_fn.restype=ctypes.c_int
 
-        get_type_fn=o2scl_hdf.o2scl_acol_get_cli_options_type
+        get_type_fn=o2scl.o2scl_acol_get_cli_options_type
         get_type_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,
                               int_ptr_ptr,char_ptr_ptr]
         get_type_fn.restype=ctypes.c_int
@@ -3498,7 +3498,7 @@ class o2graph_plotter(yt_plot_base):
                       ter.type_str(str(this_type))+':\n')
                 
                 # Function interface
-                get_fn=o2scl_hdf.o2scl_acol_get_cli_options_type
+                get_fn=o2scl.o2scl_acol_get_cli_options_type
                 get_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,int_ptr_ptr,
                                  char_ptr_ptr]
                 get_fn.restype=ctypes.c_int
@@ -3555,7 +3555,7 @@ class o2graph_plotter(yt_plot_base):
             char_ptr_ptr=ctypes.POINTER(char_ptr)
         
             # Function interface
-            get_fn=o2scl_hdf.o2scl_acol_get_cli_options_type
+            get_fn=o2scl.o2scl_acol_get_cli_options_type
             get_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,int_ptr_ptr,
                              char_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -3623,7 +3623,7 @@ class o2graph_plotter(yt_plot_base):
             double_ptr_ptr=ctypes.POINTER(double_ptr)
             char_ptr_ptr=ctypes.POINTER(char_ptr)
             
-            curr_type=o2scl_get_type(o2scl_hdf,amp)
+            curr_type=o2scl_get_type(o2scl,amp)
 
             if curr_type==b'':
                 print('O2graph commands which do not require a '+
@@ -3639,7 +3639,7 @@ class o2graph_plotter(yt_plot_base):
             char_ptr_ptr=ctypes.POINTER(char_ptr)
         
             # Function interface
-            get_fn=o2scl_hdf.o2scl_acol_get_cli_options
+            get_fn=o2scl.o2scl_acol_get_cli_options
             get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
                              char_ptr_ptr]
             get_fn.restype=ctypes.c_int
@@ -3673,7 +3673,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::commands()
         return
 
-    def yt_save_annotate(self,o2scl_hdf,amp,fname):
+    def yt_save_annotate(self,o2scl,amp,fname):
         """
         Create a .png image, then add 2D annotations, 
         save to file named 'fname', and then apply any filters
@@ -3703,7 +3703,7 @@ class o2graph_plotter(yt_plot_base):
             self.fig=self.yt_scene._render_figure
             self.canvas_flag=True
             print('Adding annotations:')
-            self.parse_string_list(self.yt_ann,o2scl_hdf,amp)
+            self.parse_string_list(self.yt_ann,o2scl,amp)
             print('Done adding annotations:')
             #self.text(0.1,0.9,'x',color='w',fontsize=self.font*1.25,
                 #transform=tf)
@@ -3913,7 +3913,7 @@ class o2graph_plotter(yt_plot_base):
             os.system('mv /tmp/yt_filtered.png '+fname)
         return
     
-    def yt_render(self,o2scl_hdf,amp,fname,mov_fname=''):
+    def yt_render(self,o2scl,amp,fname,mov_fname=''):
         """
         Complete the yt render and save the image to a file. If necessary,
         compile the images into a movie and save into the specified
@@ -3931,7 +3931,7 @@ class o2graph_plotter(yt_plot_base):
         if len(self.yt_path)==0:
 
             # No path, so just call save and finish
-            self.yt_save_annotate(o2scl_hdf,amp,fname);
+            self.yt_save_annotate(o2scl,amp,fname);
 
         else:
 
@@ -3958,7 +3958,7 @@ class o2graph_plotter(yt_plot_base):
             # Render initial frame
             i_frame=0
             fname2=self._make_fname(prefix,suffix,i_frame,n_frames)
-            self.yt_save_annotate(o2scl_hdf,amp,fname2);
+            self.yt_save_annotate(o2scl,amp,fname2);
 
             # Loop over all movements
             for ip in range(0,len(self.yt_path)):
@@ -4028,7 +4028,7 @@ class o2graph_plotter(yt_plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_save_annotate(o2scl_hdf,amp,fname2);
+                        self.yt_save_annotate(o2scl,amp,fname2);
                     
                         # End of 'for ifr in range(0,n_frames_move)'
                     
@@ -4068,7 +4068,7 @@ class o2graph_plotter(yt_plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_save_annotate(o2scl_hdf,amp,fname2);
+                        self.yt_save_annotate(o2scl,amp,fname2);
                         
                         # End of 'for ifr in range(0,n_frames_move)'
 
@@ -4129,7 +4129,7 @@ class o2graph_plotter(yt_plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_save_annotate(o2scl_hdf,amp,fname2);
+                        self.yt_save_annotate(o2scl,amp,fname2);
 
                         # End of 'for ifr in range(0,n_frames_move)'
                         
@@ -4190,7 +4190,7 @@ class o2graph_plotter(yt_plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_save_annotate(o2scl_hdf,amp,fname2);
+                        self.yt_save_annotate(o2scl,amp,fname2);
 
                         # End of 'for ifr in range(0,n_frames_move)'
                         
@@ -4278,7 +4278,7 @@ class o2graph_plotter(yt_plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_save_annotate(o2scl_hdf,amp,fname2);
+                        self.yt_save_annotate(o2scl,amp,fname2);
 
                         # End of 'for ifr in range(0,n_frames_move)'
                         
@@ -4315,7 +4315,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::yt_render()
         return
 
-    def parse_string_list(self,strlist,o2scl_hdf,amp):
+    def parse_string_list(self,strlist,o2scl,amp):
         """
         Parse a list of strings.
 
@@ -4415,7 +4415,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
                     else:
-                        self.set_wrapper(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                        self.set_wrapper(o2scl,amp,strlist[ix+1:ix_next])
                         
                 elif cmd_name=='cmap':
 
@@ -4448,7 +4448,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
                     else:
-                        self.make_png(o2scl_hdf,amp,
+                        self.make_png(o2scl,amp,
                                       strlist[ix+1:ix_next])
                         
                 elif cmd_name=='get':
@@ -4460,7 +4460,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<2:
                         self.get('No parameter specified to get.')
                     else:
-                        self.get_wrapper(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                        self.get_wrapper(o2scl,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='commands':
                     
@@ -4468,7 +4468,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process commands.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.commands(o2scl_hdf,amp,
+                    self.commands(o2scl,amp,
                                   strlist[ix+1:ix_next])
                     
                 elif cmd_name=='yt-add-vol':
@@ -4477,7 +4477,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process yt-add-vol.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.yt_add_vol(o2scl_hdf,amp)
+                    self.yt_add_vol(o2scl,amp)
                     
                 elif cmd_name=='yt-scatter':
 
@@ -4488,7 +4488,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-scatter.')
                     else:
-                        self.yt_scatter(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                        self.yt_scatter(o2scl,amp,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-path':
 
@@ -4502,7 +4502,7 @@ class o2graph_plotter(yt_plot_base):
                     elif ix_next-ix<4:
                         print('Not enough parameters for yt-path.')
                     else:
-                        self.yt_path_func(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                        self.yt_path_func(o2scl,amp,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-ann':
 
@@ -4513,7 +4513,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-ann.')
                     else:
-                        self.yt_ann_func(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                        self.yt_ann_func(o2scl,amp,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-text':
 
@@ -4622,7 +4622,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-vertex-list.')
                     else:
-                        self.yt_vertex_list(o2scl_hdf,amp,
+                        self.yt_vertex_list(o2scl,amp,
                                             strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-source-list':
@@ -4661,9 +4661,9 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for yt-render.')
                     elif ix_next-ix<3:
-                        self.yt_render(o2scl_hdf,amp,strlist[ix+1])
+                        self.yt_render(o2scl,amp,strlist[ix+1])
                     else:
-                        self.yt_render(o2scl_hdf,amp,strlist[ix+1],
+                        self.yt_render(o2scl,amp,strlist[ix+1],
                                        mov_fname=strlist[ix+2])
 
                 elif cmd_name=='yt-tf':
@@ -4680,7 +4680,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process help.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.help_func(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.help_func(o2scl,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='plot':
                     
@@ -4688,7 +4688,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process plot.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.plot(o2scl,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='plot-color':
                     
@@ -4696,7 +4696,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process plot-color.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.plot_color(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.plot_color(o2scl,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='rplot':
                     
@@ -4704,7 +4704,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process rplot.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.rplot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.rplot(o2scl,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='scatter':
                     
@@ -4712,7 +4712,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process scatter.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.scatter(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.scatter(o2scl,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='hist-plot':
                     
@@ -4720,7 +4720,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process hist-plot.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.hist_plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.hist_plot(o2scl,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='errorbar':
                     
@@ -4728,7 +4728,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process errorbar.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.errorbar(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.errorbar(o2scl,amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='hist2d-plot':
                     
@@ -4736,7 +4736,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process hist2d-plot.')
                         print('args:',strlist[ix:ix_next])
                         
-                    self.hist2d_plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.hist2d_plot(o2scl,amp,strlist[ix+1:ix_next])
                             
                 elif cmd_name=='den-plot':
                     
@@ -4744,7 +4744,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process den-plot.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.den_plot(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.den_plot(o2scl,amp,strlist[ix+1:ix_next])
                 
                 elif cmd_name=='den-plot-rgb':
                     
@@ -4752,7 +4752,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process den-plot-rgb.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.den_plot_rgb(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.den_plot_rgb(o2scl,amp,strlist[ix+1:ix_next])
                 
                 elif cmd_name=='den-plot-anim':
                     
@@ -4760,7 +4760,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process den-plot-anim.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.den_plot_anim(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.den_plot_anim(o2scl,amp,strlist[ix+1:ix_next])
                 
                 elif cmd_name=='plot1':
                     
@@ -4768,7 +4768,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process plot1.')
                         print('args:',strlist[ix:ix_next])
                         
-                    self.plot1(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                    self.plot1(o2scl,amp,strlist[ix+1:ix_next])
                             
                 elif cmd_name=='plotv':
                     
@@ -4779,7 +4779,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for plotv option.')
                     else:
-                        self.plotv(o2scl_hdf,amp,strlist[ix+1:ix_next])
+                        self.plotv(o2scl,amp,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='text':
                     
@@ -5217,7 +5217,7 @@ class o2graph_plotter(yt_plot_base):
                     if self.verbose>2:
                         print('Process acol command '+cmd_name+'.')
                         print('args:',strlist[ix:ix_next])
-                    self.gen_acol(o2scl_hdf,amp,cmd_name,
+                    self.gen_acol(o2scl,amp,cmd_name,
                                   strlist[ix+1:ix_next])
                     
                 # Increment to the next option

@@ -80,21 +80,6 @@ class linker:
     Main o2scl library handle
     """
 
-    o2scl_hdf=0
-    """
-    O2scl HDF library handle
-    """
-
-    o2scl_part=0
-    """
-    O2scl particle library handle
-    """
-
-    o2scl_eos=0
-    """
-    O2scl EOS library handle
-    """
-
     o2scl_addl=[]
     """
     Additional library handles
@@ -110,18 +95,11 @@ class linker:
     The o2scl_settings object
     """
 
-    def link_o2scl(self,include_part=True,include_eos=True):
+    def link_o2scl(self)
         """
-        A function for linking the o2scl libraries. If 
-        ``include_part`` is true, then the ``o2scl_part`` library is
-        loaded. If 
-        ``include_eos`` is true, then the ``o2scl_eos`` library is
-        loaded. The ``o2scl_hdf`` library is always loaded.
+        A function for linking the o2scl libraries.
         """
 
-        if include_eos==True and include_part==False:
-            raise Exception('Cannot include o2scl_eos without o2scl_part.')
-    
         # Future: it appears we may need to fix the string comparisons in the
         # code below and force conversion to byte strings (even though for now
         # this code seems to work)
@@ -182,45 +160,11 @@ class linker:
                 self.o2scl=ctypes.CDLL(self.o2scl_lib_dir+
                                        '/libo2scl.dylib',
                                   mode=ctypes.RTLD_GLOBAL)
-                if self.verbose>0:
-                    print('Loading',self.o2scl_lib_dir+
-                          '/libo2scl_hdf.dylib.')
-                self.o2scl_hdf=ctypes.CDLL(self.o2scl_lib_dir+
-                                           '/libo2scl_hdf.dylib',
-                                           mode=ctypes.RTLD_GLOBAL)
-                if include_part:
-                    if self.verbose>0:
-                        print('Loading',self.o2scl_lib_dir+
-                              '/libo2scl_part.dylib.')
-                    self.o2scl_part=ctypes.CDLL(self.o2scl_lib_dir+
-                                           '/libo2scl_part.dylib',
-                                                mode=ctypes.RTLD_GLOBAL)
-                    if include_eos:
-                        if self.verbose>0:
-                            print('Loading',self.o2scl_lib_dir+
-                                  '/libo2scl_eos.dylib.')
-                        self.o2scl_eos=ctypes.CDLL(self.o2scl_lib_dir+
-                                                   '/libo2scl_eos.dylib',
-                                                   mode=ctypes.RTLD_GLOBAL)
             else:
                 if self.verbose>0:
                     print('Loading libo2scl.dylib.')
                 self.o2scl=ctypes.CDLL('libo2scl.dylib',
                                        mode=ctypes.RTLD_GLOBAL)
-                if self.verbose>0:
-                    print('Loading libo2scl_hdf.dylib.')
-                self.o2scl_hdf=ctypes.CDLL('libo2scl_hdf.dylib',
-                                      mode=ctypes.RTLD_GLOBAL)
-                if include_part:
-                    if self.verbose>0:
-                        print('Loading libo2scl_part.dylib.')
-                    self.o2scl_part=ctypes.CDLL('libo2scl_part.dylib',
-                                          mode=ctypes.RTLD_GLOBAL)
-                    if include_eos:
-                        if self.verbose>0:
-                            print('Loading libo2scl_eos.dylib.')
-                        self.o2scl_eos=ctypes.CDLL('libo2scl_eos.dylib',
-                                              mode=ctypes.RTLD_GLOBAL)
                 
             if self.verbose>0:
                 print('Done loading o2scl libraries.')
@@ -269,44 +213,12 @@ class linker:
                     print('Loading o2scl.')
                 self.o2scl=ctypes.CDLL(find_library("o2scl"),
                                   mode=ctypes.RTLD_GLOBAL)
-                if self.verbose>0:
-                    print('Loading o2scl_hdf.')
-                self.o2scl_hdf=ctypes.CDLL(find_library("o2scl_hdf"),
-                                      mode=ctypes.RTLD_GLOBAL)
-                if include_part:
-                    if self.verbose>0:
-                        print('Loading o2scl_part.')
-                    self.o2scl_part=ctypes.CDLL(find_library("o2scl_part"),
-                                          mode=ctypes.RTLD_GLOBAL)
-                    if include_eos:
-                        if self.verbose>0:
-                            print('Loading o2scl_eos.')
-                        self.o2scl_eos=ctypes.CDLL(find_library("o2scl_eos"),
-                                              mode=ctypes.RTLD_GLOBAL)
+                
             else:
                 if self.verbose>0:
                     print('Loading',self.o2scl_lib_dir+'/libo2scl.so .')
                 self.o2scl=ctypes.CDLL(self.o2scl_lib_dir+'/libo2scl.so',
                                   mode=ctypes.RTLD_GLOBAL)
-                if self.verbose>0:
-                    print('Loading',self.o2scl_lib_dir+'/libo2scl_hdf.so .')
-                self.o2scl_hdf=ctypes.CDLL(self.o2scl_lib_dir+
-                                           '/libo2scl_hdf.so',
-                                      mode=ctypes.RTLD_GLOBAL)
-                if include_part:
-                    if self.verbose>0:
-                        print('Loading',self.o2scl_lib_dir+
-                              '/libo2scl_part.so .')
-                    self.o2scl_part=ctypes.CDLL(self.o2scl_lib_dir+
-                                               '/libo2scl_part.so',
-                                          mode=ctypes.RTLD_GLOBAL)
-                    if include_eos:
-                        if self.verbose>0:
-                            print('Loading',self.o2scl_lib_dir+
-                                  '/libo2scl_eos.so .')
-                        self.o2scl_eos=ctypes.CDLL(self.o2scl_lib_dir+
-                                                   '/libo2scl_eos.so',
-                                              mode=ctypes.RTLD_GLOBAL)
         
             if self.verbose>0:
                 print('Done loading o2scl libraries.')

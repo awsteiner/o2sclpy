@@ -1310,36 +1310,6 @@ class lib_settings_class:
         ret=func(self._ptr,dir_)
         return ret
 
-    def eos_installed(self):
-        """
-        | Returns: a Python boolean
-        """
-        func=self._link.o2scl.o2scl_lib_settings_class_eos_installed
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr)
-        return ret
-
-    def part_installed(self):
-        """
-        | Returns: a Python boolean
-        """
-        func=self._link.o2scl.o2scl_lib_settings_class_part_installed
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr)
-        return ret
-
-    def hdf_support(self):
-        """
-        | Returns: a Python boolean
-        """
-        func=self._link.o2scl.o2scl_lib_settings_class_hdf_support
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p]
-        ret=func(self._ptr)
-        return ret
-
     def openmp_support(self):
         """
         | Returns: a Python boolean
