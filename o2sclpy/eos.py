@@ -49,7 +49,7 @@ class eos_base:
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_base
+            f=link.o2scl.o2scl_create_eos_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -65,7 +65,7 @@ class eos_base:
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_base
+            f=self._link.o2scl.o2scl_free_eos_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -86,7 +86,7 @@ class eos_base:
         """
         Get object of type :class:`o2scl::thermo`
         """
-        func=self._link.o2scl_eos.o2scl_eos_base_get_def_thermo
+        func=self._link.o2scl.o2scl_eos_base_get_def_thermo
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,def_thermo._ptr)
         return
@@ -95,7 +95,7 @@ class eos_base:
         """
         Set object of type :class:`o2scl::thermo`
         """
-        func=self._link.o2scl_eos.o2scl_eos_base_set_def_thermo
+        func=self._link.o2scl.o2scl_eos_base_set_def_thermo
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -120,7 +120,7 @@ class eos_had_base(eos_base):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_had_base
+            f=link.o2scl.o2scl_create_eos_had_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -136,7 +136,7 @@ class eos_had_base(eos_base):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_had_base
+            f=self._link.o2scl.o2scl_free_eos_had_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -158,7 +158,7 @@ class eos_had_base(eos_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_get_eoa
+        func=self._link.o2scl.o2scl_eos_had_base_get_eoa
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -168,7 +168,7 @@ class eos_had_base(eos_base):
         """
         Setter function for eos_had_base::eoa .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_set_eoa
+        func=self._link.o2scl.o2scl_eos_had_base_set_eoa
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -178,7 +178,7 @@ class eos_had_base(eos_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_get_msom
+        func=self._link.o2scl.o2scl_eos_had_base_get_msom
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -188,7 +188,7 @@ class eos_had_base(eos_base):
         """
         Setter function for eos_had_base::msom .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_set_msom
+        func=self._link.o2scl.o2scl_eos_had_base_set_msom
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -198,7 +198,7 @@ class eos_had_base(eos_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_get_comp
+        func=self._link.o2scl.o2scl_eos_had_base_get_comp
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -208,7 +208,7 @@ class eos_had_base(eos_base):
         """
         Setter function for eos_had_base::comp .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_set_comp
+        func=self._link.o2scl.o2scl_eos_had_base_set_comp
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -218,7 +218,7 @@ class eos_had_base(eos_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_get_n0
+        func=self._link.o2scl.o2scl_eos_had_base_get_n0
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -228,7 +228,7 @@ class eos_had_base(eos_base):
         """
         Setter function for eos_had_base::n0 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_set_n0
+        func=self._link.o2scl.o2scl_eos_had_base_set_n0
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -238,7 +238,7 @@ class eos_had_base(eos_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_get_esym
+        func=self._link.o2scl.o2scl_eos_had_base_get_esym
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -248,7 +248,7 @@ class eos_had_base(eos_base):
         """
         Setter function for eos_had_base::esym .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_set_esym
+        func=self._link.o2scl.o2scl_eos_had_base_set_esym
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -258,7 +258,7 @@ class eos_had_base(eos_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_get_kprime
+        func=self._link.o2scl.o2scl_eos_had_base_get_kprime
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -268,7 +268,7 @@ class eos_had_base(eos_base):
         """
         Setter function for eos_had_base::kprime .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_set_kprime
+        func=self._link.o2scl.o2scl_eos_had_base_set_kprime
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -278,7 +278,7 @@ class eos_had_base(eos_base):
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_get_err_nonconv
+        func=self._link.o2scl.o2scl_eos_had_base_get_err_nonconv
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -288,7 +288,7 @@ class eos_had_base(eos_base):
         """
         Setter function for eos_had_base::err_nonconv .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_set_err_nonconv
+        func=self._link.o2scl.o2scl_eos_had_base_set_err_nonconv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -297,7 +297,7 @@ class eos_had_base(eos_base):
         """
         Get object of type :class:`o2scl::fermion`
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_get_def_neutron
+        func=self._link.o2scl.o2scl_eos_had_base_get_def_neutron
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,def_neutron._ptr)
         return
@@ -306,7 +306,7 @@ class eos_had_base(eos_base):
         """
         Set object of type :class:`o2scl::fermion`
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_set_def_neutron
+        func=self._link.o2scl.o2scl_eos_had_base_set_def_neutron
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -315,7 +315,7 @@ class eos_had_base(eos_base):
         """
         Get object of type :class:`o2scl::fermion`
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_get_def_proton
+        func=self._link.o2scl.o2scl_eos_had_base_get_def_proton
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,def_proton._ptr)
         return
@@ -324,7 +324,7 @@ class eos_had_base(eos_base):
         """
         Set object of type :class:`o2scl::fermion`
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_set_def_proton
+        func=self._link.o2scl.o2scl_eos_had_base_set_def_proton
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -337,7 +337,7 @@ class eos_had_base(eos_base):
         | *th*: :class:`o2scl::thermo` object
         | Returns: a Python int
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_e
+        func=self._link.o2scl.o2scl_eos_had_base_calc_e
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,n._ptr,p._ptr,th._ptr)
@@ -351,7 +351,7 @@ class eos_had_base(eos_base):
         | *th*: :class:`o2scl::thermo` object
         | Returns: a Python int
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_p
+        func=self._link.o2scl.o2scl_eos_had_base_calc_p
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,n._ptr,p._ptr,th._ptr)
@@ -364,7 +364,7 @@ class eos_had_base(eos_base):
         | *delta* =0.0: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp
+        func=self._link.o2scl.o2scl_eos_had_base_fcomp
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -377,7 +377,7 @@ class eos_had_base(eos_base):
         | *delta*: ``double``
         | Returns: a Python float, a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fcomp_err
+        func=self._link.o2scl.o2scl_eos_had_base_fcomp_err
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
         unc_conv=ctypes.c_double(0)
@@ -391,7 +391,7 @@ class eos_had_base(eos_base):
         | *delta* =0.0: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_feoa
+        func=self._link.o2scl.o2scl_eos_had_base_feoa
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -404,7 +404,7 @@ class eos_had_base(eos_base):
         | *delta* =0.0: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fesym
+        func=self._link.o2scl.o2scl_eos_had_base_fesym
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -417,7 +417,7 @@ class eos_had_base(eos_base):
         | *delta*: ``double``
         | Returns: a Python float, a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_err
+        func=self._link.o2scl.o2scl_eos_had_base_fesym_err
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
         unc_conv=ctypes.c_double(0)
@@ -431,7 +431,7 @@ class eos_had_base(eos_base):
         | *delta* =0.0: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_slope
+        func=self._link.o2scl.o2scl_eos_had_base_fesym_slope
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -444,7 +444,7 @@ class eos_had_base(eos_base):
         | *delta* =0.0: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_curve
+        func=self._link.o2scl.o2scl_eos_had_base_fesym_curve
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -457,7 +457,7 @@ class eos_had_base(eos_base):
         | *delta* =0.0: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_skew
+        func=self._link.o2scl.o2scl_eos_had_base_fesym_skew
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -469,7 +469,7 @@ class eos_had_base(eos_base):
         | *nb*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fesym_diff
+        func=self._link.o2scl.o2scl_eos_had_base_fesym_diff
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,nb)
@@ -481,7 +481,7 @@ class eos_had_base(eos_base):
         | *nb*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_feta
+        func=self._link.o2scl.o2scl_eos_had_base_feta
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,nb)
@@ -493,7 +493,7 @@ class eos_had_base(eos_base):
         | *nb*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_feta_prime
+        func=self._link.o2scl.o2scl_eos_had_base_feta_prime
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,nb)
@@ -506,7 +506,7 @@ class eos_had_base(eos_base):
         | *delta* =0.0: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fkprime
+        func=self._link.o2scl.o2scl_eos_had_base_fkprime
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -519,7 +519,7 @@ class eos_had_base(eos_base):
         | *delta* =0.0: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fmsom
+        func=self._link.o2scl.o2scl_eos_had_base_fmsom
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -532,7 +532,7 @@ class eos_had_base(eos_base):
         | *delta* =0.0: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_neut
+        func=self._link.o2scl.o2scl_eos_had_base_f_effm_neut
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -545,7 +545,7 @@ class eos_had_base(eos_base):
         | *delta* =0.0: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_prot
+        func=self._link.o2scl.o2scl_eos_had_base_f_effm_prot
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -558,7 +558,7 @@ class eos_had_base(eos_base):
         | *delta*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_scalar
+        func=self._link.o2scl.o2scl_eos_had_base_f_effm_scalar
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -571,7 +571,7 @@ class eos_had_base(eos_base):
         | *delta*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_f_effm_vector
+        func=self._link.o2scl.o2scl_eos_had_base_f_effm_vector
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -583,7 +583,7 @@ class eos_had_base(eos_base):
         | *delta*: ``double``
         | Returns: a Python float, a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_fn0
+        func=self._link.o2scl.o2scl_eos_had_base_fn0
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
         leoa_conv=ctypes.c_double(0)
@@ -597,7 +597,7 @@ class eos_had_base(eos_base):
         | *mup*: ``double``
         | Returns: , a Python float, a Python float, a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_f_number_suscept
+        func=self._link.o2scl.o2scl_eos_had_base_f_number_suscept
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
         dPdnn_conv=ctypes.c_double(0)
         dPdnp_conv=ctypes.c_double(0)
@@ -612,7 +612,7 @@ class eos_had_base(eos_base):
         | *mup*: ``double``
         | Returns: , a Python float, a Python float, a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_f_inv_number_suscept
+        func=self._link.o2scl.o2scl_eos_had_base_f_inv_number_suscept
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
         dednn_conv=ctypes.c_double(0)
         dednp_conv=ctypes.c_double(0)
@@ -624,7 +624,7 @@ class eos_had_base(eos_base):
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_saturation
+        func=self._link.o2scl.o2scl_eos_had_base_saturation
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -637,7 +637,7 @@ class eos_had_base(eos_base):
         | *np*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_mun_e
+        func=self._link.o2scl.o2scl_eos_had_base_calc_mun_e
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nn,np)
@@ -650,7 +650,7 @@ class eos_had_base(eos_base):
         | *np*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_mup_e
+        func=self._link.o2scl.o2scl_eos_had_base_calc_mup_e
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nn,np)
@@ -663,7 +663,7 @@ class eos_had_base(eos_base):
         | *np*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_ed
+        func=self._link.o2scl.o2scl_eos_had_base_calc_ed
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nn,np)
@@ -676,7 +676,7 @@ class eos_had_base(eos_base):
         | *np*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_pr
+        func=self._link.o2scl.o2scl_eos_had_base_calc_pr
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nn,np)
@@ -689,7 +689,7 @@ class eos_had_base(eos_base):
         | *mup*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_nn_p
+        func=self._link.o2scl.o2scl_eos_had_base_calc_nn_p
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,mun,mup)
@@ -702,7 +702,7 @@ class eos_had_base(eos_base):
         | *mup*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_np_p
+        func=self._link.o2scl.o2scl_eos_had_base_calc_np_p
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nn,mup)
@@ -715,7 +715,7 @@ class eos_had_base(eos_base):
         | *delta*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_dmu_delta
+        func=self._link.o2scl.o2scl_eos_had_base_calc_dmu_delta
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -728,7 +728,7 @@ class eos_had_base(eos_base):
         | *delta*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_musum_delta
+        func=self._link.o2scl.o2scl_eos_had_base_calc_musum_delta
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -741,7 +741,7 @@ class eos_had_base(eos_base):
         | *delta*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_pressure_nb
+        func=self._link.o2scl.o2scl_eos_had_base_calc_pressure_nb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -754,7 +754,7 @@ class eos_had_base(eos_base):
         | *delta*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_base_calc_edensity_nb
+        func=self._link.o2scl.o2scl_eos_had_base_calc_edensity_nb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,nb,delta)
@@ -780,7 +780,7 @@ class eos_had_eden_base(eos_had_base):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_had_eden_base
+            f=link.o2scl.o2scl_create_eos_had_eden_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -796,7 +796,7 @@ class eos_had_eden_base(eos_had_base):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_had_eden_base
+            f=self._link.o2scl.o2scl_free_eos_had_eden_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -833,7 +833,7 @@ class eos_had_pres_base(eos_had_base):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_had_pres_base
+            f=link.o2scl.o2scl_create_eos_had_pres_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -849,7 +849,7 @@ class eos_had_pres_base(eos_had_base):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_had_pres_base
+            f=self._link.o2scl.o2scl_free_eos_had_pres_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -886,7 +886,7 @@ class eos_had_temp_base(eos_had_base):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_had_temp_base
+            f=link.o2scl.o2scl_create_eos_had_temp_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -902,7 +902,7 @@ class eos_had_temp_base(eos_had_base):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_had_temp_base
+            f=self._link.o2scl.o2scl_free_eos_had_temp_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -939,7 +939,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_had_temp_eden_base
+            f=link.o2scl.o2scl_create_eos_had_temp_eden_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -955,7 +955,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_had_temp_eden_base
+            f=self._link.o2scl.o2scl_free_eos_had_temp_eden_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -992,7 +992,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_had_temp_pres_base
+            f=link.o2scl.o2scl_create_eos_had_temp_pres_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -1008,7 +1008,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_had_temp_pres_base
+            f=self._link.o2scl.o2scl_free_eos_had_temp_pres_base
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -1044,7 +1044,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_had_skyrme
+            f=link.o2scl.o2scl_create_eos_had_skyrme
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -1060,7 +1060,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_had_skyrme
+            f=self._link.o2scl.o2scl_free_eos_had_skyrme
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -1082,7 +1082,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_t0
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_t0
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1092,7 +1092,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::t0 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_t0
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_t0
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1102,7 +1102,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_t1
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_t1
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1112,7 +1112,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::t1 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_t1
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_t1
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1122,7 +1122,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_t2
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_t2
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1132,7 +1132,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::t2 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_t2
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_t2
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1142,7 +1142,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_t3
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_t3
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1152,7 +1152,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::t3 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_t3
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_t3
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1162,7 +1162,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_x0
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_x0
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1172,7 +1172,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::x0 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_x0
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_x0
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1182,7 +1182,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_x1
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_x1
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1192,7 +1192,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::x1 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_x1
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_x1
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1202,7 +1202,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_x2
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_x2
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1212,7 +1212,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::x2 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_x2
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_x2
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1222,7 +1222,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_x3
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_x3
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1232,7 +1232,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::x3 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_x3
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_x3
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1242,7 +1242,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_alpha
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_alpha
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1252,7 +1252,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::alpha .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_alpha
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_alpha
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1262,7 +1262,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_a
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_a
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1272,7 +1272,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::a .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_a
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_a
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1282,7 +1282,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_b
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_b
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1292,7 +1292,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::b .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_b
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_b
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1302,7 +1302,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_W0
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_W0
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1312,7 +1312,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::W0 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_W0
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_W0
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1322,7 +1322,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_b4
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_b4
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1332,7 +1332,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::b4 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_b4
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_b4
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1342,7 +1342,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_b4p
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_b4p
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1352,7 +1352,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::b4p .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_b4p
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_b4p
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1362,7 +1362,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_parent_method
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_parent_method
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1372,7 +1372,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Setter function for eos_had_skyrme::parent_method .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_parent_method
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_parent_method
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -1381,7 +1381,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Get object of type :class:`std::string`
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_reference
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_reference
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,reference._ptr)
@@ -1391,7 +1391,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Set object of type :class:`std::string`
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_reference
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_reference
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -1400,7 +1400,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Get object of type :class:`o2scl::fermion_deriv_nr`
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_get_nrfd
+        func=self._link.o2scl.o2scl_eos_had_skyrme_get_nrfd
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,nrfd._ptr)
         return
@@ -1409,7 +1409,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Set object of type :class:`o2scl::fermion_deriv_nr`
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_skyrme_set_nrfd
+        func=self._link.o2scl.o2scl_eos_had_skyrme_set_nrfd
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -1433,7 +1433,7 @@ class eos_had_apr(eos_had_temp_eden_base):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_had_apr
+            f=link.o2scl.o2scl_create_eos_had_apr
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -1449,7 +1449,7 @@ class eos_had_apr(eos_had_temp_eden_base):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_had_apr
+            f=self._link.o2scl.o2scl_free_eos_had_apr
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -1471,7 +1471,7 @@ class eos_had_apr(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_apr_get_pion
+        func=self._link.o2scl.o2scl_eos_had_apr_get_pion
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1481,7 +1481,7 @@ class eos_had_apr(eos_had_temp_eden_base):
         """
         Setter function for eos_had_apr::pion .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_apr_set_pion
+        func=self._link.o2scl.o2scl_eos_had_apr_set_pion
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -1491,7 +1491,7 @@ class eos_had_apr(eos_had_temp_eden_base):
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_apr_get_parent_method
+        func=self._link.o2scl.o2scl_eos_had_apr_get_parent_method
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1501,7 +1501,7 @@ class eos_had_apr(eos_had_temp_eden_base):
         """
         Setter function for eos_had_apr::parent_method .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_apr_set_parent_method
+        func=self._link.o2scl.o2scl_eos_had_apr_set_parent_method
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -1525,7 +1525,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_had_rmf
+            f=link.o2scl.o2scl_create_eos_had_rmf
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -1541,7 +1541,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_had_rmf
+            f=self._link.o2scl.o2scl_free_eos_had_rmf
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -1563,7 +1563,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_calc_e_steps
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_calc_e_steps
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1573,7 +1573,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::calc_e_steps .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_calc_e_steps
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_calc_e_steps
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
@@ -1583,7 +1583,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_calc_e_relative
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_calc_e_relative
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1593,7 +1593,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::calc_e_relative .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_calc_e_relative
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_calc_e_relative
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -1603,7 +1603,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_zm_mode
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_zm_mode
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1613,7 +1613,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::zm_mode .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_zm_mode
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_zm_mode
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -1623,7 +1623,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_verbose
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_verbose
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1633,7 +1633,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::verbose .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_verbose
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_verbose
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -1643,7 +1643,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_err_nonconv
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_err_nonconv
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1653,7 +1653,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::err_nonconv .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_err_nonconv
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_err_nonconv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -1663,7 +1663,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_mnuc
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_mnuc
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1673,7 +1673,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::mnuc .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_mnuc
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_mnuc
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1683,7 +1683,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_ms
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_ms
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1693,7 +1693,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::ms .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_ms
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_ms
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1703,7 +1703,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_mw
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_mw
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1713,7 +1713,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::mw .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_mw
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_mw
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1723,7 +1723,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_mr
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_mr
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1733,7 +1733,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::mr .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_mr
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_mr
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1743,7 +1743,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_cs
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_cs
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1753,7 +1753,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::cs .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_cs
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_cs
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1763,7 +1763,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_cw
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_cw
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1773,7 +1773,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::cw .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_cw
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_cw
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1783,7 +1783,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_cr
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_cr
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1793,7 +1793,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::cr .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_cr
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_cr
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1803,7 +1803,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_b
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_b
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1813,7 +1813,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::b .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_b
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_b
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1823,7 +1823,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_c
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_c
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1833,7 +1833,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::c .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_c
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_c
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1843,7 +1843,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_zeta
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_zeta
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1853,7 +1853,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::zeta .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_zeta
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_zeta
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1863,7 +1863,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_xi
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_xi
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1873,7 +1873,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::xi .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_xi
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_xi
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1883,7 +1883,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_a1
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_a1
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1893,7 +1893,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::a1 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_a1
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_a1
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1903,7 +1903,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_a2
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_a2
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1913,7 +1913,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::a2 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_a2
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_a2
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1923,7 +1923,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_a3
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_a3
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1933,7 +1933,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::a3 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_a3
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_a3
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1943,7 +1943,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_a4
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_a4
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1953,7 +1953,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::a4 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_a4
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_a4
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1963,7 +1963,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_a5
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_a5
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1973,7 +1973,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::a5 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_a5
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_a5
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -1983,7 +1983,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_a6
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_a6
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -1993,7 +1993,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::a6 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_a6
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_a6
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2003,7 +2003,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_b1
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_b1
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2013,7 +2013,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::b1 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_b1
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_b1
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2023,7 +2023,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_b2
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_b2
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2033,7 +2033,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::b2 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_b2
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_b2
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2043,7 +2043,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_get_b3
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_b3
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2053,7 +2053,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Setter function for eos_had_rmf::b3 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_had_rmf_set_b3
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_b3
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2077,7 +2077,7 @@ class eos_quark(eos_base):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_quark
+            f=link.o2scl.o2scl_create_eos_quark
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2093,7 +2093,7 @@ class eos_quark(eos_base):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_quark
+            f=self._link.o2scl.o2scl_free_eos_quark
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2129,7 +2129,7 @@ class eos_quark_bag(eos_quark):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_quark_bag
+            f=link.o2scl.o2scl_create_eos_quark_bag
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2145,7 +2145,7 @@ class eos_quark_bag(eos_quark):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_quark_bag
+            f=self._link.o2scl.o2scl_free_eos_quark_bag
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2167,7 +2167,7 @@ class eos_quark_bag(eos_quark):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_bag_get_bag_constant
+        func=self._link.o2scl.o2scl_eos_quark_bag_get_bag_constant
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2177,7 +2177,7 @@ class eos_quark_bag(eos_quark):
         """
         Setter function for eos_quark_bag::bag_constant .
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_bag_set_bag_constant
+        func=self._link.o2scl.o2scl_eos_quark_bag_set_bag_constant
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2201,7 +2201,7 @@ class eos_quark_njl(eos_quark):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_quark_njl
+            f=link.o2scl.o2scl_create_eos_quark_njl
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2217,7 +2217,7 @@ class eos_quark_njl(eos_quark):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_quark_njl
+            f=self._link.o2scl.o2scl_free_eos_quark_njl
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2239,7 +2239,7 @@ class eos_quark_njl(eos_quark):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_get_B0
+        func=self._link.o2scl.o2scl_eos_quark_njl_get_B0
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2249,7 +2249,7 @@ class eos_quark_njl(eos_quark):
         """
         Setter function for eos_quark_njl::B0 .
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_set_B0
+        func=self._link.o2scl.o2scl_eos_quark_njl_set_B0
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2259,7 +2259,7 @@ class eos_quark_njl(eos_quark):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_get_L
+        func=self._link.o2scl.o2scl_eos_quark_njl_get_L
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2269,7 +2269,7 @@ class eos_quark_njl(eos_quark):
         """
         Setter function for eos_quark_njl::L .
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_set_L
+        func=self._link.o2scl.o2scl_eos_quark_njl_set_L
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2279,7 +2279,7 @@ class eos_quark_njl(eos_quark):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_get_G
+        func=self._link.o2scl.o2scl_eos_quark_njl_get_G
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2289,7 +2289,7 @@ class eos_quark_njl(eos_quark):
         """
         Setter function for eos_quark_njl::G .
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_set_G
+        func=self._link.o2scl.o2scl_eos_quark_njl_set_G
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2299,7 +2299,7 @@ class eos_quark_njl(eos_quark):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_get_K
+        func=self._link.o2scl.o2scl_eos_quark_njl_get_K
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2309,7 +2309,7 @@ class eos_quark_njl(eos_quark):
         """
         Setter function for eos_quark_njl::K .
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_set_K
+        func=self._link.o2scl.o2scl_eos_quark_njl_set_K
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2319,7 +2319,7 @@ class eos_quark_njl(eos_quark):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_get_limit
+        func=self._link.o2scl.o2scl_eos_quark_njl_get_limit
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2329,7 +2329,7 @@ class eos_quark_njl(eos_quark):
         """
         Setter function for eos_quark_njl::limit .
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_set_limit
+        func=self._link.o2scl.o2scl_eos_quark_njl_set_limit
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2339,7 +2339,7 @@ class eos_quark_njl(eos_quark):
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_get_fromqq
+        func=self._link.o2scl.o2scl_eos_quark_njl_get_fromqq
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2349,7 +2349,7 @@ class eos_quark_njl(eos_quark):
         """
         Setter function for eos_quark_njl::fromqq .
         """
-        func=self._link.o2scl_eos.o2scl_eos_quark_njl_set_fromqq
+        func=self._link.o2scl.o2scl_eos_quark_njl_set_fromqq
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -2378,7 +2378,7 @@ class eos_tov:
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_tov
+            f=link.o2scl.o2scl_create_eos_tov
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2394,7 +2394,7 @@ class eos_tov:
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_tov
+            f=self._link.o2scl.o2scl_free_eos_tov
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2416,7 +2416,7 @@ class eos_tov:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_get_verbose
+        func=self._link.o2scl.o2scl_eos_tov_get_verbose
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2426,7 +2426,7 @@ class eos_tov:
         """
         Setter function for eos_tov::verbose .
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_set_verbose
+        func=self._link.o2scl.o2scl_eos_tov_set_verbose
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -2435,7 +2435,7 @@ class eos_tov:
         """
         | Returns: a Python boolean
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_has_baryons
+        func=self._link.o2scl.o2scl_eos_tov_has_baryons
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -2460,7 +2460,7 @@ class eos_tov_buchdahl(eos_tov):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_tov_buchdahl
+            f=link.o2scl.o2scl_create_eos_tov_buchdahl
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2476,7 +2476,7 @@ class eos_tov_buchdahl(eos_tov):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_tov_buchdahl
+            f=self._link.o2scl.o2scl_free_eos_tov_buchdahl
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2498,7 +2498,7 @@ class eos_tov_buchdahl(eos_tov):
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_buchdahl_get_Pstar
+        func=self._link.o2scl.o2scl_eos_tov_buchdahl_get_Pstar
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2508,7 +2508,7 @@ class eos_tov_buchdahl(eos_tov):
         """
         Setter function for eos_tov_buchdahl::Pstar .
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_buchdahl_set_Pstar
+        func=self._link.o2scl.o2scl_eos_tov_buchdahl_set_Pstar
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2532,7 +2532,7 @@ class eos_tov_polytrope(eos_tov):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_tov_polytrope
+            f=link.o2scl.o2scl_create_eos_tov_polytrope
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2548,7 +2548,7 @@ class eos_tov_polytrope(eos_tov):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_tov_polytrope
+            f=self._link.o2scl.o2scl_free_eos_tov_polytrope
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2571,7 +2571,7 @@ class eos_tov_polytrope(eos_tov):
         | *coeff*: ``double``
         | *index*: ``double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_polytrope_set_coeff_index
+        func=self._link.o2scl.o2scl_eos_tov_polytrope_set_coeff_index
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         func(self._ptr,coeff,index)
         return
@@ -2595,7 +2595,7 @@ class eos_tov_linear(eos_tov):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_tov_linear
+            f=link.o2scl.o2scl_create_eos_tov_linear
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2611,7 +2611,7 @@ class eos_tov_linear(eos_tov):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_tov_linear
+            f=self._link.o2scl.o2scl_free_eos_tov_linear
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2634,7 +2634,7 @@ class eos_tov_linear(eos_tov):
         | *cs2*: ``double``
         | *eps0*: ``double``
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_linear_set_cs2_eps0
+        func=self._link.o2scl.o2scl_eos_tov_linear_set_cs2_eps0
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         func(self._ptr,cs2,eps0)
         return
@@ -2658,7 +2658,7 @@ class eos_tov_interp(eos_tov):
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_eos_tov_interp
+            f=link.o2scl.o2scl_create_eos_tov_interp
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2674,7 +2674,7 @@ class eos_tov_interp(eos_tov):
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_eos_tov_interp
+            f=self._link.o2scl.o2scl_free_eos_tov_interp
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2696,7 +2696,7 @@ class eos_tov_interp(eos_tov):
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_interp_get_err_nonconv
+        func=self._link.o2scl.o2scl_eos_tov_interp_get_err_nonconv
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2706,7 +2706,7 @@ class eos_tov_interp(eos_tov):
         """
         Setter function for eos_tov_interp::err_nonconv .
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_interp_set_err_nonconv
+        func=self._link.o2scl.o2scl_eos_tov_interp_set_err_nonconv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -2722,7 +2722,7 @@ class eos_tov_interp(eos_tov):
         s_cole_=ctypes.c_char_p(force_bytes(s_cole))
         s_colp_=ctypes.c_char_p(force_bytes(s_colp))
         s_colnb_=ctypes.c_char_p(force_bytes(s_colnb))
-        func=self._link.o2scl_eos.o2scl_eos_tov_interp_read_table
+        func=self._link.o2scl.o2scl_eos_tov_interp_read_table
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,eos._ptr,s_cole_,s_colp_,s_colnb_)
         return
@@ -2730,7 +2730,7 @@ class eos_tov_interp(eos_tov):
     def default_low_dens_eos(self):
         """
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_interp_default_low_dens_eos
+        func=self._link.o2scl.o2scl_eos_tov_interp_default_low_dens_eos
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -2738,7 +2738,7 @@ class eos_tov_interp(eos_tov):
     def sho11_low_dens_eos(self):
         """
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_interp_sho11_low_dens_eos
+        func=self._link.o2scl.o2scl_eos_tov_interp_sho11_low_dens_eos
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -2750,7 +2750,7 @@ class eos_tov_interp(eos_tov):
         | *external* =false: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
-        func=self._link.o2scl_eos.o2scl_eos_tov_interp_s12_low_dens_eos
+        func=self._link.o2scl.o2scl_eos_tov_interp_s12_low_dens_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
         func(self._ptr,model_,external)
         return
@@ -2762,7 +2762,7 @@ class eos_tov_interp(eos_tov):
         | *external* =false: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
-        func=self._link.o2scl_eos.o2scl_eos_tov_interp_gcp10_low_dens_eos
+        func=self._link.o2scl.o2scl_eos_tov_interp_gcp10_low_dens_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
         func(self._ptr,model_,external)
         return
@@ -2775,7 +2775,7 @@ class eos_tov_interp(eos_tov):
         | *external* =false: ``bool``
         """
         model_=ctypes.c_char_p(force_bytes(model))
-        func=self._link.o2scl_eos.o2scl_eos_tov_interp_ngl13_low_dens_eos
+        func=self._link.o2scl.o2scl_eos_tov_interp_ngl13_low_dens_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_char_p,ctypes.c_bool]
         func(self._ptr,L,model_,external)
         return
@@ -2789,7 +2789,7 @@ class eos_tov_interp(eos_tov):
         | *fname* ="": string
         """
         fname_=ctypes.c_char_p(force_bytes(fname))
-        func=self._link.o2scl_eos.o2scl_eos_tov_interp_ngl13_low_dens_eos2
+        func=self._link.o2scl.o2scl_eos_tov_interp_ngl13_low_dens_eos2
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
         func(self._ptr,S,L,nt,fname_)
         return
@@ -2797,7 +2797,7 @@ class eos_tov_interp(eos_tov):
     def no_low_dens_eos(self):
         """
         """
-        func=self._link.o2scl_eos.o2scl_eos_tov_interp_no_low_dens_eos
+        func=self._link.o2scl.o2scl_eos_tov_interp_no_low_dens_eos
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -2825,7 +2825,7 @@ class tov_solve:
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_tov_solve
+            f=link.o2scl.o2scl_create_tov_solve
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -2841,7 +2841,7 @@ class tov_solve:
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_tov_solve
+            f=self._link.o2scl.o2scl_free_tov_solve
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -2863,7 +2863,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_buffer_size
+        func=self._link.o2scl.o2scl_tov_solve_get_buffer_size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2873,7 +2873,7 @@ class tov_solve:
         """
         Setter function for tov_solve::buffer_size .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_buffer_size
+        func=self._link.o2scl.o2scl_tov_solve_set_buffer_size
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
@@ -2883,7 +2883,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_max_table_size
+        func=self._link.o2scl.o2scl_tov_solve_get_max_table_size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2893,7 +2893,7 @@ class tov_solve:
         """
         Setter function for tov_solve::max_table_size .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_max_table_size
+        func=self._link.o2scl.o2scl_tov_solve_set_max_table_size
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
@@ -2903,7 +2903,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_mass
+        func=self._link.o2scl.o2scl_tov_solve_get_mass
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2913,7 +2913,7 @@ class tov_solve:
         """
         Setter function for tov_solve::mass .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_mass
+        func=self._link.o2scl.o2scl_tov_solve_set_mass
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2923,7 +2923,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_rad
+        func=self._link.o2scl.o2scl_tov_solve_get_rad
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2933,7 +2933,7 @@ class tov_solve:
         """
         Setter function for tov_solve::rad .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_rad
+        func=self._link.o2scl.o2scl_tov_solve_set_rad
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2943,7 +2943,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_bmass
+        func=self._link.o2scl.o2scl_tov_solve_get_bmass
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2953,7 +2953,7 @@ class tov_solve:
         """
         Setter function for tov_solve::bmass .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_bmass
+        func=self._link.o2scl.o2scl_tov_solve_set_bmass
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2963,7 +2963,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_gpot
+        func=self._link.o2scl.o2scl_tov_solve_get_gpot
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2973,7 +2973,7 @@ class tov_solve:
         """
         Setter function for tov_solve::gpot .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_gpot
+        func=self._link.o2scl.o2scl_tov_solve_set_gpot
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -2983,7 +2983,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_last_rjw
+        func=self._link.o2scl.o2scl_tov_solve_get_last_rjw
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -2993,7 +2993,7 @@ class tov_solve:
         """
         Setter function for tov_solve::last_rjw .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_last_rjw
+        func=self._link.o2scl.o2scl_tov_solve_set_last_rjw
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3003,7 +3003,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_last_f
+        func=self._link.o2scl.o2scl_tov_solve_get_last_f
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3013,7 +3013,7 @@ class tov_solve:
         """
         Setter function for tov_solve::last_f .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_last_f
+        func=self._link.o2scl.o2scl_tov_solve_set_last_f
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3023,7 +3023,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_domega_rat
+        func=self._link.o2scl.o2scl_tov_solve_get_domega_rat
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3033,7 +3033,7 @@ class tov_solve:
         """
         Setter function for tov_solve::domega_rat .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_domega_rat
+        func=self._link.o2scl.o2scl_tov_solve_set_domega_rat
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3043,7 +3043,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_pcent_max
+        func=self._link.o2scl.o2scl_tov_solve_get_pcent_max
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3053,7 +3053,7 @@ class tov_solve:
         """
         Setter function for tov_solve::pcent_max .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_pcent_max
+        func=self._link.o2scl.o2scl_tov_solve_set_pcent_max
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3063,7 +3063,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_reformat_results
+        func=self._link.o2scl.o2scl_tov_solve_get_reformat_results
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3073,7 +3073,7 @@ class tov_solve:
         """
         Setter function for tov_solve::reformat_results .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_reformat_results
+        func=self._link.o2scl.o2scl_tov_solve_set_reformat_results
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -3083,7 +3083,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_baryon_mass
+        func=self._link.o2scl.o2scl_tov_solve_get_baryon_mass
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3093,7 +3093,7 @@ class tov_solve:
         """
         Setter function for tov_solve::baryon_mass .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_baryon_mass
+        func=self._link.o2scl.o2scl_tov_solve_set_baryon_mass
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3103,7 +3103,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_ang_vel
+        func=self._link.o2scl.o2scl_tov_solve_get_ang_vel
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3113,7 +3113,7 @@ class tov_solve:
         """
         Setter function for tov_solve::ang_vel .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_ang_vel
+        func=self._link.o2scl.o2scl_tov_solve_set_ang_vel
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -3123,7 +3123,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_gen_rel
+        func=self._link.o2scl.o2scl_tov_solve_get_gen_rel
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3133,7 +3133,7 @@ class tov_solve:
         """
         Setter function for tov_solve::gen_rel .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_gen_rel
+        func=self._link.o2scl.o2scl_tov_solve_set_gen_rel
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -3143,7 +3143,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_calc_gpot
+        func=self._link.o2scl.o2scl_tov_solve_get_calc_gpot
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3153,7 +3153,7 @@ class tov_solve:
         """
         Setter function for tov_solve::calc_gpot .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_calc_gpot
+        func=self._link.o2scl.o2scl_tov_solve_set_calc_gpot
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -3163,7 +3163,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_step_min
+        func=self._link.o2scl.o2scl_tov_solve_get_step_min
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3173,7 +3173,7 @@ class tov_solve:
         """
         Setter function for tov_solve::step_min .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_step_min
+        func=self._link.o2scl.o2scl_tov_solve_set_step_min
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3183,7 +3183,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_step_max
+        func=self._link.o2scl.o2scl_tov_solve_get_step_max
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3193,7 +3193,7 @@ class tov_solve:
         """
         Setter function for tov_solve::step_max .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_step_max
+        func=self._link.o2scl.o2scl_tov_solve_set_step_max
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3203,7 +3203,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_step_start
+        func=self._link.o2scl.o2scl_tov_solve_get_step_start
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3213,7 +3213,7 @@ class tov_solve:
         """
         Setter function for tov_solve::step_start .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_step_start
+        func=self._link.o2scl.o2scl_tov_solve_set_step_start
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3223,7 +3223,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_verbose
+        func=self._link.o2scl.o2scl_tov_solve_get_verbose
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3233,7 +3233,7 @@ class tov_solve:
         """
         Setter function for tov_solve::verbose .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_verbose
+        func=self._link.o2scl.o2scl_tov_solve_set_verbose
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -3243,7 +3243,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_max_integ_steps
+        func=self._link.o2scl.o2scl_tov_solve_get_max_integ_steps
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3253,7 +3253,7 @@ class tov_solve:
         """
         Setter function for tov_solve::max_integ_steps .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_max_integ_steps
+        func=self._link.o2scl.o2scl_tov_solve_set_max_integ_steps
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
@@ -3263,7 +3263,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_err_nonconv
+        func=self._link.o2scl.o2scl_tov_solve_get_err_nonconv
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3273,7 +3273,7 @@ class tov_solve:
         """
         Setter function for tov_solve::err_nonconv .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_err_nonconv
+        func=self._link.o2scl.o2scl_tov_solve_set_err_nonconv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -3283,7 +3283,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_pmax_default
+        func=self._link.o2scl.o2scl_tov_solve_get_pmax_default
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3293,7 +3293,7 @@ class tov_solve:
         """
         Setter function for tov_solve::pmax_default .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_pmax_default
+        func=self._link.o2scl.o2scl_tov_solve_set_pmax_default
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3303,7 +3303,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_prbegin
+        func=self._link.o2scl.o2scl_tov_solve_get_prbegin
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3313,7 +3313,7 @@ class tov_solve:
         """
         Setter function for tov_solve::prbegin .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_prbegin
+        func=self._link.o2scl.o2scl_tov_solve_set_prbegin
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3323,7 +3323,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_prend
+        func=self._link.o2scl.o2scl_tov_solve_get_prend
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3333,7 +3333,7 @@ class tov_solve:
         """
         Setter function for tov_solve::prend .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_prend
+        func=self._link.o2scl.o2scl_tov_solve_set_prend
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3343,7 +3343,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_princ
+        func=self._link.o2scl.o2scl_tov_solve_get_princ
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3353,7 +3353,7 @@ class tov_solve:
         """
         Setter function for tov_solve::princ .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_princ
+        func=self._link.o2scl.o2scl_tov_solve_set_princ
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3363,7 +3363,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_fixed_pr_guess
+        func=self._link.o2scl.o2scl_tov_solve_get_fixed_pr_guess
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3373,7 +3373,7 @@ class tov_solve:
         """
         Setter function for tov_solve::fixed_pr_guess .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_fixed_pr_guess
+        func=self._link.o2scl.o2scl_tov_solve_set_fixed_pr_guess
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3383,7 +3383,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_max_begin
+        func=self._link.o2scl.o2scl_tov_solve_get_max_begin
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3393,7 +3393,7 @@ class tov_solve:
         """
         Setter function for tov_solve::max_begin .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_max_begin
+        func=self._link.o2scl.o2scl_tov_solve_set_max_begin
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3403,7 +3403,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_max_end
+        func=self._link.o2scl.o2scl_tov_solve_get_max_end
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3413,7 +3413,7 @@ class tov_solve:
         """
         Setter function for tov_solve::max_end .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_max_end
+        func=self._link.o2scl.o2scl_tov_solve_set_max_end
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3423,7 +3423,7 @@ class tov_solve:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_max_inc
+        func=self._link.o2scl.o2scl_tov_solve_get_max_inc
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3433,7 +3433,7 @@ class tov_solve:
         """
         Setter function for tov_solve::max_inc .
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_max_inc
+        func=self._link.o2scl.o2scl_tov_solve_set_max_inc
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3443,7 +3443,7 @@ class tov_solve:
         | Parameters:
         | *eos*: :class:`eos_tov` object
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_set_eos
+        func=self._link.o2scl.o2scl_tov_solve_set_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,eos._ptr)
         return
@@ -3452,7 +3452,7 @@ class tov_solve:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_mvsr
+        func=self._link.o2scl.o2scl_tov_solve_mvsr
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -3465,7 +3465,7 @@ class tov_solve:
         | *pmax* =1.0e20: ``double``
         | Returns: a Python int
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_fixed
+        func=self._link.o2scl.o2scl_tov_solve_fixed
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,mass,pmax)
@@ -3475,7 +3475,7 @@ class tov_solve:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_max
+        func=self._link.o2scl.o2scl_tov_solve_max
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -3485,7 +3485,7 @@ class tov_solve:
         """
         | Returns: :class:`shared_ptr_table_units`.
         """
-        func=self._link.o2scl_eos.o2scl_tov_solve_get_results
+        func=self._link.o2scl.o2scl_tov_solve_get_results
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         sp=shared_ptr_table_units(self._link,func(self._ptr))
@@ -3514,7 +3514,7 @@ class tov_love:
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_tov_love
+            f=link.o2scl.o2scl_create_tov_love
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -3530,7 +3530,7 @@ class tov_love:
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_tov_love
+            f=self._link.o2scl.o2scl_free_tov_love
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -3552,7 +3552,7 @@ class tov_love:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_get_show_ode
+        func=self._link.o2scl.o2scl_tov_love_get_show_ode
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3562,7 +3562,7 @@ class tov_love:
         """
         Setter function for tov_love::show_ode .
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_set_show_ode
+        func=self._link.o2scl.o2scl_tov_love_set_show_ode
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -3572,7 +3572,7 @@ class tov_love:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_get_addl_testing
+        func=self._link.o2scl.o2scl_tov_love_get_addl_testing
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3582,7 +3582,7 @@ class tov_love:
         """
         Setter function for tov_love::addl_testing .
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_set_addl_testing
+        func=self._link.o2scl.o2scl_tov_love_set_addl_testing
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -3592,7 +3592,7 @@ class tov_love:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_get_err_nonconv
+        func=self._link.o2scl.o2scl_tov_love_get_err_nonconv
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3602,7 +3602,7 @@ class tov_love:
         """
         Setter function for tov_love::err_nonconv .
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_set_err_nonconv
+        func=self._link.o2scl.o2scl_tov_love_set_err_nonconv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -3611,7 +3611,7 @@ class tov_love:
         """
         Get object of type :class:`table_units<>`
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_get_results
+        func=self._link.o2scl.o2scl_tov_love_get_results
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,results._ptr)
         return
@@ -3620,7 +3620,7 @@ class tov_love:
         """
         Set object of type :class:`table_units<>`
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_set_results
+        func=self._link.o2scl.o2scl_tov_love_set_results
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -3630,7 +3630,7 @@ class tov_love:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_get_delta
+        func=self._link.o2scl.o2scl_tov_love_get_delta
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3640,7 +3640,7 @@ class tov_love:
         """
         Setter function for tov_love::delta .
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_set_delta
+        func=self._link.o2scl.o2scl_tov_love_set_delta
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3650,7 +3650,7 @@ class tov_love:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_get_eps
+        func=self._link.o2scl.o2scl_tov_love_get_eps
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3660,7 +3660,7 @@ class tov_love:
         """
         Setter function for tov_love::eps .
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_set_eps
+        func=self._link.o2scl.o2scl_tov_love_set_eps
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3670,7 +3670,7 @@ class tov_love:
         Object of type :class:`table_units<>`
         """
         sp=shared_ptr_table_units(self._link)
-        func=self._link.o2scl_eos.o2scl_tov_love_get_tab
+        func=self._link.o2scl.o2scl_tov_love_get_tab
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,sp._s_ptr)
         return
@@ -3679,7 +3679,7 @@ class tov_love:
         """
         Set object of type :class:`table_units<>`
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_set_tab
+        func=self._link.o2scl.o2scl_tov_love_set_tab
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._s_ptr)
         return
@@ -3690,7 +3690,7 @@ class tov_love:
         | *tabulate*: ``bool``
         | Returns: a Python int, a Python float, a Python float, a Python float, a Python float, a Python float
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_calc_y
+        func=self._link.o2scl.o2scl_tov_love_calc_y
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.c_bool]
         yR_conv=ctypes.c_double(0)
@@ -3706,7 +3706,7 @@ class tov_love:
         | Parameters:
         | *rd*: ``double``
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_add_disc
+        func=self._link.o2scl.o2scl_tov_love_add_disc
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,rd)
         return
@@ -3714,7 +3714,7 @@ class tov_love:
     def clear_discs(self):
         """
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_clear_discs
+        func=self._link.o2scl.o2scl_tov_love_clear_discs
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -3724,7 +3724,7 @@ class tov_love:
         | Parameters:
         | Returns: a Python int, a Python float, a Python float, a Python float, a Python float, a Python float
         """
-        func=self._link.o2scl_eos.o2scl_tov_love_calc_H
+        func=self._link.o2scl.o2scl_tov_love_calc_H
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
         yR_conv=ctypes.c_double(0)
@@ -3758,7 +3758,7 @@ class nstar_cold:
         """
 
         if pointer==0:
-            f=link.o2scl_eos.o2scl_create_nstar_cold
+            f=link.o2scl.o2scl_create_nstar_cold
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -3774,7 +3774,7 @@ class nstar_cold:
         """
 
         if self._owner==True:
-            f=self._link.o2scl_eos.o2scl_free_nstar_cold
+            f=self._link.o2scl.o2scl_free_nstar_cold
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -3796,7 +3796,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_pressure_dec_nb
+        func=self._link.o2scl.o2scl_nstar_cold_get_pressure_dec_nb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3806,7 +3806,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::pressure_dec_nb .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_pressure_dec_nb
+        func=self._link.o2scl.o2scl_nstar_cold_set_pressure_dec_nb
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3816,7 +3816,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_allow_urca_nb
+        func=self._link.o2scl.o2scl_nstar_cold_get_allow_urca_nb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3826,7 +3826,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::allow_urca_nb .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_allow_urca_nb
+        func=self._link.o2scl.o2scl_nstar_cold_set_allow_urca_nb
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3836,7 +3836,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_deny_urca_nb
+        func=self._link.o2scl.o2scl_nstar_cold_get_deny_urca_nb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3846,7 +3846,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::deny_urca_nb .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_deny_urca_nb
+        func=self._link.o2scl.o2scl_nstar_cold_set_deny_urca_nb
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3856,7 +3856,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_acausal_nb
+        func=self._link.o2scl.o2scl_nstar_cold_get_acausal_nb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3866,7 +3866,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::acausal_nb .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_acausal_nb
+        func=self._link.o2scl.o2scl_nstar_cold_set_acausal_nb
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3876,7 +3876,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_acausal_ed
+        func=self._link.o2scl.o2scl_nstar_cold_get_acausal_ed
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3886,7 +3886,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::acausal_ed .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_acausal_ed
+        func=self._link.o2scl.o2scl_nstar_cold_set_acausal_ed
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3896,7 +3896,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_acausal_pr
+        func=self._link.o2scl.o2scl_nstar_cold_get_acausal_pr
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3906,7 +3906,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::acausal_pr .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_acausal_pr
+        func=self._link.o2scl.o2scl_nstar_cold_set_acausal_pr
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3916,7 +3916,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_eos_neg
+        func=self._link.o2scl.o2scl_nstar_cold_get_eos_neg
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3926,7 +3926,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::eos_neg .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_eos_neg
+        func=self._link.o2scl.o2scl_nstar_cold_set_eos_neg
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -3936,7 +3936,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_verbose
+        func=self._link.o2scl.o2scl_nstar_cold_get_verbose
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3946,7 +3946,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::verbose .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_verbose
+        func=self._link.o2scl.o2scl_nstar_cold_set_verbose
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -3956,7 +3956,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_nb_start
+        func=self._link.o2scl.o2scl_nstar_cold_get_nb_start
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3966,7 +3966,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::nb_start .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_nb_start
+        func=self._link.o2scl.o2scl_nstar_cold_set_nb_start
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3976,7 +3976,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_nb_end
+        func=self._link.o2scl.o2scl_nstar_cold_get_nb_end
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -3986,7 +3986,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::nb_end .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_nb_end
+        func=self._link.o2scl.o2scl_nstar_cold_set_nb_end
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -3996,7 +3996,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_dnb
+        func=self._link.o2scl.o2scl_nstar_cold_get_dnb
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4006,7 +4006,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::dnb .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_dnb
+        func=self._link.o2scl.o2scl_nstar_cold_set_dnb
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -4016,7 +4016,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_max_row
+        func=self._link.o2scl.o2scl_nstar_cold_get_max_row
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4026,7 +4026,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::max_row .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_max_row
+        func=self._link.o2scl.o2scl_nstar_cold_set_max_row
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
@@ -4036,7 +4036,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_remove_rows
+        func=self._link.o2scl.o2scl_nstar_cold_get_remove_rows
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4046,7 +4046,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::remove_rows .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_remove_rows
+        func=self._link.o2scl.o2scl_nstar_cold_set_remove_rows
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -4056,7 +4056,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_include_muons
+        func=self._link.o2scl.o2scl_nstar_cold_get_include_muons
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4066,7 +4066,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::include_muons .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_include_muons
+        func=self._link.o2scl.o2scl_nstar_cold_set_include_muons
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -4076,7 +4076,7 @@ class nstar_cold:
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_err_nonconv
+        func=self._link.o2scl.o2scl_nstar_cold_get_err_nonconv
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -4086,7 +4086,7 @@ class nstar_cold:
         """
         Setter function for nstar_cold::err_nonconv .
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_err_nonconv
+        func=self._link.o2scl.o2scl_nstar_cold_set_err_nonconv
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
@@ -4096,7 +4096,7 @@ class nstar_cold:
         | Parameters:
         | *eos*: :class:`eos_had_base` object
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_set_eos
+        func=self._link.o2scl.o2scl_nstar_cold_set_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,eos._ptr)
         return
@@ -4107,7 +4107,7 @@ class nstar_cold:
         | *np_0* =0.0: ``double``
         | Returns: a Python int
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_calc_eos
+        func=self._link.o2scl.o2scl_nstar_cold_calc_eos
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,np_0)
@@ -4117,7 +4117,7 @@ class nstar_cold:
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_calc_nstar
+        func=self._link.o2scl.o2scl_nstar_cold_calc_nstar
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -4129,7 +4129,7 @@ class nstar_cold:
         | *target_mass*: ``double``
         | Returns: a Python int
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_fixed
+        func=self._link.o2scl.o2scl_nstar_cold_fixed
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,target_mass)
@@ -4139,7 +4139,7 @@ class nstar_cold:
         """
         | Returns: :class:`shared_ptr_table_units`.
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_eos_results
+        func=self._link.o2scl.o2scl_nstar_cold_get_eos_results
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         sp=shared_ptr_table_units(self._link,func(self._ptr))
@@ -4149,7 +4149,7 @@ class nstar_cold:
         """
         | Returns: :class:`shared_ptr_table_units`.
         """
-        func=self._link.o2scl_eos.o2scl_nstar_cold_get_tov_results
+        func=self._link.o2scl.o2scl_nstar_cold_get_tov_results
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         sp=shared_ptr_table_units(self._link,func(self._ptr))
@@ -4166,7 +4166,7 @@ def skyrme_load(link,sk,model,external=False,verbose=0):
         | *verbose*: ``int``
     """
     model_=ctypes.c_char_p(force_bytes(model))
-    func=link.o2scl_eos.o2scl_skyrme_load_wrapper
+    func=link.o2scl.o2scl_skyrme_load_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool,ctypes.c_int]
     func(sk._ptr,model_,external,verbose)
     return
@@ -4180,7 +4180,7 @@ def rmf_load(link,rmf,model,external=False):
         | *external*: ``bool``
     """
     model_=ctypes.c_char_p(force_bytes(model))
-    func=link.o2scl_eos.o2scl_rmf_load_wrapper
+    func=link.o2scl.o2scl_rmf_load_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
     func(rmf._ptr,model_,external)
     return

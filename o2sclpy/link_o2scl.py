@@ -95,7 +95,7 @@ class linker:
     The o2scl_settings object
     """
 
-    def link_o2scl(self)
+    def link_o2scl(self):
         """
         A function for linking the o2scl libraries.
         """

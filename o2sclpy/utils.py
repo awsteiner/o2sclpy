@@ -63,7 +63,7 @@ def if_yt_then_Agg(backend,argv):
             backend='Agg'
     return backend
 
-def o2scl_get_type(o2scl_hdf,amp):
+def o2scl_get_type(o2scl,amp):
     """
     Get the type of the current object stored in the acol_manager
     pointer
@@ -74,7 +74,7 @@ def o2scl_get_type(o2scl_hdf,amp):
     int_ptr=ctypes.POINTER(ctypes.c_int)
     
     # Set up wrapper for type function
-    type_fn=o2scl_hdf.o2scl_acol_get_type
+    type_fn=o2scl.o2scl_acol_get_type
     type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
     
     # Get current type
@@ -88,12 +88,12 @@ def o2scl_get_type(o2scl_hdf,amp):
         curr_type=curr_type+type_ptr[i]
     return curr_type
 
-def table3d_get_slice(o2scl_hdf,amp,name):
+def table3d_get_slice(o2scl,amp,name):
     """
     Return a slice from the current table3d object stored
     in the acol_manager object 'amp'
     """
-    get_fn=o2scl_hdf.o2scl_acol_get_slice
+    get_fn=o2scl.o2scl_acol_get_slice
     get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                      int_ptr,double_ptr_ptr,
                      int_ptr,double_ptr_ptr,double_ptr_ptr]
@@ -109,7 +109,7 @@ def table3d_get_slice(o2scl_hdf,amp,name):
            ctypes.byref(ptrs))
     return (nx,ptrx,ny,ptry,ptrs)
 
-def table_get_column(o2scl_hdf,amp,name,return_pointer=False):
+def table_get_column(o2scl,amp,name,return_pointer=False):
     """
     Return a column from the current table object stored
     in the acol_manager object 'amp'
@@ -121,7 +121,7 @@ def table_get_column(o2scl_hdf,amp,name,return_pointer=False):
     double_ptr_ptr=ctypes.POINTER(double_ptr)
 
     # Function interface
-    get_fn=o2scl_hdf.o2scl_acol_get_column
+    get_fn=o2scl.o2scl_acol_get_column
     get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
                      int_ptr,double_ptr_ptr]
     get_fn.restype=ctypes.c_int

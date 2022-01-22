@@ -2,7 +2,7 @@ import o2sclpy
 import numpy
 
 link=o2sclpy.linker()
-link.link_o2scl(True)
+link.link_o2scl()
 
 fc=o2sclpy.find_constants(link)
 hc=fc.find_unique('hbarc','MeV*fm')

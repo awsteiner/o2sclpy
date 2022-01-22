@@ -49,7 +49,7 @@ class hdf_file:
         """
 
         if pointer==0:
-            f=link.o2scl_hdf.o2scl_hdf_create_hdf_file
+            f=link.o2scl.o2scl_hdf_create_hdf_file
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -65,7 +65,7 @@ class hdf_file:
         """
 
         if self._owner==True:
-            f=self._link.o2scl_hdf.o2scl_hdf_free_hdf_file
+            f=self._link.o2scl.o2scl_hdf_free_hdf_file
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -87,7 +87,7 @@ class hdf_file:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_get_compr_type
+        func=self._link.o2scl.o2scl_hdf_hdf_file_get_compr_type
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -97,7 +97,7 @@ class hdf_file:
         """
         Setter function for hdf_file::compr_type .
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_set_compr_type
+        func=self._link.o2scl.o2scl_hdf_hdf_file_set_compr_type
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -107,7 +107,7 @@ class hdf_file:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_get_min_compr_size
+        func=self._link.o2scl.o2scl_hdf_hdf_file_get_min_compr_size
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -117,7 +117,7 @@ class hdf_file:
         """
         Setter function for hdf_file::min_compr_size .
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_set_min_compr_size
+        func=self._link.o2scl.o2scl_hdf_hdf_file_set_min_compr_size
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
@@ -126,7 +126,7 @@ class hdf_file:
         """
         | Returns: a Python boolean
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_has_write_access
+        func=self._link.o2scl.o2scl_hdf_hdf_file_has_write_access
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
@@ -140,7 +140,7 @@ class hdf_file:
         | *err_on_fail* =true: ``bool``
         """
         fname_=ctypes.c_char_p(force_bytes(fname))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_open
+        func=self._link.o2scl.o2scl_hdf_hdf_file_open
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool,ctypes.c_bool]
         func(self._ptr,fname_,write_access,err_on_fail)
         return
@@ -151,7 +151,7 @@ class hdf_file:
         | *fname*: string
         """
         fname_=ctypes.c_char_p(force_bytes(fname))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_open_or_create
+        func=self._link.o2scl.o2scl_hdf_hdf_file_open_or_create
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,fname_)
         return
@@ -159,7 +159,7 @@ class hdf_file:
     def close(self):
         """
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_close
+        func=self._link.o2scl.o2scl_hdf_hdf_file_close
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
         return
@@ -171,7 +171,7 @@ class hdf_file:
         | Returns: a Python int, a Python obj
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_getc
+        func=self._link.o2scl.o2scl_hdf_hdf_file_getc
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_char)]
         c_conv=ctypes.c_char(0)
@@ -185,7 +185,7 @@ class hdf_file:
         | Returns: a Python int, a Python float
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_getd
+        func=self._link.o2scl.o2scl_hdf_hdf_file_getd
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_double)]
         d_conv=ctypes.c_double(0)
@@ -199,7 +199,7 @@ class hdf_file:
         | Returns: a Python int, a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_geti
+        func=self._link.o2scl.o2scl_hdf_hdf_file_geti
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_int)]
         i_conv=ctypes.c_int(0)
@@ -213,7 +213,7 @@ class hdf_file:
         | Returns: a Python int, a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_get_szt
+        func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_size_t)]
         u_conv=ctypes.c_size_t(0)
@@ -229,7 +229,7 @@ class hdf_file:
         """
         name_=ctypes.c_char_p(force_bytes(name))
         s_=ctypes.c_char_p(force_bytes(s))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_gets
+        func=self._link.o2scl.o2scl_hdf_hdf_file_gets
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,s._ptr)
@@ -244,7 +244,7 @@ class hdf_file:
         """
         name_=ctypes.c_char_p(force_bytes(name))
         s_=ctypes.c_char_p(force_bytes(s))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_gets_var
+        func=self._link.o2scl.o2scl_hdf_hdf_file_gets_var
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,s._ptr)
@@ -259,7 +259,7 @@ class hdf_file:
         """
         name_=ctypes.c_char_p(force_bytes(name))
         s_=ctypes.c_char_p(force_bytes(s))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_gets_fixed
+        func=self._link.o2scl.o2scl_hdf_hdf_file_gets_fixed
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,s._ptr)
@@ -272,7 +272,7 @@ class hdf_file:
         | *c*: ``char``
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_setc
+        func=self._link.o2scl.o2scl_hdf_hdf_file_setc
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char]
         func(self._ptr,name_,c)
         return
@@ -284,7 +284,7 @@ class hdf_file:
         | *d*: ``double``
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_setd
+        func=self._link.o2scl.o2scl_hdf_hdf_file_setd
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
         func(self._ptr,name_,d)
         return
@@ -296,7 +296,7 @@ class hdf_file:
         | *i*: ``int``
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_seti
+        func=self._link.o2scl.o2scl_hdf_hdf_file_seti
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int]
         func(self._ptr,name_,i)
         return
@@ -308,7 +308,7 @@ class hdf_file:
         | *u*: ``size_t``
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_set_szt
+        func=self._link.o2scl.o2scl_hdf_hdf_file_set_szt
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
         func(self._ptr,name_,u)
         return
@@ -321,7 +321,7 @@ class hdf_file:
         """
         name_=ctypes.c_char_p(force_bytes(name))
         s_=ctypes.c_char_p(force_bytes(s))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_sets
+        func=self._link.o2scl.o2scl_hdf_hdf_file_sets
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,name_,s_)
         return
@@ -334,7 +334,7 @@ class hdf_file:
         """
         name_=ctypes.c_char_p(force_bytes(name))
         s_=ctypes.c_char_p(force_bytes(s))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_sets_fixed
+        func=self._link.o2scl.o2scl_hdf_hdf_file_sets_fixed
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,name_,s_)
         return
@@ -347,7 +347,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_getd_vec
+        func=self._link.o2scl.o2scl_hdf_hdf_file_getd_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,v._ptr)
@@ -361,7 +361,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_geti_vec
+        func=self._link.o2scl.o2scl_hdf_hdf_file_geti_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,v._ptr)
@@ -375,7 +375,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_get_szt_vec
+        func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,v._ptr)
@@ -389,7 +389,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_gets_vec
+        func=self._link.o2scl.o2scl_hdf_hdf_file_gets_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,s._ptr)
@@ -403,7 +403,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_setd_vec
+        func=self._link.o2scl.o2scl_hdf_hdf_file_setd_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,v._ptr)
@@ -417,7 +417,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_seti_vec
+        func=self._link.o2scl.o2scl_hdf_hdf_file_seti_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,v._ptr)
@@ -431,7 +431,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_set_szt_vec
+        func=self._link.o2scl.o2scl_hdf_hdf_file_set_szt_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,v._ptr)
@@ -445,7 +445,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_sets_vec
+        func=self._link.o2scl.o2scl_hdf_hdf_file_sets_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,s._ptr)
@@ -459,7 +459,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_getd_ten
+        func=self._link.o2scl.o2scl_hdf_hdf_file_getd_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,t._ptr)
@@ -473,7 +473,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_geti_ten
+        func=self._link.o2scl.o2scl_hdf_hdf_file_geti_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,t._ptr)
@@ -487,7 +487,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_get_szt_ten
+        func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,t._ptr)
@@ -501,7 +501,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_setd_ten
+        func=self._link.o2scl.o2scl_hdf_hdf_file_setd_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,t._ptr)
@@ -515,7 +515,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_seti_ten
+        func=self._link.o2scl.o2scl_hdf_hdf_file_seti_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,t._ptr)
@@ -529,7 +529,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_set_szt_ten
+        func=self._link.o2scl.o2scl_hdf_hdf_file_set_szt_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,t._ptr)
@@ -545,7 +545,7 @@ class hdf_file:
         """
         type_=ctypes.c_char_p(force_bytes(type))
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_find_object_by_type
+        func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_type
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int]
         ret=func(self._ptr,type_,name._ptr,verbose)
@@ -561,7 +561,7 @@ class hdf_file:
         """
         name_=ctypes.c_char_p(force_bytes(name))
         type_=ctypes.c_char_p(force_bytes(type))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_find_object_by_name
+        func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_name
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int]
         ret=func(self._ptr,name_,type._ptr,verbose)
@@ -577,7 +577,7 @@ class hdf_file:
         """
         pattern_=ctypes.c_char_p(force_bytes(pattern))
         type_=ctypes.c_char_p(force_bytes(type))
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_find_object_by_pattern
+        func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_pattern
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int]
         ret=func(self._ptr,pattern_,type._ptr,verbose)
@@ -588,7 +588,7 @@ class hdf_file:
         | Parameters:
         | *verbose*: ``int``
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_file_list
+        func=self._link.o2scl.o2scl_hdf_hdf_file_file_list
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,verbose)
         return
@@ -599,7 +599,7 @@ class hdf_file:
         | *verbose*: ``int``
         | *hf2*: :class:`hdf_file` object
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_hdf_file_copy
+        func=self._link.o2scl.o2scl_hdf_hdf_file_copy
         func.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_void_p]
         func(self._ptr,verbose,hf2._ptr)
         return
@@ -627,7 +627,7 @@ class acol_manager:
         """
 
         if pointer==0:
-            f=link.o2scl_hdf.o2scl_hdf_create_acol_manager
+            f=link.o2scl.o2scl_hdf_create_acol_manager
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -643,7 +643,7 @@ class acol_manager:
         """
 
         if self._owner==True:
-            f=self._link.o2scl_hdf.o2scl_hdf_free_acol_manager
+            f=self._link.o2scl.o2scl_hdf_free_acol_manager
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -664,7 +664,7 @@ class acol_manager:
         """
         Get object of type :class:`std::string`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_env_var_name
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_env_var_name
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,env_var_name._ptr)
@@ -674,7 +674,7 @@ class acol_manager:
         """
         Set object of type :class:`std::string`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_env_var_name
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_env_var_name
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -684,7 +684,7 @@ class acol_manager:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_verbose
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_verbose
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -694,7 +694,7 @@ class acol_manager:
         """
         Setter function for acol_manager::verbose .
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_verbose
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_verbose
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -703,7 +703,7 @@ class acol_manager:
         """
         Get object of type :class:`std::string`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_type
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_type
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,type._ptr)
@@ -713,7 +713,7 @@ class acol_manager:
         """
         Set object of type :class:`std::string`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_type
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_type
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -722,7 +722,7 @@ class acol_manager:
         """
         Get object of type :class:`table_units<>`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_table_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_table_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,table_obj._ptr)
         return
@@ -731,7 +731,7 @@ class acol_manager:
         """
         Set object of type :class:`table_units<>`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_table_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_table_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -740,7 +740,7 @@ class acol_manager:
         """
         Get object of type :class:`table3d`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_table3d_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_table3d_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,table3d_obj._ptr)
         return
@@ -749,7 +749,7 @@ class acol_manager:
         """
         Set object of type :class:`table3d`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_table3d_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_table3d_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -758,7 +758,7 @@ class acol_manager:
         """
         Get object of type :class:`hist`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_hist_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_hist_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,hist_obj._ptr)
         return
@@ -767,7 +767,7 @@ class acol_manager:
         """
         Set object of type :class:`hist`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_hist_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_hist_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -776,7 +776,7 @@ class acol_manager:
         """
         Get object of type :class:`hist_2d`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_hist_2d_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_hist_2d_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,hist_2d_obj._ptr)
         return
@@ -785,7 +785,7 @@ class acol_manager:
         """
         Set object of type :class:`hist_2d`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_hist_2d_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_hist_2d_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -795,7 +795,7 @@ class acol_manager:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_int_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_int_obj
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -805,7 +805,7 @@ class acol_manager:
         """
         Setter function for acol_manager::int_obj .
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_int_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_int_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -815,7 +815,7 @@ class acol_manager:
         """
         Property of type ``ctypes.c_char``
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_char_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_char_obj
         func.restype=ctypes.c_char
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -825,7 +825,7 @@ class acol_manager:
         """
         Setter function for acol_manager::char_obj .
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_char_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_char_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_char]
         func(self._ptr,value)
         return
@@ -835,7 +835,7 @@ class acol_manager:
         """
         Property of type ``ctypes.c_double``
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_double_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_double_obj
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -845,7 +845,7 @@ class acol_manager:
         """
         Setter function for acol_manager::double_obj .
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_double_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_double_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
@@ -855,7 +855,7 @@ class acol_manager:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_size_t_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_size_t_obj
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -865,7 +865,7 @@ class acol_manager:
         """
         Setter function for acol_manager::size_t_obj .
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_size_t_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_size_t_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
@@ -874,7 +874,7 @@ class acol_manager:
         """
         Get object of type :class:`std::string`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_get_string_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_string_obj
         func.restype=ctypes.c_char_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,string_obj._ptr)
@@ -884,7 +884,7 @@ class acol_manager:
         """
         Set object of type :class:`std::string`
         """
-        func=self._link.o2scl_hdf.o2scl_hdf_acol_manager_set_string_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_string_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -899,7 +899,7 @@ def hdf_input_table(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_table_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_input_table_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -914,7 +914,7 @@ def hdf_input_n_table(link,hf,t,name):
     """
     name.__del__()
     name._ptr=ctypes.c_void_p()
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_n_table_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_input_n_table_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
     func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
     name._owner=True
@@ -929,7 +929,7 @@ def hdf_output_table(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_output_table_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_output_table_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -943,7 +943,7 @@ def hdf_input_table_units(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_table_units_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_input_table_units_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -958,7 +958,7 @@ def hdf_input_n_table_units(link,hf,t,name):
     """
     name.__del__()
     name._ptr=ctypes.c_void_p()
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_n_table_units_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_input_n_table_units_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
     func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
     name._owner=True
@@ -973,7 +973,7 @@ def hdf_output_table_units(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_output_table_units_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_output_table_units_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -987,7 +987,7 @@ def hdf_input_table3d(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_table3d_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_input_table3d_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1002,7 +1002,7 @@ def hdf_input_n_table3d(link,hf,t,name):
     """
     name.__del__()
     name._ptr=ctypes.c_void_p()
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_n_table3d_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_input_n_table3d_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
     func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
     name._owner=True
@@ -1017,7 +1017,7 @@ def hdf_output_table3d(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_output_table3d_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_output_table3d_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1031,7 +1031,7 @@ def hdf_input_uniform_grid(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_uniform_grid_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_input_uniform_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1046,7 +1046,7 @@ def hdf_input_n_uniform_grid(link,hf,t,name):
     """
     name.__del__()
     name._ptr=ctypes.c_void_p()
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_n_uniform_grid_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_input_n_uniform_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
     func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
     name._owner=True
@@ -1061,7 +1061,7 @@ def hdf_output_uniform_grid(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_output_uniform_grid_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_output_uniform_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1075,7 +1075,7 @@ def hdf_input_tensor_grid(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_tensor_grid_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_input_tensor_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1090,7 +1090,7 @@ def hdf_input_n_tensor_grid(link,hf,t,name):
     """
     name.__del__()
     name._ptr=ctypes.c_void_p()
-    func=link.o2scl_hdf.o2scl_hdf_hdf_input_n_tensor_grid_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_input_n_tensor_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
     func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
     name._owner=True
@@ -1105,7 +1105,7 @@ def hdf_output_tensor_grid(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl_hdf.o2scl_hdf_hdf_output_tensor_grid_wrapper
+    func=link.o2scl.o2scl_hdf_hdf_output_tensor_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1121,7 +1121,7 @@ def value_spec(link,spec,d,verbose=0,err_on_fail=True):
         | Returns: ``ctypes.c_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl_hdf.o2scl_hdf_value_spec_wrapper
+    func=link.o2scl.o2scl_hdf_value_spec_wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
     ret=func(spec_,d._ptr,verbose,err_on_fail)
@@ -1138,7 +1138,7 @@ def vector_spec(link,spec,v,verbose=0,err_on_fail=True):
         | Returns: ``ctypes.c_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl_hdf.o2scl_hdf_vector_spec_std_vector_double__wrapper
+    func=link.o2scl.o2scl_hdf_vector_spec_std_vector_double__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
     ret=func(spec_,v._ptr,verbose,err_on_fail)
@@ -1155,7 +1155,7 @@ def strings_spec(link,spec,v,verbose=0,err_on_fail=True):
         | Returns: ``ctypes.c_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl_hdf.o2scl_hdf_strings_spec_std_vector_std_string__wrapper
+    func=link.o2scl.o2scl_hdf_strings_spec_std_vector_std_string__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
     ret=func(spec_,v._ptr,verbose,err_on_fail)
