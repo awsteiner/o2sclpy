@@ -1,7 +1,7 @@
 import o2sclpy
 
 link=o2sclpy.linker()
-link.link_o2scl(True)
+link.link_o2scl()
 
 # Create a fermion with spin 2, mass 1.1, and chemical potential 2.0
 # Mass, chemical potential, and temperature have the same units.
