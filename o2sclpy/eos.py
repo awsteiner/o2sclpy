@@ -2335,21 +2335,21 @@ class eos_quark_njl(eos_quark):
         return
 
     @property
-    def fromqq(self):
+    def from_qq(self):
         """
         Property of type ``ctypes.c_bool``
         """
-        func=self._link.o2scl.o2scl_eos_quark_njl_get_fromqq
+        func=self._link.o2scl.o2scl_eos_quark_njl_get_from_qq
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
 
-    @fromqq.setter
-    def fromqq(self,value):
+    @from_qq.setter
+    def from_qq(self,value):
         """
-        Setter function for eos_quark_njl::fromqq .
+        Setter function for eos_quark_njl::from_qq .
         """
-        func=self._link.o2scl.o2scl_eos_quark_njl_set_fromqq
+        func=self._link.o2scl.o2scl_eos_quark_njl_set_from_qq
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
         return
