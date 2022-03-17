@@ -6,7 +6,6 @@ def test_all():
     link.link_o2scl()
 
     ls=link.o2scl_settings
-    assert ls.eos_installed()==True, 'eos_installed()'
 
     obj=ls.date_compiled()
     s='check type of string properties'
