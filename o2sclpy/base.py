@@ -7136,19 +7136,6 @@ class shared_ptr_table_units(table_units):
         f(self._s_ptr)
         return
 
-def ix_index(link,ix):
-    """
-        | Parameters:
-        | *link* :class:`linker` object
-        | *ix*: ``size_t``
-        | Returns: ``ctypes.c_index_spec`` object
-    """
-    func=link.o2scl.o2scl_ix_index_wrapper
-    func.restype=ctypes.c_index_spec
-    func.argtypes=[ctypes.c_size_t]
-    ret=func(ix)
-    return ret
-
 def ix_fixed(link,ix,ix2):
     """
         | Parameters:

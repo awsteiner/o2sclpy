@@ -475,11 +475,6 @@ Class shared_ptr_table_units
         .. automethod:: __init__
         .. automethod:: __del__
 
-Function ix_index
------------------
-
-.. autofunction:: o2sclpy.ix_index(link,ix)
-
 Function ix_fixed
 -----------------
 
