@@ -57,6 +57,9 @@ skyrme.ipynb: empty
 table.ipynb: empty
 	jupytext --to ipynb --update table.py 
 
+unit_conv.ipynb: empty
+	jupytext --to ipynb --update unit_conv.py 
+
 link_o2scl.ipynb: empty
 	jupytext --to ipynb --update link_o2scl.py 
 

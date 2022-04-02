@@ -38,6 +38,7 @@ doc: .empty
 		grep -v "Compiled at" | grep -v "New alias" > o2graph.help.txt
 	cd doc/static/examples; $(MAKE) link_o2scl.ipynb
 	cd doc/static/examples; $(MAKE) table.ipynb
+	cd doc/static/examples; $(MAKE) unit_conv.ipynb
 	cd doc/static/examples; $(MAKE) skyrme.ipynb
 	cd doc/static/examples; $(MAKE) nucmass.ipynb
 	cd doc/static/examples; $(MAKE) SFHo_SFHx.ipynb
@@ -53,6 +54,7 @@ test:
 	pytest o2sclpy/test \
 		doc/static/examples/link_o2scl.py \
 		doc/static/examples/table.py \
+		doc/static/examples/unit_conv.py \
 		doc/static/examples/skyrme.py \
 		doc/static/examples/nucmass.py \
 		doc/static/examples/SFHo_SFHx.py \
