@@ -46,6 +46,7 @@ cc.close()
 
 # Finally, we use `matplotlib` to plot the data stored in the table:
 
-plot.plot(tab['rho'],tab['nuc'])
-plot.plot(tab['rho'],tab['neut'])
-plot.show()
+if plots:
+    plot.plot(tab['rho'],tab['nuc'])
+    plot.plot(tab['rho'],tab['neut'])
+    plot.show()

@@ -52,6 +52,7 @@ test-sync:
 test:
 	pytest o2sclpy/test \
 		doc/static/examples/link_o2scl.py \
+		doc/static/examples/table.py \
 		doc/static/examples/skyrme.py \
 		doc/static/examples/nucmass.py \
 		doc/static/examples/SFHo_SFHx.py \
