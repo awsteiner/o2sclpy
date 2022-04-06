@@ -74,3 +74,7 @@ reinstall:
 
 statfiles:
 	cd doc; $(MAKE) statfiles
+
+#Change permissions to current user with sudo
+permfix:
+	sudo chown -R `whoami`:`whoami` * .git
