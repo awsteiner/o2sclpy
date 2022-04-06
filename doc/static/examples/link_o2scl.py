@@ -3,6 +3,9 @@
 # See the O$_2$sclpy documentation at
 # https://neutronstars.utk.edu/code/o2sclpy for more information.
 
+import sys
+print(sys.path)
+
 # +
 import o2sclpy
 import sys
