@@ -176,5 +176,5 @@ print('%7.6e' % Lambda)
 # For testing using ``pytest``:
 
 def test_fun():
-    assert numpy.allclose(Lambda,296.26,rtol=1.0e-3)
+    assert numpy.allclose(Lambda,297.0,rtol=8.0e-3)
     return
