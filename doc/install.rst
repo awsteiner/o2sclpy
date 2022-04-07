@@ -29,5 +29,6 @@ assumes LaTeX is installed on your system.
 O\ :sub:`2`\ sclpy dynamically loads the O\ :sub:`2`\ scl libraries
 using the :class:`o2sclpy.linker` python class. This class may require
 some additional information about your system in order to perform the
-dynamic loading properly. See :ref:`link` for more details.
+dynamic loading properly. See :ref:`Linking with O2scl <link2>` for
+more details.
 

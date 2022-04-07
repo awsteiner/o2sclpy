@@ -18,7 +18,7 @@ Basic usage
 
 The ``o2graph`` script is formulated along the same lines as the
 ``acol`` executable in O\ :sub:`2`\ scl documented at ":ref:`o2scl:The
-acol Command-line Utility`". It operates on one object at a time, and
+acol Command Line Utility`". It operates on one object at a time, and
 the basic workflow is the same: read or create an object, manipulate
 and/or plot that object, and save the object or the plot to a file.
 
@@ -40,7 +40,7 @@ Integration with O\ :sub:`2`\ scl
 
 The ``o2graph`` script implements all of the commands from the
 ``acol`` executable in O\ :sub:`2`\ scl documented at
-":ref:`o2scl:The acol Command-line Utility`"
+":ref:`o2scl:The acol Command Line Utility`"
 	     
 First plot example
 ------------------

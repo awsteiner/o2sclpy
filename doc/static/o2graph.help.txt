@@ -1,0 +1,88 @@
+o2graph: A data viewing and processing program for O2scl.
+  Version: 0.926
+ 
+List of command-line options which do not require a current object:
+
+  -addcbar         Add a color bar.
+  -alias           Create a command alias.
+  -arrow           Plot an arrow.
+  -autocorr        Compute the autocorrelation coefficients. 
+  -backend         Select the matplotlib backend to use.
+  -calc            Compute the value of a constant expression. 
+  -canvas          Create a plotting canvas.
+  -clear           Clear the current object. 
+  -clf             Clear the current figure.
+  -cmap            Create a continuous colormap.
+  -cmap2           Create a colormap.
+  -commands        List available commands for current or specified type.
+  -constant        Get a physical or numerical constant. 
+  -convert         Manipulate or use a unit conversion factor. 
+  -create          Create an object. 
+  -docs            Open local HTML docs for acol or an O2scl topic. 
+  -download        Download a file from the specified URL. 
+  -ellipse         Plot an ellipse.
+  -error-point     Plot a single point with errorbars.
+  -eval            Run the python eval() function.
+  -exec            Run the python code specified in file
+  -exit            Exit (synonymous with 'quit').
+  -filelist        List objects in a HDF5 file. 
+  -generic         Read an object generic text file. 
+  -get             Get the value of a parameter.
+  -h5-copy         Copy an O2scl-generated HDF5 file. 
+  -help            Show help information.
+  -image           Plot an image.
+  -inset           Add a new set of axes (e.g. for an inset).
+  -interactive     Toggle interactive mode. 
+  -internal        Output current object in the internal HDF5 format. 
+  -license         Show license information.
+  -line            Plot a line.
+  -modax           Modify current axes properties.
+  -no-intro        Do not print introductory text.
+  -o2scl-addl-libs Specify a list of additional libraries to load.
+  -o2scl-cpp-lib   Specify the location of the standard C++ library.
+  -o2scl-lib-dir   Specify the directory where libo2scl.so is.
+  -output          Output the current object to screen or text file. 
+  -plotv           Plot several vector-like data sets.
+  -point           Plot a single point.
+  -preview         Preview the current object. 
+  -python          Begin an interactive python session.
+  -quit            Quit (synonymous with 'exit').
+  -read            Read an object from an O2scl-style HDF5 file. 
+  -rect            Plot a rectangle.
+  -run             Run a file containing a list of commands.
+  -save            Save the current plot in a file.
+  -selax           Select axis.
+  -set             Set the value of a parameter.
+  -shell           Run a shell command.
+  -show            Show the current plot.
+  -slack           Send a slack message. 
+  -subadj          Adjust spacing of subplots.
+  -subplots        Create subplots.
+  -text            Plot text in the data coordinates.
+  -textbox         Plot a box with text.
+  -ttext           Plot text in window coordinates [(0,0) to (1,1)].
+  -type            Output the type of the current object. 
+  -version         Print version information and O2scl settings. 
+  -warranty        Show warranty information.
+  -wdocs           Open remote HTML docs for acol or an O2scl topic. 
+  -xlimits         Set the x-axis limits.
+  -xml-to-o2       Parse doxygen XML to generate runtime docs. 
+  -xtitle          Add x title to plot (or subplot).
+  -ylimits         Set the y-axis limits.
+  -yt-ann          Annotate a yt rendering (experimental).
+  -yt-arrow        Draw an arrow in the yt volume.
+  -yt-axis         Add an axis to the yt volume.
+  -yt-box          Draw a box in the yt volume.
+  -yt-line         Draw a line in the yt volume.
+  -yt-path         Add a path to the yt animation.
+  -yt-render       Render the yt volume visualization.
+  -yt-source-list  List all current yt sources.
+  -yt-text         Add text to the yt volume.
+  -yt-tf           Edit the yt transfer function.
+  -ytitle          Add y title to plot (or subplot).
+  -zlimits         Set the z-axis limits.
+
+------------------------------------------------------------------------------
+Additional help topics: cmaps, cmaps-plot, colors, colors-near, colors-plot,
+functions, markers, markers-plot, mult-vector-spec, strings-spec, types,
+value-spec, vector-spec, and xkcd-colors.
