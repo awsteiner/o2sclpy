@@ -55,7 +55,7 @@ print(('SFHx: n0=%7.6e 1/fm^3, E/A=%7.6e MeV, K=%7.6e MeV, '+
 # `uniform_grid_end_width` is like numpy.arange() but is numerically
 # stable.
 
-ug_nb=o2sclpy.uniform_grid_end_width.init(link,0.01,1.0,0.01)
+ug_nb=o2sclpy.uniform_grid_end_width.init(link,0.01,0.32,0.01)
 
 # Temperature grid in MeV
 
@@ -90,25 +90,39 @@ sfho.get_def_thermo(th)
 print('Neutron mass is %7.6e MeV.' % (n.m*ħc))
 print('Proton mass is %7.6e MeV.\n' % (p.m*ħc))
 
+# The solver works much better with an initial guess, so
+# we store the values of the meson fields 
+
+sigma=0.0
+omega=0.0
+rho=0.0
+
 # The EOS at finite temperature for isospin-symmetric matter, with
 # equal numbers of neutrons and protons. Our temperature grid is in
 # MeV, but again the EOS objects expect $\mathrm{fm}^{-1}$ so we have
 # to divide the temperature by ħc.
 
-sfho.verbose=2
-
 for i in range(0,t3d.get_nx()):
-   for j in range(0,t3d.get_ny()):
-       n.n=ug_nb[i]/2.0
-       p.n=ug_nb[i]/2.0
-       sfho.calc_temp_e(n,p,ug_T[j]/ħc,th)
-       print(n.n,p.n,ug_T[j]/ħc,th.ed/ug_nb[i]*ħc)
-       t3d.set(i,j,'EoA',th.ed/ug_nb[i]*ħc)
+    print(i+1,'of',t3d.get_nx())
+    first_point=True
+    for j in range(0,t3d.get_ny()):
+        n.n=ug_nb[i]*0.51
+        p.n=ug_nb[i]*0.49
+        if first_point==False:
+            sfho.set_fields(sigma,omega,rho)
+        sfho.calc_temp_e(n,p,ug_T[j]/ħc,th)
+        if first_point==True:
+            first_point=False
+        ret,sigma,omega,rho=sfho.get_fields()
+        #print(n.n,p.n,ug_T[j],th.ed/ug_nb[i]*ħc,sigma,omega,rho)
+        t3d.set(i,j,'EoA',th.ed/ug_nb[i]*ħc-n.m*n.n/ug_nb[i]*ħc-
+                p.m*p.n*ħc/ug_nb[i])
 
 # Now plot the results
        
 if plots:
-    plot.den_plot_temp(t3d,'EoA')
+    pl=o2sclpy.plotter()
+    pl.den_plot_temp(t3d,'EoA')
     plot.show()
 
 # For testing purposes

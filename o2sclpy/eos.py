@@ -2096,6 +2096,37 @@ class eos_had_rmf(eos_had_temp_pres_base):
         func(self._ptr,value)
         return
 
+    def get_fields(self):
+        """
+        | Parameters:
+        | Returns: a Python int, a Python float, a Python float, a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_had_rmf_get_fields
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
+        sig_conv=ctypes.c_double(0)
+        ome_conv=ctypes.c_double(0)
+        rho_conv=ctypes.c_double(0)
+        ret=func(self._ptr,ctypes.byref(sig_conv),ctypes.byref(ome_conv),ctypes.byref(rho_conv))
+        return ret,sig_conv.value,ome_conv.value,rho_conv.value
+
+    def set_fields(self,sig,ome,rho):
+        """
+        | Parameters:
+        | *sig*: ``ctypes.c_double``
+        | *ome*: ``ctypes.c_double``
+        | *rho*: ``ctypes.c_double``
+        | Returns: a Python int, a Python float, a Python float, a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_had_rmf_set_fields
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
+        sig_conv=ctypes.c_double(sig)
+        ome_conv=ctypes.c_double(ome)
+        rho_conv=ctypes.c_double(rho)
+        ret=func(self._ptr,ctypes.byref(sig_conv),ctypes.byref(ome_conv),ctypes.byref(rho_conv))
+        return ret,sig_conv.value,ome_conv.value,rho_conv.value
+
 
 class eos_quark(eos_base):
     """
