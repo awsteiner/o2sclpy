@@ -13,6 +13,7 @@ linked in these examples.
    :maxdepth: 3
 
    ex_table
+   ex_unit
    ex_skyrme
    ex_nucmass
    ex_sfho
