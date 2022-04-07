@@ -360,10 +360,9 @@ class plotter(yt_plot_base):
             print('Cannot density plot object of type',self.dtype)
         return
 
-    def den_plot_temp(self,table3d,slice_name,**kwargs):
+    def den_plot_direct(self,table3d,slice_name,**kwargs):
         """
-        A temporary function testing den_plot of table3d objects
-        inside jupyter notebooks with the new python interface
+        Create a density plot from a slice of a table3d object.
         """
         nxt=table3d.get_nx()
         nyt=table3d.get_ny()

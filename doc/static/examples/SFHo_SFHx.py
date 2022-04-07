@@ -104,25 +104,38 @@ rho=0.0
 
 for i in range(0,t3d.get_nx()):
     print(i+1,'of',t3d.get_nx())
+    # At the lowest temperature point we always need a new initial
+    # guess.
     first_point=True
     for j in range(0,t3d.get_ny()):
-        n.n=ug_nb[i]*0.51
-        p.n=ug_nb[i]*0.49
+        n.n=ug_nb[i]/2.0
+        p.n=ug_nb[i]/2.0
+        # If we're not at the lowest temperature point, use the
+        # previous solution to the field equations to generate
+        # the next solution.
         if first_point==False:
             sfho.set_fields(sigma,omega,rho)
         sfho.calc_temp_e(n,p,ug_T[j]/ħc,th)
         if first_point==True:
             first_point=False
         ret,sigma,omega,rho=sfho.get_fields()
-        #print(n.n,p.n,ug_T[j],th.ed/ug_nb[i]*ħc,sigma,omega,rho)
+        # Divide the energy density by the baryon density to
+        # get the energy per baryon, and then subtract out the
+        # rest mass contribution from both the neutrons and
+        # the protons.
         t3d.set(i,j,'EoA',th.ed/ug_nb[i]*ħc-n.m*n.n/ug_nb[i]*ħc-
                 p.m*p.n*ħc/ug_nb[i])
 
-# Now plot the results
+# Now plot the results. Raw matplotlib works, but o2sclpy has
+# a couple functions which make it easier. 
        
 if plots:
     pl=o2sclpy.plotter()
-    pl.den_plot_temp(t3d,'EoA')
+    pl.colbar=True
+    pl.xtitle('$ n_B~(\mathrm{fm}^{-3}) $')
+    pl.ytitle('$ T~(\mathrm{MeV}) $')
+    pl.ttext(1.25,0.5,'$ E/A~(\mathrm{MeV}) $',rotation=90)
+    pl.den_plot_direct(t3d,'EoA')
     plot.show()
 
 # For testing purposes
