@@ -84,7 +84,7 @@ th=sfho.get_def_thermo()
 
 for i in range(0,t3d.get_nx()):
    for j in range(0,t3d.get_ny()):
-       #n.n=ug_nb[i]/2.0
+       n.n=ug_nb[i]/2.0
        #p.n=ug_nb[i]/2.0
        #sfho.calc_temp_e(n,p,ug_T[j]/197.33,th)
        #t3d.set(i,j,'EoA',th.ed/ug_nb[i])

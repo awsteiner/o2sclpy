@@ -4896,8 +4896,10 @@ class find_constants_const_entry:
         Get object of type :class:`std::vector<std::string>`
         """
         func=self._link.o2scl.o2scl_find_constants_const_entry_get_names
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,names._ptr)
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        names._ptr=func(self._ptr)
+        names._owner=False
         return
 
     def set_names(self,value):
@@ -6894,8 +6896,10 @@ class cmd_line_arg:
         Get object of type :class:`std::vector<std::string>`
         """
         func=self._link.o2scl.o2scl_cmd_line_arg_get_parms
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,parms._ptr)
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        parms._ptr=func(self._ptr)
+        parms._owner=False
         return
 
     def set_parms(self,value):

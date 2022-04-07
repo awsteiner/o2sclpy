@@ -723,8 +723,10 @@ class acol_manager:
         Get object of type :class:`table_units<>`
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_table_obj
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,table_obj._ptr)
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        table_obj._ptr=func(self._ptr)
+        table_obj._owner=False
         return
 
     def set_table_obj(self,value):
@@ -741,8 +743,10 @@ class acol_manager:
         Get object of type :class:`table3d`
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_table3d_obj
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,table3d_obj._ptr)
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        table3d_obj._ptr=func(self._ptr)
+        table3d_obj._owner=False
         return
 
     def set_table3d_obj(self,value):
@@ -759,8 +763,10 @@ class acol_manager:
         Get object of type :class:`hist`
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_hist_obj
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,hist_obj._ptr)
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        hist_obj._ptr=func(self._ptr)
+        hist_obj._owner=False
         return
 
     def set_hist_obj(self,value):
@@ -777,8 +783,10 @@ class acol_manager:
         Get object of type :class:`hist_2d`
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_hist_2d_obj
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,hist_2d_obj._ptr)
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        hist_2d_obj._ptr=func(self._ptr)
+        hist_2d_obj._owner=False
         return
 
     def set_hist_2d_obj(self,value):
