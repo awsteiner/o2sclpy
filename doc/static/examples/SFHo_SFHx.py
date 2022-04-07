@@ -22,8 +22,8 @@ link.link_o2scl()
 # Get the value of $\hbar c$ from an O$_2$scl find_constants object:
 
 fc=o2sclpy.find_constants(link)
-hc=fc.find_unique('hbarc','MeV*fm')
-print('hbarc = %7.6e' % (hc))
+ħc=fc.find_unique('ħc','MeV*fm')
+print('ħc = %7.6e\n' % (ħc))
 
 # Get a copy (a pointer to) the O$_2$scl unit conversion object:
 
@@ -37,19 +37,19 @@ o2sclpy.rmf_load(link,sfhx,'SFHx')
 # Compute nuclear saturation and output the saturation density
 # and binding energy:
 
+# +
 sfho.saturation()
 print(('SFHo: n0=%7.6e 1/fm^3, E/A=%7.6e MeV, K=%7.6e MeV, '+
-       'M*/M=%7.6e, S=%7.6e MeV, L=%7.6e MeV') % 
-      (sfho.n0,sfho.eoa*hc,sfho.comp*hc,sfho.msom,sfho.esym*hc,
-       sfho.fesym_slope(sfho.n0)*hc))
-print('')
+       'M*/M=%7.6e, S=%7.6e MeV, L=%7.6e MeV\n') % 
+      (sfho.n0,sfho.eoa*ħc,sfho.comp*ħc,sfho.msom,sfho.esym*ħc,
+       sfho.fesym_slope(sfho.n0)*ħc))
 
 sfhx.saturation()
 print(('SFHx: n0=%7.6e 1/fm^3, E/A=%7.6e MeV, K=%7.6e MeV, '+
-       'M*/M=%7.6e, S=%7.6e MeV, L=%7.6e MeV') % 
-      (sfhx.n0,sfhx.eoa*hc,sfhx.comp*hc,sfhx.msom,sfhx.esym*hc,
-       sfhx.fesym_slope(sfhx.n0)*hc))
-print('')
+       'M*/M=%7.6e, S=%7.6e MeV, L=%7.6e MeV\n') % 
+      (sfhx.n0,sfhx.eoa*ħc,sfhx.comp*ħc,sfhx.msom,sfhx.esym*ħc,
+       sfhx.fesym_slope(sfhx.n0)*ħc))
+# -
 
 # Baryon density grid in $1/\mathrm{fm}^3$. The O$_2$scl object
 # `uniform_grid_end_width` is like numpy.arange() but is numerically
@@ -70,35 +70,49 @@ t3d.set_xy_grid('nB',ug_nb,'T',ug_T)
 
 t3d.new_slice('EoA')
 
-# AWS: I need to fix this to make sure get_def_neutron and
-# get_def_proton() get a reference rather than a copy
+# Instead of creating new fermion objects, just get the default
+# neutron and proton from the EOS object. Similarly, we need a
+# 'thermo' object to store the energy density, pressure, and entropy.
 
+# +
 n=o2sclpy.fermion(link)
-n2=o2sclpy.fermion(link)
+p=o2sclpy.fermion(link)
+th=o2sclpy.thermo(link)
+
 sfho.get_def_neutron(n)
-sfho.get_def_neutron(n2)
-print(n._ptr,n._owner)
-print(n2._ptr,n2._owner)
-#p=sfho.get_def_proton()
-th=sfho.get_def_thermo()
+sfho.get_def_proton(p)
+sfho.get_def_thermo(th)
+# -
+
+# By default, the O2scl EOS objects work in units of
+# $\mathrm{fm}^{-1}$, so we multiply by ħc to get MeV.
+
+print('Neutron mass is %7.6e MeV.' % (n.m*ħc))
+print('Proton mass is %7.6e MeV.\n' % (p.m*ħc))
+
+# The EOS at finite temperature for isospin-symmetric matter, with
+# equal numbers of neutrons and protons. Our temperature grid is in
+# MeV, but again the EOS objects expect $\mathrm{fm}^{-1}$ so we have
+# to divide the temperature by ħc.
+
+sfho.verbose=2
 
 for i in range(0,t3d.get_nx()):
    for j in range(0,t3d.get_ny()):
        n.n=ug_nb[i]/2.0
-       #p.n=ug_nb[i]/2.0
-       #sfho.calc_temp_e(n,p,ug_T[j]/197.33,th)
-       #t3d.set(i,j,'EoA',th.ed/ug_nb[i])
+       p.n=ug_nb[i]/2.0
+       sfho.calc_temp_e(n,p,ug_T[j]/ħc,th)
+       print(n.n,p.n,ug_T[j]/ħc,th.ed/ug_nb[i]*ħc)
+       t3d.set(i,j,'EoA',th.ed/ug_nb[i]*ħc)
 
+# Now plot the results
+       
 if plots:
-    plot.den_plot(t3d,'EoA')
+    plot.den_plot_temp(t3d,'EoA')
     plot.show()
-    
-# +
-#xarr=[i*0.02+0.02 for i in range(0,16)]
-#for T in numpy.arange(0,20,5):
-#   sfho.calc_
-# -
 
+# For testing purposes
+    
 def test_fun():
     assert numpy.allclose(sfho.n0,0.1582415,rtol=1.0e-4)
     assert numpy.allclose(sfhx.n0,0.1600292,rtol=1.0e-4)

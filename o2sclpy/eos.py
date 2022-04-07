@@ -925,6 +925,36 @@ class eos_had_temp_base(eos_had_base):
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
+    def calc_temp_e(self,n,p,T,th):
+        """
+        | Parameters:
+        | *n*: :class:`fermion` object
+        | *p*: :class:`fermion` object
+        | *T*: ``double``
+        | *th*: :class:`thermo` object
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_eos_had_temp_base_calc_temp_e
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,n._ptr,p._ptr,T,th._ptr)
+        return ret
+
+    def calc_temp_p(self,n,p,T,th):
+        """
+        | Parameters:
+        | *n*: :class:`fermion` object
+        | *p*: :class:`fermion` object
+        | *T*: ``double``
+        | *th*: :class:`thermo` object
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_eos_had_temp_base_calc_temp_p
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,n._ptr,p._ptr,T,th._ptr)
+        return ret
+
 
 class eos_had_temp_eden_base(eos_had_temp_base):
     """
