@@ -1677,26 +1677,6 @@ class eos_had_rmf(eos_had_temp_pres_base):
         return
 
     @property
-    def err_nonconv(self):
-        """
-        Property of type ``ctypes.c_bool``
-        """
-        func=self._link.o2scl.o2scl_eos_had_rmf_get_err_nonconv
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @err_nonconv.setter
-    def err_nonconv(self,value):
-        """
-        Setter function for eos_had_rmf::err_nonconv .
-        """
-        func=self._link.o2scl.o2scl_eos_had_rmf_set_err_nonconv
-        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
-        func(self._ptr,value)
-        return
-
-    @property
     def mnuc(self):
         """
         Property of type ``ctypes.c_double``
@@ -4221,6 +4201,237 @@ class nstar_cold:
         | Returns: :class:`shared_ptr_table_units`.
         """
         func=self._link.o2scl.o2scl_nstar_cold_get_tov_results
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        sp=shared_ptr_table_units(self._link,func(self._ptr))
+        return sp
+
+
+class nucleus_rmf:
+    """
+    Python interface for O\ :sub:`2`\ scl class nucleus_rmf.
+    See
+    https://neutronstars.utk.edu/code/o2scl/eos/html/class/nucleus_rmf.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class nucleus_rmf
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_nucleus_rmf
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucleus_rmf
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucleus_rmf
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucleus_rmf
+        
+        Returns: a nucleus_rmf object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @property
+    def stens(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_get_stens
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @stens.setter
+    def stens(self,value):
+        """
+        Setter function for nucleus_rmf::stens .
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_set_stens
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def rnrp(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_get_rnrp
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @rnrp.setter
+    def rnrp(self,value):
+        """
+        Setter function for nucleus_rmf::rnrp .
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_set_rnrp
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def rnrms(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_get_rnrms
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @rnrms.setter
+    def rnrms(self,value):
+        """
+        Setter function for nucleus_rmf::rnrms .
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_set_rnrms
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def rprms(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_get_rprms
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @rprms.setter
+    def rprms(self,value):
+        """
+        Setter function for nucleus_rmf::rprms .
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_set_rprms
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def etot(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_get_etot
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @etot.setter
+    def etot(self,value):
+        """
+        Setter function for nucleus_rmf::etot .
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_set_etot
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def r_charge(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_get_r_charge
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @r_charge.setter
+    def r_charge(self,value):
+        """
+        Setter function for nucleus_rmf::r_charge .
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_set_r_charge
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def r_charge_cm(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_get_r_charge_cm
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @r_charge_cm.setter
+    def r_charge_cm(self,value):
+        """
+        Setter function for nucleus_rmf::r_charge_cm .
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_set_r_charge_cm
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    def run_nucleus(self,nucleus_Z,nucleus_N,unocc_Z,unocc_N):
+        """
+        | Parameters:
+        | *nucleus_Z*: ``int``
+        | *nucleus_N*: ``int``
+        | *unocc_Z*: ``int``
+        | *unocc_N*: ``int``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_run_nucleus
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_int]
+        ret=func(self._ptr,nucleus_Z,nucleus_N,unocc_Z,unocc_N)
+        return ret
+
+    def get_profiles(self):
+        """
+        | Returns: :class:`shared_ptr_table_units`.
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_get_profiles
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        sp=shared_ptr_table_units(self._link,func(self._ptr))
+        return sp
+
+    def get_chden(self):
+        """
+        | Returns: :class:`shared_ptr_table_units`.
+        """
+        func=self._link.o2scl.o2scl_nucleus_rmf_get_chden
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         sp=shared_ptr_table_units(self._link,func(self._ptr))

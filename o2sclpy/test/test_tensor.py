@@ -17,12 +17,10 @@ def subtest_basic(link):
     tensor=def_tensor(link)
     assert tensor.get_rank()==3,'get_rank()'
     assert tensor.get_size(1)==3,'get_size()'
+    assert tensor.get([1,2,0])==3,'get()'
+    tensor.set([1,2,0],4)
+    assert tensor.get([1,2,0])==4,'get() 2'
     """
-    assert tensor.get_ncolumns()==3,'get_ncolumns()'
-    assert tensor.get('col1',2)==4,'get()'
-    assert tensor.get_column_name(2)==b'col3','get_column_name()'
-    assert tensor.get('col2',2)==8.0,'function_column()'
-    v=tensor['col2']
     assert len(v)==5, 'get_column()'
     assert v[4]==10.0, 'get_column()'
     v2=tensor['col2']

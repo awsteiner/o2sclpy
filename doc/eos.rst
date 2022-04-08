@@ -236,6 +236,17 @@ Class nstar_cold
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class nucleus_rmf
+-----------------
+
+.. autoclass:: o2sclpy.nucleus_rmf
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Function skyrme_load
 --------------------
 
