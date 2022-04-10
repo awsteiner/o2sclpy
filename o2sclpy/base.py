@@ -3828,6 +3828,614 @@ class ix_index:
         return cls(link,f(ix))
 
 
+class ix_fixed:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``ix_fixed``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/ix_fixed.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    @abstractmethod
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class ix_fixed
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_ix_fixed
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class ix_fixed
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_ix_fixed
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class ix_fixed
+        
+        Returns: a ix_fixed object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @classmethod
+    def init(cls,link,ix,ix2):
+        """
+        Constructor-like class method for ix_fixed .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_ix_fixed_init
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t,ctypes.c_size_t]
+        return cls(link,f(ix,ix2))
+
+
+class ix_sum:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``ix_sum``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/ix_sum.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    @abstractmethod
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class ix_sum
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_ix_sum
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class ix_sum
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_ix_sum
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class ix_sum
+        
+        Returns: a ix_sum object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @classmethod
+    def init(cls,link,ix):
+        """
+        Constructor-like class method for ix_sum .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_ix_sum_init
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t]
+        return cls(link,f(ix))
+
+
+class ix_trace:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``ix_trace``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/ix_trace.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    @abstractmethod
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class ix_trace
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_ix_trace
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class ix_trace
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_ix_trace
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class ix_trace
+        
+        Returns: a ix_trace object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @classmethod
+    def init(cls,link,ix,ix2):
+        """
+        Constructor-like class method for ix_trace .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_ix_trace_init
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t,ctypes.c_size_t]
+        return cls(link,f(ix,ix2))
+
+
+class ix_reverse:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``ix_reverse``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/ix_reverse.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    @abstractmethod
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class ix_reverse
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_ix_reverse
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class ix_reverse
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_ix_reverse
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class ix_reverse
+        
+        Returns: a ix_reverse object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @classmethod
+    def init(cls,link,ix):
+        """
+        Constructor-like class method for ix_reverse .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_ix_reverse_init
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t]
+        return cls(link,f(ix))
+
+
+class ix_range:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``ix_range``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/ix_range.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    @abstractmethod
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class ix_range
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_ix_range
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class ix_range
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_ix_range
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class ix_range
+        
+        Returns: a ix_range object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @classmethod
+    def init(cls,link,ix,start,end):
+        """
+        Constructor-like class method for ix_range .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_ix_range_init
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t,ctypes.c_size_t,ctypes.c_size_t]
+        return cls(link,f(ix,start,end))
+
+
+class ix_interp:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``ix_interp``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/ix_interp.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    @abstractmethod
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class ix_interp
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_ix_interp
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class ix_interp
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_ix_interp
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class ix_interp
+        
+        Returns: a ix_interp object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @classmethod
+    def init(cls,link,ix,v):
+        """
+        Constructor-like class method for ix_interp .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_ix_interp_init
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t,ctypes.c_double]
+        return cls(link,f(ix,v))
+
+
+class ix_grid:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``ix_grid``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/ix_grid.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    @abstractmethod
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class ix_grid
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_ix_grid
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class ix_grid
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_ix_grid
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class ix_grid
+        
+        Returns: a ix_grid object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @classmethod
+    def init(cls,link,ix,start,end,n_bins,log):
+        """
+        Constructor-like class method for ix_grid .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_ix_grid_init
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_size_t,ctypes.c_bool]
+        return cls(link,f(ix,start,end,n_bins,log))
+
+
+class ix_gridw:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``ix_gridw``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/ix_gridw.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    @abstractmethod
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class ix_gridw
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_ix_gridw
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class ix_gridw
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_ix_gridw
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class ix_gridw
+        
+        Returns: a ix_gridw object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @classmethod
+    def init(cls,link,ix,start,end,width,log):
+        """
+        Constructor-like class method for ix_gridw .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_ix_gridw_init
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
+        return cls(link,f(ix,start,end,width,log))
+
+
 class tensor:
     """
     Python interface for O\ :sub:`2`\ scl class ``tensor``,
@@ -4172,6 +4780,23 @@ class tensor:
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
         return
+
+    def rearrange_and_copy(self,spec,verbose=0,err_on_fail=True):
+        """
+        | Parameters:
+        | *spec*: string
+        | *verbose* =0: ``int``
+        | *err_on_fail* =true: ``bool``
+        | Returns: :class:`tensor` object
+        """
+        spec_=ctypes.c_char_p(force_bytes(spec))
+        func=self._link.o2scl.o2scl_tensor__rearrange_and_copy
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
+        ret2=func(self._ptr,spec_,verbose,err_on_fail)
+        ret=tensor(self._link,ret2)
+        ret.owner=True
+        return ret
 
     @classmethod
     def create_size(cls,link,rank,sizes):
@@ -6629,6 +7254,108 @@ class gen_test_number:
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
+
+
+class funct_string:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``funct_string``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/funct_string.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    @abstractmethod
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class funct_string
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_funct_string
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class funct_string
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_funct_string
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class funct_string
+        
+        Returns: a funct_string object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def set_parm(self,name,val):
+        """
+        | Parameters:
+        | *name*: string
+        | *val*: ``double``
+        | Returns: a Python int
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_funct_string_set_parm
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
+        ret=func(self._ptr,name_,val)
+        return ret
+
+    def __getitem__(self,tup):
+        """
+        | Parameters:
+        | *x*: ``double``
+        """
+        func=self._link.o2scl.o2scl_funct_string_getitem
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        m,n=tup
+        ret=func(self._ptr,x)
+        return ret
+
+    @classmethod
+    def init(cls,link,expr,var):
+        """
+        Constructor-like class method for funct_string .
+
+        | Parameters:
+
+        """
+
+        f=link.o2scl.o2scl_funct_string_init
+        f.restype=ctypes.c_void_p
+        f.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
+        return cls(link,f(expr_,var_))
 
 
 class comm_option_s:

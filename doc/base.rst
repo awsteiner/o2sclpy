@@ -285,6 +285,94 @@ Class ix_index
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class ix_fixed
+--------------
+
+.. autoclass:: o2sclpy.ix_fixed
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class ix_sum
+------------
+
+.. autoclass:: o2sclpy.ix_sum
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class ix_trace
+--------------
+
+.. autoclass:: o2sclpy.ix_trace
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class ix_reverse
+----------------
+
+.. autoclass:: o2sclpy.ix_reverse
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class ix_range
+--------------
+
+.. autoclass:: o2sclpy.ix_range
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class ix_interp
+---------------
+
+.. autoclass:: o2sclpy.ix_interp
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class ix_grid
+-------------
+
+.. autoclass:: o2sclpy.ix_grid
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class ix_gridw
+--------------
+
+.. autoclass:: o2sclpy.ix_gridw
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class tensor
 ------------
 
@@ -442,6 +530,18 @@ Class gen_test_number
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+
+Class funct_string
+------------------
+
+.. autoclass:: o2sclpy.funct_string
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
 
 Class comm_option_s
 -------------------

@@ -20,6 +20,9 @@ def subtest_basic(link):
     assert tensor.get([1,2,0])==3,'get()'
     tensor.set([1,2,0],4)
     assert tensor.get([1,2,0])==4,'get() 2'
+    assert tensor.total_size()==24,'total_size()'
+    tensor2=tensor.rearrange_and_copy('index(0),index(1),fixed(2,2)')
+    assert tensor2.total_size()==6,'total_size() after rearrange'
     """
     assert len(v)==5, 'get_column()'
     assert v[4]==10.0, 'get_column()'
