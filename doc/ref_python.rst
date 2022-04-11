@@ -10,7 +10,6 @@ Reference for Python objects
 
    plot_ref
    class_plotter
-   class_hdf5_reader
    class_cloud_file
    class_plot_base
    class_yt_plot_base
