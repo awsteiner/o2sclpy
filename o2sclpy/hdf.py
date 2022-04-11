@@ -1419,3 +1419,34 @@ def strings_spec(link,spec,v,verbose=0,err_on_fail=True):
     ret=func(spec_,v._ptr,verbose,err_on_fail)
     return ret
 
+def vector_spec_v(link,spec):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *spec*: string
+        | Returns: ``std_vector`` object
+    """
+    spec_=ctypes.c_char_p(force_bytes(spec))
+    func=link.o2scl.o2scl_hdf_vector_spec_wrapper
+    func.restype=std_vector
+    func.argtypes=[ctypes.c_char_p]
+    ret=func(spec_)
+    return ret
+
+def mult_vector_spec(link,spec,v,verbose=0,err_on_fail=True):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *spec*: string
+        | *v*: :class:`std::vector<std::vector<double>>` object
+        | *verbose*: ``int``
+        | *err_on_fail*: ``bool``
+        | Returns: ``ctypes.c_int`` object
+    """
+    spec_=ctypes.c_char_p(force_bytes(spec))
+    func=link.o2scl.o2scl_hdf_mult_vector_spec_std_vector_double__wrapper
+    func.restype=ctypes.c_int
+    func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
+    ret=func(spec_,v._ptr,verbose,err_on_fail)
+    return ret
+

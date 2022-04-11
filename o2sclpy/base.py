@@ -1077,6 +1077,110 @@ class std_vector_vector:
         """
         return self.size()
 
+class vec_vec_string:
+    """
+    Python interface for C++ class ``std::vector<std::vector<std::string>>``.
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class vec_vec_string
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_std_vector_std_vector_std_string_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class vec_vec_string
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_std_vector_std_vector_std_string_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class vec_vec_string
+        
+        Returns: a vec_vec_string object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_std_vector_std_vector_std_string__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def size(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_std_vector_std_vector_std_string__size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | Returns: vec_vec_string object
+        """
+        func=self._link.o2scl.o2scl_std_vector_std_vector_std_string__getitem
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        return ret
+
+    def __setitem__(self,i,value):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: std_vector_string object
+        """
+        func=self._link.o2scl.o2scl_std_vector_std_vector_std_string__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,i,value._ptr)
+        return
+
+    def __len__(self):
+        """
+        Return the length of the vector
+    
+        Returns: a Python int
+        """
+        return self.size()
+
 class std_complex:
     """
     Python interface for O\ :sub:`2`\ scl class ``std::complex<double>``,

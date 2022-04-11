@@ -126,6 +126,19 @@ Class std_vector_vector
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
+Class vec_vec_string
+--------------------
+
+.. autoclass:: o2sclpy.vec_vec_string
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
+        .. automethod:: __setitem__
+
 Class std_complex
 -----------------
 

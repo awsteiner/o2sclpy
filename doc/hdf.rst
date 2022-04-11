@@ -128,3 +128,13 @@ Function strings_spec
 
 .. autofunction:: o2sclpy.strings_spec(link,spec,v,verbose,err_on_fail)
 
+Function vector_spec_v
+----------------------
+
+.. autofunction:: o2sclpy.vector_spec_v(link,spec)
+
+Function mult_vector_spec
+-------------------------
+
+.. autofunction:: o2sclpy.mult_vector_spec(link,spec,v,verbose,err_on_fail)
+
