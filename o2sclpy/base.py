@@ -7166,6 +7166,77 @@ class interp_krige_optim:
         func(self._ptr,value)
         return
 
+    def eval(self,x0):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__eval
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,x0)
+        return ret
+
+    def deriv(self,x0):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__deriv
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,x0)
+        return ret
+
+    def deriv2(self,x0):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__deriv2
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,x0)
+        return ret
+
+    def sigma(self,x0):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__sigma
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,x0)
+        return ret
+
+    def sample(self,x0):
+        """
+        | Parameters:
+        | *x0*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__sample
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,x0)
+        return ret
+
+    def sample_vec(self,x,y):
+        """
+        | Parameters:
+        | *x*: :class:`std_vector` object
+        | *y*: :class:`std_vector` object
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__sample_vec
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,x._ptr,y._ptr)
+        return
+
 
 class gen_test_number:
     """

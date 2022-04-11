@@ -27,6 +27,17 @@ Class acol_manager
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class cloud_file
+----------------
+
+.. autoclass:: o2sclpy.cloud_file
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Function hdf_input_table
 ------------------------
 

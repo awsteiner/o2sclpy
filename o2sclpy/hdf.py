@@ -455,7 +455,7 @@ class hdf_file:
         """
         | Parameters:
         | *name*: string
-        | *t*: :class:`tensor<>` object
+        | *t*: :class:`tensor` object
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
@@ -497,7 +497,7 @@ class hdf_file:
         """
         | Parameters:
         | *name*: string
-        | *t*: :class:`tensor<>` object
+        | *t*: :class:`tensor` object
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
@@ -675,6 +675,26 @@ class acol_manager:
         Set object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_env_var_name
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_cl(self,cl):
+        """
+        Get object of type :class:`cli`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_cl
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        cl._ptr=func(self._ptr)
+        cl._owner=False
+        return
+
+    def set_cl(self,value):
+        """
+        Set object of type :class:`cli`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_cl
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
@@ -896,6 +916,236 @@ class acol_manager:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
+
+
+class cloud_file:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``cloud_file``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/cloud_file.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class cloud_file
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_hdf_create_cloud_file
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class cloud_file
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_hdf_free_cloud_file
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class cloud_file
+        
+        Returns: a cloud_file object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @property
+    def hash_type(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_hdf_cloud_file_get_hash_type
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @hash_type.setter
+    def hash_type(self,value):
+        """
+        Setter function for cloud_file::hash_type .
+        """
+        func=self._link.o2scl.o2scl_hdf_cloud_file_set_hash_type
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def verbose(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_hdf_cloud_file_get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for cloud_file::verbose .
+        """
+        func=self._link.o2scl.o2scl_hdf_cloud_file_set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def throw_on_fail(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_hdf_cloud_file_get_throw_on_fail
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @throw_on_fail.setter
+    def throw_on_fail(self,value):
+        """
+        Setter function for cloud_file::throw_on_fail .
+        """
+        func=self._link.o2scl.o2scl_hdf_cloud_file_set_throw_on_fail
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def allow_wget(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_hdf_cloud_file_get_allow_wget
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @allow_wget.setter
+    def allow_wget(self,value):
+        """
+        Setter function for cloud_file::allow_wget .
+        """
+        func=self._link.o2scl.o2scl_hdf_cloud_file_set_allow_wget
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def allow_curl(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_hdf_cloud_file_get_allow_curl
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @allow_curl.setter
+    def allow_curl(self,value):
+        """
+        Setter function for cloud_file::allow_curl .
+        """
+        func=self._link.o2scl.o2scl_hdf_cloud_file_set_allow_curl
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def get_file(self,file,url,dir=""):
+        """
+        | Parameters:
+        | *file*: string
+        | *url*: string
+        | *dir* ="": string
+        | Returns: a Python int
+        """
+        file_=ctypes.c_char_p(force_bytes(file))
+        url_=ctypes.c_char_p(force_bytes(url))
+        dir_=ctypes.c_char_p(force_bytes(dir))
+        func=self._link.o2scl.o2scl_hdf_cloud_file_get_file
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        ret=func(self._ptr,file_,url_,dir_)
+        return ret
+
+    def get_file_hash(self,file,url,hash="",dir=""):
+        """
+        | Parameters:
+        | *file*: string
+        | *url*: string
+        | *hash* ="": string
+        | *dir* ="": string
+        | Returns: a Python int
+        """
+        file_=ctypes.c_char_p(force_bytes(file))
+        url_=ctypes.c_char_p(force_bytes(url))
+        hash_=ctypes.c_char_p(force_bytes(hash))
+        dir_=ctypes.c_char_p(force_bytes(dir))
+        func=self._link.o2scl.o2scl_hdf_cloud_file_get_file_hash
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        ret=func(self._ptr,file_,url_,hash_,dir_)
+        return ret
+
+    def hdf5_open(self,hf,file,url,dir=""):
+        """
+        | Parameters:
+        | *hf*: :class:`hdf_file` object
+        | *file*: string
+        | *url*: string
+        | *dir* ="": string
+        | Returns: a Python int
+        """
+        file_=ctypes.c_char_p(force_bytes(file))
+        url_=ctypes.c_char_p(force_bytes(url))
+        dir_=ctypes.c_char_p(force_bytes(dir))
+        func=self._link.o2scl.o2scl_hdf_cloud_file_hdf5_open
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        ret=func(self._ptr,hf._ptr,file_,url_,dir_)
+        return ret
+
+    def hdf5_open_hash(self,hf,file,url,hash="",dir=""):
+        """
+        | Parameters:
+        | *hf*: :class:`hdf_file` object
+        | *file*: string
+        | *url*: string
+        | *hash* ="": string
+        | *dir* ="": string
+        | Returns: a Python int
+        """
+        file_=ctypes.c_char_p(force_bytes(file))
+        url_=ctypes.c_char_p(force_bytes(url))
+        hash_=ctypes.c_char_p(force_bytes(hash))
+        dir_=ctypes.c_char_p(force_bytes(dir))
+        func=self._link.o2scl.o2scl_hdf_cloud_file_hdf5_open_hash
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        ret=func(self._ptr,hf._ptr,file_,url_,hash_,dir_)
+        return ret
 
 
 def hdf_input_table(link,hf,t,name):
