@@ -1,6 +1,6 @@
 #  -------------------------------------------------------------------
 #  
-#  Copyright (C) 2006-2020, Andrew W. Steiner
+#  Copyright (C) 2006-2022, Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
 #  
@@ -26,8 +26,6 @@
 #
 
 from o2sclpy.doc_data import *
-from o2sclpy.cloud_file import *
-from o2sclpy.hdf5 import *
 from o2sclpy.link_o2scl import *
 from o2sclpy.utils import *
 from o2sclpy.plot_base import *
