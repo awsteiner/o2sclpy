@@ -31,6 +31,7 @@ from o2sclpy.hdf5 import *
 from o2sclpy.link_o2scl import *
 from o2sclpy.utils import *
 from o2sclpy.plot_base import *
+from o2sclpy.yt_plot_base import *
 from o2sclpy.plotter import *
 from o2sclpy.o2graph_plotter import *
 from o2sclpy.plot_info import *
