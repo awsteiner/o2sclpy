@@ -132,9 +132,9 @@ for i in range(0,t3d.get_nx()):
 if plots:
     pl=o2sclpy.plotter()
     pl.colbar=True
-    pl.xtitle(u'$ n_B~(\mathrm{fm}^{-3}) $')
-    pl.ytitle(u'$ T~(\mathrm{MeV}) $')
-    pl.ttext(1.25,0.5,u'$ E/A~(\mathrm{MeV}) $',rotation=90)
+    pl.xtitle(r'$ n_B~(\mathrm{fm}^{-3}) $')
+    pl.ytitle(r'$ T~(\mathrm{MeV}) $')
+    pl.ttext(1.25,0.5,r'$ E/A~(\mathrm{MeV}) $',rotation=90)
     pl.den_plot_direct(t3d,'EoA')
     plot.show()
 
