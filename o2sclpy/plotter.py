@@ -20,7 +20,8 @@
 #  -------------------------------------------------------------------
 #
 from o2sclpy.hdf5 import hdf5_reader
-from o2sclpy.plot_base import plot_base, yt_plot_base
+from o2sclpy.plot_base import plot_base
+from o2sclpy.yt_plot_base import yt_plot_base
 from o2sclpy.utils import *
 
 class plotter(yt_plot_base):
