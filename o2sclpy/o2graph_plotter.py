@@ -50,6 +50,8 @@ from o2sclpy.plot_info import marker_list, markers_plot, colors_near
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
 from o2sclpy.plot_info import colors_plot, color_list
 from o2sclpy.doc_data import version
+from o2sclpy.hdf import *
+from o2sclpy.base import *
 
 class o2graph_plotter(yt_plot_base):
     """
@@ -851,7 +853,7 @@ class o2graph_plotter(yt_plot_base):
             
         return
 
-    def plot(self,o2scl,amp,args):
+    def plot(self,o2scl,amp,args,link):
         """
         Plot a two-dimensional set of data
         """
@@ -874,13 +876,18 @@ class o2graph_plotter(yt_plot_base):
                              int_ptr,double_ptr_ptr]
             get_fn.restype=ctypes.c_int
 
-            colx=ctypes.c_char_p(force_bytes(args[0]))
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
-            if get_ret!=0:
-                print('Failed to get column named "'+args[0]+'".')
-                failed=True
+            # colx=ctypes.c_char_p(force_bytes(args[0]))
+            # idx=ctypes.c_int(0)
+            # ptrx=double_ptr()
+            # get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
+            # if get_ret!=0:
+            #     print('Failed to get column named "'+args[0]+'".')
+            #     failed=True
+
+            amt=acol_manager(link,amp)
+            tab=table(link)
+            amt.get_table_obj(tab)
+            xv=tab[force_bytes(args[0])]
 
             coly=ctypes.c_char_p(force_bytes(args[1]))
             idy=ctypes.c_int(0)
@@ -891,7 +898,7 @@ class o2graph_plotter(yt_plot_base):
                 failed=True
 
             if failed==False:
-                xv=[ptrx[i] for i in range(0,idx.value)]
+                #xv=[ptrx[i] for i in range(0,idx.value)]
                 yv=[ptry[i] for i in range(0,idy.value)]
         
                 if self.canvas_flag==False:
@@ -2013,7 +2020,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::print_param_docs()
         return
             
-    def parse_argv(self,argv,o2scl):
+    def parse_argv(self,argv,o2scl,link):
         """
         Parse command-line arguments.
 
@@ -2129,13 +2136,13 @@ class o2graph_plotter(yt_plot_base):
                 else:
                     strlist=line.split(' ')
                     strlist[0]='-'+strlist[0]
-                    self.parse_string_list(strlist,o2scl,amp)
+                    self.parse_string_list(strlist,o2scl,amp,link)
         else:
             strlist=[str(argv[i]) for i in range(1,len(argv))]
             if self.verbose>2:
                 print('Number of arguments:',len(strlist),'arguments.')
                 print('Argument List:',strlist)
-            self.parse_string_list(strlist,o2scl,amp)
+            self.parse_string_list(strlist,o2scl,amp,link)
 
         # End of function o2graph_plotter::parse_argv()
         return
@@ -3704,7 +3711,7 @@ class o2graph_plotter(yt_plot_base):
             self.fig=self.yt_scene._render_figure
             self.canvas_flag=True
             print('Adding annotations:')
-            self.parse_string_list(self.yt_ann,o2scl,amp)
+            self.parse_string_list(self.yt_ann,o2scl,amp,link)
             print('Done adding annotations:')
             #self.text(0.1,0.9,'x',color='w',fontsize=self.font*1.25,
                 #transform=tf)
@@ -4316,7 +4323,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::yt_render()
         return
 
-    def parse_string_list(self,strlist,o2scl,amp):
+    def parse_string_list(self,strlist,o2scl,amp,link):
         """
         Parse a list of strings.
 
@@ -4689,7 +4696,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process plot.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.plot(o2scl,amp,strlist[ix+1:ix_next])
+                    self.plot(o2scl,amp,strlist[ix+1:ix_next],link)
 
                 elif cmd_name=='plot-color':
                     
