@@ -87,6 +87,19 @@ Class ublas_vector
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
+Class ublas_vector_int
+----------------------
+
+.. autoclass:: o2sclpy.ublas_vector_int
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
+        .. automethod:: __setitem__
+
 Class ublas_matrix
 ------------------
 

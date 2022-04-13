@@ -265,6 +265,23 @@ class hdf_file:
         ret=func(self._ptr,name_,s._ptr)
         return ret
 
+    def gets_def_fixed(self,name,deft,s):
+        """
+        | Parameters:
+        | *name*: string
+        | *deft*: string
+        | *s*: :class:`std_string` object
+        | Returns: a Python int
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        deft_=ctypes.c_char_p(force_bytes(deft))
+        s_=ctypes.c_char_p(force_bytes(s))
+        func=self._link.o2scl.o2scl_hdf_hdf_file_gets_def_fixed
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_void_p]
+        ret=func(self._ptr,name_,deft_,s._ptr)
+        return ret
+
     def setc(self,name,c):
         """
         | Parameters:
@@ -449,6 +466,34 @@ class hdf_file:
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,s._ptr)
+        return ret
+
+    def getd_mat_copy(self,name,m):
+        """
+        | Parameters:
+        | *name*: string
+        | *m*: :class:`ublas_matrix` object
+        | Returns: a Python int
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_hdf_hdf_file_getd_mat_copy
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
+        ret=func(self._ptr,name_,m._ptr)
+        return ret
+
+    def setd_mat_copy(self,name,m):
+        """
+        | Parameters:
+        | *name*: string
+        | *m*: :class:`ublas_matrix` object
+        | Returns: a Python int
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_hdf_hdf_file_setd_mat_copy
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
+        ret=func(self._ptr,name_,m._ptr)
         return ret
 
     def getd_ten(self,name,t):

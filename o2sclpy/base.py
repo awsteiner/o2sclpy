@@ -732,6 +732,120 @@ class ublas_vector:
             ret[i]=self.__getitem__(i)
         return ret
 
+class ublas_vector_int:
+    """
+    Python interface for C++ class ``boost::numeric::ublas::vector<int>``.
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class ublas_vector_int
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_boost_numeric_ublas_vector_int_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class ublas_vector_int
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_boost_numeric_ublas_vector_int_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class ublas_vector_int
+        
+        Returns: a ublas_vector_int object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def size(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_vector_int__size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_vector_int__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def __getitem__(self,i):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_vector_int__getitem
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,i)
+        return ret
+
+    def __setitem__(self,i,value):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: int
+        """
+        func=self._link.o2scl.o2scl_boost_numeric_ublas_vector_int__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int]
+        func(self._ptr,i,value)
+        return
+
+    def __len__(self):
+        """
+        Return the length of the vector
+    
+        Returns: a Python int
+        """
+        return self.size()
+    
+    def to_numpy(self):
+        """
+        Copy the vector to a numpy array
+    
+        Returns: a one-dimensional ``numpy`` array
+        """
+        ret=numpy.zeros((self.size()),dtype=numpy.intc)
+        for i in range(0,self.size()):
+            ret[i]=self.__getitem__(i)
+        return ret
+
 class ublas_matrix:
     """
     Python interface for C++ class ``boost::numeric::ublas::matrix<double>``.
