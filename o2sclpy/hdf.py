@@ -482,6 +482,20 @@ class hdf_file:
         ret=func(self._ptr,name_,m._ptr)
         return ret
 
+    def geti_mat_copy(self,name,m):
+        """
+        | Parameters:
+        | *name*: string
+        | *m*: :class:`ublas_matrix_int` object
+        | Returns: a Python int
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_hdf_hdf_file_geti_mat_copy
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
+        ret=func(self._ptr,name_,m._ptr)
+        return ret
+
     def setd_mat_copy(self,name,m):
         """
         | Parameters:
@@ -491,6 +505,20 @@ class hdf_file:
         """
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_hdf_hdf_file_setd_mat_copy
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
+        ret=func(self._ptr,name_,m._ptr)
+        return ret
+
+    def seti_mat_copy(self,name,m):
+        """
+        | Parameters:
+        | *name*: string
+        | *m*: :class:`ublas_matrix_int` object
+        | Returns: a Python int
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_hdf_hdf_file_seti_mat_copy
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,m._ptr)
@@ -578,6 +606,83 @@ class hdf_file:
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,t._ptr)
+        return ret
+
+    def getc_def(self,name,deft):
+        """
+        | Parameters:
+        | *name*: string
+        | *deft*: ``char``
+        | Returns: a Python int, a Python obj
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_hdf_hdf_file_getc_def
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char,ctypes.POINTER(ctypes.c_char)]
+        c_conv=ctypes.c_char(0)
+        ret=func(self._ptr,name_,deft,ctypes.byref(c_conv))
+        return ret,c_conv.value
+
+    def getd_def(self,name,deft):
+        """
+        | Parameters:
+        | *name*: string
+        | *deft*: ``double``
+        | Returns: a Python int, a Python float
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_hdf_hdf_file_getd_def
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
+        d_conv=ctypes.c_double(0)
+        ret=func(self._ptr,name_,deft,ctypes.byref(d_conv))
+        return ret,d_conv.value
+
+    def geti_def(self,name,deft):
+        """
+        | Parameters:
+        | *name*: string
+        | *deft*: ``int``
+        | Returns: a Python int, a Python int
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_hdf_hdf_file_geti_def
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.POINTER(ctypes.c_int)]
+        i_conv=ctypes.c_int(0)
+        ret=func(self._ptr,name_,deft,ctypes.byref(i_conv))
+        return ret,i_conv.value
+
+    def get_szt_def(self,name,deft):
+        """
+        | Parameters:
+        | *name*: string
+        | *deft*: ``size_t``
+        | Returns: a Python int, a Python int
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt_def
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.POINTER(ctypes.c_size_t)]
+        u_conv=ctypes.c_size_t(0)
+        ret=func(self._ptr,name_,deft,ctypes.byref(u_conv))
+        return ret,u_conv.value
+
+    def gets_def(self,name,deft,s):
+        """
+        | Parameters:
+        | *name*: string
+        | *deft*: string
+        | *s*: :class:`std_string` object
+        | Returns: a Python int
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        deft_=ctypes.c_char_p(force_bytes(deft))
+        s_=ctypes.c_char_p(force_bytes(s))
+        func=self._link.o2scl.o2scl_hdf_hdf_file_gets_def
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_void_p]
+        ret=func(self._ptr,name_,deft_,s._ptr)
         return ret
 
     def find_object_by_type(self,type,name,verbose=0):

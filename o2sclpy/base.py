@@ -8192,6 +8192,63 @@ class cli:
         ret=func(self._ptr,v)
         return ret
 
+    def parse_for_aliases(self,sv,allow_undashed):
+        """
+        | Parameters:
+        | *sv*: :class:`std_vector_string` object
+        | *allow_undashed*: ``bool``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_cli_parse_for_aliases
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        ret=func(self._ptr,sv._ptr,allow_undashed)
+        return ret
+
+    def apply_aliases(self,sv,istart,debug=False):
+        """
+        | Parameters:
+        | *sv*: :class:`std_vector_string` object
+        | *istart*: ``size_t``
+        | *debug* =false: ``bool``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_cli_apply_aliases
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_bool]
+        ret=func(self._ptr,sv._ptr,istart,debug)
+        return ret
+
+    def parameter_desc(self,name):
+        """
+        | Parameters:
+        | *name*: string
+        | Returns: Python bytes object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_cli_parameter_desc
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,name_)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def option_short_desc(self,name):
+        """
+        | Parameters:
+        | *name*: string
+        | Returns: Python bytes object
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_cli_option_short_desc
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,name_)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
 
 class shared_ptr_table_units(table_units):
     """

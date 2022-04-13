@@ -2025,8 +2025,8 @@ class o2graph_plotter(yt_plot_base):
         """
 
         # Create an acol_manager object and get the pointer
-        o2scl.o2scl_create_acol_manager.restype=ctypes.c_void_p
-        amp=o2scl.o2scl_create_acol_manager()
+        o2scl.o2scl_hdf_create_acol_manager.restype=ctypes.c_void_p
+        amp=o2scl.o2scl_hdf_create_acol_manager()
 
         names_fn=o2scl.o2scl_acol_set_names
         names_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_char_p,
