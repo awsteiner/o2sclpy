@@ -86,12 +86,11 @@ class eos_base:
         """
         Get object of type :class:`o2scl::thermo`
         """
-        func=self._link.o2scl.o2scl_eos_base_get_def_thermo
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        def_thermo._ptr=func(self._ptr)
-        def_thermo._owner=False
-        return
+        func1=self._link.o2scl.o2scl_eos_base_get_def_thermo
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.thermo(link,ptr)
 
     def set_def_thermo(self,value):
         """
@@ -299,12 +298,11 @@ class eos_had_base(eos_base):
         """
         Get object of type :class:`o2scl::fermion`
         """
-        func=self._link.o2scl.o2scl_eos_had_base_get_def_neutron
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        def_neutron._ptr=func(self._ptr)
-        def_neutron._owner=False
-        return
+        func1=self._link.o2scl.o2scl_eos_had_base_get_def_neutron
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.fermion(link,ptr)
 
     def set_def_neutron(self,value):
         """
@@ -319,12 +317,11 @@ class eos_had_base(eos_base):
         """
         Get object of type :class:`o2scl::fermion`
         """
-        func=self._link.o2scl.o2scl_eos_had_base_get_def_proton
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        def_proton._ptr=func(self._ptr)
-        def_proton._owner=False
-        return
+        func1=self._link.o2scl.o2scl_eos_had_base_get_def_proton
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.fermion(link,ptr)
 
     def set_def_proton(self,value):
         """
@@ -1436,12 +1433,11 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Get object of type :class:`o2scl::fermion_deriv_nr`
         """
-        func=self._link.o2scl.o2scl_eos_had_skyrme_get_nrfd
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        nrfd._ptr=func(self._ptr)
-        nrfd._owner=False
-        return
+        func1=self._link.o2scl.o2scl_eos_had_skyrme_get_nrfd
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.fermion_deriv_nr(link,ptr)
 
     def set_nrfd(self,value):
         """
@@ -3660,12 +3656,11 @@ class tov_love:
         """
         Get object of type :class:`table_units<>`
         """
-        func=self._link.o2scl.o2scl_tov_love_get_results
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        results._ptr=func(self._ptr)
-        results._owner=False
-        return
+        func1=self._link.o2scl.o2scl_tov_love_get_results
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.table_units(link,ptr)
 
     def set_results(self,value):
         """

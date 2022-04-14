@@ -1120,12 +1120,11 @@ class fermion_rel(fermion_thermo):
         """
         Get object of type :class:`fermion`
         """
-        func=self._link.o2scl.o2scl_fermion_rel_get_unc
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        unc._ptr=func(self._ptr)
-        unc._owner=False
-        return
+        func1=self._link.o2scl.o2scl_fermion_rel_get_unc
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.fermion(link,ptr)
 
     def set_unc(self,value):
         """
@@ -2366,12 +2365,11 @@ class fermion_deriv_rel:
         """
         Get object of type :class:`fermion_deriv`
         """
-        func=self._link.o2scl.o2scl_fermion_deriv_rel_get_unc
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        unc._ptr=func(self._ptr)
-        unc._owner=False
-        return
+        func1=self._link.o2scl.o2scl_fermion_deriv_rel_get_unc
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.fermion_deriv(link,ptr)
 
     def set_unc(self,value):
         """
@@ -2585,12 +2583,11 @@ class fermion_deriv_nr:
         """
         Get object of type :class:`fermion_deriv`
         """
-        func=self._link.o2scl.o2scl_fermion_deriv_nr_get_unc
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        unc._ptr=func(self._ptr)
-        unc._owner=False
-        return
+        func1=self._link.o2scl.o2scl_fermion_deriv_nr_get_unc
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.fermion_deriv(link,ptr)
 
     def set_unc(self,value):
         """

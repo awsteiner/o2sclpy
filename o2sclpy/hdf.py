@@ -833,12 +833,11 @@ class acol_manager:
         """
         Get object of type :class:`cli`
         """
-        func=self._link.o2scl.o2scl_hdf_acol_manager_get_cl
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        cl._ptr=func(self._ptr)
-        cl._owner=False
-        return
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_cl
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.cli(link,ptr)
 
     def set_cl(self,value):
         """
@@ -892,12 +891,11 @@ class acol_manager:
         """
         Get object of type :class:`table_units<>`
         """
-        func=self._link.o2scl.o2scl_hdf_acol_manager_get_table_obj
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        table_obj._ptr=func(self._ptr)
-        table_obj._owner=False
-        return
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_table_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.table_units(link,ptr)
 
     def set_table_obj(self,value):
         """
@@ -912,12 +910,11 @@ class acol_manager:
         """
         Get object of type :class:`table3d`
         """
-        func=self._link.o2scl.o2scl_hdf_acol_manager_get_table3d_obj
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        table3d_obj._ptr=func(self._ptr)
-        table3d_obj._owner=False
-        return
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_table3d_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.table3d(link,ptr)
 
     def set_table3d_obj(self,value):
         """
@@ -932,12 +929,11 @@ class acol_manager:
         """
         Get object of type :class:`hist`
         """
-        func=self._link.o2scl.o2scl_hdf_acol_manager_get_hist_obj
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        hist_obj._ptr=func(self._ptr)
-        hist_obj._owner=False
-        return
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_hist_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.hist(link,ptr)
 
     def set_hist_obj(self,value):
         """
@@ -952,12 +948,11 @@ class acol_manager:
         """
         Get object of type :class:`hist_2d`
         """
-        func=self._link.o2scl.o2scl_hdf_acol_manager_get_hist_2d_obj
-        func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p]
-        hist_2d_obj._ptr=func(self._ptr)
-        hist_2d_obj._owner=False
-        return
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_hist_2d_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=o2sclpy.hist_2d(link,ptr)
 
     def set_hist_2d_obj(self,value):
         """
