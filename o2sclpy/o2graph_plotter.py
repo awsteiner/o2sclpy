@@ -885,8 +885,7 @@ class o2graph_plotter(yt_plot_base):
             #     failed=True
 
             amt=acol_manager(link,amp)
-            tab=table(link)
-            amt.get_table_obj(tab)
+            tab=amt.get_table_obj()
             xv=tab[force_bytes(args[0])]
 
             coly=ctypes.c_char_p(force_bytes(args[1]))
