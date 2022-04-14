@@ -32,6 +32,7 @@ cu=link.o2scl_settings.get_convert_units()
 # Use the cloud_file object to download the EOS
 
 cf=o2sclpy.cloud_file(link)
+cf.verbose=1
 cf.get_file('dsh.o2','https://isospin.roam.utk.edu/public_data'+
             '/eos_tables/du21/fid_3_5_22.o2')
 
@@ -40,13 +41,13 @@ cf.get_file('dsh.o2','https://isospin.roam.utk.edu/public_data'+
 hf=o2sclpy.hdf_file(link)
 tg_A=o2sclpy.tensor_grid(link)
 hf.open('dsh.o2')
-o2sclpy.hdf_input_tensor_grid(hf,'A',tg_A)
+o2sclpy.hdf_input_tensor_grid(link,hf,tg_A,'A')
 hf.close()
 
 # Create a table3d object for Ye=0.4
 
 t3d=o2sclpy.table3d(link)
-tg.to_table3d()
+tg_A.to_table3d()
 
 # Now plot the results. Raw matplotlib works, but o2sclpy has
 # a couple functions which make it easier. 
