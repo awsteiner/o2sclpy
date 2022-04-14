@@ -83,7 +83,7 @@ class eos_base:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def get_def_thermo(self,def_thermo):
+    def get_def_thermo(self):
         """
         Get object of type :class:`o2scl::thermo`
         """
@@ -92,6 +92,7 @@ class eos_base:
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=thermo(self._link,ptr)
+        return obj
 
     def set_def_thermo(self,value):
         """
@@ -295,7 +296,7 @@ class eos_had_base(eos_base):
         func(self._ptr,value)
         return
 
-    def get_def_neutron(self,def_neutron):
+    def get_def_neutron(self):
         """
         Get object of type :class:`o2scl::fermion`
         """
@@ -304,6 +305,7 @@ class eos_had_base(eos_base):
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=fermion(self._link,ptr)
+        return obj
 
     def set_def_neutron(self,value):
         """
@@ -314,7 +316,7 @@ class eos_had_base(eos_base):
         func(self._ptr,value._ptr)
         return
 
-    def get_def_proton(self,def_proton):
+    def get_def_proton(self):
         """
         Get object of type :class:`o2scl::fermion`
         """
@@ -323,6 +325,7 @@ class eos_had_base(eos_base):
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=fermion(self._link,ptr)
+        return obj
 
     def set_def_proton(self,value):
         """
@@ -1430,7 +1433,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         func(self._ptr,value._ptr)
         return
 
-    def get_nrfd(self,nrfd):
+    def get_nrfd(self):
         """
         Get object of type :class:`o2scl::fermion_deriv_nr`
         """
@@ -1439,6 +1442,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=fermion_deriv_nr(self._link,ptr)
+        return obj
 
     def set_nrfd(self,value):
         """
@@ -3653,7 +3657,7 @@ class tov_love:
         func(self._ptr,value)
         return
 
-    def get_results(self,results):
+    def get_results(self):
         """
         Get object of type :class:`table_units<>`
         """
@@ -3662,6 +3666,7 @@ class tov_love:
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=table_units(self._link,ptr)
+        return obj
 
     def set_results(self,value):
         """

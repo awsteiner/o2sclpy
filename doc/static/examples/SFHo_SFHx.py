@@ -75,13 +75,9 @@ t3d.new_slice('EoA')
 # 'thermo' object to store the energy density, pressure, and entropy.
 
 # +
-n=o2sclpy.fermion(link)
-p=o2sclpy.fermion(link)
-th=o2sclpy.thermo(link)
-
-sfho.get_def_neutron(n)
-sfho.get_def_proton(p)
-sfho.get_def_thermo(th)
+n=sfho.get_def_neutron()
+p=sfho.get_def_proton()
+th=sfho.get_def_thermo()
 # -
 
 # By default, the O2scl EOS objects work in units of

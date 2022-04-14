@@ -829,7 +829,7 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
-    def get_cl(self,cl):
+    def get_cl(self):
         """
         Get object of type :class:`cli`
         """
@@ -838,6 +838,7 @@ class acol_manager:
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=cli(self._link,ptr)
+        return obj
 
     def set_cl(self,value):
         """
@@ -887,7 +888,7 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
-    def get_table_obj(self,table_obj):
+    def get_table_obj(self):
         """
         Get object of type :class:`table_units<>`
         """
@@ -896,6 +897,7 @@ class acol_manager:
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=table_units(self._link,ptr)
+        return obj
 
     def set_table_obj(self,value):
         """
@@ -906,7 +908,7 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
-    def get_table3d_obj(self,table3d_obj):
+    def get_table3d_obj(self):
         """
         Get object of type :class:`table3d`
         """
@@ -915,6 +917,7 @@ class acol_manager:
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=table3d(self._link,ptr)
+        return obj
 
     def set_table3d_obj(self,value):
         """
@@ -925,7 +928,7 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
-    def get_hist_obj(self,hist_obj):
+    def get_hist_obj(self):
         """
         Get object of type :class:`hist`
         """
@@ -934,6 +937,7 @@ class acol_manager:
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=hist(self._link,ptr)
+        return obj
 
     def set_hist_obj(self,value):
         """
@@ -944,7 +948,7 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
-    def get_hist_2d_obj(self,hist_2d_obj):
+    def get_hist_2d_obj(self):
         """
         Get object of type :class:`hist_2d`
         """
@@ -953,6 +957,7 @@ class acol_manager:
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=hist_2d(self._link,ptr)
+        return obj
 
     def set_hist_2d_obj(self,value):
         """

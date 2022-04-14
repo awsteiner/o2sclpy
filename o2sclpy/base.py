@@ -5810,7 +5810,7 @@ class find_constants_const_entry:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def get_names(self,names):
+    def get_names(self):
         """
         Get object of type :class:`std::vector<std::string>`
         """
@@ -5819,6 +5819,7 @@ class find_constants_const_entry:
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=std_vector_string(self._link,ptr)
+        return obj
 
     def set_names(self,value):
         """
@@ -7982,7 +7983,7 @@ class cmd_line_arg:
         func(self._ptr,value)
         return
 
-    def get_parms(self,parms):
+    def get_parms(self):
         """
         Get object of type :class:`std::vector<std::string>`
         """
@@ -7991,6 +7992,7 @@ class cmd_line_arg:
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
         obj=std_vector_string(self._link,ptr)
+        return obj
 
     def set_parms(self,value):
         """
