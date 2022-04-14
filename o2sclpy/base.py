@@ -5818,7 +5818,7 @@ class find_constants_const_entry:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.std_vector_string(link,ptr)
+        obj=std_vector_string(self._link,ptr)
 
     def set_names(self,value):
         """
@@ -7990,7 +7990,7 @@ class cmd_line_arg:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.std_vector_string(link,ptr)
+        obj=std_vector_string(self._link,ptr)
 
     def set_parms(self,value):
         """

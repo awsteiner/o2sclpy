@@ -1124,7 +1124,7 @@ class fermion_rel(fermion_thermo):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.fermion(link,ptr)
+        obj=fermion(self._link,ptr)
 
     def set_unc(self,value):
         """
@@ -2369,7 +2369,7 @@ class fermion_deriv_rel:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.fermion_deriv(link,ptr)
+        obj=fermion_deriv(self._link,ptr)
 
     def set_unc(self,value):
         """
@@ -2587,7 +2587,7 @@ class fermion_deriv_nr:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.fermion_deriv(link,ptr)
+        obj=fermion_deriv(self._link,ptr)
 
     def set_unc(self,value):
         """

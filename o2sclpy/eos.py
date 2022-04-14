@@ -26,6 +26,7 @@ from abc import abstractmethod
 from o2sclpy.utils import force_bytes
 
 from o2sclpy.base import *
+from o2sclpy.part import *
 
 class eos_base:
     """
@@ -90,7 +91,7 @@ class eos_base:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.thermo(link,ptr)
+        obj=thermo(self._link,ptr)
 
     def set_def_thermo(self,value):
         """
@@ -302,7 +303,7 @@ class eos_had_base(eos_base):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.fermion(link,ptr)
+        obj=fermion(self._link,ptr)
 
     def set_def_neutron(self,value):
         """
@@ -321,7 +322,7 @@ class eos_had_base(eos_base):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.fermion(link,ptr)
+        obj=fermion(self._link,ptr)
 
     def set_def_proton(self,value):
         """
@@ -1437,7 +1438,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.fermion_deriv_nr(link,ptr)
+        obj=fermion_deriv_nr(self._link,ptr)
 
     def set_nrfd(self,value):
         """
@@ -3660,7 +3661,7 @@ class tov_love:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.table_units(link,ptr)
+        obj=table_units(self._link,ptr)
 
     def set_results(self,value):
         """

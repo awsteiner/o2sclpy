@@ -837,7 +837,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.cli(link,ptr)
+        obj=cli(self._link,ptr)
 
     def set_cl(self,value):
         """
@@ -895,7 +895,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.table_units(link,ptr)
+        obj=table_units(self._link,ptr)
 
     def set_table_obj(self,value):
         """
@@ -914,7 +914,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.table3d(link,ptr)
+        obj=table3d(self._link,ptr)
 
     def set_table3d_obj(self,value):
         """
@@ -933,7 +933,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.hist(link,ptr)
+        obj=hist(self._link,ptr)
 
     def set_hist_obj(self,value):
         """
@@ -952,7 +952,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=o2sclpy.hist_2d(link,ptr)
+        obj=hist_2d(self._link,ptr)
 
     def set_hist_2d_obj(self,value):
         """
