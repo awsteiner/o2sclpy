@@ -4981,24 +4981,6 @@ class tensor:
         ret=func(self._ptr)
         return ret
 
-    def convert_table3d_sum(self,ix_x,ix_y,tab,x_name="x",y_name="y",slice_name="z"):
-        """
-        | Parameters:
-        | *ix_x*: ``size_t``
-        | *ix_y*: ``size_t``
-        | *tab*: :class:`table3d` object
-        | *x_name* ="x": string
-        | *y_name* ="y": string
-        | *slice_name* ="z": string
-        """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
-        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
-        func=self._link.o2scl.o2scl_tensor__convert_table3d_sum
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
-        return
-
     def rearrange_and_copy(self,spec,verbose=0,err_on_fail=True):
         """
         | Parameters:
@@ -5171,6 +5153,17 @@ class tensor_grid:
         ret=func(self._ptr,grid_point._ptr)
         return ret
 
+    def resize(self,rank,dim):
+        """
+        | Parameters:
+        | *rank*: ``size_t``
+        | *dim*: :class:`vector<size_t>` object
+        """
+        func=self._link.o2scl.o2scl_tensor_grid__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,rank,dim._ptr)
+        return
+
     def is_grid_set(self):
         """
         | Returns: a Python boolean
@@ -5191,6 +5184,16 @@ class tensor_grid:
         func(self._ptr,grid._ptr)
         return
 
+    def set_grid_vec_vec(self,grid_vecs):
+        """
+        | Parameters:
+        | *grid_vecs*: :class:`vector<vector<double>>` object
+        """
+        func=self._link.o2scl.o2scl_tensor_grid__set_grid_vec_vec
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,grid_vecs._ptr)
+        return
+
     def default_grid(self):
         """
         """
@@ -5208,6 +5211,18 @@ class tensor_grid:
         func=self._link.o2scl.o2scl_tensor_grid__set_grid_i_vec
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
         func(self._ptr,i,grid._ptr)
+        return
+
+    def set_grid_i_func(self,ix,func):
+        """
+        | Parameters:
+        | *ix*: ``size_t``
+        | *func*: string
+        """
+        func_=ctypes.c_char_p(force_bytes(func))
+        func=self._link.o2scl.o2scl_tensor_grid__set_grid_i_func
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char_p]
+        func(self._ptr,ix,func_)
         return
 
     def get_grid(self,i,j):
@@ -5234,6 +5249,73 @@ class tensor_grid:
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_double]
         func(self._ptr,i,j,val)
         return
+
+    def lookup_grid(self,i,val):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *val*: ``double``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tensor_grid__lookup_grid
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
+        ret=func(self._ptr,i,val)
+        return ret
+
+    def copy_table3d_align(self,ix_x,ix_y,index,tab,z_name="z"):
+        """
+        | Parameters:
+        | *ix_x*: ``size_t``
+        | *ix_y*: ``size_t``
+        | *index*: :class:`vector<size_t>` object
+        | *tab*: :class:`table3d` object
+        | *z_name* ="z": string
+        """
+        z_name_=ctypes.c_char_p(force_bytes(z_name))
+        func=self._link.o2scl.o2scl_tensor_grid__copy_table3d_align
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,ix_x,ix_y,index._ptr,tab._ptr,z_name_)
+        return
+
+    def copy_table3d_align_setxy(self,ix_x,ix_y,index,tab,x_name="x",y_name="y",z_name="z"):
+        """
+        | Parameters:
+        | *ix_x*: ``size_t``
+        | *ix_y*: ``size_t``
+        | *index*: :class:`vector<size_t>` object
+        | *tab*: :class:`table3d` object
+        | *x_name* ="x": string
+        | *y_name* ="y": string
+        | *z_name* ="z": string
+        """
+        x_name_=ctypes.c_char_p(force_bytes(x_name))
+        y_name_=ctypes.c_char_p(force_bytes(y_name))
+        z_name_=ctypes.c_char_p(force_bytes(z_name))
+        func=self._link.o2scl.o2scl_tensor_grid__copy_table3d_align_setxy
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,ix_x,ix_y,index._ptr,tab._ptr,x_name_,y_name_,z_name_)
+        return
+
+    def clear(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_tensor_grid__clear
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def interp_linear(self,v):
+        """
+        | Parameters:
+        | *v*: :class:`vector<double>` object
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_tensor_grid__interp_linear
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,v._ptr)
+        return ret
 
 
 class tensor_int:
