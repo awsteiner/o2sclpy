@@ -42,8 +42,9 @@ from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
-from o2sclpy.utils import length_without_colors, wrap_line, screenify
+from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import get_ic_ptrs_to_list, string_equal_dash
+#from o2sclpy.utils import reformat_python_docs
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
@@ -2587,15 +2588,24 @@ class o2graph_plotter(yt_plot_base):
                     
         # Handle the case of an o2graph command from the
         # base list
-        for line in base_list:
-            if cmd==line[0]:
-                match=True
-                print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
-                      ter.default_fg()+
-                      ' '+line[2]+'\n\n'+line[1]+'\n')
-                tempx_arr=wrap_line(line[3])
-                for i in range (0,len(tempx_arr)):
-                    print(tempx_arr[i])
+        if cmd=='yt-axis':
+            help(yt_plot_base.yt_plot_axis)
+            #doc=yt_plot_base.yt_plot_axis.__doc__
+            #reformat_python_docs(cmd,doc)
+            #print(doc)
+            match=True
+        elif cmd=='yt-path':
+            help(o2graph_plotter.yt_path_func)
+        else:
+            for line in base_list:
+                if cmd==line[0]:
+                    match=True
+                    print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
+                          ter.default_fg()+
+                          ' '+line[2]+'\n\n'+line[1]+'\n')
+                    tempx_arr=wrap_line(line[3])
+                    for i in range (0,len(tempx_arr)):
+                        print(tempx_arr[i])
                                 
         # Handle the case of an o2graph command from the
         # extra list
@@ -2974,8 +2984,25 @@ class o2graph_plotter(yt_plot_base):
 
     def yt_path_func(self,o2scl,amp,args):
         """
-        Add a path to the list of yt animations for the next
-        yt render.
+        This function can be accessed in o2graph by the
+        o2graph command ``yt-path``.
+
+        Command-line arguments: ``<type> <number of frames> 
+        <other parameters>``
+
+        The ``yt-path`` adds a path to a yt animation. To rotate the
+        camera around the z-axis, use 'yaw' <n_frames> <angle>, where
+        angle is a fraction of a full rotation. To zoom the camera,
+        use 'zoom' <n_frames> <factor> ,where factor is the total zoom
+        factor to apply over all n_frames. To move the camera along a
+        line, use 'move' <n_frames> <[dest_x,dest_y,dest_z]>
+        <'internal' or 'user'>, where the third argument is the
+        destination in either the internal or user-specified
+        coordinate system. To turn the camera without moving it, use
+        'turn' <n_frames> <[foc_x,foc_y,foc_z]> <'internal' or
+        'user'>. Executing 'yt-path reset' resets the yt animation
+        path to an empty list (for no animation).
+
         """
 
         self.yt_path.append(args)
@@ -3291,8 +3318,12 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::yt_scatter()
         return
         
-    def yt_vertex_list(self,o2scl,amp,args):
+    def yt_vertex_list(self,o2scl,amp,link,args):
         """
+        This function can be accessed in o2graph by the
+        o2graph command ``yt-vertex-list``.
+        
+        Command-line arguments: ``[kwargs]``
         Plot a series of line segments between a list of
         vertices specified in an O\ :sub:`2`\ scl table.
         """
@@ -3311,9 +3342,19 @@ class o2graph_plotter(yt_plot_base):
             for key, value in self.yt_scene.sources.items():
                 print('yt-source-list',icnt,key,type(value))
                 icnt=icnt+1
+        # If there are no yt sources yet, then create a
+        # default volume object
         if icnt==0:
             self.yt_def_vol()
-        
+
+        #amt=acol_manager(link,amp)
+        #curr_type=std_string(link)
+        #amt.get_type(curr_type)
+        #print('vertex',curr_type.to_bytes())
+        #quit()
+        #tab=amt.get_table_obj()
+        #xv=tab[force_bytes(args[0])]
+            
         int_ptr=ctypes.POINTER(ctypes.c_int)
         char_ptr=ctypes.POINTER(ctypes.c_char)
         char_ptr_ptr=ctypes.POINTER(char_ptr)
@@ -3432,6 +3473,109 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::yt_vertex_list()
         return
         
+    def yt_mesh(self,o2scl,amp,link,args):
+        """
+        Plot a mesh from vertices specified by a slice of O\ :sub:`2`\ scl
+        table3d object.
+        """
+
+        if len(args)<1:
+            print('Function yt_mesh() requires a slice ',
+                  'column arguments.')
+            return
+
+        slice=args[0]
+        
+        icnt=0
+        if self.yt_scene!=0:
+            for key, value in self.yt_scene.sources.items():
+                print('yt-source-list',icnt,key,type(value))
+                icnt=icnt+1
+        if icnt==0:
+            self.yt_def_vol()
+
+        amt=acol_manager(link,amp)
+        curr_type=amt.type
+        print('curr_type:',curr_type)
+            
+        if curr_type==b'table3d':
+            if self.yt_check_backend()==1:
+                return
+
+            import yt
+            from yt.visualization.volume_rendering.api \
+                import LineSource
+
+            sl=amt.table3d_obj.get_slice(slice).to_numpy()
+            xv=[amt.table3d_obj.get_x_grid(i) for i in
+                range(0,amt.table3d_obj.get_nx())]
+            yv=[amt.table3d_obj.get_y_grid(i) for i in
+                range(0,amt.table3d_obj.get_ny())]
+            
+            if self.xset==False:
+                self.xlo=min(xv)
+                self.xhi=max(xv)
+                print('Set xlimits to (%0.6e,%0.6e)' % (self.xlo,self.xhi))
+                self.xset=True
+            if self.yset==False:
+                self.ylo=max(yv)
+                self.yhi=max(yv)
+                print('Set ylimits to (%0.6e,%0.6e)' % (self.ylo,self.yhi))
+                self.yset=True
+            if self.zset==False:
+                self.zlo=min(sl)
+                self.zhi=max(sl)
+                print('Set zlimits to (%0.6e,%0.6e)' % (self.zlo,self.zhi))
+                self.zset=True
+            x_range=self.xhi-self.xlo
+            y_range=self.yhi-self.ylo
+            z_range=self.zhi-self.zlo
+
+            pts=[]
+            cols=[]
+            sizes=[]
+            line_list=[]
+            for i in range(0,len(xv)-1):
+                for j in range(0,len(yv)):
+                    line_list.append([(xv[i]-self.xlo)/x_range,
+                                      (yv[j]-self.ylo)/y_range,
+                                      (sl[i][j]-self.zlo)/z_range],
+                                     [(xv[i+1]-self.xlo)/x_range,
+                                      (yv[j]-self.ylo)/y_range,
+                                      (sl[i+1][j]-self.zlo)/z_range])
+                    cols.append([1.0,1.0,1.0,1.0])
+            for i in range(0,len(xv)):
+                for j in range(0,len(yv)-1):
+                    line_list.append([(xv[i]-self.xlo)/x_range,
+                                      (yv[j]-self.ylo)/y_range,
+                                      (sl[i][j]-self.zlo)/z_range],
+                                     [(xv[i]-self.xlo)/x_range,
+                                      (yv[j+1]-self.ylo)/y_range,
+                                      (sl[i][j+1]-self.zlo)/z_range])
+                    cols.append([1.0,1.0,1.0,1.0])
+            pts.append(line_list)
+            pts2=numpy.array(pts)
+            cols2=numpy.array(cols)
+
+            ls=LineSource(pts2,cols2)
+
+            #if self.yt_created_scene==False:
+            #self.yt_create_scene()
+
+            print('o2graph:yt-mesh: Adding point source.')
+            kname=self.yt_unique_keyname('o2graph_mesh')
+            self.yt_scene.add_source(ls,keyname=kname)
+                        
+            #if self.yt_created_camera==False:
+            #self.yt_create_camera(ps)
+
+        else:
+            print('Command yt-vertex-list does not work with type',
+                  curr_type+'.')
+            
+        # End of function o2graph_plotter::yt_vertex_list()
+        return
+        
     def commands(self,o2scl,amp,args):
         """
         Output the currently available commands.
@@ -3478,7 +3622,7 @@ class o2graph_plotter(yt_plot_base):
                 st=base_acol_comm_list[i].decode('utf-8')
                 comm_list.append(ter.cmd_str(st))
             
-            comm_rows=screenify(comm_list)
+            comm_rows=screenify_py(comm_list)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
 
@@ -3493,7 +3637,7 @@ class o2graph_plotter(yt_plot_base):
             comm_list_dec=sorted(comm_list)
             for i in range(0,len(comm_list_dec)):
                 comm_list_dec[i]=ter.cmd_str(comm_list_dec[i].decode('utf-8'))
-            comm_rows=screenify(comm_list_dec)
+            comm_rows=screenify_py(comm_list_dec)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
                 
@@ -3536,7 +3680,7 @@ class o2graph_plotter(yt_plot_base):
                 if len(comm_list2)>0:
                     for i in range(0,len(comm_list2)):
                         comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
-                    comm_rows=screenify(comm_list2)
+                    comm_rows=screenify_py(comm_list2)
                     for i in range(0,len(comm_rows)):
                         print(comm_rows[i])
                 else:
@@ -3586,7 +3730,7 @@ class o2graph_plotter(yt_plot_base):
             comm_list2=sorted(comm_list)
             for i in range(0,len(comm_list2)):
                 comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
-            comm_rows=screenify(comm_list2)
+            comm_rows=screenify_py(comm_list2)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
             print('')
@@ -3601,7 +3745,7 @@ class o2graph_plotter(yt_plot_base):
             comm_list2=sorted(comm_list)
             for i in range(0,len(comm_list2)):
                 comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
-            comm_rows=screenify(comm_list2)
+            comm_rows=screenify_py(comm_list2)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
             print('')
@@ -3618,7 +3762,7 @@ class o2graph_plotter(yt_plot_base):
             comm_list2=sorted(comm_list)
             for i in range(0,len(comm_list2)):
                 comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
-            comm_rows=screenify(comm_list2)
+            comm_rows=screenify_py(comm_list2)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
                         
@@ -3673,7 +3817,7 @@ class o2graph_plotter(yt_plot_base):
             comm_list2=sorted(comm_list)
             for i in range(0,len(comm_list2)):
                 comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
-            comm_rows=screenify(comm_list2)
+            comm_rows=screenify_py(comm_list2)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
                         
@@ -4629,7 +4773,19 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-vertex-list.')
                     else:
-                        self.yt_vertex_list(o2scl,amp,
+                        self.yt_vertex_list(o2scl,amp,link,
+                                            strlist[ix+1:ix_next])
+                                                    
+                elif cmd_name=='yt-mesh':
+
+                    if self.verbose>2:
+                        print('Process yt-mesh.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<4:
+                        print('Not enough parameters for yt-mesh.')
+                    else:
+                        self.yt_vertex_list(o2scl,amp,link,
                                             strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-source-list':

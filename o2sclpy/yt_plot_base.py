@@ -762,13 +762,29 @@ class yt_plot_base(plot_base):
                      color=[1.0,1.0,1.0,0.5],
                      coords='internal',keyname='o2sclpy_axis'):
         """
-        Plot an axis in a yt volume consisting a PointSource for the
-        origin and then three arrows pointing from ``origin`` to
-        ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. The
-        specified color is used for the origin and all three arrows.
-        The arrows are constructed with one main LineSource and then
-        several smaller LineSource objects in a conical shape to
-        create the arrow heads.
+        This function can be accessed in o2graph by the
+        o2graph command ``yt-axis``.
+
+        Command-line arguments: ``[kwargs]``
+        
+        This command plots an axis from the origin to the three points
+        ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. Other
+        relevant keyword arguments are: ``color=[1,1,1,0.5]``, the
+        color of the axis arrows, coords, a string for the coordinate
+        system, and keyname, the name for the yt object. Use
+        ``coords=user`` for the user-based coordinate system and
+        ``coords=internal` for the internal coordinate system.
+
+        Note that it is often most convenient to create the 
+        first volume source to set the scaling of the user-based
+        coordinate system before using the ``yt-axis`` command.
+
+        This function creates a PointSource at the origin and then
+        three arrows pointing from the origin along the x-, y-, and
+        z-axes. The specified color is used for the origin and all
+        three arrows. The arrows are constructed with one main
+        LineSource and then several smaller LineSource objects in a
+        conical shape to create the arrow heads.
         """
 
         if self.yt_scene==0:
@@ -843,7 +859,7 @@ class yt_plot_base(plot_base):
         self.yt_data_sources.append(yt.load_uniform_grid(dict(density=arr),
                                                          arr.shape,bbox=bbox))
         ds=self.yt_data_sources[len(self.yt_data_sources)-1]
-        self.yt_vols.append(create_volume_source(ds,field='density'))
+        self.yt_vols.append(create_volume_source(ds,field=('gas','density')))
         vol=self.yt_vols[len(self.yt_vols)-1]
         vol.log_field=False
             

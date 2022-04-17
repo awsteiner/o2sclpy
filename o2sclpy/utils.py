@@ -34,6 +34,37 @@ import platform
 import ctypes
 from ctypes.util import find_library
 
+# def remove_spaces(string):
+#     while len(string)>0 and string[0]==' ':
+#         string=string[1:]
+#     return string
+
+# def reformat_python_docs(cmd,doc_str):
+    
+#     reflist=doc_str.split('\n')
+#     ter=terminal()
+    
+#     short=''
+#     parm_desc=''
+#     long_help=''
+    
+#     if len(reflist)>=2:
+#         short=reflist[1]
+#         short=remove_spaces(short)
+        
+#     if len(reflist)>=4:
+#         parm_desc=reflist[3]
+#         parm_desc=remove_spaces(parm_desc)
+        
+#     #if len(reflist)>=6:
+#     #for j in range(5,len(reflist)):
+#     #long_help=reflist[5]
+
+#     print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
+#           ter.default_fg()+' '+parm_desc)
+#     print('')
+#     print(short)
+
 def string_to_color(str_in):
     """
     Convert a string to a color
@@ -849,7 +880,7 @@ def string_equal_dash(str1,str2):
         return True
     return False
 
-def screenify(tlist,ncols=79):
+def screenify_py(tlist,ncols=79):
     maxlen=0
     for i in range(0,len(tlist)):
         if length_without_colors(tlist[i])>maxlen:
@@ -871,4 +902,3 @@ def screenify(tlist,ncols=79):
                 row=row+colt
         output_list.append(row)
     return output_list
-            

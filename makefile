@@ -58,6 +58,7 @@ test:
 		doc/static/examples/skyrme.py \
 		doc/static/examples/nucmass.py \
 		doc/static/examples/SFHo_SFHx.py \
+		doc/static/examples/test_examples.py \
 		-s -v
 
 ifeq ($(MACHINE),isospin)
