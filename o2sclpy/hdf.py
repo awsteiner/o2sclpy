@@ -685,11 +685,12 @@ class hdf_file:
         ret=func(self._ptr,name_,deft_,s._ptr)
         return ret
 
-    def find_object_by_type(self,type,name,verbose=0):
+    def find_object_by_type(self,type,name,use_regex=False,verbose=0):
         """
         | Parameters:
         | *type*: string
         | *name*: :class:`std_string` object
+        | *use_regex* =false: ``bool``
         | *verbose* =0: ``int``
         | Returns: a Python int
         """
@@ -697,15 +698,16 @@ class hdf_file:
         name_=ctypes.c_char_p(force_bytes(name))
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_type
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int]
-        ret=func(self._ptr,type_,name._ptr,verbose)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
+        ret=func(self._ptr,type_,name._ptr,use_regex,verbose)
         return ret
 
-    def find_object_by_name(self,name,type,verbose=0):
+    def find_object_by_name(self,name,type,use_regex=False,verbose=0):
         """
         | Parameters:
         | *name*: string
         | *type*: :class:`std_string` object
+        | *use_regex* =false: ``bool``
         | *verbose* =0: ``int``
         | Returns: a Python int
         """
@@ -713,8 +715,8 @@ class hdf_file:
         type_=ctypes.c_char_p(force_bytes(type))
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_name
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int]
-        ret=func(self._ptr,name_,type._ptr,verbose)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
+        ret=func(self._ptr,name_,type._ptr,use_regex,verbose)
         return ret
 
     def find_object_by_pattern(self,pattern,type,verbose=0):
@@ -810,15 +812,16 @@ class acol_manager:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def get_env_var_name(self,env_var_name):
+    def get_env_var_name(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_env_var_name
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,env_var_name._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_env_var_name(self,value):
         """
@@ -869,15 +872,16 @@ class acol_manager:
         func(self._ptr,value)
         return
 
-    def get_type(self,type):
+    def get_type(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_type
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,type._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_type(self,value):
         """
@@ -1048,15 +1052,16 @@ class acol_manager:
         func(self._ptr,value)
         return
 
-    def get_string_obj(self,string_obj):
+    def get_string_obj(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_string_obj
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,string_obj._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_string_obj(self,value):
         """

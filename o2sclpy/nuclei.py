@@ -738,15 +738,16 @@ class nucmass_table(nucmass):
         func(self._ptr,value)
         return
 
-    def get_reference(self,reference):
+    def get_reference(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_nucmass_table_get_reference
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,reference._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_reference(self,value):
         """

@@ -3348,12 +3348,7 @@ class o2graph_plotter(yt_plot_base):
             self.yt_def_vol()
 
         #amt=acol_manager(link,amp)
-        #curr_type=std_string(link)
-        #amt.get_type(curr_type)
-        #print('vertex',curr_type.to_bytes())
-        #quit()
-        #tab=amt.get_table_obj()
-        #xv=tab[force_bytes(args[0])]
+        #print('curr_type:',amt.get_type())
             
         int_ptr=ctypes.POINTER(ctypes.c_int)
         char_ptr=ctypes.POINTER(ctypes.c_char)
@@ -3491,6 +3486,8 @@ class o2graph_plotter(yt_plot_base):
             for key, value in self.yt_scene.sources.items():
                 print('yt-source-list',icnt,key,type(value))
                 icnt=icnt+1
+        # If there are no yt sources yet, then create a
+        # default volume object
         if icnt==0:
             self.yt_def_vol()
 
@@ -3824,7 +3821,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::commands()
         return
 
-    def yt_save_annotate(self,o2scl,amp,fname):
+    def yt_save_annotate(self,o2scl,amp,link,fname):
         """
         Create a .png image, then add 2D annotations, 
         save to file named 'fname', and then apply any filters
@@ -3853,9 +3850,11 @@ class o2graph_plotter(yt_plot_base):
             self.axes=axt.axes
             self.fig=self.yt_scene._render_figure
             self.canvas_flag=True
-            print('Adding annotations:')
+            if verbose>1:
+                print('Adding annotations:')
             self.parse_string_list(self.yt_ann,o2scl,amp,link)
-            print('Done adding annotations:')
+            if verbose>1:
+                print('Done adding annotations:')
             #self.text(0.1,0.9,'x',color='w',fontsize=self.font*1.25,
                 #transform=tf)
             self.canvas_flag=False
@@ -3867,7 +3866,9 @@ class o2graph_plotter(yt_plot_base):
             #self.yt_scene._render_figure.tight_layout(pad=0.0)
             plot.subplots_adjust(left=0.0,bottom=0.0,
                                  right=1.0,top=1.0)
-            print('o2graph:yt-render: Calling savefig() with annotations.')
+            if verbose>0:
+                print('o2graph:yt-render: Calling',
+                      'savefig() with annotations and file',fname,'.')
             self.yt_scene._render_figure.savefig(fname,facecolor='black',
                                                  pad_inches=0)
 
@@ -4064,7 +4065,7 @@ class o2graph_plotter(yt_plot_base):
             os.system('mv /tmp/yt_filtered.png '+fname)
         return
     
-    def yt_render(self,o2scl,amp,fname,mov_fname=''):
+    def yt_render(self,o2scl,amp,link,fname,mov_fname=''):
         """
         Complete the yt render and save the image to a file. If necessary,
         compile the images into a movie and save into the specified
@@ -4082,7 +4083,7 @@ class o2graph_plotter(yt_plot_base):
         if len(self.yt_path)==0:
 
             # No path, so just call save and finish
-            self.yt_save_annotate(o2scl,amp,fname);
+            self.yt_save_annotate(o2scl,amp,link,fname);
 
         else:
 
@@ -4109,7 +4110,7 @@ class o2graph_plotter(yt_plot_base):
             # Render initial frame
             i_frame=0
             fname2=self._make_fname(prefix,suffix,i_frame,n_frames)
-            self.yt_save_annotate(o2scl,amp,fname2);
+            self.yt_save_annotate(o2scl,amp,link,fname2);
 
             # Loop over all movements
             for ip in range(0,len(self.yt_path)):
@@ -4179,7 +4180,7 @@ class o2graph_plotter(yt_plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_save_annotate(o2scl,amp,fname2);
+                        self.yt_save_annotate(o2scl,amp,link,fname2);
                     
                         # End of 'for ifr in range(0,n_frames_move)'
                     
@@ -4219,7 +4220,7 @@ class o2graph_plotter(yt_plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_save_annotate(o2scl,amp,fname2);
+                        self.yt_save_annotate(o2scl,amp,link,fname2);
                         
                         # End of 'for ifr in range(0,n_frames_move)'
 
@@ -4280,7 +4281,7 @@ class o2graph_plotter(yt_plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_save_annotate(o2scl,amp,fname2);
+                        self.yt_save_annotate(o2scl,amp,link,fname2);
 
                         # End of 'for ifr in range(0,n_frames_move)'
                         
@@ -4341,7 +4342,7 @@ class o2graph_plotter(yt_plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_save_annotate(o2scl,amp,fname2);
+                        self.yt_save_annotate(o2scl,amp,link,fname2);
 
                         # End of 'for ifr in range(0,n_frames_move)'
                         
@@ -4429,7 +4430,7 @@ class o2graph_plotter(yt_plot_base):
                         # Save new frame
                         fname2=self._make_fname(prefix,suffix,
                                                 i_frame,n_frames)
-                        self.yt_save_annotate(o2scl,amp,fname2);
+                        self.yt_save_annotate(o2scl,amp,link,fname2);
 
                         # End of 'for ifr in range(0,n_frames_move)'
                         
@@ -4785,8 +4786,8 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-mesh.')
                     else:
-                        self.yt_vertex_list(o2scl,amp,link,
-                                            strlist[ix+1:ix_next])
+                        self.yt_mesh(o2scl,amp,link,
+                                     strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-source-list':
 
@@ -4824,9 +4825,9 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for yt-render.')
                     elif ix_next-ix<3:
-                        self.yt_render(o2scl,amp,strlist[ix+1])
+                        self.yt_render(o2scl,amp,link,strlist[ix+1])
                     else:
-                        self.yt_render(o2scl,amp,strlist[ix+1],
+                        self.yt_render(o2scl,amp,link,strlist[ix+1],
                                        mov_fname=strlist[ix+2])
 
                 elif cmd_name=='yt-tf':

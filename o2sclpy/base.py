@@ -5912,15 +5912,16 @@ class find_constants_const_entry:
         func(self._ptr,value._ptr)
         return
 
-    def get_unit(self,unit):
+    def get_unit(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_find_constants_const_entry_get_unit
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,unit._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_unit(self,value):
         """
@@ -5971,15 +5972,16 @@ class find_constants_const_entry:
         func(self._ptr,value)
         return
 
-    def get_source(self,source):
+    def get_source(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_find_constants_const_entry_get_source
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,source._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_source(self,value):
         """
@@ -6313,15 +6315,16 @@ class convert_units_der_unit:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def get_label(self,label):
+    def get_label(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_convert_units_der_unit_get_label
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,label._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_label(self,value):
         """
@@ -6492,15 +6495,16 @@ class convert_units_der_unit:
         func(self._ptr,value)
         return
 
-    def get_name(self,name):
+    def get_name(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_convert_units_der_unit_get_name
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,name._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_name(self,value):
         """
@@ -7809,15 +7813,16 @@ class comm_option_s:
         func(self._ptr,value)
         return
 
-    def get_lng(self,lng):
+    def get_lng(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_comm_option_s_get_lng
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,lng._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_lng(self,value):
         """
@@ -7828,15 +7833,16 @@ class comm_option_s:
         func(self._ptr,value._ptr)
         return
 
-    def get_desc(self,desc):
+    def get_desc(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_comm_option_s_get_desc
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,desc._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_desc(self,value):
         """
@@ -7887,15 +7893,16 @@ class comm_option_s:
         func(self._ptr,value)
         return
 
-    def get_parm_desc(self,parm_desc):
+    def get_parm_desc(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_comm_option_s_get_parm_desc
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,parm_desc._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_parm_desc(self,value):
         """
@@ -7906,15 +7913,16 @@ class comm_option_s:
         func(self._ptr,value._ptr)
         return
 
-    def get_help(self,help):
+    def get_help(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_comm_option_s_get_help
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,help._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_help(self,value):
         """
@@ -8006,15 +8014,16 @@ class cmd_line_arg:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
-    def get_arg(self,arg):
+    def get_arg(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_cmd_line_arg_get_arg
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,arg._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_arg(self,value):
         """
@@ -8186,15 +8195,16 @@ class cli:
         func(self._ptr,value)
         return
 
-    def get_desc(self,desc):
+    def get_desc(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_cli_get_desc
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,desc._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_desc(self,value):
         """
@@ -8205,15 +8215,16 @@ class cli:
         func(self._ptr,value._ptr)
         return
 
-    def get_cmd_name(self,cmd_name):
+    def get_cmd_name(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_cli_get_cmd_name
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,cmd_name._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_cmd_name(self,value):
         """
@@ -8224,15 +8235,16 @@ class cli:
         func(self._ptr,value._ptr)
         return
 
-    def get_addl_help_cmd(self,addl_help_cmd):
+    def get_addl_help_cmd(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_cli_get_addl_help_cmd
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,addl_help_cmd._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_addl_help_cmd(self,value):
         """
@@ -8243,15 +8255,16 @@ class cli:
         func(self._ptr,value._ptr)
         return
 
-    def get_addl_help_cli(self,addl_help_cli):
+    def get_addl_help_cli(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_cli_get_addl_help_cli
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,addl_help_cli._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_addl_help_cli(self,value):
         """

@@ -93,6 +93,7 @@ def subtest_hdf5(link,tmp_path):
     return
 
 def test_all(tmp_path):
+
     link=o2sclpy.linker()
     link.link_o2scl()
 
