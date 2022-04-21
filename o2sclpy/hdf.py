@@ -719,11 +719,12 @@ class hdf_file:
         ret=func(self._ptr,name_,type._ptr,use_regex,verbose)
         return ret
 
-    def find_object_by_pattern(self,pattern,type,verbose=0):
+    def find_object_by_pattern(self,pattern,type,use_regex=False,verbose=0):
         """
         | Parameters:
         | *pattern*: string
         | *type*: :class:`std_string` object
+        | *use_regex* =false: ``bool``
         | *verbose* =0: ``int``
         | Returns: a Python int
         """
@@ -731,8 +732,8 @@ class hdf_file:
         type_=ctypes.c_char_p(force_bytes(type))
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_pattern
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int]
-        ret=func(self._ptr,pattern_,type._ptr,verbose)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
+        ret=func(self._ptr,pattern_,type._ptr,use_regex,verbose)
         return ret
 
     def file_list(self,verbose):

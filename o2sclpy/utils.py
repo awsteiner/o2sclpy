@@ -34,36 +34,58 @@ import platform
 import ctypes
 from ctypes.util import find_library
 
-# def remove_spaces(string):
-#     while len(string)>0 and string[0]==' ':
-#         string=string[1:]
-#     return string
+def remove_spaces(string):
+    while len(string)>0 and string[0]==' ':
+        string=string[1:]
+    return string
 
-# def reformat_python_docs(cmd,doc_str):
+def reformat_python_docs(cmd,doc_str):
     
-#     reflist=doc_str.split('\n')
-#     ter=terminal()
-    
-#     short=''
-#     parm_desc=''
-#     long_help=''
-    
-#     if len(reflist)>=2:
-#         short=reflist[1]
-#         short=remove_spaces(short)
-        
-#     if len(reflist)>=4:
-#         parm_desc=reflist[3]
-#         parm_desc=remove_spaces(parm_desc)
-        
-#     #if len(reflist)>=6:
-#     #for j in range(5,len(reflist)):
-#     #long_help=reflist[5]
+    reflist=doc_str.split('\n')
+    ter=terminal()
 
-#     print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
-#           ter.default_fg()+' '+parm_desc)
-#     print('')
-#     print(short)
+    short=''
+    parm_desc=''
+    long_help=''
+    
+    if len(reflist)>=4:
+        short=reflist[3]
+        short=remove_spaces(short)
+
+    jnext=6        
+    if len(reflist)>=6:
+        parm_desc=reflist[5]
+        parm_desc=remove_spaces(parm_desc)
+        while reflist[jnext]!='' and jnext<len(reflist):
+            stmp=reflist[jnext]
+            stmp=remove_spaces(stmp)
+            parm_desc=parm_desc+' '+stmp
+            jnext=jnext+1
+        
+    print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
+          ter.default_fg()+' '+parm_desc)
+    print('')
+    print(short)
+    
+    if len(reflist)>=jnext+1:
+        for j in range(jnext+1,len(reflist)):
+            if (reflist[j]==''):
+                print('')
+                tmplist=wrap_line(long_help)
+                for k in range(0,len(tmplist)):
+                    print(tmplist[k])
+                long_help=''
+            else:
+                stemp=remove_spaces(reflist[j])
+                if len(long_help)>0:
+                    long_help=long_help+' '+stemp
+                else:
+                    long_help=stemp
+                
+    print('')
+    tmplist=wrap_line(long_help)
+    for k in range(0,len(tmplist)):
+        print(tmplist[k])
 
 def string_to_color(str_in):
     """

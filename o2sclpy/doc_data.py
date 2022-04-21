@@ -575,6 +575,7 @@ extra_list=[
      "<slice_r> <slice_g> <slice_b>","Create a density plot from "+
      "the three specified slices. This command uses imshow(). "+
      "To directly create a .png file with no axes, use make-png instead."],
+    ["table3d","yt-mesh","","",""],
     ["table3d","make-png","Create a png file from a table3d object.",
      "<slice_r> <slice_g> <slice_b> <filename>",
      "Create a .png file from "+

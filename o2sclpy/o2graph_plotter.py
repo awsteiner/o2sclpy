@@ -44,7 +44,7 @@ from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import get_ic_ptrs_to_list, string_equal_dash
-#from o2sclpy.utils import reformat_python_docs
+from o2sclpy.utils import reformat_python_docs
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
@@ -2147,7 +2147,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::parse_argv()
         return
 
-    def yt_add_vol(self,o2scl,amp,keyname='o2graph_vol'):
+    def yt_add_vol(self,o2scl,amp,args,keyname='o2graph_vol'):
         """
         Add a volume source to a yt visualization from a
         tensor_grid object.
@@ -2162,6 +2162,7 @@ class o2graph_plotter(yt_plot_base):
         curr_type=o2scl_get_type(o2scl,amp)
 
         if curr_type==b'tensor_grid':
+            
             self.yt_check_backend()
             import yt
             from yt.visualization.volume_rendering.api \
@@ -2199,6 +2200,95 @@ class o2graph_plotter(yt_plot_base):
             nx=nx.value
             ny=ny.value
             nz=nz.value
+            total_size=nx*ny*nz
+
+            if self.xset==False:
+                self.xlo=gridx[0]
+                self.xhi=gridx[nx-1]
+                self.xset=True
+            if self.yset==False:
+                self.ylo=gridy[0]
+                self.yhi=gridy[ny-1]
+                self.yset=True
+            if self.zset==False:
+                self.zlo=gridz[0]
+                self.zhi=gridz[nz-1]
+                self.zset=True
+            print('o2graph_plotter:yt-add-vol: axis limits:',
+                  self.xlo,self.xhi,
+                  self.ylo,self.yhi,self.zlo,self.zhi)
+            
+            arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
+            self.yt_volume_data.append(numpy.copy(arr))
+            # Rescale to the internal coordinate system
+            bbox=numpy.array([[(gridx[0]-self.xlo)/(self.xhi-self.xlo),
+                               (gridx[nx-1]-self.xlo)/(self.xhi-self.xlo)],
+                              [(gridy[0]-self.ylo)/(self.yhi-self.ylo),
+                               (gridy[ny-1]-self.ylo)/(self.yhi-self.ylo)],
+                              [(gridz[0]-self.zlo)/(self.zhi-self.zlo),
+                               (gridz[nz-1]-self.zlo)/(self.zhi-self.zlo)]])
+            self.yt_volume_bbox.append(numpy.copy(bbox))
+            arr2=self.yt_volume_data[len(self.yt_volume_data)-1]
+            bbox2=self.yt_volume_bbox[len(self.yt_volume_bbox)-1]
+
+            func=yt.load_uniform_grid
+            self.yt_data_sources.append(func(dict(density=arr2),
+                                             arr2.shape,bbox=bbox2))
+            ds=self.yt_data_sources[len(self.yt_data_sources)-1]
+
+            self.yt_vols.append(create_volume_source(ds,field='density'))
+            vol=self.yt_vols[len(self.yt_vols)-1]
+            vol.log_field=False
+
+            # Setup the transfer function
+            if self.yt_tf!=0:
+                vol.set_transfer_function(self.yt_tf)
+                print(self.yt_tf)
+            else:
+                tfh=TransferFunctionHelper(ds)
+                tfh.set_field('density')
+                tfh.set_log(False)
+                tfh.set_bounds()
+                tfh.build_transfer_function()
+                tfh.tf.add_layers(3)
+                #tfh.plot('tf.png')
+                vol.set_transfer_function(tfh.tf)
+                print(tfh.tf)
+                        
+            if self.yt_created_scene==False:
+                self.yt_create_scene()
+
+            kname=self.yt_unique_keyname(keyname)
+            self.yt_vol_keynames.append(kname)
+            self.yt_scene.add_source(vol,keyname=kname)
+                            
+            if self.yt_created_camera==False:
+                self.yt_create_camera(ds)
+                
+        elif curr_type==b'table3d':
+            
+            self.yt_check_backend()
+            
+            import yt
+            from yt.visualization.volume_rendering.api \
+                import create_volume_source
+            from yt.visualization.volume_rendering.transfer_function_helper \
+                import TransferFunctionHelper
+
+            tg=tensor_grid(link)
+            amt=acol_manager(link,amp)
+            t3d=amt.get_table3d_obj()
+            tg.from_table3d_fermi(args[0])
+
+            grid=std_vector(link)
+            grid=tg.get_grid_packed()
+            nx=tg.get_size(0)
+            ny=tg.get_size(1)
+            nz=tg.get_size(2)
+            gridx=[grid[i] for i in range(0,nx)]
+            gridy=[grid[i] for i in range(nx,nx+ny)]
+            gridz=[grid[i] for i in range(nx+ny,nx+ny+nz)]
+            
             total_size=nx*ny*nz
 
             if self.xset==False:
@@ -2589,13 +2679,13 @@ class o2graph_plotter(yt_plot_base):
         # Handle the case of an o2graph command from the
         # base list
         if cmd=='yt-axis':
-            help(yt_plot_base.yt_plot_axis)
-            #doc=yt_plot_base.yt_plot_axis.__doc__
-            #reformat_python_docs(cmd,doc)
-            #print(doc)
+            doc=yt_plot_base.yt_plot_axis.__doc__
+            reformat_python_docs(cmd,doc)
             match=True
         elif cmd=='yt-path':
-            help(o2graph_plotter.yt_path_func)
+            doc=o2graph_plotter.yt_path_func.__doc__
+            reformat_python_docs(cmd,doc)
+            match=True
         else:
             for line in base_list:
                 if cmd==line[0]:
@@ -2984,8 +3074,9 @@ class o2graph_plotter(yt_plot_base):
 
     def yt_path_func(self,o2scl,amp,args):
         """
-        This function can be accessed in o2graph by the
-        o2graph command ``yt-path``.
+        Documentation for o2graph command ``yt-path``:
+
+        Add a path to the yt animation.
 
         Command-line arguments: ``<type> <number of frames> 
         <other parameters>``
@@ -3479,21 +3570,10 @@ class o2graph_plotter(yt_plot_base):
                   'column arguments.')
             return
 
-        slice=args[0]
-        
-        icnt=0
-        if self.yt_scene!=0:
-            for key, value in self.yt_scene.sources.items():
-                print('yt-source-list',icnt,key,type(value))
-                icnt=icnt+1
-        # If there are no yt sources yet, then create a
-        # default volume object
-        if icnt==0:
-            self.yt_def_vol()
+        slc=args[0]
 
         amt=acol_manager(link,amp)
-        curr_type=amt.type
-        print('curr_type:',curr_type)
+        curr_type=amt.get_type()
             
         if curr_type==b'table3d':
             if self.yt_check_backend()==1:
@@ -3503,11 +3583,12 @@ class o2graph_plotter(yt_plot_base):
             from yt.visualization.volume_rendering.api \
                 import LineSource
 
-            sl=amt.table3d_obj.get_slice(slice).to_numpy()
-            xv=[amt.table3d_obj.get_x_grid(i) for i in
-                range(0,amt.table3d_obj.get_nx())]
-            yv=[amt.table3d_obj.get_y_grid(i) for i in
-                range(0,amt.table3d_obj.get_ny())]
+            t3d=amt.get_table3d_obj()
+            sl=t3d.get_slice(slc).to_numpy()
+            xv=[t3d.get_grid_x(i) for i in
+                range(0,t3d.get_nx())]
+            yv=[t3d.get_grid_y(i) for i in
+                range(0,t3d.get_ny())]
             
             if self.xset==False:
                 self.xlo=min(xv)
@@ -3515,62 +3596,71 @@ class o2graph_plotter(yt_plot_base):
                 print('Set xlimits to (%0.6e,%0.6e)' % (self.xlo,self.xhi))
                 self.xset=True
             if self.yset==False:
-                self.ylo=max(yv)
+                self.ylo=min(yv)
                 self.yhi=max(yv)
                 print('Set ylimits to (%0.6e,%0.6e)' % (self.ylo,self.yhi))
                 self.yset=True
             if self.zset==False:
-                self.zlo=min(sl)
-                self.zhi=max(sl)
+                self.zlo=numpy.min(sl)
+                self.zhi=numpy.max(sl)
                 print('Set zlimits to (%0.6e,%0.6e)' % (self.zlo,self.zhi))
                 self.zset=True
             x_range=self.xhi-self.xlo
             y_range=self.yhi-self.ylo
             z_range=self.zhi-self.zlo
 
+            icnt=0
+            if self.yt_scene!=0:
+                for key, value in self.yt_scene.sources.items():
+                    print('yt-source-list',icnt,key,type(value))
+                    icnt=icnt+1
+            # If there are no yt sources yet, then create a
+            # default volume object
+            if icnt==0:
+                self.yt_def_vol()
+
+            
             pts=[]
             cols=[]
             sizes=[]
-            line_list=[]
             for i in range(0,len(xv)-1):
                 for j in range(0,len(yv)):
-                    line_list.append([(xv[i]-self.xlo)/x_range,
-                                      (yv[j]-self.ylo)/y_range,
-                                      (sl[i][j]-self.zlo)/z_range],
-                                     [(xv[i+1]-self.xlo)/x_range,
-                                      (yv[j]-self.ylo)/y_range,
-                                      (sl[i+1][j]-self.zlo)/z_range])
+                    pts.append([[(xv[i]-self.xlo)/x_range,
+                                       (yv[j]-self.ylo)/y_range,
+                                       (sl[i][j]-self.zlo)/z_range],
+                                      [(xv[i+1]-self.xlo)/x_range,
+                                       (yv[j]-self.ylo)/y_range,
+                                       (sl[i+1][j]-self.zlo)/z_range]])
                     cols.append([1.0,1.0,1.0,1.0])
+                    
             for i in range(0,len(xv)):
                 for j in range(0,len(yv)-1):
-                    line_list.append([(xv[i]-self.xlo)/x_range,
-                                      (yv[j]-self.ylo)/y_range,
-                                      (sl[i][j]-self.zlo)/z_range],
-                                     [(xv[i]-self.xlo)/x_range,
-                                      (yv[j+1]-self.ylo)/y_range,
-                                      (sl[i][j+1]-self.zlo)/z_range])
+                    pts.append([[(xv[i]-self.xlo)/x_range,
+                                       (yv[j]-self.ylo)/y_range,
+                                       (sl[i][j]-self.zlo)/z_range],
+                                      [(xv[i]-self.xlo)/x_range,
+                                       (yv[j+1]-self.ylo)/y_range,
+                                       (sl[i][j+1]-self.zlo)/z_range]])
                     cols.append([1.0,1.0,1.0,1.0])
-            pts.append(line_list)
+                    
             pts2=numpy.array(pts)
             cols2=numpy.array(cols)
+            #print(pts2,cols2)
 
             ls=LineSource(pts2,cols2)
 
-            #if self.yt_created_scene==False:
-            #self.yt_create_scene()
+            if self.yt_created_scene==False:
+                self.yt_create_scene()
 
             print('o2graph:yt-mesh: Adding point source.')
             kname=self.yt_unique_keyname('o2graph_mesh')
             self.yt_scene.add_source(ls,keyname=kname)
                         
-            #if self.yt_created_camera==False:
-            #self.yt_create_camera(ps)
-
         else:
-            print('Command yt-vertex-list does not work with type',
+            print('Command yt-mesh does not work with type',
                   curr_type+'.')
             
-        # End of function o2graph_plotter::yt_vertex_list()
+        # End of function o2graph_plotter::yt_mesh()
         return
         
     def commands(self,o2scl,amp,args):
@@ -3850,10 +3940,10 @@ class o2graph_plotter(yt_plot_base):
             self.axes=axt.axes
             self.fig=self.yt_scene._render_figure
             self.canvas_flag=True
-            if verbose>1:
+            if self.verbose>1:
                 print('Adding annotations:')
             self.parse_string_list(self.yt_ann,o2scl,amp,link)
-            if verbose>1:
+            if self.verbose>1:
                 print('Done adding annotations:')
             #self.text(0.1,0.9,'x',color='w',fontsize=self.font*1.25,
                 #transform=tf)
@@ -3866,7 +3956,7 @@ class o2graph_plotter(yt_plot_base):
             #self.yt_scene._render_figure.tight_layout(pad=0.0)
             plot.subplots_adjust(left=0.0,bottom=0.0,
                                  right=1.0,top=1.0)
-            if verbose>0:
+            if self.verbose>0:
                 print('o2graph:yt-render: Calling',
                       'savefig() with annotations and file',fname,'.')
             self.yt_scene._render_figure.savefig(fname,facecolor='black',
@@ -4628,8 +4718,9 @@ class o2graph_plotter(yt_plot_base):
                     if self.verbose>2:
                         print('Process yt-add-vol.')
                         print('args:',strlist[ix:ix_next])
-
-                    self.yt_add_vol(o2scl,amp)
+                        
+                        self.yt_add_vol(o2scl,amp,
+                                        strlist[ix+1:ix_next])
                     
                 elif cmd_name=='yt-scatter':
 
@@ -4783,7 +4874,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process yt-mesh.')
                         print('args:',strlist[ix:ix_next])
 
-                    if ix_next-ix<4:
+                    if ix_next-ix<2:
                         print('Not enough parameters for yt-mesh.')
                     else:
                         self.yt_mesh(o2scl,amp,link,

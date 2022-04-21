@@ -5238,6 +5238,18 @@ class tensor_grid:
         ret=func(self._ptr,i,j)
         return ret
 
+    def get_grid_packed(self):
+        """
+        | Returns: ``numpy`` array
+        """
+        func=self._link.o2scl.o2scl_tensor_grid__get_grid_packed
+        n_=ctypes.c_int(0)
+        ptr_=ctypes.POINTER(ctypes.c_double)()
+        func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
+        func(self._ptr,ctypes.byref(ptr_),ctypes.byref(n_))
+        ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
+        return ret
+
     def set_grid(self,i,j,val):
         """
         | Parameters:
@@ -5316,6 +5328,22 @@ class tensor_grid:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,v._ptr)
         return ret
+
+    def from_table3d_fermi(self,t3d,slice,n_points,low=0.0,high=0.0,width=0.0):
+        """
+        | Parameters:
+        | *t3d*: :class:`table3d` object
+        | *slice*: string
+        | *n_points*: ``size_t``
+        | *low* =0.0: ``double``
+        | *high* =0.0: ``double``
+        | *width* =0.0: ``double``
+        """
+        slice_=ctypes.c_char_p(force_bytes(slice))
+        func=self._link.o2scl.o2scl_tensor_grid__from_table3d_fermi
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,t3d._ptr,slice_,n_points,low,high,width)
+        return
 
 
 class tensor_int:

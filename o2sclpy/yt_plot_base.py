@@ -762,10 +762,11 @@ class yt_plot_base(plot_base):
                      color=[1.0,1.0,1.0,0.5],
                      coords='internal',keyname='o2sclpy_axis'):
         """
-        This function can be accessed in o2graph by the
-        o2graph command ``yt-axis``.
+        Documentation for o2graph command ``yt-axis``:
 
-        Command-line arguments: ``[kwargs]``
+        Add an axis to the yt volume.
+
+        [kwargs]
         
         This command plots an axis from the origin to the three points
         ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. Other
