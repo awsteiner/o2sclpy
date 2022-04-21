@@ -1,0 +1,7 @@
+# This example creates a density plot and overlying contour plot
+# with two independent variables.
+#
+o2graph -create table3d x grid:0,1,0.05 y "grid:(-1),0,0.05" \
+	z "sin(x*6)*cos(y*6)" \
+        -yt-mesh z -yt-path yaw 101 1.0 -yt-render "/tmp/x*.png" yt_mesh.mp4
+	
