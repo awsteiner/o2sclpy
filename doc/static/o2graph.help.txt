@@ -15,10 +15,10 @@ List of command-line options which do not require a current object:
   -cmap            Create a continuous colormap.
   -cmap2           Create a colormap.
   -commands        List available commands for current or specified type.
-  -constant        Get a physical or numerical constant. 
+  -constant        Get or modify a physical or numerical constant. 
   -convert         Manipulate or use a unit conversion factor. 
   -create          Create an object. 
-  -docs            Open local HTML docs for acol or an O2scl topic. 
+  -docs            Open local HTML docs for acol or an O₂scl topic. 
   -download        Download a file from the specified URL. 
   -ellipse         Plot an ellipse.
   -error-point     Plot a single point with errorbars.
@@ -28,7 +28,7 @@ List of command-line options which do not require a current object:
   -filelist        List objects in a HDF5 file. 
   -generic         Read an object generic text file. 
   -get             Get the value of a parameter.
-  -h5-copy         Copy an O2scl-generated HDF5 file. 
+  -h5-copy         Copy an O₂scl-generated HDF5 file. 
   -help            Show help information.
   -image           Plot an image.
   -inset           Add a new set of axes (e.g. for an inset).
@@ -47,7 +47,7 @@ List of command-line options which do not require a current object:
   -preview         Preview the current object. 
   -python          Begin an interactive python session.
   -quit            Quit (synonymous with 'exit').
-  -read            Read an object from an O2scl-style HDF5 file. 
+  -read            Read an object from an O₂scl-style HDF5 file. 
   -rect            Plot a rectangle.
   -run             Run a file containing a list of commands.
   -save            Save the current plot in a file.
@@ -62,9 +62,9 @@ List of command-line options which do not require a current object:
   -textbox         Plot a box with text.
   -ttext           Plot text in window coordinates [(0,0) to (1,1)].
   -type            Output the type of the current object. 
-  -version         Print version information and O2scl settings. 
+  -version         Print version information and O₂scl settings. 
   -warranty        Show warranty information.
-  -wdocs           Open remote HTML docs for acol or an O2scl topic. 
+  -wdocs           Open remote HTML docs for acol or an O₂scl topic. 
   -xlimits         Set the x-axis limits.
   -xml-to-o2       Parse doxygen XML to generate runtime docs. 
   -xtitle          Add x title to plot (or subplot).

@@ -39,7 +39,7 @@ from o2sclpy.doc_data import cmaps, new_cmaps, base_list
 from o2sclpy.doc_data import extra_types, extra_list, param_list
 from o2sclpy.doc_data import yt_param_list, acol_help_topics
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
-from o2sclpy.utils import parse_arguments, string_to_dict, terminal
+from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
@@ -1929,7 +1929,7 @@ class o2graph_plotter(yt_plot_base):
         Called by help_func().
         """
 
-        ter=terminal()
+        ter=terminal_py()
         str_line=ter.horiz_line()
         print('\n'+str_line)
         print('\nO2graph parameter list:')
@@ -2041,7 +2041,7 @@ class o2graph_plotter(yt_plot_base):
                            ctypes.c_char_p]
 
         # Get current type
-        ter=terminal()
+        ter=terminal_py()
         cmd_name=b'o2graph'
         cmd_desc=(b'o2graph: A data viewing and '+
                   b'processing program for '+force_bytes(ter.bold())+
@@ -2359,6 +2359,12 @@ class o2graph_plotter(yt_plot_base):
         
     def den_plot_anim(self,o2scl,amp,args):
         """
+        Documentation for o2graph command ``den-plot-anim``:
+
+        Create an animated density plot from a tensor_grid object
+
+        <x index> <y index> <z index [+'r']> <mp4 filename>"
+
         Create an mp4 animation of a density plot from a tensor_grid3 
         object. The first argument specifies which tensor index is
         along the x axis, the second argument is the tensor index is
@@ -2655,11 +2661,17 @@ class o2graph_plotter(yt_plot_base):
         Function to process the help command.
         """
 
+        base_list_new=[
+            ["yt-axis",yt_plot_base.yt_plot_axis.__doc__],
+            ["yt-path",o2graph_plotter.yt_path_func.__doc__],
+            ["den-plot-anim",o2graph_plotter.den_plot_anim.__doc__],
+        ]
+
         # The command we're looking for help on (if specified)
         cmd=''
 
         # vt100 inits
-        ter=terminal()
+        ter=terminal_py()
         str_line=ter.horiz_line()
 
         # Get current type
@@ -2675,18 +2687,15 @@ class o2graph_plotter(yt_plot_base):
 
         # See if we matched an o2graph command
         match=False
-                    
+
+        for line in base_list_new:
+            if cmd==line[0]:
+                match=True
+                reformat_python_docs(cmd,line[1])
+        
         # Handle the case of an o2graph command from the
         # base list
-        if cmd=='yt-axis':
-            doc=yt_plot_base.yt_plot_axis.__doc__
-            reformat_python_docs(cmd,doc)
-            match=True
-        elif cmd=='yt-path':
-            doc=o2graph_plotter.yt_path_func.__doc__
-            reformat_python_docs(cmd,doc)
-            match=True
-        else:
+        if match==False:
             for line in base_list:
                 if cmd==line[0]:
                     match=True
@@ -3668,7 +3677,7 @@ class o2graph_plotter(yt_plot_base):
         Output the currently available commands.
         """
 
-        ter=terminal()
+        ter=terminal_py()
         
         # C types
         int_ptr=ctypes.POINTER(ctypes.c_int)

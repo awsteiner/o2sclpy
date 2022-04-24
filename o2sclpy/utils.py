@@ -39,53 +39,77 @@ def remove_spaces(string):
         string=string[1:]
     return string
 
+def doc_replacements(s):
+    s=s.replace(' ``',' ')
+    s=s.replace('`` ',' ')
+    s=s.replace('``, ',', ')
+    s=s.replace('``. ','. ')
+    return s
+
 def reformat_python_docs(cmd,doc_str):
-    
+
     reflist=doc_str.split('\n')
-    ter=terminal()
+    
+    for i in range(0,len(reflist)):
+        reflist[i]=remove_spaces(reflist[i])
+        #print(i,'x',reflist[i],'x')
+
+    if len(reflist)<1:
+        return
+
+    if reflist[0]=='':
+        if len(reflist)<2:
+            return
+        doc_str2=reflist[1]
+        for i in range(2,len(reflist)):
+            doc_str2=doc_str2+'\n'+reflist[i]
+    else:
+        doc_str2=reflist[0]
+        for i in range(0,len(reflist)):
+            doc_str2=doc_str2+'\n'+reflist[i]
+
+    reflist2=doc_str2.split('\n\n')
+
+    if False:
+        for i in range(0,len(reflist2)):
+            print(i,'x',reflist2[i],'x')
+    
+    ter=terminal_py()
 
     short=''
     parm_desc=''
     long_help=''
-    
-    if len(reflist)>=4:
-        short=reflist[3]
-        short=remove_spaces(short)
 
-    jnext=6        
-    if len(reflist)>=6:
-        parm_desc=reflist[5]
-        parm_desc=remove_spaces(parm_desc)
-        while reflist[jnext]!='' and jnext<len(reflist):
-            stmp=reflist[jnext]
-            stmp=remove_spaces(stmp)
-            parm_desc=parm_desc+' '+stmp
-            jnext=jnext+1
-        
+    # The short description
+    if len(reflist2)>=2:
+        short=reflist2[1]
+
+    # The parameter description
+    if len(reflist2)>=3:
+        parm_desc=reflist2[2]
+
+        parm_desc=parm_desc.replace('  ',' ')
+        sx='Command-line arguments: ``'
+        if parm_desc[0:len(sx)]==sx:
+            parm_desc=parm_desc[len(sx):]
+        if parm_desc[-2:]=='``':
+            parm_desc=parm_desc[0:-2]
+            
     print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
           ter.default_fg()+' '+parm_desc)
-    print('')
-    print(short)
-    
-    if len(reflist)>=jnext+1:
-        for j in range(jnext+1,len(reflist)):
-            if (reflist[j]==''):
-                print('')
+    print('Short description:',short)
+
+    if len(reflist2)>=4:
+        print('')
+        print('Long description:')
+        for j in range(3,len(reflist2)):
+            if len(reflist2[j])>0:
+                long_help=doc_replacements(reflist2[j])
                 tmplist=wrap_line(long_help)
+                if j!=3:
+                    print('')
                 for k in range(0,len(tmplist)):
                     print(tmplist[k])
-                long_help=''
-            else:
-                stemp=remove_spaces(reflist[j])
-                if len(long_help)>0:
-                    long_help=long_help+' '+stemp
-                else:
-                    long_help=stemp
-                
-    print('')
-    tmplist=wrap_line(long_help)
-    for k in range(0,len(tmplist)):
-        print(tmplist[k])
 
 def string_to_color(str_in):
     """
@@ -707,7 +731,7 @@ def string_to_dict(s):
         
     return dct
 
-class terminal:
+class terminal_py:
     """
     Handle vt100 formatting sequences
     """

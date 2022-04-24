@@ -546,6 +546,17 @@ Class interp_krige_optim
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class terminal
+--------------
+
+.. autoclass:: o2sclpy.terminal
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class gen_test_number
 ---------------------
 
@@ -776,4 +787,9 @@ Function linear_or_log
 ----------------------
 
 .. autofunction:: o2sclpy.linear_or_log(link,x,log_x)
+
+Function get_screen_size_ioctl
+------------------------------
+
+.. autofunction:: o2sclpy.get_screen_size_ioctl(link,row,col)
 

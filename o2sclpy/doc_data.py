@@ -1,6 +1,6 @@
-from o2sclpy.utils import terminal
+from o2sclpy.utils import terminal_py
 
-ter=terminal()
+ter=terminal_py()
 
 version='0.926'
 

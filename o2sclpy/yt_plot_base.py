@@ -774,7 +774,7 @@ class yt_plot_base(plot_base):
         color of the axis arrows, coords, a string for the coordinate
         system, and keyname, the name for the yt object. Use
         ``coords=user`` for the user-based coordinate system and
-        ``coords=internal` for the internal coordinate system.
+        ``coords=internal`` for the internal coordinate system.
 
         Note that it is often most convenient to create the 
         first volume source to set the scaling of the user-based
