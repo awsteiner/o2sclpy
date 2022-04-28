@@ -7498,6 +7498,37 @@ class interp_krige_optim:
         func(self._ptr,value)
         return
 
+    def set_noise(self,size,x,y,noise_var,rescale=False,err_on_fail=True):
+        """
+        | Parameters:
+        | *size*: ``size_t``
+        | *x*: :class:`std_vector` object
+        | *y*: :class:`std_vector` object
+        | *noise_var*: ``double``
+        | *rescale* =false: ``bool``
+        | *err_on_fail* =true: ``bool``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_noise
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_bool,ctypes.c_bool]
+        ret=func(self._ptr,size,x._ptr,y._ptr,noise_var,rescale,err_on_fail)
+        return ret
+
+    def set(self,size,x,y,rescale,err_on_fail=True):
+        """
+        | Parameters:
+        | *size*: ``size_t``
+        | *x*: :class:`std_vector` object
+        | *y*: :class:`std_vector` object
+        | *rescale*: ``bool``
+        | *err_on_fail* =true: ``bool``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_bool]
+        func(self._ptr,size,x._ptr,y._ptr,rescale,err_on_fail)
+        return
+
     def eval(self,x0):
         """
         | Parameters:
