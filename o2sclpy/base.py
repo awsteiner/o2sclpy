@@ -7419,6 +7419,28 @@ class interp_krige_optim:
         return new_obj
 
     @property
+    def mode_loo_cv(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_mode_loo_cv
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+    @property
+    def mode_max_lml(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_mode_max_lml
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+    @property
     def verbose(self):
         """
         Property of type ``ctypes.c_int``
