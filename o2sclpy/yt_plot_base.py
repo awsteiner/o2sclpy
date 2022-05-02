@@ -761,19 +761,18 @@ class yt_plot_base(plot_base):
     def yt_plot_axis(self,xval=1.0,yval=1.0,zval=1.0,
                      color=[1.0,1.0,1.0,0.5],
                      coords='internal',keyname='o2sclpy_axis'):
-        """
-        Documentation for o2graph command ``yt-axis``:
+        """Documentation for o2graph command ``yt-axis``:
 
         Add an axis to the yt volume.
 
         [kwargs]
         
         This command plots an axis from the origin to the three points
-        ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. Other
-        relevant keyword arguments are: ``color=[1,1,1,0.5]``, the
-        color of the axis arrows, coords, a string for the coordinate
-        system, and keyname, the name for the yt object. Use
-        ``coords=user`` for the user-based coordinate system and
+        ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. There are
+        two keyword arguments, the first is ``color=[1,1,1,0.5]``, the
+        color of the axis arrows. The other is a string for the
+        coordinate system, and keyname, the name for the yt object.
+        Use ``coords=user`` for the user-based coordinate system and
         ``coords=internal`` for the internal coordinate system.
 
         Note that it is often most convenient to create the 

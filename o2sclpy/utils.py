@@ -39,14 +39,32 @@ def remove_spaces(string):
         string=string[1:]
     return string
 
-def doc_replacements(s):
+def doc_replacements(s,base_list_new,ter):
+
+    # Replace commands in base_list_new
+    for i in range(0,len(base_list_new)):
+        s=s.replace('``'+base_list_new[i][0]+'``',
+                    ter.cyan_fg()+ter.bold()+base_list_new[i][0]+
+                    ter.default_fg())
+
+    # For ``code`` formatting
     s=s.replace(' ``',' ')
     s=s.replace('`` ',' ')
     s=s.replace('``, ',', ')
     s=s.replace('``. ','. ')
+
+    # Combine two spaces to one
+    s=s.replace('  ',' ')
+
+    # For :math:`` equations
+    s=s.replace(' :math:`',' ')
+    s=s.replace('` ',' ')
+    s=s.replace('`.','.')
+    s=s.replace('`',',')
+                    
     return s
 
-def reformat_python_docs(cmd,doc_str):
+def reformat_python_docs(cmd,doc_str,base_list_new):
 
     reflist=doc_str.split('\n')
     
@@ -75,6 +93,7 @@ def reformat_python_docs(cmd,doc_str):
             print(i,'x',reflist2[i],'x')
     
     ter=terminal_py()
+    ncols=os.get_terminal_size().columns
 
     short=''
     parm_desc=''
@@ -86,7 +105,7 @@ def reformat_python_docs(cmd,doc_str):
 
     # The parameter description
     if len(reflist2)>=3:
-        parm_desc=reflist2[2]
+        parm_desc=reflist2[2].replace('\n',' ')
 
         parm_desc=parm_desc.replace('  ',' ')
         sx='Command-line arguments: ``'
@@ -104,8 +123,9 @@ def reformat_python_docs(cmd,doc_str):
         print('Long description:')
         for j in range(3,len(reflist2)):
             if len(reflist2[j])>0:
-                long_help=doc_replacements(reflist2[j])
-                tmplist=wrap_line(long_help)
+                long_help=doc_replacements(reflist2[j].replace('\n',' '),
+                                           base_list_new,ter)
+                tmplist=wrap_line(long_help,ncols-1)
                 if j!=3:
                     print('')
                 for k in range(0,len(tmplist)):

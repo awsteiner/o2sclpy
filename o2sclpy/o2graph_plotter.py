@@ -2665,6 +2665,8 @@ class o2graph_plotter(yt_plot_base):
             ["yt-axis",yt_plot_base.yt_plot_axis.__doc__],
             ["yt-path",o2graph_plotter.yt_path_func.__doc__],
             ["den-plot-anim",o2graph_plotter.den_plot_anim.__doc__],
+            ["addcbar",plot_base.addcbar.__doc__],
+            ["arrow",plot_base.arrow.__doc__],
         ]
 
         # The command we're looking for help on (if specified)
@@ -2691,7 +2693,7 @@ class o2graph_plotter(yt_plot_base):
         for line in base_list_new:
             if cmd==line[0]:
                 match=True
-                reformat_python_docs(cmd,line[1])
+                reformat_python_docs(cmd,line[1],base_list_new)
         
         # Handle the case of an o2graph command from the
         # base list
@@ -3092,16 +3094,17 @@ class o2graph_plotter(yt_plot_base):
 
         The ``yt-path`` adds a path to a yt animation. To rotate the
         camera around the z-axis, use 'yaw' <n_frames> <angle>, where
-        angle is a fraction of a full rotation. To zoom the camera,
-        use 'zoom' <n_frames> <factor> ,where factor is the total zoom
-        factor to apply over all n_frames. To move the camera along a
-        line, use 'move' <n_frames> <[dest_x,dest_y,dest_z]>
-        <'internal' or 'user'>, where the third argument is the
-        destination in either the internal or user-specified
-        coordinate system. To turn the camera without moving it, use
-        'turn' <n_frames> <[foc_x,foc_y,foc_z]> <'internal' or
-        'user'>. Executing 'yt-path reset' resets the yt animation
-        path to an empty list (for no animation).
+        angle is a fraction of a full rotation to perform by the end
+        of the animation. To zoom the camera, use 'zoom' <n_frames>
+        <factor> ,where factor is the total zoom factor to apply over
+        all n_frames. To move the camera along a line, use 'move'
+        <n_frames> <[dest_x,dest_y,dest_z]> <'internal' or 'user'>,
+        where the third argument is the destination in either the
+        internal or user-specified coordinate system. To turn the
+        camera without moving it, use 'turn' <n_frames>
+        <[foc_x,foc_y,foc_z]> <'internal' or 'user'>. Executing
+        'yt-path reset' resets the yt animation path to an empty list
+        (for no animation).
 
         """
 
