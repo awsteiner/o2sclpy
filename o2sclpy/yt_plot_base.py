@@ -491,6 +491,48 @@ class yt_plot_base(plot_base):
         # End of function plot_base::yt_box()
         return
         
+    def yt_xtitle(self,textstr,tx=0.5,ty=-0.1,tz=-0.1,
+                  textcolor=(1,1,1,1.0),
+                  reorient=False,scale=0.6,font=30,
+                  keyname='o2sclpy_text',dpi=100,filename='',
+                  coords='internal'):
+        """
+        Add a title to the x axis in yt
+        """
+        self.yt_text(tx,ty,tz,textstr,textcolor=textcolor,
+                     reorient=reorient,scale=scale,font=font,
+                     keyname=keyname,dpi=dpi,filename=filename,
+                     coords=coords)
+        return
+                
+    def yt_ytitle(self,textstr,tx=-0.1,ty=0.5,tz=-0.1,
+                  textcolor=(1,1,1,1.0),
+                  reorient=False,scale=0.6,font=30,
+                  keyname='o2sclpy_text',dpi=100,filename='',
+                  coords='internal'):
+        """
+        Add a title to the y axis in yt
+        """
+        self.yt_text(tx,ty,tz,textstr,textcolor=textcolor,
+                     reorient=reorient,scale=scale,font=font,
+                     keyname=keyname,dpi=dpi,filename=filename,
+                     coords=coords)
+        return
+                
+    def yt_ztitle(self,textstr,tx=-0.1,ty=-0.1,tz=0.5,
+                  textcolor=(1,1,1,1.0),
+                  reorient=False,scale=0.6,font=30,
+                  keyname='o2sclpy_text',dpi=100,filename='',
+                  coords='internal'):
+        """
+        Add a title to the z axis in yt
+        """
+        self.yt_text(tx,ty,tz,textstr,textcolor=textcolor,
+                     reorient=reorient,scale=scale,font=font,
+                     keyname=keyname,dpi=dpi,filename=filename,
+                     coords=coords)
+        return
+                
     def yt_text(self,tx,ty,tz,textstr,textcolor=(1,1,1,0.5),
                 reorient=False,scale=0.6,font=30,
                 keyname='o2sclpy_text',dpi=100,filename='',

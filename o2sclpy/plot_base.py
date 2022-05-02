@@ -189,8 +189,19 @@ class plot_base:
         self.new_cmaps()
     
     def cmap(self,cmap_name,col_list):
-        """
-        Add a colormap
+        """Documentation for o2graph command ``cmap``:
+
+        Create a continuous colormap.
+
+        Command-line arguments: ``<cmap name> <color 1> <color 2> 
+        [color3]...``
+
+        Create a new color map named <cmap name> which consists of
+        equal-sized gradients between the specified list of at least
+        two colors. Matplotlib colors, (r,g,b) colors, and xkcd colors
+        are all allowed. For example 'o2graph -cmap c forestgreen
+        \"(0.5,0.5,0.7)\" \"xkcd:light red\" -create table3d x
+        grid:0,40,1 y grid:0,40,1 z \"x+y\" -den-plot z cmap=c -show'.
         """
 
         if self.verbose>1:
@@ -265,8 +276,19 @@ class plot_base:
         return
         
     def cmap2(self,cmap_name,col_list):
-        """
-        Add a colormap with sharp transitions
+        """Documentation for o2graph command ``cmap2``:
+
+        Create a colormap with sharp transitions
+
+        Command-line arguments: ``<cmap name> <color 1> <color 2>
+        [color3 color4]...``
+
+        Create a new color map named <cmap name> which consists of
+        equal-sized gradients between the list of specified color
+        pairs. Matplotlib colors, (r,g,b) colors, and xkcd colors are
+        all allowed. For example 'o2graph -cmap2 c \"(0.5,0.5,0.7)\"
+        \"xkcd:light red\" -create table3d x grid:0,40,1 y grid:0,40,1
+        z \"x+y\" -den-plot z cmap=c -show'.
         """
 
         N=len(col_list)

@@ -1,0 +1,1 @@
+o2graph -set yt_resolution "(1024,1024)" -read temp -yt-scatter log_wgt Mns_max R_55 none log_wgt Mns_max R_55 -yt-axis -yt-xtitle x -yt-ytitle y -yt-ztitle z dpi=200 -yt-path yaw 100 1.0 -yt-render "/tmp/x*.png" temp.mp4 loop=True && open temp.mp4 

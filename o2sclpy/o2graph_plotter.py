@@ -2667,6 +2667,19 @@ class o2graph_plotter(yt_plot_base):
             ["den-plot-anim",o2graph_plotter.den_plot_anim.__doc__],
             ["addcbar",plot_base.addcbar.__doc__],
             ["arrow",plot_base.arrow.__doc__],
+            ["backend",
+             ('Documentation for backend\n\n'+
+              'Select the matplotlib backend to use.\n\n'+
+              '<backend>\n\n'+
+              'This commend selects the matplotlib backend. '+
+              "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', "+
+              "and 'QT4Agg'. Use backend Agg to save the plot to a "+
+              "file without opening a window. The backend can only "+
+              "be changed once, i.e. if the backend command is "+
+              "invoked more than once, then only the last invocation "+
+              "will have any effect.")],
+            ["cmap",plot_base.cmap.__doc__],
+            ["cmap2",plot_base.cmap2.__doc__]
         ]
 
         # The command we're looking for help on (if specified)
@@ -4167,7 +4180,7 @@ class o2graph_plotter(yt_plot_base):
             os.system('mv /tmp/yt_filtered.png '+fname)
         return
     
-    def yt_render(self,o2scl,amp,link,fname,mov_fname=''):
+    def yt_render(self,o2scl,amp,link,fname,mov_fname='',loop=False):
         """
         Complete the yt render and save the image to a file. If necessary,
         compile the images into a movie and save into the specified
@@ -4544,6 +4557,7 @@ class o2graph_plotter(yt_plot_base):
             # (15-25 recommended) -y forces overwrite of the movie
             # file if it already exists
 
+            
             if n_frames>=1000:
                 cmd=('ffmpeg -y -r 10 -f image2 -i '+
                      prefix+'%04d'+suffix+' -vcodec libx264 '+
@@ -4560,6 +4574,9 @@ class o2graph_plotter(yt_plot_base):
                 cmd=('ffmpeg -y -r 10 -f image2 -i '+
                      prefix+'%01d'+suffix+' -vcodec libx264 '+
                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
+
+            if loop==True:
+                cmd=cmd+' -stream_loop -1'
                 
             print('ffmpeg command:',cmd)
             os.system(cmd)
@@ -4789,6 +4806,48 @@ class o2graph_plotter(yt_plot_base):
                                      float(eval(strlist[ix+2])),
                                      float(eval(strlist[ix+3])),
                                      strlist[ix+4])
+                                                    
+                elif cmd_name=='yt-xtitle':
+
+                    if self.verbose>2:
+                        print('Process yt-text.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<2:
+                        print('Not enough parameters for yt-text.')
+                    elif ix_next-ix==3:
+                        self.yt_xtitle(strlist[ix+1],
+                                       **string_to_dict(strlist[ix+2]))
+                    else:
+                        self.yt_xtitle(strlist[ix+1])
+                                                    
+                elif cmd_name=='yt-ytitle':
+
+                    if self.verbose>2:
+                        print('Process yt-text.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<2:
+                        print('Not enough parameters for yt-text.')
+                    elif ix_next-ix==3:
+                        self.yt_ytitle(strlist[ix+1],
+                                       **string_to_dict(strlist[ix+2]))
+                    else:
+                        self.yt_ytitle(strlist[ix+1])
+                                                    
+                elif cmd_name=='yt-ztitle':
+
+                    if self.verbose>2:
+                        print('Process yt-text.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<2:
+                        print('Not enough parameters for yt-text.')
+                    elif ix_next-ix==3:
+                        self.yt_ztitle(strlist[ix+1],
+                                       **string_to_dict(strlist[ix+2]))
+                    else:
+                        self.yt_ztitle(strlist[ix+1])
                                                     
                 elif cmd_name=='yt-line':
 
