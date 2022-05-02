@@ -3285,47 +3285,35 @@ class o2graph_plotter(yt_plot_base):
                 rescale_g=False
                 rescale_b=False
                 for i in range(0,idr.value):
-                    if ptrr[i]<0.0:
-                        if rescale_r==False:
-                            rescale_r=True
+                    if ptrr[i]<0.0 or ptrr[i]>1.0:
+                        rescale_r=True
+                    if ptrg[i]<0.0 or ptrg[i]>1.0:
+                        rescale_g=True
+                    if ptrb[i]<0.0 or ptrb[i]>1.0:
+                        rescale_b=True
+                if rescale_r:
+                    min_r=ptrr[0]
+                    max_r=ptrr[0]
+                    for i in range(0,idr.value):
+                        if ptrr[i]<min_r:
                             min_r=ptrr[i]
+                        if ptrr[i]>max_r:
                             max_r=ptrr[i]
-                        elif ptrr[i]<min_r:
-                            min_r=ptrr[i]
-                    if ptrr[i]>1.0:
-                        if rescale_r==False:
-                            rescale_r=True
-                            min_r=ptrr[i]
-                            max_r=ptrr[i]
-                        elif ptrr[i]>max_r:
-                            max_r=ptrr[i]
-                    if ptrg[i]<0.0:
-                        if rescale_g==False:
-                            rescale_g=True
+                if rescale_g:
+                    min_g=ptrg[0]
+                    max_g=ptrg[0]
+                    for i in range(0,idr.value):
+                        if ptrg[i]<min_g:
                             min_g=ptrg[i]
+                        if ptrg[i]>max_g:
                             max_g=ptrg[i]
-                        elif ptrg[i]<min_g:
-                            min_g=ptrg[i]
-                    if ptrg[i]>1.0:
-                        if rescale_g==False:
-                            rescale_g=True
-                            min_g=ptrg[i]
-                            max_g=ptrg[i]
-                        elif ptrg[i]>max_g:
-                            max_g=ptrg[i]
-                    if ptrb[i]<0.0:
-                        if rescale_b==False:
-                            rescale_b=True
+                if rescale_b:
+                    min_b=ptrb[0]
+                    max_b=ptrb[0]
+                    for i in range(0,idr.value):
+                        if ptrb[i]<min_b:
                             min_b=ptrb[i]
-                            max_b=ptrb[i]
-                        elif ptrb[i]<min_b:
-                            min_b=ptrb[i]
-                    if ptrb[i]>1.0:
-                        if rescale_b==False:
-                            rescale_b=True
-                            min_b=ptrb[i]
-                            max_b=ptrb[i]
-                        elif ptrb[i]>max_b:
+                        if ptrb[i]>max_b:
                             max_b=ptrb[i]
                 if rescale_r:
                     print('Rescaling red range   (%0.6e,%0.6e) to (0,1)' %
@@ -4990,7 +4978,7 @@ class o2graph_plotter(yt_plot_base):
                         self.yt_render(o2scl,amp,link,strlist[ix+1])
                     else:
                         self.yt_render(o2scl,amp,link,strlist[ix+1],
-                                       mov_fname=strlist[ix+2])
+                                       **string_to_dict(strlist[ix+2]))
 
                 elif cmd_name=='yt-tf':
 

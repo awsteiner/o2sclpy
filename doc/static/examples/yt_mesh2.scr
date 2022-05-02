@@ -4,5 +4,5 @@
 o2graph -create table3d x grid:0,1,0.05 y "grid:(-1),0,0.05" \
 	z "sin(x*6)*cos(y*6)" -yt-mesh z -yt-tf new 0 1 100 \
         -yt-tf gauss 0.5 1.0 0.5 0.5 1.0 -yt-add-vol z \
-        -yt-path yaw 101 1.0 -yt-render "/tmp/x*.png" yt_mesh.mp4
+        -yt-path yaw 101 1.0 -yt-render "/tmp/x*.png" mov_fname=yt_mesh.mp4
 	
