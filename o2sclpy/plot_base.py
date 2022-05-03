@@ -1662,6 +1662,17 @@ class plot_base:
 
     def canvas(self):
         """
+        Documentation for o2graph command ``canvas``:
+
+        Create a plotting canvas.
+
+        Command-line arguments: (No arguments.)
+
+        Create an empty plotting canvas. For example 'o2graph
+        -canvas -show'. Typically, 'o2graph' creates
+        the canvas automatically so explicitly using this command
+        is unnecessary.
+
         This function creates a default figure using default_plot()
         and axis object using the xtitle and ytitle for the
         axis titles and xlo, xhi, ylo, and yhi for the axis limits.

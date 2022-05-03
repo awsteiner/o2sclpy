@@ -2358,20 +2358,26 @@ class o2graph_plotter(yt_plot_base):
         return
         
     def den_plot_anim(self,o2scl,amp,args):
-        """
-        Documentation for o2graph command ``den-plot-anim``:
+        """Documentation for o2graph command ``den-plot-anim``:
 
-        Create an animated density plot from a tensor_grid object
+        Create an animated density plot from a rank 3 tensor_grid
+        object
 
-        <x index> <y index> <z index [+'r']> <mp4 filename>"
+        Command-line arguments: ``<x index> <y index> <z index [+'r']>
+        <mp4 filename>``
 
-        Create an mp4 animation of a density plot from a tensor_grid3 
+        Create an mp4 animation of a density plot from a tensor_grid3
         object. The first argument specifies which tensor index is
-        along the x axis, the second argument is the tensor index is
-        along the y axis, and the third argument is the tensor index
-        which will be animated.
+        along the x axis (either ``0``, ``1`` or ``2``), the second
+        argument is the tensor index is along the y axis (either
+        ``0``, ``1`` or ``2``), and the third argument is the tensor
+        index which will be animated. If the third argument has an
+        additional ``r`` suffix, then the animation will be reversed,
+        so that the first frame corresponds to the largest value of
+        the grid for the associated index.
 
         Experimental.
+
         """
 
         import matplotlib.pyplot as plot
@@ -2662,24 +2668,35 @@ class o2graph_plotter(yt_plot_base):
         """
 
         base_list_new=[
-            ["yt-axis",yt_plot_base.yt_plot_axis.__doc__],
-            ["yt-path",o2graph_plotter.yt_path_func.__doc__],
-            ["den-plot-anim",o2graph_plotter.den_plot_anim.__doc__],
             ["addcbar",plot_base.addcbar.__doc__],
             ["arrow",plot_base.arrow.__doc__],
             ["backend",
-             ('Documentation for backend\n\n'+
-              'Select the matplotlib backend to use.\n\n'+
-              '<backend>\n\n'+
-              'This commend selects the matplotlib backend. '+
+             ("Documentation for backend\n\n"+
+              "Select the matplotlib backend to use.\n\n"+
+              "<backend>\n\n"+
+              "This commend selects the matplotlib backend. "+
               "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', "+
               "and 'QT4Agg'. Use backend Agg to save the plot to a "+
               "file without opening a window. The backend can only "+
               "be changed once, i.e. if the backend command is "+
               "invoked more than once, then only the last invocation "+
               "will have any effect.")],
+            ["canvas",plot_base.canvas.__doc__],
             ["cmap",plot_base.cmap.__doc__],
-            ["cmap2",plot_base.cmap2.__doc__]
+            ["cmap2",plot_base.cmap2.__doc__],
+            ["den-plot-anim",o2graph_plotter.den_plot_anim.__doc__],
+            ["image","Documentation for image\n\n"+
+             "Plot a png file in a matplotlib window.\n\n"+
+             "<png file>\n\n"+
+             "This command reads a png file, fills a plotting canvas "+
+             "and then calls matplotlib.pyplot.show()."],
+            ["yt-axis",yt_plot_base.yt_plot_axis.__doc__],
+            ["yt-path",o2graph_plotter.yt_path_func.__doc__],
+            ["yt-text",o2graph_plotter.yt_text.__doc__],
+            ["yt-tf",o2graph_plotter.yt_tf_func.__doc__],
+            ["yt-xtitle",yt_plot_base.yt_xtitle.__doc__],
+            ["yt-ytitle",yt_plot_base.yt_ytitle.__doc__],
+            ["yt-ztitle",yt_plot_base.yt_ztitle.__doc__]
         ]
 
         # The command we're looking for help on (if specified)
@@ -3015,8 +3032,18 @@ class o2graph_plotter(yt_plot_base):
         return
         
     def yt_tf_func(self,args):
-        """
-        Update the yt transfer function.
+        """Documentation for o2graph command ``yt-tf``:
+
+        Edit the yt transfer function.
+
+        Command-line arguments: ``<mode> <args>``
+
+        To create a new transfer function, use 'new' for <mode> and
+        the remaining <args> are <min> <max> [nbins] .To add a
+        Gaussian, use 'gauss' for <mode> and <args> are <loc> <width>
+        <red> <green> <blue>, and <alpha>. To add a step function, use
+        'step' <low> <high> <red> <green> <blue>, and <alpha>. To plot
+        the transfer function, use 'plot' <filename>.
         """
 
         if len(args)==0:
@@ -4544,7 +4571,6 @@ class o2graph_plotter(yt_plot_base):
             # -pix_fmt sepcifies the pixel format, -crf is the quality
             # (15-25 recommended) -y forces overwrite of the movie
             # file if it already exists
-
             
             if n_frames>=1000:
                 cmd=('ffmpeg -y -r 10 -f image2 -i '+
@@ -5453,8 +5479,21 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
 
                     import matplotlib.image as img
-                    im = img.imread(strlist[ix+1])
-                    default_plot(0.0,0.0,0.0,0.0)
+                    im=img.imread(strlist[ix+1])
+                    
+                    # Rescale the figure to insure the correct
+                    # aspect ratio
+                    height=im.shape[0]
+                    width=im.shape[1]
+                    fig_size_x=6
+                    fig_size_y=height*fig_size_x/width
+                    if fig_size_y>10:
+                        fig_size_y=10
+                        fig_size_x=fig_size_y*width/height
+                        
+                    default_plot(0.0,0.0,0.0,0.0,fig_size_x=fig_size_x,
+                                 fig_size_y=fig_size_y)
+                    
                     import matplotlib.pyplot as plot
                     plot.imshow(im)
                     plot.show()

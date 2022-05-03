@@ -496,8 +496,14 @@ class yt_plot_base(plot_base):
                   reorient=False,scale=0.6,font=30,
                   keyname='o2sclpy_text',dpi=100,filename='',
                   coords='internal'):
-        """
+        """Documentation for o2graph command ``yt-xtitle``:
+
         Add a title to the x axis in yt
+
+        Command-line arguments: ``<x title>``
+
+        This command uses yt-text to add a title to the
+        x-axis. 
         """
         self.yt_text(tx,ty,tz,textstr,textcolor=textcolor,
                      reorient=reorient,scale=scale,font=font,
@@ -510,8 +516,14 @@ class yt_plot_base(plot_base):
                   reorient=False,scale=0.6,font=30,
                   keyname='o2sclpy_text',dpi=100,filename='',
                   coords='internal'):
-        """
+        """Documentation for o2graph command ``yt-ytitle``:
+
         Add a title to the y axis in yt
+
+        Command-line arguments: ``<y title>``
+
+        This command uses yt-text to add a title to the
+        y-axis. 
         """
         self.yt_text(tx,ty,tz,textstr,textcolor=textcolor,
                      reorient=reorient,scale=scale,font=font,
@@ -524,8 +536,14 @@ class yt_plot_base(plot_base):
                   reorient=False,scale=0.6,font=30,
                   keyname='o2sclpy_text',dpi=100,filename='',
                   coords='internal'):
-        """
+        """Documentation for o2graph command ``yt-ztitle``:
+
         Add a title to the z axis in yt
+
+        Command-line arguments: ``<z title>``
+
+        This command uses yt-text to add a title to the
+        z-axis. 
         """
         self.yt_text(tx,ty,tz,textstr,textcolor=textcolor,
                      reorient=reorient,scale=scale,font=font,
@@ -537,7 +555,12 @@ class yt_plot_base(plot_base):
                 reorient=False,scale=0.6,font=30,
                 keyname='o2sclpy_text',dpi=100,filename='',
                 coords=''):
-        """
+        """Documentation for o2graph command ``yt-text``:
+
+        Add text to the yt volume.
+
+        Command-line arguments: ``<x> <y> <z> <text> reorient=False``
+
         Plot text given in ``textstr`` in a yt volume visualization at
         location ``(tx,ty,tz)``. If reorient is ``True``, then 
         the during an animation, the text will be redrawn so that
@@ -807,7 +830,8 @@ class yt_plot_base(plot_base):
 
         Add an axis to the yt volume.
 
-        [kwargs]
+        Command-line arguments: ``xval=1.0,yval=1.0,zval=1.0,
+        color=[1.0,1.0,1.0,0.5],coords='internal',keyname='o2sclpy_axis'``
         
         This command plots an axis from the origin to the three points
         ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. There are
@@ -827,6 +851,7 @@ class yt_plot_base(plot_base):
         three arrows. The arrows are constructed with one main
         LineSource and then several smaller LineSource objects in a
         conical shape to create the arrow heads.
+
         """
 
         if self.yt_scene==0:
