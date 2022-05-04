@@ -934,7 +934,7 @@ class yt_plot_base(plot_base):
         if self.yt_created_scene==False:
             self.yt_create_scene()
 
-        kname=self.yt_unique_keyname('o2sclpy_vol')
+        kname=self.yt_unique_keyname('o2graph_vol')
         self.yt_scene.add_source(vol,keyname=kname)
                             
         if self.yt_created_camera==False:

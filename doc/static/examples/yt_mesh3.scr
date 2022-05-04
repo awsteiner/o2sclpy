@@ -2,6 +2,6 @@
 # with two independent variables.
 #
 o2graph -create table3d x grid:0,1,0.05 y "grid:(-1),0,0.05" \
-  z "sin(x*6)*cos(y*6)" -to-tg-fermi z 100 0 0 0.01 -set colbar 1 \
+  z "sin(x*6)*cos(y*6)" -to-tg-fermi z 100 -set colbar 1 \
   -den-plot-anim 0 1 2 temp.mp4
 	

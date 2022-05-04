@@ -2158,7 +2158,7 @@ class o2graph_plotter(yt_plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         double_ptr=ctypes.POINTER(ctypes.c_double)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
-        
+
         curr_type=o2scl_get_type(o2scl,amp)
 
         if curr_type==b'tensor_grid':
@@ -2214,9 +2214,10 @@ class o2graph_plotter(yt_plot_base):
                 self.zlo=gridz[0]
                 self.zhi=gridz[nz-1]
                 self.zset=True
-            print('o2graph_plotter:yt-add-vol: axis limits:',
-                  self.xlo,self.xhi,
-                  self.ylo,self.yhi,self.zlo,self.zhi)
+                print('o2graph_plotter:yt-add-vol: axis limits:\n ',
+                      '%7.6e %7.6e %7.6e %7.6e %7.6e %7.6e' % (
+                          self.xlo,self.xhi,
+                          self.ylo,self.yhi,self.zlo,self.zhi))
             
             arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
             self.yt_volume_data.append(numpy.copy(arr))
@@ -2236,7 +2237,8 @@ class o2graph_plotter(yt_plot_base):
                                              arr2.shape,bbox=bbox2))
             ds=self.yt_data_sources[len(self.yt_data_sources)-1]
 
-            self.yt_vols.append(create_volume_source(ds,field='density'))
+            self.yt_vols.append(create_volume_source(ds,field=('gas',
+                                                               'density')))
             vol=self.yt_vols[len(self.yt_vols)-1]
             vol.log_field=False
 
@@ -2254,7 +2256,7 @@ class o2graph_plotter(yt_plot_base):
                 #tfh.plot('tf.png')
                 vol.set_transfer_function(tfh.tf)
                 print(tfh.tf)
-                        
+
             if self.yt_created_scene==False:
                 self.yt_create_scene()
 
@@ -3633,17 +3635,20 @@ class o2graph_plotter(yt_plot_base):
             if self.xset==False:
                 self.xlo=min(xv)
                 self.xhi=max(xv)
-                print('Set xlimits to (%0.6e,%0.6e)' % (self.xlo,self.xhi))
+                print('Function yt-mesh set xlimits to (%0.6e,%0.6e)' %
+                      (self.xlo,self.xhi))
                 self.xset=True
             if self.yset==False:
                 self.ylo=min(yv)
                 self.yhi=max(yv)
-                print('Set ylimits to (%0.6e,%0.6e)' % (self.ylo,self.yhi))
+                print('Function yt-mesh set ylimits to (%0.6e,%0.6e)' %
+                      (self.ylo,self.yhi))
                 self.yset=True
             if self.zset==False:
                 self.zlo=numpy.min(sl)
                 self.zhi=numpy.max(sl)
-                print('Set zlimits to (%0.6e,%0.6e)' % (self.zlo,self.zhi))
+                print('Function yt-mesh set zlimits to (%0.6e,%0.6e)' %
+                      (self.zlo,self.zhi))
                 self.zset=True
             x_range=self.xhi-self.xlo
             y_range=self.yhi-self.ylo
@@ -3692,8 +3697,8 @@ class o2graph_plotter(yt_plot_base):
             if self.yt_created_scene==False:
                 self.yt_create_scene()
 
-            print('o2graph:yt-mesh: Adding point source.')
             kname=self.yt_unique_keyname('o2graph_mesh')
+            print('o2graph:yt-mesh: Adding line source '+kname+'.')
             self.yt_scene.add_source(ls,keyname=kname)
                         
         else:
@@ -4762,8 +4767,8 @@ class o2graph_plotter(yt_plot_base):
                         print('Process yt-add-vol.')
                         print('args:',strlist[ix:ix_next])
                         
-                        self.yt_add_vol(o2scl,amp,
-                                        strlist[ix+1:ix_next])
+                    self.yt_add_vol(o2scl,amp,
+                                    strlist[ix+1:ix_next])
                     
                 elif cmd_name=='yt-scatter':
 
@@ -4972,14 +4977,17 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
                         
                     icnt=0
-                    for key, value in self.yt_scene.sources.items():
-                        tstr=("<class 'yt.visualization.volume_"+
-                              "rendering.render_source.")
-                        print('yt-source-list',icnt,key,
-                              str(type(value)).replace(tstr,"<class '..."))
-                        icnt=icnt+1
-                    if icnt==0:
+                    if self.yt_scene==0:
                         print('No yt sources.')
+                    else:
+                        for key, value in self.yt_scene.sources.items():
+                            tstr=("<class 'yt.visualization.volume_"+
+                                  "rendering.render_source.")
+                            print('yt-source-list',icnt,key,
+                                  str(type(value)).replace(tstr,"<class '..."))
+                            icnt=icnt+1
+                        if icnt==0:
+                            print('No yt sources.')
                     
                 elif cmd_name=='yt-axis':
 
