@@ -65,8 +65,8 @@ tg_A.copy_table3d_align_setxy(0,2,ix,t3d,'nB','T','A')
 if plots:
     pl=o2sclpy.plotter()
     pl.colbar=True
-    pl.xtitle(u'$ n_B~(\mathrm{fm}^{-3}) $')
-    pl.ytitle(u'$ T~(\mathrm{MeV}) $')
+    pl.xtitle(r'$ n_B~(\mathrm{fm}^{-3}) $')
+    pl.ytitle(r'$ T~(\mathrm{MeV}) $')
     pl.ttext(1.25,0.5,u'$ A $',rotation=90)
     pl.den_plot_direct(t3d,'A')
     plot.show()
@@ -74,7 +74,7 @@ if plots:
 # For testing purposes
     
 def test_fun():
-    assert numpy.allclose(t3d.get(0,0,'A'),56,rtol=0.1)
+    assert numpy.allclose(t3d.get(0,0,'A'),81,rtol=0.1)
     return
 
 
