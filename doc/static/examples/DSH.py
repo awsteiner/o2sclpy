@@ -44,10 +44,20 @@ hf.open('dsh.o2')
 o2sclpy.hdf_input_tensor_grid(link,hf,tg_A,'A')
 hf.close()
 
-# Create a table3d object for Ye=0.4
+# In order to make a plot at fixed Ye, we first need to construct a
+# tensor index object. We want to include all values of nB (index 0 in
+# the tensor object) and all values of T (index 2 in the tensor
+# object), but for Ye, we select the value in the grid which is
+# closest to Ye=0.4.
+
+ix=o2sclpy.std_vector_size_t(link)
+ix.resize(3)
+ix[1]=tg_A.lookup_grid(1,0.4)
+
+# Create a table3d object
 
 t3d=o2sclpy.table3d(link)
-tg_A.to_table3d()
+tg_A.copy_table3d_align_setxy(0,2,ix,t3d,'nB','T','A')
 
 # Now plot the results. Raw matplotlib works, but o2sclpy has
 # a couple functions which make it easier. 
@@ -57,15 +67,14 @@ if plots:
     pl.colbar=True
     pl.xtitle(u'$ n_B~(\mathrm{fm}^{-3}) $')
     pl.ytitle(u'$ T~(\mathrm{MeV}) $')
-    pl.ttext(1.25,0.5,u'$ E/A~(\mathrm{MeV}) $',rotation=90)
-    pl.den_plot_direct(t3d,'EoA')
+    pl.ttext(1.25,0.5,u'$ A $',rotation=90)
+    pl.den_plot_direct(t3d,'A')
     plot.show()
 
 # For testing purposes
     
 def test_fun():
-    assert numpy.allclose(sfho.n0,0.1582415,rtol=1.0e-4)
-    assert numpy.allclose(sfhx.n0,0.1600292,rtol=1.0e-4)
+    assert numpy.allclose(t3d.get(0,0,'A'),56,rtol=0.1)
     return
 
 

@@ -42,6 +42,7 @@ doc: .empty
 	cd doc/static/examples; $(MAKE) skyrme.ipynb
 	cd doc/static/examples; $(MAKE) nucmass.ipynb
 	cd doc/static/examples; $(MAKE) SFHo_SFHx.ipynb
+	cd doc/static/examples; $(MAKE) DSH.ipynb
 	cd doc; $(MAKE) html
 
 sync-doc:
@@ -58,6 +59,7 @@ test:
 		doc/static/examples/skyrme.py \
 		doc/static/examples/nucmass.py \
 		doc/static/examples/SFHo_SFHx.py \
+		doc/static/examples/DSH.py \
 		doc/static/examples/test_examples.py \
 		-s -v
 

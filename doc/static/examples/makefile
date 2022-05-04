@@ -54,6 +54,9 @@ cmaps:
 skyrme.ipynb: empty
 	jupytext --to ipynb --update skyrme.py 
 
+DSH.ipynb: empty
+	jupytext --to ipynb --update DSH.py 
+
 table.ipynb: empty
 	jupytext --to ipynb --update table.py 
 

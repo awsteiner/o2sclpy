@@ -511,6 +511,19 @@ class std_vector_size_t:
         for i in range(0,len(v)):
             self.__setitem__(i,v[i])
         return
+    def __str__(self):
+        """
+        Desc
+        """
+        s='('
+        for i in range(0,len(self)):
+            if i!=len(self)-1:
+                s=s+str(self[i])+','
+            else:
+                s=s+str(self[i])
+        s=s+')'
+        return s
+        
 
 class std_vector_string:
     """
@@ -3422,6 +3435,52 @@ class table3d:
         ret=func(self._ptr,iy)
         return ret
 
+    def get_x_name(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_table3d_get_x_name
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def get_y_name(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_table3d_get_y_name
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def set_x_name(self,name):
+        """
+        | Parameters:
+        | *name*: string
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_set_x_name
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,name_)
+        return
+
+    def set_y_name(self,name):
+        """
+        | Parameters:
+        | *name*: string
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_set_y_name
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,name_)
+        return
+
     def get_size(self):
         """
         | Parameters:
@@ -5344,6 +5403,23 @@ class tensor_grid:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_double]
         func(self._ptr,t3d._ptr,slice_,n_points,low,high,width)
         return
+
+    def rearrange_and_copy(self,spec,verbose=0,err_on_fail=True):
+        """
+        | Parameters:
+        | *spec*: string
+        | *verbose* =0: ``int``
+        | *err_on_fail* =true: ``bool``
+        | Returns: :class:`tensor_grid` object
+        """
+        spec_=ctypes.c_char_p(force_bytes(spec))
+        func=self._link.o2scl.o2scl_tensor_grid__rearrange_and_copy
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
+        ret2=func(self._ptr,spec_,verbose,err_on_fail)
+        ret=tensor_grid(self._link,ret2)
+        ret.owner=True
+        return ret
 
 
 class tensor_int:
