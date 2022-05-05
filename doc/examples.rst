@@ -17,3 +17,4 @@ linked in these examples.
    ex_skyrme
    ex_nucmass
    ex_sfho
+   ex_dsh
