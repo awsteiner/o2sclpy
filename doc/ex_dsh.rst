@@ -1,5 +1,5 @@
-SFHo example
-============
+DSH example
+===========
 
 :ref:`O2sclpy <o2sclpy>`
 
