@@ -259,6 +259,15 @@ def force_bytes(obj):
         return bytes(obj,'utf-8')
     return obj
 
+def force_string(obj):
+    """
+    This function returns the bytes object corresponding to ``obj``
+    in case it is a string using UTF-8. 
+    """
+    if isinstance(obj,numpy.bytes_)==True or isinstance(obj,bytes)==True:
+        return obj.decode('utf-8')
+    return obj
+
 # This function is probably best replaced by get_str_array() below
 #
 # def parse_col_names(dset):

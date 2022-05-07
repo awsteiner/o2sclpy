@@ -44,7 +44,7 @@ from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import get_ic_ptrs_to_list, string_equal_dash
-from o2sclpy.utils import reformat_python_docs
+from o2sclpy.utils import reformat_python_docs, force_string
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
@@ -2968,9 +2968,10 @@ class o2graph_plotter(yt_plot_base):
                           'do not require a current object:\n')
                 else:
                     # AWS removed decode on 10/27/2020
+                    # but Converted to force_string on 5/6/22
                     print('List of command-line options',
                           '(current object type is',
-                          curr_type+'):\n')
+                          force_string(curr_type)+'):\n')
                 full_list=[]
 
                 for j in range(0,len(tlist)):
