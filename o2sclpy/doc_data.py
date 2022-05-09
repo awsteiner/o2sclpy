@@ -324,9 +324,9 @@ base_list=[
      "word 'end'.\n\n"+
      "Examples are:\n  -yt-ann -text 0.1 0.95 \"Ann. example\" "+
      "color=w,ha=left end"],
-    ["yt-xtitle","","",""],
-    ["yt-ytitle","","",""],
-    ["yt-ztitle","","",""],
+    ["yt-xtitle","Add a x title to a yt render.","",""],
+    ["yt-ytitle","Add a y title to a yt render.","",""],
+    ["yt-ztitle","Add a z title to a yt render.","",""],
     ["yt-arrow","Draw an arrow in the yt volume.",
      "<[x1,y1,z1]> <[x2,y2,z2]> [kwargs]",
      "Draw an arrow from the tail at (x1,y1,z1) to the head at "+
