@@ -2504,6 +2504,79 @@ class eos_tov:
         ret=func(self._ptr,pr)
         return ret
 
+    def pr_from_ed(self,ed):
+        """
+        | Parameters:
+        | *ed*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_tov_pr_from_ed
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,ed)
+        return ret
+
+    def nb_from_ed(self,ed):
+        """
+        | Parameters:
+        | *ed*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_tov_nb_from_ed
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,ed)
+        return ret
+
+    def nb_from_pr(self,pr):
+        """
+        | Parameters:
+        | *pr*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_tov_nb_from_pr
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,pr)
+        return ret
+
+    def ed_from_nb(self,nb):
+        """
+        | Parameters:
+        | *nb*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_tov_ed_from_nb
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,nb)
+        return ret
+
+    def pr_from_nb(self,nb):
+        """
+        | Parameters:
+        | *nb*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_tov_pr_from_nb
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,nb)
+        return ret
+
+    def ed_nb_from_pr(self,pr):
+        """
+        | Parameters:
+        | *pr*: ``double``
+        | Returns: , a Python float, a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_tov_ed_nb_from_pr
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
+        ed_conv=ctypes.c_double(0)
+        nb_conv=ctypes.c_double(0)
+        func(self._ptr,pr,ctypes.byref(ed_conv),ctypes.byref(nb_conv))
+        return ed_conv.value,nb_conv.value
+
 
 class eos_tov_buchdahl(eos_tov):
     """
@@ -2640,6 +2713,32 @@ class eos_tov_buchdahl(eos_tov):
         | Returns: a Python float
         """
         func=self._link.o2scl.o2scl_eos_tov_buchdahl_pr_from_r_gm
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,r,beta)
+        return ret
+
+    def exp2lam_from_r_gm(self,r,beta):
+        """
+        | Parameters:
+        | *r*: ``double``
+        | *beta*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_tov_buchdahl_exp2lam_from_r_gm
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,r,beta)
+        return ret
+
+    def exp2phi_from_r_gm(self,r,beta):
+        """
+        | Parameters:
+        | *r*: ``double``
+        | *beta*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_tov_buchdahl_exp2phi_from_r_gm
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
         ret=func(self._ptr,r,beta)
