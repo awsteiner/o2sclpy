@@ -79,9 +79,9 @@ List of command-line options which do not require a current object:
   -yt-source-list  List all current yt sources.
   -yt-text         Add text to the yt volume.
   -yt-tf           Edit the yt transfer function.
-  -yt-xtitle       
-  -yt-ytitle       
-  -yt-ztitle       
+  -yt-xtitle       Add a x title to a yt render.
+  -yt-ytitle       Add a y title to a yt render.
+  -yt-ztitle       Add a z title to a yt render.
   -ytitle          Add y title to plot (or subplot).
   -zlimits         Set the z-axis limits.
 

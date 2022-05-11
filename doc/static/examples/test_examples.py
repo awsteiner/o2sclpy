@@ -1,5 +1,6 @@
 import math
 from PIL import Image
+from PIL import ImageChops
 import operator
 import functools
 import os
@@ -25,11 +26,15 @@ def compare_images(name):
     Compare the script image with the version in the figures
     directory and ensure they are nearly identical.
     """
-    img1=Image.open('doc/static/figures/'+name+'_doc.png').histogram()
-    img2=Image.open('doc/static/examples/'+name+'.png').histogram()
+    img1=Image.open('doc/static/figures/'+name+'_doc.png')
+    img2=Image.open('doc/static/examples/'+name+'.png')
+    img1h=img1.histogram()
+    img2h=img2.histogram()
     rms = math.sqrt(functools.reduce(operator.add,
-                                     map(lambda a,b: (a-b)**2,img1,img2))/
-                    len(img1))
+                                     map(lambda a,b: (a-b)**2,img1h,img2h))/
+                    len(img1h))
+    #img3=ImageChops.subtract(img1,img2)
+    #img3.save('doc/static/examples/'+name+'_diff.png')
     assert rms<200, name
     return
 
