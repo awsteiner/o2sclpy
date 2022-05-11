@@ -40,9 +40,22 @@ print('Relative difference %7.6e.' %
 # Get the table for the TOV results
 
 tov_table=ts.get_results()
+beta=ts.mass*b.G_km_Msun/ts.rad
 
+radial_grid=[]
+rel_diff=[]
+for i in range(1,tov_table.get_nlines()):
+    r=tov_table['r'][i]
+    radial_grid.append(r)
+    enc_mass=r*(1.0-1.0/b.exp2lam_from_r_gm(tov_table['r'][i],
+                                            beta))/2.0/b.G_km_Msun
+    enc_mass2=tov_table['gm'][i]
+    rel_diff.append(abs(enc_mass-enc_mass2)/enc_mass)
+
+          
 if plots:
     pl=o2sclpy.plotter()
+    
     pl.canvas()
     plot.plot(tov_table['r'][0:tov_table.get_nlines()],
               tov_table['gm'][0:tov_table.get_nlines()])
@@ -50,16 +63,19 @@ if plots:
     pl.ytitle('gravitational mass (Msun)')
     plot.show()
 
-    plot.clf()
-    o2sclpy.default_plot()
-    plot.plot(tov_table['r'][0:tov_table.get_nlines()],
-              tov_table['gm'][0:tov_table.get_nlines()])
+    pl.canvas_flag=False
+    pl.canvas()
+    plot.plot(radial_grid,rel_diff)
     pl.xtitle('radius (km)')
-    pl.ytitle('gravitational mass (Msun)')
+    pl.ytitle('rel. error in enclosed grav. mass')
     plot.show()
     
 # For testing using ``pytest``:
 
 def test_fun():
-    assert numpy.allclose(Lambda,297.0,rtol=8.0e-3)
+    print('here',b.rad_from_gm(1.4),ts.rad)
+    print(abs(b.rad_from_gm(1.4)-ts.rad)/ts.rad)
+    assert numpy.allclose(b.rad_from_gm(1.4),ts.rad,rtol=1.0e-20)
+    for i in range(0,len(rel_diff)):
+        assert numpy.allclose(rel_diff[i],0.0,atol=5.0e-11)
     return
