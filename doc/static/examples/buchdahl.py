@@ -23,11 +23,11 @@ link.link_o2scl()
 
 cu=link.o2scl_settings.get_convert_units()
 
-# Create the Buchdahl EOS object
+# Create the Buchdahl EOS object:
 
 b=o2sclpy.eos_tov_buchdahl(link)
 
-# Create the TOV solve object, set the EOS and compute the M-R curve
+# Create the TOV solve object, set the EOS and compute the M-R curve:
 
 ts=o2sclpy.tov_solve(link)
 ts.set_eos(b);
@@ -37,10 +37,17 @@ print('Exact radius is %7.6e, computed radius is %7.6e.' %
 print('Relative difference %7.6e.' %
       (abs(b.rad_from_gm(1.4)-ts.rad)/ts.rad))
 
-# Get the table for the TOV results
+# Get the table for the TOV results:
 
 tov_table=ts.get_results()
+
+# The compactness of a 1.4 solar mass NS:
+
 beta=ts.mass*b.G_km_Msun/ts.rad
+
+# Construct two lists, a radius grid and a list containing the
+# relative difference of the exact and calculated enclosed
+# gravitational mass:
 
 radial_grid=[]
 rel_diff=[]
@@ -52,13 +59,13 @@ for i in range(1,tov_table.get_nlines()):
     enc_mass2=tov_table['gm'][i]
     rel_diff.append(abs(enc_mass-enc_mass2)/enc_mass)
 
-          
-if plots:
+# Initialize the plotting object:
     
+if plots:
     pl=o2sclpy.plotter()
 
-    # Plot the enclosed gravitational mass as a function of
-    # radius for a 1.4 solar mass neutron star.
+# Plot the enclosed gravitational mass as a function of
+# radius for a 1.4 solar mass neutron star:
     
     pl.canvas()
     plot.plot(tov_table['r'][0:tov_table.get_nlines()],
@@ -67,9 +74,9 @@ if plots:
     pl.ytitle('gravitational mass (Msun)')
     plot.show()
 
-    # For the enclosed gravitational mass, plot the relative
-    # difference of the exact results and that computed from
-    # the tov_solve class.
+# For the enclosed gravitational mass, plot the relative
+# difference of the exact results and that computed from
+# the tov_solve class:
 
     pl.canvas_flag=False
     pl.canvas()
