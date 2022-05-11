@@ -54,7 +54,11 @@ for i in range(1,tov_table.get_nlines()):
 
           
 if plots:
+    
     pl=o2sclpy.plotter()
+
+    # Plot the enclosed gravitational mass as a function of
+    # radius for a 1.4 solar mass neutron star.
     
     pl.canvas()
     plot.plot(tov_table['r'][0:tov_table.get_nlines()],
@@ -62,6 +66,10 @@ if plots:
     pl.xtitle('radius (km)')
     pl.ytitle('gravitational mass (Msun)')
     plot.show()
+
+    # For the enclosed gravitational mass, plot the relative
+    # difference of the exact results and that computed from
+    # the tov_solve class.
 
     pl.canvas_flag=False
     pl.canvas()
@@ -73,9 +81,7 @@ if plots:
 # For testing using ``pytest``:
 
 def test_fun():
-    print('here',b.rad_from_gm(1.4),ts.rad)
-    print(abs(b.rad_from_gm(1.4)-ts.rad)/ts.rad)
-    assert numpy.allclose(b.rad_from_gm(1.4),ts.rad,rtol=1.0e-20)
+    assert numpy.allclose(b.rad_from_gm(1.4),ts.rad,rtol=1.0e-9,atol=0)
     for i in range(0,len(rel_diff)):
         assert numpy.allclose(rel_diff[i],0.0,atol=5.0e-11)
     return

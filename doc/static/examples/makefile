@@ -72,6 +72,9 @@ nucmass.ipynb: empty
 SFHo_SFHx.ipynb: empty
 	jupytext --to ipynb --update SFHo_SFHx.py 
 
+buchdahl.ipynb: empty
+	jupytext --to ipynb --update buchdahl.py 
+
 empty:
 
 colors_near:
