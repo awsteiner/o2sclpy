@@ -1,4 +1,4 @@
-# # Skyrme equation of state example for O$_2$sclpy
+# # Buchdahl equation of state example for O$_2$sclpy
 
 # See the O$_2$sclpy documentation at https://neutronstars.utk.edu/code/o2sclpy for more information.
 
@@ -44,6 +44,14 @@ tov_table=ts.get_results()
 if plots:
     pl=o2sclpy.plotter()
     pl.canvas()
+    plot.plot(tov_table['r'][0:tov_table.get_nlines()],
+              tov_table['gm'][0:tov_table.get_nlines()])
+    pl.xtitle('radius (km)')
+    pl.ytitle('gravitational mass (Msun)')
+    plot.show()
+
+    plot.clf()
+    o2sclpy.default_plot()
     plot.plot(tov_table['r'][0:tov_table.get_nlines()],
               tov_table['gm'][0:tov_table.get_nlines()])
     pl.xtitle('radius (km)')
