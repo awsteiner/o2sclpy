@@ -2,7 +2,13 @@
 # with two independent variables.
 #
 o2graph -create table3d x grid:0,1,0.05 y "grid:(-1),0,0.05" \
-	z "sin(x*6)*cos(y*6)" -yt-mesh z -yt-tf new 0 1 100 \
-        -yt-tf gauss 0.5 1.0 0.5 0.5 1.0 -yt-add-vol z \
-        -yt-path yaw 101 1.0 -yt-render "/tmp/x*.png" yt_mesh.mp4
+	z "sin(x*6)*cos(y*6)" -yt-mesh z \
+        -create table3d x grid:0,1,0.02 y "grid:(-1),0,0.02" \
+	z "sin(x*6)*cos(y*6)" \
+        -to-tg-fermi z 100 -list -yt-tf new 0 1 100 \
+        -yt-tf gauss 0.25 0.03 0.2 0.2 1.0 20.0 \
+        -yt-tf gauss 0.75 0.03 1.0 0.2 1.0 20.0 \
+        -yt-add-vol \
+        -yt-path yaw 101 1.0 -yt-render "/tmp/x*.png" \
+        mov_fname=yt_mesh2.mp4
 	

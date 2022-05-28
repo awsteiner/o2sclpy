@@ -39,12 +39,12 @@ from o2sclpy.doc_data import cmaps, new_cmaps, base_list
 from o2sclpy.doc_data import extra_types, extra_list, param_list
 from o2sclpy.doc_data import yt_param_list, acol_help_topics
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
-from o2sclpy.utils import parse_arguments, string_to_dict, terminal
+from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number, table_get_column, o2scl_get_type
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import get_ic_ptrs_to_list, string_equal_dash
-from o2sclpy.utils import reformat_python_docs
+from o2sclpy.utils import reformat_python_docs, force_string
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
@@ -1929,7 +1929,7 @@ class o2graph_plotter(yt_plot_base):
         Called by help_func().
         """
 
-        ter=terminal()
+        ter=terminal_py()
         str_line=ter.horiz_line()
         print('\n'+str_line)
         print('\nO2graph parameter list:')
@@ -2041,7 +2041,7 @@ class o2graph_plotter(yt_plot_base):
                            ctypes.c_char_p]
 
         # Get current type
-        ter=terminal()
+        ter=terminal_py()
         cmd_name=b'o2graph'
         cmd_desc=(b'o2graph: A data viewing and '+
                   b'processing program for '+force_bytes(ter.bold())+
@@ -2158,7 +2158,7 @@ class o2graph_plotter(yt_plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         double_ptr=ctypes.POINTER(ctypes.c_double)
         double_ptr_ptr=ctypes.POINTER(double_ptr)
-        
+
         curr_type=o2scl_get_type(o2scl,amp)
 
         if curr_type==b'tensor_grid':
@@ -2214,9 +2214,10 @@ class o2graph_plotter(yt_plot_base):
                 self.zlo=gridz[0]
                 self.zhi=gridz[nz-1]
                 self.zset=True
-            print('o2graph_plotter:yt-add-vol: axis limits:',
-                  self.xlo,self.xhi,
-                  self.ylo,self.yhi,self.zlo,self.zhi)
+                print('o2graph_plotter:yt-add-vol: axis limits:\n ',
+                      '%7.6e %7.6e %7.6e %7.6e %7.6e %7.6e' % (
+                          self.xlo,self.xhi,
+                          self.ylo,self.yhi,self.zlo,self.zhi))
             
             arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
             self.yt_volume_data.append(numpy.copy(arr))
@@ -2236,7 +2237,8 @@ class o2graph_plotter(yt_plot_base):
                                              arr2.shape,bbox=bbox2))
             ds=self.yt_data_sources[len(self.yt_data_sources)-1]
 
-            self.yt_vols.append(create_volume_source(ds,field='density'))
+            self.yt_vols.append(create_volume_source(ds,field=('gas',
+                                                               'density')))
             vol=self.yt_vols[len(self.yt_vols)-1]
             vol.log_field=False
 
@@ -2254,7 +2256,7 @@ class o2graph_plotter(yt_plot_base):
                 #tfh.plot('tf.png')
                 vol.set_transfer_function(tfh.tf)
                 print(tfh.tf)
-                        
+
             if self.yt_created_scene==False:
                 self.yt_create_scene()
 
@@ -2358,14 +2360,26 @@ class o2graph_plotter(yt_plot_base):
         return
         
     def den_plot_anim(self,o2scl,amp,args):
-        """
-        Create an mp4 animation of a density plot from a tensor_grid3 
+        """Documentation for o2graph command ``den-plot-anim``:
+
+        Create an animated density plot from a rank 3 tensor_grid
+        object
+
+        Command-line arguments: ``<x index> <y index> <z index [+'r']>
+        <mp4 filename>``
+
+        Create an mp4 animation of a density plot from a tensor_grid3
         object. The first argument specifies which tensor index is
-        along the x axis, the second argument is the tensor index is
-        along the y axis, and the third argument is the tensor index
-        which will be animated.
+        along the x axis (either ``0``, ``1`` or ``2``), the second
+        argument is the tensor index is along the y axis (either
+        ``0``, ``1`` or ``2``), and the third argument is the tensor
+        index which will be animated. If the third argument has an
+        additional ``r`` suffix, then the animation will be reversed,
+        so that the first frame corresponds to the largest value of
+        the grid for the associated index.
 
         Experimental.
+
         """
 
         import matplotlib.pyplot as plot
@@ -2655,11 +2669,43 @@ class o2graph_plotter(yt_plot_base):
         Function to process the help command.
         """
 
+        base_list_new=[
+            ["addcbar",plot_base.addcbar.__doc__],
+            ["arrow",plot_base.arrow.__doc__],
+            ["backend",
+             ("Documentation for backend\n\n"+
+              "Select the matplotlib backend to use.\n\n"+
+              "<backend>\n\n"+
+              "This commend selects the matplotlib backend. "+
+              "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', "+
+              "and 'QT4Agg'. Use backend Agg to save the plot to a "+
+              "file without opening a window. The backend can only "+
+              "be changed once, i.e. if the backend command is "+
+              "invoked more than once, then only the last invocation "+
+              "will have any effect.")],
+            ["canvas",plot_base.canvas.__doc__],
+            ["cmap",plot_base.cmap.__doc__],
+            ["cmap2",plot_base.cmap2.__doc__],
+            ["den-plot-anim",o2graph_plotter.den_plot_anim.__doc__],
+            ["image","Documentation for image\n\n"+
+             "Plot a png file in a matplotlib window.\n\n"+
+             "<png file>\n\n"+
+             "This command reads a png file, fills a plotting canvas "+
+             "and then calls matplotlib.pyplot.show()."],
+            ["yt-axis",yt_plot_base.yt_plot_axis.__doc__],
+            ["yt-path",o2graph_plotter.yt_path_func.__doc__],
+            ["yt-text",o2graph_plotter.yt_text.__doc__],
+            ["yt-tf",o2graph_plotter.yt_tf_func.__doc__],
+            ["yt-xtitle",yt_plot_base.yt_xtitle.__doc__],
+            ["yt-ytitle",yt_plot_base.yt_ytitle.__doc__],
+            ["yt-ztitle",yt_plot_base.yt_ztitle.__doc__]
+        ]
+
         # The command we're looking for help on (if specified)
         cmd=''
 
         # vt100 inits
-        ter=terminal()
+        ter=terminal_py()
         str_line=ter.horiz_line()
 
         # Get current type
@@ -2675,18 +2721,15 @@ class o2graph_plotter(yt_plot_base):
 
         # See if we matched an o2graph command
         match=False
-                    
+
+        for line in base_list_new:
+            if cmd==line[0]:
+                match=True
+                reformat_python_docs(cmd,line[1],base_list_new)
+        
         # Handle the case of an o2graph command from the
         # base list
-        if cmd=='yt-axis':
-            doc=yt_plot_base.yt_plot_axis.__doc__
-            reformat_python_docs(cmd,doc)
-            match=True
-        elif cmd=='yt-path':
-            doc=o2graph_plotter.yt_path_func.__doc__
-            reformat_python_docs(cmd,doc)
-            match=True
-        else:
+        if match==False:
             for line in base_list:
                 if cmd==line[0]:
                     match=True
@@ -2925,9 +2968,10 @@ class o2graph_plotter(yt_plot_base):
                           'do not require a current object:\n')
                 else:
                     # AWS removed decode on 10/27/2020
+                    # but Converted to force_string on 5/6/22
                     print('List of command-line options',
                           '(current object type is',
-                          curr_type+'):\n')
+                          force_string(curr_type)+'):\n')
                 full_list=[]
 
                 for j in range(0,len(tlist)):
@@ -2991,8 +3035,18 @@ class o2graph_plotter(yt_plot_base):
         return
         
     def yt_tf_func(self,args):
-        """
-        Update the yt transfer function.
+        """Documentation for o2graph command ``yt-tf``:
+
+        Edit the yt transfer function.
+
+        Command-line arguments: ``<mode> <args>``
+
+        To create a new transfer function, use 'new' for <mode> and
+        the remaining <args> are <min> <max> [nbins] .To add a
+        Gaussian, use 'gauss' for <mode> and <args> are <loc> <width>
+        <red> <green> <blue>, and <alpha>. To add a step function, use
+        'step' <low> <high> <red> <green> <blue>, and <alpha>. To plot
+        the transfer function, use 'plot' <filename>.
         """
 
         if len(args)==0:
@@ -3083,16 +3137,17 @@ class o2graph_plotter(yt_plot_base):
 
         The ``yt-path`` adds a path to a yt animation. To rotate the
         camera around the z-axis, use 'yaw' <n_frames> <angle>, where
-        angle is a fraction of a full rotation. To zoom the camera,
-        use 'zoom' <n_frames> <factor> ,where factor is the total zoom
-        factor to apply over all n_frames. To move the camera along a
-        line, use 'move' <n_frames> <[dest_x,dest_y,dest_z]>
-        <'internal' or 'user'>, where the third argument is the
-        destination in either the internal or user-specified
-        coordinate system. To turn the camera without moving it, use
-        'turn' <n_frames> <[foc_x,foc_y,foc_z]> <'internal' or
-        'user'>. Executing 'yt-path reset' resets the yt animation
-        path to an empty list (for no animation).
+        angle is a fraction of a full rotation to perform by the end
+        of the animation. To zoom the camera, use 'zoom' <n_frames>
+        <factor> ,where factor is the total zoom factor to apply over
+        all n_frames. To move the camera along a line, use 'move'
+        <n_frames> <[dest_x,dest_y,dest_z]> <'internal' or 'user'>,
+        where the third argument is the destination in either the
+        internal or user-specified coordinate system. To turn the
+        camera without moving it, use 'turn' <n_frames>
+        <[foc_x,foc_y,foc_z]> <'internal' or 'user'>. Executing
+        'yt-path reset' resets the yt animation path to an empty list
+        (for no animation).
 
         """
 
@@ -3260,47 +3315,35 @@ class o2graph_plotter(yt_plot_base):
                 rescale_g=False
                 rescale_b=False
                 for i in range(0,idr.value):
-                    if ptrr[i]<0.0:
-                        if rescale_r==False:
-                            rescale_r=True
+                    if ptrr[i]<0.0 or ptrr[i]>1.0:
+                        rescale_r=True
+                    if ptrg[i]<0.0 or ptrg[i]>1.0:
+                        rescale_g=True
+                    if ptrb[i]<0.0 or ptrb[i]>1.0:
+                        rescale_b=True
+                if rescale_r:
+                    min_r=ptrr[0]
+                    max_r=ptrr[0]
+                    for i in range(0,idr.value):
+                        if ptrr[i]<min_r:
                             min_r=ptrr[i]
+                        if ptrr[i]>max_r:
                             max_r=ptrr[i]
-                        elif ptrr[i]<min_r:
-                            min_r=ptrr[i]
-                    if ptrr[i]>1.0:
-                        if rescale_r==False:
-                            rescale_r=True
-                            min_r=ptrr[i]
-                            max_r=ptrr[i]
-                        elif ptrr[i]>max_r:
-                            max_r=ptrr[i]
-                    if ptrg[i]<0.0:
-                        if rescale_g==False:
-                            rescale_g=True
+                if rescale_g:
+                    min_g=ptrg[0]
+                    max_g=ptrg[0]
+                    for i in range(0,idr.value):
+                        if ptrg[i]<min_g:
                             min_g=ptrg[i]
+                        if ptrg[i]>max_g:
                             max_g=ptrg[i]
-                        elif ptrg[i]<min_g:
-                            min_g=ptrg[i]
-                    if ptrg[i]>1.0:
-                        if rescale_g==False:
-                            rescale_g=True
-                            min_g=ptrg[i]
-                            max_g=ptrg[i]
-                        elif ptrg[i]>max_g:
-                            max_g=ptrg[i]
-                    if ptrb[i]<0.0:
-                        if rescale_b==False:
-                            rescale_b=True
+                if rescale_b:
+                    min_b=ptrb[0]
+                    max_b=ptrb[0]
+                    for i in range(0,idr.value):
+                        if ptrb[i]<min_b:
                             min_b=ptrb[i]
-                            max_b=ptrb[i]
-                        elif ptrb[i]<min_b:
-                            min_b=ptrb[i]
-                    if ptrb[i]>1.0:
-                        if rescale_b==False:
-                            rescale_b=True
-                            min_b=ptrb[i]
-                            max_b=ptrb[i]
-                        elif ptrb[i]>max_b:
+                        if ptrb[i]>max_b:
                             max_b=ptrb[i]
                 if rescale_r:
                     print('Rescaling red range   (%0.6e,%0.6e) to (0,1)' %
@@ -3593,17 +3636,20 @@ class o2graph_plotter(yt_plot_base):
             if self.xset==False:
                 self.xlo=min(xv)
                 self.xhi=max(xv)
-                print('Set xlimits to (%0.6e,%0.6e)' % (self.xlo,self.xhi))
+                print('Function yt-mesh set xlimits to (%0.6e,%0.6e)' %
+                      (self.xlo,self.xhi))
                 self.xset=True
             if self.yset==False:
                 self.ylo=min(yv)
                 self.yhi=max(yv)
-                print('Set ylimits to (%0.6e,%0.6e)' % (self.ylo,self.yhi))
+                print('Function yt-mesh set ylimits to (%0.6e,%0.6e)' %
+                      (self.ylo,self.yhi))
                 self.yset=True
             if self.zset==False:
                 self.zlo=numpy.min(sl)
                 self.zhi=numpy.max(sl)
-                print('Set zlimits to (%0.6e,%0.6e)' % (self.zlo,self.zhi))
+                print('Function yt-mesh set zlimits to (%0.6e,%0.6e)' %
+                      (self.zlo,self.zhi))
                 self.zset=True
             x_range=self.xhi-self.xlo
             y_range=self.yhi-self.ylo
@@ -3652,8 +3698,8 @@ class o2graph_plotter(yt_plot_base):
             if self.yt_created_scene==False:
                 self.yt_create_scene()
 
-            print('o2graph:yt-mesh: Adding point source.')
             kname=self.yt_unique_keyname('o2graph_mesh')
+            print('o2graph:yt-mesh: Adding line source '+kname+'.')
             self.yt_scene.add_source(ls,keyname=kname)
                         
         else:
@@ -3668,7 +3714,7 @@ class o2graph_plotter(yt_plot_base):
         Output the currently available commands.
         """
 
-        ter=terminal()
+        ter=terminal_py()
         
         # C types
         int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -4155,7 +4201,7 @@ class o2graph_plotter(yt_plot_base):
             os.system('mv /tmp/yt_filtered.png '+fname)
         return
     
-    def yt_render(self,o2scl,amp,link,fname,mov_fname=''):
+    def yt_render(self,o2scl,amp,link,fname,mov_fname='',loop=False):
         """
         Complete the yt render and save the image to a file. If necessary,
         compile the images into a movie and save into the specified
@@ -4531,7 +4577,7 @@ class o2graph_plotter(yt_plot_base):
             # -pix_fmt sepcifies the pixel format, -crf is the quality
             # (15-25 recommended) -y forces overwrite of the movie
             # file if it already exists
-
+            
             if n_frames>=1000:
                 cmd=('ffmpeg -y -r 10 -f image2 -i '+
                      prefix+'%04d'+suffix+' -vcodec libx264 '+
@@ -4548,6 +4594,9 @@ class o2graph_plotter(yt_plot_base):
                 cmd=('ffmpeg -y -r 10 -f image2 -i '+
                      prefix+'%01d'+suffix+' -vcodec libx264 '+
                      '-crf 25 -pix_fmt yuv420p '+mov_fname)
+
+            if loop==True:
+                cmd=cmd+' -stream_loop -1'
                 
             print('ffmpeg command:',cmd)
             os.system(cmd)
@@ -4719,8 +4768,8 @@ class o2graph_plotter(yt_plot_base):
                         print('Process yt-add-vol.')
                         print('args:',strlist[ix:ix_next])
                         
-                        self.yt_add_vol(o2scl,amp,
-                                        strlist[ix+1:ix_next])
+                    self.yt_add_vol(o2scl,amp,
+                                    strlist[ix+1:ix_next])
                     
                 elif cmd_name=='yt-scatter':
 
@@ -4777,6 +4826,48 @@ class o2graph_plotter(yt_plot_base):
                                      float(eval(strlist[ix+2])),
                                      float(eval(strlist[ix+3])),
                                      strlist[ix+4])
+                                                    
+                elif cmd_name=='yt-xtitle':
+
+                    if self.verbose>2:
+                        print('Process yt-text.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<2:
+                        print('Not enough parameters for yt-text.')
+                    elif ix_next-ix==3:
+                        self.yt_xtitle(strlist[ix+1],
+                                       **string_to_dict(strlist[ix+2]))
+                    else:
+                        self.yt_xtitle(strlist[ix+1])
+                                                    
+                elif cmd_name=='yt-ytitle':
+
+                    if self.verbose>2:
+                        print('Process yt-text.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<2:
+                        print('Not enough parameters for yt-text.')
+                    elif ix_next-ix==3:
+                        self.yt_ytitle(strlist[ix+1],
+                                       **string_to_dict(strlist[ix+2]))
+                    else:
+                        self.yt_ytitle(strlist[ix+1])
+                                                    
+                elif cmd_name=='yt-ztitle':
+
+                    if self.verbose>2:
+                        print('Process yt-text.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<2:
+                        print('Not enough parameters for yt-text.')
+                    elif ix_next-ix==3:
+                        self.yt_ztitle(strlist[ix+1],
+                                       **string_to_dict(strlist[ix+2]))
+                    else:
+                        self.yt_ztitle(strlist[ix+1])
                                                     
                 elif cmd_name=='yt-line':
 
@@ -4887,14 +4978,17 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
                         
                     icnt=0
-                    for key, value in self.yt_scene.sources.items():
-                        tstr=("<class 'yt.visualization.volume_"+
-                              "rendering.render_source.")
-                        print('yt-source-list',icnt,key,
-                              str(type(value)).replace(tstr,"<class '..."))
-                        icnt=icnt+1
-                    if icnt==0:
+                    if self.yt_scene==0:
                         print('No yt sources.')
+                    else:
+                        for key, value in self.yt_scene.sources.items():
+                            tstr=("<class 'yt.visualization.volume_"+
+                                  "rendering.render_source.")
+                            print('yt-source-list',icnt,key,
+                                  str(type(value)).replace(tstr,"<class '..."))
+                            icnt=icnt+1
+                        if icnt==0:
+                            print('No yt sources.')
                     
                 elif cmd_name=='yt-axis':
 
@@ -4919,7 +5013,7 @@ class o2graph_plotter(yt_plot_base):
                         self.yt_render(o2scl,amp,link,strlist[ix+1])
                     else:
                         self.yt_render(o2scl,amp,link,strlist[ix+1],
-                                       mov_fname=strlist[ix+2])
+                                       **string_to_dict(strlist[ix+2]))
 
                 elif cmd_name=='yt-tf':
 
@@ -5394,8 +5488,21 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
 
                     import matplotlib.image as img
-                    im = img.imread(strlist[ix+1])
-                    default_plot(0.0,0.0,0.0,0.0)
+                    im=img.imread(strlist[ix+1])
+                    
+                    # Rescale the figure to insure the correct
+                    # aspect ratio
+                    height=im.shape[0]
+                    width=im.shape[1]
+                    fig_size_x=6
+                    fig_size_y=height*fig_size_x/width
+                    if fig_size_y>10:
+                        fig_size_y=10
+                        fig_size_x=fig_size_y*width/height
+                        
+                    default_plot(0.0,0.0,0.0,0.0,fig_size_x=fig_size_x,
+                                 fig_size_y=fig_size_y)
+                    
                     import matplotlib.pyplot as plot
                     plot.imshow(im)
                     plot.show()

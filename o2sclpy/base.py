@@ -511,6 +511,19 @@ class std_vector_size_t:
         for i in range(0,len(v)):
             self.__setitem__(i,v[i])
         return
+    def __str__(self):
+        """
+        Desc
+        """
+        s='('
+        for i in range(0,len(self)):
+            if i!=len(self)-1:
+                s=s+str(self[i])+','
+            else:
+                s=s+str(self[i])
+        s=s+')'
+        return s
+        
 
 class std_vector_string:
     """
@@ -3422,6 +3435,52 @@ class table3d:
         ret=func(self._ptr,iy)
         return ret
 
+    def get_x_name(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_table3d_get_x_name
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def get_y_name(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_table3d_get_y_name
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def set_x_name(self,name):
+        """
+        | Parameters:
+        | *name*: string
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_set_x_name
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,name_)
+        return
+
+    def set_y_name(self,name):
+        """
+        | Parameters:
+        | *name*: string
+        """
+        name_=ctypes.c_char_p(force_bytes(name))
+        func=self._link.o2scl.o2scl_table3d_set_y_name
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,name_)
+        return
+
     def get_size(self):
         """
         | Parameters:
@@ -5344,6 +5403,23 @@ class tensor_grid:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_double]
         func(self._ptr,t3d._ptr,slice_,n_points,low,high,width)
         return
+
+    def rearrange_and_copy(self,spec,verbose=0,err_on_fail=True):
+        """
+        | Parameters:
+        | *spec*: string
+        | *verbose* =0: ``int``
+        | *err_on_fail* =true: ``bool``
+        | Returns: :class:`tensor_grid` object
+        """
+        spec_=ctypes.c_char_p(force_bytes(spec))
+        func=self._link.o2scl.o2scl_tensor_grid__rearrange_and_copy
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
+        ret2=func(self._ptr,spec_,verbose,err_on_fail)
+        ret=tensor_grid(self._link,ret2)
+        ret.owner=True
+        return ret
 
 
 class tensor_int:
@@ -7419,6 +7495,28 @@ class interp_krige_optim:
         return new_obj
 
     @property
+    def mode_loo_cv(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_mode_loo_cv
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+    @property
+    def mode_max_lml(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_mode_max_lml
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+    @property
     def verbose(self):
         """
         Property of type ``ctypes.c_int``
@@ -7498,6 +7596,37 @@ class interp_krige_optim:
         func(self._ptr,value)
         return
 
+    def set_noise(self,size,x,y,noise_var,rescale=False,err_on_fail=True):
+        """
+        | Parameters:
+        | *size*: ``size_t``
+        | *x*: :class:`std_vector` object
+        | *y*: :class:`std_vector` object
+        | *noise_var*: ``double``
+        | *rescale* =false: ``bool``
+        | *err_on_fail* =true: ``bool``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_noise
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_bool,ctypes.c_bool]
+        ret=func(self._ptr,size,x._ptr,y._ptr,noise_var,rescale,err_on_fail)
+        return ret
+
+    def set(self,size,x,y,rescale,err_on_fail=True):
+        """
+        | Parameters:
+        | *size*: ``size_t``
+        | *x*: :class:`std_vector` object
+        | *y*: :class:`std_vector` object
+        | *rescale*: ``bool``
+        | *err_on_fail* =true: ``bool``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_bool]
+        func(self._ptr,size,x._ptr,y._ptr,rescale,err_on_fail)
+        return
+
     def eval(self,x0):
         """
         | Parameters:
@@ -7568,6 +7697,394 @@ class interp_krige_optim:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,x._ptr,y._ptr)
         return
+
+
+class terminal:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``terminal``,
+    see
+    https://neutronstars.utk.edu/code/o2scl/html/class/terminal.html .
+    
+    Note that python complex numbers are immutable, but this class is
+    not, so the real and imaginary parts can be changed with real_set()
+    and imag_set(). 
+                                 
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class terminal
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_terminal
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class terminal
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_terminal
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class terminal
+        
+        Returns: a terminal object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def is_redirected(self):
+        """
+        | Returns: a Python boolean
+        """
+        func=self._link.o2scl.o2scl_terminal_is_redirected
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def str_len(self,str):
+        """
+        | Parameters:
+        | *str*: string
+        | Returns: a Python int
+        """
+        str_=ctypes.c_char_p(force_bytes(str))
+        func=self._link.o2scl.o2scl_terminal_str_len
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        ret=func(self._ptr,str_)
+        return ret
+
+    def hrule(self,n=78):
+        """
+        | Parameters:
+        | *n* =78: ``size_t``
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_hrule
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def cyan_fg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_cyan_fg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def magenta_fg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_magenta_fg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def yellow_fg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_yellow_fg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def red_fg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_red_fg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def green_fg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_green_fg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def blue_fg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_blue_fg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def cyan_bg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_cyan_bg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def magenta_bg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_magenta_bg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def yellow_bg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_yellow_bg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def red_bg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_red_bg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def green_bg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_green_bg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def blue_bg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_blue_bg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def default_fg(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_default_fg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def bold(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_bold
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def eight_bit_fg(self,col):
+        """
+        | Parameters:
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_eight_bit_fg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_short]
+        ret=func(self._ptr,col)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def eight_bit_bg(self,col):
+        """
+        | Parameters:
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_eight_bit_bg
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_short]
+        ret=func(self._ptr,col)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def lowint(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_lowint
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def underline(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_underline
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def reverse(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_reverse
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def alt_font(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_alt_font
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def normal_font(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_normal_font
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def eight_bit_summ(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_eight_bit_summ
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def three_byte_summ(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_three_byte_summ
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
+
+    def three_byte_summ_long(self):
+        """
+        | Returns: Python bytes object
+        """
+        func=self._link.o2scl.o2scl_terminal_three_byte_summ_long
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        strt=std_string(self._link,ret)
+        strt._owner=True
+        return strt.to_bytes()
 
 
 class gen_test_number:
@@ -8938,4 +9455,18 @@ def linear_or_log(link,x,log_x):
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
     func(x._ptr,log_x._ptr)
     return
+
+def get_screen_size_ioctl(link,row,col):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *row*: ``int``
+        | *col*: ``int``
+        | Returns: ``ctypes.c_int`` object
+    """
+    func=link.o2scl.o2scl_get_screen_size_ioctl_wrapper
+    func.restype=ctypes.c_int
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+    ret=func(row._ptr,col._ptr)
+    return ret
 

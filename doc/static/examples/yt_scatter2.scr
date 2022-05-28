@@ -1,0 +1,7 @@
+o2graph -set yt_resolution "(1024,1024)" \
+-create table theta grid:0,6.28,0.0628 -function "sin(theta)" x \
+-function "cos(theta)" y -function "(3.14-theta)^2" z -preview 40 \
+-yt-scatter x y z none x y z -yt-axis -yt-xtitle "$ x^2 $" dpi=200 \
+-yt-ytitle "$ \sqrt{y} $" dpi=200 -yt-ztitle "$ z_{\odot} $" dpi=200 \
+-yt-path yaw 100 1.0 \
+-yt-render "/tmp/x*.png" mov_fname=temp.mp4,loop=True

@@ -491,11 +491,76 @@ class yt_plot_base(plot_base):
         # End of function plot_base::yt_box()
         return
         
+    def yt_xtitle(self,textstr,tx=0.5,ty=-0.1,tz=-0.1,
+                  textcolor=(1,1,1,1.0),
+                  reorient=False,scale=0.6,font=30,
+                  keyname='o2sclpy_text',dpi=100,filename='',
+                  coords='internal'):
+        """Documentation for o2graph command ``yt-xtitle``:
+
+        Add a title to the x axis in yt
+
+        Command-line arguments: ``<x title>``
+
+        This command uses yt-text to add a title to the
+        x-axis. 
+        """
+        self.yt_text(tx,ty,tz,textstr,textcolor=textcolor,
+                     reorient=reorient,scale=scale,font=font,
+                     keyname=keyname,dpi=dpi,filename=filename,
+                     coords=coords)
+        return
+                
+    def yt_ytitle(self,textstr,tx=-0.1,ty=0.5,tz=-0.1,
+                  textcolor=(1,1,1,1.0),
+                  reorient=False,scale=0.6,font=30,
+                  keyname='o2sclpy_text',dpi=100,filename='',
+                  coords='internal'):
+        """Documentation for o2graph command ``yt-ytitle``:
+
+        Add a title to the y axis in yt
+
+        Command-line arguments: ``<y title>``
+
+        This command uses yt-text to add a title to the
+        y-axis. 
+        """
+        self.yt_text(tx,ty,tz,textstr,textcolor=textcolor,
+                     reorient=reorient,scale=scale,font=font,
+                     keyname=keyname,dpi=dpi,filename=filename,
+                     coords=coords)
+        return
+                
+    def yt_ztitle(self,textstr,tx=-0.1,ty=-0.1,tz=0.5,
+                  textcolor=(1,1,1,1.0),
+                  reorient=False,scale=0.6,font=30,
+                  keyname='o2sclpy_text',dpi=100,filename='',
+                  coords='internal'):
+        """Documentation for o2graph command ``yt-ztitle``:
+
+        Add a title to the z axis in yt
+
+        Command-line arguments: ``<z title>``
+
+        This command uses yt-text to add a title to the
+        z-axis. 
+        """
+        self.yt_text(tx,ty,tz,textstr,textcolor=textcolor,
+                     reorient=reorient,scale=scale,font=font,
+                     keyname=keyname,dpi=dpi,filename=filename,
+                     coords=coords)
+        return
+                
     def yt_text(self,tx,ty,tz,textstr,textcolor=(1,1,1,0.5),
                 reorient=False,scale=0.6,font=30,
                 keyname='o2sclpy_text',dpi=100,filename='',
                 coords=''):
-        """
+        """Documentation for o2graph command ``yt-text``:
+
+        Add text to the yt volume.
+
+        Command-line arguments: ``<x> <y> <z> <text> reorient=False``
+
         Plot text given in ``textstr`` in a yt volume visualization at
         location ``(tx,ty,tz)``. If reorient is ``True``, then 
         the during an animation, the text will be redrawn so that
@@ -761,20 +826,20 @@ class yt_plot_base(plot_base):
     def yt_plot_axis(self,xval=1.0,yval=1.0,zval=1.0,
                      color=[1.0,1.0,1.0,0.5],
                      coords='internal',keyname='o2sclpy_axis'):
-        """
-        Documentation for o2graph command ``yt-axis``:
+        """Documentation for o2graph command ``yt-axis``:
 
         Add an axis to the yt volume.
 
-        [kwargs]
+        Command-line arguments: ``xval=1.0,yval=1.0,zval=1.0,
+        color=[1.0,1.0,1.0,0.5],coords='internal',keyname='o2sclpy_axis'``
         
         This command plots an axis from the origin to the three points
-        ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. Other
-        relevant keyword arguments are: ``color=[1,1,1,0.5]``, the
-        color of the axis arrows, coords, a string for the coordinate
-        system, and keyname, the name for the yt object. Use
-        ``coords=user`` for the user-based coordinate system and
-        ``coords=internal` for the internal coordinate system.
+        ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. There are
+        two keyword arguments, the first is ``color=[1,1,1,0.5]``, the
+        color of the axis arrows. The other is a string for the
+        coordinate system, and keyname, the name for the yt object.
+        Use ``coords=user`` for the user-based coordinate system and
+        ``coords=internal`` for the internal coordinate system.
 
         Note that it is often most convenient to create the 
         first volume source to set the scaling of the user-based
@@ -786,6 +851,7 @@ class yt_plot_base(plot_base):
         three arrows. The arrows are constructed with one main
         LineSource and then several smaller LineSource objects in a
         conical shape to create the arrow heads.
+
         """
 
         if self.yt_scene==0:
@@ -868,7 +934,7 @@ class yt_plot_base(plot_base):
         if self.yt_created_scene==False:
             self.yt_create_scene()
 
-        kname=self.yt_unique_keyname('o2sclpy_vol')
+        kname=self.yt_unique_keyname('o2graph_vol')
         self.yt_scene.add_source(vol,keyname=kname)
                             
         if self.yt_created_camera==False:

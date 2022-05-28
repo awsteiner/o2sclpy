@@ -15,5 +15,7 @@ linked in these examples.
    ex_table
    ex_unit
    ex_skyrme
+   ex_buchdahl
    ex_nucmass
    ex_sfho
+   ex_dsh

@@ -189,8 +189,19 @@ class plot_base:
         self.new_cmaps()
     
     def cmap(self,cmap_name,col_list):
-        """
-        Add a colormap
+        """Documentation for o2graph command ``cmap``:
+
+        Create a continuous colormap.
+
+        Command-line arguments: ``<cmap name> <color 1> <color 2> 
+        [color3]...``
+
+        Create a new color map named <cmap name> which consists of
+        equal-sized gradients between the specified list of at least
+        two colors. Matplotlib colors, (r,g,b) colors, and xkcd colors
+        are all allowed. For example 'o2graph -cmap c forestgreen
+        \"(0.5,0.5,0.7)\" \"xkcd:light red\" -create table3d x
+        grid:0,40,1 y grid:0,40,1 z \"x+y\" -den-plot z cmap=c -show'.
         """
 
         if self.verbose>1:
@@ -265,8 +276,19 @@ class plot_base:
         return
         
     def cmap2(self,cmap_name,col_list):
-        """
-        Add a colormap with sharp transitions
+        """Documentation for o2graph command ``cmap2``:
+
+        Create a colormap with sharp transitions
+
+        Command-line arguments: ``<cmap name> <color 1> <color 2>
+        [color3 color4]...``
+
+        Create a new color map named <cmap name> which consists of
+        equal-sized gradients between the list of specified color
+        pairs. Matplotlib colors, (r,g,b) colors, and xkcd colors are
+        all allowed. For example 'o2graph -cmap2 c \"(0.5,0.5,0.7)\"
+        \"xkcd:light red\" -create table3d x grid:0,40,1 y grid:0,40,1
+        z \"x+y\" -den-plot z cmap=c -show'.
         """
 
         N=len(col_list)
@@ -706,8 +728,60 @@ class plot_base:
         return
 
     def arrow(self,x1,y1,x2,y2,arrowprops,**kwargs):
-        """
-        Plot an arrow from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
+        """Documentation for o2graph command ``arrow``:
+
+        Plot an arrow.
+        
+        Command-line arguments: ``x1 y1 x2 y2 <arrow properties> [kwargs]``
+
+        Plot an arrow from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`. The
+        ``arrow`` command uses axes.annotate() to generate an arrow
+        with an empty string as the first argument to annotate(). The
+        o2graph argument <arrow properties> is the python dictionary
+        for the 'arrowprops' argument to annotate(). The arrowstyle
+        and connectionstyle attributes should be listed along with
+        other arrowprops attributes. Examples for arrowprops are:
+
+        * arrowstyle=->,connectionstyle=arc3
+        * arrowstyle=-|>,connectionstyle=arc,fc=red,ec=blue
+        * arrowstyle=-|>,connectionstyle=arc,head_length=4.0,
+          head_width=1.0
+        * arrowstyle=->,connectionstyle=arc3,head_length=4.0,
+          head_width=1.0,rad=-0.1 
+        * arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,
+          head_width=1.0,rad=-0.1
+
+        Summary for arrowstyle argument (angleB is renamed to as_angleB):
+
+        Name    Attributes
+        * -       None
+        * ->      head_length=0.4,head_width=0.2
+        * -[      widthB=1.0,lengthB=0.2,as_angleB=None
+        * |-      widthA=1.0,widthB=1.0
+        * -|      head_length=0.4,head_width=0.2
+        * <-      head_length=0.4,head_width=0.2
+        * <-      head_length=0.4,head_width=0.2
+        * <|      head_length=0.4,head_width=0.2
+        * <|      head_length=0.4,head_width=0.2
+        * fancy   head_length=0.4,head_width=0.4,tail_width=0.4
+        * simple  head_length=0.5,head_width=0.5,tail_width=0.2
+        * wedge   tail_width=0.3,shrink_factor=0.5
+
+        (note that fancy, simple or wedge require arc3 or angle3 connection 
+        styles)
+
+        Summary for connectionstyle argument (angleB is renamed to 
+        cs_angleB):
+
+        Name    Attributes
+        * angle   angleA=90,cs_angleB=0,rad=0.0
+        * angle3  angleA=90,cs_angleB=0
+        * arc     angleA=0,cs_angleB=0,armA=None,armB=None,rad=0.0
+        * arc3    rad=0.0
+        * bar     armA=0.0,armB=0.0,fraction=0.3,angle=None
+
+        See https://matplotlib.org/2.0.2/users/annotations.html for more.
+
         """
         if self.verbose>2:
             print('Arrow',x1,y1,x2,y1,arrowprops)
@@ -1531,6 +1605,13 @@ class plot_base:
     
     def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):
         """
+        Documentation for o2graph command ``addcbar``:
+
+        Add a color bar.
+        
+        Command-line arguments: ``<left> <bottom> <width> <height>
+        [kwargs]``
+
         Add a new colorbar or a colorbar from the most recently created
         image at the location specified by ``left``, ``bottom``,
         ``width`` and ``height``. If the image keyword is 'last', 
@@ -1538,7 +1619,7 @@ class plot_base:
         histogram plot (command 'hist2d-plot') is used. If 
         the image keyword is 'new', then a colormap must be 
         specified using the 'cmap' keyword and the color map is
-        used to create the colorbar. 
+        used to create the colorbar.
         """
 
         import matplotlib.pyplot as plot
@@ -1581,6 +1662,17 @@ class plot_base:
 
     def canvas(self):
         """
+        Documentation for o2graph command ``canvas``:
+
+        Create a plotting canvas.
+
+        Command-line arguments: (No arguments.)
+
+        Create an empty plotting canvas. For example 'o2graph
+        -canvas -show'. Typically, 'o2graph' creates
+        the canvas automatically so explicitly using this command
+        is unnecessary.
+
         This function creates a default figure using default_plot()
         and axis object using the xtitle and ytitle for the
         axis titles and xlo, xhi, ylo, and yhi for the axis limits.
