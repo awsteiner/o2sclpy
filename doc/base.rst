@@ -546,6 +546,17 @@ Class interp_krige_optim
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class terminal
+--------------
+
+.. autoclass:: o2sclpy.terminal
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class gen_test_number
 ---------------------
 
@@ -677,6 +688,11 @@ Function string_to_uint_list
 
 .. autofunction:: o2sclpy.string_to_uint_list(link,x,list)
 
+Function find_constant
+----------------------
+
+.. autofunction:: o2sclpy.find_constant(link,name,unit)
+
 Function vector_level_count
 ---------------------------
 
@@ -776,4 +792,9 @@ Function linear_or_log
 ----------------------
 
 .. autofunction:: o2sclpy.linear_or_log(link,x,log_x)
+
+Function get_screen_size_ioctl
+------------------------------
+
+.. autofunction:: o2sclpy.get_screen_size_ioctl(link,row,col)
 
