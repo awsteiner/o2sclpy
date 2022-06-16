@@ -447,28 +447,6 @@ Class tensor_size_t
         .. automethod:: __copy__
         .. automethod:: __deepcopy__
 
-Class find_constants_const_entry
---------------------------------
-
-.. autoclass:: o2sclpy.find_constants_const_entry
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
-Class find_constants
---------------------
-
-.. autoclass:: o2sclpy.find_constants
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
 Class convert_units_der_unit
 ----------------------------
 
@@ -673,25 +651,10 @@ Function wordexp_wrapper
 
 .. autofunction:: o2sclpy.wordexp_wrapper(link,word,matches)
 
-Function function_to_double
----------------------------
-
-.. autofunction:: o2sclpy.function_to_double(link,s,verbose)
-
-Function function_to_double_nothrow
------------------------------------
-
-.. autofunction:: o2sclpy.function_to_double_nothrow(link,s,result,verbose)
-
 Function string_to_uint_list
 ----------------------------
 
 .. autofunction:: o2sclpy.string_to_uint_list(link,x,list)
-
-Function find_constant
-----------------------
-
-.. autofunction:: o2sclpy.find_constant(link,name,unit)
 
 Function vector_level_count
 ---------------------------

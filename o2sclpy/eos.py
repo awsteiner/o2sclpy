@@ -588,14 +588,15 @@ class eos_had_base(eos_base):
         """
         | Parameters:
         | *delta*: ``double``
-        | Returns: a Python float, a Python float
+        | Returns: a Python int, a Python float, a Python float
         """
         func=self._link.o2scl.o2scl_eos_had_base_fn0
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
+        nb_conv=ctypes.c_double(0)
         leoa_conv=ctypes.c_double(0)
-        ret=func(self._ptr,delta,ctypes.byref(leoa_conv))
-        return ret,leoa_conv.value
+        ret=func(self._ptr,delta,ctypes.byref(nb_conv),ctypes.byref(leoa_conv))
+        return ret,nb_conv.value,leoa_conv.value
 
     def f_number_suscept(self,mun,mup):
         """
