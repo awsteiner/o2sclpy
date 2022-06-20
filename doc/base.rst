@@ -447,6 +447,28 @@ Class tensor_size_t
         .. automethod:: __copy__
         .. automethod:: __deepcopy__
 
+Class find_constants_const_entry
+--------------------------------
+
+.. autoclass:: o2sclpy.find_constants_const_entry
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class find_constants<>
+----------------------
+
+.. autoclass:: o2sclpy.find_constants<>
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
 Class convert_units_der_unit
 ----------------------------
 
