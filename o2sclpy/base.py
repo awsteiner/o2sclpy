@@ -6237,7 +6237,7 @@ class find_constants_const_entry:
         return
 
 
-class find_constants<>:
+class find_constants:
     """
     Python interface for O\ :sub:`2`\ scl class ``find_constants<>``,
     see
@@ -6255,7 +6255,7 @@ class find_constants<>:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class find_constants<>
+        Init function for class find_constants
 
         | Parameters:
         | *link* :class:`linker` object
@@ -6276,7 +6276,7 @@ class find_constants<>:
 
     def __del__(self):
         """
-        Delete function for class find_constants<>
+        Delete function for class find_constants
         """
 
         if self._owner==True:
@@ -6289,9 +6289,9 @@ class find_constants<>:
 
     def __copy__(self):
         """
-        Shallow copy function for class find_constants<>
+        Shallow copy function for class find_constants
         
-        Returns: a find_constants<> object
+        Returns: a find_constants object
         """
 
         new_obj=type(self)(self._link,self._ptr)

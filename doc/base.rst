@@ -458,10 +458,10 @@ Class find_constants_const_entry
         .. automethod:: __del__
         .. automethod:: __copy__
 
-Class find_constants<>
-----------------------
+Class find_constants
+--------------------
 
-.. autoclass:: o2sclpy.find_constants<>
+.. autoclass:: o2sclpy.find_constants
         :members:
         :undoc-members:
 
