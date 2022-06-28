@@ -19,15 +19,15 @@ if 'pytest' in sys.modules:
 link=o2sclpy.linker()
 link.link_o2scl()
 
-# Get the value of $\hbar c$ from an O$_2$scl find_constants object:
-
-fc=o2sclpy.find_constants(link)
-hc=fc.find_unique('hbarc','MeV*fm')
-print('hbarc = %7.6e' % (hc))
-
-# Get a copy (a pointer to) the O$_2$scl unit conversion object:
+# Get a copy (a pointer to) the O$_2$scl unit conversion object,
+# which also allows access to the constant library
 
 cu=link.o2scl_settings.get_convert_units()
+
+# Get the value of $\hbar c$ from an O$_2$scl find_constants object:
+
+hc=cu.find_unique('hbarc','MeV*fm')
+print('hbarc = %7.6e' % (hc))
 
 # Create neutron and proton objects and set their spin degeneracy and
 # masses. The O$_2$scl EOS classes expect these masses to be in units
@@ -35,11 +35,11 @@ cu=link.o2scl_settings.get_convert_units()
 
 neut=o2sclpy.fermion(link)
 neut.g=2.0
-neut.m=cu.convert('g','1/fm',fc.find_unique('massneutron','g'))
+neut.m=cu.convert('g','1/fm',cu.find_unique('massneutron','g'))
 
 prot=o2sclpy.fermion(link)
 prot.g=2.0
-prot.m=cu.convert('g','1/fm',fc.find_unique('massproton','g'))
+prot.m=cu.convert('g','1/fm',cu.find_unique('massproton','g'))
 
 # Create the Skyrme EOS object and load the NRAPR parameterization:
 
@@ -169,7 +169,7 @@ print('%7.6e' % lambda_km5)
 
 # To get the dimensionless tidal deformability we divide by $(G M)^5$:
 
-twoG=fc.find_unique('schwarz','m')/1.0e3
+twoG=cu.find_unique('schwarz','m')/1.0e3
 Lambda=lambda_km5/(1.4*twoG/2.0)**5
 print('%7.6e' % Lambda)
 

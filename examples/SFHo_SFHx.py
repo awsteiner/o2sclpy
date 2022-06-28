@@ -19,15 +19,14 @@ if 'pytest' in sys.modules:
 link=o2sclpy.linker()
 link.link_o2scl()
 
-# Get the value of $\hbar c$ from an O$_2$scl find_constants object:
-
-fc=o2sclpy.find_constants(link)
-ħc=fc.find_unique('ħc','MeV*fm')
-print('ħc = %7.6e\n' % (ħc))
-
-# Get a copy (a pointer to) the O$_2$scl unit conversion object:
+# Get a copy (a pointer to) the O$_2$scl unit conversion object, which
+# also allows access to the constant library, then get ħc.
 
 cu=link.o2scl_settings.get_convert_units()
+hc=cu.find_unique('hbarc','MeV*fm')
+print('ħc = %7.6e\n' % (ħc))
+
+# Create the EOS objects
 
 sfho=o2sclpy.eos_had_rmf(link)
 o2sclpy.rmf_load(link,sfho,'SFHo')

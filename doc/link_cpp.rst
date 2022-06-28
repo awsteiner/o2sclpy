@@ -104,10 +104,10 @@ Linking with O\ :sub:`2`\ scl example
 -------------------------------------
 
 Use this `link
-<https://nbviewer.org/urls/raw.githubusercontent.com/awsteiner/o2sclpy/main/doc/static/examples/link_o2scl.ipynb>`_
+<https://nbviewer.org/urls/raw.githubusercontent.com/awsteiner/o2sclpy/main/examples/link_o2scl.ipynb>`_
 to view this example as a jupyter notebook on nbviewer.org.
 
-.. literalinclude:: static/examples/link_o2scl.py
+.. literalinclude:: ../examples/link_o2scl.py
 
 Class linker
 ------------

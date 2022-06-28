@@ -36,14 +36,14 @@ web-doc: .empty
 doc: .empty
 	cd doc/static; o2graph -h | grep -v "Set o2scl" | \
 		grep -v "Compiled at" | grep -v "New alias" > o2graph.help.txt
-	cd doc/static/examples; $(MAKE) link_o2scl.ipynb
-	cd doc/static/examples; $(MAKE) table.ipynb
-	cd doc/static/examples; $(MAKE) unit_conv.ipynb
-	cd doc/static/examples; $(MAKE) skyrme.ipynb
-	cd doc/static/examples; $(MAKE) nucmass.ipynb
-	cd doc/static/examples; $(MAKE) SFHo_SFHx.ipynb
-	cd doc/static/examples; $(MAKE) DSH.ipynb
-	cd doc/static/examples; $(MAKE) buchdahl.ipynb
+	cd examples; $(MAKE) link_o2scl.ipynb
+	cd examples; $(MAKE) table.ipynb
+	cd examples; $(MAKE) unit_conv.ipynb
+	cd examples; $(MAKE) skyrme.ipynb
+	cd examples; $(MAKE) nucmass.ipynb
+	cd examples; $(MAKE) SFHo_SFHx.ipynb
+	cd examples; $(MAKE) DSH.ipynb
+	cd examples; $(MAKE) buchdahl.ipynb
 	cd doc; $(MAKE) html
 
 sync-doc:
@@ -54,15 +54,15 @@ test-sync:
 
 test:
 	pytest o2sclpy/test \
-		doc/static/examples/link_o2scl.py \
-		doc/static/examples/table.py \
-		doc/static/examples/unit_conv.py \
-		doc/static/examples/skyrme.py \
-		doc/static/examples/nucmass.py \
-		doc/static/examples/SFHo_SFHx.py \
-		doc/static/examples/DSH.py \
-		doc/static/examples/buchdahl.py \
-		doc/static/examples/test_examples.py \
+		examples/link_o2scl.py \
+		examples/table.py \
+		examples/unit_conv.py \
+		examples/skyrme.py \
+		examples/nucmass.py \
+		examples/SFHo_SFHx.py \
+		examples/DSH.py \
+		examples/buchdahl.py \
+		examples/test_examples.py \
 		-s -v
 
 ifeq ($(MACHINE),isospin)

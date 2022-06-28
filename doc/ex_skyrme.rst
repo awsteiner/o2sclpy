@@ -8,8 +8,8 @@ computes the associated neutron star mass-radius curve, and computes
 the tidal deformability of a 1.4 solar mass neutron star.
 
 Use this `link
-<https://nbviewer.org/urls/raw.githubusercontent.com/awsteiner/o2sclpy/main/doc/static/examples/skyrme.ipynb>`_
+<https://nbviewer.org/urls/raw.githubusercontent.com/awsteiner/o2sclpy/main/examples/skyrme.ipynb>`_
 to view this example as a jupyter notebook on nbviewer.org.
 
-.. literalinclude:: static/examples/skyrme.py
+.. literalinclude:: ../examples/skyrme.py
 

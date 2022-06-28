@@ -4,8 +4,12 @@ import numpy
 link=o2sclpy.linker()
 link.link_o2scl()
 
-fc=o2sclpy.find_constants(link)
-hc=fc.find_unique('hbarc','MeV*fm')
+# Get a copy (a pointer to) the O$_2$scl unit conversion object, which
+# also allows access to the constant library, then get ħc.
+
+cu=link.o2scl_settings.get_convert_units()
+
+hc=cu.find_unique('hbarc','MeV*fm')
 print('hbarc = %7.6e' % (hc))
 
 # Instantiate and load the Atomic Mass Evaluation
