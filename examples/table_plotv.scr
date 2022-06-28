@@ -10,4 +10,4 @@ o2graph -create table x "grid:(-3.14),3.14,0.1" \
 	-function "cos(x+acos(-1))" y -internal table_plotv_c.o2 \
 	-plotv hdf5:table_plotv_?.o2:acol:x \
 	hdf5:table_plotv_?.o2:acol:y \
-	-save table_plotv.png
+	-save figures/table_plotv.png

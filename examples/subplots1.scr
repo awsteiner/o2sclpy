@@ -17,4 +17,4 @@ o2graph -create table x func:1001:i/100.0 \
 	-selax 3 -set ylo "(0)" -set yhi 1.49 -plot x y4 \
 	-xtitle x -ytitle "y=atan(x)" \
 	-subadj hspace=0,left=0.14,right=0.98,top=0.98,bottom=0.11,wspace=0.41 \
-	-save subplots1.png -show
+	-save figures/subplots1.png -show

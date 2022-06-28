@@ -18,4 +18,4 @@ o2graph -create table x "grid:0,5,0.01" \
 	-yt-text "(-0.5)" 0.0 "(-1.2)" "$ y $" "textcolor=[1,1,1,0.8]" \
 	-yt-text 0.0 "(-0.8)" 0.9 "$ z $" "textcolor=[1,1,1,0.8]" \
 	-yt-source-list \
-	-set yt_sigma_clip 0.5 -yt-render yt_scatter.png
+	-set yt_sigma_clip 0.5 -yt-render figures/yt_scatter.png

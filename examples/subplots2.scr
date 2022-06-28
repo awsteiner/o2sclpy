@@ -21,4 +21,4 @@ o2graph -create table x func:1001:i/100.0 \
 	-selax 3 -set ylo 0 -set yhi 9 -den-plot z2 cmap=inferno \
 	-xtitle x -ytitle "y=sin(x) cos(y)" \
 	-subadj hspace=0,left=0.15,right=0.93,top=0.98,bottom=0.11,wspace=0.37 \
-	-save subplots2.png -show
+	-save figures/subplots2.png -show

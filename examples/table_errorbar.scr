@@ -14,5 +14,5 @@ o2graph -create table x grid:0,1,8.0e-2 \
 	-error-point 0.3 0.2 0.1 None 0.2 0.1 ecolor=green \
 	-error-point 0.1 "(-0.5)" 0.1 0.2 0.3 0.4 \
 	lolims=True,ecolor=black,capsize=4 \
-	-save table_errorbar.png
+	-save figures/table_errorbar.png
 	

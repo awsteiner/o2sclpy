@@ -7,4 +7,4 @@ o2graph -create table x grid:0,1,1.0e-3 \
 	-function "sin(4*x)" y1 \
 	-function "sin(4*x)+0.3*cos(4*x)" y2 \
 	-xtitle x -ytitle y -set fig_dict "left_margin=0.15" \
-	-rplot x y1 x y2 -save table_rplot.png
+	-rplot x y1 x y2 -save figures/table_rplot.png

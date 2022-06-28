@@ -23,7 +23,7 @@ link.link_o2scl()
 # also allows access to the constant library, then get ħc.
 
 cu=link.o2scl_settings.get_convert_units()
-hc=cu.find_unique('hbarc','MeV*fm')
+ħc=cu.find_unique('hbarc','MeV*fm')
 print('ħc = %7.6e\n' % (ħc))
 
 # Use the cloud_file object to download the EOS

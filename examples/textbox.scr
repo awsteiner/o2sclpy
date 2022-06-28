@@ -13,4 +13,4 @@ o2graph -set font 30 -textbox 0.5 0.9 test1 fc=#ffdddd color=red \
 	fc=#bbeeee,ls=-.,lw=2,ec=black \
         -ellipse 0.7 0.1 0.2 0.1 "(-10)" \
 	fc=#bbeeee,ls=-.,lw=2,ec=black \
-	-save textbox.png -show
+	-save figures/textbox.png -show
