@@ -22,7 +22,7 @@ filename, use `o2graph -help colors-near <color> <filename>`. To avoid
 the generation of a `matplotlib` window, choose the Agg backend first:
 `o2graph -backend Agg -help colors-near <color> <filename>`.
 
-.. include:: static/examples/colors_near.scr
+.. include:: ../examples/colors_near.scr
    :literal:
 .. image:: static/figures/near_blue.png
    :width: 70%
@@ -38,7 +38,7 @@ To obtain a quick summary of matplotlib and o2sclpy colormaps, use
 `-help cmaps` for a list or `-help cmaps-plot [filename]` for a plot,
 e.g.
 
-.. include:: static/examples/cmaps.scr
+.. include:: ../examples/cmaps.scr
    :literal:
 .. image:: static/figures/cmaps.png
    :width: 70%
@@ -49,7 +49,7 @@ Markers
 To obtain a quick summary of matplotlib markers, use `-help markers`
 for a list or `-help markers-plot [filename]` for a plot, e.g.
 
-.. include:: static/examples/markers.scr
+.. include:: ../examples/markers.scr
    :literal:
 .. image:: static/figures/markers.png
    :width: 70%
