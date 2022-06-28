@@ -47,7 +47,7 @@ First plot example
 
 .. include:: static/examples/table_plot.scr
    :literal:
-.. image:: static/figures/table_plot_doc.png
+.. image:: static/figures/table_plot.png
    :width: 70%
 
 Density plot and contour line example
@@ -55,7 +55,7 @@ Density plot and contour line example
 
 .. include:: static/examples/table3d_den_plot.scr
    :literal:
-.. image:: static/figures/table3d_den_plot_doc.png
+.. image:: static/figures/table3d_den_plot.png
    :width: 70%
 
 Agg backend example
@@ -69,7 +69,7 @@ Agg backend example
 
 .. include:: static/examples/table_plotv.scr
    :literal:
-.. image:: static/figures/table_plotv_doc.png
+.. image:: static/figures/table_plotv.png
    :width: 70%
 
 Scatter plot example
@@ -77,7 +77,7 @@ Scatter plot example
 
 .. include:: static/examples/table_scatter.scr
    :literal:
-.. image:: static/figures/table_scatter_doc.png
+.. image:: static/figures/table_scatter.png
    :width: 70%
 
 Region plot example
@@ -85,7 +85,7 @@ Region plot example
 
 .. include:: static/examples/table_rplot.scr
    :literal:
-.. image:: static/figures/table_rplot_doc.png
+.. image:: static/figures/table_rplot.png
    :width: 70%
 
 Error bars example
@@ -93,7 +93,7 @@ Error bars example
 
 .. include:: static/examples/table_errorbar.scr
    :literal:
-.. image:: static/figures/table_errorbar_doc.png
+.. image:: static/figures/table_errorbar.png
    :width: 70%
 
 plot-color example
@@ -101,7 +101,7 @@ plot-color example
 
 .. include:: static/examples/table_plot_color.scr
    :literal:
-.. image:: static/figures/table_plot_color_doc.png
+.. image:: static/figures/table_plot_color.png
    :width: 70%
 
 Modifying axis example
@@ -109,7 +109,7 @@ Modifying axis example
 
 .. include:: static/examples/modax.scr
    :literal:
-.. image:: static/figures/modax_doc.png
+.. image:: static/figures/modax.png
    :width: 70%
 
 Textbox example
@@ -117,7 +117,7 @@ Textbox example
 
 .. include:: static/examples/textbox.scr
    :literal:
-.. image:: static/figures/textbox_doc.png
+.. image:: static/figures/textbox.png
    :width: 70%
 
 Subplot example 1
@@ -125,7 +125,7 @@ Subplot example 1
 
 .. include:: static/examples/subplots1.scr
    :literal:
-.. image:: static/figures/subplots1_doc.png
+.. image:: static/figures/subplots1.png
    :width: 70%
 
 Subplot example 2
@@ -133,7 +133,7 @@ Subplot example 2
 
 .. include:: static/examples/subplots2.scr
    :literal:
-.. image:: static/figures/subplots2_doc.png
+.. image:: static/figures/subplots2.png
    :width: 70%
 
 Subplot example 3
@@ -141,7 +141,7 @@ Subplot example 3
 
 .. include:: static/examples/subplots3.scr
    :literal:
-.. image:: static/figures/subplots3_doc.png
+.. image:: static/figures/subplots3.png
    :width: 70%
 	   
 Internal structure

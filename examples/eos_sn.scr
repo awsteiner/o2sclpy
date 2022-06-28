@@ -9,4 +9,4 @@ file:~/.o2scl_data/sfho_oo.o2:logrho \
 -xtitle "$ \log_{10} \rho~(\mathrm{g}/\mathrm{cm}^3) $" \
 -ytitle "$ \log_{10} \mathrm{T}~(\mathrm{MeV}) $" \
 -ttext 1.1 "(-0.1)" "$ Y_e = 0.05 $" -den-plot Xa \
--save eos_sn_plot.png
+-save figures/eos_sn_plot.png

@@ -1,1 +1,1 @@
-o2graph -backend Agg -help markers-plot markers.png
+o2graph -backend Agg -help markers-plot figures/markers.png

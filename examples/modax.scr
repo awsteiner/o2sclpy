@@ -8,4 +8,4 @@ o2graph -create table x grid:-3.14,3.14,0.1 \
 	-text 1 0.05 "$ f^{\prime}(x)$" \
 	-modax x_loc=tb,y_minor_loc=0.1,y_tick_dir=inout,labelsize=20 \
 	-modax y_tick_len=10,y_minor_tick_len=10 \
-	-save modax.png -show
+	-save figures/modax.png -show

@@ -36,7 +36,7 @@ yt scatter example
 
 .. include:: static/examples/yt_scatter.scr
    :literal:
-.. image:: static/figures/yt_scatter_doc.png
+.. image:: static/figures/yt_scatter.png
    :width: 70%
 
 yt multiple volume example
@@ -44,10 +44,10 @@ yt multiple volume example
 
 .. include:: static/examples/yt_tg_multvol.scr
    :literal:	     
-.. image:: static/figures/yt_tg_multvol_doc.png
+.. image:: static/figures/yt_tg_multvol.png
    :width: 70%
 
 .. raw:: html
 	 
-   <video width="512" height="512" controls><source src="https://neutronstars.utk.edu/code/o2sclpy/_static/yt_tg_multvol_doc.mp4" type="video/mp4"></video>
+   <video width="512" height="512" controls><source src="https://neutronstars.utk.edu/code/o2sclpy/_static/yt_tg_multvol.mp4" type="video/mp4"></video>
 

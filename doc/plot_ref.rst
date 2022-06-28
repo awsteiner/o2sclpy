@@ -24,11 +24,11 @@ the generation of a `matplotlib` window, choose the Agg backend first:
 
 .. include:: static/examples/colors_near.scr
    :literal:
-.. image:: static/figures/near_blue_doc.png
+.. image:: static/figures/near_blue.png
    :width: 70%
-.. image:: static/figures/near_hex_doc.png
+.. image:: static/figures/near_hex.png
    :width: 70%
-.. image:: static/figures/near_rgb_doc.png
+.. image:: static/figures/near_rgb.png
    :width: 70%
 
 Colormaps
@@ -40,7 +40,7 @@ e.g.
 
 .. include:: static/examples/cmaps.scr
    :literal:
-.. image:: static/figures/cmaps_doc.png
+.. image:: static/figures/cmaps.png
    :width: 70%
 
 Markers
@@ -51,6 +51,6 @@ for a list or `-help markers-plot [filename]` for a plot, e.g.
 
 .. include:: static/examples/markers.scr
    :literal:
-.. image:: static/figures/markers_doc.png
+.. image:: static/figures/markers.png
    :width: 70%
 
