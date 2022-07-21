@@ -1,5 +1,5 @@
-Other O\ :sub:`2`\ sclpy objects
-================================
+Other O₂sclpy objects
+=====================
 
 :ref:`O2sclpy <o2sclpy>`
 
@@ -7,8 +7,8 @@ Variables ``base_list``, ``param_list``, ``yt_param_list``,
 ``extra_list`` are not listed here because their auto-docs are too
 long.
 
-Other O\ :sub:`2`\ sclpy functions
-----------------------------------
+Other O₂sclpy functions
+-----------------------
 
 .. autofunction:: o2sclpy.build_o2scl
 .. autofunction:: o2sclpy.default_plot
@@ -17,8 +17,8 @@ Other O\ :sub:`2`\ sclpy functions
 .. autofunction:: o2sclpy.parse_arguments
 .. autofunction:: o2sclpy.force_bytes
 
-Other O\ :sub:`2`\ sclpy variables
-----------------------------------
+Other O₂sclpy variables
+-----------------------
 
 .. autodata:: o2sclpy.version		  
 .. autodata:: o2sclpy.cmaps

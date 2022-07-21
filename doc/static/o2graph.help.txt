@@ -1,5 +1,3 @@
-Function acol_manager::update_o2_docs() could not find documentation for command calcm .
-Function acol_manager::update_o2_docs() could not find documentation for command integm .
 o2graph: A data viewing and processing program for O2scl.
   Version: 0.926
  
@@ -11,7 +9,6 @@ List of command-line options which do not require a current object:
   -autocorr        Compute the autocorrelation coefficients. 
   -backend         Select the matplotlib backend to use.
   -calc            Compute the value of a constant expression. 
-  -calcm           
   -canvas          Create a plotting canvas.
   -clear           Clear the current object. 
   -clf             Clear the current figure.
@@ -21,7 +18,7 @@ List of command-line options which do not require a current object:
   -constant        Get or modify a physical or numerical constant. 
   -convert         Manipulate or use a unit conversion factor. 
   -create          Create an object. 
-  -docs            Open local HTML docs for acol or an O₂scl topic. 
+  -docs            Open local HTML docs for O₂scl documentation. 
   -download        Download a file from the specified URL. 
   -ellipse         Plot an ellipse.
   -error-point     Plot a single point with errorbars.
@@ -35,12 +32,12 @@ List of command-line options which do not require a current object:
   -help            Show help information.
   -image           Plot an image.
   -inset           Add a new set of axes (e.g. for an inset).
-  -integm          
   -interactive     Toggle interactive mode. 
   -internal        Output current object in the internal HDF5 format. 
   -license         Show license information.
   -line            Plot a line.
   -modax           Modify current axes properties.
+  -ninteg          Numerically integrate a user-specified function. 
   -no-intro        Do not print introductory text.
   -o2scl-addl-libs Specify a list of additional libraries to load.
   -o2scl-cpp-lib   Specify the location of the standard C++ library.

@@ -1,7 +1,7 @@
 .. _other:
 
-Other classes from O\ :sub:`2`\ scl
-===================================
+Other classes from O₂scl
+========================
 
 :ref:`O2sclpy <o2sclpy>`
 
