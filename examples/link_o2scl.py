@@ -32,5 +32,5 @@ link.link_o2scl()
 print(link.o2scl_settings.o2scl_version())
 
 def test_fun():
-    assert link.o2scl_settings.o2scl_version()==b'0.927a1'
+    assert link.o2scl_settings.o2scl_version()==b'0.927'
     return
