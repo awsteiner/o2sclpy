@@ -7507,6 +7507,17 @@ class interp_krige_optim:
 
 
     @property
+    def mode_loo_cv_bf(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_mode_loo_cv_bf
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+
+    @property
     def mode_max_lml(self):
         """
         Property of type ``ctypes.c_size_t``
@@ -7597,7 +7608,7 @@ class interp_krige_optim:
         func(self._ptr,value)
         return
 
-    def set_noise(self,size,x,y,noise_var,rescale=False,err_on_fail=True):
+    def set_noise(self,size,x,y,noise_var,rescale=False):
         """
         | Parameters:
         | *size*: ``size_t``
@@ -7605,27 +7616,25 @@ class interp_krige_optim:
         | *y*: :class:`std_vector` object
         | *noise_var*: ``double``
         | *rescale* =false: ``bool``
-        | *err_on_fail* =true: ``bool``
         | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_noise
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_bool,ctypes.c_bool]
-        ret=func(self._ptr,size,x._ptr,y._ptr,noise_var,rescale,err_on_fail)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_bool]
+        ret=func(self._ptr,size,x._ptr,y._ptr,noise_var,rescale)
         return ret
 
-    def set(self,size,x,y,rescale,err_on_fail=True):
+    def set(self,size,x,y,rescale):
         """
         | Parameters:
         | *size*: ``size_t``
         | *x*: :class:`std_vector` object
         | *y*: :class:`std_vector` object
         | *rescale*: ``bool``
-        | *err_on_fail* =true: ``bool``
         """
         func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_bool]
-        func(self._ptr,size,x._ptr,y._ptr,rescale,err_on_fail)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,size,x._ptr,y._ptr,rescale)
         return
 
     def eval(self,x0):
