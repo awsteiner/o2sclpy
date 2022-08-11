@@ -872,10 +872,10 @@ class o2graph_plotter(yt_plot_base):
                             
             failed=False
 
-            get_fn=o2scl.o2scl_acol_get_column
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr]
-            get_fn.restype=ctypes.c_int
+            #get_fn=o2scl.o2scl_acol_get_column
+            #get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
+            #                 int_ptr,double_ptr_ptr]
+            #get_fn.restype=ctypes.c_int
 
             # colx=ctypes.c_char_p(force_bytes(args[0]))
             # idx=ctypes.c_int(0)
@@ -888,14 +888,15 @@ class o2graph_plotter(yt_plot_base):
             amt=acol_manager(link,amp)
             tab=amt.get_table_obj()
             xv=tab[force_bytes(args[0])]
+            yv=tab[force_bytes(args[1])]
 
-            coly=ctypes.c_char_p(force_bytes(args[1]))
-            idy=ctypes.c_int(0)
-            ptry=double_ptr()
-            get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
-            if get_ret!=0:
-                print('Failed to get column named "'+args[1]+'".')
-                failed=True
+            #coly=ctypes.c_char_p(force_bytes(args[1]))
+            #idy=ctypes.c_int(0)
+            #ptry=double_ptr()
+            #get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
+            #if get_ret!=0:
+            #    print('Failed to get column named "'+args[1]+'".')
+            #    failed=True
 
             if failed==False:
                 #xv=[ptrx[i] for i in range(0,idx.value)]
@@ -929,6 +930,9 @@ class o2graph_plotter(yt_plot_base):
             # End of section for 'table' type
         elif curr_type==b'hist':
 
+            #amt=acol_manager(link,amp)
+            #hist=amt.get_hist_obj()
+            
             get_reps_fn=o2scl.o2scl_acol_get_hist_reps
             get_reps_fn.argtypes=[ctypes.c_void_p,
                              int_ptr,double_ptr_ptr]
@@ -2032,8 +2036,10 @@ class o2graph_plotter(yt_plot_base):
         """
 
         # Create an acol_manager object and get the pointer
-        o2scl.o2scl_hdf_create_acol_manager.restype=ctypes.c_void_p
-        amp=o2scl.o2scl_hdf_create_acol_manager()
+        am=acol_manager(link)
+        amp=am._ptr
+        am.run_o2graph()
+        cl=am.get_cl()
 
         names_fn=o2scl.o2scl_acol_set_names
         names_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_char_p,
@@ -2042,16 +2048,22 @@ class o2graph_plotter(yt_plot_base):
 
         # Get current type
         ter=terminal_py()
-        cmd_name=b'o2graph'
         cmd_desc=(b'o2graph: A data viewing and '+
                   b'processing program for '+force_bytes(ter.bold())+
                   b'O2scl'+force_bytes(ter.default_fg())+
                   b'.\n  Version: '+force_bytes(version)+b'\n')
-        env_var=b'O2GRAPH_DEFAULTS'
-        names_fn(amp,len(cmd_name),ctypes.c_char_p(cmd_name),
-                 len(cmd_desc),ctypes.c_char_p(cmd_desc),
-                 len(env_var),ctypes.c_char_p(env_var))
 
+        s=std_string(link)
+        
+        s.init_bytes(b'O2GRAPH_DEFAULTS')
+        am.set_env_var_name(s)
+        
+        s.init_bytes(b'o2graph')
+        cl.set_cmd_name(s)
+        
+        s.init_bytes(cmd_desc)
+        cl.set_desc(s)
+        
         # Apply aliases before parsing. We convert argv 
         # to a set of integer and character arrays, then
         # pass them to o2scl_acol_apply_aliases()

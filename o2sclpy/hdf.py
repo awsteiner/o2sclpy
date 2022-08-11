@@ -1073,6 +1073,16 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
+    def run_o2graph(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_run_o2graph
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
 
 class cloud_file:
     """
