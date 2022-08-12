@@ -1083,6 +1083,16 @@ class acol_manager:
         ret=func(self._ptr)
         return ret
 
+    def parse_o2graph(self,args):
+        """
+        | Parameters:
+        | *args*: :class:`std_vector_string` object
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_parse_o2graph
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,args._ptr)
+        return
+
 
 class cloud_file:
     """

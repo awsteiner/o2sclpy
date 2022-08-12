@@ -69,7 +69,7 @@ class o2graph_plotter(yt_plot_base):
     :ref:`o2scl_acol::acol_manager<o2scl:acol_manager>` object.
     """
 
-    def set_wrapper(self,o2scl,amp,args):
+    def set_wrapper(self,o2scl,amp,link,args):
         """
         Wrapper around :py:func:`o2sclpy.plot_base.set` which sets
         plot-related parameters and sends other parameters to
@@ -103,23 +103,18 @@ class o2graph_plotter(yt_plot_base):
             return
 
         # Call the acol 'set' function
-        str_args='-set'
-        size_type=ctypes.c_int * (len(args)+1)
-        sizes=size_type()
-        sizes[0]=len('set')+1
-            
+        vs=std_vector_string(link)
+        vs.resize(len(args)+1)
+        vs[0]=b'-set'
         for i in range(0,len(args)):
-            str_args=str_args+args[i]
-            sizes[i+1]=len(args[i])
-        ccp=ctypes.c_char_p(force_bytes(str_args))
-    
-        parse_fn=o2scl.o2scl_acol_parse
-        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                           size_type,ctypes.c_char_p]
+            vs[i+1]=force_bytes(args[i])
+
+        amt=acol_manager(link,amp)
             
         if self.verbose>2:
-            print('Calling acol set function for parameter',args[0],'.')
-        parse_fn(amp,len(args)+1,sizes,ccp)
+            print('Calling acol set function for parameter '+args[0]+'.')
+            
+        amt.parse_o2graph(vs)
 
         # End of function o2graph_plotter::set_wrapper()
         return
@@ -4718,7 +4713,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
                     else:
-                        self.set_wrapper(o2scl,amp,strlist[ix+1:ix_next])
+                        self.set_wrapper(o2scl,amp,link,strlist[ix+1:ix_next])
                         
                 elif cmd_name=='cmap':
 
@@ -5607,7 +5602,7 @@ class o2graph_plotter(yt_plot_base):
                 ix=ix_next
                 
             if self.verbose>2:
-                print('Going to next.')
+                print('Going to next argument in parse_string_list().')
                 
         # End of function o2graph_plotter::parse_string_list()
         return

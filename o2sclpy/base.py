@@ -602,7 +602,7 @@ class std_vector_string:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: std_string object
+        | Returns: Python bytes object
         """
         func=self._link.o2scl.o2scl_std_vector_std_string__getitem
         func.restype=ctypes.c_void_p
@@ -616,11 +616,13 @@ class std_vector_string:
         """
         | Parameters:
         | *i*: ``size_t``
-        | *value*: Python bytes string
+        | *value*: Python bytes object
         """
         func=self._link.o2scl.o2scl_std_vector_std_string__setitem
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char_p]
-        func(self._ptr,i,value)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        s=std_string(self._link)
+        s.init_bytes(value)
+        func(self._ptr,i,s._ptr)
         return
 
     def __len__(self):
