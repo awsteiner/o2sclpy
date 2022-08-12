@@ -1,7 +1,7 @@
 .. _other:
 
-Other classes from O₂scl
-========================
+Other classes from O\ :sub:`2`\ scl
+===================================
 
 :ref:`O2sclpy <o2sclpy>`
 
@@ -105,4 +105,38 @@ Class hist
         .. automethod:: __copy__
         .. automethod:: __deepcopy__
         .. automethod:: __getitem__
+
+Class contour_line
+------------------
+
+.. autoclass:: o2sclpy.contour_line
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __deepcopy__
+
+Class vector_contour_line
+-------------------------
+
+.. autoclass:: o2sclpy.vector_contour_line
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class contour
+-------------
+
+.. autoclass:: o2sclpy.contour
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
 

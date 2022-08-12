@@ -102,15 +102,16 @@ class slack_messenger:
         func(self._ptr,value)
         return
 
-    def get_url(self,url):
+    def get_url(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_slack_messenger_get_url
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,url._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_url(self,value):
         """
@@ -121,15 +122,16 @@ class slack_messenger:
         func(self._ptr,value._ptr)
         return
 
-    def get_channel(self,channel):
+    def get_channel(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_slack_messenger_get_channel
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,channel._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_channel(self,value):
         """
@@ -140,15 +142,16 @@ class slack_messenger:
         func(self._ptr,value._ptr)
         return
 
-    def get_icon(self,icon):
+    def get_icon(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_slack_messenger_get_icon
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,icon._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_icon(self,value):
         """
@@ -159,15 +162,16 @@ class slack_messenger:
         func(self._ptr,value._ptr)
         return
 
-    def get_username(self,username):
+    def get_username(self):
         """
         Get object of type :class:`std::string`
         """
         func=self._link.o2scl.o2scl_slack_messenger_get_username
-        func.restype=ctypes.c_char_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,username._ptr)
-        return
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
 
     def set_username(self,value):
         """
@@ -1038,6 +1042,44 @@ class hist:
         func(self._ptr,value)
         return
 
+    def create_rep_vec(self,v):
+        """
+        | Parameters:
+        | *v*: :class:`std_vector` object
+        """
+        func=self._link.o2scl.o2scl_hist_create_rep_vec
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,v._ptr)
+        return
+
+    def from_table(self,t,colx,n_bins):
+        """
+        | Parameters:
+        | *t*: :class:`table<>` object
+        | *colx*: string
+        | *n_bins*: ``size_t``
+        """
+        colx_=ctypes.c_char_p(force_bytes(colx))
+        func=self._link.o2scl.o2scl_hist_from_table
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
+        func(self._ptr,t._ptr,colx_,n_bins)
+        return
+
+    def from_table_twocol(self,t,colx,coly,n_bins):
+        """
+        | Parameters:
+        | *t*: :class:`table<>` object
+        | *colx*: string
+        | *coly*: string
+        | *n_bins*: ``size_t``
+        """
+        colx_=ctypes.c_char_p(force_bytes(colx))
+        coly_=ctypes.c_char_p(force_bytes(coly))
+        func=self._link.o2scl.o2scl_hist_from_table_twocol
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_size_t]
+        func(self._ptr,t._ptr,colx_,coly_,n_bins)
+        return
+
     def size(self):
         """
         | Returns: a Python int
@@ -1179,6 +1221,335 @@ class hist:
         func=self._link.o2scl.o2scl_hist_clear
         func.argtypes=[ctypes.c_void_p]
         func(self._ptr)
+        return
+
+
+class contour_line:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``contour_line``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/contour_line.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class contour_line
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_contour_line
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class contour_line
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_contour_line
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class contour_line
+        
+        Returns: a contour_line object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class contour_line
+        
+        Returns: a new copy of the contour_line object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_contour_line
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
+        return new_obj
+
+    @property
+    def level(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_contour_line_get_level
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @level.setter
+    def level(self,value):
+        """
+        Setter function for contour_line::level .
+        """
+        func=self._link.o2scl.o2scl_contour_line_set_level
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    def get_x(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_contour_line_get_x
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_x(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_contour_line_set_x
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_y(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_contour_line_get_y
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_y(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_contour_line_set_y
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+
+class vector_contour_line:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``std::vector<contour_line>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/std::vector<contour_line>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class vector_contour_line
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_std_vector_contour_line_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class vector_contour_line
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_std_vector_contour_line_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class vector_contour_line
+        
+        Returns: a vector_contour_line object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_std_vector_contour_line__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def __len__(self):
+        """
+        Return the length of the vector
+    
+        Returns: an int
+        """
+        return self.length()
+     
+
+class contour:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``contour``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/contour.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class contour
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_contour
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class contour
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_contour
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class contour
+        
+        Returns: a contour object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @property
+    def verbose(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_contour_get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for contour::verbose .
+        """
+        func=self._link.o2scl.o2scl_contour_set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def lev_adjust(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_contour_get_lev_adjust
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @lev_adjust.setter
+    def lev_adjust(self,value):
+        """
+        Setter function for contour::lev_adjust .
+        """
+        func=self._link.o2scl.o2scl_contour_set_lev_adjust
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def debug_next_point(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_contour_get_debug_next_point
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @debug_next_point.setter
+    def debug_next_point(self,value):
+        """
+        Setter function for contour::debug_next_point .
+        """
+        func=self._link.o2scl.o2scl_contour_set_debug_next_point
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def calc_contours(self,clines):
+        """
+        | Parameters:
+        | *clines*: :class:`vector<contour_line>` object
+        """
+        func=self._link.o2scl.o2scl_contour_calc_contours
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,clines._ptr)
         return
 
 
