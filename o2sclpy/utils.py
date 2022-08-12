@@ -160,31 +160,6 @@ def if_yt_then_Agg(backend,argv):
             backend='Agg'
     return backend
 
-def o2scl_get_type(o2scl,amp):
-    """
-    Get the type of the current object stored in the acol_manager
-    pointer
-    """
-    # pointer types
-    char_ptr=ctypes.POINTER(ctypes.c_char)
-    char_ptr_ptr=ctypes.POINTER(char_ptr)
-    int_ptr=ctypes.POINTER(ctypes.c_int)
-    
-    # Set up wrapper for type function
-    type_fn=o2scl.o2scl_acol_get_type
-    type_fn.argtypes=[ctypes.c_void_p,int_ptr,char_ptr_ptr]
-    
-    # Get current type
-    it=ctypes.c_int(0)
-    type_ptr=char_ptr()
-    type_fn(amp,ctypes.byref(it),ctypes.byref(type_ptr))
-
-    # Construct the type as a byte string
-    curr_type=b''
-    for i in range(0,it.value):
-        curr_type=curr_type+type_ptr[i]
-    return curr_type
-
 def table3d_get_slice(o2scl,amp,name):
     """
     Return a slice from the current table3d object stored
