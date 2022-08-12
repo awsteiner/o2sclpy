@@ -867,35 +867,12 @@ class o2graph_plotter(yt_plot_base):
                             
             failed=False
 
-            #get_fn=o2scl.o2scl_acol_get_column
-            #get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-            #                 int_ptr,double_ptr_ptr]
-            #get_fn.restype=ctypes.c_int
-
-            # colx=ctypes.c_char_p(force_bytes(args[0]))
-            # idx=ctypes.c_int(0)
-            # ptrx=double_ptr()
-            # get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
-            # if get_ret!=0:
-            #     print('Failed to get column named "'+args[0]+'".')
-            #     failed=True
-
             amt=acol_manager(link,amp)
             tab=amt.get_table_obj()
             xv=tab[force_bytes(args[0])]
             yv=tab[force_bytes(args[1])]
 
-            #coly=ctypes.c_char_p(force_bytes(args[1]))
-            #idy=ctypes.c_int(0)
-            #ptry=double_ptr()
-            #get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
-            #if get_ret!=0:
-            #    print('Failed to get column named "'+args[1]+'".')
-            #    failed=True
-
             if failed==False:
-                #xv=[ptrx[i] for i in range(0,idx.value)]
-                yv=[ptry[i] for i in range(0,idy.value)]
         
                 if self.canvas_flag==False:
                     self.canvas()
