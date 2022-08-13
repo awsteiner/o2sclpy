@@ -38,7 +38,7 @@ from o2sclpy.doc_data import yt_param_list, acol_help_topics
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
-from o2sclpy.utils import is_number, table_get_column
+from o2sclpy.utils import is_number
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import get_ic_ptrs_to_list, string_equal_dash
 from o2sclpy.utils import reformat_python_docs, force_string
@@ -1244,7 +1244,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::rplot()
         return
                                  
-    def scatter(self,o2scl,amp,args):
+    def scatter(self,o2scl,amp,link,args):
         """
         Generate a scatter plot.
         """
