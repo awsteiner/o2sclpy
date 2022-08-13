@@ -60,6 +60,18 @@ def o2scl_get_type(o2scl,amp,link):
     amt=acol_manager(link,amp)
     return amt.get_type()
 
+def table_get_column(o2scl,amp,link,name,return_pointer=False):
+    """
+    Return a column from the current table object stored
+    in the acol_manager object 'amp'
+    """
+
+    amt=acol_manager(link,amp)
+    tab=amt.get_table_obj()
+    col=tab[force_bytes(name)]
+
+    return col
+
 class o2graph_plotter(yt_plot_base):
     """
     A plotting class for the o2graph script. This class is a child of the
@@ -183,7 +195,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::gen_acol()
         return
 
-    def den_plot(self,o2scl,amp,args):
+    def den_plot(self,o2scl,amp,link,args):
         """
         Density plot from a ``table3d``, ``hist_2d``, ``tensor_grid``,
         ``tensor``, ``tensor<int>``, or ``tensor<size_t>`` object.
@@ -1196,13 +1208,13 @@ class o2graph_plotter(yt_plot_base):
 
                 if failed==False:
                     for i in range(0,len(zv)):
-                        xv.append(zv[len(zv)-1-i])
-                        yv.append(wv[len(zv)-1-i])
+                        numpy.append(xv,zv[len(zv)-1-i])
+                        numpy.append(yv,wv[len(wv)-1-i])
 
             if failed==False:
                 # Make sure the loop is closed
-                xv.append(zv[0])
-                yv.append(wv[0])
+                numpy.append(xv,zv[0])
+                numpy.append(yv,wv[0])
         
                 if self.canvas_flag==False:
                     self.canvas()
@@ -1478,19 +1490,19 @@ class o2graph_plotter(yt_plot_base):
                         
         if curr_type==b'table':
 
-            xv=table_get_column(o2scl,amp,args[0])
-            yv=table_get_column(o2scl,amp,args[1])
+            xv=table_get_column(o2scl,amp,link,args[0])
+            yv=table_get_column(o2scl,amp,link,args[1])
 
             if len(args)>=6 and args[2]=='None' or args[2]=='none':
                 if is_number(args[3]):
                     xerrv=float(args[3]);
                 else:
-                    xerrv=table_get_column(o2scl,amp,args[3])
+                    xerrv=table_get_column(o2scl,amp,link,args[3])
             if len(args)>=6 and args[3]=='None' or args[3]=='none':
                 if is_number(args[2]):
                     xerrv=float(args[2]);
                 else:
-                    xerrv=table_get_column(o2scl,amp,args[2])
+                    xerrv=table_get_column(o2scl,amp,link,args[2])
             elif len(args)>=6:
                 if is_number(args[2]):
                     if is_number(args[3]):
@@ -1532,14 +1544,14 @@ class o2graph_plotter(yt_plot_base):
                 elif is_number(args[2]):
                     xerrv=float(args[2])
                 else:
-                    xerrv=table_get_column(o2scl,amp,args[2])
+                    xerrv=table_get_column(o2scl,amp,link,args[2])
     
             if args[3]=='None' or args[3]=='none':
                 yerrv=0.0
             elif is_number(args[3]):
                 yerrv=float(args[3])
             else:
-                yerrv=table_get_column(o2scl,amp,args[3])
+                yerrv=table_get_column(o2scl,amp,link,args[3])
 
             if self.canvas_flag==False:
                 self.canvas()
@@ -1663,7 +1675,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::plot1()
         return
             
-    def plotv(self,o2scl,amp,args):
+    def plotv(self,o2scl,amp,link,args):
         """
         Plot one or two multiple vector specifications
         """
@@ -4898,7 +4910,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<2:
                         print('Not enough parameters for plotv option.')
                     else:
-                        self.plotv(o2scl,amp,strlist[ix+1:ix_next])
+                        self.plotv(o2scl,amp,link,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='text':
                     

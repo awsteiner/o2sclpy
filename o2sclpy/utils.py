@@ -181,18 +181,6 @@ def table3d_get_slice(o2scl,amp,name):
            ctypes.byref(ptrs))
     return (nx,ptrx,ny,ptry,ptrs)
 
-def table_get_column(o2scl,amp,name,return_pointer=False):
-    """
-    Return a column from the current table object stored
-    in the acol_manager object 'amp'
-    """
-
-    amt=acol_manager(link,amp)
-    tab=amt.get_table_obj()
-    col=tab[force_bytes(name)]
-
-    return col
-
 def is_number(s):
     """
     Return true if 's' is likely a number
