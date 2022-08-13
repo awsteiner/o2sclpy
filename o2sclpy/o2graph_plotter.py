@@ -163,7 +163,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::get_wrapper()
         return
             
-    def gen_acol(self,o2scl,amp,cmd_name,args):
+    def gen_acol(self,o2scl,amp,link,cmd_name,args):
         """
         Run a general ``acol`` command named ``cmd_name`` with arguments
         stored in ``args``. This function uses the O\ :sub:`2`\ scl function
@@ -1577,24 +1577,15 @@ class o2graph_plotter(yt_plot_base):
         curr_type=o2scl_get_type(o2scl,amp,link)
                         
         if curr_type==b'table':
-            
-            get_fn=o2scl.o2scl_acol_get_column
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr]
-            get_fn.restype=ctypes.c_int
 
-            colx=ctypes.c_char_p(force_bytes(args[0]))
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
             failed=False
-            if get_ret!=0:
-                print('Failed to get column named "'+args[0]+'".')
-                failed=True
+            
+            amt=acol_manager(link,amp)
+            tab=amt.get_table_obj()
+            yv=tab[force_bytes(args[0])]
 
             if failed==False:
                 xv=[i for i in range(0,idx.value)]
-                yv=[ptrx[i] for i in range(0,idx.value)]
         
                 if self.canvas_flag==False:
                     self.canvas()
@@ -2729,7 +2720,7 @@ class o2graph_plotter(yt_plot_base):
                               cmd=='tensor_grid' or
                               cmd=='uniform_grid<double>' or
                               cmd=='vector<contour_line>')):
-            self.gen_acol(o2scl,amp,'help',args)
+            self.gen_acol(o2scl,amp,link,'help',args)
             finished=True
             
         if match==False and finished==False:
@@ -2880,7 +2871,7 @@ class o2graph_plotter(yt_plot_base):
                     print(tlist[j])
             else:
                 # Otherwise, it's an acol command so
-                self.gen_acol(o2scl,amp,'help',args)
+                self.gen_acol(o2scl,amp,link,'help',args)
             
         # If the user specified 'help set', then print
         # the o2graph parameter documentation
@@ -3076,41 +3067,14 @@ class o2graph_plotter(yt_plot_base):
             import yt
             from yt.visualization.volume_rendering.api \
                 import PointSource
-                        
-            get_fn=o2scl.o2scl_acol_get_column
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr]
-            get_fn.restype=ctypes.c_int
-                        
-            colx=ctypes.c_char_p(force_bytes(column_x))
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            get_ret=get_fn(amp,colx,ctypes.byref(idx),
-                           ctypes.byref(ptrx))
-            if get_ret!=0:
-                print('Failed to get column named "'+
-                      column_x+'".')
-                failed=True
-                            
-            coly=ctypes.c_char_p(force_bytes(column_y))
-            idy=ctypes.c_int(0)
-            ptry=double_ptr()
-            get_ret=get_fn(amp,coly,ctypes.byref(idy),
-                           ctypes.byref(ptry))
-            if get_ret!=0:
-                print('Failed to get column named "'+
-                      column_y+'".')
-                failed=True
 
-            colz=ctypes.c_char_p(force_bytes(column_z))
-            idz=ctypes.c_int(0)
-            ptrz=double_ptr()
-            get_ret=get_fn(amp,colz,ctypes.byref(idz),
-                           ctypes.byref(ptrz))
-            if get_ret!=0:
-                print('Failed to get column named "'+
-                      column_z+'".')
-                failed=True
+            failed=False
+            
+            amt=acol_manager(link,amp)
+            tab=amt.get_table_obj()
+            ptrx=tab[force_bytes(column_x)]
+            ptry=tab[force_bytes(column_y)]
+            ptrz=tab[force_bytes(column_z)]
 
             if (force_bytes(size_column)==b'None' or
                 force_bytes(size_column)==b'none'):
@@ -3132,39 +3096,19 @@ class o2graph_plotter(yt_plot_base):
                   green_column,blue_column,alpha_column)
             
             if size_column!='':
-                cols=ctypes.c_char_p(force_bytes(size_column))
-                ids=ctypes.c_int(0)
-                ptrs=double_ptr()
-                get_ret=get_fn(amp,cols,ctypes.byref(ids),
-                               ctypes.byref(ptrs))
+                ptrs=tab[force_bytes(size_column)]
                 
             if red_column!='':
-                colr=ctypes.c_char_p(force_bytes(red_column))
-                idr=ctypes.c_int(0)
-                ptrr=double_ptr()
-                get_ret=get_fn(amp,colr,ctypes.byref(idr),
-                               ctypes.byref(ptrr))
+                ptrr=tab[force_bytes(red_column)]
                 
             if green_column!='':
-                colg=ctypes.c_char_p(force_bytes(green_column))
-                idg=ctypes.c_int(0)
-                ptrg=double_ptr()
-                get_ret=get_fn(amp,colg,ctypes.byref(idg),
-                               ctypes.byref(ptrg))
+                ptrg=tab[force_bytes(green_column)]
                 
             if blue_column!='':
-                colb=ctypes.c_char_p(force_bytes(blue_column))
-                idb=ctypes.c_int(0)
-                ptrb=double_ptr()
-                get_ret=get_fn(amp,colb,ctypes.byref(idb),
-                               ctypes.byref(ptrb))
+                ptrb=tab[force_bytes(blue_column)]
                 
             if alpha_column!='':
-                cola=ctypes.c_char_p(force_bytes(alpha_column))
-                ida=ctypes.c_int(0)
-                ptra=double_ptr()
-                get_ret=get_fn(amp,cola,ctypes.byref(ida),
-                               ctypes.byref(ptra))
+                ptra=tab[force_bytes(alpha_column)]
 
             if red_column!='' and blue_column!='' and green_column!='':
                 rescale_r=False
@@ -3352,41 +3296,14 @@ class o2graph_plotter(yt_plot_base):
             import yt
             from yt.visualization.volume_rendering.api \
                 import LineSource
-                        
-            get_fn=o2scl.o2scl_acol_get_column
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr]
-            get_fn.restype=ctypes.c_int
-                        
-            colx=ctypes.c_char_p(force_bytes(column_x))
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            get_ret=get_fn(amp,colx,ctypes.byref(idx),
-                           ctypes.byref(ptrx))
-            if get_ret!=0:
-                print('Failed to get column named "'+
-                      column_x+'".')
-                failed=True
-                            
-            coly=ctypes.c_char_p(force_bytes(column_y))
-            idy=ctypes.c_int(0)
-            ptry=double_ptr()
-            get_ret=get_fn(amp,coly,ctypes.byref(idy),
-                           ctypes.byref(ptry))
-            if get_ret!=0:
-                print('Failed to get column named "'+
-                      column_y+'".')
-                failed=True
 
-            colz=ctypes.c_char_p(force_bytes(column_z))
-            idz=ctypes.c_int(0)
-            ptrz=double_ptr()
-            get_ret=get_fn(amp,colz,ctypes.byref(idz),
-                           ctypes.byref(ptrz))
-            if get_ret!=0:
-                print('Failed to get column named "'+
-                      column_z+'".')
-                failed=True
+            failed=False
+            
+            amt=acol_manager(link,amp)
+            tab=amt.get_table_obj()
+            ptrx=tab[force_bytes(column_x)]
+            ptry=tab[force_bytes(column_y)]
+            ptrz=tab[force_bytes(column_z)]
 
             if self.xset==False:
                 self.xlo=ptrx[0]
@@ -5432,7 +5349,7 @@ class o2graph_plotter(yt_plot_base):
                     if self.verbose>2:
                         print('Process acol command '+cmd_name+'.')
                         print('args:',strlist[ix:ix_next])
-                    self.gen_acol(o2scl,amp,cmd_name,
+                    self.gen_acol(o2scl,amp,link,cmd_name,
                                   strlist[ix+1:ix_next])
                     if (cmd_name=='v' or cmd_name=='version'):
                         try:
