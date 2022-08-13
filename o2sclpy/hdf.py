@@ -76,7 +76,7 @@ class hdf_file:
         """
         Shallow copy function for class hdf_file
         
-        Returns: a hdf_file object
+        Returns: hdf_file object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -807,7 +807,7 @@ class acol_manager:
         """
         Shallow copy function for class acol_manager
         
-        Returns: a acol_manager object
+        Returns: acol_manager object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1143,7 +1143,7 @@ class cloud_file:
         """
         Shallow copy function for class cloud_file
         
-        Returns: a cloud_file object
+        Returns: cloud_file object
         """
 
         new_obj=type(self)(self._link,self._ptr)

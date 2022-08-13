@@ -5,6 +5,30 @@ HDF5 classes from O\ :sub:`2`\ scl
 
 :ref:`O2sclpy <o2sclpy>`
 
+* :ref:`Class hdf_file`
+* :ref:`Class acol_manager`
+* :ref:`Class cloud_file`
+* :ref:`Function hdf_input_table`
+* :ref:`Function hdf_input_n_table`
+* :ref:`Function hdf_output_table`
+* :ref:`Function hdf_input_table_units`
+* :ref:`Function hdf_input_n_table_units`
+* :ref:`Function hdf_output_table_units`
+* :ref:`Function hdf_input_table3d`
+* :ref:`Function hdf_input_n_table3d`
+* :ref:`Function hdf_output_table3d`
+* :ref:`Function hdf_input_uniform_grid`
+* :ref:`Function hdf_input_n_uniform_grid`
+* :ref:`Function hdf_output_uniform_grid`
+* :ref:`Function hdf_input_tensor_grid`
+* :ref:`Function hdf_input_n_tensor_grid`
+* :ref:`Function hdf_output_tensor_grid`
+* :ref:`Function value_spec`
+* :ref:`Function vector_spec`
+* :ref:`Function strings_spec`
+* :ref:`Function vector_spec_v`
+* :ref:`Function mult_vector_spec`
+
 Class hdf_file
 --------------
 

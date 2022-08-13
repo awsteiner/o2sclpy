@@ -37,7 +37,8 @@ itp_nearest_neigh=8
 
 class std_string:
     """
-    Python interface for C++ class ``std::string``.
+    Note that std_string objects are not "immutable" like Python
+    strings.
     """
 
     _ptr=0
@@ -82,10 +83,23 @@ class std_string:
         """
         Shallow copy function for class std_string
         
-        Returns: a std_string object
+        Returns: std_string object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class std_string
+        
+        Returns: new copy of the std_string object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_std_string
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def length(self):
@@ -113,7 +127,7 @@ class std_string:
         """
         | Parameters:
         | *i*: ``size_t``
-        | *value*: char
+        | *value*: ``char``
         """
         func=self._link.o2scl.o2scl_std_string_setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char]
@@ -143,7 +157,7 @@ class std_string:
         Initialize the string from a Python bytes object
     
         | Parameters:
-        | *s* a Python bytes string
+        | *s*: a Python bytes string
         """
         self.resize(len(s))
         for i in range(0,len(s)):
@@ -208,10 +222,23 @@ class std_vector:
         """
         Shallow copy function for class std_vector
         
-        Returns: a std_vector object
+        Returns: std_vector object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class std_vector
+        
+        Returns: new copy of the std_vector object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_std_vector_double_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def resize(self,n):
@@ -249,7 +276,7 @@ class std_vector:
         """
         | Parameters:
         | *i*: ``size_t``
-        | *value*: double
+        | *value*: ``double``
         """
         func=self._link.o2scl.o2scl_std_vector_double__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
@@ -322,10 +349,23 @@ class std_vector_int:
         """
         Shallow copy function for class std_vector_int
         
-        Returns: a std_vector_int object
+        Returns: std_vector_int object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class std_vector_int
+        
+        Returns: new copy of the std_vector_int object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_std_vector_int_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def resize(self,n):
@@ -363,7 +403,7 @@ class std_vector_int:
         """
         | Parameters:
         | *i*: ``size_t``
-        | *value*: int
+        | *value*: ``int``
         """
         func=self._link.o2scl.o2scl_std_vector_int__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int]
@@ -436,10 +476,23 @@ class std_vector_size_t:
         """
         Shallow copy function for class std_vector_size_t
         
-        Returns: a std_vector_size_t object
+        Returns: std_vector_size_t object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class std_vector_size_t
+        
+        Returns: new copy of the std_vector_size_t object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_std_vector_size_t_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def resize(self,n):
@@ -477,7 +530,7 @@ class std_vector_size_t:
         """
         | Parameters:
         | *i*: ``size_t``
-        | *value*: size_t
+        | *value*: ``size_t``
         """
         func=self._link.o2scl.o2scl_std_vector_size_t__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
@@ -572,10 +625,23 @@ class std_vector_string:
         """
         Shallow copy function for class std_vector_string
         
-        Returns: a std_vector_string object
+        Returns: std_vector_string object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class std_vector_string
+        
+        Returns: new copy of the std_vector_string object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_std_vector_std_string_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def resize(self,n):
@@ -680,10 +746,23 @@ class ublas_vector:
         """
         Shallow copy function for class ublas_vector
         
-        Returns: a ublas_vector object
+        Returns: ublas_vector object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class ublas_vector
+        
+        Returns: new copy of the ublas_vector object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_boost_numeric_ublas_vector_double_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def size(self):
@@ -721,7 +800,7 @@ class ublas_vector:
         """
         | Parameters:
         | *i*: ``size_t``
-        | *value*: double
+        | *value*: ``double``
         """
         func=self._link.o2scl.o2scl_boost_numeric_ublas_vector_double__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
@@ -794,10 +873,23 @@ class ublas_vector_int:
         """
         Shallow copy function for class ublas_vector_int
         
-        Returns: a ublas_vector_int object
+        Returns: ublas_vector_int object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class ublas_vector_int
+        
+        Returns: new copy of the ublas_vector_int object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_boost_numeric_ublas_vector_int_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def size(self):
@@ -835,7 +927,7 @@ class ublas_vector_int:
         """
         | Parameters:
         | *i*: ``size_t``
-        | *value*: int
+        | *value*: ``int``
         """
         func=self._link.o2scl.o2scl_boost_numeric_ublas_vector_int__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int]
@@ -908,10 +1000,23 @@ class ublas_matrix:
         """
         Shallow copy function for class ublas_matrix
         
-        Returns: a ublas_matrix object
+        Returns: ublas_matrix object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class ublas_matrix
+        
+        Returns: new copy of the ublas_matrix object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_boost_numeric_ublas_matrix_double_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def size1(self):
@@ -1025,10 +1130,23 @@ class ublas_matrix_int:
         """
         Shallow copy function for class ublas_matrix_int
         
-        Returns: a ublas_matrix_int object
+        Returns: ublas_matrix_int object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class ublas_matrix_int
+        
+        Returns: new copy of the ublas_matrix_int object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_boost_numeric_ublas_matrix_int_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def size1(self):
@@ -1142,10 +1260,23 @@ class std_vector_vector:
         """
         Shallow copy function for class std_vector_vector
         
-        Returns: a std_vector_vector object
+        Returns: std_vector_vector object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class std_vector_vector
+        
+        Returns: new copy of the std_vector_vector object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_std_vector_std_vector_double_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def resize(self,n):
@@ -1253,10 +1384,23 @@ class vec_vec_string:
         """
         Shallow copy function for class vec_vec_string
         
-        Returns: a vec_vec_string object
+        Returns: vec_vec_string object
         """
 
         new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class vec_vec_string
+        
+        Returns: new copy of the vec_vec_string object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_std_vector_std_vector_std_string_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
         return new_obj
 
     def resize(self,n):
@@ -1283,12 +1427,14 @@ class vec_vec_string:
         """
         | Parameters:
         | *n*: ``size_t``
-        | Returns: vec_vec_string object
+        | Returns: std_vector_string object
         """
         func=self._link.o2scl.o2scl_std_vector_std_vector_std_string__getitem
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
+        strt=std_vector_string(self._link,ret)
+        strt._owner=True
         return ret
 
     def __setitem__(self,i,value):
@@ -1312,14 +1458,10 @@ class vec_vec_string:
 
 class std_complex:
     """
-    Python interface for O\ :sub:`2`\ scl class ``std::complex<double>``,
-    see
-    https://neutronstars.utk.edu/code/o2scl/html/class/std::complex<double>.html .
-    
     Note that python complex numbers are immutable, but this class is
     not, so the real and imaginary parts can be changed with real_set()
     and imag_set(). 
-                                 
+        
     """
 
     _ptr=0
@@ -1364,7 +1506,7 @@ class std_complex:
         """
         Shallow copy function for class std_complex
         
-        Returns: a std_complex object
+        Returns: std_complex object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1435,14 +1577,10 @@ class std_complex:
 
 class lib_settings_class:
     """
-    Python interface for O\ :sub:`2`\ scl class ``lib_settings_class``,
+    Python interface for O₂scl class ``lib_settings_class``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/lib_settings_class.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -1487,7 +1625,7 @@ class lib_settings_class:
         """
         Shallow copy function for class lib_settings_class
         
-        Returns: a lib_settings_class object
+        Returns: lib_settings_class object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1703,9 +1841,10 @@ class lib_settings_class:
 
 class table:
     """
-    Python interface for O\ :sub:`2`\ scl class ``table``,
+    Python interface for O₂scl class ``table<>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/table.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/table<>.html .
+    
     """
 
     _ptr=0
@@ -1750,7 +1889,7 @@ class table:
         """
         Shallow copy function for class table
         
-        Returns: a table object
+        Returns: table object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1760,7 +1899,7 @@ class table:
         """
         Deep copy function for class table
         
-        Returns: a new copy of the table object
+        Returns: new copy of the table object
         """
 
         new_obj=type(self)(self._link)
@@ -2528,9 +2667,10 @@ class table:
 
 class table_units(table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``table_units``,
+    Python interface for O₂scl class ``table_units<>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/table_units.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/table_units<>.html .
+    
     """
 
     def __init__(self,link,pointer=0):
@@ -2571,7 +2711,7 @@ class table_units(table):
         """
         Shallow copy function for class table_units
         
-        Returns: a table_units object
+        Returns: table_units object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2581,7 +2721,7 @@ class table_units(table):
         """
         Deep copy function for class table_units
         
-        Returns: a new copy of the table_units object
+        Returns: new copy of the table_units object
         """
 
         new_obj=type(self)(self._link)
@@ -2659,9 +2799,10 @@ class table_units(table):
 
 class uniform_grid:
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid``,
+    Python interface for O₂scl class ``uniform_grid<>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid<>.html .
+    
     """
 
     _ptr=0
@@ -2706,7 +2847,7 @@ class uniform_grid:
         """
         Shallow copy function for class uniform_grid
         
-        Returns: a uniform_grid object
+        Returns: uniform_grid object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2796,9 +2937,10 @@ class uniform_grid:
 
 class uniform_grid_end(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end``,
+    Python interface for O₂scl class ``uniform_grid_end<>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end<>.html .
+    
     """
 
     def __init__(self,link,pointer=0):
@@ -2839,7 +2981,7 @@ class uniform_grid_end(uniform_grid):
         """
         Shallow copy function for class uniform_grid_end
         
-        Returns: a uniform_grid_end object
+        Returns: uniform_grid_end object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2862,9 +3004,10 @@ class uniform_grid_end(uniform_grid):
 
 class uniform_grid_width(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_width``,
+    Python interface for O₂scl class ``uniform_grid_width<>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_width.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_width<>.html .
+    
     """
 
     def __init__(self,link,pointer=0):
@@ -2905,7 +3048,7 @@ class uniform_grid_width(uniform_grid):
         """
         Shallow copy function for class uniform_grid_width
         
-        Returns: a uniform_grid_width object
+        Returns: uniform_grid_width object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2928,9 +3071,10 @@ class uniform_grid_width(uniform_grid):
 
 class uniform_grid_end_width(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end_width``,
+    Python interface for O₂scl class ``uniform_grid_end_width<>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end_width.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end_width<>.html .
+    
     """
 
     def __init__(self,link,pointer=0):
@@ -2971,7 +3115,7 @@ class uniform_grid_end_width(uniform_grid):
         """
         Shallow copy function for class uniform_grid_end_width
         
-        Returns: a uniform_grid_end_width object
+        Returns: uniform_grid_end_width object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2994,9 +3138,10 @@ class uniform_grid_end_width(uniform_grid):
 
 class uniform_grid_log_end(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end``,
+    Python interface for O₂scl class ``uniform_grid_log_end<>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_end.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_end<>.html .
+    
     """
 
     def __init__(self,link,pointer=0):
@@ -3037,7 +3182,7 @@ class uniform_grid_log_end(uniform_grid):
         """
         Shallow copy function for class uniform_grid_log_end
         
-        Returns: a uniform_grid_log_end object
+        Returns: uniform_grid_log_end object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3103,7 +3248,7 @@ class uniform_grid_log_width(uniform_grid):
         """
         Shallow copy function for class uniform_grid_log_width
         
-        Returns: a uniform_grid_log_width object
+        Returns: uniform_grid_log_width object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3169,7 +3314,7 @@ class uniform_grid_log_end_width(uniform_grid):
         """
         Shallow copy function for class uniform_grid_log_end_width
         
-        Returns: a uniform_grid_log_end_width object
+        Returns: uniform_grid_log_end_width object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3192,14 +3337,10 @@ class uniform_grid_log_end_width(uniform_grid):
 
 class table3d:
     """
-    Python interface for O\ :sub:`2`\ scl class ``table3d``,
+    Python interface for O₂scl class ``table3d``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/table3d.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -3244,7 +3385,7 @@ class table3d:
         """
         Shallow copy function for class table3d
         
-        Returns: a table3d object
+        Returns: table3d object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3254,7 +3395,7 @@ class table3d:
         """
         Deep copy function for class table3d
         
-        Returns: a new copy of the table3d object
+        Returns: new copy of the table3d object
         """
 
         new_obj=type(self)(self._link)
@@ -3832,14 +3973,10 @@ class table3d:
 
 class index_spec:
     """
-    Python interface for O\ :sub:`2`\ scl class ``index_spec``,
+    Python interface for O₂scl class ``index_spec``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/index_spec.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -3884,7 +4021,7 @@ class index_spec:
         """
         Shallow copy function for class index_spec
         
-        Returns: a index_spec object
+        Returns: index_spec object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4033,14 +4170,10 @@ class index_spec:
 
 class ix_index:
     """
-    Python interface for O\ :sub:`2`\ scl class ``ix_index``,
+    Python interface for O₂scl class ``ix_index``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/ix_index.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -4086,7 +4219,7 @@ class ix_index:
         """
         Shallow copy function for class ix_index
         
-        Returns: a ix_index object
+        Returns: ix_index object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4109,14 +4242,10 @@ class ix_index:
 
 class ix_fixed:
     """
-    Python interface for O\ :sub:`2`\ scl class ``ix_fixed``,
+    Python interface for O₂scl class ``ix_fixed``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/ix_fixed.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -4162,7 +4291,7 @@ class ix_fixed:
         """
         Shallow copy function for class ix_fixed
         
-        Returns: a ix_fixed object
+        Returns: ix_fixed object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4185,14 +4314,10 @@ class ix_fixed:
 
 class ix_sum:
     """
-    Python interface for O\ :sub:`2`\ scl class ``ix_sum``,
+    Python interface for O₂scl class ``ix_sum``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/ix_sum.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -4238,7 +4363,7 @@ class ix_sum:
         """
         Shallow copy function for class ix_sum
         
-        Returns: a ix_sum object
+        Returns: ix_sum object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4261,14 +4386,10 @@ class ix_sum:
 
 class ix_trace:
     """
-    Python interface for O\ :sub:`2`\ scl class ``ix_trace``,
+    Python interface for O₂scl class ``ix_trace``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/ix_trace.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -4314,7 +4435,7 @@ class ix_trace:
         """
         Shallow copy function for class ix_trace
         
-        Returns: a ix_trace object
+        Returns: ix_trace object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4337,14 +4458,10 @@ class ix_trace:
 
 class ix_reverse:
     """
-    Python interface for O\ :sub:`2`\ scl class ``ix_reverse``,
+    Python interface for O₂scl class ``ix_reverse``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/ix_reverse.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -4390,7 +4507,7 @@ class ix_reverse:
         """
         Shallow copy function for class ix_reverse
         
-        Returns: a ix_reverse object
+        Returns: ix_reverse object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4413,14 +4530,10 @@ class ix_reverse:
 
 class ix_range:
     """
-    Python interface for O\ :sub:`2`\ scl class ``ix_range``,
+    Python interface for O₂scl class ``ix_range``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/ix_range.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -4466,7 +4579,7 @@ class ix_range:
         """
         Shallow copy function for class ix_range
         
-        Returns: a ix_range object
+        Returns: ix_range object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4489,14 +4602,10 @@ class ix_range:
 
 class ix_interp:
     """
-    Python interface for O\ :sub:`2`\ scl class ``ix_interp``,
+    Python interface for O₂scl class ``ix_interp``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/ix_interp.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -4542,7 +4651,7 @@ class ix_interp:
         """
         Shallow copy function for class ix_interp
         
-        Returns: a ix_interp object
+        Returns: ix_interp object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4565,14 +4674,10 @@ class ix_interp:
 
 class ix_grid:
     """
-    Python interface for O\ :sub:`2`\ scl class ``ix_grid``,
+    Python interface for O₂scl class ``ix_grid``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/ix_grid.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -4618,7 +4723,7 @@ class ix_grid:
         """
         Shallow copy function for class ix_grid
         
-        Returns: a ix_grid object
+        Returns: ix_grid object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4641,14 +4746,10 @@ class ix_grid:
 
 class ix_gridw:
     """
-    Python interface for O\ :sub:`2`\ scl class ``ix_gridw``,
+    Python interface for O₂scl class ``ix_gridw``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/ix_gridw.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -4694,7 +4795,7 @@ class ix_gridw:
         """
         Shallow copy function for class ix_gridw
         
-        Returns: a ix_gridw object
+        Returns: ix_gridw object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4764,7 +4865,7 @@ class tensor:
         """
         Shallow copy function for class tensor
         
-        Returns: a tensor object
+        Returns: tensor object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4774,7 +4875,7 @@ class tensor:
         """
         Deep copy function for class tensor
         
-        Returns: a new copy of the tensor object
+        Returns: new copy of the tensor object
         """
 
         new_obj=type(self)(self._link)
@@ -5164,7 +5265,7 @@ class tensor_grid:
         """
         Shallow copy function for class tensor_grid
         
-        Returns: a tensor_grid object
+        Returns: tensor_grid object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -5174,7 +5275,7 @@ class tensor_grid:
         """
         Deep copy function for class tensor_grid
         
-        Returns: a new copy of the tensor_grid object
+        Returns: new copy of the tensor_grid object
         """
 
         new_obj=type(self)(self._link)
@@ -5473,7 +5574,7 @@ class tensor_int:
         """
         Shallow copy function for class tensor_int
         
-        Returns: a tensor_int object
+        Returns: tensor_int object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -5483,7 +5584,7 @@ class tensor_int:
         """
         Deep copy function for class tensor_int
         
-        Returns: a new copy of the tensor_int object
+        Returns: new copy of the tensor_int object
         """
 
         new_obj=type(self)(self._link)
@@ -5730,7 +5831,7 @@ class tensor_size_t:
         """
         Shallow copy function for class tensor_size_t
         
-        Returns: a tensor_size_t object
+        Returns: tensor_size_t object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -5740,7 +5841,7 @@ class tensor_size_t:
         """
         Deep copy function for class tensor_size_t
         
-        Returns: a new copy of the tensor_size_t object
+        Returns: new copy of the tensor_size_t object
         """
 
         new_obj=type(self)(self._link)
@@ -5940,14 +6041,10 @@ class tensor_size_t:
 
 class find_constants_const_entry:
     """
-    Python interface for O\ :sub:`2`\ scl class ``find_constants<>::const_entry``,
+    Python interface for O₂scl class ``find_constants<>::const_entry``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/find_constants<>::const_entry.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -5992,7 +6089,7 @@ class find_constants_const_entry:
         """
         Shallow copy function for class find_constants_const_entry
         
-        Returns: a find_constants_const_entry object
+        Returns: find_constants_const_entry object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -6241,14 +6338,10 @@ class find_constants_const_entry:
 
 class find_constants:
     """
-    Python interface for O\ :sub:`2`\ scl class ``find_constants<>``,
+    Python interface for O₂scl class ``find_constants<>``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/find_constants<>.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -6293,7 +6386,7 @@ class find_constants:
         """
         Shallow copy function for class find_constants
         
-        Returns: a find_constants object
+        Returns: find_constants object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -6333,14 +6426,10 @@ class find_constants:
 
 class convert_units_der_unit:
     """
-    Python interface for O\ :sub:`2`\ scl class ``convert_units<>::der_unit``,
+    Python interface for O₂scl class ``convert_units<>::der_unit``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/convert_units<>::der_unit.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -6385,7 +6474,7 @@ class convert_units_der_unit:
         """
         Shallow copy function for class convert_units_der_unit
         
-        Returns: a convert_units_der_unit object
+        Returns: convert_units_der_unit object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -6661,7 +6750,7 @@ class convert_units:
         """
         Shallow copy function for class convert_units
         
-        Returns: a convert_units object
+        Returns: convert_units object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -6897,14 +6986,10 @@ class convert_units:
 
 class columnify:
     """
-    Python interface for O\ :sub:`2`\ scl class ``columnify``,
+    Python interface for O₂scl class ``columnify``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/columnify.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -6949,7 +7034,7 @@ class columnify:
         """
         Shallow copy function for class columnify
         
-        Returns: a columnify object
+        Returns: columnify object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -7024,14 +7109,10 @@ class columnify:
 
 class format_float:
     """
-    Python interface for O\ :sub:`2`\ scl class ``format_float``,
+    Python interface for O₂scl class ``format_float``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/format_float.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -7076,7 +7157,7 @@ class format_float:
         """
         Shallow copy function for class format_float
         
-        Returns: a format_float object
+        Returns: format_float object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -7176,14 +7257,10 @@ class format_float:
 
 class interp:
     """
-    Python interface for O\ :sub:`2`\ scl class ``interp<std::vector<double>>``,
+    Python interface for O₂scl class ``interp<std::vector<double>>``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/interp<std::vector<double>>.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -7228,7 +7305,7 @@ class interp:
         """
         Shallow copy function for class interp
         
-        Returns: a interp object
+        Returns: interp object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -7308,14 +7385,10 @@ class interp:
 
 class interp_vec:
     """
-    Python interface for O\ :sub:`2`\ scl class ``interp_vec<std::vector<double>>``,
+    Python interface for O₂scl class ``interp_vec<std::vector<double>>``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/interp_vec<std::vector<double>>.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -7360,7 +7433,7 @@ class interp_vec:
         """
         Shallow copy function for class interp_vec
         
-        Returns: a interp_vec object
+        Returns: interp_vec object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -7439,14 +7512,10 @@ class interp_vec:
 
 class interp_krige_optim:
     """
-    Python interface for O\ :sub:`2`\ scl class ``interp_krige_optim<std::vector<double>>``,
+    Python interface for O₂scl class ``interp_krige_optim<std::vector<double>>``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/interp_krige_optim<std::vector<double>>.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -7491,7 +7560,7 @@ class interp_krige_optim:
         """
         Shallow copy function for class interp_krige_optim
         
-        Returns: a interp_krige_optim object
+        Returns: interp_krige_optim object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -7713,14 +7782,10 @@ class interp_krige_optim:
 
 class terminal:
     """
-    Python interface for O\ :sub:`2`\ scl class ``terminal``,
+    Python interface for O₂scl class ``terminal``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/terminal.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -7765,7 +7830,7 @@ class terminal:
         """
         Shallow copy function for class terminal
         
-        Returns: a terminal object
+        Returns: terminal object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -8101,14 +8166,10 @@ class terminal:
 
 class gen_test_number:
     """
-    Python interface for O\ :sub:`2`\ scl class ``gen_test_number<double>``,
+    Python interface for O₂scl class ``gen_test_number<double>``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/gen_test_number<double>.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -8153,7 +8214,7 @@ class gen_test_number:
         """
         Shallow copy function for class gen_test_number
         
-        Returns: a gen_test_number object
+        Returns: gen_test_number object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -8190,14 +8251,10 @@ class gen_test_number:
 
 class funct_string:
     """
-    Python interface for O\ :sub:`2`\ scl class ``funct_string``,
+    Python interface for O₂scl class ``funct_string``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/funct_string.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -8243,7 +8300,7 @@ class funct_string:
         """
         Shallow copy function for class funct_string
         
-        Returns: a funct_string object
+        Returns: funct_string object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -8292,14 +8349,10 @@ class funct_string:
 
 class comm_option_s:
     """
-    Python interface for O\ :sub:`2`\ scl class ``comm_option_s``,
+    Python interface for O₂scl class ``comm_option_s``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/comm_option_s.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -8344,7 +8397,7 @@ class comm_option_s:
         """
         Shallow copy function for class comm_option_s
         
-        Returns: a comm_option_s object
+        Returns: comm_option_s object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -8513,14 +8566,10 @@ class comm_option_s:
 
 class cmd_line_arg:
     """
-    Python interface for O\ :sub:`2`\ scl class ``cmd_line_arg``,
+    Python interface for O₂scl class ``cmd_line_arg``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/cmd_line_arg.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -8565,7 +8614,7 @@ class cmd_line_arg:
         """
         Shallow copy function for class cmd_line_arg
         
-        Returns: a cmd_line_arg object
+        Returns: cmd_line_arg object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -8654,14 +8703,10 @@ class cmd_line_arg:
 
 class cli:
     """
-    Python interface for O\ :sub:`2`\ scl class ``cli``,
+    Python interface for O₂scl class ``cli``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/cli.html .
     
-    Note that python complex numbers are immutable, but this class is
-    not, so the real and imaginary parts can be changed with real_set()
-    and imag_set(). 
-                                 
     """
 
     _ptr=0
@@ -8706,7 +8751,7 @@ class cli:
         """
         Shallow copy function for class cli
         
-        Returns: a cli object
+        Returns: cli object
         """
 
         new_obj=type(self)(self._link,self._ptr)

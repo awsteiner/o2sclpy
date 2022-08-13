@@ -5,6 +5,19 @@ Other classes from O\ :sub:`2`\ scl
 
 :ref:`O2sclpy <o2sclpy>`
 
+* :ref:`Class slack_messenger`
+* :ref:`Class quadratic_real_coeff_gsl`
+* :ref:`Class quadratic_real_coeff_gsl2`
+* :ref:`Class cubic_real_coeff_cern`
+* :ref:`Class cubic_real_coeff_gsl`
+* :ref:`Class quartic_real_coeff_cern`
+* :ref:`Class fermi_dirac_integ_gsl`
+* :ref:`Class bessel_K_exp_integ_gsl`
+* :ref:`Class hist`
+* :ref:`Class contour_line`
+* :ref:`Class vector_contour_line`
+* :ref:`Class contour`
+
 Class slack_messenger
 ---------------------
 

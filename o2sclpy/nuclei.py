@@ -31,7 +31,7 @@ class nucleus(part):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucleus``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucleus.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucleus.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -72,7 +72,7 @@ class nucleus(part):
         """
         Shallow copy function for class nucleus
         
-        Returns: a nucleus object
+        Returns: nucleus object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -183,7 +183,7 @@ class nucmass_info:
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_info``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_info.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_info.html .
     """
 
     _ptr=0
@@ -228,7 +228,7 @@ class nucmass_info:
         """
         Shallow copy function for class nucmass_info
         
-        Returns: a nucmass_info object
+        Returns: nucmass_info object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -338,7 +338,7 @@ class nucmass:
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass.html .
     """
 
     _ptr=0
@@ -384,7 +384,7 @@ class nucmass:
         """
         Shallow copy function for class nucmass
         
-        Returns: a nucmass object
+        Returns: nucmass object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -670,7 +670,7 @@ class nucmass_table(nucmass):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_table``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_table.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_table.html .
     """
 
     @abstractmethod
@@ -712,7 +712,7 @@ class nucmass_table(nucmass):
         """
         Shallow copy function for class nucmass_table
         
-        Returns: a nucmass_table object
+        Returns: nucmass_table object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -783,7 +783,7 @@ class nucmass_fit_base(nucmass):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_fit_base``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_fit_base.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_fit_base.html .
     """
 
     @abstractmethod
@@ -825,7 +825,7 @@ class nucmass_fit_base(nucmass):
         """
         Shallow copy function for class nucmass_fit_base
         
-        Returns: a nucmass_fit_base object
+        Returns: nucmass_fit_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -856,7 +856,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_semi_empirical``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_semi_empirical.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_semi_empirical.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -897,7 +897,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
         """
         Shallow copy function for class nucmass_semi_empirical
         
-        Returns: a nucmass_semi_empirical object
+        Returns: nucmass_semi_empirical object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1034,7 +1034,7 @@ class nucmass_ame(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_ame``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_ame.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_ame.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1075,7 +1075,7 @@ class nucmass_ame(nucmass_table):
         """
         Shallow copy function for class nucmass_ame
         
-        Returns: a nucmass_ame object
+        Returns: nucmass_ame object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1086,7 +1086,7 @@ class nucmass_dz_table(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_table``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_dz_table.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dz_table.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1127,7 +1127,7 @@ class nucmass_dz_table(nucmass_table):
         """
         Shallow copy function for class nucmass_dz_table
         
-        Returns: a nucmass_dz_table object
+        Returns: nucmass_dz_table object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1138,7 +1138,7 @@ class nucmass_dz_fit(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_fit``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_dz_fit.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dz_fit.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1179,7 +1179,7 @@ class nucmass_dz_fit(nucmass_fit_base):
         """
         Shallow copy function for class nucmass_dz_fit
         
-        Returns: a nucmass_dz_fit object
+        Returns: nucmass_dz_fit object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1190,7 +1190,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_fit_33``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_dz_fit_33.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dz_fit_33.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1231,7 +1231,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
         """
         Shallow copy function for class nucmass_dz_fit_33
         
-        Returns: a nucmass_dz_fit_33 object
+        Returns: nucmass_dz_fit_33 object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1242,7 +1242,7 @@ class nucmass_frdm(nucmass_fit_base):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_frdm``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_frdm.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_frdm.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1283,7 +1283,7 @@ class nucmass_frdm(nucmass_fit_base):
         """
         Shallow copy function for class nucmass_frdm
         
-        Returns: a nucmass_frdm object
+        Returns: nucmass_frdm object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1814,7 +1814,7 @@ class nucmass_mnmsk(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_mnmsk``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_mnmsk.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_mnmsk.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1855,7 +1855,7 @@ class nucmass_mnmsk(nucmass_table):
         """
         Shallow copy function for class nucmass_mnmsk
         
-        Returns: a nucmass_mnmsk object
+        Returns: nucmass_mnmsk object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1866,7 +1866,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_mnmsk_exp``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_mnmsk_exp.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_mnmsk_exp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1907,7 +1907,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
         """
         Shallow copy function for class nucmass_mnmsk_exp
         
-        Returns: a nucmass_mnmsk_exp object
+        Returns: nucmass_mnmsk_exp object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1918,7 +1918,7 @@ class nucmass_gen(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_gen``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_gen.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_gen.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1959,7 +1959,7 @@ class nucmass_gen(nucmass_table):
         """
         Shallow copy function for class nucmass_gen
         
-        Returns: a nucmass_gen object
+        Returns: nucmass_gen object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1970,7 +1970,7 @@ class nucmass_dglg(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_dglg``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_dglg.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dglg.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2011,7 +2011,7 @@ class nucmass_dglg(nucmass_table):
         """
         Shallow copy function for class nucmass_dglg
         
-        Returns: a nucmass_dglg object
+        Returns: nucmass_dglg object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2022,7 +2022,7 @@ class nucmass_hfb(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_hfb``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_hfb.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_hfb.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2063,7 +2063,7 @@ class nucmass_hfb(nucmass_table):
         """
         Shallow copy function for class nucmass_hfb
         
-        Returns: a nucmass_hfb object
+        Returns: nucmass_hfb object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2074,7 +2074,7 @@ class nucmass_hfb_sp(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_hfb_sp``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_hfb_sp.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_hfb_sp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2115,7 +2115,7 @@ class nucmass_hfb_sp(nucmass_table):
         """
         Shallow copy function for class nucmass_hfb_sp
         
-        Returns: a nucmass_hfb_sp object
+        Returns: nucmass_hfb_sp object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2126,7 +2126,7 @@ class nucmass_ktuy(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_ktuy``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_ktuy.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_ktuy.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2167,7 +2167,7 @@ class nucmass_ktuy(nucmass_table):
         """
         Shallow copy function for class nucmass_ktuy
         
-        Returns: a nucmass_ktuy object
+        Returns: nucmass_ktuy object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2178,7 +2178,7 @@ class nucmass_sdnp(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_sdnp``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_sdnp.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_sdnp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2219,7 +2219,7 @@ class nucmass_sdnp(nucmass_table):
         """
         Shallow copy function for class nucmass_sdnp
         
-        Returns: a nucmass_sdnp object
+        Returns: nucmass_sdnp object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2230,7 +2230,7 @@ class nucmass_wlw(nucmass_table):
     """
     Python interface for O\ :sub:`2`\ scl class ``nucmass_wlw``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/nucmass_wlw.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_wlw.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2271,7 +2271,7 @@ class nucmass_wlw(nucmass_table):
         """
         Shallow copy function for class nucmass_wlw
         
-        Returns: a nucmass_wlw object
+        Returns: nucmass_wlw object
         """
 
         new_obj=type(self)(self._link,self._ptr)

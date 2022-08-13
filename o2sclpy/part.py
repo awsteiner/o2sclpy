@@ -72,7 +72,7 @@ class thermo:
         """
         Shallow copy function for class thermo
         
-        Returns: a thermo object
+        Returns: thermo object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -186,7 +186,7 @@ class part:
         """
         Shallow copy function for class part
         
-        Returns: a part object
+        Returns: part object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -480,7 +480,7 @@ class fermion(part):
         """
         Shallow copy function for class fermion
         
-        Returns: a fermion object
+        Returns: fermion object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -531,7 +531,7 @@ class quark(fermion):
     """
     Python interface for O\ :sub:`2`\ scl class ``quark``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/quark.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/quark.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -572,7 +572,7 @@ class quark(fermion):
         """
         Shallow copy function for class quark
         
-        Returns: a quark object
+        Returns: quark object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -666,7 +666,7 @@ class fermion_zerot:
         """
         Shallow copy function for class fermion_zerot
         
-        Returns: a fermion_zerot object
+        Returns: fermion_zerot object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -767,7 +767,7 @@ class fermion_thermo(fermion_zerot):
         """
         Shallow copy function for class fermion_thermo
         
-        Returns: a fermion_thermo object
+        Returns: fermion_thermo object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -890,7 +890,7 @@ class fermion_rel(fermion_thermo):
         """
         Shallow copy function for class fermion_rel
         
-        Returns: a fermion_rel object
+        Returns: fermion_rel object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1241,7 +1241,7 @@ class fermion_nonrel(fermion_zerot):
         """
         Shallow copy function for class fermion_nonrel
         
-        Returns: a fermion_nonrel object
+        Returns: fermion_nonrel object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1287,7 +1287,7 @@ class boson(part):
     """
     Python interface for O\ :sub:`2`\ scl class ``boson``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/boson.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/boson.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1328,7 +1328,7 @@ class boson(part):
         """
         Shallow copy function for class boson
         
-        Returns: a boson object
+        Returns: boson object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1359,7 +1359,7 @@ class boson_rel:
     """
     Python interface for O\ :sub:`2`\ scl class ``boson_rel``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/boson_rel.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/boson_rel.html .
     """
 
     _ptr=0
@@ -1404,7 +1404,7 @@ class boson_rel:
         """
         Shallow copy function for class boson_rel
         
-        Returns: a boson_rel object
+        Returns: boson_rel object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1513,7 +1513,7 @@ class classical_thermo:
         """
         Shallow copy function for class classical_thermo
         
-        Returns: a classical_thermo object
+        Returns: classical_thermo object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1589,7 +1589,7 @@ class thermo_np_deriv_press:
         """
         Shallow copy function for class thermo_np_deriv_press
         
-        Returns: a thermo_np_deriv_press object
+        Returns: thermo_np_deriv_press object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1763,7 +1763,7 @@ class thermo_np_deriv_helm:
         """
         Shallow copy function for class thermo_np_deriv_helm
         
-        Returns: a thermo_np_deriv_helm object
+        Returns: thermo_np_deriv_helm object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1937,7 +1937,7 @@ class part_deriv_press:
         """
         Shallow copy function for class part_deriv_press
         
-        Returns: a part_deriv_press object
+        Returns: part_deriv_press object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2060,7 +2060,7 @@ class part_deriv(part):
         """
         Shallow copy function for class part_deriv
         
-        Returns: a part_deriv object
+        Returns: part_deriv object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2110,7 +2110,7 @@ class fermion_deriv(fermion):
         """
         Shallow copy function for class fermion_deriv
         
-        Returns: a fermion_deriv object
+        Returns: fermion_deriv object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2164,7 +2164,7 @@ class deriv_thermo_base:
         """
         Shallow copy function for class deriv_thermo_base
         
-        Returns: a deriv_thermo_base object
+        Returns: deriv_thermo_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2296,7 +2296,7 @@ class fermion_deriv_rel:
         """
         Shallow copy function for class fermion_deriv_rel
         
-        Returns: a fermion_deriv_rel object
+        Returns: fermion_deriv_rel object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2555,7 +2555,7 @@ class fermion_deriv_nr:
         """
         Shallow copy function for class fermion_deriv_nr
         
-        Returns: a fermion_deriv_nr object
+        Returns: fermion_deriv_nr object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2708,7 +2708,7 @@ class classical_deriv_thermo:
         """
         Shallow copy function for class classical_deriv_thermo
         
-        Returns: a classical_deriv_thermo object
+        Returns: classical_deriv_thermo object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2741,7 +2741,7 @@ class fermion_mag_zerot:
     """
     Python interface for O\ :sub:`2`\ scl class ``fermion_mag_zerot``,
     See
-    https://neutronstars.utk.edu/code/o2scl/part/html/class/fermion_mag_zerot.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/fermion_mag_zerot.html .
     """
 
     _ptr=0
@@ -2786,7 +2786,7 @@ class fermion_mag_zerot:
         """
         Shallow copy function for class fermion_mag_zerot
         
-        Returns: a fermion_mag_zerot object
+        Returns: fermion_mag_zerot object
         """
 
         new_obj=type(self)(self._link,self._ptr)

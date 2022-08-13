@@ -5,6 +5,31 @@ EOS classes
 
 :ref:`O2sclpy <o2sclpy>`
 
+* :ref:`Class eos_base`
+* :ref:`Class eos_had_base`
+* :ref:`Class eos_had_eden_base`
+* :ref:`Class eos_had_pres_base`
+* :ref:`Class eos_had_temp_base`
+* :ref:`Class eos_had_temp_eden_base`
+* :ref:`Class eos_had_temp_pres_base`
+* :ref:`Class eos_had_skyrme`
+* :ref:`Class eos_had_apr`
+* :ref:`Class eos_had_rmf`
+* :ref:`Class eos_quark`
+* :ref:`Class eos_quark_bag`
+* :ref:`Class eos_quark_njl`
+* :ref:`Class eos_tov`
+* :ref:`Class eos_tov_buchdahl`
+* :ref:`Class eos_tov_polytrope`
+* :ref:`Class eos_tov_linear`
+* :ref:`Class eos_tov_interp`
+* :ref:`Class tov_solve`
+* :ref:`Class tov_love`
+* :ref:`Class nstar_cold`
+* :ref:`Class nucleus_rmf`
+* :ref:`Function skyrme_load`
+* :ref:`Function rmf_load`
+
 Class eos_base
 --------------
 

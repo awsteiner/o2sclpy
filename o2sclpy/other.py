@@ -76,7 +76,7 @@ class slack_messenger:
         """
         Shallow copy function for class slack_messenger
         
-        Returns: a slack_messenger object
+        Returns: slack_messenger object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -319,7 +319,7 @@ class quadratic_real_coeff_gsl:
         """
         Shallow copy function for class quadratic_real_coeff_gsl
         
-        Returns: a quadratic_real_coeff_gsl object
+        Returns: quadratic_real_coeff_gsl object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -407,7 +407,7 @@ class quadratic_real_coeff_gsl2:
         """
         Shallow copy function for class quadratic_real_coeff_gsl2
         
-        Returns: a quadratic_real_coeff_gsl2 object
+        Returns: quadratic_real_coeff_gsl2 object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -495,7 +495,7 @@ class cubic_real_coeff_cern:
         """
         Shallow copy function for class cubic_real_coeff_cern
         
-        Returns: a cubic_real_coeff_cern object
+        Returns: cubic_real_coeff_cern object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -587,7 +587,7 @@ class cubic_real_coeff_gsl:
         """
         Shallow copy function for class cubic_real_coeff_gsl
         
-        Returns: a cubic_real_coeff_gsl object
+        Returns: cubic_real_coeff_gsl object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -679,7 +679,7 @@ class quartic_real_coeff_cern:
         """
         Shallow copy function for class quartic_real_coeff_cern
         
-        Returns: a quartic_real_coeff_cern object
+        Returns: quartic_real_coeff_cern object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -775,7 +775,7 @@ class fermi_dirac_integ_gsl:
         """
         Shallow copy function for class fermi_dirac_integ_gsl
         
-        Returns: a fermi_dirac_integ_gsl object
+        Returns: fermi_dirac_integ_gsl object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -891,7 +891,7 @@ class bessel_K_exp_integ_gsl:
         """
         Shallow copy function for class bessel_K_exp_integ_gsl
         
-        Returns: a bessel_K_exp_integ_gsl object
+        Returns: bessel_K_exp_integ_gsl object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -983,7 +983,7 @@ class hist:
         """
         Shallow copy function for class hist
         
-        Returns: a hist object
+        Returns: hist object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -993,7 +993,7 @@ class hist:
         """
         Deep copy function for class hist
         
-        Returns: a new copy of the hist object
+        Returns: new copy of the hist object
         """
 
         new_obj=type(self)(self._link)
@@ -1273,7 +1273,7 @@ class contour_line:
         """
         Shallow copy function for class contour_line
         
-        Returns: a contour_line object
+        Returns: contour_line object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1283,7 +1283,7 @@ class contour_line:
         """
         Deep copy function for class contour_line
         
-        Returns: a new copy of the contour_line object
+        Returns: new copy of the contour_line object
         """
 
         new_obj=type(self)(self._link)
@@ -1402,7 +1402,7 @@ class vector_contour_line:
         """
         Shallow copy function for class vector_contour_line
         
-        Returns: a vector_contour_line object
+        Returns: vector_contour_line object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1476,7 +1476,7 @@ class contour:
         """
         Shallow copy function for class contour
         
-        Returns: a contour object
+        Returns: contour object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1540,6 +1540,29 @@ class contour:
         func=self._link.o2scl.o2scl_contour_set_debug_next_point
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,value)
+        return
+
+    def set_data(self,ugx,ugy,udata):
+        """
+        | Parameters:
+        | *ugx*: :class:`uniform_grid<double>` object
+        | *ugy*: :class:`uniform_grid<double>` object
+        | *udata*: :class:`ublas_matrix` object
+        """
+        func=self._link.o2scl.o2scl_contour_set_data
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ugx._ptr,ugy._ptr,udata._ptr)
+        return
+
+    def set_levels(self,n_levels,levels):
+        """
+        | Parameters:
+        | *n_levels*: ``size_t``
+        | *levels*: :class:`vector<size_t>` object
+        """
+        func=self._link.o2scl.o2scl_contour_set_levels
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,n_levels,levels._ptr)
         return
 
     def calc_contours(self,clines):

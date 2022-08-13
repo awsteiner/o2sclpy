@@ -5,9 +5,95 @@ Base classes from O\ :sub:`2`\ scl
 
 :ref:`O2sclpy <o2sclpy>`
 
-Note that these classes are experimental. They are not intended
-to provide the full functionality
-of the corresponding C++ class.
+Note that this python interface is not intended
+to provide the full functionality of the corresponding C++ 
+class.
+
+* :ref:`Class std_string`
+* :ref:`Class std_vector`
+* :ref:`Class std_vector_int`
+* :ref:`Class std_vector_size_t`
+* :ref:`Class std_vector_string`
+* :ref:`Class ublas_vector`
+* :ref:`Class ublas_vector_int`
+* :ref:`Class ublas_matrix`
+* :ref:`Class ublas_matrix_int`
+* :ref:`Class std_vector_vector`
+* :ref:`Class vec_vec_string`
+* :ref:`Class std_complex`
+* :ref:`Class lib_settings_class`
+* :ref:`Class table`
+* :ref:`Class table_units`
+* :ref:`Class uniform_grid`
+* :ref:`Class uniform_grid_end`
+* :ref:`Class uniform_grid_width`
+* :ref:`Class uniform_grid_end_width`
+* :ref:`Class uniform_grid_log_end`
+* :ref:`Class uniform_grid_log_width`
+* :ref:`Class uniform_grid_log_end_width`
+* :ref:`Class table3d`
+* :ref:`Class index_spec`
+* :ref:`Class ix_index`
+* :ref:`Class ix_fixed`
+* :ref:`Class ix_sum`
+* :ref:`Class ix_trace`
+* :ref:`Class ix_reverse`
+* :ref:`Class ix_range`
+* :ref:`Class ix_interp`
+* :ref:`Class ix_grid`
+* :ref:`Class ix_gridw`
+* :ref:`Class tensor`
+* :ref:`Class tensor_grid`
+* :ref:`Class tensor_int`
+* :ref:`Class tensor_size_t`
+* :ref:`Class find_constants_const_entry`
+* :ref:`Class find_constants`
+* :ref:`Class convert_units_der_unit`
+* :ref:`Class convert_units`
+* :ref:`Class columnify`
+* :ref:`Class format_float`
+* :ref:`Class interp`
+* :ref:`Class interp_vec`
+* :ref:`Class interp_krige_optim`
+* :ref:`Class terminal`
+* :ref:`Class gen_test_number`
+* :ref:`Class funct_string`
+* :ref:`Class comm_option_s`
+* :ref:`Class cmd_line_arg`
+* :ref:`Class cli`
+* :ref:`Class shared_ptr_table_units`
+* :ref:`Function fermi_function`
+* :ref:`Function bose_function`
+* :ref:`Function quadratic_extremum_x`
+* :ref:`Function quadratic_extremum_y`
+* :ref:`Function screenify`
+* :ref:`Function file_exists`
+* :ref:`Function RGBtoHSV`
+* :ref:`Function HSVtoRGB`
+* :ref:`Function wordexp_single_file`
+* :ref:`Function wordexp_wrapper`
+* :ref:`Function string_to_uint_list`
+* :ref:`Function vector_level_count`
+* :ref:`Function vector_deriv_interp`
+* :ref:`Function vector_deriv2_interp`
+* :ref:`Function vector_deriv_xy_interp`
+* :ref:`Function vector_deriv2_xy_interp`
+* :ref:`Function vector_integ_interp`
+* :ref:`Function vector_integ_xy_interp`
+* :ref:`Function vector_integ_ul_interp`
+* :ref:`Function vector_integ_ul_xy_interp`
+* :ref:`Function vector_find_level`
+* :ref:`Function vector_invert_enclosed_sum`
+* :ref:`Function vector_region_int`
+* :ref:`Function vector_region_fracint`
+* :ref:`Function vector_bound_fracint`
+* :ref:`Function vector_bound_int`
+* :ref:`Function rebin_xy`
+* :ref:`Function linear_or_log_chi2`
+* :ref:`Function linear_or_log_pair`
+* :ref:`Function vector_refine`
+* :ref:`Function linear_or_log`
+* :ref:`Function get_screen_size_ioctl`
 
 Class std_string
 ----------------
@@ -19,6 +105,7 @@ Class std_string
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
@@ -32,6 +119,7 @@ Class std_vector
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
@@ -45,6 +133,7 @@ Class std_vector_int
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
@@ -58,6 +147,7 @@ Class std_vector_size_t
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
@@ -71,6 +161,7 @@ Class std_vector_string
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
@@ -84,6 +175,7 @@ Class ublas_vector
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
@@ -97,6 +189,7 @@ Class ublas_vector_int
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
@@ -110,6 +203,7 @@ Class ublas_matrix
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
@@ -123,6 +217,7 @@ Class ublas_matrix_int
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
@@ -136,6 +231,7 @@ Class std_vector_vector
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 
@@ -149,6 +245,7 @@ Class vec_vec_string
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
 

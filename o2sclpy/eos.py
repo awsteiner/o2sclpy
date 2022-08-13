@@ -32,7 +32,7 @@ class eos_base:
     """
     Python interface for O\ :sub:`2`\ scl class eos_base.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_base.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_base.html .
     """
 
     _ptr=0
@@ -77,7 +77,7 @@ class eos_base:
         """
         Shallow copy function for class eos_base
         
-        Returns: a eos_base object
+        Returns: eos_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -108,7 +108,7 @@ class eos_had_base(eos_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_base.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_base.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_base.html .
     """
 
     @abstractmethod
@@ -150,7 +150,7 @@ class eos_had_base(eos_base):
         """
         Shallow copy function for class eos_had_base
         
-        Returns: a eos_had_base object
+        Returns: eos_had_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -773,7 +773,7 @@ class eos_had_eden_base(eos_had_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_eden_base.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_eden_base.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_eden_base.html .
     """
 
     @abstractmethod
@@ -815,7 +815,7 @@ class eos_had_eden_base(eos_had_base):
         """
         Shallow copy function for class eos_had_eden_base
         
-        Returns: a eos_had_eden_base object
+        Returns: eos_had_eden_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -826,7 +826,7 @@ class eos_had_pres_base(eos_had_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_pres_base.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_pres_base.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_pres_base.html .
     """
 
     @abstractmethod
@@ -868,7 +868,7 @@ class eos_had_pres_base(eos_had_base):
         """
         Shallow copy function for class eos_had_pres_base
         
-        Returns: a eos_had_pres_base object
+        Returns: eos_had_pres_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -879,7 +879,7 @@ class eos_had_temp_base(eos_had_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_temp_base.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_temp_base.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_base.html .
     """
 
     @abstractmethod
@@ -921,7 +921,7 @@ class eos_had_temp_base(eos_had_base):
         """
         Shallow copy function for class eos_had_temp_base
         
-        Returns: a eos_had_temp_base object
+        Returns: eos_had_temp_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -962,7 +962,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_temp_eden_base.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_temp_eden_base.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_eden_base.html .
     """
 
     @abstractmethod
@@ -1004,7 +1004,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
         """
         Shallow copy function for class eos_had_temp_eden_base
         
-        Returns: a eos_had_temp_eden_base object
+        Returns: eos_had_temp_eden_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1015,7 +1015,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_temp_pres_base.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_temp_pres_base.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_pres_base.html .
     """
 
     @abstractmethod
@@ -1057,7 +1057,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
         """
         Shallow copy function for class eos_had_temp_pres_base
         
-        Returns: a eos_had_temp_pres_base object
+        Returns: eos_had_temp_pres_base object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1068,7 +1068,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_skyrme.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_skyrme.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_skyrme.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1109,7 +1109,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         Shallow copy function for class eos_had_skyrme
         
-        Returns: a eos_had_skyrme object
+        Returns: eos_had_skyrme object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1460,7 +1460,7 @@ class eos_had_apr(eos_had_temp_eden_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_apr.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_apr.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_apr.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1501,7 +1501,7 @@ class eos_had_apr(eos_had_temp_eden_base):
         """
         Shallow copy function for class eos_had_apr
         
-        Returns: a eos_had_apr object
+        Returns: eos_had_apr object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -1552,7 +1552,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_had_rmf.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_had_rmf.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_rmf.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1593,7 +1593,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
         Shallow copy function for class eos_had_rmf
         
-        Returns: a eos_had_rmf object
+        Returns: eos_had_rmf object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2115,7 +2115,7 @@ class eos_quark(eos_base):
     """
     Python interface for O\ :sub:`2`\ scl class eos_quark.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_quark.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2156,7 +2156,7 @@ class eos_quark(eos_base):
         """
         Shallow copy function for class eos_quark
         
-        Returns: a eos_quark object
+        Returns: eos_quark object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2167,7 +2167,7 @@ class eos_quark_bag(eos_quark):
     """
     Python interface for O\ :sub:`2`\ scl class eos_quark_bag.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_quark_bag.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark_bag.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2208,7 +2208,7 @@ class eos_quark_bag(eos_quark):
         """
         Shallow copy function for class eos_quark_bag
         
-        Returns: a eos_quark_bag object
+        Returns: eos_quark_bag object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2239,7 +2239,7 @@ class eos_quark_njl(eos_quark):
     """
     Python interface for O\ :sub:`2`\ scl class eos_quark_njl.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_quark_njl.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark_njl.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2280,7 +2280,7 @@ class eos_quark_njl(eos_quark):
         """
         Shallow copy function for class eos_quark_njl
         
-        Returns: a eos_quark_njl object
+        Returns: eos_quark_njl object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2411,7 +2411,7 @@ class eos_tov:
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_tov.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov.html .
     """
 
     _ptr=0
@@ -2457,7 +2457,7 @@ class eos_tov:
         """
         Shallow copy function for class eos_tov
         
-        Returns: a eos_tov object
+        Returns: eos_tov object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2583,7 +2583,7 @@ class eos_tov_buchdahl(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_buchdahl.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_tov_buchdahl.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_buchdahl.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2624,7 +2624,7 @@ class eos_tov_buchdahl(eos_tov):
         """
         Shallow copy function for class eos_tov_buchdahl
         
-        Returns: a eos_tov_buchdahl object
+        Returns: eos_tov_buchdahl object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2750,7 +2750,7 @@ class eos_tov_polytrope(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_polytrope.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_tov_polytrope.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_polytrope.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2791,7 +2791,7 @@ class eos_tov_polytrope(eos_tov):
         """
         Shallow copy function for class eos_tov_polytrope
         
-        Returns: a eos_tov_polytrope object
+        Returns: eos_tov_polytrope object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2813,7 +2813,7 @@ class eos_tov_linear(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_linear.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_tov_linear.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_linear.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2854,7 +2854,7 @@ class eos_tov_linear(eos_tov):
         """
         Shallow copy function for class eos_tov_linear
         
-        Returns: a eos_tov_linear object
+        Returns: eos_tov_linear object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2876,7 +2876,7 @@ class eos_tov_interp(eos_tov):
     """
     Python interface for O\ :sub:`2`\ scl class eos_tov_interp.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/eos_tov_interp.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_interp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2917,7 +2917,7 @@ class eos_tov_interp(eos_tov):
         """
         Shallow copy function for class eos_tov_interp
         
-        Returns: a eos_tov_interp object
+        Returns: eos_tov_interp object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3039,7 +3039,7 @@ class tov_solve:
     """
     Python interface for O\ :sub:`2`\ scl class tov_solve.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/tov_solve.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/tov_solve.html .
     """
 
     _ptr=0
@@ -3084,7 +3084,7 @@ class tov_solve:
         """
         Shallow copy function for class tov_solve
         
-        Returns: a tov_solve object
+        Returns: tov_solve object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3728,7 +3728,7 @@ class tov_love:
     """
     Python interface for O\ :sub:`2`\ scl class tov_love.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/tov_love.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/tov_love.html .
     """
 
     _ptr=0
@@ -3773,7 +3773,7 @@ class tov_love:
         """
         Shallow copy function for class tov_love
         
-        Returns: a tov_love object
+        Returns: tov_love object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -3974,7 +3974,7 @@ class nstar_cold:
     """
     Python interface for O\ :sub:`2`\ scl class nstar_cold.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/nstar_cold.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nstar_cold.html .
     """
 
     _ptr=0
@@ -4019,7 +4019,7 @@ class nstar_cold:
         """
         Shallow copy function for class nstar_cold
         
-        Returns: a nstar_cold object
+        Returns: nstar_cold object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -4394,7 +4394,7 @@ class nucleus_rmf:
     """
     Python interface for O\ :sub:`2`\ scl class nucleus_rmf.
     See
-    https://neutronstars.utk.edu/code/o2scl/eos/html/class/nucleus_rmf.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/nucleus_rmf.html .
     """
 
     _ptr=0
@@ -4439,7 +4439,7 @@ class nucleus_rmf:
         """
         Shallow copy function for class nucleus_rmf
         
-        Returns: a nucleus_rmf object
+        Returns: nucleus_rmf object
         """
 
         new_obj=type(self)(self._link,self._ptr)
