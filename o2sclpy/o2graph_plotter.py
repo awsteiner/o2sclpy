@@ -32,9 +32,6 @@ import textwrap
 # For code.interact() in 'python' command
 import code 
 
-# For rectangles
-import matplotlib.patches as patches
-
 from o2sclpy.doc_data import cmaps, new_cmaps, base_list
 from o2sclpy.doc_data import extra_types, extra_list, param_list
 from o2sclpy.doc_data import yt_param_list, acol_help_topics
@@ -148,22 +145,20 @@ class o2graph_plotter(yt_plot_base):
             self.get(args[0])
                             
         else:
-                        
-            str_args='-get'
-            size_type=ctypes.c_int * (len(args)+1)
-            sizes=size_type()
-            sizes[0]=len('get')+1
-        
+
+            vs=std_vector_string(link)
+            vs.resize(len(args)+1)
+            vs[0]=b'-get'
             for i in range(0,len(args)):
-                str_args=str_args+args[i]
-                sizes[i+1]=len(args[i])
-            ccp=ctypes.c_char_p(force_bytes(str_args))
-        
-            parse_fn=o2scl.o2scl_acol_parse
-            parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                              size_type,ctypes.c_char_p]
-        
-            parse_fn(amp,len(args)+1,sizes,ccp)
+                vs[i+1]=force_bytes(args[i])
+
+            amt=acol_manager(link,amp)
+
+            if self.verbose>2:
+                print('Calling acol get function for parameter '+
+                      args[0]+'.')
+
+            amt.parse_o2graph(vs)
 
         # End of function o2graph_plotter::get_wrapper()
         return
@@ -175,22 +170,16 @@ class o2graph_plotter(yt_plot_base):
         ``o2scl_acol_parse()``.
         """
 
-        str_args='-'+cmd_name
-        size_type=ctypes.c_int * (len(args)+1)
-        sizes=size_type()
-        sizes[0]=len(cmd_name)+1
+        vs=std_vector_string(link)
+        vs.resize(len(args)+1)
         
+        vs[0]=b'-'+force_bytes(cmd_name)
         for i in range(0,len(args)):
-            str_args=str_args+args[i]
-            sizes[i+1]=len(args[i])
-        ccp=ctypes.c_char_p(force_bytes(str_args))
-
-        parse_fn=o2scl.o2scl_acol_parse
-        parse_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                           size_type,ctypes.c_char_p]
+            vs[i+1]=force_bytes(args[i])
+            
+        amt=acol_manager(link,amp)
+        amt.parse_o2graph(vs)
         
-        parse_fn(amp,len(args)+1,sizes,ccp)
-
         # End of function o2graph_plotter::gen_acol()
         return
 
@@ -1002,6 +991,8 @@ class o2graph_plotter(yt_plot_base):
                 
             print('Fill function',fill_fn)
                 
+            import matplotlib.patches as patches
+
             for i in range(0,nx.value):
 
                 iy=ctypes.c_int(i)
@@ -1194,57 +1185,24 @@ class o2graph_plotter(yt_plot_base):
                             
             failed=False
 
-            get_fn=o2scl.o2scl_acol_get_column
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr]
-            get_fn.restype=ctypes.c_int
-
-            colx1=ctypes.c_char_p(force_bytes(args[0]))
-            idx1=ctypes.c_int(0)
-            ptrx1=double_ptr()
-            get_ret=get_fn(amp,colx1,ctypes.byref(idx1),ctypes.byref(ptrx1))
-            if get_ret!=0:
-                print('Failed to get column named "'+args[0]+'".')
-                failed=True
-
-            coly1=ctypes.c_char_p(force_bytes(args[1]))
-            idy1=ctypes.c_int(0)
-            ptry1=double_ptr()
-            get_ret=get_fn(amp,coly1,ctypes.byref(idy1),ctypes.byref(ptry1))
-            if get_ret!=0:
-                print('Failed to get column named "'+args[1]+'".')
-                failed=True
-
-            if failed==False:
-                xv=[ptrx1[i] for i in range(0,idx1.value)]
-                yv=[ptry1[i] for i in range(0,idy1.value)]
+            amt=acol_manager(link,amp)
+            tab=amt.get_table_obj()
+            xv=tab[force_bytes(args[0])]
+            yv=tab[force_bytes(args[1])]
                 
             if len(args)>3:
-                colx2=ctypes.c_char_p(force_bytes(args[2]))
-                idx2=ctypes.c_int(0)
-                ptrx2=double_ptr()
-                get_ret=get_fn(amp,colx2,ctypes.byref(idx2),ctypes.byref(ptrx2))
-                if get_ret!=0:
-                    print('Failed to get column named "'+args[2]+'".')
-                    failed=True
-
-                coly2=ctypes.c_char_p(force_bytes(args[3]))
-                idy2=ctypes.c_int(0)
-                ptry2=double_ptr()
-                get_ret=get_fn(amp,coly2,ctypes.byref(idy2),ctypes.byref(ptry2))
-                if get_ret!=0:
-                    print('Failed to get column named "'+args[3]+'".')
-                    failed=True
+                zv=tab[force_bytes(args[2])]
+                wv=tab[force_bytes(args[3])]
 
                 if failed==False:
-                    for i in range(0,idx2.value):
-                        xv.append(ptrx2[idx2.value-1-i])
-                        yv.append(ptry2[idy2.value-1-i])
+                    for i in range(0,len(zv)):
+                        xv.append(zv[len(zv)-1-i])
+                        yv.append(wv[len(zv)-1-i])
 
             if failed==False:
                 # Make sure the loop is closed
-                xv.append(ptrx1[0])
-                yv.append(ptry1[0])
+                xv.append(zv[0])
+                yv.append(wv[0])
         
                 if self.canvas_flag==False:
                     self.canvas()
@@ -1294,57 +1252,21 @@ class o2graph_plotter(yt_plot_base):
                             
             failed=False
 
-            get_fn=o2scl.o2scl_acol_get_column
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr]
-            get_fn.restype=ctypes.c_int
-
-            colx=ctypes.c_char_p(force_bytes(args[0]))
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
-            if get_ret!=0:
-                print('Failed to get column named "'+args[0]+'".')
-                failed=True
-
-            coly=ctypes.c_char_p(force_bytes(args[1]))
-            idy=ctypes.c_int(0)
-            ptry=double_ptr()
-            get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
-            if get_ret!=0:
-                print('Failed to get column named "'+args[1]+'".')
-                failed=True
-
-            if failed==False:
-                xv=[ptrx[i] for i in range(0,idx.value)]
-                yv=[ptry[i] for i in range(0,idy.value)]
+            amt=acol_manager(link,amp)
+            tab=amt.get_table_obj()
+            xv=tab[force_bytes(args[0])]
+            yv=tab[force_bytes(args[1])]
 
             sv=[]
             cv=[]
 
             if (len(args)>2 and force_bytes(args[2])!=b'None' and
                 force_bytes(args[2])!=b'none'):
-                cols=ctypes.c_char_p(force_bytes(args[2]))
-                ids=ctypes.c_int(0)
-                ptrs=double_ptr()
-                get_ret=get_fn(amp,cols,ctypes.byref(ids),ctypes.byref(ptrs))
-                if get_ret!=0:
-                    print('Failed to get column named "'+args[2]+'".')
-                    failed=True
-                else:
-                    sv=[ptrs[i] for i in range(0,ids.value)]
+                sv=tab[force_bytes(args[2])]
 
             if (len(args)>3 and force_bytes(args[3])!=b'None' and
                 force_bytes(args[3])!=b'none'):
-                colc=ctypes.c_char_p(force_bytes(args[3]))
-                idc=ctypes.c_int(0)
-                ptrc=double_ptr()
-                get_ret=get_fn(amp,colc,ctypes.byref(idc),ctypes.byref(ptrc))
-                if get_ret!=0:
-                    print('Failed to get column named "'+args[3]+'".')
-                    failed=True
-                else:
-                    cv=[ptrc[i] for i in range(0,idc.value)]
+                cv=tab[force_bytes(args[3])]
 
             if failed==False:
                 
@@ -1421,20 +1343,12 @@ class o2graph_plotter(yt_plot_base):
         curr_type=o2scl_get_type(o2scl,amp,link)
                         
         if curr_type==b'table':
-                            
-            get_fn=o2scl.o2scl_acol_get_column
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr]
-            get_fn.restype=ctypes.c_int
 
-            colx=ctypes.c_char_p(force_bytes(args[0]))
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
             failed=False
-            if get_ret!=0:
-                print('Failed to get column named "'+args[0]+'".')
-                failed=True
+                
+            amt=acol_manager(link,amp)
+            tab=amt.get_table_obj()
+            xv=tab[force_bytes(args[0])]
 
             if failed==False:
                 xv=[ptrx[i] for i in range(0,idx.value)]
@@ -1518,32 +1432,14 @@ class o2graph_plotter(yt_plot_base):
                         
         if curr_type==b'table':
                             
-            get_fn=o2scl.o2scl_acol_get_column
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr]
-            get_fn.restype=ctypes.c_int
+            amt=acol_manager(link,amp)
+            tab=amt.get_table_obj()
+            xv=tab[force_bytes(args[0])]
+            yv=tab[force_bytes(args[1])]
 
             failed=False
 
-            colx=ctypes.c_char_p(force_bytes(args[0]))
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            get_ret=get_fn(amp,colx,ctypes.byref(idx),ctypes.byref(ptrx))
-            if get_ret!=0:
-                print('Failed to get column named "'+args[0]+'".')
-                failed=True
-            
-            coly=ctypes.c_char_p(force_bytes(args[1]))
-            idy=ctypes.c_int(0)
-            ptry=double_ptr()
-            get_ret=get_fn(amp,coly,ctypes.byref(idy),ctypes.byref(ptry))
-            if get_ret!=0:
-                print('Failed to get column named "'+args[1]+'".')
-                failed=True
-
             if failed==False:
-                xv=[ptrx[i] for i in range(0,idx.value)]
-                yv=[ptry[i] for i in range(0,idy.value)]
         
                 if self.canvas_flag==False:
                     self.canvas()

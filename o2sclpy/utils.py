@@ -187,32 +187,10 @@ def table_get_column(o2scl,amp,name,return_pointer=False):
     in the acol_manager object 'amp'
     """
 
-    # C types
-    int_ptr=ctypes.POINTER(ctypes.c_int)
-    double_ptr=ctypes.POINTER(ctypes.c_double)
-    double_ptr_ptr=ctypes.POINTER(double_ptr)
+    amt=acol_manager(link,amp)
+    tab=amt.get_table_obj()
+    col=tab[force_bytes(name)]
 
-    # Function interface
-    get_fn=o2scl.o2scl_acol_get_column
-    get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                     int_ptr,double_ptr_ptr]
-    get_fn.restype=ctypes.c_int
-
-    # Arguments
-    col=ctypes.c_char_p(force_bytes(name))
-    size=ctypes.c_int(0)
-    pointer=double_ptr()
-
-    # Function call
-    get_ret=get_fn(amp,col,ctypes.byref(size),ctypes.byref(pointer))
-    if get_ret!=0:
-        print('Failed to get column named "'+name+'".')
-        return None
-
-    if return_pointer:
-        return pointer
-        
-    col=[pointer[i] for i in range(0,size.value)]
     return col
 
 def is_number(s):
