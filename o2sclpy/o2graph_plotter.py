@@ -1206,34 +1206,32 @@ class o2graph_plotter(yt_plot_base):
                 zv=tab[force_bytes(args[2])]
                 wv=tab[force_bytes(args[3])]
 
-                if failed==False:
-                    for i in range(0,len(zv)):
-                        numpy.append(xv,zv[len(zv)-1-i])
-                        numpy.append(yv,wv[len(wv)-1-i])
+                for i in range(0,len(zv)):
+                    numpy.append(xv,zv[len(zv)-1-i])
+                    numpy.append(yv,wv[len(wv)-1-i])
 
-            if failed==False:
                 # Make sure the loop is closed
                 numpy.append(xv,zv[0])
                 numpy.append(yv,wv[0])
         
-                if self.canvas_flag==False:
-                    self.canvas()
-                if len(args)==3:
-                    self.axes.fill(xv,yv,**string_to_dict(args[2]))
-                elif len(args)==5:
-                    self.axes.fill(xv,yv,**string_to_dict(args[4]))
-                else:
-                    self.axes.fill(xv,yv)
+            if self.canvas_flag==False:
+                self.canvas()
+            if len(args)==3:
+                self.axes.fill(xv,yv,**string_to_dict(args[2]))
+            elif len(args)==5:
+                self.axes.fill(xv,yv,**string_to_dict(args[4]))
+            else:
+                self.axes.fill(xv,yv)
 
-                if self.logx==True:
-                    self.axes.set_xscale('log')
-                if self.logy==True:
-                    self.axes.set_yscale('log')
+            if self.logx==True:
+                self.axes.set_xscale('log')
+            if self.logy==True:
+                self.axes.set_yscale('log')
                     
-                if self.xset==True:
-                    self.axes.set_xlim(self.xlo,self.xhi)
-                if self.yset==True:
-                    self.axes.set_ylim(self.ylo,self.yhi)
+            if self.xset==True:
+                self.axes.set_xlim(self.xlo,self.xhi)
+            if self.yset==True:
+                self.axes.set_ylim(self.ylo,self.yhi)
                                  
             # End of section for 'table' type
         else:
@@ -3126,7 +3124,7 @@ class o2graph_plotter(yt_plot_base):
                 rescale_r=False
                 rescale_g=False
                 rescale_b=False
-                for i in range(0,idr.value):
+                for i in range(0,len(ptrr)):
                     if ptrr[i]<0.0 or ptrr[i]>1.0:
                         rescale_r=True
                     if ptrg[i]<0.0 or ptrg[i]>1.0:
@@ -3136,7 +3134,7 @@ class o2graph_plotter(yt_plot_base):
                 if rescale_r:
                     min_r=ptrr[0]
                     max_r=ptrr[0]
-                    for i in range(0,idr.value):
+                    for i in range(0,len(ptrr)):
                         if ptrr[i]<min_r:
                             min_r=ptrr[i]
                         if ptrr[i]>max_r:
@@ -3144,7 +3142,7 @@ class o2graph_plotter(yt_plot_base):
                 if rescale_g:
                     min_g=ptrg[0]
                     max_g=ptrg[0]
-                    for i in range(0,idr.value):
+                    for i in range(0,len(ptrg)):
                         if ptrg[i]<min_g:
                             min_g=ptrg[i]
                         if ptrg[i]>max_g:
@@ -3152,7 +3150,7 @@ class o2graph_plotter(yt_plot_base):
                 if rescale_b:
                     min_b=ptrb[0]
                     max_b=ptrb[0]
-                    for i in range(0,idr.value):
+                    for i in range(0,len(ptrb)):
                         if ptrb[i]<min_b:
                             min_b=ptrb[i]
                         if ptrb[i]>max_b:
@@ -3160,23 +3158,23 @@ class o2graph_plotter(yt_plot_base):
                 if rescale_r:
                     print('Rescaling red range   (%0.6e,%0.6e) to (0,1)' %
                           (min_r,max_r))
-                    for i in range(0,idr.value):
+                    for i in range(0,len(ptrr)):
                         ptrr[i]=(ptrr[i]-min_r)/(max_r-min_r)
                 if rescale_g:
                     print('Rescaling green range (%0.6e,%0.6e) to (0,1)' %
                           (min_g,max_g))
-                    for i in range(0,idg.value):
+                    for i in range(0,len(ptrg)):
                         ptrg[i]=(ptrg[i]-min_g)/(max_g-min_g)
                 if rescale_b:
                     print('Rescaling blue range  (%0.6e,%0.6e) to (0,1)' %
                           (min_b,max_b))
-                    for i in range(0,idb.value):
+                    for i in range(0,len(ptrb)):
                         ptrb[i]=(ptrb[i]-min_b)/(max_b-min_b)
                 
             if self.xset==False:
                 self.xlo=ptrx[0]
                 self.xhi=ptrx[0]
-                for i in range(0,idx.value):
+                for i in range(0,len(ptrx)):
                     if ptrx[i]<self.xlo:
                         self.xlo=ptrx[i]
                     if ptrx[i]>self.xhi:
@@ -3186,7 +3184,7 @@ class o2graph_plotter(yt_plot_base):
             if self.yset==False:
                 self.ylo=ptry[0]
                 self.yhi=ptry[0]
-                for i in range(0,idy.value):
+                for i in range(0,len(ptry)):
                     if ptry[i]<self.ylo:
                         self.ylo=ptry[i]
                     if ptry[i]>self.yhi:
@@ -3196,7 +3194,7 @@ class o2graph_plotter(yt_plot_base):
             if self.zset==False:
                 self.zlo=ptrz[0]
                 self.zhi=ptrz[0]
-                for i in range(0,idz.value):
+                for i in range(0,len(ptrz)):
                     if ptrz[i]<self.zlo:
                         self.zlo=ptrz[i]
                     if ptrz[i]>self.zhi:
@@ -3218,7 +3216,7 @@ class o2graph_plotter(yt_plot_base):
             pts=[]
             cols=[]
             sizes=[]
-            for i in range(0,idx.value):
+            for i in range(0,len(ptrx)):
                 pts.append([(ptrx[i]-self.xlo)/x_range,
                             (ptry[i]-self.ylo)/y_range,
                             (ptrz[i]-self.zlo)/z_range])
@@ -4562,7 +4560,7 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-scatter.')
                     else:
-                        self.yt_scatter(o2scl,amp,strlist[ix+1:ix_next])
+                        self.yt_scatter(o2scl,amp,link,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-path':
 

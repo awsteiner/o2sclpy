@@ -130,7 +130,7 @@ if plots:
     pl.xtitle(r'$ n_B~(\mathrm{fm}^{-3}) $')
     pl.ytitle(r'$ T~(\mathrm{MeV}) $')
     pl.ttext(1.25,0.5,r'$ E/A~(\mathrm{MeV}) $',rotation=90)
-    pl.den_plot_direct(t3d,'EoA')
+    pl.den_plot(t3d,'EoA')
     plot.show()
 
 # For testing purposes

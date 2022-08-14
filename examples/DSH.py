@@ -65,7 +65,7 @@ if plots:
     pl.xtitle(r'$ n_B~(\mathrm{fm}^{-3}) $')
     pl.ytitle(r'$ T~(\mathrm{MeV}) $')
     pl.ttext(1.25,0.5,u'$ A $',rotation=90)
-    pl.den_plot_direct(t3d,'A')
+    pl.den_plot(t3d,'A')
     plot.show()
 
 # For testing purposes
