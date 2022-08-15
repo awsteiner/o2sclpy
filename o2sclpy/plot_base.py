@@ -740,45 +740,44 @@ class plot_base:
         o2graph argument <arrow properties> is the python dictionary
         for the 'arrowprops' argument to annotate(). The arrowstyle
         and connectionstyle attributes should be listed along with
-        other arrowprops attributes. Examples for arrowprops are:
+        other arrowprops attributes. Examples for arrowprops are::
 
-        * arrowstyle=->,connectionstyle=arc3
-        * arrowstyle=-|>,connectionstyle=arc,fc=red,ec=blue
-        * arrowstyle=-|>,connectionstyle=arc,head_length=4.0,
-          head_width=1.0
-        * arrowstyle=->,connectionstyle=arc3,head_length=4.0,
-          head_width=1.0,rad=-0.1 
-        * arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,
-          head_width=1.0,rad=-0.1
+            * arrowstyle=->,connectionstyle=arc3
+            * arrowstyle=-|>,connectionstyle=arc,fc=red,ec=blue
+            * arrowstyle=-|>,connectionstyle=arc,head_length=4.0,
+              head_width=1.0
+            * arrowstyle=->,connectionstyle=arc3,head_length=4.0,
+              head_width=1.0,rad=-0.1 
+            * arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,
+              head_width=1.0,rad=-0.1
+        
+        Summary for arrowstyle argument (angleB is renamed to 
+        as_angleB)::
 
-        Summary for arrowstyle argument (angleB is renamed to as_angleB):
-
-        Name    Attributes
-        * -       None
-        * ->      head_length=0.4,head_width=0.2
-        * -[      widthB=1.0,lengthB=0.2,as_angleB=None
-        * |-      widthA=1.0,widthB=1.0
-        * -|      head_length=0.4,head_width=0.2
-        * <-      head_length=0.4,head_width=0.2
-        * <-      head_length=0.4,head_width=0.2
-        * <|      head_length=0.4,head_width=0.2
-        * <|      head_length=0.4,head_width=0.2
-        * fancy   head_length=0.4,head_width=0.4,tail_width=0.4
-        * simple  head_length=0.5,head_width=0.5,tail_width=0.2
-        * wedge   tail_width=0.3,shrink_factor=0.5
-
+            Name    Attributes
+            -       None
+            ->      head_length=0.4,head_width=0.2
+            -[      widthB=1.0,lengthB=0.2,as_angleB=None
+            |-      widthA=1.0,widthB=1.0
+            -|      head_length=0.4,head_width=0.2
+            <-      head_length=0.4,head_width=0.2
+            <|      head_length=0.4,head_width=0.2
+            fancy   head_length=0.4,head_width=0.4,tail_width=0.4
+            simple  head_length=0.5,head_width=0.5,tail_width=0.2
+            wedge   tail_width=0.3,shrink_factor=0.5
+        
         (note that fancy, simple or wedge require arc3 or angle3 connection 
         styles)
 
         Summary for connectionstyle argument (angleB is renamed to 
-        cs_angleB):
+        cs_angleB)::
 
-        Name    Attributes
-        * angle   angleA=90,cs_angleB=0,rad=0.0
-        * angle3  angleA=90,cs_angleB=0
-        * arc     angleA=0,cs_angleB=0,armA=None,armB=None,rad=0.0
-        * arc3    rad=0.0
-        * bar     armA=0.0,armB=0.0,fraction=0.3,angle=None
+            Name    Attributes
+            * angle   angleA=90,cs_angleB=0,rad=0.0
+            * angle3  angleA=90,cs_angleB=0
+            * arc     angleA=0,cs_angleB=0,armA=None,armB=None,rad=0.0
+            * arc3    rad=0.0
+            * bar     armA=0.0,armB=0.0,fraction=0.3,angle=None
 
         See https://matplotlib.org/2.0.2/users/annotations.html for more.
 
