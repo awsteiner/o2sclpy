@@ -1841,10 +1841,9 @@ class lib_settings_class:
 
 class table:
     """
-    Python interface for O₂scl class ``table<>``,
+    Python interface for O\ :sub:`2`\ scl class ``table``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/table<>.html .
-    
+    https://neutronstars.utk.edu/code/o2scl/html/class/table.html .
     """
 
     _ptr=0
@@ -2667,10 +2666,9 @@ class table:
 
 class table_units(table):
     """
-    Python interface for O₂scl class ``table_units<>``,
+    Python interface for O\ :sub:`2`\ scl class ``table_units``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/table_units<>.html .
-    
+    https://neutronstars.utk.edu/code/o2scl/html/class/table_units.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2799,10 +2797,9 @@ class table_units(table):
 
 class uniform_grid:
     """
-    Python interface for O₂scl class ``uniform_grid<>``,
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid<>.html .
-    
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid.html .
     """
 
     _ptr=0
@@ -2937,10 +2934,9 @@ class uniform_grid:
 
 class uniform_grid_end(uniform_grid):
     """
-    Python interface for O₂scl class ``uniform_grid_end<>``,
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end<>.html .
-    
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3004,10 +3000,9 @@ class uniform_grid_end(uniform_grid):
 
 class uniform_grid_width(uniform_grid):
     """
-    Python interface for O₂scl class ``uniform_grid_width<>``,
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_width``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_width<>.html .
-    
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_width.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3071,10 +3066,9 @@ class uniform_grid_width(uniform_grid):
 
 class uniform_grid_end_width(uniform_grid):
     """
-    Python interface for O₂scl class ``uniform_grid_end_width<>``,
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end_width``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end_width<>.html .
-    
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end_width.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3138,10 +3132,9 @@ class uniform_grid_end_width(uniform_grid):
 
 class uniform_grid_log_end(uniform_grid):
     """
-    Python interface for O₂scl class ``uniform_grid_log_end<>``,
+    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_end<>.html .
-    
+    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_end.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -5142,6 +5135,24 @@ class tensor:
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
+
+    def convert_table3d_sum(self,ix_x,ix_y,tab,x_name="x",y_name="y",slice_name="z"):
+        """
+        | Parameters:
+        | *ix_x*: ``size_t``
+        | *ix_y*: ``size_t``
+        | *tab*: :class:`table3d` object
+        | *x_name* ="x": string
+        | *y_name* ="y": string
+        | *slice_name* ="z": string
+        """
+        x_name_=ctypes.c_char_p(force_bytes(x_name))
+        y_name_=ctypes.c_char_p(force_bytes(y_name))
+        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        func=self._link.o2scl.o2scl_tensor__convert_table3d_sum
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
+        return
 
     def rearrange_and_copy(self,spec,verbose=0,err_on_fail=True):
         """

@@ -1207,12 +1207,12 @@ class o2graph_plotter(yt_plot_base):
                 wv=tab[force_bytes(args[3])]
 
                 for i in range(0,len(zv)):
-                    numpy.append(xv,zv[len(zv)-1-i])
-                    numpy.append(yv,wv[len(wv)-1-i])
+                    xv=numpy.append(xv,zv[len(zv)-1-i])
+                    yv=numpy.append(yv,wv[len(wv)-1-i])
 
                 # Make sure the loop is closed
-                numpy.append(xv,zv[0])
-                numpy.append(yv,wv[0])
+                xv=numpy.append(xv,zv[0])
+                yv=numpy.append(yv,wv[0])
         
             if self.canvas_flag==False:
                 self.canvas()
