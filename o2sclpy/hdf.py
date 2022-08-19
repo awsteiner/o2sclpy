@@ -1073,22 +1073,22 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
-    def run_o2graph(self):
+    def run_empty(self):
         """
         | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_hdf_acol_manager_run_o2graph
+        func=self._link.o2scl.o2scl_hdf_acol_manager_run_empty
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
 
-    def parse_o2graph(self,args):
+    def parse_vec_string(self,args):
         """
         | Parameters:
         | *args*: :class:`std_vector_string` object
         """
-        func=self._link.o2scl.o2scl_hdf_acol_manager_parse_o2graph
+        func=self._link.o2scl.o2scl_hdf_acol_manager_parse_vec_string
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,args._ptr)
         return

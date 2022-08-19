@@ -132,7 +132,7 @@ class o2graph_plotter(yt_plot_base):
         if self.verbose>2:
             print('Calling acol set function for parameter '+args[0]+'.')
             
-        amt.parse_o2graph(vs)
+        amt.parse_vec_string(vs)
 
         # End of function o2graph_plotter::set_wrapper()
         return
@@ -170,7 +170,7 @@ class o2graph_plotter(yt_plot_base):
                 print('Calling acol get function for parameter '+
                       args[0]+'.')
 
-            amt.parse_o2graph(vs)
+            amt.parse_vec_string(vs)
 
         # End of function o2graph_plotter::get_wrapper()
         return
@@ -190,7 +190,7 @@ class o2graph_plotter(yt_plot_base):
             vs[i+1]=force_bytes(args[i])
             
         amt=acol_manager(link,amp)
-        amt.parse_o2graph(vs)
+        amt.parse_vec_string(vs)
         
         # End of function o2graph_plotter::gen_acol()
         return
@@ -1883,7 +1883,7 @@ class o2graph_plotter(yt_plot_base):
         # Create an acol_manager object and get the pointer
         am=acol_manager(link)
         amp=am._ptr
-        am.run_o2graph()
+        am.run_empty()
         cl=am.get_cl()
 
         names_fn=o2scl.o2scl_acol_set_names

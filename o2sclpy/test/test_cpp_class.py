@@ -121,6 +121,26 @@ def subtest_ublas_vector(link):
     
     return
 
+def subtest_ublas_vector_int(link):
+    # Test the ublas_vector class
+    v=o2sclpy.ublas_vector_int(link)
+    v.resize(5)
+    v[0]=3
+    v[1]=1
+    v[2]=4
+    v[3]=1
+    v[4]=5
+    v2=v.to_numpy()
+    for i in range(0,5):
+        assert v2[i]==v[i],'resize(), setitem(), to_numpy()'
+    v3=v
+    v3[0]=1.0
+    assert v[0]==1,'getitem and shallow copy'
+    assert v3.size()==5,'size()'
+    assert len(v3)==5,'len()'
+    
+    return
+
 def subtest_ublas_matrix(link):
     # Test the ublas_matrix class
     v=o2sclpy.ublas_matrix(link)
@@ -178,6 +198,17 @@ def subtest_std_vector_vector(link):
     assert numpy.allclose(vv[2][3],7,1.0e-14),'vv'
     return
     
+def subtest_vec_vec_string(link):
+    # Test the std_complex class
+    vv=o2sclpy.vec_vec_string(link)
+    vv.resize(3)
+    assert vv.size()==3,'vv size'
+    vv[0]=[b'this',b'is',b'a']
+    vv[1]=[b'test',b'of']
+    vv[2]=[b'the',b'emergency',b'broadcasting',b'system.']
+    assert vv[2][3]==b'broadcasting','vvs'
+    return
+    
 def subtest_std_complex(link):
     # Test the std_complex class
     c=o2sclpy.std_complex(link)
@@ -201,11 +232,15 @@ def test_all():
     subtest_std_vector_size_t(link)
     subtest_std_vector_string(link)
     subtest_ublas_vector(link)
+    subtest_ublas_vector_int(link)
     subtest_ublas_matrix(link)
     subtest_ublas_matrix_int(link)
     subtest_std_vector_vector(link)
+    subtest_vec_vec_string(link)
     subtest_std_complex(link)
 
     return
     
-    
+if __name__ == '__main__':
+    test_all()
+    print('All tests passed.')
