@@ -1573,7 +1573,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::errorbar()
         return
                                  
-    def plot1(self,o2scl,amp,args):
+    def plot1(self,o2scl,amp,link,args):
         """
         Plot one array of data versus an integer x axis.
         """
@@ -1595,7 +1595,7 @@ class o2graph_plotter(yt_plot_base):
             yv=tab[force_bytes(args[0])]
 
             if failed==False:
-                xv=[i for i in range(0,idx.value)]
+                xv=[i for i in range(0,len(yv))]
         
                 if self.canvas_flag==False:
                     self.canvas()
@@ -4897,7 +4897,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process plot1.')
                         print('args:',strlist[ix:ix_next])
                         
-                    self.plot1(o2scl,amp,strlist[ix+1:ix_next])
+                    self.plot1(o2scl,amp,link,strlist[ix+1:ix_next])
                             
                 elif cmd_name=='plotv':
                     
