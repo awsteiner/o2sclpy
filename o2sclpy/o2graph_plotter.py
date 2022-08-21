@@ -229,7 +229,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::gen_acol()
         return
 
-    def den_plot(self,o2scl,amp,link,args):
+    def den_plot_o2graph(self,o2scl,amp,link,args):
         """
         Density plot from a ``table3d``, ``hist_2d``, ``tensor_grid``,
         ``tensor``, ``tensor<int>``, or ``tensor<size_t>`` object.
@@ -242,255 +242,52 @@ class o2graph_plotter(yt_plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
 
         curr_type=o2scl_get_type(o2scl,amp,link)
+        amt=acol_manager(link,amp)
 
-        # Handle tensor and table3d types
-        if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
-            curr_type==b'tensor_grid' or curr_type==b'tensor<int>' or
-            curr_type==b'table3d'):
-
-            kwstring=''
-            
-            # If the object is a tensor, convert to a table3d
-            # object before plotting
-            if curr_type!=b'table3d':
-                index1=0
-                index2=1
-                if len(args)==1:
-                    kwstring=args[0]
-                if len(args)>=2:
-                    index1=int(args[0])
-                    index2=int(args[1])
-                if len(args)>=3:
-                    kwstring=args[2]
-                if index1+index2!=1 and index1*index2!=0:
-                    print('Indices must be "0 1" or "1 0" in',
-                          'in den-plot.')
-                    return
-                    
-                conv_fn=o2scl.o2scl_acol_tensor_to_table3d
-                conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
-                conv_fn.restype=ctypes.c_int
-                
-                conv_ret=conv_fn(amp,index1,index2)
-                if conv_ret!=0:
-                    print('Automatic conversion to table3d failed.')
-                    return
-                slice_name="tensor"
-            else:
-                slice_name=args[0]
-                if len(args)>=2:
-                    kwstring=args[1]
-
-            # Now that we are guaranteed to have a table3d
-            # object to use, use that to create the density
-            # plot
-            get_fn=o2scl.o2scl_acol_get_slice
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr,
-                             int_ptr,double_ptr_ptr,double_ptr_ptr]
-
-            slice=ctypes.c_char_p(force_bytes(slice_name))
-            nx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            ny=ctypes.c_int(0)
-            ptry=double_ptr()
-            ptrs=double_ptr()
-            get_fn(amp,slice,ctypes.byref(nx),ctypes.byref(ptrx),
-                   ctypes.byref(ny),ctypes.byref(ptry),
-                   ctypes.byref(ptrs))
-
-            xgrid=[ptrx[i] for i in range(0,nx.value)]
-            ygrid=[ptry[i] for i in range(0,ny.value)]
-            stemp=[ptrs[i] for i in range(0,nx.value*ny.value)]
-            stemp2=numpy.array(stemp)
-            sl=stemp2.reshape(nx.value,ny.value)
-            sl=sl.transpose()
-
-            # If logz was specified, then manually apply the
-            # log to the data. Alternatively, we should consider
-            # using 'LogNorm' here, as suggested in
-            
-            #https://stackoverflow.com/questions/2546475/
-            #how-can-i-draw-a-log-normalized-imshow-plot-
-            #with-a-colorbar-representing-the-raw
-
-            if self.logz==True:
-                fail_found=False
-                for i in range(0,ny.value):
-                    for j in range(0,nx.value):
-                        if sl[i][j]>0.0:
-                            sl[i][j]=math.log10(sl[i][j])
-                        else:
-                            if fail_found==False:
-                                print('Failed to take log of',sl[i][j],
-                                      'at (i,j)=(',j,',',i,') or (',
-                                      xgrid[j],',',ygrid[i],
-                                      '). Setting point to zero and',
-                                      'suppressing future warnings.')
-                            fail_found=True
-                            sl[i][j]=0.0
-                                
-            # If the z range was specified, truncate all values
-            # outside that range (this truncation is done after
-            # the application of the log above)
-            if self.zset==True:
-                for i in range(0,ny.value):
-                    for j in range(0,nx.value):
-                        if sl[i][j]>self.zhi:
-                            sl[i][j]=self.zhi
-                        elif sl[i][j]<self.zlo:
-                            sl[i][j]=self.zlo
-
-            if self.canvas_flag==False:
-                self.canvas()
-
-            dctt=string_to_dict(kwstring)
-            if dctt.pop('pcm',None)==True:
-                
-                print('Creating density plot using pcolormesh()')
-                if self.logx==True:
-                    self.axes.set_xscale('log')
-                if self.logy==True:
-                    self.axes.set_yscale('log')
-                self.last_image=self.axes.pcolormesh(xgrid,ygrid,sl,**dctt)
-                
-            else:
-
-                # The imshow() function doesn't work with a log axis, so we
-                # set the scales back to linear and manually take the log
-                self.axes.set_xscale('linear')
-                self.axes.set_yscale('linear')
-            
-                if self.logx==True:
-                    xgrid=[math.log(ptrx[i],10) for i in
-                           range(0,nx.value)]
-                if self.logy==True:
-                    ygrid=[math.log(ptry[i],10) for i in
-                           range(0,ny.value)]
-
-                diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
-                mean_x=numpy.mean(diffs_x)
-                std_x=numpy.std(diffs_x)
-                diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
-                mean_y=numpy.mean(diffs_y)
-                std_y=numpy.std(diffs_y)
-            
-                if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
-                    print('Warning in o2graph::o2graph_plotter::den_plot():')
-                    print('  Nonlinearity of x or y grid is greater than '+
-                          '10^{-4}.')
-                    print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
-                          (std_x/mean_x))
-                    print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
-                          (std_y/mean_y))
-                    print('  The density plot may not be properly scaled.')
-                
-                extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-                extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
-                                           xgrid[nx.value-2])/2
-                extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-                extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
-                                           ygrid[ny.value-2])/2
-
-                f=self.axes.imshow
-                if len(kwstring)==0:
-                    self.last_image=f(sl,interpolation='nearest',
-                                      origin='lower',extent=[extent1,extent2,
-                                                             extent3,extent4],
-                                      aspect='auto')
-                else:
-                    self.last_image=f(sl,interpolation='nearest',
-                                      origin='lower',extent=[extent1,extent2,
-                                                             extent3,extent4],
-                                      aspect='auto',
-                                      **string_to_dict(kwstring))
-
-                # AWS 7/1/2020: I'm not sure why imshow() is now
-                # apparently mangling the minor tick settings. This
-                # restores them. 
-                self.axes.minorticks_on()
-                self.axes.tick_params('both',length=12,width=1,which='major')
-                self.axes.tick_params('both',length=5,width=1,which='minor')
-                self.axes.tick_params(labelsize=self.font*0.8)
-
-            # The color bar is added later below...
-
-            # End of section for tensor types and table3d
-        elif curr_type==b'hist_2d':
-
-            get_fn=o2scl.o2scl_acol_get_hist_2d
-            get_fn.argtypes=[ctypes.c_void_p,int_ptr,double_ptr_ptr,
-                             int_ptr,double_ptr_ptr,double_ptr_ptr]
-
-            nx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            ny=ctypes.c_int(0)
-            ptry=double_ptr()
-            ptrs=double_ptr()
-            get_fn(amp,ctypes.byref(nx),ctypes.byref(ptrx),
-                   ctypes.byref(ny),ctypes.byref(ptry),
-                   ctypes.byref(ptrs))
-
-            xgrid=[ptrx[i] for i in range(0,nx.value)]
-            ygrid=[ptry[i] for i in range(0,ny.value)]
-            stemp=[ptrs[i] for i in range(0,nx.value*ny.value)]
-            stemp2=numpy.array(stemp)
-            sl=stemp2.reshape(nx.value,ny.value)
-            sl=sl.transpose()
-
-            if self.logx==True:
-                xgrid=[math.log(ptrx[i],10) for i in
-                       range(0,nx.value)]
-            if self.logy==True:
-                ygrid=[math.log(ptry[i],10) for i in
-                       range(0,ny.value)]
-
-            if self.zset==True:
-                for i in range(0,ny.value):
-                    for j in range(0,nx.value):
-                        if sl[i][j]>self.zhi:
-                            sl[i][j]=self.zhi
-                        elif sl[i][j]<self.zlo:
-                            sl[i][j]=self.zlo
-                            
-            if self.logz==True:
-                for i in range(0,ny.value):
-                    for j in range(0,nx.value):
-                        sl[i][j]=math.log10(sl[i][j])
-                        
-            if self.canvas_flag==False:
-                self.canvas()
-
-            extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-            extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
-                                       xgrid[nx.value-2])/2
-            extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-            extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
-                                       ygrid[ny.value-2])/2
-                        
-            if len(args)<1:
-                self.last_image=self.axes.imshow(sl,interpolation='nearest',
-                            origin='lower',extent=[extent1,extent2,
-                                                   extent3,extent4],
-                            aspect='auto')
-            else:
-                self.last_image=self.axes.imshow(sl,interpolation='nearest',
-                            origin='lower',extent=[extent1,extent2,
-                                                   extent3,extent4],
-                            aspect='auto',**string_to_dict(args[0]))
-
-            # The color bar is added later below...
-
-            # End of section for type hist_2d
-        else:
+        kwstring=''
+        slice_name=''
+        if curr_type==b'tensor':
+            amt.tensor_obj.copy_table3d(args[0],args[1],
+                                        amt.table3d_obj)
+            slice_name='z'
+            if len(args)>=3:
+                kwstring=args[2]
+        elif curr_type=b'tensor<size_t>':
+            amt.tensor_size_t_obj.copy_table3d(args[0],args[1],
+                                               amt.table3d_obj)
+            slice_name='z'
+            if len(args)>=3:
+                kwstring=args[2]
+        elif curr_type=b'tensor<int>':
+            amt.tensor_int_obj.copy_table3d(args[0],args[1],
+                                            amt.table3d_obj)
+            slice_name='z'
+            if len(args)>=3:
+                kwstring=args[2]
+        elif curr_type=b'tensor_grid':
+            svst=o2sclpy.std_vector_size_t(link)
+            svst.resize(amt.tensor_grid_obj.get_rank())
+            func=amt.tensor_grid_obj.copy_table3d_align_setxy
+            func(args[0],args[1],svst,amt.table3d_obj)
+            slice_name='z'
+            if len(args)>=3:
+                kwstring=args[2]
+        elif curr_type=b'hist_2d':
+            print('not yet supported.')
+            return
+        elif curr_type=b'table3d':
+            slice_name=args[0]
+            if len(args)>=2:
+                kwstring=args[1]
+        else curr_type!=b'table3d':
             print("Command 'den-plot' not supported for type",
                   curr_type,".")
             return
 
-        if self.colbar==True:
-            cbar=self.fig.colorbar(self.last_image,ax=self.axes)
-            cbar.ax.tick_params('both',length=6,width=1,which='major')
-            cbar.ax.tick_params(labelsize=self.font*0.8)
+        dctt=string_to_dict(kwstring)
+        den_plot(amt.table3d_obj,slice_name,**dctt)
+
+        return
 
     def den_plot_rgb(self,o2scl,amp,args):
         """
@@ -4918,7 +4715,8 @@ class o2graph_plotter(yt_plot_base):
                         print('Process den-plot.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.den_plot(o2scl,amp,link,strlist[ix+1:ix_next])
+                    self.den_plot_o2graph(o2scl,amp,link,
+                                          strlist[ix+1:ix_next])
                 
                 elif cmd_name=='den-plot-rgb':
                     

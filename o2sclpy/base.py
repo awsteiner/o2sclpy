@@ -1056,7 +1056,7 @@ class ublas_matrix:
         func(self._ptr,m,n)
         return
 
-    def __getitem__(self,tup):
+    def __getitem__(self,matrix_tuple):
         """
         | Parameters:
         | *m*: ``size_t``
@@ -1065,12 +1065,12 @@ class ublas_matrix:
         func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_double__getitem
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
-        m,n=tup
+        m,n=matrix_tuple
         ret=func(self._ptr,m,n)
         return ret
 
-    def __setitem__(self,tup,value):
-        m,n=tup
+    def __setitem__(self,matrix_tuple,value):
+        m,n=matrix_tuple
         func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_double__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_double]
         func(self._ptr,m,n,value)
@@ -1186,7 +1186,7 @@ class ublas_matrix_int:
         func(self._ptr,m,n)
         return
 
-    def __getitem__(self,tup):
+    def __getitem__(self,matrix_tuple):
         """
         | Parameters:
         | *m*: ``size_t``
@@ -1195,12 +1195,12 @@ class ublas_matrix_int:
         func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_int__getitem
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
-        m,n=tup
+        m,n=matrix_tuple
         ret=func(self._ptr,m,n)
         return ret
 
-    def __setitem__(self,tup,value):
-        m,n=tup
+    def __setitem__(self,matrix_tuple,value):
+        m,n=matrix_tuple
         func=self._link.o2scl.o2scl_boost_numeric_ublas_matrix_int__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_int]
         func(self._ptr,m,n,value)
@@ -8355,7 +8355,7 @@ class funct_string:
         ret=func(self._ptr,name_,val)
         return ret
 
-    def __getitem__(self,tup):
+    def __getitem__(self,x):
         """
         | Parameters:
         | *x*: ``double``
@@ -8363,7 +8363,6 @@ class funct_string:
         func=self._link.o2scl.o2scl_funct_string_getitem
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
-        m,n=tup
         ret=func(self._ptr,x)
         return ret
 

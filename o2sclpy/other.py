@@ -1653,6 +1653,30 @@ class prob_dens_mdim:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
+    def pdf(self,x):
+        """
+        | Parameters:
+        | *x*: :class:`std_vector` object
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_std_vector_double__pdf
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,x._ptr)
+        return ret
+
+    def log_pdf(self,x):
+        """
+        | Parameters:
+        | *x*: :class:`std_vector` object
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_std_vector_double__log_pdf
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,x._ptr)
+        return ret
+
     def dim(self):
         """
         | Returns: a Python int
@@ -1662,6 +1686,17 @@ class prob_dens_mdim:
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         return ret
+
+    def __getitem__(self,x):
+        """
+        | Parameters:
+        | *x*: :class:`std_vector` object
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_std_vector_double__getitem
+        func.restype=ctypes.c_void
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,x._ptr)
+        return
 
 
 class prob_dens_mdim_biv_gaussian(prob_dens_mdim):

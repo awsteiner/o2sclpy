@@ -168,6 +168,7 @@ Class prob_dens_mdim
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __getitem__
 
 Class prob_dens_mdim_biv_gaussian
 ---------------------------------
