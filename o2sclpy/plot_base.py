@@ -1774,14 +1774,14 @@ class plot_base:
         if self.canvas_flag==False:
             self.canvas()
             
-        if 'pcm' in kwargs.values() and kwargs['pcm']==True:
+        if kwargs.pop('pcm',None)==True:
             
             print('Creating density plot using pcolormesh()')
             if self.logx==True:
                 self.axes.set_xscale('log')
             if self.logy==True:
                 self.axes.set_yscale('log')
-            self.last_image=self.axes.pcolormesh(xgrid,ygrid,sl,**dctt)
+            self.last_image=self.axes.pcolormesh(xgrid,ygrid,sl,**kwargs)
 
         else:
 

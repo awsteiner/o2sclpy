@@ -1835,7 +1835,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::parse_argv()
         return
 
-    def yt_add_vol(self,o2scl,amp,args,keyname='o2graph_vol'):
+    def yt_add_vol(self,o2scl,amp,link,args,keyname='o2graph_vol'):
         """
         Add a volume source to a yt visualization from a
         tensor_grid object.
@@ -4390,7 +4390,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process yt-add-vol.')
                         print('args:',strlist[ix:ix_next])
                         
-                    self.yt_add_vol(o2scl,amp,
+                    self.yt_add_vol(o2scl,amp,link,
                                     strlist[ix+1:ix_next])
                     
                 elif cmd_name=='yt-scatter':
