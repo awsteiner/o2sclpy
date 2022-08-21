@@ -1598,3 +1598,214 @@ class contour:
         return
 
 
+class prob_dens_mdim:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim<std::vector<double>>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim<std::vector<double>>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class prob_dens_mdim
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_prob_dens_mdim_std_vector_double_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class prob_dens_mdim
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_prob_dens_mdim_std_vector_double_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class prob_dens_mdim
+        
+        Returns: prob_dens_mdim object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def dim(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_std_vector_double__dim
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+
+class prob_dens_mdim_biv_gaussian(prob_dens_mdim):
+    """
+    Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim_biv_gaussian<std::vector<double>>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_biv_gaussian<std::vector<double>>.html .
+    """
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class prob_dens_mdim_biv_gaussian
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_prob_dens_mdim_biv_gaussian_std_vector_double_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class prob_dens_mdim_biv_gaussian
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_prob_dens_mdim_biv_gaussian_std_vector_double_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class prob_dens_mdim_biv_gaussian
+        
+        Returns: prob_dens_mdim_biv_gaussian object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def set(self,x_cent,y_cent,x_std,y_std,covar):
+        """
+        | Parameters:
+        | *x_cent*: ``double``
+        | *y_cent*: ``double``
+        | *x_std*: ``double``
+        | *y_std*: ``double``
+        | *covar*: ``double``
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_biv_gaussian_std_vector_double__set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,x_cent,y_cent,x_std,y_std,covar)
+        return
+
+    def get(self):
+        """
+        | Parameters:
+        | Returns: , a Python float, a Python float, a Python float, a Python float, a Python float
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_biv_gaussian_std_vector_double__get
+        func.argtypes=[ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double)]
+        x_cent_conv=ctypes.c_double(0)
+        y_cent_conv=ctypes.c_double(0)
+        x_std_conv=ctypes.c_double(0)
+        y_std_conv=ctypes.c_double(0)
+        covar_conv=ctypes.c_double(0)
+        func(self._ptr,ctypes.byref(x_cent_conv),ctypes.byref(y_cent_conv),ctypes.byref(x_std_conv),ctypes.byref(y_std_conv),ctypes.byref(covar_conv))
+        return x_cent_conv.value,y_cent_conv.value,x_std_conv.value,y_std_conv.value,covar_conv.value
+
+    def level_fixed_integral(self,integral):
+        """
+        | Parameters:
+        | *integral*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_biv_gaussian_std_vector_double__level_fixed_integral
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,integral)
+        return ret
+
+
+class prob_dens_mdim_gaussian(prob_dens_mdim):
+    """
+    Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim_gaussian<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_gaussian<>.html .
+    """
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class prob_dens_mdim_gaussian
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_prob_dens_mdim_gaussian_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class prob_dens_mdim_gaussian
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_prob_dens_mdim_gaussian_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class prob_dens_mdim_gaussian
+        
+        Returns: prob_dens_mdim_gaussian object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+

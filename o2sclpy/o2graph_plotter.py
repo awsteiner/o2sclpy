@@ -175,6 +175,40 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::get_wrapper()
         return
             
+    def ell_max(self,amp,link,args):
+        """
+        Desc
+        """
+        
+        curr_type=o2scl_get_type(o2scl,amp,link)
+
+        # Handle tensor and table3d types
+        if curr_type!=b'prob_dens_mdim_gaussian':
+            print("Command 'ell-max' not supported for type",
+                  curr_type,".")
+            return
+
+        amt=acol_manager(link,amp)
+        pdmg=amt.get_pdmg_obj()
+
+        
+        
+        if self.canvas_flag==False:
+            self.canvas()
+            
+        fx=float(eval(x))
+        fy=float(eval(y))
+        fw=float(eval(w))
+        fh=float(eval(h))
+        fangle=float(eval(angle))
+        if self.canvas_flag==False:
+            self.canvas()
+        r=patches.Ellipse((fx,fy),fw,fh,fangle,**kwargs)
+        self.axes.add_patch(r)
+        # End of function plot_base::ellipse()
+        
+        return
+        
     def gen_acol(self,o2scl,amp,link,cmd_name,args):
         """
         Run a general ``acol`` command named ``cmd_name`` with arguments
@@ -4487,6 +4521,17 @@ class o2graph_plotter(yt_plot_base):
                         print('Not enough parameters for set option.')
                     else:
                         self.set_wrapper(o2scl,amp,link,strlist[ix+1:ix_next])
+                        
+                elif cmd_name=='ell-max':
+
+                    if self.verbose>2:
+                        print('Process ell-max.')
+                        print('args:',strlist[ix:ix_next])
+                        
+                    if ix_next-ix<1:
+                        print('Not enough parameters for ell-max option.')
+                    else:
+                        self.ell_max(strlist[ix+1],strlist[ix+2:ix_next])
                         
                 elif cmd_name=='cmap':
 

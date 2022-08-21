@@ -92,6 +92,11 @@ def subtest_std_vector_string(link):
     v[2]=b'ghi'
     v[3]=b'jkl'
     v[4]=b'mno'
+    # test set_list()
+    v2=o2sclpy.std_vector_string(link)
+    v2.set_list(['abc','def','ghi','jkl','mno'])
+    for i in range(0,len(v)):
+        assert v[i]==v2[i],'set item'
     # Test shallow copy
     v3=v
     v3[0]=b'pqr'
@@ -134,7 +139,7 @@ def subtest_ublas_vector_int(link):
     for i in range(0,5):
         assert v2[i]==v[i],'resize(), setitem(), to_numpy()'
     v3=v
-    v3[0]=1.0
+    v3[0]=1
     assert v[0]==1,'getitem and shallow copy'
     assert v3.size()==5,'size()'
     assert len(v3)==5,'len()'
@@ -203,10 +208,14 @@ def subtest_vec_vec_string(link):
     vv=o2sclpy.vec_vec_string(link)
     vv.resize(3)
     assert vv.size()==3,'vv size'
-    vv[0]=[b'this',b'is',b'a']
-    vv[1]=[b'test',b'of']
-    vv[2]=[b'the',b'emergency',b'broadcasting',b'system.']
-    assert vv[2][3]==b'broadcasting','vvs'
+    v=o2sclpy.std_vector_string(link)
+    v.set_list(['this','is','a'])
+    vv[0]=v
+    v.set_list(['test','of'])
+    vv[1]=v
+    v.set_list(['the','emergency','broadcasting','system.'])
+    vv[2]=v
+    assert vv[2][3]==b'system.','vvs'
     return
     
 def subtest_std_complex(link):

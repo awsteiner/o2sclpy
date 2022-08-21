@@ -72,6 +72,9 @@ class.
 * :ref:`Function HSVtoRGB`
 * :ref:`Function wordexp_single_file`
 * :ref:`Function wordexp_wrapper`
+* :ref:`Function function_to_double`
+* :ref:`Function function_to_double_nothrow`
+* :ref:`Function find_constant`
 * :ref:`Function string_to_uint_list`
 * :ref:`Function vector_level_count`
 * :ref:`Function vector_deriv_interp`
@@ -769,6 +772,21 @@ Function wordexp_wrapper
 ------------------------
 
 .. autofunction:: o2sclpy.wordexp_wrapper(link,word,matches)
+
+Function function_to_double
+---------------------------
+
+.. autofunction:: o2sclpy.function_to_double(link,s,verbose)
+
+Function function_to_double_nothrow
+-----------------------------------
+
+.. autofunction:: o2sclpy.function_to_double_nothrow(link,s,result,verbose)
+
+Function find_constant
+----------------------
+
+.. autofunction:: o2sclpy.find_constant(link,name,unit)
 
 Function string_to_uint_list
 ----------------------------

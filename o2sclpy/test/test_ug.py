@@ -35,3 +35,7 @@ def test_all(tmp_path):
     assert ug_end.get_end()==ug.get_end(),'get_end() after hdf_input()'
     
     return
+
+if __name__ == '__main__':
+    test_all()
+    print('All tests passed.')

@@ -698,6 +698,12 @@ class std_vector_string:
         Returns: a Python int
         """
         return self.size()
+    
+    def set_list(self,ls):
+        self.resize(len(ls))
+        for i in range(0,len(ls)):
+            self[i]=force_bytes(ls[i])
+        return
 
 class ublas_vector:
     """
@@ -1433,9 +1439,9 @@ class vec_vec_string:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        strt=std_vector_string(self._link,ret)
-        strt._owner=True
-        return ret
+        vstrt=std_vector_string(self._link,ret)
+        vstrt._owner=True
+        return vstrt
 
     def __setitem__(self,i,value):
         """
@@ -5136,7 +5142,7 @@ class tensor:
         ret=func(self._ptr)
         return ret
 
-    def convert_table3d_sum(self,ix_x,ix_y,tab,x_name="x",y_name="y",slice_name="z"):
+    def copy_table3d(self,ix_x,ix_y,tab,x_name="x",y_name="y",slice_name="z"):
         """
         | Parameters:
         | *ix_x*: ``size_t``
@@ -5149,7 +5155,25 @@ class tensor:
         x_name_=ctypes.c_char_p(force_bytes(x_name))
         y_name_=ctypes.c_char_p(force_bytes(y_name))
         slice_name_=ctypes.c_char_p(force_bytes(slice_name))
-        func=self._link.o2scl.o2scl_tensor__convert_table3d_sum
+        func=self._link.o2scl.o2scl_tensor__copy_table3d
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+        func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
+        return
+
+    def copy_table3d_sum(self,ix_x,ix_y,tab,x_name="x",y_name="y",slice_name="z"):
+        """
+        | Parameters:
+        | *ix_x*: ``size_t``
+        | *ix_y*: ``size_t``
+        | *tab*: :class:`table3d` object
+        | *x_name* ="x": string
+        | *y_name* ="y": string
+        | *slice_name* ="z": string
+        """
+        x_name_=ctypes.c_char_p(force_bytes(x_name))
+        y_name_=ctypes.c_char_p(force_bytes(y_name))
+        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        func=self._link.o2scl.o2scl_tensor__copy_table3d_sum
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
         func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
         return
@@ -9151,6 +9175,53 @@ def wordexp_wrapper(link,word,matches):
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p]
     func(word_,matches._ptr)
     return
+
+def function_to_double(link,s,verbose=0):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *s*: string
+        | *verbose*: ``int``
+        | Returns: ``ctypes.c_double`` object
+    """
+    s_=ctypes.c_char_p(force_bytes(s))
+    func=link.o2scl.o2scl_function_to_double_wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_char_p,ctypes.c_int]
+    ret=func(s_,verbose)
+    return ret
+
+def function_to_double_nothrow(link,s,result,verbose=0):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *s*: string
+        | *result*: ``double``
+        | *verbose*: ``int``
+        | Returns: ``ctypes.c_int`` object
+    """
+    s_=ctypes.c_char_p(force_bytes(s))
+    func=link.o2scl.o2scl_function_to_double_nothrow_wrapper
+    func.restype=ctypes.c_int
+    func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int]
+    ret=func(s_,result._ptr,verbose)
+    return ret
+
+def find_constant(link,name,unit):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *name*: string
+        | *unit*: string
+        | Returns: ``ctypes.c_double`` object
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    unit_=ctypes.c_char_p(force_bytes(unit))
+    func=link.o2scl.o2scl_find_constant_wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
+    ret=func(name_,unit_)
+    return ret
 
 def string_to_uint_list(link,x,list):
     """

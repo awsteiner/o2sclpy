@@ -680,7 +680,9 @@ extra_list=[
      "Create an animated density plot from a tensor_grid object. ",
      "<x index> <y index> <z index [+'r']> <mp4 filename>",
      "(Requires ffmpeg.)"],
-     
+    ["prob_dens_mdim_gaussian","max-ell",
+     "Create an ellipse around the peak.",
+     "<frac> [kwargs]",""]
 ]
 """
 This is a list of 5-element entries:

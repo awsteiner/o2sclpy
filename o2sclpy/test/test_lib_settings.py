@@ -19,5 +19,7 @@ def test_all():
     assert numpy.allclose(x,2.8427e24,rtol=1.0e-4),'convert_units()'
     
     return
-    
-    
+
+if __name__ == '__main__':
+    test_all()
+    print('All tests passed.')

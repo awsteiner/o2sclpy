@@ -58,4 +58,7 @@ def test_all(tmp_path):
     subtest_hdf5(link,tmp_path)
     return
     
+if __name__ == '__main__':
+    test_all()
+    print('All tests passed.')
     

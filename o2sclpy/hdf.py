@@ -398,7 +398,7 @@ class hdf_file:
         ret=func(self._ptr,name_,v._ptr)
         return ret
 
-    def gets_vec(self,name,s):
+    def gets_vec_copy(self,name,s):
         """
         | Parameters:
         | *name*: string
@@ -406,7 +406,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl.o2scl_hdf_hdf_file_gets_vec
+        func=self._link.o2scl.o2scl_hdf_hdf_file_gets_vec_copy
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,s._ptr)
@@ -454,7 +454,7 @@ class hdf_file:
         ret=func(self._ptr,name_,v._ptr)
         return ret
 
-    def sets_vec(self,name,s):
+    def sets_vec_copy(self,name,s):
         """
         | Parameters:
         | *name*: string
@@ -462,7 +462,7 @@ class hdf_file:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl.o2scl_hdf_hdf_file_sets_vec
+        func=self._link.o2scl.o2scl_hdf_hdf_file_sets_vec_copy
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
         ret=func(self._ptr,name_,s._ptr)
