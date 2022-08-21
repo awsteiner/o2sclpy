@@ -1416,86 +1416,61 @@ class o2graph_plotter(yt_plot_base):
         char_ptr_ptr=ctypes.POINTER(char_ptr)
         
         curr_type=o2scl_get_type(o2scl,amp,link)
+        amt=acol_manager(link,amp)
                         
+        failed=False
+            
         if curr_type==b'table':
 
-            failed=False
-            
-            amt=acol_manager(link,amp)
             tab=amt.get_table_obj()
             yv=tab[force_bytes(args[0])]
 
-            if failed==False:
-                xv=[i for i in range(0,len(yv))]
-        
-                if self.canvas_flag==False:
-                    self.canvas()
-                if self.logx==True:
-                    if self.logy==True:
-                        if len(args)<2:
-                            self.axes.loglog(xv,yv)
-                        else:
-                            self.axes.loglog(xv,yv,**string_to_dict(args[1]))
-                    else:
-                        if len(args)<2:
-                            self.axes.semilogx(xv,yv)
-                        else:
-                            self.axes.semilogx(xv,yv,**string_to_dict(args[1]))
-                else:
-                    if self.logy==True:
-                        if len(args)<2:
-                            self.axes.semilogy(xv,yv)
-                        else:
-                            self.axes.semilogy(xv,yv,**string_to_dict(args[1]))
-                    else:
-                        if len(args)<2:
-                            self.axes.plot(xv,yv)
-                        else:
-                            self.axes.plot(xv,yv,**string_to_dict(args[1]))
-                                
-                if self.xset==True:
-                    self.axes.set_xlim(self.xlo,self.xhi)
-                if self.yset==True:
-                    self.axes.set_ylim(self.ylo,self.yhi)
-                    
-        elif (curr_type==b'double[]' or curr_type==b'int[]' or
-              curr_type==b'size_t[]'):
-
-            get_fn=o2scl.o2scl_acol_get_double_arr
-            get_fn.argtypes=[ctypes.c_void_p,int_ptr,double_ptr_ptr]
-                            
-            id=ctypes.c_int(0)
-            ptr=double_ptr()
-            get_fn(amp,ctypes.byref(id),ctypes.byref(ptr))
+        elif curr_type==b'double[]':
             
-            xv=[i for i in range(0,id.value)]
-            yv=[ptr[i] for i in range(0,id.value)]
+            yv=amt.get_doublev_obj().to_numpy()
+            
+        elif curr_type==b'int[]':
 
+            yv=amt.get_intv_obj().to_numpy()
+            
+        elif curr_type==b'size_t[]':
+            
+            yv=amt.get_size_tv_obj().to_numpy()
+            
+        else:
+            
+            print("Command 'plot1' not supported for type",
+                  curr_type,".")
+            return
+            
+        if failed==False:
+            xv=[i for i in range(0,len(yv))]
+        
             if self.canvas_flag==False:
                 self.canvas()
             if self.logx==True:
                 if self.logy==True:
-                    if len(args)<1:
+                    if len(args)<2:
                         self.axes.loglog(xv,yv)
                     else:
-                        self.axes.loglog(xv,yv,**string_to_dict(args[0]))
+                        self.axes.loglog(xv,yv,**string_to_dict(args[1]))
                 else:
-                    if len(args)<1:
+                    if len(args)<2:
                         self.axes.semilogx(xv,yv)
                     else:
-                        self.axes.semilogx(xv,yv,**string_to_dict(args[0]))
+                        self.axes.semilogx(xv,yv,**string_to_dict(args[1]))
             else:
                 if self.logy==True:
-                    if len(args)<1:
+                    if len(args)<2:
                         self.axes.semilogy(xv,yv)
                     else:
-                        self.axes.semilogy(xv,yv,**string_to_dict(args[0]))
+                        self.axes.semilogy(xv,yv,**string_to_dict(args[1]))
                 else:
-                    if len(args)<1:
+                    if len(args)<2:
                         self.axes.plot(xv,yv)
                     else:
-                        self.axes.plot(xv,yv,**string_to_dict(args[0]))
-                            
+                        self.axes.plot(xv,yv,**string_to_dict(args[1]))
+                                
             if self.xset==True:
                 self.axes.set_xlim(self.xlo,self.xhi)
             if self.yset==True:

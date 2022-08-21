@@ -1073,6 +1073,206 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
+    def get_cont_obj(self):
+        """
+        Get object of type :class:`std::vector<contour_line>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_cont_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=vector_contour_line(self._link,ptr)
+        return obj
+
+    def set_cont_obj(self,value):
+        """
+        Set object of type :class:`std::vector<contour_line>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_cont_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ug_obj(self):
+        """
+        Get object of type :class:`uniform_grid<double>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_ug_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=uniform_grid<double>(self._link,ptr)
+        return obj
+
+    def set_ug_obj(self,value):
+        """
+        Set object of type :class:`uniform_grid<double>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_ug_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_intv_obj(self):
+        """
+        Get object of type :class:`std::vector<int>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_intv_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector_int(self._link,ptr)
+        return obj
+
+    def set_intv_obj(self,value):
+        """
+        Set object of type :class:`std::vector<int>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_intv_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_doublev_obj(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_doublev_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_doublev_obj(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_doublev_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_size_tv_obj(self):
+        """
+        Get object of type :class:`std::vector<size_t>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_size_tv_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector_size_t(self._link,ptr)
+        return obj
+
+    def set_size_tv_obj(self,value):
+        """
+        Set object of type :class:`std::vector<size_t>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_size_tv_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_stringv_obj(self):
+        """
+        Get object of type :class:`std::vector<std::string>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_stringv_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector_string(self._link,ptr)
+        return obj
+
+    def set_stringv_obj(self,value):
+        """
+        Set object of type :class:`std::vector<std::string>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_stringv_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_vvdouble_obj(self):
+        """
+        Get object of type :class:`std::vector<std::vector<double>>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_vvdouble_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector_vector(self._link,ptr)
+        return obj
+
+    def set_vvdouble_obj(self,value):
+        """
+        Set object of type :class:`std::vector<std::vector<double>>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_vvdouble_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_vvstring_obj(self):
+        """
+        Get object of type :class:`std::vector<std::vector<std::string>>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_vvstring_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=vec_vec_string(self._link,ptr)
+        return obj
+
+    def set_vvstring_obj(self,value):
+        """
+        Set object of type :class:`std::vector<std::vector<std::string>>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_vvstring_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_pdma_obj(self):
+        """
+        Get object of type :class:`prob_dens_mdim_amr<>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_pdma_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=prob_dens_mdim_amr(self._link,ptr)
+        return obj
+
+    def set_pdma_obj(self,value):
+        """
+        Set object of type :class:`prob_dens_mdim_amr<>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_pdma_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_pdmg_obj(self):
+        """
+        Get object of type :class:`prob_dens_mdim_gaussian<>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_pdmg_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=prob_dens_mdim_gaussian(self._link,ptr)
+        return obj
+
+    def set_pdmg_obj(self,value):
+        """
+        Set object of type :class:`prob_dens_mdim_gaussian<>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_pdmg_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
     def run_empty(self):
         """
         | Returns: a Python int
