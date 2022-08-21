@@ -252,19 +252,19 @@ class o2graph_plotter(yt_plot_base):
             slice_name='z'
             if len(args)>=3:
                 kwstring=args[2]
-        elif curr_type=b'tensor<size_t>':
+        elif curr_type==b'tensor<size_t>':
             amt.tensor_size_t_obj.copy_table3d(args[0],args[1],
                                                amt.table3d_obj)
             slice_name='z'
             if len(args)>=3:
                 kwstring=args[2]
-        elif curr_type=b'tensor<int>':
+        elif curr_type==b'tensor<int>':
             amt.tensor_int_obj.copy_table3d(args[0],args[1],
                                             amt.table3d_obj)
             slice_name='z'
             if len(args)>=3:
                 kwstring=args[2]
-        elif curr_type=b'tensor_grid':
+        elif curr_type==b'tensor_grid':
             svst=o2sclpy.std_vector_size_t(link)
             svst.resize(amt.tensor_grid_obj.get_rank())
             func=amt.tensor_grid_obj.copy_table3d_align_setxy
@@ -272,14 +272,14 @@ class o2graph_plotter(yt_plot_base):
             slice_name='z'
             if len(args)>=3:
                 kwstring=args[2]
-        elif curr_type=b'hist_2d':
+        elif curr_type==b'hist_2d':
             print('not yet supported.')
             return
-        elif curr_type=b'table3d':
+        elif curr_type==b'table3d':
             slice_name=args[0]
             if len(args)>=2:
                 kwstring=args[1]
-        else curr_type!=b'table3d':
+        else:
             print("Command 'den-plot' not supported for type",
                   curr_type,".")
             return

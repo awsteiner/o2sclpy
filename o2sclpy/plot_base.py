@@ -1728,35 +1728,123 @@ class plot_base:
         """
         Create a density plot from a slice of a table3d object.
         """
+        
         nxt=table3d.get_nx()
         nyt=table3d.get_ny()
         sl=table3d.get_slice(slice_name).to_numpy()
         sl=sl.transpose()
         xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
         ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
+        
+        # If logz was specified, then manually apply the
+        # log to the data. Alternatively, we should consider
+        # using 'LogNorm' here, as suggested in
+            
+        #https://stackoverflow.com/questions/2546475/
+        #how-can-i-draw-a-log-normalized-imshow-plot-
+        #with-a-colorbar-representing-the-raw
+
+        if self.logz==True:
+            fail_found=False
+            for i in range(0,ny.value):
+                for j in range(0,nx.value):
+                    if sl[i][j]>0.0:
+                        sl[i][j]=math.log10(sl[i][j])
+                    else:
+                        if fail_found==False:
+                            print('Failed to take log of',sl[i][j],
+                                  'at (i,j)=(',j,',',i,') or (',
+                                  xgrid[j],',',ygrid[i],
+                                  '). Setting point to zero and',
+                                  'suppressing future warnings.')
+                        fail_found=True
+                        sl[i][j]=0.0
+
+        # If the z range was specified, truncate all values
+        # outside that range (this truncation is done after
+        # the application of the log above)
+        if self.zset==True:
+            for i in range(0,ny.value):
+                for j in range(0,nx.value):
+                    if sl[i][j]>self.zhi:
+                        sl[i][j]=self.zhi
+                    elif sl[i][j]<self.zlo:
+                        sl[i][j]=self.zlo
+
         if self.canvas_flag==False:
             self.canvas()
-        if self.logx==True:
-            for i in range(0,len(xgrid)):
-                xgrid[i]=math.log(xgrid[i],10)
-        if self.logy==True:
-            for i in range(0,len(ygrid)):
-                ygrid[i]=math.log(ygrid[i],10)
-        if self.logz==1:
-            for i in range(0,len(xgrid)):
-                for j in range(0,len(ygrid)):
-                    sl[i][j]=math.log10(sl[i][h])
-        tmp1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-        tmp2=xgrid[nxt-1]+(xgrid[nxt-1]-xgrid[nxt-2])/2
-        tmp3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-        tmp4=ygrid[nyt-1]+(ygrid[nyt-1]-ygrid[nyt-2])/2
-        self.last_image=self.axes.imshow(sl,interpolation='nearest',
-                                         origin='lower',
-                                         extent=[tmp1,tmp2,
-                                                 tmp3,tmp4],
-                                         aspect='auto',**kwargs)
+            
+        if kwargs['pcm']==True:
+            
+            print('Creating density plot using pcolormesh()')
+            if self.logx==True:
+                self.axes.set_xscale('log')
+            if self.logy==True:
+                self.axes.set_yscale('log')
+            self.last_image=self.axes.pcolormesh(xgrid,ygrid,sl,**dctt)
+
+        else:
+
+            # The imshow() function doesn't work with a log axis, so we
+            # set the scales back to linear and manually take the log
+            self.axes.set_xscale('linear')
+            self.axes.set_yscale('linear')
+            
+            if self.logx==True:
+                xgrid=[math.log(ptrx[i],10) for i in
+                       range(0,nx.value)]
+            if self.logy==True:
+                ygrid=[math.log(ptry[i],10) for i in
+                       range(0,ny.value)]
+
+            diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
+            mean_x=numpy.mean(diffs_x)
+            std_x=numpy.std(diffs_x)
+            diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
+            mean_y=numpy.mean(diffs_y)
+            std_y=numpy.std(diffs_y)
+            
+            if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
+                print('Warning in o2graph::o2graph_plotter::den_plot():')
+                print('  Nonlinearity of x or y grid is greater than '+
+                      '10^{-4}.')
+                print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
+                      (std_x/mean_x))
+                print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
+                      (std_y/mean_y))
+                print('  The density plot may not be properly scaled.')
+                
+            extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+            extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
+                                       xgrid[nx.value-2])/2
+            extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+            extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
+                                       ygrid[ny.value-2])/2
+
+            f=self.axes.imshow
+            if len(kwstring)==0:
+                self.last_image=f(sl,interpolation='nearest',
+                                  origin='lower',extent=[extent1,extent2,
+                                                         extent3,extent4],
+                                  aspect='auto')
+            else:
+                self.last_image=f(sl,interpolation='nearest',
+                                  origin='lower',extent=[extent1,extent2,
+                                                         extent3,extent4],
+                                  aspect='auto',
+                                  **string_to_dict(kwstring))
+
+            # AWS 7/1/2020: I'm not sure why imshow() is now
+            # apparently mangling the minor tick settings. This
+            # restores them. 
+            self.axes.minorticks_on()
+            self.axes.tick_params('both',length=12,width=1,which='major')
+            self.axes.tick_params('both',length=5,width=1,which='minor')
+            self.axes.tick_params(labelsize=self.font*0.8)
+
         if self.colbar==True:
             cbar=self.fig.colorbar(self.last_image,ax=self.axes)
+            cbar.ax.tick_params('both',length=6,width=1,which='major')
             cbar.ax.tick_params(labelsize=self.font*0.8)
                 
         return
