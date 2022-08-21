@@ -1408,13 +1408,6 @@ class o2graph_plotter(yt_plot_base):
         """
         Plot one array of data versus an integer x axis.
         """
-
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        
         curr_type=o2scl_get_type(o2scl,amp,link)
         amt=acol_manager(link,amp)
                         
@@ -1424,6 +1417,7 @@ class o2graph_plotter(yt_plot_base):
 
             tab=amt.get_table_obj()
             yv=tab[force_bytes(args[0])]
+            args=args[1:]
 
         elif curr_type==b'double[]':
             
@@ -1444,32 +1438,33 @@ class o2graph_plotter(yt_plot_base):
             return
             
         if failed==False:
+            
             xv=[i for i in range(0,len(yv))]
         
             if self.canvas_flag==False:
                 self.canvas()
             if self.logx==True:
                 if self.logy==True:
-                    if len(args)<2:
+                    if len(args)<1:
                         self.axes.loglog(xv,yv)
                     else:
-                        self.axes.loglog(xv,yv,**string_to_dict(args[1]))
+                        self.axes.loglog(xv,yv,**string_to_dict(args[0]))
                 else:
-                    if len(args)<2:
+                    if len(args)<1:
                         self.axes.semilogx(xv,yv)
                     else:
-                        self.axes.semilogx(xv,yv,**string_to_dict(args[1]))
+                        self.axes.semilogx(xv,yv,**string_to_dict(args[0]))
             else:
                 if self.logy==True:
-                    if len(args)<2:
+                    if len(args)<1:
                         self.axes.semilogy(xv,yv)
                     else:
-                        self.axes.semilogy(xv,yv,**string_to_dict(args[1]))
+                        self.axes.semilogy(xv,yv,**string_to_dict(args[0]))
                 else:
-                    if len(args)<2:
+                    if len(args)<1:
                         self.axes.plot(xv,yv)
                     else:
-                        self.axes.plot(xv,yv,**string_to_dict(args[1]))
+                        self.axes.plot(xv,yv,**string_to_dict(args[0]))
                                 
             if self.xset==True:
                 self.axes.set_xlim(self.xlo,self.xhi)
@@ -1484,96 +1479,101 @@ class o2graph_plotter(yt_plot_base):
         Plot one or two multiple vector specifications
         """
 
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        
+        amt=acol_manager(link,amp)
         curr_type=o2scl_get_type(o2scl,amp,link)
-        
-        if curr_type==b'vector<contour_line>':
-             print('Store and clear the vector<contour_line> object '+
-                   'before using \'plotv\'.')
-             return 1
-        
-        conv_fn=o2scl.o2scl_acol_mult_vectors_to_conts
-        conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                          ctypes.c_char_p]
-        conv_fn.restype=ctypes.c_int
-
-        if (len(args)>=2 and force_bytes(args[1])!=b'none' and
-            force_bytes(args[1])!=b'None'):
-            if self.verbose>1:
-                print('Calling mult_vectors_to_conts() with',
-                      args[0],'and',args[1])
-            mvs1=ctypes.c_char_p(force_bytes(args[0]))
-            mvs2=ctypes.c_char_p(force_bytes(args[1]))
-            conv_ret=conv_fn(amp,mvs1,mvs2)
-            if conv_ret!=0:
-                print('Failed to read "'+args[0]+'" and "'+args[1]+'".')
-                return 2
-        else:
-            if self.verbose>1:
-                print('Calling mult_vectors_to_conts() with',
-                      args[0])
-            mvs1=ctypes.c_char_p(0)
-            mvs2=ctypes.c_char_p(force_bytes(args[0]))
-            conv_ret=conv_fn(amp,mvs1,mvs2)
-            if conv_ret!=0:
-                print('Failed to read "'+args[0])
-                return 2
-        
-        
-        # Get the total number of contour lines
-        cont_n_fn=o2scl.o2scl_acol_contours_n
-        cont_n_fn.argtypes=[ctypes.c_void_p]
-        cont_n_fn.restype=ctypes.c_int
-        nconts=cont_n_fn(amp)
-
-        # Define types for extracting each contour line
-        cont_line_fn=o2scl.o2scl_acol_contours_line
-        cont_line_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                               int_ptr,double_ptr_ptr,
-                               double_ptr_ptr]
-        cont_line_fn.restype=ctypes.c_double
 
         if self.canvas_flag==False:
             self.canvas()
 
-        # Loop over all contour lines
-        for k in range(0,nconts):
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            ptry=double_ptr()
-            lev=cont_line_fn(amp,k,ctypes.byref(idx),
-                             ctypes.byref(ptrx),ctypes.byref(ptry))
-            xv=[ptrx[i] for i in range(0,idx.value)]
-            yv=[ptry[i] for i in range(0,idx.value)]
+        if (len(args)>=2 and force_bytes(args[1])!=b'none' and
+            force_bytes(args[1])!=b'None'):
+            
+            if self.verbose>1:
+                print('Calling mult_vectors_to_conts() with',
+                      args[0],'and',args[1])
                 
-            if self.logx==True:
-                if self.logy==True:
-                    if len(args)<3:
-                        self.axes.loglog(xv,yv)
+            vvdx=o2sclpy.std_vector_vector(link)
+            o2sclpy.mult_vector_spec(link,args[0],vvdx,verbose,False)
+            vvdy=o2sclpy.std_vector_vector(link)
+            o2sclpy.mult_vector_spec(link,args[1],vvdy,verbose,False)
+
+            for i in range(0,vvdx.size()):
+                for j in range(0,vvdy.size()):
+                    if self.logx==True:
+                        if self.logy==True:
+                            if len(args>=3):
+                                self.axes.loglog(vvdx[i],vvdy[j],
+                                                 **string_to_dict(args[2]))
+                            else:
+                                self.axes.loglog(vvdx[i],vvdy[j])
+                        else:
+                            if len(args>=3):
+                                self.axes.semilogx(vvdx[i],vvdy[j],
+                                                 **string_to_dict(args[2]))
+                            else:
+                                self.axes.semilogx(vvdx[i],vvdy[j])
                     else:
-                        self.axes.loglog(xv,yv,**string_to_dict(args[2]))
+                        if self.logy==True:
+                            if len(args>=3):
+                                self.axes.semilogy(vvdx[i],vvdy[j],
+                                                 **string_to_dict(args[2]))
+                            else:
+                                self.axes.semilogy(vvdx[i],vvdy[j])
+                        else:
+                            if len(args>=3):
+                                self.axes.plot(vvdx[i],vvdy[j],
+                                                 **string_to_dict(args[2]))
+                            else:
+                                self.axes.plot(vvdx[i],vvdy[j])
+            
+        else:
+            
+            if self.verbose>1:
+                print('Calling mult_vectors_to_conts() with',
+                      args[0])
+            vvdy=o2sclpy.std_vector_vector(link)
+            o2sclpy.mult_vector_spec(link,args[0],vvdy,verbose,False)
+            maxlen=0
+            for i in range(0,len(vvdy)):
+                if vvdy[i].size()>maxlen:
+                    maxlen=vvdy[i].size()
+            vvdx=[i for i in range(0,maxlen)]
+
+            kwstring=''
+            if (len(args)>=3 and (force_bytes(args[1])==b'none' or
+                                  force_bytes(args[1])==b'None')):
+                kwstring=args[2]
+            elif len(args)>=2:
+                kwstring=args[1]
+            
+            for j in range(0,vvdy.size()):
+                if self.logx==True:
+                    if self.logy==True:
+                        if kwstring!='':
+                            self.axes.loglog(vvdx,vvdy[j],
+                                             **string_to_dict(kwstring))
+                        else:
+                            self.axes.loglog(vvdx,vvdy[j])
+                    else:
+                        if kwstring!='':
+                            self.axes.semilogx(vvdx,vvdy[j],
+                                             **string_to_dict(kwstring))
+                        else:
+                            self.axes.semilogx(vvdx,vvdy[j])
                 else:
-                    if len(args)<3:
-                        self.axes.semilogx(xv,yv)
+                    if self.logy==True:
+                        if kwstring!='':
+                            self.axes.semilogy(vvdx,vvdy[j],
+                                             **string_to_dict(kwstring))
+                        else:
+                            self.axes.semilogy(vvdx,vvdy[j])
                     else:
-                        self.axes.semilogx(xv,yv,**string_to_dict(args[2]))
-            else:
-                if self.logy==True:
-                    if len(args)<3:
-                        self.axes.semilogy(xv,yv)
-                    else:
-                        self.axes.semilogy(xv,yv,**string_to_dict(args[2]))
-                else:
-                    if len(args)<3:
-                        self.axes.plot(xv,yv)
-                    else:
-                        self.axes.plot(xv,yv,**string_to_dict(args[2]))
-                        
+                        if kwstring!='':
+                            self.axes.plot(vvdx,vvdy[j],
+                                             **string_to_dict(kwstring))
+                        else:
+                            self.axes.plot(vvdx,vvdy[j])
+                    
         # End of function o2graph_plotter::plotv()
         return
         
@@ -1691,11 +1691,6 @@ class o2graph_plotter(yt_plot_base):
         amp=am._ptr
         am.run_empty()
         cl=am.get_cl()
-
-        names_fn=o2scl.o2scl_acol_set_names
-        names_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_char_p,
-                           ctypes.c_int,ctypes.c_char_p,ctypes.c_int,
-                           ctypes.c_char_p]
 
         # Get current type
         ter=terminal_py()
@@ -2631,7 +2626,7 @@ class o2graph_plotter(yt_plot_base):
                           'do not require a current object:\n')
                 else:
                     # AWS removed decode on 10/27/2020
-                    # but Converted to force_string on 5/6/22
+                    # and converted to force_string() on 5/6/22
                     print('List of command-line options',
                           '(current object type is',
                           force_string(curr_type)+'):\n')
