@@ -1746,8 +1746,8 @@ class plot_base:
 
         if self.logz==True:
             fail_found=False
-            for i in range(0,ny.value):
-                for j in range(0,nx.value):
+            for i in range(0,nyt):
+                for j in range(0,nxt):
                     if sl[i][j]>0.0:
                         sl[i][j]=math.log10(sl[i][j])
                     else:
@@ -1764,8 +1764,8 @@ class plot_base:
         # outside that range (this truncation is done after
         # the application of the log above)
         if self.zset==True:
-            for i in range(0,ny.value):
-                for j in range(0,nx.value):
+            for i in range(0,nyt):
+                for j in range(0,nxt):
                     if sl[i][j]>self.zhi:
                         sl[i][j]=self.zhi
                     elif sl[i][j]<self.zlo:
@@ -1774,7 +1774,7 @@ class plot_base:
         if self.canvas_flag==False:
             self.canvas()
             
-        if kwargs['pcm']==True:
+        if 'pcm' in kwargs.values() and kwargs['pcm']==True:
             
             print('Creating density plot using pcolormesh()')
             if self.logx==True:
@@ -1792,10 +1792,10 @@ class plot_base:
             
             if self.logx==True:
                 xgrid=[math.log(ptrx[i],10) for i in
-                       range(0,nx.value)]
+                       range(0,nxt)]
             if self.logy==True:
                 ygrid=[math.log(ptry[i],10) for i in
-                       range(0,ny.value)]
+                       range(0,nyt)]
 
             diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
             mean_x=numpy.mean(diffs_x)
@@ -1815,24 +1815,17 @@ class plot_base:
                 print('  The density plot may not be properly scaled.')
                 
             extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-            extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
-                                       xgrid[nx.value-2])/2
+            extent2=xgrid[nxt-1]+(xgrid[nxt-1]-
+                                       xgrid[nxt-2])/2
             extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-            extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
-                                       ygrid[ny.value-2])/2
+            extent4=ygrid[nyt-1]+(ygrid[nyt-1]-
+                                       ygrid[nyt-2])/2
 
             f=self.axes.imshow
-            if len(kwstring)==0:
-                self.last_image=f(sl,interpolation='nearest',
-                                  origin='lower',extent=[extent1,extent2,
-                                                         extent3,extent4],
-                                  aspect='auto')
-            else:
-                self.last_image=f(sl,interpolation='nearest',
-                                  origin='lower',extent=[extent1,extent2,
-                                                         extent3,extent4],
-                                  aspect='auto',
-                                  **string_to_dict(kwstring))
+            self.last_image=f(sl,interpolation='nearest',
+                              origin='lower',extent=[extent1,extent2,
+                                                     extent3,extent4],
+                              aspect='auto',**kwargs)
 
             # AWS 7/1/2020: I'm not sure why imshow() is now
             # apparently mangling the minor tick settings. This

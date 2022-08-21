@@ -285,7 +285,7 @@ class o2graph_plotter(yt_plot_base):
             return
 
         dctt=string_to_dict(kwstring)
-        den_plot(amt.table3d_obj,slice_name,**dctt)
+        self.den_plot(amt.get_table3d_obj(),slice_name,**dctt)
 
         return
 
