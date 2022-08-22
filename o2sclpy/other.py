@@ -1052,6 +1052,16 @@ class hist:
         func(self._ptr,v._ptr)
         return
 
+    def get_wgts(self):
+        """
+        | Returns: ublas_matrix object
+        """
+        func=self._link.o2scl.o2scl_hist_get_wgts
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        ret2=ublas_vector(self._link,ret)
+        return ret2
+
     def from_table(self,t,colx,n_bins):
         """
         | Parameters:

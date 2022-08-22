@@ -743,8 +743,24 @@ class o2graph_plotter(yt_plot_base):
             # End of section for 'table' type
         elif curr_type==b'hist':
 
-            #amt=acol_manager(link,amp)
-            #hist=amt.get_hist_obj()
+            if False:
+                amt=acol_manager(link,amp)
+                print('h1')
+                hist=amt.get_hist_obj()
+                print('h2')
+                wgts=hist.get_wgts()
+                print('h3')
+                reps=std_vector(link)
+                print('h4')
+                hist.create_rep_vec(reps)
+                print('h5')
+                print(wgts)
+                print('h6')
+                print(wgts.to_numpy())
+                print('h7')
+                print(reps.to_numpy())
+                print('h8')
+                quit()
             
             get_reps_fn=o2scl.o2scl_acol_get_hist_reps
             get_reps_fn.argtypes=[ctypes.c_void_p,
@@ -935,7 +951,7 @@ class o2graph_plotter(yt_plot_base):
         Plot a set of line segments, coloring according to a third 
         variable.
         """
-
+        
         if len(args)<4:
             raise ValueError('Function plot_color() requires four values '+
                              'for the args list.')

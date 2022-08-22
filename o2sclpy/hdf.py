@@ -26,6 +26,7 @@ from abc import abstractmethod
 from o2sclpy.utils import force_bytes
 
 from o2sclpy.base import *
+from o2sclpy.other import *
 
 class hdf_file:
     """
