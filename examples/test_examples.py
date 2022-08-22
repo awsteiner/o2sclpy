@@ -172,3 +172,21 @@ def test_yt_scatter():
 #    compare_images('yt_tg_multvol')
 #    return
 
+if __name__ == '__main__':
+    test_colors_near()
+    test_cmaps()
+    test_markers()
+    test_modax()
+    test_subplots1()
+    test_subplots2()
+    test_subplots3()
+    test_table_plot()
+    test_table_plot_color()
+    test_table_plotv()
+    test_table_rplot()
+    test_table_errorbar()
+    test_textbox()
+    test_table_scatter()
+    test_table3d_den_plot()
+    test_yt_scatter()
+    print('All tests passed.')
