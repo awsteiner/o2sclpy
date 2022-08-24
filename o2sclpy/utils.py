@@ -55,7 +55,7 @@ def doc_replacements(s,base_list_new,ter):
     for i in range(0,len(base_list_new)):
         s=s.replace('``'+base_list_new[i][0]+'``',
                     ter.cyan_fg()+ter.bold()+base_list_new[i][0]+
-                    ter.default_fg())
+                    ter.default_fgbg())
 
     # For ``code`` formatting
     s=s.replace(' ``',' ')
@@ -128,7 +128,7 @@ def reformat_python_docs(cmd,doc_str,base_list_new):
             parm_desc=parm_desc[0:-2]
             
     print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
-          ter.default_fg()+' '+parm_desc)
+          ter.default_fgbg()+' '+parm_desc)
     print('Short description:',short)
 
     if len(reflist2)>=4:
@@ -750,7 +750,7 @@ class terminal_py:
         strt=strt+chr(27)+'[1m'
         return strt
     
-    def default_fg(self):
+    def default_fgbg(self):
         """
         Set the foreground color to the default
         """
@@ -778,16 +778,16 @@ class terminal_py:
         return str_line
 
     def type_str(self,strt):
-        return self.magenta_fg()+self.bold()+strt+self.default_fg()
+        return self.magenta_fg()+self.bold()+strt+self.default_fgbg()
     
     def cmd_str(self,strt):
-        return self.cyan_fg()+self.bold()+strt+self.default_fg()
+        return self.cyan_fg()+self.bold()+strt+self.default_fgbg()
     
     def topic_str(self,strt):
-        return self.green_fg()+self.bold()+strt+self.default_fg()
+        return self.green_fg()+self.bold()+strt+self.default_fgbg()
     
     def var_str(self,strt):
-        return self.red_fg()+self.bold()+strt+self.default_fg()
+        return self.red_fg()+self.bold()+strt+self.default_fgbg()
 
 def length_without_colors(strt):
     """

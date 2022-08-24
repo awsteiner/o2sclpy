@@ -1552,52 +1552,52 @@ class o2graph_plotter(yt_plot_base):
             if line[0]!='verbose':
                 if line[0]=='colbar':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.colbar))
+                           ter.default_fgbg())+' '+str(self.colbar))
                 elif line[0]=='fig-dict':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.fig_dict))
+                           ter.default_fgbg())+' '+str(self.fig_dict))
                 elif line[0]=='font':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.font))
+                           ter.default_fgbg())+' '+str(self.font))
                 elif line[0]=='logx':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.logx))
+                           ter.default_fgbg())+' '+str(self.logx))
                 elif line[0]=='logy':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.logy))
+                           ter.default_fgbg())+' '+str(self.logy))
                 elif line[0]=='logz':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.logz))
+                           ter.default_fgbg())+' '+str(self.logz))
                 elif line[0]=='xhi':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.xhi))
+                           ter.default_fgbg())+' '+str(self.xhi))
                 elif line[0]=='xlo':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.xlo))
+                           ter.default_fgbg())+' '+str(self.xlo))
                 elif line[0]=='xset':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.xset))
+                           ter.default_fgbg())+' '+str(self.xset))
                 elif line[0]=='yhi':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.yhi))
+                           ter.default_fgbg())+' '+str(self.yhi))
                 elif line[0]=='ylo':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.ylo))
+                           ter.default_fgbg())+' '+str(self.ylo))
                 elif line[0]=='yset':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.yset))
+                           ter.default_fgbg())+' '+str(self.yset))
                 elif line[0]=='zhi':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.zhi))
+                           ter.default_fgbg())+' '+str(self.zhi))
                 elif line[0]=='zlo':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.zlo))
+                           ter.default_fgbg())+' '+str(self.zlo))
                 elif line[0]=='zset':
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg())+' '+str(self.zset))
+                           ter.default_fgbg())+' '+str(self.zset))
                 else:
                     print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fg()))
+                           ter.default_fgbg()))
                 print(' '+line[1])
                 print(' ')
         print(str_line)
@@ -1606,28 +1606,28 @@ class o2graph_plotter(yt_plot_base):
         for line in yt_param_list:
             if line[0]=='yt_filter':
                 print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fg())+' '+self.yt_filter)
+                       ter.default_fgbg())+' '+self.yt_filter)
             if line[0]=='yt_focus':
                 print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fg())+' '+self.yt_focus)
+                       ter.default_fgbg())+' '+self.yt_focus)
             if line[0]=='yt_position':
                 print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fg())+' '+self.yt_position)
+                       ter.default_fgbg())+' '+self.yt_position)
             if line[0]=='yt_width':
                 print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fg())+' '+self.yt_width)
+                       ter.default_fgbg())+' '+self.yt_width)
             if line[0]=='yt_north':
                 print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fg())+' '+self.yt_north)
+                       ter.default_fgbg())+' '+self.yt_north)
             if line[0]=='yt_path':
                 print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fg())+' '+str(self.yt_path))
+                       ter.default_fgbg())+' '+str(self.yt_path))
             if line[0]=='yt_resolution':
                 print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fg())+' '+str(self.yt_resolution))
+                       ter.default_fgbg())+' '+str(self.yt_resolution))
             if line[0]=='yt_sigma_clip':
                 print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fg())+' '+str(self.yt_sigma_clip))
+                       ter.default_fgbg())+' '+str(self.yt_sigma_clip))
             print(' '+line[1])
             print(' ')
 
@@ -1655,7 +1655,7 @@ class o2graph_plotter(yt_plot_base):
         ter=terminal_py()
         cmd_desc=(b'o2graph: A data viewing and '+
                   b'processing program for '+force_bytes(ter.bold())+
-                  b'O2scl'+force_bytes(ter.default_fg())+
+                  b'O2scl'+force_bytes(ter.default_fgbg())+
                   b'.\n  Version: '+force_bytes(version)+b'\n')
 
         s=std_string(link)
@@ -2351,7 +2351,7 @@ class o2graph_plotter(yt_plot_base):
                 if cmd==line[0]:
                     match=True
                     print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
-                          ter.default_fg()+
+                          ter.default_fgbg()+
                           ' '+line[2]+'\n\n'+line[1]+'\n')
                     tempx_arr=wrap_line(line[3])
                     for i in range (0,len(tempx_arr)):
@@ -2364,7 +2364,7 @@ class o2graph_plotter(yt_plot_base):
                  curr_type==force_bytes(line[0])) and
                 cmd==line[1]):
                 match=True
-                print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+ter.default_fg()+
+                print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+ter.default_fgbg()+
                       ' '+line[3]+'\n\n'+line[2]+'\n')
                 tempx_arr=wrap_line(line[4])
                 for i in range (0,len(tempx_arr)):
@@ -2379,9 +2379,9 @@ class o2graph_plotter(yt_plot_base):
                     str_line=ter.horiz_line()
                     print('\n'+str_line)
                     print('Type: '+ter.magenta_fg()+ter.bold()+line[0]+
-                          ter.default_fg()+':')
+                          ter.default_fgbg()+':')
                     print('Usage: '+cmd+' '+ter.cyan_fg()+ter.bold()+line[3]+
-                          ter.default_fg()+'\n\n'+line[2]+'\n')
+                          ter.default_fgbg()+'\n\n'+line[2]+'\n')
                     
                     tempx_arr=line[4].split('\n')
                     for j in range(0,len(tempx_arr)):
@@ -2577,7 +2577,7 @@ class o2graph_plotter(yt_plot_base):
                 
                 print('o2graph: A data viewing and '+
                       'processing program for '+ter.bold()+
-                      'O2scl'+ter.default_fg()+
+                      'O2scl'+ter.default_fgbg()+
                       '.\n  Version: '+version)
                 print(' ')
                 if curr_type==b'':
@@ -2614,7 +2614,7 @@ class o2graph_plotter(yt_plot_base):
                 for k in range(0,len(full_list2)):
                     full_list2[k][0]=(ter.cyan_fg()+ter.bold()+
                                       full_list2[k][0].decode('utf-8')+
-                                      ter.default_fg())
+                                      ter.default_fgbg())
                     full_list2[k][1]=full_list2[k][1].decode('utf-8')
                     if length_without_colors(full_list2[k][0])>max_len:
                         max_len=length_without_colors(full_list2[k][0])
@@ -2632,10 +2632,10 @@ class o2graph_plotter(yt_plot_base):
                 for j in range(0,len(help_topics)):
                     if j<len(help_topics)-1:
                         strt+=(ter.green_fg()+ter.bold()+
-                               help_topics[j]+ter.default_fg()+', ')
+                               help_topics[j]+ter.default_fgbg()+', ')
                     else:
                         strt+=('and '+ter.green_fg()+ter.bold()+
-                               help_topics[j]+ter.default_fg()+'.')
+                               help_topics[j]+ter.default_fgbg()+'.')
                 tlist=wrap_line(strt)
                 for j in range(0,len(tlist)):
                     print(tlist[j])

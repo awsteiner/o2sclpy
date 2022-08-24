@@ -87,7 +87,7 @@ base_list=[
      "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', 'QT4Agg'. "+
      "Use -backend Agg to save the plot to a file without "+
      "opening a window. The backend can only be changed once, i.e. "+
-     "if the "+ter.cyan_fg()+ter.bold()+"backend"+ter.default_fg()+
+     "if the "+ter.cyan_fg()+ter.bold()+"backend"+ter.default_fgbg()+
      " command is invoked "+
      "more than once, then only the last invocation will have any "+
      "effect."],
@@ -179,7 +179,7 @@ base_list=[
      "<dir>",""],
     ["plotv","Plot several vector-like data sets.",
      "[multiple vector spec. for x] <multiple vector spec. for y>",
-     "The "+ter.cyan_fg()+ter.bold()+"plotv"+ter.default_fg()+
+     "The "+ter.cyan_fg()+ter.bold()+"plotv"+ter.default_fgbg()+
      " command plots one or several pairs of vectors for x "+
      "and y. The total number of curves plotted will be the number "+
      "of vector data sets from the first argument times the number "+
@@ -188,12 +188,12 @@ base_list=[
      "truncated. Any kwargs are applied to all curves plotted. For "+
      "details on multiple vector specifications, use "+
      "'o2graph -help "+ter.green_fg()+ter.bold()+"mult-vector-spec"+
-     ter.default_fg()+"'. Note that "+ter.cyan_fg()+ter.bold()+"plotv"+
-     ter.default_fg()+" uses "+
+     ter.default_fgbg()+"'. Note that "+ter.cyan_fg()+ter.bold()+"plotv"+
+     ter.default_fgbg()+" uses "+
      "the vector<contour_line> object as temporary storage, so if "+
      "the current object has type vector<contour_line> then you "+
      "will need to save that object to a file and use "+ter.cyan_fg()+
-     ter.bold()+"clear"+ter.default_fg()+" first."],
+     ter.bold()+"clear"+ter.default_fgbg()+" first."],
     ["point","Plot a single point.","<x> <y>",""],
     ["error-point","Plot a single point with errorbars.",
      "<x> <y> [<x err> <yerr>] or [<x lo> <x hi> <y lo> <y hi>]",
@@ -211,9 +211,9 @@ base_list=[
      "xuplims    x value is upper limit            False\n"+
      "errorevery draw error bars on subset of data 1\n"+
      "capthick   thickness of error bar cap        None\n\n"+
-     "See also "+ter.cyan_fg()+ter.bold()+"errorbar"+ter.default_fg()+
+     "See also "+ter.cyan_fg()+ter.bold()+"errorbar"+ter.default_fgbg()+
      " for for plotting columns from a "+ter.magenta_fg()+ter.bold()+
-     "table "+ter.default_fg()+"object."],
+     "table "+ter.default_fgbg()+"object."],
     ["python","Begin an interactive python session.","",""],
     ["rect","Plot a rectangle.",
      "<x1> <y1> <x2> <y2> [angle] [kwargs]",
@@ -273,35 +273,35 @@ base_list=[
      "facecolor (fc), fill, hatch ({'/','\','|','-','+','x','o','O',"+
      "'.', '*'}), linestyle (ls), and linewidth (lw). The keyword "+
      "arguments are for the text properties, and follow "+
-     "those of the "+ter.cyan_fg()+ter.bold()+"text"+ter.default_fg()+
+     "those of the "+ter.cyan_fg()+ter.bold()+"text"+ter.default_fgbg()+
      " command."],
     ["ttext","Plot text in window coordinates [(0,0) to (1,1)].",
      "<x> <y> <text> [kwargs]","The "+ter.cyan_fg()+ter.bold()+"ttext"+
-     ter.default_fg()+" command plots text in the "+
+     ter.default_fgbg()+" command plots text in the "+
      "window coordinates [typically (0,0) to (1,1)] with the font size "+
      "determined by the value of the parameter "+ter.red_fg()+
-     ter.bold()+"font"+ter.default_fg()+" LaTeX is used "+
+     ter.bold()+"font"+ter.default_fgbg()+" LaTeX is used "+
      "for text rendering by default, but this setting can be changed "+
      "using, e.g. '-set usetex 0'. Some useful kwargs are fontfamily, "+
      "fontstyle, fontsize, color, backgroundcolor, rotation, "+
      "horizontalalignment (ha), and verticalalignment (va). Specifying "+
      "fontsize overrides the "+ter.red_fg()+ter.bold()+"font"+
-     ter.default_fg()+" parameter Note that "+
+     ter.default_fgbg()+" parameter Note that "+
      "you must disable LaTeX rendering to change fontfamily or "+
      "fontstyle."],
     ["xlimits","Set the x-axis limits.","<low> <high>",
      "The "+ter.cyan_fg()+ter.bold()+"xlimits"+
-     ter.default_fg()+" command sets "+ter.red_fg()+
-     ter.bold()+"xlo"+ter.default_fg()+" and "+ter.red_fg()+
-     ter.bold()+"xhi"+ter.default_fg()+" to the specified limits, "+
+     ter.default_fgbg()+" command sets "+ter.red_fg()+
+     ter.bold()+"xlo"+ter.default_fgbg()+" and "+ter.red_fg()+
+     ter.bold()+"xhi"+ter.default_fgbg()+" to the specified limits, "+
      "and sets "+ter.red_fg()+
-     ter.bold()+"xset"+ter.default_fg()+" to true. If a plotting "+
+     ter.bold()+"xset"+ter.default_fgbg()+" to true. If a plotting "+
      "canvas is currently "+
      "open, then "+
      "the x-limits on the current axis are modified. Future plots are also "+
      "plot with the specified x-limits. If <low> and <high> are identical "+
      "then "+ter.red_fg()+
-     ter.bold()+"xset"+ter.default_fg()+" is set to false and the x "+
+     ter.bold()+"xset"+ter.default_fgbg()+" is set to false and the x "+
      "limits are automatically set by matplotlib."],
     ["xtitle","Add x title to plot (or subplot).","",""],
     ["ylimits","Set the y-axis limits.","<low> <high>",
@@ -311,7 +311,7 @@ base_list=[
      "the y-limits on the current axis are modified. Future plots are also "+
      "set with the specified y-limits. If <low> and <high> are identical "+
      "then "+ter.red_fg()+
-     ter.bold()+"yset"+ter.default_fg()+" is set to false and the y "+
+     ter.bold()+"yset"+ter.default_fgbg()+" is set to false and the y "+
      "limits are automatically set by matplotlib."],
     ["ytitle","Add y title to plot (or subplot).","",""],
     ["yt-ann","Annotate a yt rendering (experimental).","",
@@ -423,7 +423,7 @@ base_list=[
      "and set 'zset' to true. The z-axis limits are principally used "+
      "for yt volume visualizations. If <low> and <high> are identical "+
      "then "+ter.red_fg()+
-     ter.bold()+"zset"+ter.default_fg()+" is set to false."]
+     ter.bold()+"zset"+ter.default_fgbg()+" is set to false."]
 ]
 """
 This is a list of 4-element entries:

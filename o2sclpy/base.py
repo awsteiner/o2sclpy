@@ -8064,11 +8064,11 @@ class terminal:
         strt._owner=True
         return strt.to_bytes()
 
-    def default_fg(self):
+    def default_fgbg(self):
         """
         | Returns: Python bytes object
         """
-        func=self._link.o2scl.o2scl_terminal_default_fg
+        func=self._link.o2scl.o2scl_terminal_default_fgbg
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
