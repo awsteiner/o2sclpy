@@ -452,14 +452,15 @@ extra_list=[
      "<x> <y> [kwargs]",
      "If the current object is a table, then plot "+
      "column <y> versus column "+
-     "<x>. If the current object is a one-dimensional histogram, then plot "+
-     "the histogram weights as a function of the bin representative values. "+
-     "If the current object is a set of contour lines, then plot the full "+
-     "set of contour lines. Some useful kwargs are color (c), dashes, "+
+     "<x>. Some useful kwargs are color (c), dashes, "+
      "linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), "+
      "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
-     "(mfcalt), markersize (ms). For example: o2graph -create x 0 10 0.2 "+
-     "-function sin(x) y -plot x y lw=0,marker='+' -show"],
+     "(mfcalt), markersize (ms). For example: \"o2graph -create x 0 10 0.2 "+
+     "-function sin(x) y -plot x y lw=0,marker='+' -show\". "+
+     "This command uses the matplotlib plot() function, see "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
+     "for information and keyword arguments. This command does not yet "+
+     "support the matplotlib format parameter."],
     ["table","plot-color",
      "Plot three columns from the table.",
      "<x> <y> <z> <cmap> [kwargs]",
@@ -542,19 +543,26 @@ extra_list=[
      "useful kwargs are color (c), "+
      "dashes, linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), "+
      "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
-     "(mfcalt), markersize (ms). For example: o2 -create x 0 10 0.2 "+
-     "-function sin(x) y -plot1 y ls='--',marker='o' -show"],
+     "(mfcalt), markersize (ms). For example: \"o2graph -create x 0 10 0.2 "+
+     "-function sin(x) y -plot1 y ls='--',marker='o' -show\". "+
+     "This command uses the matplotlib plot() function, see "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
+     "for information and keyword arguments. This command does not yet "+
+     "support the matplotlib format parameter."],
     ["table","hist-plot","Create a histogram plot from column in a table.",
-     "<col>","For a table, create a histogram plot from the "+
+     "<col> [kwargs]","For a table, create a histogram plot from the "+
      "specified column. This command uses matplotlib to construct the "+
-     "histogram rather than using O2scl to create a hist_2d object."],
+     "histogram rather than using O2scl to create a histogram object. "+
+     "This command uses the matplotlib hist() function, see "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html "+
+     "for information and keyword arguments."],
     ["table","hist2d-plot",
      "Create a 2-D histogram plot from two columns in a table.",
      "<col x> <col y>","For a table, create a 2D histogram plot from "+
      "the specified columns. This command uses matplotlib to construct the "+
      "histogram rather than using O2scl to create a hist object."],
     ["table3d","den-plot","Create a density plot from a table3d object.",
-     "<slice>",
+     "<slice> [kwargs]",
      "Creates a density plot from the specified "+
      "slice. A z-axis density legend "+
      "is print on the RHS if colbar is set to True before plotting. "+
@@ -572,8 +580,14 @@ extra_list=[
      "function presumes a uniform linear or logarithmic x- and y-axis "+
      "grid, and the den-plot function will output a warning if this "+
      "is not the case. The pcolormesh() function can handle arbitrary "+
-     "x and y-axis grids. Some useful kwargs are cmap, interpolation "+
-     "(for imshow), alpha, vmin, and vmax."],
+     "x and y-axis grids. If ``logz`` is set to true, then the base 10 "+
+     "logarithm is taken of the data before the density plot is "+
+     "constructed. Some useful kwargs are cmap, interpolation "+
+     "(for imshow), alpha, vmin, and vmax. See more information at "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html "+
+     "and "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.pcolormesh.html "+
+     "for more information and keyword arguments."],
     ["table3d","den-plot-rgb","Create a (R,G,B) density plot from a table3d.",
      "<slice_r> <slice_g> <slice_b>","Create a density plot from "+
      "the three specified slices. This command uses imshow(). "+
@@ -584,38 +598,62 @@ extra_list=[
      "Create a .png file from "+
      "the three specified table3d slices. This command requires pillow. "+
      "To create a density-plot with axes instead, use den-plot-rgb."],
+    ["hist","hist-plot",
+     "Create a histogram plot from the current histogram.",
+     "[kwargs]","Create a histogram plot from the "+
+     "current histogram. "+
+     "This command uses the matplotlib hist() function, see "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html "+
+     "for information and keyword arguments."],
     ["hist","plot","Plot the histogram.","[kwargs]",
      "Plot the histogram weights as a function "+
      "of the bin representative values. "+
      "Some useful kwargs (which apply for all three object types) are "+
      "color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
      "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
-     "markerfacecoloralt (mfcalt), markersize (ms). For example: o2graph "+
+     "markerfacecoloralt (mfcalt), markersize (ms). For example: \"o2graph "+
      "-create x 0 10 0.2 -function sin(x) y "+
-     "-plot x y lw=0,marker='+' -show"],
+     "-plot x y lw=0,marker='+' -show\". "+
+     "This command uses the matplotlib plot() function, see "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
+     "for information and keyword arguments. This command does not yet "+
+     "support the matplotlib format parameter."],
     ["double[]","plot1","Plot the array.","[kwargs]",
      "Plot the array. Some useful kwargs "+
      "are color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
      "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
-     "markerfacecoloralt (mfcalt), markersize (ms)."],
+     "markerfacecoloralt (mfcalt), markersize (ms). "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
+     "for information and keyword arguments. This command does not yet "+
+     "support the matplotlib format parameter."],
     ["int[]","plot1","Plot the array.","[kwargs]",
      "Plot the array. Some useful kwargs "+
      "are color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
      "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
-     "markerfacecoloralt (mfcalt), markersize (ms)."],
+     "markerfacecoloralt (mfcalt), markersize (ms). "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
+     "for information and keyword arguments. This command does not yet "+
+     "support the matplotlib format parameter."],
     ["size_t[]","plot1","Plot the array.","[kwargs]",
      "Plot the array. Some useful kwargs "+
      "are color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
      "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
-     "markerfacecoloralt (mfcalt), markersize (ms)."],
+     "markerfacecoloralt (mfcalt), markersize (ms). "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
+     "for information and keyword arguments. This command does not yet "+
+     "support the matplotlib format parameter."],
     ["vector<contour_line>","plot","Plot the contour lines.","[kwargs]",
      "Plot the set of contour lines. Some "+
      "useful kwargs (which apply for all three "+
      "object types) are color (c), dashes, linestyle (ls), linewidth (lw), "+
      "marker, markeredgecolor (mec), markeredgewidth (mew), markerfacecolor "+
      "(mfc), markerfacecoloralt (mfcalt), markersize (ms). For example: "+
-     "o2graph -create x 0 10 0.2 -function sin(x) y -plot x y "+
-     "lw=0,marker='+' -show"],
+     "\"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y "+
+     "lw=0,marker='+' -show\". "+
+     "This command uses the matplotlib plot() function, see "+
+     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
+     "for information and keyword arguments. This command does not yet "+
+     "support the matplotlib format parameter."],
     ["hist_2d","den-plot","Create a density plot from a hist_2d object",
      "[kwargs]","Create a density plot from the current histogram (assuming "+
      "equally-spaced bins). Logarithmic x- or y-axes are handled by taking "+
@@ -700,7 +738,7 @@ param_list=[
                  "blank and implies ('fig_size_x=6.0, fig_size_y=6.0, "+
                  "ticks_in=False, "+
                  "rt_ticks=False, left_margin=0.14, right_margin=0.04, "+
-                 "bottom_margin=0.12, top_margin=0.04, fontsize=16') ."+
+                 "bottom_margin=0.12, top_margin=0.04, fontsize=16'). "+
                  "The x and y sizes of the figure object are in "+
                  "fig_size_x and fig_size_y. The value ticks_in refers "+
                  "to whether or not the ticks are inside or outside the "+

@@ -35,11 +35,21 @@ import ctypes
 from ctypes.util import find_library
 
 def remove_spaces(string):
+    """
+    Remove all spaces in the specified string and return the result.
+
+    This function is in ``utils.py``.
+    """
     while len(string)>0 and string[0]==' ':
         string=string[1:]
     return string
 
 def doc_replacements(s,base_list_new,ter):
+    """
+    Make some replacements from RST formatting to the terminal screen.
+
+    This function is in ``utils.py``.
+    """
 
     # Replace commands in base_list_new
     for i in range(0,len(base_list_new)):
@@ -65,7 +75,10 @@ def doc_replacements(s,base_list_new,ter):
     return s
 
 def reformat_python_docs(cmd,doc_str,base_list_new):
-
+    """
+    Reformat a python documentation string
+    """
+    
     reflist=doc_str.split('\n')
     
     for i in range(0,len(reflist)):
@@ -133,7 +146,8 @@ def reformat_python_docs(cmd,doc_str,base_list_new):
 
 def string_to_color(str_in):
     """
-    Convert a string to a color
+    Convert a string to a color, either ``(r,g,b)`` to an RGB color
+    or ``[r,g,b,a]`` to an RGBA color.
     """
 
     if str_in[0]=='(':
@@ -149,37 +163,20 @@ def string_to_color(str_in):
     return str_in
 
 def if_yt_then_Agg(backend,argv):
-    # Determine if yt commands are present
+    """
+    Determine if yt commands are present, and if found, then automatically
+    convert to the Agg backend.
+    """
             
     yt_found=False
     for i in range(1,len(argv)):
         if argv[i][0:4]=='-yt-' and yt_found==False:
             if backend!='' and backend!='agg' and backend!='Agg':
-                print('Backend was not set to Agg but yt commands were found.')
+                print('Backend was not set to Agg but yt '+
+                      'commands were found.')
             yt_found=True
             backend='Agg'
     return backend
-
-def table3d_get_slice(o2scl,amp,name):
-    """
-    Return a slice from the current table3d object stored
-    in the acol_manager object 'amp'
-    """
-    get_fn=o2scl.o2scl_acol_get_slice
-    get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                     int_ptr,double_ptr_ptr,
-                     int_ptr,double_ptr_ptr,double_ptr_ptr]
-    
-    slice=ctypes.c_char_p(force_bytes(slice_name))
-    nx=ctypes.c_int(0)
-    ptrx=double_ptr()
-    ny=ctypes.c_int(0)
-    ptry=double_ptr()
-    ptrs=double_ptr()
-    get_fn(amp,slice,ctypes.byref(nx),ctypes.byref(ptrx),
-           ctypes.byref(ny),ctypes.byref(ptry),
-           ctypes.byref(ptrs))
-    return (nx,ptrx,ny,ptry,ptrs)
 
 def is_number(s):
     """
@@ -208,23 +205,6 @@ def force_string(obj):
     if isinstance(obj,numpy.bytes_)==True or isinstance(obj,bytes)==True:
         return obj.decode('utf-8')
     return obj
-
-# This function is probably best replaced by get_str_array() below
-#
-# def parse_col_names(dset):
-#     nc=dset['nc'].__getitem__(0)
-#     nw=dset['nw'].__getitem__(0)
-#     counter=dset['counter']
-#     data=dset['data']
-#     clist=[]
-#     k=0
-#     for i in range(0,nw):
-#         column=''
-#         for j in range(0,counter[i]):
-#             column=column+str(unichr(data[k]))
-#             k=k+1
-#         clist.append(column)
-#     return clist
 
 def default_plot(left_margin=0.14,bottom_margin=0.12,
                  right_margin=0.04,top_margin=0.04,fontsize=16,
