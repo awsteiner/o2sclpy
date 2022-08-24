@@ -6,7 +6,7 @@ List of command-line options which do not require a current object:
   -addcbar         Add a color bar.
   -alias           Create a command alias.
   -arrow           Plot an arrow.
-  -autocorr        Compute the autocorrelation coefficients. 
+  -autocorr        Compute autocorrelation coefficients from a set of vectors. 
   -backend         Select the matplotlib backend to use.
   -calc            Compute the value of a constant expression. 
   -canvas          Create a plotting canvas.

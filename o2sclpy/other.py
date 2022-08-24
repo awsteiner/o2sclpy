@@ -1054,9 +1054,21 @@ class hist:
 
     def get_wgts(self):
         """
-        | Returns: ublas_matrix object
+        | Returns: ublas_vector object
         """
         func=self._link.o2scl.o2scl_hist_get_wgts
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        ret2=ublas_vector(self._link,ret)
+        return ret2
+
+    def get_bins(self):
+        """
+        | Returns: ublas_vector object
+        """
+        func=self._link.o2scl.o2scl_hist_get_bins
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
         ret2=ublas_vector(self._link,ret)
@@ -1852,5 +1864,181 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
 
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
+
+
+class prob_dens_mdim_amr_hypercube:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim_amr<>::hypercube``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_amr<>::hypercube.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class prob_dens_mdim_amr_hypercube
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_prob_dens_mdim_amr_hypercube
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class prob_dens_mdim_amr_hypercube
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_prob_dens_mdim_amr_hypercube
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class prob_dens_mdim_amr_hypercube
+        
+        Returns: prob_dens_mdim_amr_hypercube object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    @property
+    def n_dim(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_get_n_dim
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @n_dim.setter
+    def n_dim(self,value):
+        """
+        Setter function for prob_dens_mdim_amr<>::hypercube::n_dim .
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_set_n_dim
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    def get_low(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_get_low
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_low(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_set_low
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_high(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_get_high
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_high(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_set_high
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_inside(self):
+        """
+        Get object of type :class:`std::vector<size_t>`
+        """
+        func1=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_get_inside
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector_size_t(self._link,ptr)
+        return obj
+
+    def set_inside(self,value):
+        """
+        Set object of type :class:`std::vector<size_t>`
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_set_inside
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def frac_vol(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_get_frac_vol
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @frac_vol.setter
+    def frac_vol(self,value):
+        """
+        Setter function for prob_dens_mdim_amr<>::hypercube::frac_vol .
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_set_frac_vol
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def weight(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_get_weight
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @weight.setter
+    def weight(self,value):
+        """
+        Setter function for prob_dens_mdim_amr<>::hypercube::weight .
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr_hypercube_set_weight
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
 
 

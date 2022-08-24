@@ -235,12 +235,6 @@ class o2graph_plotter(yt_plot_base):
         ``tensor``, ``tensor<int>``, or ``tensor<size_t>`` object.
         """
 
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-
         curr_type=o2scl_get_type(o2scl,amp,link)
         amt=acol_manager(link,amp)
 
@@ -743,45 +737,14 @@ class o2graph_plotter(yt_plot_base):
             # End of section for 'table' type
         elif curr_type==b'hist':
 
-            if False:
-                amt=acol_manager(link,amp)
-                print('h1')
-                hist=amt.get_hist_obj()
-                print('h2')
-                wgts=hist.get_wgts()
-                print('h3')
-                reps=std_vector(link)
-                print('h4')
-                hist.create_rep_vec(reps)
-                print('h5')
-                print(wgts)
-                print('h6')
-                print(wgts.to_numpy())
-                print('h7')
-                print(reps.to_numpy())
-                print('h8')
-                quit()
-            
-            get_reps_fn=o2scl.o2scl_acol_get_hist_reps
-            get_reps_fn.argtypes=[ctypes.c_void_p,
-                             int_ptr,double_ptr_ptr]
-                            
-            get_wgts_fn=o2scl.o2scl_acol_get_hist_wgts
-            get_wgts_fn.argtypes=[ctypes.c_void_p,
-                             int_ptr,double_ptr_ptr]
-                            
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            get_reps_fn(amp,ctypes.byref(idx),
-                        ctypes.byref(ptrx))
+            amt=acol_manager(link,amp)
+            hist=amt.get_hist_obj()
+            wgts=hist.get_wgts()
+            reps=std_vector(link)
+            hist.create_rep_vec(reps)
 
-            idy=ctypes.c_int(0)
-            ptry=double_ptr()
-            get_wgts_fn(amp,ctypes.byref(idy),
-                        ctypes.byref(ptry))
-
-            xv=[ptrx[i] for i in range(0,idx.value)]
-            yv=[ptry[i] for i in range(0,idy.value)]
+            xv=reps.to_numpy()
+            yv=wgts.to_numpy()
     
             if self.canvas_flag==False:
                 self.canvas()
@@ -1219,35 +1182,16 @@ class o2graph_plotter(yt_plot_base):
 
         elif curr_type==b'hist':
                     
-            get_reps_fn=o2scl.o2scl_acol_get_hist_reps
-            get_reps_fn.argtypes=[ctypes.c_void_p,
-                             int_ptr,double_ptr_ptr]
-                            
-            get_wgts_fn=o2scl.o2scl_acol_get_hist_wgts
-            get_wgts_fn.argtypes=[ctypes.c_void_p,
-                             int_ptr,double_ptr_ptr]
-                            
-            get_bins_fn=o2scl.o2scl_acol_get_hist_bins
-            get_bins_fn.argtypes=[ctypes.c_void_p,
-                             int_ptr,double_ptr_ptr]
-                            
-            idx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            get_reps_fn(amp,ctypes.byref(idx),
-                        ctypes.byref(ptrx))
-            xv=[ptrx[i] for i in range(0,idx.value)]
+            amt=acol_manager(link,amp)
+            hist=amt.get_hist_obj()
+            wgts=hist.get_wgts()
+            reps=std_vector(link)
+            hist.create_rep_vec(reps)
+            bins=hist.get_bins()
 
-            idy=ctypes.c_int(0)
-            ptry=double_ptr()
-            get_wgts_fn(amp,ctypes.byref(idy),
-                        ctypes.byref(ptry))
-            yv=[ptry[i] for i in range(0,idy.value)]
-
-            idz=ctypes.c_int(0)
-            ptrz=double_ptr()
-            get_bins_fn(amp,ctypes.byref(idz),
-                        ctypes.byref(ptrz))
-            zv=[ptrz[i] for i in range(0,idz.value)]
+            xv=reps.to_numpy()
+            yv=wgts.to_numpy()
+            zv=bins.to_numpy()
             
             if self.canvas_flag==False:
                 self.canvas()

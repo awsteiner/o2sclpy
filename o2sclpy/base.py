@@ -2248,6 +2248,18 @@ class table:
         func(self._ptr,data._ptr)
         return
 
+    def insert_row(self,nv,data,row):
+        """
+        | Parameters:
+        | *nv*: ``size_t``
+        | *data*: :class:`std_vector` object
+        | *row*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table__insert_row
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,nv,data._ptr,row)
+        return
+
     def ordered_lookup(self,scol,val):
         """
         | Parameters:
