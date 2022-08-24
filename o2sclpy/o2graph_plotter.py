@@ -1148,7 +1148,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::scatter()
         return
                                  
-    def hist_plot(self,o2scl,amp,args):
+    def hist_plot(self,o2scl,amp,link,args):
         """
         Plot a histogram.
         """
@@ -1171,7 +1171,6 @@ class o2graph_plotter(yt_plot_base):
             xv=tab[force_bytes(args[0])]
 
             if failed==False:
-                xv=[ptrx[i] for i in range(0,idx.value)]
         
                 if self.canvas_flag==False:
                     self.canvas()
