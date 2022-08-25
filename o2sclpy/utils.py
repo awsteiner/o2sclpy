@@ -45,110 +45,6 @@ def remove_spaces(string):
         string=string[1:]
     return string
 
-def doc_replacements(s,base_list_new,ter,amp):
-    """
-    Make some replacements from RST formatting to the terminal screen.
-
-    This function is in ``utils.py``.
-    """
-
-    amt=acol_manager(link,amp)
-    
-    # Replace commands in base_list_new
-    for i in range(0,len(base_list_new)):
-        s=s.replace('``'+base_list_new[i][0]+'``',
-                    amt.get_command_color()+base_list_new[i][0]+
-                    amt.get_default_color())
-
-    # For ``code`` formatting
-    s=s.replace(' ``',' ')
-    s=s.replace('`` ',' ')
-    s=s.replace('``, ',', ')
-    s=s.replace('``. ','. ')
-
-    # Combine two spaces to one
-    s=s.replace('  ',' ')
-
-    # For :math:`` equations
-    s=s.replace(' :math:`',' ')
-    s=s.replace('` ',' ')
-    s=s.replace('`.','.')
-    s=s.replace('`',',')
-                    
-    return s
-
-def reformat_python_docs(cmd,doc_str,base_list_new,amp):
-    """
-    Reformat a python documentation string
-    """
-    
-    amt=acol_manager(link,amp)
-    
-    reflist=doc_str.split('\n')
-    
-    for i in range(0,len(reflist)):
-        reflist[i]=remove_spaces(reflist[i])
-        #print(i,'x',reflist[i],'x')
-
-    if len(reflist)<1:
-        return
-
-    if reflist[0]=='':
-        if len(reflist)<2:
-            return
-        doc_str2=reflist[1]
-        for i in range(2,len(reflist)):
-            doc_str2=doc_str2+'\n'+reflist[i]
-    else:
-        doc_str2=reflist[0]
-        for i in range(0,len(reflist)):
-            doc_str2=doc_str2+'\n'+reflist[i]
-
-    reflist2=doc_str2.split('\n\n')
-
-    if False:
-        for i in range(0,len(reflist2)):
-            print(i,'x',reflist2[i],'x')
-    
-    ter=terminal_py()
-    ncols=os.get_terminal_size().columns
-
-    short=''
-    parm_desc=''
-    long_help=''
-
-    # The short description
-    if len(reflist2)>=2:
-        short=reflist2[1]
-
-    # The parameter description
-    if len(reflist2)>=3:
-        parm_desc=reflist2[2].replace('\n',' ')
-
-        parm_desc=parm_desc.replace('  ',' ')
-        sx='Command-line arguments: ``'
-        if parm_desc[0:len(sx)]==sx:
-            parm_desc=parm_desc[len(sx):]
-        if parm_desc[-2:]=='``':
-            parm_desc=parm_desc[0:-2]
-            
-    print('Usage: '+amt.get_command_color()+
-          amt.get_default_color()+' '+parm_desc)
-    print('Short description:',short)
-
-    if len(reflist2)>=4:
-        print('')
-        print('Long description:')
-        for j in range(3,len(reflist2)):
-            if len(reflist2[j])>0:
-                long_help=doc_replacements(reflist2[j].replace('\n',' '),
-                                           base_list_new,ter,amp)
-                tmplist=wrap_line(long_help,ncols-1)
-                if j!=3:
-                    print('')
-                for k in range(0,len(tmplist)):
-                    print(tmplist[k])
-
 def string_to_color(str_in):
     """
     Convert a string to a color, either ``(r,g,b)`` to an RGB color
@@ -782,17 +678,21 @@ class terminal_py:
             str_line=str_line+chr(27)+'(B'
         return str_line
 
-    def type_str(self,strt):
-        return self.magenta_fg()+self.bold()+strt+self.default_fgbg()
+    def type_str(self,strt,amt):
+        return (force_string(amt.get_type_color())+strt+
+                force_string(amt.get_default_color()))
     
     def cmd_str(self,strt):
-        return self.cyan_fg()+self.bold()+strt+self.default_fgbg()
+        return (force_string(amt.get_command_color())+strt+
+                force_string(amt.get_default_color()))
     
     def topic_str(self,strt):
-        return self.green_fg()+self.bold()+strt+self.default_fgbg()
+        return (force_string(amt.get_help_color())+strt+
+                force_string(amt.get_default_color()))
     
     def var_str(self,strt):
-        return self.red_fg()+self.bold()+strt+self.default_fgbg()
+        return (force_string(amt.get_param_color())+strt+
+                force_string(amt.get_default_color()))
 
 def length_without_colors(strt):
     """

@@ -41,7 +41,7 @@ from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import is_number
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import get_ic_ptrs_to_list, string_equal_dash
-from o2sclpy.utils import reformat_python_docs, force_string
+from o2sclpy.utils import force_string, remove_spaces
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
 from o2sclpy.plot_info import marker_list, markers_plot, colors_near
@@ -51,6 +51,39 @@ from o2sclpy.doc_data import version
 from o2sclpy.hdf import *
 from o2sclpy.base import *
 
+def doc_replacements(s,base_list_new,ter,amp,link):
+    """
+    Make some replacements from RST formatting to the terminal screen.
+
+    This function is in ``utils.py``.
+    """
+
+    amt=acol_manager(link,amp)
+    
+    # Replace commands in base_list_new
+    for i in range(0,len(base_list_new)):
+        s=s.replace('``'+base_list_new[i][0]+'``',
+                    force_string(amt.get_command_color())+
+                    base_list_new[i][0]+
+                    force_string(amt.get_default_color()))
+
+    # For ``code`` formatting
+    s=s.replace(' ``',' ')
+    s=s.replace('`` ',' ')
+    s=s.replace('``, ',', ')
+    s=s.replace('``. ','. ')
+
+    # Combine two spaces to one
+    s=s.replace('  ',' ')
+
+    # For :math:`` equations
+    s=s.replace(' :math:`',' ')
+    s=s.replace('` ',' ')
+    s=s.replace('`.','.')
+    s=s.replace('`',',')
+                    
+    return s
+
 def o2scl_get_type(o2scl,amp,link):
     """
     Get the type of the current object stored in the acol_manager
@@ -59,6 +92,79 @@ def o2scl_get_type(o2scl,amp,link):
 
     amt=acol_manager(link,amp)
     return amt.get_type()
+
+def reformat_python_docs(cmd,doc_str,base_list_new,amp,link):
+    """
+    Reformat a python documentation string
+    """
+    
+    amt=acol_manager(link,amp)
+    
+    reflist=doc_str.split('\n')
+    
+    for i in range(0,len(reflist)):
+        reflist[i]=remove_spaces(reflist[i])
+        #print(i,'x',reflist[i],'x')
+
+    if len(reflist)<1:
+        return
+
+    if reflist[0]=='':
+        if len(reflist)<2:
+            return
+        doc_str2=reflist[1]
+        for i in range(2,len(reflist)):
+            doc_str2=doc_str2+'\n'+reflist[i]
+    else:
+        doc_str2=reflist[0]
+        for i in range(0,len(reflist)):
+            doc_str2=doc_str2+'\n'+reflist[i]
+
+    reflist2=doc_str2.split('\n\n')
+
+    if False:
+        for i in range(0,len(reflist2)):
+            print(i,'x',reflist2[i],'x')
+    
+    ter=terminal_py()
+    ncols=os.get_terminal_size().columns
+
+    short=''
+    parm_desc=''
+    long_help=''
+
+    # The short description
+    if len(reflist2)>=2:
+        short=reflist2[1]
+
+    # The parameter description
+    if len(reflist2)>=3:
+        parm_desc=reflist2[2].replace('\n',' ')
+
+        parm_desc=parm_desc.replace('  ',' ')
+        sx='Command-line arguments: ``'
+        if parm_desc[0:len(sx)]==sx:
+            parm_desc=parm_desc[len(sx):]
+        if parm_desc[-2:]=='``':
+            parm_desc=parm_desc[0:-2]
+            
+    print('Usage: '+force_string(amt.get_command_color())+cmd+
+          force_string(amt.get_default_color())+' '+parm_desc)
+    
+    print('Short description:',short)
+
+    if len(reflist2)>=4:
+        print('')
+        print('Long description:')
+        for j in range(3,len(reflist2)):
+            if len(reflist2[j])>0:
+                long_help=doc_replacements(reflist2[j].replace('\n',' '),
+                                           base_list_new,ter,amp,link)
+                tmplist=wrap_line(long_help,ncols-1)
+                if j!=3:
+                    print('')
+                for k in range(0,len(tmplist)):
+                    print(tmplist[k])
 
 def table_get_column(o2scl,amp,link,name,return_pointer=False):
     """
@@ -1513,7 +1619,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::plotv()
         return
         
-    def print_param_docs(self):
+    def print_param_docs(self,amt):
         """
         Print parameter documentation.
 
@@ -1528,53 +1634,68 @@ class o2graph_plotter(yt_plot_base):
         for line in param_list:
             if line[0]!='verbose':
                 if line[0]=='colbar':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.colbar))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.colbar))
                 elif line[0]=='fig-dict':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.fig_dict))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.fig_dict))
                 elif line[0]=='font':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.font))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.font))
                 elif line[0]=='logx':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.logx))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.logx))
                 elif line[0]=='logy':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.logy))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.logy))
                 elif line[0]=='logz':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.logz))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.logz))
                 elif line[0]=='xhi':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.xhi))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.xhi))
                 elif line[0]=='xlo':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.xlo))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.xlo))
                 elif line[0]=='xset':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.xset))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.xset))
                 elif line[0]=='yhi':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.yhi))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.yhi))
                 elif line[0]=='ylo':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.ylo))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.ylo))
                 elif line[0]=='yset':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.yset))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.yset))
                 elif line[0]=='zhi':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.zhi))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.zhi))
                 elif line[0]=='zlo':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.zlo))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.zlo))
                 elif line[0]=='zset':
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg())+' '+str(self.zset))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color())+' '+
+                          str(self.zset))
                 else:
-                    print((ter.red_fg()+ter.bold()+line[0]+
-                           ter.default_fgbg()))
+                    print(force_string(amt.get_param_color())+line[0]+
+                          force_string(amt.get_default_color()))
                 print(' '+line[1])
                 print(' ')
         print(str_line)
@@ -1582,29 +1703,37 @@ class o2graph_plotter(yt_plot_base):
         print(' ')
         for line in yt_param_list:
             if line[0]=='yt_filter':
-                print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fgbg())+' '+self.yt_filter)
+                print(force_string(amt.get_param_color())+line[0]+
+                      force_string(amt.get_default_color())+' '+
+                      str(self.yt_filter))
             if line[0]=='yt_focus':
-                print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fgbg())+' '+self.yt_focus)
+                print(force_string(amt.get_param_color())+line[0]+
+                      force_string(amt.get_default_color())+' '+
+                      str(self.yt_focus))
             if line[0]=='yt_position':
-                print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fgbg())+' '+self.yt_position)
+                print(force_string(amt.get_param_color())+line[0]+
+                      force_string(amt.get_default_color())+' '+
+                      str(self.yt_position))
             if line[0]=='yt_width':
-                print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fgbg())+' '+self.yt_width)
+                print(force_string(amt.get_param_color())+line[0]+
+                      force_string(amt.get_default_color())+' '+
+                      str(self.yt_width))
             if line[0]=='yt_north':
-                print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fgbg())+' '+self.yt_north)
+                print(force_string(amt.get_param_color())+line[0]+
+                      force_string(amt.get_default_color())+' '+
+                      str(self.yt_north))
             if line[0]=='yt_path':
-                print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fgbg())+' '+str(self.yt_path))
+                print(force_string(amt.get_param_color())+line[0]+
+                      force_string(amt.get_default_color())+' '+
+                      str(self.yt_path))
             if line[0]=='yt_resolution':
-                print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fgbg())+' '+str(self.yt_resolution))
+                print(force_string(amt.get_param_color())+line[0]+
+                      force_string(amt.get_default_color())+' '+
+                      str(self.yt_resolution))
             if line[0]=='yt_sigma_clip':
-                print((ter.red_fg()+ter.bold()+line[0]+
-                       ter.default_fgbg())+' '+str(self.yt_sigma_clip))
+                print(force_string(amt.get_param_color())+line[0]+
+                      force_string(amt.get_default_color())+' '+
+                      str(self.yt_sigma_clip))
             print(' '+line[1])
             print(' ')
 
@@ -2321,7 +2450,7 @@ class o2graph_plotter(yt_plot_base):
         for line in base_list_new:
             if cmd==line[0]:
                 match=True
-                reformat_python_docs(cmd,line[1],base_list_new,amp)
+                reformat_python_docs(cmd,line[1],base_list_new,amp,link)
         
         # Handle the case of an o2graph command from the
         # base list
@@ -2329,8 +2458,8 @@ class o2graph_plotter(yt_plot_base):
             for line in base_list:
                 if cmd==line[0]:
                     match=True
-                    print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
-                          ter.default_fgbg()+
+                    print('Usage: '+force_string(amt.get_command_color())+
+                          cmd+force_string(amt.get_default_color())+
                           ' '+line[2]+'\n\n'+line[1]+'\n')
                     tempx_arr=wrap_line(line[3])
                     for i in range (0,len(tempx_arr)):
@@ -2343,7 +2472,8 @@ class o2graph_plotter(yt_plot_base):
                  curr_type==force_bytes(line[0])) and
                 cmd==line[1]):
                 match=True
-                print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+ter.default_fgbg()+
+                print('Usage: '+force_string(amt.get_command_color())+
+                      cmd+force_string(amt.get_default_color())+
                       ' '+line[3]+'\n\n'+line[2]+'\n')
                 tempx_arr=wrap_line(line[4])
                 for i in range (0,len(tempx_arr)):
@@ -2357,10 +2487,12 @@ class o2graph_plotter(yt_plot_base):
                     match=True
                     str_line=ter.horiz_line()
                     print('\n'+str_line)
-                    print('Type: '+ter.magenta_fg()+ter.bold()+line[0]+
-                          ter.default_fgbg()+':')
-                    print('Usage: '+cmd+' '+ter.cyan_fg()+ter.bold()+line[3]+
-                          ter.default_fgbg()+'\n\n'+line[2]+'\n')
+                    print('Type: '+force_string(amt.get_type_color())+
+                          line[0]+force_string(amt.get_default_color())+':')
+                    print('Usage: '+
+                          force_string(amt.get_command_color())+
+                          cmd+force_string(amt.get_default_color())+' '
+                          +line[3]+'\n\n'+line[2]+'\n')
                     
                     tempx_arr=line[4].split('\n')
                     for j in range(0,len(tempx_arr)):
@@ -2591,9 +2723,9 @@ class o2graph_plotter(yt_plot_base):
                 full_list2=sorted(full_list,key=lambda x: x[0])
                 max_len=0
                 for k in range(0,len(full_list2)):
-                    full_list2[k][0]=(ter.cyan_fg()+ter.bold()+
+                    full_list2[k][0]=(force_string(amt.get_command_color())+
                                       full_list2[k][0].decode('utf-8')+
-                                      ter.default_fgbg())
+                                      force_string(amt.get_default_color()))
                     full_list2[k][1]=full_list2[k][1].decode('utf-8')
                     if length_without_colors(full_list2[k][0])>max_len:
                         max_len=length_without_colors(full_list2[k][0])
@@ -2610,11 +2742,13 @@ class o2graph_plotter(yt_plot_base):
                 strt='Additional help topics: '
                 for j in range(0,len(help_topics)):
                     if j<len(help_topics)-1:
-                        strt+=(ter.green_fg()+ter.bold()+
-                               help_topics[j]+ter.default_fgbg()+', ')
+                        strt+=(force_string(amt.get_help_color())+
+                               help_topics[j]+
+                               force_string(amt.get_default_color())+', ')
                     else:
-                        strt+=('and '+ter.green_fg()+ter.bold()+
-                               help_topics[j]+ter.default_fgbg()+'.')
+                        strt+=('and '+force_string(amt.get_help_color())+
+                               help_topics[j]+
+                               force_string(amt.get_default_color())+'.')
                 tlist=wrap_line(strt)
                 for j in range(0,len(tlist)):
                     print(tlist[j])
@@ -2625,7 +2759,7 @@ class o2graph_plotter(yt_plot_base):
         # If the user specified 'help set', then print
         # the o2graph parameter documentation
         if (cmd=='set' or cmd=='get') and len(args)==1:
-            self.print_param_docs()
+            self.print_param_docs(amt)
 
         # End of function o2graph_plotter::help_func()
         return
@@ -3272,7 +3406,7 @@ class o2graph_plotter(yt_plot_base):
             comm_list=[]
             for i in range(0,len(base_acol_comm_list)):
                 st=base_acol_comm_list[i].decode('utf-8')
-                comm_list.append(ter.cmd_str(st))
+                comm_list.append(ter.cmd_str(st,amt))
             
             comm_rows=screenify_py(comm_list)
             for i in range(0,len(comm_rows)):
@@ -3288,7 +3422,8 @@ class o2graph_plotter(yt_plot_base):
                 comm_list.append(force_bytes(line[0]))
             comm_list_dec=sorted(comm_list)
             for i in range(0,len(comm_list_dec)):
-                comm_list_dec[i]=ter.cmd_str(comm_list_dec[i].decode('utf-8'))
+                comm_list_dec[i]=ter.cmd_str(comm_list_dec[i].decode('utf-8'),
+                                             amt)
             comm_rows=screenify_py(comm_list_dec)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
@@ -3298,7 +3433,7 @@ class o2graph_plotter(yt_plot_base):
             for this_type in acol_types:
                 
                 print('Acol and o2graph commands for an object of type '+
-                      ter.type_str(str(this_type))+':\n')
+                      ter.type_str(str(this_type,amt))+':\n')
                 
                 # Function interface
                 get_fn=o2scl.o2scl_acol_get_cli_options_type
@@ -3331,7 +3466,8 @@ class o2graph_plotter(yt_plot_base):
 
                 if len(comm_list2)>0:
                     for i in range(0,len(comm_list2)):
-                        comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
+                        comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'),
+                                                  amt)
                     comm_rows=screenify_py(comm_list2)
                     for i in range(0,len(comm_rows)):
                         print(comm_rows[i])
@@ -3375,13 +3511,14 @@ class o2graph_plotter(yt_plot_base):
 
             # comm_list is the list of acol commands for this type
             print('Commands from acol for objects of type',
-                  ter.type_str(curr_type)+':')
+                  ter.type_str(curr_type,amt)+':')
             print('')
             comm_list=get_ic_ptrs_to_list(size,iptr,cptr)
             
             comm_list2=sorted(comm_list)
             for i in range(0,len(comm_list2)):
-                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
+                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'),
+                                          amt)
             comm_rows=screenify_py(comm_list2)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
@@ -3396,14 +3533,15 @@ class o2graph_plotter(yt_plot_base):
 
             comm_list2=sorted(comm_list)
             for i in range(0,len(comm_list2)):
-                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
+                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'),
+                                          amt)
             comm_rows=screenify_py(comm_list2)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
             print('')
                 
             print('Commands from o2graph for objects of type',
-                  ter.type_str(curr_type)+':')
+                  ter.type_str(curr_type,amt)+':')
             print('')
             comm_list=[]
             for line in extra_list:
@@ -3413,7 +3551,8 @@ class o2graph_plotter(yt_plot_base):
 
             comm_list2=sorted(comm_list)
             for i in range(0,len(comm_list2)):
-                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
+                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'),
+                                          amt)
             comm_rows=screenify_py(comm_list2)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
@@ -3433,7 +3572,7 @@ class o2graph_plotter(yt_plot_base):
                       'current object.')
             else:
                 print('O2graph commands for an object of type '+
-                      ter.type_str(curr_type.decode('utf-8'))+':\n')
+                      ter.type_str(curr_type.decode('utf-8'),amt)+':\n')
             
             # C types
             int_ptr=ctypes.POINTER(ctypes.c_int)
@@ -3468,7 +3607,8 @@ class o2graph_plotter(yt_plot_base):
 
             comm_list2=sorted(comm_list)
             for i in range(0,len(comm_list2)):
-                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'))
+                comm_list2[i]=ter.cmd_str(comm_list2[i].decode('utf-8'),
+                                          amt)
             comm_rows=screenify_py(comm_list2)
             for i in range(0,len(comm_rows)):
                 print(comm_rows[i])
