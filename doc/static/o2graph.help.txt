@@ -1,19 +1,20 @@
+Setting colors with string: c:10039,t:10062,p:10134,h:10105,e:10069,u:11032
 o2graph: A data viewing and processing program for O2scl.
   Version: 0.928a1
  
 List of command-line options which do not require a current object:
 
-  -addcbar         Add a color bar.
+  -addcbar         
   -alias           Create a command alias.
-  -arrow           Plot an arrow.
+  -arrow           
   -autocorr        Compute autocorrelation coefficients from a set of vectors. 
-  -backend         Select the matplotlib backend to use.
+  -backend         
   -calc            Compute the value of a constant expression. 
-  -canvas          Create a plotting canvas.
+  -canvas          
   -clear           Clear the current object. 
   -clf             Clear the current figure.
-  -cmap            Create a continuous colormap.
-  -cmap2           Create a colormap.
+  -cmap            
+  -cmap2           
   -commands        List available commands for current or specified type.
   -constant        Get or modify a physical or numerical constant. 
   -convert         Manipulate or use a unit conversion factor. 

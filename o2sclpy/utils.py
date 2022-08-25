@@ -36,7 +36,8 @@ from ctypes.util import find_library
 
 def remove_spaces(string):
     """
-    Remove all spaces in the specified string and return the result.
+    Remove spaces at the beginning specified string and return the 
+    result.
 
     This function is in ``utils.py``.
     """
@@ -44,18 +45,20 @@ def remove_spaces(string):
         string=string[1:]
     return string
 
-def doc_replacements(s,base_list_new,ter):
+def doc_replacements(s,base_list_new,ter,amp):
     """
     Make some replacements from RST formatting to the terminal screen.
 
     This function is in ``utils.py``.
     """
 
+    amt=acol_manager(link,amp)
+    
     # Replace commands in base_list_new
     for i in range(0,len(base_list_new)):
         s=s.replace('``'+base_list_new[i][0]+'``',
-                    ter.cyan_fg()+ter.bold()+base_list_new[i][0]+
-                    ter.default_fgbg())
+                    amt.get_command_color()+base_list_new[i][0]+
+                    amt.get_default_color())
 
     # For ``code`` formatting
     s=s.replace(' ``',' ')
@@ -74,10 +77,12 @@ def doc_replacements(s,base_list_new,ter):
                     
     return s
 
-def reformat_python_docs(cmd,doc_str,base_list_new):
+def reformat_python_docs(cmd,doc_str,base_list_new,amp):
     """
     Reformat a python documentation string
     """
+    
+    amt=acol_manager(link,amp)
     
     reflist=doc_str.split('\n')
     
@@ -127,8 +132,8 @@ def reformat_python_docs(cmd,doc_str,base_list_new):
         if parm_desc[-2:]=='``':
             parm_desc=parm_desc[0:-2]
             
-    print('Usage: '+ter.cyan_fg()+ter.bold()+cmd+
-          ter.default_fgbg()+' '+parm_desc)
+    print('Usage: '+amt.get_command_color()+
+          amt.get_default_color()+' '+parm_desc)
     print('Short description:',short)
 
     if len(reflist2)>=4:
@@ -137,7 +142,7 @@ def reformat_python_docs(cmd,doc_str,base_list_new):
         for j in range(3,len(reflist2)):
             if len(reflist2[j])>0:
                 long_help=doc_replacements(reflist2[j].replace('\n',' '),
-                                           base_list_new,ter)
+                                           base_list_new,ter,amp)
                 tmplist=wrap_line(long_help,ncols-1)
                 if j!=3:
                     print('')

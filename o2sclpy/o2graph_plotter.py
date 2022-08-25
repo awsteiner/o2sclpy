@@ -2286,6 +2286,8 @@ class o2graph_plotter(yt_plot_base):
         Function to process the help command.
         """
 
+        amt=acol_manager(link,amp)
+        
         base_list_new=[
             ["addcbar",plot_base.addcbar.__doc__],
             ["arrow",plot_base.arrow.__doc__],
@@ -2342,7 +2344,7 @@ class o2graph_plotter(yt_plot_base):
         for line in base_list_new:
             if cmd==line[0]:
                 match=True
-                reformat_python_docs(cmd,line[1],base_list_new)
+                reformat_python_docs(cmd,line[1],base_list_new,amp)
         
         # Handle the case of an o2graph command from the
         # base list

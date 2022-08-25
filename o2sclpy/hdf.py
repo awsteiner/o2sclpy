@@ -1274,6 +1274,146 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
+    def get_command_color(self):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_command_color
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
+
+    def set_command_color(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_command_color
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_type_color(self):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_type_color
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
+
+    def set_type_color(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_type_color
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_param_color(self):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_param_color
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
+
+    def set_param_color(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_param_color
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_help_color(self):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_help_color
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
+
+    def set_help_color(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_help_color
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_exec_color(self):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_exec_color
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
+
+    def set_exec_color(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_exec_color
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_url_color(self):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_url_color
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
+
+    def set_url_color(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_url_color
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_default_color(self):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_default_color
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
+
+    def set_default_color(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_default_color
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
     def run_empty(self):
         """
         | Returns: a Python int
