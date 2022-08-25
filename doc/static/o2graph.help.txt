@@ -1,4 +1,3 @@
-Setting colors with string: c:10039,t:10062,p:10134,h:10105,e:10069,u:11032
 o2graph: A data viewing and processing program for O2scl.
   Version: 0.928a1
  

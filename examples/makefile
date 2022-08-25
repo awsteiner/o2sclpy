@@ -60,6 +60,9 @@ DSH.ipynb: empty
 table.ipynb: empty
 	jupytext --to ipynb --update table.py 
 
+tov.ipynb: empty
+	jupytext --to ipynb --update tov.py 
+
 unit_conv.ipynb: empty
 	jupytext --to ipynb --update unit_conv.py 
 

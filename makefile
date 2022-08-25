@@ -38,6 +38,7 @@ doc: .empty
 		grep -v "Compiled at" | grep -v "New alias" > o2graph.help.txt
 	cd examples; $(MAKE) link_o2scl.ipynb
 	cd examples; $(MAKE) table.ipynb
+	cd examples; $(MAKE) tov.ipynb
 	cd examples; $(MAKE) unit_conv.ipynb
 	cd examples; $(MAKE) skyrme.ipynb
 	cd examples; $(MAKE) nucmass.ipynb
@@ -62,6 +63,7 @@ test:
 		examples/SFHo_SFHx.py \
 		examples/DSH.py \
 		examples/buchdahl.py \
+		examples/tov.py \
 		examples/test_examples.py \
 		-s -v
 

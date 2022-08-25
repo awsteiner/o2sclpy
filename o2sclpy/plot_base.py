@@ -1727,6 +1727,61 @@ class plot_base:
     #     # End of function plot_base::move_labels()
     #     return
 
+    def plot(self,args,**kwargs):
+        """
+        Plot a two-dimensional set of data
+        
+        args can be [table,col1,col2] or ....
+        """
+
+        if len(args)<2:
+            print('Failed, not enough information to plot.')
+            return
+
+        if (str(type(args[0]))=='<class \'o2sclpy.base.table\'>' or
+            str(type(args[0]))=='<class \'o2sclpy.base.table_units\'>' or
+            str(type(args[0]))==
+            '<class \'o2sclpy.base.shared_ptr_table_units\'>'):
+            
+            failed=False
+
+            tab=args[0]
+            xv=tab[force_bytes(args[1])][0:tab.get_nlines()]
+            yv=tab[force_bytes(args[2])][0:tab.get_nlines()]
+
+            if failed==False:
+        
+                if self.canvas_flag==False:
+                    self.canvas()
+                if self.logx==True:
+                    if self.logy==True:
+                        if len(args)<3:
+                            self.axes.loglog(xv,yv)
+                        else:
+                            self.axes.loglog(xv,yv,**kwargs)
+                    else:
+                        if len(args)<3:
+                            self.axes.semilogx(xv,yv)
+                        else:
+                            self.axes.semilogx(xv,yv,**kwargs)
+                else:
+                    if self.logy==True:
+                        if len(args)<3:
+                            self.axes.semilogy(xv,yv)
+                        else:
+                            self.axes.semilogy(xv,yv,**kwargs)
+                    else:
+                        if len(args)<3:
+                            self.axes.plot(xv,yv)
+                        else:
+                            self.axes.plot(xv,yv,**kwargs)
+                            
+        else:
+                
+            print('plot() does not support type',type(args[0]))
+                            
+        return
+
     def den_plot(self,table3d,slice_name,**kwargs):
         """
         Create a density plot from a slice of a table3d object.

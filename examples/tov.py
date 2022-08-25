@@ -1,4 +1,4 @@
-# # TOV example for O$_2$sclpy
+# # Tolman-Oppenheimer-Volkov example for O$_2$sclpy
 
 # See the O$_2$sclpy documentation at https://neutronstars.utk.edu/code/o2sclpy for more information.
 
@@ -19,7 +19,7 @@ if 'pytest' in sys.modules:
 link=o2sclpy.linker()
 link.link_o2scl()
 
-# THis is the APR EOS as computed in o2scl/examples/ex_eos_had_apr.cpp
+# This is the APR EOS as computed in ``o2scl/examples/ex_eos_had_apr.cpp``.
 
 eos=[[4.500000e-02,2.156413e-01,6.998033e-04],
      [8.500000e-02,4.084332e-01,2.456061e-03],
@@ -72,25 +72,52 @@ eos=[[4.500000e-02,2.156413e-01,6.998033e-04],
      [1.964000e+00,2.306741e+01,2.952175e+01]]
 
 # Create a table, the columns, and the units for each column
+
 tab=o2sclpy.table_units(link)
 tab.line_of_names("nb ed pr")
 tab.line_of_units("1/fm^3 1/fm^4 1/fm^4")
 
 # Fill the table with the Python data
-tab.set_nlines(len(eos))
+#tab.set_nlines(len(eos))
+
 for i in range(0,len(eos)):
     tab.line_of_data([eos[i][j] for j in range(0,3)])
+
+# Create a new column in the table for the chemical
+# potential
+
+tab.function_column('(ed+pr)/nb','mu')
+    
+# Create the object which interpolates the EOS for the TOV
+# solver. Use the default crust EOS.
 
 eti=o2sclpy.eos_tov_interp(link)
 eti.default_low_dens_eos()
 eti.read_table(tab,'ed','pr','nb')
 
+# Specify the EOS and determine the M-R curve
+
 ts=o2sclpy.tov_solve(link)
 ts.set_eos(eti)
 ts.mvsr()
 
+# Obtain the table of results and the maximum mass
+
 mvsr_table=ts.get_results()
 print('M_max: %7.6e' % mvsr_table.max("gm"))
+
+# Delete rows in the table which correspond to unstable configurations
+
+mvsr_table.set_nlines(mvsr_table.lookup("gm",mvsr_table.max("gm"))+1)
+
+# Plot the mass-radius curve
+
+p=o2sclpy.plot_base()
+p.xlimits(9.5,20)
+p.plot([mvsr_table,'r','gm'])
+p.xtitle('$ R~(\mathrm{km}) $')
+p.ytitle('$ M~(\mathrm{M}_{\odot}) $')
+p.show()
 
 # For testing using ``pytest``:
 

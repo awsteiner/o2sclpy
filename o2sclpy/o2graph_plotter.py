@@ -684,7 +684,7 @@ class o2graph_plotter(yt_plot_base):
             
         return
 
-    def plot(self,o2scl,amp,args,link):
+    def plot_o2graph(self,o2scl,amp,args,link):
         """
         Plot a two-dimensional set of data
         """
@@ -699,42 +699,19 @@ class o2graph_plotter(yt_plot_base):
         curr_type=o2scl_get_type(o2scl,amp,link)
                         
         if curr_type==b'table':
-                            
-            failed=False
-
+            
             amt=acol_manager(link,amp)
             tab=amt.get_table_obj()
-            xv=tab[force_bytes(args[0])]
-            yv=tab[force_bytes(args[1])]
+            
+            if len(args)<3:
+                self.plot([tab,args[0],args[1]])
+            else:
+                self.plot([tab,args[0],args[1]],**string_to_dict(args[2]))
 
-            if failed==False:
-        
-                if self.canvas_flag==False:
-                    self.canvas()
-                if self.logx==True:
-                    if self.logy==True:
-                        if len(args)<3:
-                            self.axes.loglog(xv,yv)
-                        else:
-                            self.axes.loglog(xv,yv,**string_to_dict(args[2]))
-                    else:
-                        if len(args)<3:
-                            self.axes.semilogx(xv,yv)
-                        else:
-                            self.axes.semilogx(xv,yv,**string_to_dict(args[2]))
-                else:
-                    if self.logy==True:
-                        if len(args)<3:
-                            self.axes.semilogy(xv,yv)
-                        else:
-                            self.axes.semilogy(xv,yv,**string_to_dict(args[2]))
-                    else:
-                        if len(args)<3:
-                            self.axes.plot(xv,yv)
-                        else:
-                            self.axes.plot(xv,yv,**string_to_dict(args[2]))
+            failed=False
 
             # End of section for 'table' type
+            
         elif curr_type==b'hist':
 
             amt=acol_manager(link,amp)
@@ -906,7 +883,7 @@ class o2graph_plotter(yt_plot_base):
         if self.yset==True:
             self.axes.set_ylim(self.ylo,self.yhi)
                                  
-        # End of function o2graph_plotter::plot()
+        # End of function o2graph_plotter::plot_o2graph()
         return
                                  
     def plot_color(self,o2scl,amp,link,args):
@@ -4590,7 +4567,7 @@ class o2graph_plotter(yt_plot_base):
                         print('Process plot.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.plot(o2scl,amp,strlist[ix+1:ix_next],link)
+                    self.plot_o2graph(o2scl,amp,strlist[ix+1:ix_next],link)
 
                 elif cmd_name=='plot-color':
                     
