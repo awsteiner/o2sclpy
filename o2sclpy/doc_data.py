@@ -35,85 +35,15 @@ new_cmaps=[('O2sclpy cmaps',
 List of new o2sclpy cmaps
 """
 
+# When entries are blank, it's because they are taken from the
+# python docstring in o2graph_plotter.help_func()
 base_list=[
-    ["addcbar","Add a color bar.",
-     "<left> <bottom> <width> <height> [kwargs]",
-     "Add a color bar from the most recently created image. The "+
-     "axes object for the first colorbar added is named "],
-    ["arrow","Plot an arrow.",
-     "<x1> <y1> <x2> <y2> <arrow properties> [kwargs]",
-     "Plot an arrow from (x1,y1) to (x2,y2). This command uses "+
-     "axes.annotate() to generate an arrow with an empty string "+
-     "as the first argument to annotate(). The o2graph argument <arrow "+
-     "properties> is the python dictionary for the 'arrowprops' "+
-     "argument to annotate(). The arrowstyle and connectionstyle "+
-     "attributes should be listed along with other arrowprops attributes.\n"+
-     " \nExamples for arrowprops are:\n"+
-     "\"arrowstyle=->,connectionstyle=arc3\"\n"+
-     "\"arrowstyle=-|>,connectionstyle=arc,fc=red,ec=blue\"\n"+
-     "\"arrowstyle=-|>,connectionstyle=arc,head_length=4.0,"+
-     "head_width=1.0\"\n"+
-     "\"arrowstyle=->,connectionstyle=arc3,head_length=4.0,"+
-     "head_width=1.0,rad=-0.1\"\n"+
-     "\"arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,"+
-     "head_width=1.0,rad=-0.1\"\n \n"+
-     "Summary for arrowstyle argument (angleB is renamed to as_angleB):\n"+
-     "Name    Attributes\n"+
-     "-       None\n"+
-     "->      head_length=0.4,head_width=0.2\n"+
-     "-[      widthB=1.0,lengthB=0.2,as_angleB=None\n"+
-     "|-      widthA=1.0,widthB=1.0\n"+
-     "-|      head_length=0.4,head_width=0.2\n"+
-     "<-      head_length=0.4,head_width=0.2\n"+
-     "<-      head_length=0.4,head_width=0.2\n"+
-     "<|      head_length=0.4,head_width=0.2\n"+
-     "<|      head_length=0.4,head_width=0.2\n"+
-     "fancy   head_length=0.4,head_width=0.4,tail_width=0.4\n"+
-     "simple  head_length=0.5,head_width=0.5,tail_width=0.2\n"+
-     "wedge   tail_width=0.3,shrink_factor=0.5\n \n"+
-     "(note that fancy, simple or wedge require arc3 or angle3 connection "+
-     "styles)\n \n"+
-     "Summary for connectionstyle argument (angleB is renamed to "+
-     "cs_angleB):\n"+
-     "Name    Attributes\n"+
-     "angle   angleA=90,cs_angleB=0,rad=0.0\n"+
-     "angle3  angleA=90,cs_angleB=0\n"+
-     "arc     angleA=0,cs_angleB=0,armA=None,armB=None,rad=0.0\n"+
-     "arc3    rad=0.0\n"+
-     "bar     armA=0.0,armB=0.0,fraction=0.3,angle=None\n \n"+
-     "See https://matplotlib.org/2.0.2/users/annotations.html for more."],
-    ["backend","Select the matplotlib backend to use.","<backend>",
-     "This selects the matplotlib backend. "+
-     "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', 'QT4Agg'. "+
-     "Use -backend Agg to save the plot to a file without "+
-     "opening a window. The backend can only be changed once, i.e. "+
-     "if the "+ter.cyan_fg()+ter.bold()+"backend"+ter.default_fgbg()+
-     " command is invoked "+
-     "more than once, then only the last invocation will have any "+
-     "effect."],
-    ["cmap","Create a continuous colormap.",
-     "<cmap name> <color 1> <color 2> [color3]...",
-     "Create a new color map named <cmap name> which consists of "+
-     "equal-sized gradients between the specified list of at least "+
-     "two colors. Matplotlib colors, (r,g,b) colors, and xkcd "+
-     "colors are all allowed. For example 'o2graph -cmap c "+
-     "forestgreen \"(0.5,0.5,0.7)\" \"xkcd:light red\" -create "+
-     "table3d x grid:0,40,1 y grid:0,40,1 z \"x+y\" -den-plot z "+
-     "cmap=c -show'."],
-    ["cmap2","Create a colormap.",
-     "<cmap name> <color 1> <color 2> [color3 color4]...",
-     "Create a new color map named <cmap name> which consists of "+
-     "equal-sized gradients between the list of specified color "+
-     "pairs. Matplotlib colors, (r,g,b) colors, and xkcd "+
-     "colors are all allowed. For example 'o2graph -cmap2 c "+
-     "\"(0.5,0.5,0.7)\" \"xkcd:light red\" -create "+
-     "table3d x grid:0,40,1 y grid:0,40,1 z \"x+y\" -den-plot z "+
-     "cmap=c -show'."],
-    ["canvas","Create a plotting canvas.","",
-     "Create an empty plotting canvas. For example 'o2graph "+
-     "-canvas -show'. Typically, 'o2graph' creates "+
-     "the canvas automatically so explicitly using this command "+
-     "is unnecessary."],
+    ["addcbar","","",""],
+    ["arrow","","",""],
+    ["backend","","",""],
+    ["cmap","","",""],
+    ["cmap2","","",""],
+    ["canvas","","",""],
     ["clf","Clear the current figure.","",
      "Clear the current figure."],
     ["ellipse","Plot an ellipse.",
