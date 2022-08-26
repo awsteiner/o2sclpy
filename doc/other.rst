@@ -147,8 +147,6 @@ Class vector_contour_line
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
-        .. automethod:: __getitem__
-        .. automethod:: __setitem__
 
 Class contour
 -------------
