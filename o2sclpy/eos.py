@@ -3703,6 +3703,19 @@ class tov_solve:
         ret=func(self._ptr,mass,pmax)
         return ret
 
+    def fixed_pr(self,pcent,pmax=1.0e20):
+        """
+        | Parameters:
+        | *pcent*: ``double``
+        | *pmax* =1.0e20: ``double``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_tov_solve_fixed_pr
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,pcent,pmax)
+        return ret
+
     def max(self):
         """
         | Returns: a Python int
