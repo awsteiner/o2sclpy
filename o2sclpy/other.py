@@ -1462,6 +1462,16 @@ class vector_contour_line:
         func(self._ptr,n)
         return
 
+    def size(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_std_vector_contour_line__size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
     def __len__(self):
         """
         Return the length of the vector
@@ -1866,7 +1876,7 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
         return new_obj
 
 
-class prob_dens_mdim_amr_hypercube:
+class hypercube:
     """
     Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim_amr<>::hypercube``,
     See
@@ -1879,7 +1889,7 @@ class prob_dens_mdim_amr_hypercube:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class prob_dens_mdim_amr_hypercube
+        Init function for class hypercube
 
         | Parameters:
         | *link* :class:`linker` object
@@ -1900,7 +1910,7 @@ class prob_dens_mdim_amr_hypercube:
 
     def __del__(self):
         """
-        Delete function for class prob_dens_mdim_amr_hypercube
+        Delete function for class hypercube
         """
 
         if self._owner==True:
@@ -1913,9 +1923,9 @@ class prob_dens_mdim_amr_hypercube:
 
     def __copy__(self):
         """
-        Shallow copy function for class prob_dens_mdim_amr_hypercube
+        Shallow copy function for class hypercube
         
-        Returns: prob_dens_mdim_amr_hypercube object
+        Returns: hypercube object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -2040,5 +2050,137 @@ class prob_dens_mdim_amr_hypercube:
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
+
+
+class std_vector_hypercube:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``std::vector<prob_dens_mdim_amr<>::hypercube>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/std::vector<prob_dens_mdim_amr<>::hypercube>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class std_vector_hypercube
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_std_vector_prob_dens_mdim_amr_hypercube_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class std_vector_hypercube
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_std_vector_prob_dens_mdim_amr_hypercube_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class std_vector_hypercube
+        
+        Returns: std_vector_hypercube object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_std_vector_prob_dens_mdim_amr_hypercube__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def size(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_std_vector_prob_dens_mdim_amr_hypercube__size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+
+class prob_dens_mdim_amr:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim_amr<>``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_amr<>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class prob_dens_mdim_amr
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_prob_dens_mdim_amr_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class prob_dens_mdim_amr
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_prob_dens_mdim_amr_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class prob_dens_mdim_amr
+        
+        Returns: prob_dens_mdim_amr object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
 
 

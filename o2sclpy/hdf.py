@@ -1194,6 +1194,26 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
+    def get_vvstring_obj(self):
+        """
+        Get object of type :class:`std::vector<std::vector<std::string>>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_vvstring_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=vec_vec_string(self._link,ptr)
+        return obj
+
+    def set_vvstring_obj(self,value):
+        """
+        Set object of type :class:`std::vector<std::vector<std::string>>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_vvstring_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
     def get_vvdouble_obj(self):
         """
         Get object of type :class:`std::vector<std::vector<double>>`
@@ -1214,22 +1234,82 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
-    def get_vvstring_obj(self):
+    def get_tensor_obj(self):
         """
-        Get object of type :class:`std::vector<std::vector<std::string>>`
+        Get object of type :class:`tensor<>`
         """
-        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_vvstring_obj
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_tensor_obj
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=vec_vec_string(self._link,ptr)
+        obj=tensor(self._link,ptr)
         return obj
 
-    def set_vvstring_obj(self,value):
+    def set_tensor_obj(self,value):
         """
-        Set object of type :class:`std::vector<std::vector<std::string>>`
+        Set object of type :class:`tensor<>`
         """
-        func=self._link.o2scl.o2scl_hdf_acol_manager_set_vvstring_obj
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_tensor_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_tensor_int_obj(self):
+        """
+        Get object of type :class:`tensor<int>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_tensor_int_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=tensor<int>(self._link,ptr)
+        return obj
+
+    def set_tensor_int_obj(self,value):
+        """
+        Set object of type :class:`tensor<int>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_tensor_int_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_tensor_size_t_obj(self):
+        """
+        Get object of type :class:`tensor<size_t>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_tensor_size_t_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=tensor<size_t>(self._link,ptr)
+        return obj
+
+    def set_tensor_size_t_obj(self,value):
+        """
+        Set object of type :class:`tensor<size_t>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_tensor_size_t_obj
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_tensor_grid_obj(self):
+        """
+        Get object of type :class:`tensor_grid<>`
+        """
+        func1=self._link.o2scl.o2scl_hdf_acol_manager_get_tensor_grid_obj
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=tensor_grid(self._link,ptr)
+        return obj
+
+    def set_tensor_grid_obj(self,value):
+        """
+        Set object of type :class:`tensor_grid<>`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_tensor_grid_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return

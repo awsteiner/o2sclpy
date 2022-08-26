@@ -389,404 +389,58 @@ class o2graph_plotter(yt_plot_base):
 
         return
 
-    def den_plot_rgb(self,o2scl,amp,args):
+    def den_plot_rgb_o2graph(self,o2scl,amp,link,args):
         """
         Density plot from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
         """
 
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-
         curr_type=o2scl_get_type(o2scl,amp,link)
+        amt=acol_manager(link,amp)
 
-        # Handle tensor and table3d types
-        if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
-            curr_type==b'tensor_grid' or curr_type==b'tensor<int>' or
-            curr_type==b'table3d'):
-
-            # If the object is a tensor, convert to a table3d
-            # object before plotting
-            if curr_type!=b'table3d':
-                index1=0
-                index2=1
-                if len(args)==1:
-                    kwstring=args[0]
-                if len(args)>=2:
-                    index1=int(args[0])
-                    index2=int(args[1])
-                if len(args)>=3:
-                    kwstring=args[2]
-                if index1+index2!=1 and index1*index2!=0:
-                    print('Indices must be "0 1" or "1 0" in',
-                          'in den-plot.')
-                    return
-                    
-                conv_fn=o2scl.o2scl_acol_tensor_to_table3d
-                conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
-                conv_fn.restype=ctypes.c_int
-                
-                conv_ret=conv_fn(amp,index1,index2)
-                if conv_ret!=0:
-                    print('Automatic conversion to table3d failed.')
-                    return
-                slice_name="tensor"
-            else:
-                r_slice_name=args[0]
-                g_slice_name=args[1]
-                b_slice_name=args[2]
-                if len(args)>=4:
-                    kwstring=args[3]
-
-            # Now that we are guaranteed to have a table3d
-            # object to use, use that to create the density
-            # plot
-            get_fn=o2scl.o2scl_acol_get_slice
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr,
-                             int_ptr,double_ptr_ptr,double_ptr_ptr]
-
-            r_slice=ctypes.c_char_p(force_bytes(r_slice_name))
-            nx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            ny=ctypes.c_int(0)
-            ptry=double_ptr()
-            ptrs_r=double_ptr()
-            get_fn(amp,r_slice,ctypes.byref(nx),ctypes.byref(ptrx),
-                   ctypes.byref(ny),ctypes.byref(ptry),
-                   ctypes.byref(ptrs_r))
-
-            # Allocate the python storage
-            sl_all=numpy.zeros((ny.value,nx.value,3))
-            xgrid=numpy.zeros((nx.value))
-            ygrid=numpy.zeros((ny.value))
-
-            # Copy from the C pointer to the python storage
-            ix=0
-            for i in range(0,nx.value):
-                for j in range(0,ny.value):
-                    sl_all[j,i,0]=ptrs_r[ix]
-                    ix=ix+1
-
-            # Copy the grid
-            for i in range(0,nx.value):
-                xgrid[i]=ptrx[i]
-            for j in range(0,ny.value):
-                ygrid[j]=ptry[j]
-            
-            g_slice=ctypes.c_char_p(force_bytes(g_slice_name))
-            nx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            ny=ctypes.c_int(0)
-            ptry=double_ptr()
-            ptrs_g=double_ptr()
-            get_fn(amp,g_slice,ctypes.byref(nx),ctypes.byref(ptrx),
-                   ctypes.byref(ny),ctypes.byref(ptry),
-                   ctypes.byref(ptrs_g))
-
-            # Copy from the C pointer to the python storage
-            ix=0
-            for i in range(0,nx.value):
-                for j in range(0,ny.value):
-                    sl_all[j,i,1]=ptrs_g[ix]
-                    ix=ix+1
-            
-            b_slice=ctypes.c_char_p(force_bytes(b_slice_name))
-            nx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            ny=ctypes.c_int(0)
-            ptry=double_ptr()
-            ptrs_b=double_ptr()
-            get_fn(amp,b_slice,ctypes.byref(nx),ctypes.byref(ptrx),
-                   ctypes.byref(ny),ctypes.byref(ptry),
-                   ctypes.byref(ptrs_b))
-
-            # Copy from the C pointer to the python storage
-            ix=0
-            for i in range(0,nx.value):
-                for j in range(0,ny.value):
-                    sl_all[j,i,2]=ptrs_b[ix]
-                    ix=ix+1
-
-            
-            # If logz was specified, then manually apply the
-            # log to the data. Alternatively, we should consider
-            # using 'LogNorm' here, as suggested in
-            
-            # If the z range was specified, truncate all values
-            # outside that range (this truncation is done after
-            # the application of the log above)
-            
-            # if self.zset==True:
-            #     for i in range(0,ny.value):
-            #         for j in range(0,nx.value):
-            #             if sl_r[i][j]>self.zhi:
-            #                 sl_r[i][j]=self.zhi
-            #             elif sl_r[i][j]<self.zlo:
-            #                 sl_r[i][j]=self.zlo
-            #             if sl_g[i][j]>self.zhi:
-            #                 sl_g[i][j]=self.zhi
-            #             elif sl_g[i][j]<self.zlo:
-            #                 sl_g[i][j]=self.zlo
-            #             if sl_b[i][j]>self.zhi:
-            #                 sl_b[i][j]=self.zhi
-            #             elif sl_b[i][j]<self.zlo:
-            #                 sl_b[i][j]=self.zlo
-
-            if self.canvas_flag==False:
-                self.canvas()
-
-            # The imshow() function doesn't work with a log axis, so we
-            # set the scales back to linear and manually take the log
-            self.axes.set_xscale('linear')
-            self.axes.set_yscale('linear')
-            
-            if self.logx==True:
-                xgrid=[math.log(ptrx[i],10) for i in
-                       range(0,nx.value)]
-            if self.logy==True:
-                ygrid=[math.log(ptry[i],10) for i in
-                       range(0,ny.value)]
-
-            diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
-            mean_x=numpy.mean(diffs_x)
-            std_x=numpy.std(diffs_x)
-            diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
-            mean_y=numpy.mean(diffs_y)
-            std_y=numpy.std(diffs_y)
-            
-            if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
-                print('Warning in o2graph::o2graph_plotter::den_plot():')
-                print('  Nonlinearity of x or y grid is greater than '+
-                      '10^{-4}.')
-                print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
-                      (std_x/mean_x))
-                print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
-                      (std_y/mean_y))
-                print('  The density plot may not be properly scaled.')
-                
-            extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-            extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
-                                       xgrid[nx.value-2])/2
-            extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-            extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
-                                       ygrid[ny.value-2])/2
-                        
-            f=self.axes.imshow
-            if len(kwstring)==0:
-                self.last_image=f(sl_all,
-                                  interpolation='nearest',
-                                  origin='lower',extent=[extent1,extent2,
-                                                         extent3,extent4],
-                                  aspect='auto')
-            else:
-                self.last_image=f(sl_all,
-                                  interpolation='nearest',
-                                  origin='lower',extent=[extent1,extent2,
-                                                         extent3,extent4],
-                                  aspect='auto',
-                                  **string_to_dict(kwstring))
-
-            # The color bar is added later below...
-
-            # End of section for tensor types and table3d
-        else:
+        kwstring=''
+        if curr_type!=b'table3d':
             print("Command 'den-plot-rgb' not supported for type",
                   curr_type,".")
             return
+            
+        slice_r=args[0]
+        slice_g=args[1]
+        slice_b=args[2]
+        if len(args)>=4:
+            kwstring=args[3]
 
-        if self.colbar==True:
-            cbar=self.fig.colorbar(self.last_image,ax=self.axes)
-            cbar.ax.tick_params('both',length=6,width=1,which='major')
-            cbar.ax.tick_params(labelsize=self.font*0.8)
+        dctt=string_to_dict(kwstring)
+        self.den_plot(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
+                      **dctt)
 
-    def make_png(self,o2scl,amp,args):
+        return
+
+    def make_png_o2graph(self,o2scl,amp,link,args):
         """
         Create png from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
         """
 
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-
         curr_type=o2scl_get_type(o2scl,amp,link)
+        amt=acol_manager(link,amp)
 
-        # Handle tensor and table3d types
-        if (curr_type==b'tensor' or curr_type==b'tensor<size_t>' or
-            curr_type==b'tensor_grid' or curr_type==b'tensor<int>' or
-            curr_type==b'table3d'):
-
-            # If the object is a tensor, convert to a table3d
-            # object before plotting
-            if curr_type!=b'table3d':
-                index1=0
-                index2=1
-                if len(args)==1:
-                    kwstring=args[0]
-                if len(args)>=2:
-                    index1=int(args[0])
-                    index2=int(args[1])
-                if index1+index2!=1 and index1*index2!=0:
-                    print('Indices must be "0 1" or "1 0" in',
-                          'in den-plot.')
-                    return
-                    
-                conv_fn=o2scl.o2scl_acol_tensor_to_table3d
-                conv_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
-                conv_fn.restype=ctypes.c_int
-                
-                conv_ret=conv_fn(amp,index1,index2)
-                if conv_ret!=0:
-                    print('Automatic conversion to table3d failed.')
-                    return
-                slice_name="tensor"
-            else:
-                r_slice_name=args[0]
-                g_slice_name=args[1]
-                b_slice_name=args[2]
-
-            # Now that we are guaranteed to have a table3d
-            # object to use, use that to create the density
-            # plot
-            get_fn=o2scl.o2scl_acol_get_slice
-            get_fn.argtypes=[ctypes.c_void_p,ctypes.c_char_p,
-                             int_ptr,double_ptr_ptr,
-                             int_ptr,double_ptr_ptr,double_ptr_ptr]
-
-            r_slice=ctypes.c_char_p(force_bytes(r_slice_name))
-            nx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            ny=ctypes.c_int(0)
-            ptry=double_ptr()
-            ptrs_r=double_ptr()
-            get_fn(amp,r_slice,ctypes.byref(nx),ctypes.byref(ptrx),
-                   ctypes.byref(ny),ctypes.byref(ptry),
-                   ctypes.byref(ptrs_r))
-
-            # Allocate the python storage
-            sl_all=numpy.zeros((ny.value,nx.value,3))
-            xgrid=numpy.zeros((nx.value))
-            ygrid=numpy.zeros((ny.value))
-
-            # Copy from the C pointer to the python storage
-            ix=0
-            for i in range(0,nx.value):
-                for j in range(0,ny.value):
-                    sl_all[j,i,0]=ptrs_r[ix]
-                    ix=ix+1
-
-            # Copy the grid
-            for i in range(0,nx.value):
-                xgrid[i]=ptrx[i]
-            for j in range(0,ny.value):
-                ygrid[j]=ptry[j]
-            
-            g_slice=ctypes.c_char_p(force_bytes(g_slice_name))
-            nx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            ny=ctypes.c_int(0)
-            ptry=double_ptr()
-            ptrs_g=double_ptr()
-            get_fn(amp,g_slice,ctypes.byref(nx),ctypes.byref(ptrx),
-                   ctypes.byref(ny),ctypes.byref(ptry),
-                   ctypes.byref(ptrs_g))
-
-            # Copy from the C pointer to the python storage
-            ix=0
-            for i in range(0,nx.value):
-                for j in range(0,ny.value):
-                    sl_all[j,i,1]=ptrs_g[ix]
-                    ix=ix+1
-            
-            b_slice=ctypes.c_char_p(force_bytes(b_slice_name))
-            nx=ctypes.c_int(0)
-            ptrx=double_ptr()
-            ny=ctypes.c_int(0)
-            ptry=double_ptr()
-            ptrs_b=double_ptr()
-            get_fn(amp,b_slice,ctypes.byref(nx),ctypes.byref(ptrx),
-                   ctypes.byref(ny),ctypes.byref(ptry),
-                   ctypes.byref(ptrs_b))
-
-            # Copy from the C pointer to the python storage
-            ix=0
-            for i in range(0,nx.value):
-                for j in range(0,ny.value):
-                    sl_all[j,i,2]=ptrs_b[ix]
-                    ix=ix+1
-
-            
-            # If logz was specified, then manually apply the
-            # log to the data. Alternatively, we should consider
-            # using 'LogNorm' here, as suggested in
-            
-            # If the z range was specified, truncate all values
-            # outside that range (this truncation is done after
-            # the application of the log above)
-            
-            # if self.zset==True:
-            #     for i in range(0,ny.value):
-            #         for j in range(0,nx.value):
-            #             if sl_r[i][j]>self.zhi:
-            #                 sl_r[i][j]=self.zhi
-            #             elif sl_r[i][j]<self.zlo:
-            #                 sl_r[i][j]=self.zlo
-            #             if sl_g[i][j]>self.zhi:
-            #                 sl_g[i][j]=self.zhi
-            #             elif sl_g[i][j]<self.zlo:
-            #                 sl_g[i][j]=self.zlo
-            #             if sl_b[i][j]>self.zhi:
-            #                 sl_b[i][j]=self.zhi
-            #             elif sl_b[i][j]<self.zlo:
-            #                 sl_b[i][j]=self.zlo
-
-
-            from PIL import Image
-            im=Image.new(mode='RGB',size=(nx.value,ny.value))
-            pixels=im.load()
-            
-            min_val=sl_all[0,0,0]
-            max_val=sl_all[0,0,0]
-            
-            for i in range(0,nx.value):
-                for j in range(0,ny.value):
-                    if sl_all[j,i,0]<min_val:
-                        min_val=sl_all[j,i,0]
-                    if sl_all[j,i,1]<min_val:
-                        min_val=sl_all[j,i,1]
-                    if sl_all[j,i,2]<min_val:
-                        min_val=sl_all[j,i,2]
-                    if sl_all[j,i,0]>max_val:
-                        max_val=sl_all[j,i,0]
-                    if sl_all[j,i,1]>max_val:
-                        max_val=sl_all[j,i,1]
-                    if sl_all[j,i,2]>max_val:
-                        max_val=sl_all[j,i,2]
-
-            print('o2graph::make-png(): Minimum is',
-                  min_val,'maximum is',max_val,'.')
-                        
-            for i in range(0,nx.value):
-                for j in range(0,ny.value):
-                    pixels[i,j]=(int(256*(sl_all[j,i,0]-min_val)/
-                                     (max_val-min_val)),
-                                 int(256*(sl_all[j,i,1]-min_val)/
-                                     (max_val-min_val)),
-                                 int(256*(sl_all[j,i,2]-min_val)/
-                                     (max_val-min_val)))
-
-            im.save(args[3])
-            
-            # End of section for tensor types and table3d
-        else:
+        kwstring=''
+        if curr_type!=b'table3d':
             print("Command 'make-png' not supported for type",
                   curr_type,".")
+            return
+            
+        slice_r=args[0]
+        slice_g=args[1]
+        slice_b=args[2]
+        fname=args[3]
+        if len(args)>=5:
+            kwstring=args[4]
+
+        dctt=string_to_dict(kwstring)
+        self.den_plot(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
+                      fname,**dctt)
             
         return
 
@@ -930,31 +584,19 @@ class o2graph_plotter(yt_plot_base):
             # End of section for 'prob_dens_mdim_amr' type
         elif curr_type==b'vector<contour_line>':
 
-            # Get the total number of contour lines
-            cont_n_fn=o2scl.o2scl_acol_contours_n
-            cont_n_fn.argtypes=[ctypes.c_void_p]
-            cont_n_fn.restype=ctypes.c_int
-            nconts=cont_n_fn(amp)
-
-            # Define types for extracting each contour line
-            cont_line_fn=o2scl.o2scl_acol_contours_line
-            cont_line_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                                   int_ptr,double_ptr_ptr,
-                                   double_ptr_ptr]
-            cont_line_fn.restype=ctypes.c_double
+            amt=acol_manager(link,amp)
+            vcl=amt.get_cont_obj()
+            nconts=vcl.size()
 
             if self.canvas_flag==False:
                 self.canvas()
 
             # Loop over all contour lines
             for k in range(0,nconts):
-                idx=ctypes.c_int(0)
-                ptrx=double_ptr()
-                ptry=double_ptr()
-                lev=cont_line_fn(amp,k,ctypes.byref(idx),
-                                 ctypes.byref(ptrx),ctypes.byref(ptry))
-                xv=[ptrx[i] for i in range(0,idx.value)]
-                yv=[ptry[i] for i in range(0,idx.value)]
+
+                cl=vcl[k]
+                xv=cl.get_x().to_numpy()
+                yv=cl.get_y().to_numpy()
                 
                 if self.logx==True:
                     if self.logy==True:
@@ -978,6 +620,7 @@ class o2graph_plotter(yt_plot_base):
                             self.axes.plot(xv,yv)
                         else:
                             self.axes.plot(xv,yv,**string_to_dict(args[0]))
+                            
             # End of section for 'vector<contour_line>' type
         else:
             print("Command 'plot' not supported for type",
@@ -1077,13 +720,6 @@ class o2graph_plotter(yt_plot_base):
         Plot a region inside a curve or in between two curves
         """
 
-        # Useful pointer types
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        
         curr_type=o2scl_get_type(o2scl,amp,link)
                         
         if curr_type==b'table':
@@ -1141,13 +777,6 @@ class o2graph_plotter(yt_plot_base):
         """
 
         import matplotlib.pyplot as plot
-        
-        # Useful pointer types
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        int_ptr=ctypes.POINTER(ctypes.c_int)
         
         curr_type=o2scl_get_type(o2scl,amp,link)
                         
@@ -1236,13 +865,6 @@ class o2graph_plotter(yt_plot_base):
         Plot a histogram.
         """
 
-        # Useful pointer types
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        
         curr_type=o2scl_get_type(o2scl,amp,link)
                         
         if curr_type==b'table':
@@ -1303,13 +925,6 @@ class o2graph_plotter(yt_plot_base):
         """
 
         import matplotlib.pyplot as plot
-        
-        # Useful pointer types
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        int_ptr=ctypes.POINTER(ctypes.c_int)
         
         curr_type=o2scl_get_type(o2scl,amp,link)
                         
@@ -1774,79 +1389,11 @@ class o2graph_plotter(yt_plot_base):
         
         s.init_bytes(cmd_desc)
         cl.set_desc(s)
-        
-        # Apply aliases before parsing. We convert argv 
-        # to a set of integer and character arrays, then
-        # pass them to o2scl_acol_apply_aliases()
+
         if True:
-
-            orig_len=len(argv)
-            
-            int_ptr=ctypes.POINTER(ctypes.c_int)
-            char_ptr=ctypes.POINTER(ctypes.c_char)
-            int_ptr_ptr=ctypes.POINTER(int_ptr)
-            char_ptr_ptr=ctypes.POINTER(char_ptr)
-
-            # Allocate space for arrays
-            tiarr=(ctypes.c_int*len(argv))()
-            ttot=0
-            for i in range(0,len(argv)):
-                ttot+=len(argv[i])
-            tcarr=(ctypes.c_char*ttot)()
-
-            # Fill arrays with data
-            tcnt=0
-            for i in range(0,len(argv)):
-                tiarr[i]=len(argv[i])
-                #print(i,tiarr[i])
-                for j in range(0,len(argv[i])):
-                    tcarr[tcnt]=bytes(argv[i][j],'utf8')
-                    #print(j,tcarr[tcnt])
-                    tcnt=tcnt+1
-
-            # Call the alias_counts() function to find out how big the
-            # destination arrays need to be. This two step-process
-            # allows python to handle the memory allocation.
-            count_fn=o2scl.o2scl_acol_alias_counts
-            count_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,int_ptr,
-                               ctypes.c_char_p,int_ptr,int_ptr]
-            n_new=ctypes.c_int(0)
-            s_new=ctypes.c_int(0)
-            count_fn(amp,len(argv),tiarr,tcarr,ctypes.byref(n_new),
-                     ctypes.byref(s_new))
-
-            # Allocate the new integer and string arrays
-            tiarr2=(ctypes.c_int*n_new.value)()
-            tcarr2=(ctypes.c_char*s_new.value)()
-
-            # Setup and call alias function
-            alias_fn=o2scl.o2scl_acol_apply_aliases
-            alias_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,int_ptr,
-                               ctypes.c_char_p,int_ptr,ctypes.c_char_p]
-            alias_fn(amp,len(argv),tiarr,tcarr,tiarr2,tcarr2)
-
-            # Construct the new argv list. We skip alias
-            # definitions because they are already taken care of
-            argv=[]
-            icnt=0
-            cnt=0
-            iskip=0
-            if len(tiarr2)!=orig_len:
-                print('After applying alias,',orig_len,'->',len(tiarr2))
-            for i in range(0,n_new.value):
-                tstr=''
-                for j in range(0,tiarr2[i]):
-                    tstr=tstr+tcarr2[cnt].decode('utf-8')
-                    cnt=cnt+1
-                if tstr=='-alias':
-                    iskip=2
-                elif iskip==0:
-                    argv.append(tstr)
-                    if len(tiarr2)!=orig_len:
-                        print(icnt,argv[icnt])
-                    icnt=icnt+1
-                else:
-                    iskip=iskip-1
+            vs=std_vector_string(link)
+            vs.set_list(argv)
+            cl.apply_aliases(vs,0)
             
         if len(argv)<=1:
             done_flag=False
@@ -1876,12 +1423,6 @@ class o2graph_plotter(yt_plot_base):
         tensor_grid object.
         """
 
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-
         curr_type=o2scl_get_type(o2scl,amp,link)
 
         if curr_type==b'tensor_grid':
@@ -1893,36 +1434,22 @@ class o2graph_plotter(yt_plot_base):
             from yt.visualization.volume_rendering.transfer_function_helper \
                 import TransferFunctionHelper
 
-            # Set up wrapper for get function
-            get_fn=o2scl.o2scl_acol_get_tensor_grid3
-            get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr,
-                             int_ptr,double_ptr_ptr,
-                             double_ptr_ptr,double_ptr_ptr,
-                             double_ptr_ptr]
-            get_fn.restype=ctypes.c_int
-             # Call get function
-            nx=ctypes.c_int(0)
-            ny=ctypes.c_int(0)
-            nz=ctypes.c_int(0)
-            ret=ctypes.c_int(0)
-            gridx=double_ptr()
-            gridy=double_ptr()
-            gridz=double_ptr()
-            data=double_ptr()
-            ret=get_fn(amp,ctypes.byref(nx),ctypes.byref(ny),
-                       ctypes.byref(nz),ctypes.byref(gridx),
-                       ctypes.byref(gridy),ctypes.byref(gridz),
-                       ctypes.byref(data))
-            if ret==2:
+            amt=acol_manager(link,amp)
+            tg3=amt.get_tensor_grid_obj()
+            rk=tg3.get_rank()
+            if rk!=3:
                 print("Object of type 'tensor_grid' does not have rank 3.")
                 return
-            elif ret==1:
-                print("Object is not of type 'tensor_grid'.")
-                return
-
-            nx=nx.value
-            ny=ny.value
-            nz=nz.value
+            sza=tg3.get_size_arr()
+            nx=sza[0]
+            ny=sza[1]
+            nz=sza[2]
+            grid_packed=tg3.get_grid_packed()
+            gridx=[grid_packed[i] for i in range(0,nx)]
+            gridy=[grid_packed[i+nx] for i in range(0,ny)]
+            gridz=[grid_packed[i+nx+ny] for i in range(0,nz)]
+            
+            data=tg3.get_data()
             total_size=nx*ny*nz
 
             if self.xset==False:
@@ -2107,47 +1634,27 @@ class o2graph_plotter(yt_plot_base):
 
         import matplotlib.pyplot as plot
         
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        
         curr_type=o2scl_get_type(o2scl,amp,link)
 
         if curr_type==b'tensor_grid':
 
             # Set up wrapper for get function
-            get_fn=o2scl.o2scl_acol_get_tensor_grid3
-            get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr,
-                             int_ptr,double_ptr_ptr,
-                             double_ptr_ptr,double_ptr_ptr,
-                             double_ptr_ptr]
-            get_fn.restype=ctypes.c_int
-            
-             # Call get function
-            nx=ctypes.c_int(0)
-            ny=ctypes.c_int(0)
-            nz=ctypes.c_int(0)
-            ret=ctypes.c_int(0)
-            gridx=double_ptr()
-            gridy=double_ptr()
-            gridz=double_ptr()
-            data=double_ptr()
-            ret=get_fn(amp,ctypes.byref(nx),ctypes.byref(ny),
-                       ctypes.byref(nz),ctypes.byref(gridx),
-                       ctypes.byref(gridy),ctypes.byref(gridz),
-                       ctypes.byref(data))
-            if ret==2:
+            amt=acol_manager(link,amp)
+            tg3=amt.get_tensor_grid_obj()
+            rk=tg3.get_rank()
+            if rk!=3:
                 print("Object of type 'tensor_grid' does not have rank 3.")
                 return
-            elif ret==1:
-                print("Object is not of type 'tensor_grid'.")
-                return
-
-            nx=nx.value
-            ny=ny.value
-            nz=nz.value
+            sza=tg3.get_size_arr()
+            nx=sza[0]
+            ny=sza[1]
+            nz=sza[2]
+            grid_packed=tg3.get_grid_packed()
+            gridx=[grid_packed[i] for i in range(0,nx)]
+            gridy=[grid_packed[i+nx] for i in range(0,ny)]
+            gridz=[grid_packed[i+nx+ny] for i in range(0,nz)]
+            
+            data=tg3.get_data()
             total_size=nx*ny*nz
 
             if args[0]=='0':
@@ -2393,6 +1900,7 @@ class o2graph_plotter(yt_plot_base):
         """
 
         amt=acol_manager(link,amp)
+        cl=amt.get_cl()
         
         base_list_new=[
             ["addcbar",plot_base.addcbar.__doc__],
@@ -2681,11 +2189,6 @@ class o2graph_plotter(yt_plot_base):
             # If there was no match, do a command list
             if acol_match==False:
 
-                desc_fn=o2scl.o2scl_acol_cli_option_desc
-                desc_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,
-                                  char_ptr_ptr]
-                desc_fn.restype=ctypes.c_int
-                
                 print('o2graph: A data viewing and '+
                       'processing program for '+ter.bold()+
                       'O2scl'+ter.default_fgbg()+
@@ -2703,11 +2206,7 @@ class o2graph_plotter(yt_plot_base):
                 full_list=[]
 
                 for j in range(0,len(tlist)):
-                    opt_name=ctypes.c_char_p(tlist[j])
-                    desc_ret=desc_fn(amp,opt_name,iptr,cptr)
-                    desc=b''
-                    for k in range(0,iptr[0]):
-                        desc=desc+cptr[k]
+                    desc=cl.option_short_desc(tlist[j])
                     full_list.append([tlist[j],desc])
 
                 for line in base_list:
@@ -2935,12 +2434,6 @@ class o2graph_plotter(yt_plot_base):
         if len(args)>=8:
             alpha_column=args[7]
         
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-                    
         curr_type=o2scl_get_type(o2scl,amp,link)
 
         if curr_type==b'table':
@@ -3164,12 +2657,6 @@ class o2graph_plotter(yt_plot_base):
         if icnt==0:
             self.yt_def_vol()
 
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-                    
         curr_type=o2scl_get_type(o2scl,amp,link)
 
         if curr_type==b'table':
@@ -3674,8 +3161,8 @@ class o2graph_plotter(yt_plot_base):
 
     def _make_fname(self,prefix,suffix,i_frame,n_frames):
         """
-        Construct the animation filename from frame index and frame total,
-        padding with zeros when necessary.
+        Construct the animation filename from frame index and frame 
+        total, padding with zeros when necessary. 
         """
         if n_frames>=1000:
             if i_frame<10:
@@ -3705,7 +3192,7 @@ class o2graph_plotter(yt_plot_base):
     def restore_position(self,pos):
         """
         Restore the value of self.yt_position from the array 'pos'
-        which is 
+        which is ...
         """
         
         if self.yt_position=='default':
@@ -4385,7 +3872,7 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
-                        print('Not enough parameters for set option.')
+                        print('Not enough parameters for cmap option.')
                     else:
                         self.cmap(strlist[ix+1],strlist[ix+2:ix_next])
                         
@@ -4396,7 +3883,7 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
-                        print('Not enough parameters for set option.')
+                        print('Not enough parameters for cmap2 option.')
                     else:
                         self.cmap2(strlist[ix+1],strlist[ix+2:ix_next])
                         
@@ -4407,10 +3894,10 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
-                        print('Not enough parameters for set option.')
+                        print('Not enough parameters for make-png option.')
                     else:
-                        self.make_png(o2scl,amp,
-                                      strlist[ix+1:ix_next])
+                        self.make_png_o2graph(o2scl,amp,link,
+                                              strlist[ix+1:ix_next])
                         
                 elif cmd_name=='get':
                     
@@ -4772,7 +4259,8 @@ class o2graph_plotter(yt_plot_base):
                         print('Process den-plot-rgb.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.den_plot_rgb(o2scl,amp,strlist[ix+1:ix_next])
+                    self.den_plot_rgb_o2graph(o2scl,amp,link,
+                                              strlist[ix+1:ix_next])
                 
                 elif cmd_name=='den-plot-anim':
                     

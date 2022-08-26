@@ -1900,3 +1900,172 @@ class plot_base:
                 
         return
     
+    def den_plot_rgb(self,table3d,slice_r,slice_g,slice_b,**kwargs):
+        """
+        Density plot from a ``table3d`` object using three slices
+        to specify the red, green, and blue values.
+        """
+
+        nxt=table3d.get_nx()
+        nyt=table3d.get_ny()
+        xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
+        ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
+
+        slr=table3d.get_slice(slice_r).to_numpy()
+        slr=slr.transpose()
+        slg=table3d.get_slice(slice_g).to_numpy()
+        slg=slg.transpose()
+        slb=table3d.get_slice(slice_b).to_numpy()
+        slb=slb.transpose()
+
+        # Allocate the python storage
+        sl_all=numpy.zeros((nyt,nxt,3))
+
+        for i in range(0,nxt):
+            for j in range(0,nyt):
+                sl_all[j,i,0]=slr[i,j]
+                sl_all[j,i,1]=slg[i,j]
+                sl_all[j,i,2]=slb[i,j]
+        
+        # If logz was specified, then manually apply the
+        # log to the data. Alternatively, we should consider
+        # using 'LogNorm' here, as suggested in
+            
+        # If the z range was specified, truncate all values
+        # outside that range (this truncation is done after
+        # the application of the log above)
+            
+        # if self.zset==True:
+        #     for i in range(0,ny.value):
+        #         for j in range(0,nx.value):
+        #             if sl_r[i][j]>self.zhi:
+        #                 sl_r[i][j]=self.zhi
+        #             elif sl_r[i][j]<self.zlo:
+        #                 sl_r[i][j]=self.zlo
+        #             if sl_g[i][j]>self.zhi:
+        #                 sl_g[i][j]=self.zhi
+        #             elif sl_g[i][j]<self.zlo:
+        #                 sl_g[i][j]=self.zlo
+        #             if sl_b[i][j]>self.zhi:
+        #                 sl_b[i][j]=self.zhi
+        #             elif sl_b[i][j]<self.zlo:
+        #                 sl_b[i][j]=self.zlo
+
+        if self.canvas_flag==False:
+            self.canvas()
+
+        # The imshow() function doesn't work with a log axis, so we
+        # set the scales back to linear and manually take the log
+        self.axes.set_xscale('linear')
+        self.axes.set_yscale('linear')
+            
+        if self.logx==True:
+            xgrid=[math.log(ptrx[i],10) for i in
+                   range(0,nx.value)]
+        if self.logy==True:
+            ygrid=[math.log(ptry[i],10) for i in
+                   range(0,ny.value)]
+
+        diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
+        mean_x=numpy.mean(diffs_x)
+        std_x=numpy.std(diffs_x)
+        diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
+        mean_y=numpy.mean(diffs_y)
+        std_y=numpy.std(diffs_y)
+            
+        if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
+            print('Warning in plot_base::den_plot_rgb():')
+            print('  Nonlinearity of x or y grid is greater than '+
+                  '10^{-4}.')
+            print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
+                  (std_x/mean_x))
+            print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
+                  (std_y/mean_y))
+            print('  The density plot may not be properly scaled.')
+                
+        extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+        extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
+                                   xgrid[nx.value-2])/2
+        extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+        extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
+                                   ygrid[ny.value-2])/2
+                        
+        f=self.axes.imshow
+        self.last_image=f(sl_all,
+                          interpolation='nearest',
+                          origin='lower',extent=[extent1,extent2,
+                                                 extent3,extent4],
+                          aspect='auto',**kwargs)
+
+        if self.colbar==True:
+            cbar=self.fig.colorbar(self.last_image,ax=self.axes)
+            cbar.ax.tick_params('both',length=6,width=1,which='major')
+            cbar.ax.tick_params(labelsize=self.font*0.8)
+
+        return
+
+    def make_png(self,table3d,slice_r,slice_g,slice_b,fname,**kwargs):
+        """
+        Create png from a ``table3d`` object using three slices
+        to specify the red, green, and blue values.
+        """
+        
+        nxt=table3d.get_nx()
+        nyt=table3d.get_ny()
+        xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
+        ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
+
+        slr=table3d.get_slice(slice_r).to_numpy()
+        slr=slr.transpose()
+        slg=table3d.get_slice(slice_g).to_numpy()
+        slg=slg.transpose()
+        slb=table3d.get_slice(slice_b).to_numpy()
+        slb=slb.transpose()
+
+        # Allocate the python storage
+        sl_all=numpy.zeros((nyt,nxt,3))
+
+        for i in range(0,nxt):
+            for j in range(0,nyt):
+                sl_all[j,i,0]=slr[i,j]
+                sl_all[j,i,1]=slg[i,j]
+                sl_all[j,i,2]=slb[i,j]
+        
+        from PIL import Image
+        im=Image.new(mode='RGB',size=(nxt,nyt))
+        pixels=im.load()
+            
+        min_val=sl_all[0,0,0]
+        max_val=sl_all[0,0,0]
+            
+        for i in range(0,nxt):
+            for j in range(0,nyt):
+                if sl_all[j,i,0]<min_val:
+                    min_val=sl_all[j,i,0]
+                if sl_all[j,i,1]<min_val:
+                    min_val=sl_all[j,i,1]
+                if sl_all[j,i,2]<min_val:
+                    min_val=sl_all[j,i,2]
+                if sl_all[j,i,0]>max_val:
+                    max_val=sl_all[j,i,0]
+                if sl_all[j,i,1]>max_val:
+                    max_val=sl_all[j,i,1]
+                if sl_all[j,i,2]>max_val:
+                    max_val=sl_all[j,i,2]
+
+        print('plot_base::make-png(): Minimum is',
+              min_val,'maximum is',max_val,'.')
+                        
+        for i in range(0,nxt):
+            for j in range(0,nyt):
+                pixels[i,j]=(int(256*(sl_all[j,i,0]-min_val)/
+                                 (max_val-min_val)),
+                             int(256*(sl_all[j,i,1]-min_val)/
+                                 (max_val-min_val)),
+                             int(256*(sl_all[j,i,2]-min_val)/
+                                 (max_val-min_val)))
+
+        im.save(fname)
+            
+        return
+    

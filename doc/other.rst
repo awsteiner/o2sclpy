@@ -20,7 +20,9 @@ Other classes from O\ :sub:`2`\ scl
 * :ref:`Class prob_dens_mdim`
 * :ref:`Class prob_dens_mdim_biv_gaussian`
 * :ref:`Class prob_dens_mdim_gaussian`
-* :ref:`Class prob_dens_mdim_amr_hypercube`
+* :ref:`Class hypercube`
+* :ref:`Class std_vector_hypercube`
+* :ref:`Class prob_dens_mdim_amr`
 
 Class slack_messenger
 ---------------------
@@ -193,10 +195,32 @@ Class prob_dens_mdim_gaussian
         .. automethod:: __del__
         .. automethod:: __copy__
 
-Class prob_dens_mdim_amr_hypercube
-----------------------------------
+Class hypercube
+---------------
 
-.. autoclass:: o2sclpy.prob_dens_mdim_amr_hypercube
+.. autoclass:: o2sclpy.hypercube
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class std_vector_hypercube
+--------------------------
+
+.. autoclass:: o2sclpy.std_vector_hypercube
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class prob_dens_mdim_amr
+------------------------
+
+.. autoclass:: o2sclpy.prob_dens_mdim_amr
         :members:
         :undoc-members:
 
