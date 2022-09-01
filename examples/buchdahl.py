@@ -67,6 +67,7 @@ if plots:
 # Plot the enclosed gravitational mass as a function of
 # radius for a 1.4 solar mass neutron star:
     
+if plots:
     pl.canvas()
     plot.plot(tov_table['r'][0:tov_table.get_nlines()],
               tov_table['gm'][0:tov_table.get_nlines()])
@@ -78,6 +79,7 @@ if plots:
 # difference of the exact results and that computed from
 # the tov_solve class:
 
+if plots:
     pl.canvas_flag=False
     pl.canvas()
     plot.plot(radial_grid,rel_diff)

@@ -88,10 +88,10 @@ nb=eos_table['nb'][0:eos_table.get_nlines()]
 print(type(nb))
 ed=eos_table['ed'][0:eos_table.get_nlines()]
 edhc=[ed[i]*hc for i in range(0,eos_table.get_nlines())]
-plot.plot(nb,edhc)
-plot.xlabel('baryon density (1/fm^3)')
-plot.ylabel('energy density (MeV/fm^3)')
 if plots:
+    plot.plot(nb,edhc)
+    plot.xlabel('baryon density (1/fm^3)')
+    plot.ylabel('energy density (MeV/fm^3)')
     plot.show()
 
 # Compute the M-R curve using the TOV equations. TOV solver
@@ -117,12 +117,11 @@ for i in range(0,tov_table.get_ncolumns()):
     print('Column',i,str(col,'UTF-8'),str(unit,'UTF-8'))
 print('')
 
-
-plot.plot(tov_table['r'][0:tov_table.get_nlines()],
-          tov_table['gm'][0:tov_table.get_nlines()])
-plot.xlabel('radius (km)')
-plot.ylabel('gravitational mass (Msun))')
 if plots:
+    plot.plot(tov_table['r'][0:tov_table.get_nlines()],
+              tov_table['gm'][0:tov_table.get_nlines()])
+    plot.xlabel('radius (km)')
+    plot.ylabel('gravitational mass (Msun))')
     plot.show()
 
 # This line computes the profile of a 1.4 solar mass 
@@ -133,11 +132,11 @@ if plots:
 
 ret2=nc.fixed(1.4)
 
-plot.plot(tov_table['r'][0:tov_table.get_nlines()],
-          tov_table['gm'][0:tov_table.get_nlines()])
-plot.xlabel('radius (km)')
-plot.ylabel('gravitational mass (Msun))')
 if plots:
+    plot.plot(tov_table['r'][0:tov_table.get_nlines()],
+              tov_table['gm'][0:tov_table.get_nlines()])
+    plot.xlabel('radius (km)')
+    plot.ylabel('gravitational mass (Msun))')
     plot.show()
 
 # Create a O$_2$scl ``tov_love`` object to compute the tidal
