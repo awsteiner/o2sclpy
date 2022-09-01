@@ -112,12 +112,13 @@ mvsr_table.set_nlines(mvsr_table.lookup("gm",mvsr_table.max("gm"))+1)
 
 # Plot the mass-radius curve
 
-p=o2sclpy.plot_base()
-p.xlimits(9.5,20)
-p.plot([mvsr_table,'r','gm'])
-p.xtitle('$ R~(\mathrm{km}) $')
-p.ytitle('$ M~(\mathrm{M}_{\odot}) $')
-p.show()
+if plots:
+    p=o2sclpy.plot_base()
+    p.xlimits(9.5,20)
+    p.plot([mvsr_table,'r','gm'])
+    p.xtitle('$ R~(\mathrm{km}) $')
+    p.ytitle('$ M~(\mathrm{M}_{\odot}) $')
+    p.show()
 
 # For testing using ``pytest``:
 
