@@ -1434,13 +1434,13 @@ class vector_contour_line:
         """
         | Parameters:
         | *n*: ``size_t``
+        | Returns: contour_line object
         """
         func=self._link.o2scl.o2scl_std_vector_contour_line__getitem
-        func.restype=ctypes.c_contour_line
+        func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         vcl=contour_line(self._link,ret)
-        vcl._owner=True
         return vcl
 
     def __setitem__(self,i,value):

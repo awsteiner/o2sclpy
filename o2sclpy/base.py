@@ -1440,7 +1440,6 @@ class vec_vec_string:
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
         vstrt=std_vector_string(self._link,ret)
-        vstrt._owner=True
         return vstrt
 
     def __setitem__(self,i,value):
