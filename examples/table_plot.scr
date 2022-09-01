@@ -7,7 +7,7 @@
 # commands. Also, in LaTeX strings, and extra space is placed after
 # some $'s to avoid confusion with shell variables.
 #
-o2graph -create table x grid:-3.14,3.14,0.1 \
+o2graph -backend Agg -create table x grid:-3.14,3.14,0.1 \
 	-function "(1+sin(x))/2" y \
 	-set xlo "(-3.14)" -set xhi 3.14 -xtitle "$ x$" -deriv x y yp \
 	-preview 20 -internal data/ex1.o2 -plot x y marker=.,color=blue \

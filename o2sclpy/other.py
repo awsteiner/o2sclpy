@@ -1430,6 +1430,30 @@ class vector_contour_line:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_std_vector_contour_line__getitem
+        func.restype=ctypes.c_contour_line
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        vcl=contour_line(self._link,ret)
+        vcl._owner=True
+        return vcl
+
+    def __setitem__(self,i,value):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: contour_line object
+        """
+        func=self._link.o2scl.o2scl_std_vector_contour_line__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,i,value._ptr)
+        return
+
     def resize(self,n):
         """
         | Parameters:

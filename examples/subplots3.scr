@@ -2,7 +2,7 @@
 # is used to create a independent color bar based on the last image
 # plotted.
 #
-o2graph -create table x func:1001:i/100.0 \
+o2graph -backend Agg -create table x func:1001:i/100.0 \
 	-function "sin(x)" y1 \
 	-function "cos(x)" y2 \
 	-subplots 2 2 sharex=True \
@@ -19,4 +19,4 @@ o2graph -create table x func:1001:i/100.0 \
 	-xtitle x -ytitle "y=sin(x) cos(y)" \
 	-addcbar 0.85 0.12 0.04 0.86 \
         -selax \
-	-save figures/subplots3.png -show
+	-save figures/subplots3.png

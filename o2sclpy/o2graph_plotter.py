@@ -4712,6 +4712,9 @@ class o2graph_plotter(yt_plot_base):
                     if self.verbose>2:
                         print('Process show.')
                         print('args:',strlist[ix:ix_next])
+                    #if os.getenv('O2GRAPH_TEST')=='1':
+                    #print('Skipping show because test mode enabled.')
+                    #else:
                     self.show()
                 elif cmd_name=='move-labels':
                     if self.verbose>2:

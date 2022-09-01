@@ -284,7 +284,7 @@ def colors_near(col='',fname=''):
             plot.rc('font',family='serif')
             fig,axes=plot.subplots(figsize=(9.5,6.4))
             # Get height and width
-            X,Y=fig.get_dpi()*fig.get_size_inches()
+            X,Y=fig.get_size_inches()*100
             h=Y/(nrows+header+1)
             w=X/ncols
         
