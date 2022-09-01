@@ -11,7 +11,5 @@ Use this `link
 <https://nbviewer.org/urls/raw.githubusercontent.com/awsteiner/o2sclpy/main/examples/table.ipynb>`_
 to view this example as a jupyter notebook on nbviewer.org.
 
-
-
 .. literalinclude:: ../examples/table.py
 

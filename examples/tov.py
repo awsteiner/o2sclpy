@@ -78,7 +78,6 @@ tab.line_of_names("nb ed pr")
 tab.line_of_units("1/fm^3 1/fm^4 1/fm^4")
 
 # Fill the table with the Python data
-#tab.set_nlines(len(eos))
 
 for i in range(0,len(eos)):
     tab.line_of_data([eos[i][j] for j in range(0,3)])

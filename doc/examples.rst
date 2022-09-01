@@ -19,3 +19,4 @@ scl is linked in these examples.
    ex_nucmass
    ex_sfho
    ex_dsh
+   ex_tov
