@@ -1877,6 +1877,18 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
+    def make_biv(self):
+        """
+        | Returns: :class:`prob_dens_mdim_biv_gaussian` object
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_gaussian__make_biv
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret2=func(self._ptr)
+        ret=prob_dens_mdim_biv_gaussian(self._link,ret2)
+        ret.owner=True
+        return ret
+
 
 class hypercube:
     """
