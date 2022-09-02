@@ -93,7 +93,8 @@ def o2scl_get_type(o2scl,amp,link):
     amt=acol_manager(link,amp)
     return amt.get_type()
 
-def reformat_python_docs(cmd,doc_str,base_list_new,amp,link):
+def reformat_python_docs(cmd,doc_str,base_list_new,amp,link,
+                         return_short=False):
     """
     Reformat a python documentation string
     """
@@ -137,6 +138,9 @@ def reformat_python_docs(cmd,doc_str,base_list_new,amp,link):
     if len(reflist2)>=2:
         short=reflist2[1]
 
+    if return_short:
+        return short
+
     # The parameter description
     if len(reflist2)>=3:
         parm_desc=reflist2[2].replace('\n',' ')
@@ -165,6 +169,8 @@ def reformat_python_docs(cmd,doc_str,base_list_new,amp,link):
                     print('')
                 for k in range(0,len(tmplist)):
                     print(tmplist[k])
+                    
+    return
 
 def table_get_column(o2scl,amp,link,name,return_pointer=False):
     """

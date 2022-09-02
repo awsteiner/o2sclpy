@@ -2185,4 +2185,24 @@ class prob_dens_mdim_amr:
         new_obj=type(self)(self._link,self._ptr)
         return new_obj
 
+    def get_mesh(self):
+        """
+        Get object of type :class:`std::vector<prob_dens_mdim_amr<>::hypercube>`
+        """
+        func1=self._link.o2scl.o2scl_prob_dens_mdim_amr__get_mesh
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector_hypercube(self._link,ptr)
+        return obj
+
+    def set_mesh(self,value):
+        """
+        Set object of type :class:`std::vector<prob_dens_mdim_amr<>::hypercube>`
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__set_mesh
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
 
