@@ -216,6 +216,8 @@ Class std_vector_hypercube
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+        .. automethod:: __getitem__
+        .. automethod:: __setitem__
 
 Class prob_dens_mdim_amr
 ------------------------

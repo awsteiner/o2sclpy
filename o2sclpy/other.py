@@ -2141,6 +2141,29 @@ class std_vector_hypercube:
         ret=func(self._ptr)
         return ret
 
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | Returns: prob_dens_mdim_amr<>::hypercube object
+        """
+        func=self._link.o2scl.o2scl_std_vector_prob_dens_mdim_amr_hypercube__getitem
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        return ret
+
+    def __setitem__(self,i,value):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: prob_dens_mdim_amr<>::hypercube object
+        """
+        func=self._link.o2scl.o2scl_std_vector_prob_dens_mdim_amr_hypercube__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,i,value._ptr)
+        return
+
 
 class prob_dens_mdim_amr:
     """

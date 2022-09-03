@@ -2030,12 +2030,13 @@ def vector_spec_v(link,spec):
     ret=func(spec_)
     return ret
 
-def mult_vector_spec(link,spec,v,verbose=0,err_on_fail=True):
+def mult_vector_spec(link,spec,v,use_regex=False,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
         | *spec*: string
         | *v*: :class:`std::vector<std::vector<double>>` object
+        | *use_regex*: ``bool``
         | *verbose*: ``int``
         | *err_on_fail*: ``bool``
         | Returns: ``ctypes.c_int`` object
@@ -2043,7 +2044,7 @@ def mult_vector_spec(link,spec,v,verbose=0,err_on_fail=True):
     spec_=ctypes.c_char_p(force_bytes(spec))
     func=link.o2scl.o2scl_hdf_mult_vector_spec_std_vector_double__wrapper
     func.restype=ctypes.c_int
-    func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
-    ret=func(spec_,v._ptr,verbose,err_on_fail)
+    func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int,ctypes.c_bool]
+    ret=func(spec_,v._ptr,use_regex,verbose,err_on_fail)
     return ret
 

@@ -1151,39 +1151,39 @@ class o2graph_plotter(yt_plot_base):
         if (len(args)>=2 and force_bytes(args[1])!=b'none' and
             force_bytes(args[1])!=b'None'):
             
-            if self.verbose>1:
+            if self.verbose>1 or True:
                 print('Calling mult_vectors_to_conts() with',
                       args[0],'and',args[1])
                 
-            vvdx=o2sclpy.std_vector_vector(link)
-            o2sclpy.mult_vector_spec(link,args[0],vvdx,verbose,False)
-            vvdy=o2sclpy.std_vector_vector(link)
-            o2sclpy.mult_vector_spec(link,args[1],vvdy,verbose,False)
+            vvdx=std_vector_vector(link)
+            retx=mult_vector_spec(link,args[0],vvdx,False,self.verbose,False)
+            vvdy=std_vector_vector(link)
+            rety=mult_vector_spec(link,args[1],vvdy,False,self.verbose,False)
 
             for i in range(0,vvdx.size()):
                 for j in range(0,vvdy.size()):
                     if self.logx==True:
                         if self.logy==True:
-                            if len(args>=3):
+                            if len(args)>=3:
                                 self.axes.loglog(vvdx[i],vvdy[j],
                                                  **string_to_dict(args[2]))
                             else:
                                 self.axes.loglog(vvdx[i],vvdy[j])
                         else:
-                            if len(args>=3):
+                            if len(args)>=3:
                                 self.axes.semilogx(vvdx[i],vvdy[j],
                                                  **string_to_dict(args[2]))
                             else:
                                 self.axes.semilogx(vvdx[i],vvdy[j])
                     else:
                         if self.logy==True:
-                            if len(args>=3):
+                            if len(args)>=3:
                                 self.axes.semilogy(vvdx[i],vvdy[j],
                                                  **string_to_dict(args[2]))
                             else:
                                 self.axes.semilogy(vvdx[i],vvdy[j])
                         else:
-                            if len(args>=3):
+                            if len(args)>=3:
                                 self.axes.plot(vvdx[i],vvdy[j],
                                                  **string_to_dict(args[2]))
                             else:

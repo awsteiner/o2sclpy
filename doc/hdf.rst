@@ -160,5 +160,5 @@ Function vector_spec_v
 Function mult_vector_spec
 -------------------------
 
-.. autofunction:: o2sclpy.mult_vector_spec(link,spec,v,verbose,err_on_fail)
+.. autofunction:: o2sclpy.mult_vector_spec(link,spec,v,use_regex,verbose,err_on_fail)
 
