@@ -37,91 +37,92 @@ def test_cmaps():
     return
 
 def test_markers():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./markers.scr')
     assert ret==0
     compare_images('markers')
     return
 
 def test_modax():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./modax.scr')
     assert ret==0
     compare_images('modax')
     return
 
 def test_subplots1():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./subplots1.scr')
     assert ret==0
     compare_images('subplots1')
     return
 
 def test_subplots2():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./subplots2.scr')
     assert ret==0
     compare_images('subplots2')
     return
 
 def test_subplots3():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./subplots3.scr')
     assert ret==0
     compare_images('subplots3')
     return
 
 def test_table_plot():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./table_plot.scr')
     assert ret==0
     compare_images('table_plot')
     return
 
 def test_table_plot_color():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./table_plot_color.scr')
     assert ret==0
     compare_images('table_plot_color')
     return
 
 def test_table_plotv():
-    os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./table_plotv.scr')
+    assert ret==0
     compare_images('table_plotv')
     return
 
 def test_table_rplot():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./table_rplot.scr')
     assert ret==0
     compare_images('table_rplot')
     return
 
 def test_table_errorbar():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./table_errorbar.scr')
     assert ret==0
     compare_images('table_errorbar')
     return
 
 def test_textbox():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./textbox.scr')
     assert ret==0
     compare_images('textbox')
     return
 
 def test_table_scatter():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./table_scatter.scr')
     assert ret==0
     compare_images('table_scatter')
     return
 
 def test_table3d_den_plot():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./table3d_den_plot.scr')
     assert ret==0
     compare_images('table3d_den_plot')
     return
 
 def test_yt_scatter():
-    ret=os.system('cd examples; data/temp.scr')
+    ret=os.system('cd examples; ./yt_scatter.scr')
     assert ret==0
     compare_images('yt_scatter')
     return
 
 # We comment this one out because its time consuming
 #def test_yt_tg_multvol():
-#    ret=os.system('cd examples; data/temp.scr')
+#    ret=os.system('cd examples; ./yt_tg_multvol.scr')
 #    assert ret==0
 #    compare_images('yt_tg_multvol')
 #    return

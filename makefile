@@ -67,6 +67,19 @@ test:
 		examples/test_examples.py \
 		-s -v
 
+testq:
+	pytest o2sclpy/test \
+		examples/link_o2scl.py \
+		examples/table.py \
+		examples/unit_conv.py \
+		examples/skyrme.py \
+		examples/nucmass.py \
+		examples/SFHo_SFHx.py \
+		examples/DSH.py \
+		examples/buchdahl.py \
+		examples/tov.py \
+		examples/test_examples.py 
+
 ifeq ($(MACHINE),isospin)
 PIP3_CMD = sudo pip3
 else
