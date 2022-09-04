@@ -5,7 +5,7 @@ import operator
 import functools
 import os
 
-def compare_images(name):
+def compare_images(name,diff=200):
     """
     Compare the script image with the version in the figures
     directory and ensure they are nearly identical.
@@ -19,7 +19,7 @@ def compare_images(name):
                     len(img1h))
     #img3=ImageChops.subtract(img1,img2)
     #img3.save('figures/'+name+'_diff.png')
-    assert rms<200, name
+    assert rms<diff, name
     return
 
 def test_colors_near():
@@ -117,7 +117,7 @@ def test_table3d_den_plot():
 def test_yt_scatter():
     ret=os.system('cd examples; ./yt_scatter.scr')
     assert ret==0
-    compare_images('yt_scatter')
+    compare_images('yt_scatter',diff=400)
     return
 
 # We comment this one out because its time consuming
