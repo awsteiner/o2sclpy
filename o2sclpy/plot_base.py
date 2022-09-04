@@ -33,7 +33,7 @@ from matplotlib.colors import LinearSegmentedColormap
 import matplotlib.patches as patches
 
 from o2sclpy.utils import parse_arguments, string_to_dict
-from o2sclpy.utils import force_bytes, default_plot, get_str_array
+from o2sclpy.utils import force_bytes, default_plot
 from o2sclpy.utils import string_to_color
 
 class plot_base:

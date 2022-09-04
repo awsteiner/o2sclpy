@@ -209,19 +209,6 @@ def get_str_array(dset):
         word_counter=word_counter+1
     return list
 
-def get_ic_ptrs_to_list(size,lengths,chars):
-    """
-    """
-    tlist=[]
-    count=0
-    for i in range(0,size.value):
-        strt=b''
-        for j in range(0,lengths[i]):
-            strt=strt+chars[count]
-            count+=1
-        tlist.append(strt)
-    return tlist
-
 def parse_arguments(argv,verbose=0):
     """
     Old command-line parser (this is currently unused and

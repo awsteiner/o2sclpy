@@ -37,10 +37,10 @@ from o2sclpy.doc_data import extra_types, extra_list, param_list
 from o2sclpy.doc_data import yt_param_list, acol_help_topics
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
-from o2sclpy.utils import force_bytes, default_plot, get_str_array
+from o2sclpy.utils import force_bytes, default_plot
 from o2sclpy.utils import is_number
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
-from o2sclpy.utils import get_ic_ptrs_to_list, string_equal_dash
+from o2sclpy.utils import string_equal_dash
 from o2sclpy.utils import force_string, remove_spaces
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
@@ -455,13 +455,6 @@ class o2graph_plotter(yt_plot_base):
         Plot a two-dimensional set of data
         """
 
-        # Useful pointer types
-        double_ptr=ctypes.POINTER(ctypes.c_double)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        double_ptr_ptr=ctypes.POINTER(double_ptr)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        
         curr_type=o2scl_get_type(o2scl,amp,link)
                         
         if curr_type==b'table':
@@ -552,15 +545,15 @@ class o2graph_plotter(yt_plot_base):
 
             for i in range(0,nx.value):
 
-                iy=ctypes.c_int(i)
-                lowy=double_ptr()
-                highy=double_ptr()
-                fvy=ctypes.c_double(0.0)
-                wy=ctypes.c_double(0.0)
-                get_cube_fn(amp,iy,ctypes.byref(lowy),
-                            ctypes.byref(highy),
-                            ctypes.byref(fvy),
-                            ctypes.byref(wy))
+                # iy=ctypes.c_int(i)
+                # lowy=double_ptr()
+                # highy=double_ptr()
+                # fvy=ctypes.c_double(0.0)
+                # wy=ctypes.c_double(0.0)
+                # get_cube_fn(amp,iy,ctypes.byref(lowy),
+                #             ctypes.byref(highy),
+                #             ctypes.byref(fvy),
+                #             ctypes.byref(wy))
                 
                 left=lowy[dimx]
                 lower=lowy[dimy]
@@ -993,33 +986,17 @@ class o2graph_plotter(yt_plot_base):
                         xerrv=[[float(args[2]),float(args[3])]
                                for i in range(0,idxerr.value)]
                     else:
-                        colxerr=ctypes.c_char_p(force_bytes(args[3]))
-                        idxerr=ctypes.c_int(0)
-                        ptrxerr=double_ptr()
-                        get_fn(amp,colxerr,ctypes.byref(idxerr),
-                               ctypes.byref(ptrxerr))
+                        ptrxerr=table_get_column(o2scl,amp,link,args[3])
                         xerrv=[[float(args[2]),ptrxerr[i]] for i in
                                range(0,idxerr.value)]
                 else:
                     if is_number(args[3]):
-                        colxerr=ctypes.c_char_p(force_bytes(args[2]))
-                        idxerr=ctypes.c_int(0)
-                        ptrxerr=double_ptr()
-                        get_fn(amp,colxerr,ctypes.byref(idxerr),
-                               ctypes.byref(ptrxerr))
+                        ptrxerr=table_get_column(o2scl,amp,link,args[2])
                         xerrv=[[ptrxerr[i],float(args[3])] for i in
                                range(0,idxerr.value)]
                     else:
-                        colxerr=ctypes.c_char_p(force_bytes(args[2]))
-                        idxerr=ctypes.c_int(0)
-                        ptrxerr=double_ptr()
-                        get_fn(amp,colxerr,ctypes.byref(idxerr),
-                               ctypes.byref(ptrxerr))
-                        colxerr2=ctypes.c_char_p(force_bytes(args[3]))
-                        idxerr2=ctypes.c_int(0)
-                        ptrxerr2=double_ptr()
-                        get_fn(amp,colxerr2,ctypes.byref(idxerr2),
-                               ctypes.byref(ptrxerr2))
+                        ptrxerr=table_get_column(o2scl,amp,link,args[2])
+                        ptrxerr2=table_get_column(o2scl,amp,link,args[3])
                         xerrv=[[ptrxerr[i],ptrxerr2[i]] for i in
                                range(0,idxerr.value)]
             else:
@@ -2115,45 +2092,18 @@ class o2graph_plotter(yt_plot_base):
             # Since we didn't match anything above, see if
             # it is an acol command
             
-            # C types
-            int_ptr=ctypes.POINTER(ctypes.c_int)
-            int_ptr_ptr=ctypes.POINTER(int_ptr)
-            char_ptr=ctypes.POINTER(ctypes.c_char)
-            char_ptr_ptr=ctypes.POINTER(char_ptr)
-
             acol_match=False
                 
             # If len(args)>=2, then the user gave a type,
             # so check options based on that type
             if len(args)>=2:
 
-                if True:
-                    
-                    amt.command_del(amt.get_type())
-                    amt.command_add(force_bytes(curr_type))
-                    tlist=cl.get_option_list()
-
-                else:
-                
-                    # Function interface
-                    get_fn=o2scl.o2scl_acol_get_cli_options_type
-                    get_fn.argtypes=[ctypes.c_void_p,char_ptr,
-                                     int_ptr,int_ptr_ptr,
-                                     char_ptr_ptr]
-                    get_fn.restype=ctypes.c_int
-
-                    # Arguments
-                    size=ctypes.c_int(0)
-                    iptr=int_ptr()
-                    cptr=char_ptr()
-                    curr_type2=ctypes.c_char_p(force_bytes(curr_type))
-        
-                    # Function call
-                    get_ret=get_fn(amp,curr_type2,ctypes.byref(size),
-                                   ctypes.byref(iptr),ctypes.byref(cptr))
-
-                    # tlist is the list of acol commands
-                    tlist=get_ic_ptrs_to_list(size,iptr,cptr)
+                old_type=amt.get_type()
+                amt.command_del(old_type)
+                amt.command_add(force_bytes(curr_type))
+                tlist=cl.get_option_list()
+                amt.command_del(force_bytes(curr_type))
+                amt.command_add(old_type)
 
                 # If specified, look up command in acol list
                 if len(args)>0:
@@ -2166,24 +2116,7 @@ class o2graph_plotter(yt_plot_base):
             if acol_match==False:
 
                 # Check acol options based on the current type
-                
-                # Function interface
-                get_fn=o2scl.o2scl_acol_get_cli_options
-                get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
-                                 char_ptr_ptr]
-                get_fn.restype=ctypes.c_int
-    
-                # Arguments
-                size=ctypes.c_int(0)
-                iptr=int_ptr()
-                cptr=char_ptr()
-            
-                # Function call
-                get_ret=get_fn(amp,ctypes.byref(size),
-                               ctypes.byref(iptr),ctypes.byref(cptr))
-    
-                # tlist is the list of acol commands
-                tlist=get_ic_ptrs_to_list(size,iptr,cptr)
+                tlist=cl.get_option_list()
 
                 if len(args)<2:
                     # If specified, look up command in acol list
@@ -2863,39 +2796,18 @@ class o2graph_plotter(yt_plot_base):
 
         ter=terminal_py()
         
-        # C types
-        int_ptr=ctypes.POINTER(ctypes.c_int)
-        int_ptr_ptr=ctypes.POINTER(int_ptr)
-        char_ptr=ctypes.POINTER(ctypes.c_char)
-        char_ptr_ptr=ctypes.POINTER(char_ptr)
-            
-        # Function arguments
-        this_type=ctypes.c_char_p(b'')
-        size=ctypes.c_int(0)
-        iptr=int_ptr()
-        cptr=char_ptr()
-            
-        # Function interfaces
-        get_fn=o2scl.o2scl_acol_get_cli_options
-        get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
-                         char_ptr_ptr]
-        get_fn.restype=ctypes.c_int
-
-        get_type_fn=o2scl.o2scl_acol_get_cli_options_type
-        get_type_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,
-                              int_ptr_ptr,char_ptr_ptr]
-        get_type_fn.restype=ctypes.c_int
-
         if len(args)>0 and args[0]=='all':
 
             print('Commands from acol which do not require a current',
                   'object:\n')
+
+            old_type=amt.get_type()
+            amt.command_del(old_type)
+            amt.command_add(b'')
+            base_acol_comm_list=cl.get_option_list()
+            amt.command_del(b'')
+            amt.command_add(old_type)
             
-            # Function call
-            get_ret=get_type_fn(amp,this_type,ctypes.byref(size),
-                                ctypes.byref(iptr),ctypes.byref(cptr))
-    
-            base_acol_comm_list=get_ic_ptrs_to_list(size,iptr,cptr)
             base_acol_comm_list=sorted(base_acol_comm_list)
             comm_list=[]
             for i in range(0,len(base_acol_comm_list)):
@@ -2929,24 +2841,12 @@ class o2graph_plotter(yt_plot_base):
                 print('Acol and o2graph commands for an object of type '+
                       ter.type_str(str(this_type,amt))+':\n')
                 
-                # Function interface
-                get_fn=o2scl.o2scl_acol_get_cli_options_type
-                get_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,int_ptr_ptr,
-                                 char_ptr_ptr]
-                get_fn.restype=ctypes.c_int
-        
-                # Arguments
-                size=ctypes.c_int(0)
-                iptr=int_ptr()
-                cptr=char_ptr()
-                this_type2=ctypes.c_char_p(force_bytes(this_type))
-                
-                # Function call
-                get_ret=get_fn(amp,this_type2,ctypes.byref(size),
-                               ctypes.byref(iptr),ctypes.byref(cptr))
-        
-                # comm_list is the list of acol commands for this type
-                comm_list=get_ic_ptrs_to_list(size,iptr,cptr)
+                old_type=amt.get_type()
+                amt.command_del(old_type)
+                amt.command_add(force_bytes(this_type2))
+                comm_list=cl.get_option_list()
+                amt.command_del(force_bytes(this_type2))
+                amt.command_add(old_type)
                 
                 for line in extra_list:
                     if (this_type==line[0] or
@@ -2981,33 +2881,17 @@ class o2graph_plotter(yt_plot_base):
                 print(acol_types)
                 return
 
-            # C types
-            int_ptr=ctypes.POINTER(ctypes.c_int)
-            int_ptr_ptr=ctypes.POINTER(int_ptr)
-            char_ptr=ctypes.POINTER(ctypes.c_char)
-            char_ptr_ptr=ctypes.POINTER(char_ptr)
-        
-            # Function interface
-            get_fn=o2scl.o2scl_acol_get_cli_options_type
-            get_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,int_ptr_ptr,
-                             char_ptr_ptr]
-            get_fn.restype=ctypes.c_int
-
-            # Arguments
-            size=ctypes.c_int(0)
-            iptr=int_ptr()
-            cptr=char_ptr()
-            curr_type2=ctypes.c_char_p(force_bytes(curr_type))
-        
-            # Function call
-            get_ret=get_fn(amp,curr_type2,ctypes.byref(size),
-                           ctypes.byref(iptr),ctypes.byref(cptr))
-
+            old_type=amt.get_type()
+            amt.command_del(old_type)
+            amt.command_add(force_bytes(curr_type))
+            comm_list=cl.get_option_list()
+            amt.command_del(force_bytes(curr_type))
+            amt.command_add(old_type)
+                
             # comm_list is the list of acol commands for this type
             print('Commands from acol for objects of type',
                   ter.type_str(curr_type,amt)+':')
             print('')
-            comm_list=get_ic_ptrs_to_list(size,iptr,cptr)
             
             comm_list2=sorted(comm_list)
             for i in range(0,len(comm_list2)):
@@ -3053,12 +2937,6 @@ class o2graph_plotter(yt_plot_base):
                         
         else:
 
-            int_ptr=ctypes.POINTER(ctypes.c_int)
-            double_ptr=ctypes.POINTER(ctypes.c_double)
-            char_ptr=ctypes.POINTER(ctypes.c_char)
-            double_ptr_ptr=ctypes.POINTER(double_ptr)
-            char_ptr_ptr=ctypes.POINTER(char_ptr)
-            
             curr_type=o2scl_get_type(o2scl,amp)
 
             if curr_type==b'':
@@ -3068,29 +2946,7 @@ class o2graph_plotter(yt_plot_base):
                 print('O2graph commands for an object of type '+
                       ter.type_str(curr_type.decode('utf-8'),amt)+':\n')
             
-            # C types
-            int_ptr=ctypes.POINTER(ctypes.c_int)
-            int_ptr_ptr=ctypes.POINTER(int_ptr)
-            char_ptr=ctypes.POINTER(ctypes.c_char)
-            char_ptr_ptr=ctypes.POINTER(char_ptr)
-        
-            # Function interface
-            get_fn=o2scl.o2scl_acol_get_cli_options
-            get_fn.argtypes=[ctypes.c_void_p,int_ptr,int_ptr_ptr,
-                             char_ptr_ptr]
-            get_fn.restype=ctypes.c_int
-
-            # Arguments
-            size=ctypes.c_int(0)
-            iptr=int_ptr()
-            cptr=char_ptr()
-        
-            # Function call
-            get_ret=get_fn(amp,ctypes.byref(size),
-                           ctypes.byref(iptr),ctypes.byref(cptr))
-
-            # comm_list is the list of acol commands for this type
-            comm_list=get_ic_ptrs_to_list(size,iptr,cptr)
+            comm_list=cl.get_option_list()
             
             for line in base_list:
                 comm_list.append(force_bytes(line[0]))
