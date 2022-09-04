@@ -2165,16 +2165,12 @@ class std_vector_hypercube:
         return
 
 
-class prob_dens_mdim_amr:
+class prob_dens_mdim_amr(prob_dens_mdim):
     """
     Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim_amr<>``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_amr<>.html .
     """
-
-    _ptr=0
-    _link=0
-    _owner=True
 
     def __init__(self,link,pointer=0):
         """
@@ -2239,5 +2235,151 @@ class prob_dens_mdim_amr:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
+
+    @property
+    def n_dim(self):
+        """
+        Property of type ``ctypes.c_size_t``
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__get_n_dim
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @n_dim.setter
+    def n_dim(self,value):
+        """
+        Setter function for prob_dens_mdim_amr<>::n_dim .
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__set_n_dim
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,value)
+        return
+
+    def get_low(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_prob_dens_mdim_amr__get_low
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_low(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__set_low
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_high(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_prob_dens_mdim_amr__get_high
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_high(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__set_high
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def allow_resampling(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__get_allow_resampling
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @allow_resampling.setter
+    def allow_resampling(self,value):
+        """
+        Setter function for prob_dens_mdim_amr<>::allow_resampling .
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__set_allow_resampling
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def get_scale(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_prob_dens_mdim_amr__get_scale
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_scale(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__set_scale
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def verbose(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for prob_dens_mdim_amr<>::verbose .
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    def clear(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__clear
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def clear_mesh(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__clear_mesh
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def total_volume(self):
+        """
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_prob_dens_mdim_amr__total_volume
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
 
 

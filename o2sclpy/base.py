@@ -8961,6 +8961,17 @@ class cli:
         ret=func(self._ptr,sv._ptr,istart,debug)
         return ret
 
+    def get_option_list(self):
+        """
+        | Returns: :class:`std_vector_string` object
+        """
+        func=self._link.o2scl.o2scl_cli_get_option_list
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        vstrt=std_vector_string(self._link,ret)
+        return vstrt
+
     def parameter_desc(self,name):
         """
         | Parameters:

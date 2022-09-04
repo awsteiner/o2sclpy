@@ -517,22 +517,14 @@ class o2graph_plotter(yt_plot_base):
             # End of section for 'hist' type
         elif curr_type==b'prob_dens_mdim_amr':
 
-            get_base_fn=o2scl.o2scl_acol_pdma_get_base
-            get_base_fn.argtypes=[ctypes.c_void_p,int_ptr,
-                                  int_ptr,double_ptr_ptr,double_ptr_ptr]
-                            
-            get_cube_fn=o2scl.o2scl_acol_pdma_get_cube
-            get_cube_fn.argtypes=[ctypes.c_void_p,ctypes.c_int,
-                                  double_ptr_ptr,double_ptr_ptr,
-                                  double_ptr,double_ptr]
-                            
-            ndimx=ctypes.c_int(0)
-            nx=ctypes.c_int(0)
-            lowx=double_ptr()
-            highx=double_ptr()
-            get_base_fn(amp,ctypes.byref(ndimx),ctypes.byref(nx),
-                        ctypes.byref(lowx),ctypes.byref(highx))
-
+            amt=acol_manager(link,amp)
+            pdma=amt.get_pdma_obj()
+            ndimx=pdma.n_dim
+            mesh=pdma.get_mesh()
+            n=mesh.size()
+            lowx=pdma.get_low()
+            highx=pdma.get_high()
+            
             dimx=int(args[0])
             dimy=int(args[1])
 
@@ -2135,24 +2127,33 @@ class o2graph_plotter(yt_plot_base):
             # so check options based on that type
             if len(args)>=2:
 
-                # Function interface
-                get_fn=o2scl.o2scl_acol_get_cli_options_type
-                get_fn.argtypes=[ctypes.c_void_p,char_ptr,int_ptr,int_ptr_ptr,
-                                 char_ptr_ptr]
-                get_fn.restype=ctypes.c_int
+                if True:
+                    
+                    amt.command_del(amt.get_type())
+                    amt.command_add(force_bytes(curr_type))
+                    tlist=cl.get_option_list()
 
-                # Arguments
-                size=ctypes.c_int(0)
-                iptr=int_ptr()
-                cptr=char_ptr()
-                curr_type2=ctypes.c_char_p(force_bytes(curr_type))
+                else:
+                
+                    # Function interface
+                    get_fn=o2scl.o2scl_acol_get_cli_options_type
+                    get_fn.argtypes=[ctypes.c_void_p,char_ptr,
+                                     int_ptr,int_ptr_ptr,
+                                     char_ptr_ptr]
+                    get_fn.restype=ctypes.c_int
+
+                    # Arguments
+                    size=ctypes.c_int(0)
+                    iptr=int_ptr()
+                    cptr=char_ptr()
+                    curr_type2=ctypes.c_char_p(force_bytes(curr_type))
         
-                # Function call
-                get_ret=get_fn(amp,curr_type2,ctypes.byref(size),
-                               ctypes.byref(iptr),ctypes.byref(cptr))
+                    # Function call
+                    get_ret=get_fn(amp,curr_type2,ctypes.byref(size),
+                                   ctypes.byref(iptr),ctypes.byref(cptr))
 
-                # tlist is the list of acol commands
-                tlist=get_ic_ptrs_to_list(size,iptr,cptr)
+                    # tlist is the list of acol commands
+                    tlist=get_ic_ptrs_to_list(size,iptr,cptr)
 
                 # If specified, look up command in acol list
                 if len(args)>0:

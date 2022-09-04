@@ -1514,6 +1514,28 @@ class acol_manager:
         func(self._ptr,args._ptr)
         return
 
+    def command_add(self,new_type):
+        """
+        | Parameters:
+        | *new_type*: string
+        """
+        new_type_=ctypes.c_char_p(force_bytes(new_type))
+        func=self._link.o2scl.o2scl_hdf_acol_manager_command_add
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,new_type_)
+        return
+
+    def command_del(self,ltype):
+        """
+        | Parameters:
+        | *ltype*: string
+        """
+        ltype_=ctypes.c_char_p(force_bytes(ltype))
+        func=self._link.o2scl.o2scl_hdf_acol_manager_command_del
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,ltype_)
+        return
+
 
 class cloud_file:
     """
