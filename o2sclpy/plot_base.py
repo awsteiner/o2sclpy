@@ -709,8 +709,18 @@ class plot_base:
         return
 
     def line(self,x1,y1,x2,y2,**kwargs):
-        """
+        """Documentation for o2graph command ``line``:
+
         Plot a line from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
+
+        Command-line arguments: ``x1 y1 x2 y2 [kwargs]``
+
+        Plot a line from (x1,y1) to (xy,y2). Some useful kwargs are
+        color (c), dashes, linestyle (ls), linewidth (lw), marker,
+        markeredgecolor (mec), markeredgewidth (mew), markerfacecolor
+        (mfc), markerfacecoloralt (mfcalt), markersize (ms). For
+        example: o2graph -line 0.05 0.05 0.95 0.95 lw=0,marker='+'
+        -show
         """
         if self.verbose>2:
             print('Line',x1,y1,x2,y1)
@@ -799,7 +809,13 @@ class plot_base:
 
     def point(self,xval,yval,**kwargs):
         """
-        Plot a point at location (xval,yval)
+        Documentation for o2graph command ``point``:
+
+        Plot a single point.
+
+        Command-line arguments: ``<x> <y> [kwargs]``
+
+        Plot a single point.
         """
         if self.verbose>2:
             print('point',xval,yval,kwargs)
@@ -820,7 +836,29 @@ class plot_base:
     def error_point(self,xval,yval,err1=None,err2=None,
                     err3=None,err4=None,**kwargs):
         """
-        Plot a point at location (xval,yval)
+        Documentation for o2graph command ``error-point``:
+
+        Plot a single point with errorbars.
+
+        Command-line arguments: ``<x> <y> [<x err> <yerr>] or 
+        [<x lo> <x hi> <y lo> <y hi>]``
+
+        Some useful kwargs for the error-point command are:
+        
+        keyword    description                      default value
+        ---------------------------------------------------------
+        ecolor     error bar color                   None
+        capsize    cap size in points                None
+        barsabove  plot error bars on top of point   False
+        lolims     y value is lower limit            False
+        uplims     y value is upper limit            False
+        xlolims    x value is lower limit            False
+        xuplims    x value is upper limit            False
+        errorevery draw error bars on subset of data 1
+        capthick   thickness of error bar cap        None
+
+        See also errorbar for for plotting columns from a table object
+
         """
         if err1=='None' or err1=='none':
             err1=None
@@ -888,7 +926,18 @@ class plot_base:
 
     def rect(self,x1,y1,x2,y2,angle=0,**kwargs):
         """
-        Plot a rectangle from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
+        Documentation for o2graph command ``rect``:
+
+        Plot a rectangle.
+
+        Command-line arguments: ``<x1> <y1> <x2> <y2> [angle] [kwargs]``
+
+        Plot a rectange from (x1,y1) to (xy,y2) with rotation angle
+        <angle>. By default, the rectangle has no border, but the
+        linewidth ('lw') and edgecolor kwargs can be used to specify
+        one if desired. Some useful kwargs are alpha, color, edgecolor
+        (ec), facecolor (fc), fill, hatch, linestyle (ls), linewidth
+        (lw).
         """
         if self.verbose>2:
             print('Rect',x1,y1,x2,y1)
@@ -921,7 +970,18 @@ class plot_base:
 
     def ellipse(self,x,y,w,h,angle=0,**kwargs):
         """
-        Plot an ellipse
+        Documentation for o2graph command ``ellipse``:
+
+        Plot an ellipse.
+
+        <x> <y> <w> <h> [angle] [kwargs]
+
+        Plot an ellipse centered at (x,y) with width w and height h,
+        optionally rotated by the specified angle. By default, the
+        ellipse has no border, but the linewidth ('lw') and edgecolor
+        kwargs can be used to specify one if desired. Some useful
+        kwargs are alpha, color, edgecolor (ec), facecolor (fc), fill,
+        hatch, linestyle (ls), linewidth (lw).
         """
         if self.verbose>2:
             print('Ellipse',x,y,w,h,angle)
@@ -941,7 +1001,14 @@ class plot_base:
 
     def show(self):
         """
-        Call the ``matplotlib`` show function.
+        Documentation for o2graph command ``show``:
+
+        Show the current plot.
+
+        (No arguments.)
+
+        Show the current plot on the screen and begin the graphical
+        user interface. This is similar to ``plot.show()``.
         """
 
         import matplotlib.pyplot as plot
@@ -1459,7 +1526,15 @@ class plot_base:
     
     def selax(self,name=''):
         """
+        Documentation for o2graph command ``selax``:
+
         Select an axis from the current list of axes
+
+        [name]
+
+        Select which axis to use for subsequent plotting commands. If
+        [name] is not specified, then the names of all current axes
+        objects are listed.
         """
 
         if name=='':
@@ -1474,12 +1549,17 @@ class plot_base:
 
     def inset(self,left,bottom,width,height,**kwargs):
         """
-        Create a new axis inside the current figure?
+        Documentation for o2graph command ``inset``:
+        
+        Add a new set of axes
+        
+        Command-line arguments: ``<left> <bottom> <width> <height>
+        [kwargs]``
 
-        Useful kwargs are projection (None, 'aitoff', 'hammer', 'lambert',
-        'mollweide', 'polar', 'rectilinear', str}) and polar (T/F)
-        and many other axis kwargs (which may be difficult to 
-        modify in this simplified form)
+        This command creates a new set of axes, adds the new axes
+        to the list of axes, and sets the new axes as the current.
+        The axes object is named 'inset0' for the first inset, then
+        'inset1', and so on.
         """
 
         # Create a unique axes label i.e. inset0
@@ -1503,7 +1583,34 @@ class plot_base:
         
     def modax(self,**kwargs):
         """
-        Modify the current axes properties
+        Documentation for o2graph command ``modax``:
+
+        Modify current axes properties.
+
+        [kwargs]
+
+        alpha            float>0      alpha value for region inside axes 
+        labelsize        float>0      font size for labels 
+        x_loc            b,t,tb       placement of x-axis (bottom, top, or both)
+        x_major_loc      float>0      linear increment for x-axis major ticks 
+        x_minor_loc      float>0      linear increment for x-axis minor ticks 
+        x_minor_tick_dir in,out,inout direction of x-axis minor ticks 
+        x_minor_tick_len float>0      length of x-axis minor ticks 
+        x_minor_tick_wid float>0      width of x-axis minor ticks 
+        x_tick_dir       in,out,inout direction of x-axis major ticks 
+        x_tick_len       float>0      length of x-axis major ticks 
+        x_tick_wid       float>0      width of x-axis major ticks 
+        x_visible        T/F          set x-axis visible or invisible 
+        y_loc            l,r,lr       placement of y-axis (left, right, or both)
+        y_major_loc      float>0      linear increment for x-axis major ticks 
+        y_minor_loc      float>0      linear increment for x-axis minor ticks 
+        y_minor_tick_dir in,out,inout direction of y-axis minor ticks 
+        y_minor_tick_len float>0      length of y-axis minor ticks 
+        y_minor_tick_wid float>0      width of y-axis minor ticks 
+        y_tick_dir       in,out,inout direction of y-axis major ticks 
+        y_tick_len       float>0      length of y-axis major ticks 
+        y_tick_wid       float>0      width of y-axis major ticks 
+        y_visible        T/F          set y-axis visible or invisible
         """
 
         import matplotlib.pyplot as plot

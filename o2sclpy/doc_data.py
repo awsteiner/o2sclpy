@@ -364,10 +364,12 @@ This is a list of 4-element entries:
 """
 
 acol_types=["char","double","double[]","hist","hist_2d","int",
-            "int[]","prob_dens_mdim_amr","size_t","size_t[]","string",
+            "int[]","prob_dens_mdim_amr","prob_dens_mdim_gaussian",
+            "size_t","size_t[]","string",
             "string[]","table","table3d","tensor","tensor<int>",
             "tensor<size_t>","tensor_grid",
-            "uniform_grid<double>","vector<contour_line>"]
+            "uniform_grid<double>","vec_vec_double",
+            "vec_vec_string","vector<contour_line>"]
 
 extra_types=["table","table3d","hist_2d","hist","double[]","int[]",
              "size_t[]","tensor","tensor<int>","tensor<size_t>",
@@ -721,7 +723,7 @@ List of yt parameters for o2sclpy
 A list of 2-element entries, name and description
 """
 
-acol_help_topics=["functions","mult-vector-spec","strings-spec",
+acol_help_topics=["functions","index-spec","mult-vector-spec","strings-spec",
                   "types","value-spec","vector-spec"]
 
 o2graph_help_topics=["cmaps","cmaps-plot","colors","colors-plot",

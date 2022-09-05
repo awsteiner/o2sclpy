@@ -1108,7 +1108,21 @@ class o2graph_plotter(yt_plot_base):
             
     def plotv(self,o2scl,amp,link,args):
         """
-        Plot one or two multiple vector specifications
+        Documentation for o2graph command ``plotv``:
+
+        Plot several vector-like data sets.
+
+        Command-line arguments: ``[multiple vector spec. for x] 
+        <multiple vector spec. for y>``
+
+        The plotv command plots one or several pairs of vectors for x
+        and y. The total number of curves plotted will be the number
+        of vector data sets from the first argument times the number
+        of vector data sets from the second argument. If the x and y
+        vector lengths are not equal, then the longer vector is
+        truncated. Any kwargs are applied to all curves plotted. For
+        details on multiple vector specifications, use o2graph -help
+        mult-vector-spec.
         """
 
         amt=acol_manager(link,amp)
@@ -1892,14 +1906,66 @@ class o2graph_plotter(yt_plot_base):
               "invoked more than once, then only the last invocation "+
               "will have any effect.")],
             ["canvas",plot_base.canvas.__doc__],
+            ["clf","Documentation for clf\n\n"+
+             "Clear the current figure.\n\n"+
+             "(No arguments.)\n\n"+
+             "Clear the current figure."],
             ["cmap",plot_base.cmap.__doc__],
             ["cmap2",plot_base.cmap2.__doc__],
             ["den-plot-anim",o2graph_plotter.den_plot_anim.__doc__],
+            ["ellipse",plot_base.ellipse.__doc__],
+            ["error-point",plot_base.error_point.__doc__],
+            ["eval","Documentation for eval\n\n"+
+             "Run the python eval() function.\n\n"+
+             "<python code>\n\n"+
+             "Take the python code given and execute it using eval(). "+
+             "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
+            ["exec","Documentation for exec\n\n"+
+             "Run the python code specified in a file.\n\n"+
+             "<filename>\n\n"+
+             "Take the python code given and execute it using execfile()."],
             ["image","Documentation for image\n\n"+
              "Plot a png file in a matplotlib window.\n\n"+
              "<png file>\n\n"+
              "This command reads a png file, fills a plotting canvas "+
              "and then calls matplotlib.pyplot.show()."],
+            ["inset",plot_base.inset.__doc__],
+            ["line",plot_base.line.__doc__],
+            ["modax",plot_base.modax.__doc__],
+            ["o2scl-addl-libs",
+             "Specify a list of list of additional libraries to load."],
+            ["o2scl-cpp-lib",
+             "Specify the location of the standard C++ library."],
+            ["o2scl-lib-dir",
+             "Specify the directory for the libo2scl shared library."],
+            ["plotv",o2graph_plotter.plotv.__doc__],
+            ["point",plot_base.point.__doc__],
+            ["python","Begin an interactive python session."],
+            ["rect",plot_base.rect.__doc__],
+            ["save",
+             "Documentation for save\n\n"+
+             "Save the current plot in a file.\n\n"+
+             "<filename>\n\n",
+             "Save the current plot in a file similar "+
+             "to plot.savefig(). The action of this command depends on "+
+             "which backend was selected. File type depends on the "+
+             "extension, typically either .png, .pdf, .eps, .jpg, .raw, "+
+             ".svg, and .tif."],
+            ["selax",plot_base.selax.__doc__],
+            ["show",plot_base.show.__doc__],
+            ["subadj","Documentation for subadj\n\n"+
+             "Adjust spacing of subplots\n\n"+
+             "<kwargs>\n\n"+
+             "Adjust the spacing for subplots after using the 'subplots' "+
+             "command. All arguments are keyword arguments. The kwargs "+
+             "for 'subadj' are left, right, bottom, top, "+
+             "wspace, and hspace. This just a wrapper to the "+
+             "pyplot.subplots_adjust() function. Note that, unlike the "+
+             "margin settings for the fig_dict parameter, the values "+
+             "'right' and 'top' are defined relative to the lower-left "+
+             "corner, so a small right margin is 'right=0.99'. The "+
+             "subplots_adjust() function requires right>left and "+
+             "top>bottom."],
             ["yt-axis",yt_plot_base.yt_plot_axis.__doc__],
             ["yt-path",o2graph_plotter.yt_path_func.__doc__],
             ["yt-text",o2graph_plotter.yt_text.__doc__],
@@ -1920,16 +1986,19 @@ class o2graph_plotter(yt_plot_base):
         curr_type=o2scl_get_type(o2scl,amp,link)
 
         if len(args)==1:
+            
             cmd=args[0]
+            
         elif len(args)==2:
             # If both a type and command are specified
                         
             curr_type=args[0]
             cmd=args[1]
 
-        # See if we matched an o2graph command
+        # True if the user-specified arguments were matched
         match=False
 
+        # Look for the user-specified command in base_list_new
         for line in base_list_new:
             if cmd==line[0]:
                 match=True
@@ -1950,17 +2019,18 @@ class o2graph_plotter(yt_plot_base):
                                 
         # Handle the case of an o2graph command from the
         # extra list
-        for line in extra_list:
-            if ((curr_type==line[0] or
-                 curr_type==force_bytes(line[0])) and
-                cmd==line[1]):
-                match=True
-                print('Usage: '+force_string(amt.get_command_color())+
-                      cmd+force_string(amt.get_default_color())+
-                      ' '+line[3]+'\n\n'+line[2]+'\n')
-                tempx_arr=wrap_line(line[4])
-                for i in range (0,len(tempx_arr)):
-                    print(tempx_arr[i])
+        if match==False:
+            for line in extra_list:
+                if ((curr_type==line[0] or
+                     curr_type==force_bytes(line[0])) and
+                    cmd==line[1]):
+                    match=True
+                    print('Usage: '+force_string(amt.get_command_color())+
+                          cmd+force_string(amt.get_default_color())+
+                          ' '+line[3]+'\n\n'+line[2]+'\n')
+                    tempx_arr=wrap_line(line[4])
+                    for i in range (0,len(tempx_arr)):
+                        print(tempx_arr[i])
 
         # If we haven't matched yet, then show commands for
         # other types
@@ -2069,21 +2139,7 @@ class o2graph_plotter(yt_plot_base):
             finished=True
 
         # Handle acol topics and types
-        if (len(args)==1 and (cmd=='strings-spec' or cmd=='functions' or
-                              cmd=='mult-vector-spec' or cmd=='types' or
-                              cmd=='value-spec' or cmd=='vector-spec' or
-                              cmd=='index-spec' or cmd=='char' or
-                              cmd=='double' or cmd=='double[]' or
-                              cmd=='hist' or cmd=='hist_2d' or
-                              cmd=='int' or cmd=='int[]' or
-                              cmd=='prob_dens_amr' or cmd=='size_t' or
-                              cmd=='size_t[]' or cmd=='string' or
-                              cmd=='string[]' or cmd=='table' or
-                              cmd=='table3d' or cmd=='tensor' or
-                              cmd=='tensor<int>' or cmd=='tensor<size_t>' or
-                              cmd=='tensor_grid' or
-                              cmd=='uniform_grid<double>' or
-                              cmd=='vector<contour_line>')):
+        if (len(args)==1 and cmd in acol_help_topics):
             self.gen_acol(o2scl,amp,link,'help',args)
             finished=True
             
@@ -2150,8 +2206,18 @@ class o2graph_plotter(yt_plot_base):
                     full_list.append([tlist[j],desc])
 
                 for line in base_list:
-                    full_list.append([force_bytes(line[0]),
-                                      force_bytes(line[1])])
+                    found_new=False
+                    for line2 in base_list_new:
+                        if line[0]==line2[0]:
+                            short=reformat_python_docs(line2[0],line2[1],
+                                                 base_list_new,amp,
+                                                 link,True)
+                            full_list.append([force_bytes(line[0]),
+                                              force_bytes(short)])
+                            found_new=True
+                    if found_new==False:
+                        full_list.append([force_bytes(line[0]),
+                                          force_bytes(line[1])])
 
                 if curr_type!='':
                     for line in extra_list:
