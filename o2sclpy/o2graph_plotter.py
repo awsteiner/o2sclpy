@@ -32,7 +32,7 @@ import textwrap
 # For code.interact() in 'python' command
 import code 
 
-from o2sclpy.doc_data import cmaps, new_cmaps, base_list
+from o2sclpy.doc_data import cmaps, new_cmaps
 from o2sclpy.doc_data import extra_types, extra_list, param_list
 from o2sclpy.doc_data import yt_param_list, acol_help_topics
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
@@ -51,7 +51,7 @@ from o2sclpy.doc_data import version
 from o2sclpy.hdf import *
 from o2sclpy.base import *
 
-base_list_new2=[
+base_list_new=[
     ["addcbar",plot_base.addcbar.__doc__],
     ["arrow",plot_base.arrow.__doc__],
     ["backend",
@@ -154,7 +154,7 @@ extra_list_new=[
     ["table","plot-color",""],
 ]
 
-def doc_replacements(s,base_list_new,ter,amp,link):
+def doc_replacements(s,ter,amp,link):
     """
     Make some replacements from RST formatting to the terminal screen.
 
@@ -196,7 +196,7 @@ def o2scl_get_type(o2scl,amp,link):
     amt=acol_manager(link,amp)
     return amt.get_type()
 
-def reformat_python_docs(cmd,doc_str,base_list_new,amp,link,
+def reformat_python_docs(cmd,doc_str,amp,link,
                          return_short=False):
     """
     Reformat a python documentation string
@@ -268,7 +268,7 @@ def reformat_python_docs(cmd,doc_str,base_list_new,amp,link,
         for j in range(3,len(reflist2)):
             if len(reflist2[j])>0:
                 long_help=doc_replacements(reflist2[j].replace('\n',' '),
-                                           base_list_new,ter,amp,link)
+                                           ter,amp,link)
                 tmplist=wrap_line(long_help,ncols-1)
                 if j!=3:
                     print('')
@@ -308,7 +308,7 @@ class o2graph_plotter(yt_plot_base):
         """
         Desc
         """
-        for line in base_list_new2:
+        for line in base_list_new:
             if line[0]=="plotv":
                 line[1]=o2graph_plotter.plotv.__doc__
             elif line[0]=="yt-ann":
@@ -2039,10 +2039,10 @@ class o2graph_plotter(yt_plot_base):
         match=False
 
         # Handle the case of an o2graph command from the base list
-        for line in base_list_new2:
+        for line in base_list_new:
             if cmd==line[0]:
                 match=True
-                reformat_python_docs(cmd,line[1],base_list_new2,amp,link)
+                reformat_python_docs(cmd,line[1],amp,link)
         
         # Handle the case of an o2graph command from the
         # extra list
@@ -2232,9 +2232,8 @@ class o2graph_plotter(yt_plot_base):
                     desc=cl.option_short_desc(tlist[j])
                     full_list.append([tlist[j],desc])
 
-                for line2 in base_list_new2:
-                    short=reformat_python_docs(line2[0],line2[1],
-                                               base_list_new2,amp,
+                for line2 in base_list_new:
+                    short=reformat_python_docs(line2[0],line2[1],amp,
                                                link,True)
                     full_list.append([force_bytes(line2[0]),
                                       force_bytes(short)])
@@ -2910,7 +2909,7 @@ class o2graph_plotter(yt_plot_base):
                   'object:\n')
 
             comm_list=[]
-            for line in base_list:
+            for line in base_list_new:
                 comm_list.append(force_bytes(line[0]))
             comm_list_dec=sorted(comm_list)
             for i in range(0,len(comm_list_dec)):
@@ -2992,7 +2991,7 @@ class o2graph_plotter(yt_plot_base):
                   'object.')
             print('')
             comm_list=[]
-            for line in base_list:
+            for line in base_list_new:
                 comm_list.append(force_bytes(line[0]))
 
             comm_list2=sorted(comm_list)
@@ -3034,7 +3033,7 @@ class o2graph_plotter(yt_plot_base):
             
             comm_list=cl.get_option_list()
             
-            for line in base_list:
+            for line in base_list_new:
                 comm_list.append(force_bytes(line[0]))
             for line in extra_list:
                 if (curr_type==line[0] or
