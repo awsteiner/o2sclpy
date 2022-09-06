@@ -657,7 +657,18 @@ class plot_base:
 
     def xlimits(self,xlo,xhi):
         """
+        Documentation for o2graph command ``xlimits``:
+
         Set the x-axis limits
+
+        <x low> <x high>
+
+        The xlimits command sets xlo and xhi to the specified limits
+        and sets xset to True. If a plotting canvas is currently open,
+        then the x-limits on the current axis are modified. Future
+        plots are also plot with the specified x-limits. If <low> and
+        <high> are identical then xset is set to False and the x
+        limits are automatically set by matplotlib.
         """
         if xlo==xhi:
             self.xset=False
@@ -676,7 +687,18 @@ class plot_base:
 
     def ylimits(self,ylo,yhi):
         """
+        Documentation for o2graph command ``ylimits``:
+
         Set the y-axis limits
+
+        <y low> <y high>
+
+        The ylimits command sets ylo and yhi to the specified limits
+        and sets yset to True. If a plotting canvas is currently open,
+        then the y-limits on the current axis are modified. Future
+        plots are also plot with the specified y-limits. If <low> and
+        <high> are identical then yset is set to False and the y
+        limits are automatically set by matplotlib.
         """
         if ylo==yhi:
             self.yset=False
@@ -695,7 +717,18 @@ class plot_base:
 
     def zlimits(self,zlo,zhi):
         """
+        Documentation for o2graph command ``zlimits``:
+
         Set the z-axis limits
+
+        <z low> <z high>
+
+        The zlimits command sets zlo and zhi to the specified limits
+        and sets zset to True. If a plotting canvas is currently open,
+        then the z-limits on the current axis are modified. Future
+        plots are also plot with the specified z-limits. If <low> and
+        <high> are identical then zset is set to False and the z
+        limits are automatically set by matplotlib.
         """
         if zlo==zhi:
             self.zset=False
@@ -1293,8 +1326,135 @@ class plot_base:
         # End of function plot_base::save()
         return
 
-    def ttext(self,tx,ty,textstr,**kwargs):
+    def text(self,tx,ty,textstr,**kwargs):
+        """Documentation for o2graph command ``text``:
+
+        Plot text in the data coordinates.
+
+        <x> <y> <text> [kwargs]
+
+        The 'text' command plots text in the data coordinates defined
+        by the current axes with the font size determined by the value
+        of the parameter 'font'. LaTeX is used for text rendering by
+        default, but this setting can be changed using, e.g. '-set
+        usetex 0'. Some useful kwargs are fontfamily, fontstyle,
+        fontsize, color, backgroundcolor, rotation,
+        horizontalalignment (ha), and verticalalignment (va). Note
+        that you must disable LaTeX rendering to change fontfamily or
+        fontstyle.
+
+        If ``tx`` and ``ty`` are strings, then they are passed through
+        the ``eval()`` function and converted to floating-point
+        numbers.
         """
+        if self.canvas_flag==False:
+            self.canvas()
+            
+        ha_present=False
+        for key in kwargs:
+            if key=='ha' or key=='horizontalalignment':
+                ha_present=True
+        if ha_present==False:
+            kwargs=dict(kwargs,ha='center')
+            
+        va_present=False
+        for key in kwargs:
+            if key=='va' or key=='verticalalignment':
+                va_present=True
+        if va_present==False:
+            kwargs=dict(kwargs,va='center')
+
+        fontsize_present=False
+        for key in kwargs:
+            if key=='fontsize':
+                fontsize_present=True
+        if fontsize_present==False:
+            kwargs=dict(kwargs,fontsize=self.font)
+
+        if isinstance(tx,str):
+            tx=float(eval(tx))
+        if isinstance(ty,str):
+            ty=float(eval(ty))
+
+        self.axes.text(tx,ty,textstr,**kwargs)
+        
+        # End of function plot_base::text()
+        return
+
+    def textbox(self,tx,ty,strt,boxprops='',**kwargs):
+        """
+        Documentation for o2graph command ``textbox``:
+
+        Plot a box with text.
+
+        <x1> <y1> <text> [bbox properties] [kwargs]
+        
+        Plot text <text> and a box at location <x1> <y1>. For example,
+        textbox 0.5 0.5 \"$ f(x) $\" \"alpha=0.8,facecolor=white\"
+        . This command uses the standard axis text function, but
+        adds a bounding box with the specified properties. Typical
+        bbox properties are boxstyle (Circle, DArrow, LArrow,
+        RArrow, Round, Round4, Roundtooth, Sawtooth, Square),
+        alpha, color, edgecolor (ec), facecolor (fc), fill, hatch
+        ({'/','\','|','-','+','x','o','O','.', '*'}), linestyle
+        (ls), and linewidth (lw). The keyword arguments are for the
+        text properties, and follow "+ those of the text command.
+
+        """
+        if self.canvas_flag==False:
+            self.canvas()
+
+        ha_present=False
+        for key in kwargs:
+            if key=='ha':
+                ha_present=True
+        if ha_present==False:
+            kwargs=dict(kwargs,ha='center')
+            
+        va_present=False
+        for key in kwargs:
+            if key=='va':
+                va_present=True
+        if va_present==False:
+            kwargs=dict(kwargs,va='center')
+
+        fontsize_present=False
+        for key in kwargs:
+            if key=='fontsize':
+                fontsize_present=True
+        if fontsize_present==False:
+            kwargs=dict(kwargs,fontsize=self.font)
+
+        if isinstance(tx,str):
+            tx=float(eval(tx))
+        if isinstance(ty,str):
+            ty=float(eval(ty))
+            
+        self.axes.text(tx,ty,strt,
+                       transform=self.axes.transAxes,
+                       bbox=string_to_dict(boxprops),**kwargs)
+        
+        # End of function plot_base::textbox()
+        return
+
+    def ttext(self,tx,ty,textstr,**kwargs):
+        """Documentation for o2graph command ``ttext``:
+
+        Plot text in window coordinates [(0,0) to (1,1)].
+
+        <x> <y> <text> [kwargs]
+
+        The ttext command plots text in the window coordinates
+        [typically (0,0) to (1,1)] with the font size determined by
+        the value of the parameter font. LaTeX is used for text
+        rendering by default, but this setting can be changed using,
+        e.g. '-set usetex 0'. Some useful kwargs are fontfamily,
+        fontstyle, fontsize, color, backgroundcolor, rotation,
+        horizontalalignment (ha), and verticalalignment (va).
+        Specifying fontsize overrides the font parameter. Note that
+        you must disable LaTeX rendering to change fontfamily or
+        fontstyle.
+
         Plot text in the native coordinate system using a transAxes
         transformation. This function uses the class font size and and
         centering in the horizontal and vertical directions by
@@ -1303,6 +1463,7 @@ class plot_base:
         created already. If ``tx`` and ``ty`` are strings, then they
         are passed through the ``eval()`` function and converted to
         floating-point numbers.
+
         """
         if self.canvas_flag==False:
             self.canvas()
@@ -1345,94 +1506,22 @@ class plot_base:
         # End of function plot_base::ttext()
         return
 
-    def text(self,tx,ty,textstr,**kwargs):
-        """Plot text in the axis coordinate system transforming using the
-        class font size and and centering in the horizontal and
-        vertical directions by default. A figure and axes are created
-        using :py:func:`o2sclpy.plot_base.canvas()`, if they have not
-        been created already. If ``tx`` and ``ty`` are strings, then
-        they are passed through the ``eval()`` function and converted
-        to floating-point numbers.
-        """
-        if self.canvas_flag==False:
-            self.canvas()
-            
-        ha_present=False
-        for key in kwargs:
-            if key=='ha' or key=='horizontalalignment':
-                ha_present=True
-        if ha_present==False:
-            kwargs=dict(kwargs,ha='center')
-            
-        va_present=False
-        for key in kwargs:
-            if key=='va' or key=='verticalalignment':
-                va_present=True
-        if va_present==False:
-            kwargs=dict(kwargs,va='center')
-
-        fontsize_present=False
-        for key in kwargs:
-            if key=='fontsize':
-                fontsize_present=True
-        if fontsize_present==False:
-            kwargs=dict(kwargs,fontsize=self.font)
-
-        if isinstance(tx,str):
-            tx=float(eval(tx))
-        if isinstance(ty,str):
-            ty=float(eval(ty))
-
-        self.axes.text(tx,ty,textstr,**kwargs)
-        
-        # End of function plot_base::text()
-        return
-
-    def textbox(self,tx,ty,strt,boxprops='',**kwargs):
-        """
-        Plot text in the axis coordinate system with a box
-        """
-        if self.canvas_flag==False:
-            self.canvas()
-
-        ha_present=False
-        for key in kwargs:
-            if key=='ha':
-                ha_present=True
-        if ha_present==False:
-            kwargs=dict(kwargs,ha='center')
-            
-        va_present=False
-        for key in kwargs:
-            if key=='va':
-                va_present=True
-        if va_present==False:
-            kwargs=dict(kwargs,va='center')
-
-        fontsize_present=False
-        for key in kwargs:
-            if key=='fontsize':
-                fontsize_present=True
-        if fontsize_present==False:
-            kwargs=dict(kwargs,fontsize=self.font)
-
-        if isinstance(tx,str):
-            tx=float(eval(tx))
-        if isinstance(ty,str):
-            ty=float(eval(ty))
-            
-        self.axes.text(tx,ty,strt,
-                       transform=self.axes.transAxes,
-                       bbox=string_to_dict(boxprops),**kwargs)
-        
-        # End of function plot_base::textbox()
-        return
-
     def subplots(self,nr,nc=1,**kwargs):
         """
-        Create ``nr`` rows and ``nc`` columns of subplots. The axis
-        objects are extracted and placed in a (one-dimensional) list
-        in ``axes_dict``.
+        Documentation for o2graph command ``subplot``:
+
+        Create subplots.
+
+        <nrows> <ncols> [kwargs]
+
+        Create a grid of <nrows> by <ncols> subplots. The kwargs
+        currently supported are 'sharex=True|False', and
+        'sharey=True|False'. Subplots are named 'subplot0',
+        'subplot1', ... with the indexes moving to the right before
+        proceeding to the next row.
+
+        This command allows ``o2graph`` to track the figure and
+        axis objects so the user can easily refer to them.
         """
         
         import matplotlib.pyplot as plot

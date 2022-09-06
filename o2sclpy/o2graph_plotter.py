@@ -135,7 +135,9 @@ def reformat_python_docs(cmd,doc_str,base_list_new,amp,link,
     long_help=''
 
     # The short description
-    if len(reflist2)>=2:
+    if len(reflist2)==1:
+        short=reflist2[0].split('\n')[0]
+    elif len(reflist2)>=2:
         short=reflist2[1]
 
     if return_short:
@@ -1966,13 +1968,28 @@ class o2graph_plotter(yt_plot_base):
              "corner, so a small right margin is 'right=0.99'. The "+
              "subplots_adjust() function requires right>left and "+
              "top>bottom."],
+            ["subplots",plot_base.subplots.__doc__],
+            ["text",plot_base.text.__doc__],
+            ["textbox",plot_base.textbox.__doc__],
+            ["ttext",plot_base.ttext.__doc__],
+            ["xlimits",plot_base.xlimits.__doc__],
+            ["xtitle",plot_base.xtitle.__doc__],
+            ["ylimits",plot_base.ylimits.__doc__],
+            ["ytitle",plot_base.ytitle.__doc__],
+            ["yt-ann",o2graph_plotter.yt_ann_func.__doc__],
+            ["yt-arrow",yt_plot_base.yt_arrow.__doc__],
             ["yt-axis",yt_plot_base.yt_plot_axis.__doc__],
+            ["yt-box",yt_plot_base.yt_box.__doc__],
+            ["yt-line",yt_plot_base.yt_line.__doc__],
             ["yt-path",o2graph_plotter.yt_path_func.__doc__],
+            ["yt-render",o2graph_plotter.yt_render.__doc__],
+            ["yt-source-list","List yt sources"],
             ["yt-text",o2graph_plotter.yt_text.__doc__],
             ["yt-tf",o2graph_plotter.yt_tf_func.__doc__],
             ["yt-xtitle",yt_plot_base.yt_xtitle.__doc__],
             ["yt-ytitle",yt_plot_base.yt_ytitle.__doc__],
-            ["yt-ztitle",yt_plot_base.yt_ztitle.__doc__]
+            ["yt-ztitle",yt_plot_base.yt_ztitle.__doc__],
+            ["zlimits",plot_base.zlimits.__doc__]
         ]
 
         # The command we're looking for help on (if specified)
@@ -2216,6 +2233,7 @@ class o2graph_plotter(yt_plot_base):
                                               force_bytes(short)])
                             found_new=True
                     if found_new==False:
+                        print('here x',line[0])
                         full_list.append([force_bytes(line[0]),
                                           force_bytes(line[1])])
 
@@ -3277,10 +3295,18 @@ class o2graph_plotter(yt_plot_base):
         return
     
     def yt_render(self,o2scl,amp,link,fname,mov_fname='',loop=False):
-        """
-        Complete the yt render and save the image to a file. If necessary,
-        compile the images into a movie and save into the specified
-        file name.
+        """Documentation for o2graph command ``yt-render``:
+
+        Render the yt volume visualization.
+
+        <filename or pattern> [movie output filename]
+
+        Perform the volume rendering. If yt_path is empty, then the
+        first argument is the filename. If yt_path is not empty then
+        the first argument is a filename pattern containing * where
+        each frame will be stored. If yt_path is not empty and a movie
+        filename is given, then ffmpeg will be used to combine the
+        frames into an mp4 file.
         """
 
         if self.yt_scene==0:

@@ -44,206 +44,33 @@ base_list=[
     ["cmap","","",""],
     ["cmap2","","",""],
     ["canvas","","",""],
-    ["clf","Clear the current figure.","",
-     "Clear the current figure."],
-    ["ellipse","Plot an ellipse.",
-     "<x> <y> <w> <h> [angle] [kwargs]",
-     ("Plot an ellipse centered at (x,y) with width w and height h, "+
-      "optionally rotated by the specified angle. By default, the "+
-      "ellipse has no border, "+
-      "but the linewidth ('lw') and edgecolor kwargs can be used to "+
-      "specify one if desired. Some useful kwargs are alpha, color, "+
-      "edgecolor (ec), facecolor (fc), fill, hatch, linestyle (ls), "+
-      "linewidth (lw).")],
-    ["eval","Run the python eval() function.","<python code>",
-     "Take the python code given and execute it using eval(). "+
-     "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
-    ["exec","Run the python code specified in file","<filename>",
-     "Take the python code given and execute it using execfile(). "+
-     "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
-    ["image","Plot an image.","<file>",
-     "Read a .png file, create a plot, and then call plot.show()."],
-    ["inset","Add a new set of axes (e.g. for an inset).",
-     "<left> <bottom> <width> <height> [kwargs]",
-     "This command creates a new set of axes, adds the new axies "+
-     "to the list of axes, and sets the new axes as the current. "+
-     "The axes object is named 'inset0' for the first inset, then "+
-     "'inset1', and so on."],
-    ["line","Plot a line.","<x1> <y1> <x2> <y2> [kwargs]",
-     "Plot a line from (x1,y1) to (xy,y2). Some useful "+
-     "kwargs are color (c), dashes, linestyle (ls), linewidth (lw), "+
-     "marker, markeredgecolor (mec), markeredgewidth (mew), "+
-     "markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize "+
-     "(ms). For example: o2graph -line 0.05 0.05 0.95 0.95 "+
-     "lw=0,marker='+' -show"],
-    ["modax","Modify current axes properties.","[kwargs]",
-     ("kwarg            Values       Description\n"+
-      "------------------------------------------------------------------------\n"+
-      "alpha            float>0      alpha value for region inside axes\n"+
-      "labelsize        float>0      font size for labels\n"+
-      "x_loc            b,t,tb       placement of x-axis (bottom, top, or both)\n"+
-      "x_major_loc      float>0      linear increment for x-axis major ticks\n"+
-      "x_minor_loc      float>0      linear increment for x-axis minor ticks\n"+
-      "x_minor_tick_dir in,out,inout direction of x-axis minor ticks\n"+
-      "x_minor_tick_len float>0      length of x-axis minor ticks\n"+
-      "x_minor_tick_wid float>0      width of x-axis minor ticks\n"+
-      "x_tick_dir       in,out,inout direction of x-axis major ticks\n"+
-      "x_tick_len       float>0      length of x-axis major ticks\n"+
-      "x_tick_wid       float>0      width of x-axis major ticks\n"+
-      "x_visible        T/F          set x-axis visible or invisible\n"+
-      "y_loc            l,r,lr       placement of y-axis (left, right, or both)\n"+
-      "y_major_loc      float>0      linear increment for x-axis major ticks\n"+
-      "y_minor_loc      float>0      linear increment for x-axis minor ticks\n"+
-      "y_minor_tick_dir in,out,inout direction of y-axis minor ticks\n"+
-      "y_minor_tick_len float>0      length of y-axis minor ticks\n"+
-      "y_minor_tick_wid float>0      width of y-axis minor ticks\n"+
-      "y_tick_dir       in,out,inout direction of y-axis major ticks\n"+
-      "y_tick_len       float>0      length of y-axis major ticks\n"+
-      "y_tick_wid       float>0      width of y-axis major ticks\n"+
-      "y_visible        T/F          set y-axis visible or invisible\n")],
-    ["o2scl-addl-libs","Specify a list of additional libraries to load.",
-     "<dir>",""],
-    ["o2scl-cpp-lib","Specify the location of the standard C++ library.",
-     "<dir>",""],
-    ["o2scl-lib-dir","Specify the directory where libo2scl.so is.",
-     "<dir>",""],
-    ["plotv","Plot several vector-like data sets.",
-     "[multiple vector spec. for x] <multiple vector spec. for y>",
-     "The "+ter.cyan_fg()+ter.bold()+"plotv"+ter.default_fgbg()+
-     " command plots one or several pairs of vectors for x "+
-     "and y. The total number of curves plotted will be the number "+
-     "of vector data sets from the first argument times the number "+
-     "of vector data sets from the second argument. If the x and y "+
-     "vector lengths are not equal, then the longer vector is "+
-     "truncated. Any kwargs are applied to all curves plotted. For "+
-     "details on multiple vector specifications, use "+
-     "'o2graph -help "+ter.green_fg()+ter.bold()+"mult-vector-spec"+
-     ter.default_fgbg()+"'. Note that "+ter.cyan_fg()+ter.bold()+"plotv"+
-     ter.default_fgbg()+" uses "+
-     "the vector<contour_line> object as temporary storage, so if "+
-     "the current object has type vector<contour_line> then you "+
-     "will need to save that object to a file and use "+ter.cyan_fg()+
-     ter.bold()+"clear"+ter.default_fgbg()+" first."],
-    ["point","Plot a single point.","<x> <y>",""],
-    ["error-point","Plot a single point with errorbars.",
-     "<x> <y> [<x err> <yerr>] or [<x lo> <x hi> <y lo> <y hi>]",
-     "Some "+
-     "useful kwargs "+
-     "for the error-point command are:\n\n"+
-     "keyword    description                      default value\n"+
-     "---------------------------------------------------------\n"+
-     "ecolor     error bar color                   None\n"+
-     "capsize    cap size in points                None\n"+
-     "barsabove  plot error bars on top of point   False\n"+
-     "lolims     y value is lower limit            False\n"+
-     "uplims     y value is upper limit            False\n"+
-     "xlolims    x value is lower limit            False\n"+
-     "xuplims    x value is upper limit            False\n"+
-     "errorevery draw error bars on subset of data 1\n"+
-     "capthick   thickness of error bar cap        None\n\n"+
-     "See also "+ter.cyan_fg()+ter.bold()+"errorbar"+ter.default_fgbg()+
-     " for for plotting columns from a "+ter.magenta_fg()+ter.bold()+
-     "table "+ter.default_fgbg()+"object."],
-    ["python","Begin an interactive python session.","",""],
-    ["rect","Plot a rectangle.",
-     "<x1> <y1> <x2> <y2> [angle] [kwargs]",
-     "Plot a rectange from (x1,y1) to (xy,y2) with "+
-     "rotation angle <angle>. By default, the rectangle has no border, "+
-     "but the linewidth ('lw') and edgecolor kwargs can be used to "+
-     "specify one if desired. Some useful kwargs are alpha, color, "+
-     "edgecolor (ec), facecolor (fc), fill, hatch, linestyle (ls), "+
-     "linewidth (lw)."],
-    ["save","Save the current plot in a file.","<filename>",
-     "Save the current plot in a file similar "+
-     "to plot.savefig(). The action of this command depends on "+
-     "which backend was selected. File type depends on the "+
-     "extension, typically either .png, .pdf, .eps, .jpg, .raw, .svg, "+
-     "and .tif ."],
-    ["selax","Select axis.","[name]",
-     "Select which axis to use for subsequent plotting commands. "+
-     "If [name] is not specified, then the names of all current "+
-     "axes objects are listed."],
-    ["show","Show the current plot.","","Show the current plot "+
-     "on the screen and begin "+
-     "the graphical user interface. This is similar to plot.show()."],
-    ["subadj","Adjust spacing of subplots.","<kwargs>",
-     "Adjust the spacing for subplots after using the 'subplots' "+
-     "command. All arguments are keyword arguments. The kwargs for "+
-     "'subadj' are left, right, bottom, top, "+
-     "wspace, and hspace. This just a wrapper to the "+
-     "pyplot.subplots_adjust() function. Note that, unlike the margin "+
-     "settings for the fig_dict parameter, the values 'right' and 'top' "+
-     "are defined relative to the lower-left corner, so a small right "+
-     "margin is 'right=0.99'. The subplots_adjust() function requires "+
-     "right>left and top>bottom."],
-    ["subplots","Create subplots.","<nrows> <ncols> [kwargs]",
-     "Create a grid of <nrows> by <ncols> subplots. "+
-     "The kwargs currently supported are 'sharex=True|False', "+
-     "and 'sharey=True|False'. Subplots are named 'subplot0', 'subplot1', "+
-     "... with the indexes moving to the right before proceeding to "+
-     "the next row."],
-    ["text","Plot text in the data coordinates.",
-     "<x> <y> <text> [kwargs]","The 'text' command plots text in the "+
-     "data coordinates defined by the current axes with the font size "+
-     "determined by the value of the parameter 'font'. LaTeX is used "+
-     "for text rendering by default, but this setting can be changed "+
-     "using, e.g. '-set usetex 0'. Some useful kwargs are fontfamily, "+
-     "fontstyle, fontsize, color, backgroundcolor, rotation, "+
-     "horizontalalignment (ha), and verticalalignment (va). Note that "+
-     "you must disable LaTeX rendering to change fontfamily or "+
-     "fontstyle."],
-    ["textbox",
-     "Plot a box with text.","<x1> <y1> <text> [bbox properties] [kwargs]",
-     "Plot text <text> and a box at location <x1> <y1>. For example, "+
-     "textbox 0.5 0.5 \"$ f(x) $\" \"alpha=0.8,facecolor=white\" . "+
-     "This command uses the standard axis text function, but adds "+
-     "a bounding box with the specified properties. Typical bbox "+
-     "properties are boxstyle (Circle, DArrow, LArrow, RArrow, Round, "+
-     "Round4, Roundtooth, Sawtooth, Square), alpha, color, edgecolor (ec), "+
-     "facecolor (fc), fill, hatch ({'/','\','|','-','+','x','o','O',"+
-     "'.', '*'}), linestyle (ls), and linewidth (lw). The keyword "+
-     "arguments are for the text properties, and follow "+
-     "those of the "+ter.cyan_fg()+ter.bold()+"text"+ter.default_fgbg()+
-     " command."],
-    ["ttext","Plot text in window coordinates [(0,0) to (1,1)].",
-     "<x> <y> <text> [kwargs]","The "+ter.cyan_fg()+ter.bold()+"ttext"+
-     ter.default_fgbg()+" command plots text in the "+
-     "window coordinates [typically (0,0) to (1,1)] with the font size "+
-     "determined by the value of the parameter "+ter.red_fg()+
-     ter.bold()+"font"+ter.default_fgbg()+" LaTeX is used "+
-     "for text rendering by default, but this setting can be changed "+
-     "using, e.g. '-set usetex 0'. Some useful kwargs are fontfamily, "+
-     "fontstyle, fontsize, color, backgroundcolor, rotation, "+
-     "horizontalalignment (ha), and verticalalignment (va). Specifying "+
-     "fontsize overrides the "+ter.red_fg()+ter.bold()+"font"+
-     ter.default_fgbg()+" parameter Note that "+
-     "you must disable LaTeX rendering to change fontfamily or "+
-     "fontstyle."],
-    ["xlimits","Set the x-axis limits.","<low> <high>",
-     "The "+ter.cyan_fg()+ter.bold()+"xlimits"+
-     ter.default_fgbg()+" command sets "+ter.red_fg()+
-     ter.bold()+"xlo"+ter.default_fgbg()+" and "+ter.red_fg()+
-     ter.bold()+"xhi"+ter.default_fgbg()+" to the specified limits, "+
-     "and sets "+ter.red_fg()+
-     ter.bold()+"xset"+ter.default_fgbg()+" to true. If a plotting "+
-     "canvas is currently "+
-     "open, then "+
-     "the x-limits on the current axis are modified. Future plots are also "+
-     "plot with the specified x-limits. If <low> and <high> are identical "+
-     "then "+ter.red_fg()+
-     ter.bold()+"xset"+ter.default_fgbg()+" is set to false and the x "+
-     "limits are automatically set by matplotlib."],
-    ["xtitle","Add x title to plot (or subplot).","",""],
-    ["ylimits","Set the y-axis limits.","<low> <high>",
-     "Set 'ylo' and 'yhi' to the specified limits, "+
-     "and set 'yset' to true. If a plotting canvas is currently "+
-     "open, then "+
-     "the y-limits on the current axis are modified. Future plots are also "+
-     "set with the specified y-limits. If <low> and <high> are identical "+
-     "then "+ter.red_fg()+
-     ter.bold()+"yset"+ter.default_fgbg()+" is set to false and the y "+
-     "limits are automatically set by matplotlib."],
-    ["ytitle","Add y title to plot (or subplot).","",""],
+    ["clf","","",""],
+    ["ellipse","","",""],
+    ["eval","","",""],
+    ["exec","","",""],
+    ["image","","",""],
+    ["inset","","",""],
+    ["line","","",""],
+    ["modax","","",""],
+    ["o2scl-addl-libs","","",""],
+    ["o2scl-cpp-lib","","",""],
+    ["o2scl-lib-dir","","",""],
+    ["plotv","","",""],
+    ["point","","",""],
+    ["python","","",""],
+    ["rect","","",""],
+    ["save","","",""],
+    ["selax","","",""],
+    ["show","","",""],
+    ["subadj","","",""],
+    ["subplots","",""],
+    ["text","","",""],
+    ["textbox","","",""],
+    ["ttext","","",""],
+    ["xlimits","","",""],
+    ["xtitle","","",""],
+    ["ylimits","","",""],
+    ["ytitle","","",""],
     ["yt-ann","Annotate a yt rendering (experimental).","",
      "The 'yt-ann' command adds a list of o2graph commands that can "+
      "be used to annotate a yt rendering. Annotations are normal "+
@@ -327,14 +154,7 @@ base_list=[
      "'turn' <n_frames> <[foc_x,foc_y,foc_z]> <'internal' or 'user'>. "+
      "Executing 'yt-path reset' resets the yt "+
      "animation path to an empty list (for no animation)."],
-    ["yt-render","Render the yt volume visualization.",
-     "<filename or pattern> [movie output filename]",
-     "Perform the volume rendering. If yt_path is empty, then "+
-     "the first argument is the filename. If yt_path is not empty "+
-     "then the first argument is a filename pattern containing * "+
-     "where each frame will be stored. If yt_path is not empty "+
-     "and a movie filename is given, then ffmpeg will be used "+
-     "to combine the frames into an mp4 file."],
+    ["yt-render","","",""],
     ["yt-source-list","List all current yt sources.","",
      "For each source output the index, keyname, and source type."],
     ["yt-text","Add text to the yt volume.",
