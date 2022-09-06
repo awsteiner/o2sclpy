@@ -51,6 +51,109 @@ from o2sclpy.doc_data import version
 from o2sclpy.hdf import *
 from o2sclpy.base import *
 
+base_list_new2=[
+    ["addcbar",plot_base.addcbar.__doc__],
+    ["arrow",plot_base.arrow.__doc__],
+    ["backend",
+     ("Documentation for backend\n\n"+
+      "Select the matplotlib backend to use.\n\n"+
+      "<backend>\n\n"+
+      "This commend selects the matplotlib backend. "+
+      "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', "+
+      "and 'QT4Agg'. Use backend Agg to save the plot to a "+
+      "file without opening a window. The backend can only "+
+      "be changed once, i.e. if the backend command is "+
+      "invoked more than once, then only the last invocation "+
+      "will have any effect.")],
+    ["canvas",plot_base.canvas.__doc__],
+    ["clf","Documentation for clf\n\n"+
+     "Clear the current figure.\n\n"+
+     "(No arguments.)\n\n"+
+     "Clear the current figure."],
+    ["cmap",plot_base.cmap.__doc__],
+    ["cmap2",plot_base.cmap2.__doc__],
+    ["ellipse",plot_base.ellipse.__doc__],
+    ["error-point",plot_base.error_point.__doc__],
+    ["eval","Documentation for eval\n\n"+
+     "Run the python eval() function.\n\n"+
+     "<python code>\n\n"+
+     "Take the python code given and execute it using eval(). "+
+     "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
+    ["exec","Documentation for exec\n\n"+
+     "Run the python code specified in a file.\n\n"+
+     "<filename>\n\n"+
+     "Take the python code given and execute it using execfile()."],
+    ["image","Documentation for image\n\n"+
+     "Plot a png file in a matplotlib window.\n\n"+
+     "<png file>\n\n"+
+     "This command reads a png file, fills a plotting canvas "+
+     "and then calls matplotlib.pyplot.show()."],
+    ["inset",plot_base.inset.__doc__],
+    ["line",plot_base.line.__doc__],
+    ["modax",plot_base.modax.__doc__],
+    ["o2scl-addl-libs",
+     "Specify a list of list of additional libraries to load."],
+    ["o2scl-cpp-lib",
+     "Specify the location of the standard C++ library."],
+    ["o2scl-lib-dir",
+     "Specify the directory for the libo2scl shared library."],
+    ["plotv",0],
+    ["point",plot_base.point.__doc__],
+    ["python","Begin an interactive python session."],
+    ["rect",plot_base.rect.__doc__],
+    ["save",
+     "Documentation for save\n\n"+
+     "Save the current plot in a file.\n\n"+
+     "<filename>\n\n",
+     "Save the current plot in a file similar "+
+     "to plot.savefig(). The action of this command depends on "+
+     "which backend was selected. File type depends on the "+
+     "extension, typically either .png, .pdf, .eps, .jpg, .raw, "+
+     ".svg, and .tif."],
+    ["selax",plot_base.selax.__doc__],
+    ["show",plot_base.show.__doc__],
+    ["subadj","Documentation for subadj\n\n"+
+     "Adjust spacing of subplots\n\n"+
+     "<kwargs>\n\n"+
+     "Adjust the spacing for subplots after using the 'subplots' "+
+     "command. All arguments are keyword arguments. The kwargs "+
+     "for 'subadj' are left, right, bottom, top, "+
+     "wspace, and hspace. This just a wrapper to the "+
+     "pyplot.subplots_adjust() function. Note that, unlike the "+
+     "margin settings for the fig_dict parameter, the values "+
+     "'right' and 'top' are defined relative to the lower-left "+
+     "corner, so a small right margin is 'right=0.99'. The "+
+     "subplots_adjust() function requires right>left and "+
+     "top>bottom."],
+    ["subplots",plot_base.subplots.__doc__],
+    ["text",plot_base.text.__doc__],
+    ["textbox",plot_base.textbox.__doc__],
+    ["ttext",plot_base.ttext.__doc__],
+    ["xlimits",plot_base.xlimits.__doc__],
+    ["xtitle",plot_base.xtitle.__doc__],
+    ["ylimits",plot_base.ylimits.__doc__],
+    ["ytitle",plot_base.ytitle.__doc__],
+    ["yt-ann",0],
+    ["yt-arrow",yt_plot_base.yt_arrow.__doc__],
+    ["yt-axis",yt_plot_base.yt_plot_axis.__doc__],
+    ["yt-box",yt_plot_base.yt_box.__doc__],
+    ["yt-line",yt_plot_base.yt_line.__doc__],
+    ["yt-path",0],
+    ["yt-render",0],
+    ["yt-source-list","List yt sources"],
+    ["yt-text",0],
+    ["yt-tf",0],
+    ["yt-xtitle",yt_plot_base.yt_xtitle.__doc__],
+    ["yt-ytitle",yt_plot_base.yt_ytitle.__doc__],
+    ["yt-ztitle",yt_plot_base.yt_ztitle.__doc__],
+    ["zlimits",plot_base.zlimits.__doc__]
+]
+
+extra_list_new=[
+    ["table","plot",""],
+    ["table","plot-color",""],
+]
+
 def doc_replacements(s,base_list_new,ter,amp,link):
     """
     Make some replacements from RST formatting to the terminal screen.
@@ -200,6 +303,25 @@ class o2graph_plotter(yt_plot_base):
     always be a pointer to the 
     :ref:`o2scl_acol::acol_manager<o2scl:acol_manager>` object.
     """
+
+    def __init__(self):
+        """
+        Desc
+        """
+        for line in base_list_new2:
+            if line[0]=="plotv":
+                line[1]=o2graph_plotter.plotv.__doc__
+            elif line[0]=="yt-ann":
+                line[1]=o2graph_plotter.yt_ann_func.__doc__
+            elif line[0]=="yt-path":
+                line[1]=o2graph_plotter.yt_path_func.__doc__
+            elif line[0]=="yt-render":
+                line[1]=o2graph_plotter.yt_render.__doc__
+            elif line[0]=="yt-text":
+                line[1]=o2graph_plotter.yt_text.__doc__
+            elif line[0]=="yt-tf":
+                line[1]=o2graph_plotter.yt_tf_func.__doc__
+        return
 
     def set_wrapper(self,o2scl,amp,link,args):
         """
@@ -1893,105 +2015,6 @@ class o2graph_plotter(yt_plot_base):
         amt=acol_manager(link,amp)
         cl=amt.get_cl()
         
-        base_list_new=[
-            ["addcbar",plot_base.addcbar.__doc__],
-            ["arrow",plot_base.arrow.__doc__],
-            ["backend",
-             ("Documentation for backend\n\n"+
-              "Select the matplotlib backend to use.\n\n"+
-              "<backend>\n\n"+
-              "This commend selects the matplotlib backend. "+
-              "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', "+
-              "and 'QT4Agg'. Use backend Agg to save the plot to a "+
-              "file without opening a window. The backend can only "+
-              "be changed once, i.e. if the backend command is "+
-              "invoked more than once, then only the last invocation "+
-              "will have any effect.")],
-            ["canvas",plot_base.canvas.__doc__],
-            ["clf","Documentation for clf\n\n"+
-             "Clear the current figure.\n\n"+
-             "(No arguments.)\n\n"+
-             "Clear the current figure."],
-            ["cmap",plot_base.cmap.__doc__],
-            ["cmap2",plot_base.cmap2.__doc__],
-            ["den-plot-anim",o2graph_plotter.den_plot_anim.__doc__],
-            ["ellipse",plot_base.ellipse.__doc__],
-            ["error-point",plot_base.error_point.__doc__],
-            ["eval","Documentation for eval\n\n"+
-             "Run the python eval() function.\n\n"+
-             "<python code>\n\n"+
-             "Take the python code given and execute it using eval(). "+
-             "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
-            ["exec","Documentation for exec\n\n"+
-             "Run the python code specified in a file.\n\n"+
-             "<filename>\n\n"+
-             "Take the python code given and execute it using execfile()."],
-            ["image","Documentation for image\n\n"+
-             "Plot a png file in a matplotlib window.\n\n"+
-             "<png file>\n\n"+
-             "This command reads a png file, fills a plotting canvas "+
-             "and then calls matplotlib.pyplot.show()."],
-            ["inset",plot_base.inset.__doc__],
-            ["line",plot_base.line.__doc__],
-            ["modax",plot_base.modax.__doc__],
-            ["o2scl-addl-libs",
-             "Specify a list of list of additional libraries to load."],
-            ["o2scl-cpp-lib",
-             "Specify the location of the standard C++ library."],
-            ["o2scl-lib-dir",
-             "Specify the directory for the libo2scl shared library."],
-            ["plotv",o2graph_plotter.plotv.__doc__],
-            ["point",plot_base.point.__doc__],
-            ["python","Begin an interactive python session."],
-            ["rect",plot_base.rect.__doc__],
-            ["save",
-             "Documentation for save\n\n"+
-             "Save the current plot in a file.\n\n"+
-             "<filename>\n\n",
-             "Save the current plot in a file similar "+
-             "to plot.savefig(). The action of this command depends on "+
-             "which backend was selected. File type depends on the "+
-             "extension, typically either .png, .pdf, .eps, .jpg, .raw, "+
-             ".svg, and .tif."],
-            ["selax",plot_base.selax.__doc__],
-            ["show",plot_base.show.__doc__],
-            ["subadj","Documentation for subadj\n\n"+
-             "Adjust spacing of subplots\n\n"+
-             "<kwargs>\n\n"+
-             "Adjust the spacing for subplots after using the 'subplots' "+
-             "command. All arguments are keyword arguments. The kwargs "+
-             "for 'subadj' are left, right, bottom, top, "+
-             "wspace, and hspace. This just a wrapper to the "+
-             "pyplot.subplots_adjust() function. Note that, unlike the "+
-             "margin settings for the fig_dict parameter, the values "+
-             "'right' and 'top' are defined relative to the lower-left "+
-             "corner, so a small right margin is 'right=0.99'. The "+
-             "subplots_adjust() function requires right>left and "+
-             "top>bottom."],
-            ["subplots",plot_base.subplots.__doc__],
-            ["text",plot_base.text.__doc__],
-            ["textbox",plot_base.textbox.__doc__],
-            ["ttext",plot_base.ttext.__doc__],
-            ["xlimits",plot_base.xlimits.__doc__],
-            ["xtitle",plot_base.xtitle.__doc__],
-            ["ylimits",plot_base.ylimits.__doc__],
-            ["ytitle",plot_base.ytitle.__doc__],
-            ["yt-ann",o2graph_plotter.yt_ann_func.__doc__],
-            ["yt-arrow",yt_plot_base.yt_arrow.__doc__],
-            ["yt-axis",yt_plot_base.yt_plot_axis.__doc__],
-            ["yt-box",yt_plot_base.yt_box.__doc__],
-            ["yt-line",yt_plot_base.yt_line.__doc__],
-            ["yt-path",o2graph_plotter.yt_path_func.__doc__],
-            ["yt-render",o2graph_plotter.yt_render.__doc__],
-            ["yt-source-list","List yt sources"],
-            ["yt-text",o2graph_plotter.yt_text.__doc__],
-            ["yt-tf",o2graph_plotter.yt_tf_func.__doc__],
-            ["yt-xtitle",yt_plot_base.yt_xtitle.__doc__],
-            ["yt-ytitle",yt_plot_base.yt_ytitle.__doc__],
-            ["yt-ztitle",yt_plot_base.yt_ztitle.__doc__],
-            ["zlimits",plot_base.zlimits.__doc__]
-        ]
-
         # The command we're looking for help on (if specified)
         cmd=''
 
@@ -2015,25 +2038,12 @@ class o2graph_plotter(yt_plot_base):
         # True if the user-specified arguments were matched
         match=False
 
-        # Look for the user-specified command in base_list_new
-        for line in base_list_new:
+        # Handle the case of an o2graph command from the base list
+        for line in base_list_new2:
             if cmd==line[0]:
                 match=True
-                reformat_python_docs(cmd,line[1],base_list_new,amp,link)
+                reformat_python_docs(cmd,line[1],base_list_new2,amp,link)
         
-        # Handle the case of an o2graph command from the
-        # base list
-        if match==False:
-            for line in base_list:
-                if cmd==line[0]:
-                    match=True
-                    print('Usage: '+force_string(amt.get_command_color())+
-                          cmd+force_string(amt.get_default_color())+
-                          ' '+line[2]+'\n\n'+line[1]+'\n')
-                    tempx_arr=wrap_line(line[3])
-                    for i in range (0,len(tempx_arr)):
-                        print(tempx_arr[i])
-                                
         # Handle the case of an o2graph command from the
         # extra list
         if match==False:
@@ -2222,20 +2232,12 @@ class o2graph_plotter(yt_plot_base):
                     desc=cl.option_short_desc(tlist[j])
                     full_list.append([tlist[j],desc])
 
-                for line in base_list:
-                    found_new=False
-                    for line2 in base_list_new:
-                        if line[0]==line2[0]:
-                            short=reformat_python_docs(line2[0],line2[1],
-                                                 base_list_new,amp,
-                                                 link,True)
-                            full_list.append([force_bytes(line[0]),
-                                              force_bytes(short)])
-                            found_new=True
-                    if found_new==False:
-                        print('here x',line[0])
-                        full_list.append([force_bytes(line[0]),
-                                          force_bytes(line[1])])
+                for line2 in base_list_new2:
+                    short=reformat_python_docs(line2[0],line2[1],
+                                               base_list_new2,amp,
+                                               link,True)
+                    full_list.append([force_bytes(line2[0]),
+                                      force_bytes(short)])
 
                 if curr_type!='':
                     for line in extra_list:
