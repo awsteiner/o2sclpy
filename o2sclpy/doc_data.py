@@ -51,76 +51,11 @@ List of types which have additional plotting commands
 """
 
 extra_list=[
-    ["table","plot",
-     "Plot two columns from the table.",
-     "<x> <y> [kwargs]",
-     "If the current object is a table, then plot "+
-     "column <y> versus column "+
-     "<x>. Some useful kwargs are color (c), dashes, "+
-     "linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), "+
-     "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
-     "(mfcalt), markersize (ms). For example: \"o2graph -create x 0 10 0.2 "+
-     "-function sin(x) y -plot x y lw=0,marker='+' -show\". "+
-     "This command uses the matplotlib plot() function, see "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
-     "for information and keyword arguments. This command does not yet "+
-     "support the matplotlib format parameter."],
-    ["table","plot-color",
-     "Plot three columns from the table.",
-     "<x> <y> <z> <cmap> [kwargs]",
-     "If the current object is a table, then plot "+
-     "column <y> versus column "+
-     "<x> using line segments colored by column <z> which are rescaled "+
-     "to colormap <cmap>. "+
-     "Some useful kwargs are color (c), dashes, "+
-     "linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), "+
-     "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
-     "(mfcalt), markersize (ms). For example: o2graph -create x 0 10 0.2 "+
-     "-function sin(x) y -function cos(x) z -plot-color x y z "+
-     "Purples lw=0,marker='+' -show"],
-    ["table","rplot",
-     "Plot a region inside a column or in between two columns.",
-     "<x1> <y1> [x2 y2] [kwargs]",
-     "If either 2 or 3 arguments are specified, "+
-     "this command plots the "+
-     "region inside the curve defined by the specified set of x and y "+
-     "values. The first point is copied at the end to ensure a closed "+
-     "region. If 4 or 5 arguments are specified, then this command plots the "+
-     "region in between two sets of x and y values, again adding the first "+
-     "point from (x1,y1) to the end to ensure a closed region."],
-    ["table","scatter","Create a scatter plot from 2-4 columns.",
-     "<x> <y> [s] [c] [kwargs]",
-     "This command creates a scatter plot form "+
-     "columns <x> and <y>, "+
-     "optionally using column [s] to choose the marker size and optionally "+
-     "using column [c] to choose the marker color. To vary the marker colors "+
-     "while choosing the default marker size just specify 'None' as the "+
-     "argument for [s]. Or, to specify keyword arguments while using the "+
-     "default size and color, specify 'None' as the argument for both [s] "+
-     "and [c]."],
-    ["table","errorbar",
-     "Plot the specified columns with errobars.",
-     "<x> <y> <xerr> <yerr> [kwargs]",
-     "Plot column <y> versus column <x> with "+
-     "symmetric error bars given in "+
-     "column <xerr> and <yerr>. For no uncertainty in either the x or y "+
-     "direction, just use 0 for <xerr> or <yerr>, respectively. Some "+
-     "useful kwargs "+
-     "for the errorbar command are:\n\n"+
-     "keyword    description                      default value\n"+
-     "---------------------------------------------------------\n"+
-     "ecolor     error bar color                   None\n"+
-     "elinewidth error bar line width              None\n"+
-     "capsize    cap size in points                None\n"+
-     "barsabove  plot error bars on top of points  False\n"+
-     "lolims     y value is lower limit            False\n"+
-     "uplims     y value is upper limit            False\n"+
-     "xlolims    x value is lower limit            False\n"+
-     "xuplims    x value is upper limit            False\n"+
-     "errorevery draw error bars on subset of data 1\n"+
-     "capthick   thickness of error bar cap        None\n\n"+
-     "For error points with no lines use, e.g. lw=0,elinewidth=1 . "+
-     "See also 'error-point' for plotting a single point with errorbars."],
+    ["table","plot","","",""],
+    ["table","plot-color","","",""],
+    ["table","rplot","","",""],
+    ["table","scatter","","",""],
+    ["table","errorbar","","",""],
     ["table","yt-scatter","Add scattered points to a yt scene",
      ("<x column> <y column> <z column> [size column] [red column] "+
       "[green column] [blue column] [alpha column]"),

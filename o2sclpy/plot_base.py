@@ -661,7 +661,7 @@ class plot_base:
 
         Set the x-axis limits
 
-        <x low> <x high>
+        Command-line arguments: ``<x low> <x high>``
 
         The xlimits command sets xlo and xhi to the specified limits
         and sets xset to True. If a plotting canvas is currently open,
@@ -691,7 +691,7 @@ class plot_base:
 
         Set the y-axis limits
 
-        <y low> <y high>
+        Command-line arguments: ``<y low> <y high>``
 
         The ylimits command sets ylo and yhi to the specified limits
         and sets yset to True. If a plotting canvas is currently open,
@@ -721,7 +721,7 @@ class plot_base:
 
         Set the z-axis limits
 
-        <z low> <z high>
+        Command-line arguments: ``<z low> <z high>``
 
         The zlimits command sets zlo and zhi to the specified limits
         and sets zset to True. If a plotting canvas is currently open,
@@ -1007,7 +1007,7 @@ class plot_base:
 
         Plot an ellipse.
 
-        <x> <y> <w> <h> [angle] [kwargs]
+        Command-line arguments: ``<x> <y> <w> <h> [angle] [kwargs]``
 
         Plot an ellipse centered at (x,y) with width w and height h,
         optionally rotated by the specified angle. By default, the
@@ -1331,7 +1331,7 @@ class plot_base:
 
         Plot text in the data coordinates.
 
-        <x> <y> <text> [kwargs]
+        Command-line arguments: ``<x> <y> <text> [kwargs]``
 
         The 'text' command plots text in the data coordinates defined
         by the current axes with the font size determined by the value
@@ -1387,7 +1387,8 @@ class plot_base:
 
         Plot a box with text.
 
-        <x1> <y1> <text> [bbox properties] [kwargs]
+        Command-line arguments: ``<x1> <y1> <text> [bbox properties] 
+        [kwargs]``
         
         Plot text <text> and a box at location <x1> <y1>. For example,
         textbox 0.5 0.5 \"$ f(x) $\" \"alpha=0.8,facecolor=white\"
@@ -1442,7 +1443,7 @@ class plot_base:
 
         Plot text in window coordinates [(0,0) to (1,1)].
 
-        <x> <y> <text> [kwargs]
+        Command-line arguments: ``<x> <y> <text> [kwargs]``
 
         The ttext command plots text in the window coordinates
         [typically (0,0) to (1,1)] with the font size determined by
@@ -1512,7 +1513,7 @@ class plot_base:
 
         Create subplots.
 
-        <nrows> <ncols> [kwargs]
+        Command-line arguments: ``<nrows> <ncols> [kwargs]``
 
         Create a grid of <nrows> by <ncols> subplots. The kwargs
         currently supported are 'sharex=True|False', and

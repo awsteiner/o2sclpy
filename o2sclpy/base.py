@@ -9261,6 +9261,22 @@ def string_to_uint_list(link,x,list):
     x._owner=True
     return ret
 
+def rewrap_keep_endlines(link,str,sv,ncol=79,verbose=0,ignore_vt100=True):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *str*: string
+        | *sv*: :class:`std::vector<std::string>` object
+        | *ncol*: ``size_t``
+        | *verbose*: ``int``
+        | *ignore_vt100*: ``bool``
+    """
+    str_=ctypes.c_char_p(force_bytes(str))
+    func=link.o2scl.o2scl_rewrap_keep_endlines_wrapper
+    func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int,ctypes.c_bool]
+    func(str_,sv._ptr,ncol,verbose,ignore_vt100)
+    return
+
 def vector_level_count(link,level,n,x,y):
     """
         | Parameters:

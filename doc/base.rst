@@ -76,6 +76,7 @@ class.
 * :ref:`Function function_to_double_nothrow`
 * :ref:`Function find_constant`
 * :ref:`Function string_to_uint_list`
+* :ref:`Function rewrap_keep_endlines`
 * :ref:`Function vector_level_count`
 * :ref:`Function vector_deriv_interp`
 * :ref:`Function vector_deriv2_interp`
@@ -792,6 +793,11 @@ Function string_to_uint_list
 ----------------------------
 
 .. autofunction:: o2sclpy.string_to_uint_list(link,x,list)
+
+Function rewrap_keep_endlines
+-----------------------------
+
+.. autofunction:: o2sclpy.rewrap_keep_endlines(link,str,sv,ncol,verbose,ignore_vt100)
 
 Function vector_level_count
 ---------------------------

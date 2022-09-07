@@ -150,8 +150,12 @@ base_list_new=[
 ]
 
 extra_list_new=[
-    ["table","plot",""],
-    ["table","plot-color",""],
+    ["table","errorbar",0],
+    ["table","plot",0],
+    ["table","plot-color",0],
+    ["table","rplot",0],
+    ["table","scatter",0],
+    ["hist","plot",0]
 ]
 
 def doc_replacements(s,ter,amp,link):
@@ -321,6 +325,11 @@ class o2graph_plotter(yt_plot_base):
                 line[1]=o2graph_plotter.yt_text.__doc__
             elif line[0]=="yt-tf":
                 line[1]=o2graph_plotter.yt_tf_func.__doc__
+        for line in extra_list_new:
+            if line[1]=="plot":
+                line[2]=o2graph_plotter.plot_o2graph.__doc__
+            elif line[1]=="plot-color":
+                line[2]=o2graph_plotter.plot_color.__doc__
         return
 
     def set_wrapper(self,o2scl,amp,link,args):
@@ -467,9 +476,13 @@ class o2graph_plotter(yt_plot_base):
 
     def den_plot_o2graph(self,o2scl,amp,link,args):
         """
-        Density plot from a ``table3d``, ``hist_2d``, ``tensor_grid``,
-        ``tensor``, ``tensor<int>``, or ``tensor<size_t>`` object.
+        Documentation for o2graph command ``den-plot``:
+        
+       
         """
+        # Old docs:
+        #Density plot from a ``table3d``, ``hist_2d``, ``tensor_grid``,
+        #``tensor``, ``tensor<int>``, or ``tensor<size_t>`` object.
 
         curr_type=o2scl_get_type(o2scl,amp,link)
         amt=acol_manager(link,amp)
@@ -521,6 +534,8 @@ class o2graph_plotter(yt_plot_base):
 
     def den_plot_rgb_o2graph(self,o2scl,amp,link,args):
         """
+        Documentation for o2graph command ``den-plot-rgb``:
+
         Density plot from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
         """
@@ -548,6 +563,8 @@ class o2graph_plotter(yt_plot_base):
 
     def make_png_o2graph(self,o2scl,amp,link,args):
         """
+        Documentation for o2graph command ``make-png``:
+
         Create png from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
         """
@@ -576,7 +593,43 @@ class o2graph_plotter(yt_plot_base):
 
     def plot_o2graph(self,o2scl,amp,args,link):
         """
-        Plot a two-dimensional set of data
+        Documentation for o2graph command ``plot``:
+
+        For objects of type ``table``:
+
+        Plot two columns.
+
+        Command-line arguments: ``<x> <y> [kwargs]``
+
+        Plot column <y> versus
+        column <x>. Some useful kwargs are color (c), dashes,
+        linestyle (ls), linewidth (lw), marker, markeredgecolor (mec),
+        markeredgewidth (mew), markerfacecolor (mfc),
+        markerfacecoloralt (mfcalt), markersize (ms). For example:
+        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
+        lw=0,marker='+' -show\". This command uses the matplotlib
+        plot() function, see
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
+        for information and keyword arguments. This command does not
+        yet support the matplotlib format parameter.
+
+        For objects of type ``hist``:
+
+        Plot the histogram
+
+        Command-line arguments: ``[kwargs]``
+
+        Plot the histogram weights as a function of the bin
+        representative values. Some useful kwargs (which apply for all
+        three object types) are color (c), dashes, linestyle (ls),
+        linewidth (lw), marker, markeredgecolor (mec), markeredgewidth
+        (mew), markerfacecolor (mfc), markerfacecoloralt (mfcalt),
+        markersize (ms). For example: \"o2graph -create x 0 10 0.2
+        -function sin(x) y -plot x y lw=0,marker='+' -show\". This
+        command uses the matplotlib plot() function, see
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
+        for information and keyword arguments. This command does not
+        yet support the matplotlib format parameter.
         """
 
         curr_type=o2scl_get_type(o2scl,amp,link)
@@ -752,8 +805,26 @@ class o2graph_plotter(yt_plot_base):
                                  
     def plot_color(self,o2scl,amp,link,args):
         """
-        Plot a set of line segments, coloring according to a third 
-        variable.
+        Documentation for o2graph command ``plot-color``:
+
+        For objects of type ``table``:
+
+        Plot three columns, using the third for the color
+
+        Command-line arguments: ``<x> <y> <c> <cmap> [kwargs]``
+
+        Plot column <y> versus
+        column <x> using column <c> to specify the line color.
+        Some useful kwargs are color (c), dashes,
+        linestyle (ls), linewidth (lw), marker, markeredgecolor (mec),
+        markeredgewidth (mew), markerfacecolor (mfc),
+        markerfacecoloralt (mfcalt), markersize (ms). For example:
+        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
+        lw=0,marker='+' -show\". This command uses the matplotlib
+        plot() function, see
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
+        for information and keyword arguments. This command does not
+        yet support the matplotlib format parameter.
         """
         
         if len(args)<4:
@@ -832,7 +903,21 @@ class o2graph_plotter(yt_plot_base):
                                  
     def rplot(self,o2scl,amp,link,args):
         """
-        Plot a region inside a curve or in between two curves
+        Documentation for o2graph command ``rplot``:
+
+        For objects of type ``table``:
+
+        Plot a region inside a column or in between two columns.
+
+        Command-line arguments: ``<x1> <y1> [x2 y2] [kwargs]``
+
+        If either 2 or 3 arguments are specified, this command plots
+        the region inside the curve defined by the specified set of x
+        and y values. The first point is copied at the end to ensure a
+        closed region. If 4 or 5 arguments are specified, then this
+        command plots the region in between two sets of x and y
+        values, again adding the first point from (x1,y1) to the end
+        to ensure a closed region.
         """
 
         curr_type=o2scl_get_type(o2scl,amp,link)
@@ -888,7 +973,22 @@ class o2graph_plotter(yt_plot_base):
                                  
     def scatter(self,o2scl,amp,link,args):
         """
-        Generate a scatter plot.
+        Documentation for o2graph command ``scatter``:
+
+        For objects of type ``table``:
+
+        Create a scatter plot from 2-4 columns.
+
+        Command-line arguments: ``<x> <y> [s] [c] [kwargs]``
+
+        This command creates a scatter plot form columns <x> and <y>,
+        optionally using column [s] to choose the marker size and
+        optionally using column [c] to choose the marker color. To
+        vary the marker colors while choosing the default marker size
+        just specify 'None' as the argument for [s]. Or, to specify
+        keyword arguments while using the default size and color,
+        specify 'None' as the argument for both [s] and [c].
+
         """
 
         import matplotlib.pyplot as plot
@@ -1084,7 +1184,37 @@ class o2graph_plotter(yt_plot_base):
                                  
     def errorbar(self,o2scl,amp,link,args):
         """
-        Create a plot with error bars.
+        Documentation for o2graph command ``errorbar``:
+
+        For objects of type ``table``:
+
+        Plot the specified columns with errobars.
+
+        Command-line arguments: ``<x> <y> <xerr> <yerr> [kwargs]``
+
+        Plot column <y> versus column <x> with "+ symmetric error bars
+        given in "+ column <xerr> and <yerr>. For no uncertainty in
+        either the x or y direction, just use 0 for <xerr> or <yerr>,
+        respectively.
+
+        Some useful kwargs for the errorbar command are:
+
+        keyword    description                      default value
+        ---------------------------------------------------------
+        ecolor     error bar color                   None
+        elinewidth error bar line width              None
+        capsize    cap size in points                None
+        barsabove  plot error bars on top of points  False
+        lolims     y value is lower limit            False
+        uplims     y value is upper limit            False
+        xlolims    x value is lower limit            False
+        xuplims    x value is upper limit            False
+        errorevery draw error bars on subset of data 1
+        capthick   thickness of error bar cap        None
+
+        For error points with no lines use, e.g. lw=0,elinewidth=1.
+        See also 'error-point' for plotting a single point with
+        errorbars.
         """
 
         curr_type=o2scl_get_type(o2scl,amp,link)
@@ -1532,6 +1662,8 @@ class o2graph_plotter(yt_plot_base):
 
     def yt_add_vol(self,o2scl,amp,link,args,keyname='o2graph_vol'):
         """
+        Documentation for o2graph command ``yt-add-vol``:
+
         Add a volume source to a yt visualization from a
         tensor_grid object.
         """
@@ -1723,7 +1855,8 @@ class o2graph_plotter(yt_plot_base):
         return
         
     def den_plot_anim(self,o2scl,amp,args):
-        """Documentation for o2graph command ``den-plot-anim``:
+        """
+        Documentation for o2graph command ``den-plot-anim``:
 
         Create an animated density plot from a rank 3 tensor_grid
         object
@@ -2289,7 +2422,8 @@ class o2graph_plotter(yt_plot_base):
         return
         
     def yt_tf_func(self,args):
-        """Documentation for o2graph command ``yt-tf``:
+        """
+        Documentation for o2graph command ``yt-tf``:
 
         Edit the yt transfer function.
 
@@ -2412,8 +2546,23 @@ class o2graph_plotter(yt_plot_base):
 
     def yt_ann_func(self,o2scl,amp,args):
         """
-        Add the o2graph commands specified in `args` to the 
-        list of yt annotations to be used in the next yt render.
+        Documentation for o2graph command ``yt-ann``:
+
+        Annotate a yt rendering (experimental).
+
+        Command-line arguments: ``[args]``
+
+        The 'yt-ann' command adds a list of o2graph commands that can
+        be used to annotate a yt rendering. Annotations are normal
+        o2graph 2D plotting commands built upon a coordinate system with
+        (0,0) as the lower-left corner of the image and (1,1) as the
+        upper-right corner.
+        yt-ann command arguments may include dashes but must end with the
+        word 'end'.
+        
+        Examples are:\n  -yt-ann -text 0.1 0.95 \"Ann. example\"
+        color=w,ha=left end
+        
         The list or arguments in `args` must end with 'end'. 
         If `args` contains only one entry ('end'), then the
         list of annotations is cleared.
@@ -2431,6 +2580,8 @@ class o2graph_plotter(yt_plot_base):
 
     def yt_scatter(self,o2scl,amp,link,args):
         """
+        Documentation for o2graph command ``yt-scatter``:
+
         Create a 3D scatter plot with yt using data from an
         O\ :sub:`2`\ scl table object
         """
@@ -2655,10 +2806,10 @@ class o2graph_plotter(yt_plot_base):
         
     def yt_vertex_list(self,o2scl,amp,link,args):
         """
-        This function can be accessed in o2graph by the
-        o2graph command ``yt-vertex-list``.
+        Documentation for o2graph command ``yt-vertex-list``:
         
         Command-line arguments: ``[kwargs]``
+
         Plot a series of line segments between a list of
         vertices specified in an O\ :sub:`2`\ scl table.
         """
@@ -3296,7 +3447,8 @@ class o2graph_plotter(yt_plot_base):
         return
     
     def yt_render(self,o2scl,amp,link,fname,mov_fname='',loop=False):
-        """Documentation for o2graph command ``yt-render``:
+        """
+        Documentation for o2graph command ``yt-render``:
 
         Render the yt volume visualization.
 
