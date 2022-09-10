@@ -150,8 +150,10 @@ base_list_new=[
 ]
 
 extra_list_new=[
+    ["hist","plot",0],
     ["table","errorbar",0],
     ["table","hist-plot",0],
+    ["table","hist2d-plot",0],
     ["table","plot",0],
     ["table","plot1",0],
     ["table","plot-color",0],
@@ -159,7 +161,8 @@ extra_list_new=[
     ["table","scatter",0],
     ["table","yt-scatter",0],
     ["table","yt-vertex-list",0],
-    ["hist","plot",0]
+    ["table3d","den-plot",0],
+    ["table3d","den-plot-rgb",0],
 ]
 
 def doc_replacements(s,ter,amp,link):
@@ -437,10 +440,16 @@ class o2graph_plotter(yt_plot_base):
             elif line[0]=="yt-tf":
                 line[1]=o2graph_plotter.yt_tf_func.__doc__
         for line in extra_list_new:
+            if line[1]=="den-plot":
+                line[2]=o2graph_plotter.den_plot_o2graph.__doc__
+            if line[1]=="den-plot-rgb":
+                line[2]=o2graph_plotter.den_plot_rgb_o2graph.__doc__
             if line[1]=="errorbar":
                 line[2]=o2graph_plotter.errorbar.__doc__
             elif line[1]=="hist-plot":
                 line[2]=o2graph_plotter.hist_plot.__doc__
+            elif line[1]=="hist2d-plot":
+                line[2]=o2graph_plotter.hist2d_plot.__doc__
             elif line[1]=="plot":
                 line[2]=o2graph_plotter.plot_o2graph.__doc__
             elif line[1]=="plot1":
@@ -600,10 +609,41 @@ class o2graph_plotter(yt_plot_base):
         return
 
     def den_plot_o2graph(self,o2scl,amp,link,args):
-        """
-        Documentation for o2graph command ``den-plot``:
-        
-       
+        """Documentation for o2graph command ``den-plot``:
+
+        For objects of type ``table3d``:
+
+        Create a density plot from a specified slice
+
+        Command-line arguments: ``<slice> [kwargs]``
+
+        Creates a density plot from the specified slice. A z-axis
+        density legend "is print on the RHS if colbar is set to True
+        before plotting. "If z-axis limits are specified, then values
+        larger than the upper "limit "are set equal to the upper limit
+        and values smaller than the lower "limit are set equal to the
+        lower limit before plotting. The x- "and y-axis limits
+        (xlo,xhi,ylo,yhi) are ignored. The python "function imshow()
+        is used, unless 'pcm=True' is specified, in "which case the
+        pcolormesh() function is used instead. When 'pcm=False',
+        logarithmic scales are handled by taking the base 10 log of
+        the x- or y-grids specified in the table3d object before
+        plotting. When 'pcm=True', " logarithmic axes can be handled
+        automatically. The imshow() function presumes a uniform linear
+        or logarithmic x- and y-axis grid, and the den-plot function
+        will output a warning if this is not the case. The
+        pcolormesh() function can handle arbitrary x and y-axis grids.
+        If ``logz`` is set to true, then the base 10 logarithm is
+        taken of the data before the density plot is constructed. Some
+        useful kwargs are cmap, interpolation (for imshow), alpha,
+        vmin, and vmax. 
+
+        See 
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html
+        and
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.pcolormesh.html
+        for more information and keyword arguments.
+
         """
         # Old docs:
         #Density plot from a ``table3d``, ``hist_2d``, ``tensor_grid``,
@@ -661,8 +701,15 @@ class o2graph_plotter(yt_plot_base):
         """
         Documentation for o2graph command ``den-plot-rgb``:
 
-        Density plot from a ``table3d`` object using three slices
-        to specify the red, green, and blue values.
+        For objects of type ``table3d``:
+
+        Create a density plot from a specified slice
+
+        Command-line arguments: ``<slice r> <slice g> <slice b> [kwargs]``
+
+        Create a density plot from the three specified slices. This
+        command uses imshow(). To directly create a .png file with no
+        axes, use make-png instead.
         """
 
         curr_type=o2scl_get_type(o2scl,amp,link)
@@ -1274,7 +1321,17 @@ class o2graph_plotter(yt_plot_base):
                                  
     def hist2d_plot(self,o2scl,amp,args):
         """
-        Plot a two-dimensional histogram.
+        Documentation for o2graph command ``hist2d-plot``:
+
+        For objects of type ``table``:
+
+        Create a 2D histogram plot from two columns in a table
+
+        Command-line arguments: ``<col x> <col y> [kwargs]``
+
+        Create a 2D histogram plot from the specified columns. This
+        command uses matplotlib to construct the histogram rather than
+        using O2scl to create a hist object.
         """
 
         import matplotlib.pyplot as plot

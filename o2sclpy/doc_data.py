@@ -60,42 +60,9 @@ extra_list=[
     ["table","yt-vertex-list","","",""],
     ["table","plot1","","",""],
     ["table","hist-plot","","",""],
-    ["table","hist2d-plot",
-     "Create a 2-D histogram plot from two columns in a table.",
-     "<col x> <col y>","For a table, create a 2D histogram plot from "+
-     "the specified columns. This command uses matplotlib to construct the "+
-     "histogram rather than using O2scl to create a hist object."],
-    ["table3d","den-plot","Create a density plot from a table3d object.",
-     "<slice> [kwargs]",
-     "Creates a density plot from the specified "+
-     "slice. A z-axis density legend "+
-     "is print on the RHS if colbar is set to True before plotting. "+
-     "If z-axis limits are specified, then values larger than the upper "+
-     "limit "+
-     "are set equal to the upper limit and values smaller than the lower "+
-     "limit are set equal to the lower limit before plotting. The x- "+
-     "and y-axis limits (xlo,xhi,ylo,yhi) are ignored. The python "+
-     "function imshow() is used, unless 'pcm=True' is specified, in "+
-     "which case the pcolormesh() function is used instead. When "+
-     "'pcm=False', logarithmic scales are handled by "+
-     "taking the base 10 log of the x- or y-grids "+
-     "specified in the table3d object before plotting. When 'pcm=True', "
-     "logarithmic axes can be handled automatically. The imshow() "+
-     "function presumes a uniform linear or logarithmic x- and y-axis "+
-     "grid, and the den-plot function will output a warning if this "+
-     "is not the case. The pcolormesh() function can handle arbitrary "+
-     "x and y-axis grids. If ``logz`` is set to true, then the base 10 "+
-     "logarithm is taken of the data before the density plot is "+
-     "constructed. Some useful kwargs are cmap, interpolation "+
-     "(for imshow), alpha, vmin, and vmax. See more information at "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html "+
-     "and "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.pcolormesh.html "+
-     "for more information and keyword arguments."],
-    ["table3d","den-plot-rgb","Create a (R,G,B) density plot from a table3d.",
-     "<slice_r> <slice_g> <slice_b>","Create a density plot from "+
-     "the three specified slices. This command uses imshow(). "+
-     "To directly create a .png file with no axes, use make-png instead."],
+    ["table","hist2d-plot","","",""],
+    ["table3d","den-plot","","",""],
+    ["table3d","den-plot-rgb","","",""],
     ["table3d","yt-mesh","","",""],
     ["table3d","make-png","Create a png file from a table3d object.",
      "<slice_r> <slice_g> <slice_b> <filename>",
