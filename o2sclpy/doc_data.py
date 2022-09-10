@@ -56,45 +56,10 @@ extra_list=[
     ["table","rplot","","",""],
     ["table","scatter","","",""],
     ["table","errorbar","","",""],
-    ["table","yt-scatter","Add scattered points to a yt scene",
-     ("<x column> <y column> <z column> [size column] [red column] "+
-      "[green column] [blue column] [alpha column]"),
-     ("This adds a series of points to a yt scene. If a volume "+
-      "has not yet been added, then a default volume is added. "+
-      "If the x, y-, or z-axis limits have not yet been set, then "+
-      "they are set by the limits of the data. If the size column "+
-      "is unspecified, 'none', or 'None', then the default value of 3 is "+
-      "used. If the color columns are unspecified, 'none' or "+
-      "'None', then [1,1,1] is used, and finally the default "+
-      "for the alpha column is 0.5. If any of the values for the color "+
-      "columns are less than zero or greater than 1, then that color "+
-      "column is rescaled to [0,1].")],
-    ["table","yt-vertex-list",
-     "Draw a line from a series of vertices in a table.",
-     "<x column> <y column> <z column> [kwargs]",
-     "Create a series of yt LineSource objects in a visualization "+
-     "using the three specified columns as vertices. One line segment "+
-     "will be drawn from the values in the first row to the values in "+
-     "the second row, one line segment from the second row to the "+
-     "third row, and so on"],
-    ["table","plot1","Plot the specified column.","<y> [kwargs]",
-     "Plot column <y> versus row number. Some "+
-     "useful kwargs are color (c), "+
-     "dashes, linestyle (ls), linewidth (lw), marker, markeredgecolor (mec), "+
-     "markeredgewidth (mew), markerfacecolor (mfc), markerfacecoloralt "+
-     "(mfcalt), markersize (ms). For example: \"o2graph -create x 0 10 0.2 "+
-     "-function sin(x) y -plot1 y ls='--',marker='o' -show\". "+
-     "This command uses the matplotlib plot() function, see "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
-     "for information and keyword arguments. This command does not yet "+
-     "support the matplotlib format parameter."],
-    ["table","hist-plot","Create a histogram plot from column in a table.",
-     "<col> [kwargs]","For a table, create a histogram plot from the "+
-     "specified column. This command uses matplotlib to construct the "+
-     "histogram rather than using O2scl to create a histogram object. "+
-     "This command uses the matplotlib hist() function, see "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html "+
-     "for information and keyword arguments."],
+    ["table","yt-scatter","","",""],
+    ["table","yt-vertex-list","","",""],
+    ["table","plot1","","",""],
+    ["table","hist-plot","","",""],
     ["table","hist2d-plot",
      "Create a 2-D histogram plot from two columns in a table.",
      "<col x> <col y>","For a table, create a 2D histogram plot from "+

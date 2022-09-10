@@ -151,10 +151,14 @@ base_list_new=[
 
 extra_list_new=[
     ["table","errorbar",0],
+    ["table","hist-plot",0],
     ["table","plot",0],
+    ["table","plot1",0],
     ["table","plot-color",0],
     ["table","rplot",0],
     ["table","scatter",0],
+    ["table","yt-scatter",0],
+    ["table","yt-vertex-list",0],
     ["hist","plot",0]
 ]
 
@@ -162,7 +166,7 @@ def doc_replacements(s,ter,amp,link):
     """
     Make some replacements from RST formatting to the terminal screen.
 
-    This function is in ``utils.py``.
+    This function is in ``o2graph_plotter.py``.
     """
 
     amt=acol_manager(link,amp)
@@ -172,6 +176,11 @@ def doc_replacements(s,ter,amp,link):
         s=s.replace('``'+base_list_new[i][0]+'``',
                     force_string(amt.get_command_color())+
                     base_list_new[i][0]+
+                    force_string(amt.get_default_color()))
+    for i in range(0,len(extra_list_new)):
+        s=s.replace('``'+extra_list_new[i][1]+'``',
+                    force_string(amt.get_command_color())+
+                    extra_list_new[i][1]+
                     force_string(amt.get_default_color()))
 
     # For ``code`` formatting
@@ -201,7 +210,7 @@ def o2scl_get_type(o2scl,amp,link):
     return amt.get_type()
 
 def reformat_python_docs(cmd,doc_str,amp,link,
-                         return_short=False):
+                         return_short=False,verbose=0):
     """
     Reformat a python documentation string
     """
@@ -212,7 +221,8 @@ def reformat_python_docs(cmd,doc_str,amp,link,
     
     for i in range(0,len(reflist)):
         reflist[i]=remove_spaces(reflist[i])
-        #print(i,'x',reflist[i],'x')
+        if verbose>1:
+            print(i,'x',reflist[i],'x')
 
     if len(reflist)<1:
         return
@@ -225,7 +235,7 @@ def reformat_python_docs(cmd,doc_str,amp,link,
             doc_str2=doc_str2+'\n'+reflist[i]
     else:
         doc_str2=reflist[0]
-        for i in range(0,len(reflist)):
+        for i in range(1,len(reflist)):
             doc_str2=doc_str2+'\n'+reflist[i]
 
     reflist2=doc_str2.split('\n\n')
@@ -281,6 +291,107 @@ def reformat_python_docs(cmd,doc_str,amp,link,
                     
     return
 
+def reformat_python_docs_type(curr_type,cmd,doc_str,amp,link,
+                              return_short=False,verbose=0):
+    """
+    Reformat a python documentation string
+    """
+    
+    amt=acol_manager(link,amp)
+    
+    reflist=doc_str.split('\n')
+    
+    for i in range(0,len(reflist)):
+        reflist[i]=remove_spaces(reflist[i])
+        if verbose>1:
+            print(i,'x',reflist[i],'x')
+
+    if len(reflist)<1:
+        return
+
+    if reflist[0]=='':
+        if len(reflist)<2:
+            return
+        doc_str2=reflist[1]
+        for i in range(2,len(reflist)):
+            doc_str2=doc_str2+'\n'+reflist[i]
+    else:
+        doc_str2=reflist[0]
+        for i in range(1,len(reflist)):
+            doc_str2=doc_str2+'\n'+reflist[i]
+
+    reflist2=doc_str2.split('\n\n')
+
+    sect_found=False
+    jfound=0
+    for j in range(0,len(reflist2)):
+        if reflist2[j]==("For objects of type ``"+curr_type+"``:"):
+            sect_found=True
+            jfound=j+1
+
+    if sect_found==False:
+        print('Could not find documentation for type',curr_type,
+              'and command',cmd)
+        return
+
+    strt="For objects of type"
+    reflist3=[]
+    jlast=len(reflist2)
+    loop_done=False
+    for j in range(jfound,jlast):
+        if reflist2[j][0:len(strt)]==strt:
+            jlast=j
+            loop_done=True
+        elif loop_done==False:
+            reflist3.append(reflist2[j])
+
+    if False:
+        for j in range(0,len(reflist3)):
+            print(j,'y',reflist3[j],'y')
+            
+    ter=terminal_py()
+    ncols=os.get_terminal_size().columns
+
+    short=''
+    parm_desc=''
+    long_help=''
+
+    if len(reflist3)>0:
+        short=reflist3[0]
+
+    if return_short:
+        return short
+
+    if len(reflist3)>1:
+        parm_desc=reflist3[1].replace('\n',' ')
+
+        parm_desc=parm_desc.replace('  ',' ')
+        sx='Command-line arguments: ``'
+        if parm_desc[0:len(sx)]==sx:
+            parm_desc=parm_desc[len(sx):]
+        if parm_desc[-2:]=='``':
+            parm_desc=parm_desc[0:-2]
+            
+    print('Usage: '+force_string(amt.get_command_color())+cmd+
+          force_string(amt.get_default_color())+' '+parm_desc)
+    
+    print('Short description:',short)
+
+    if len(reflist3)>2:
+        print('')
+        print('Long description:')
+        for j in range(2,len(reflist3)):
+            if len(reflist3[j])>0:
+                long_help=doc_replacements(reflist3[j].replace('\n',' '),
+                                           ter,amp,link)
+                tmplist=wrap_line(long_help,ncols-1)
+                if j!=3:
+                    print('')
+                for k in range(0,len(tmplist)):
+                    print(tmplist[k])
+                    
+    return
+
 def table_get_column(o2scl,amp,link,name,return_pointer=False):
     """
     Return a column from the current table object stored
@@ -326,10 +437,24 @@ class o2graph_plotter(yt_plot_base):
             elif line[0]=="yt-tf":
                 line[1]=o2graph_plotter.yt_tf_func.__doc__
         for line in extra_list_new:
-            if line[1]=="plot":
+            if line[1]=="errorbar":
+                line[2]=o2graph_plotter.errorbar.__doc__
+            elif line[1]=="hist-plot":
+                line[2]=o2graph_plotter.hist_plot.__doc__
+            elif line[1]=="plot":
                 line[2]=o2graph_plotter.plot_o2graph.__doc__
+            elif line[1]=="plot1":
+                line[2]=o2graph_plotter.plot1.__doc__
             elif line[1]=="plot-color":
                 line[2]=o2graph_plotter.plot_color.__doc__
+            elif line[1]=="rplot":
+                line[2]=o2graph_plotter.rplot.__doc__
+            elif line[1]=="scatter":
+                line[2]=o2graph_plotter.scatter.__doc__
+            elif line[1]=="yt-scatter":
+                line[2]=o2graph_plotter.yt_scatter.__doc__
+            elif line[1]=="yt-vertex-list":
+                line[2]=o2graph_plotter.yt_vertex_list.__doc__
         return
 
     def set_wrapper(self,o2scl,amp,link,args):
@@ -1077,7 +1202,20 @@ class o2graph_plotter(yt_plot_base):
                                  
     def hist_plot(self,o2scl,amp,link,args):
         """
-        Plot a histogram.
+        Documentation for o2graph command ``hist-plot``:
+
+        For objects of type ``table``:
+
+        Create a histogram plot from a column in a table
+
+        Command-line arguments: ``<col> [kwargs]``
+
+        For a table, create a histogram plot from the specified
+        column. This command uses matplotlib to construct the
+        histogram rather than using O2scl to create a histogram
+        object. This command uses the matplotlib hist() function, see
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
+        for information and keyword arguments.
         """
 
         curr_type=o2scl_get_type(o2scl,amp,link)
@@ -1292,7 +1430,25 @@ class o2graph_plotter(yt_plot_base):
                                  
     def plot1(self,o2scl,amp,link,args):
         """
-        Plot one array of data versus an integer x axis.
+        Documentation for o2graph command ``plot1``:
+        
+        For objects of type ``table``:
+
+        Plot the specified column
+
+        Command-line arguments: ``<y> [kwargs]``
+
+        Plot column <y> versus row number. Some useful kwargs are
+        color (c), dashes, linestyle (ls), linewidth (lw), marker,
+        markeredgecolor (mec), markeredgewidth (mew), markerfacecolor
+        (mfc), markerfacecoloralt (mfcalt), markersize (ms). For
+        example: \"o2graph -create x 0 10 0.2 -function sin(x) y
+        -plot1 y ls='--',marker='o' -show\". This command uses the
+        matplotlib plot() function, see
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
+        for information and keyword arguments. This command does not
+        yet support the matplotlib format parameter.
+
         """
         curr_type=o2scl_get_type(o2scl,amp,link)
         amt=acol_manager(link,amp)
@@ -2180,17 +2336,12 @@ class o2graph_plotter(yt_plot_base):
         # Handle the case of an o2graph command from the
         # extra list
         if match==False:
-            for line in extra_list:
+            for line in extra_list_new:
                 if ((curr_type==line[0] or
                      curr_type==force_bytes(line[0])) and
                     cmd==line[1]):
                     match=True
-                    print('Usage: '+force_string(amt.get_command_color())+
-                          cmd+force_string(amt.get_default_color())+
-                          ' '+line[3]+'\n\n'+line[2]+'\n')
-                    tempx_arr=wrap_line(line[4])
-                    for i in range (0,len(tempx_arr)):
-                        print(tempx_arr[i])
+                    reformat_python_docs_type(curr_type,cmd,line[2],amp,link)
 
         # If we haven't matched yet, then show commands for
         # other types
@@ -2551,7 +2702,7 @@ class o2graph_plotter(yt_plot_base):
         Annotate a yt rendering (experimental).
 
         Command-line arguments: ``[args]``
-
+        
         The 'yt-ann' command adds a list of o2graph commands that can
         be used to annotate a yt rendering. Annotations are normal
         o2graph 2D plotting commands built upon a coordinate system with
@@ -2582,8 +2733,23 @@ class o2graph_plotter(yt_plot_base):
         """
         Documentation for o2graph command ``yt-scatter``:
 
-        Create a 3D scatter plot with yt using data from an
-        O\ :sub:`2`\ scl table object
+        For objects of type ``table``:
+
+        Add scattered points to a yt scene
+        
+        Command-line arguments: ``<x column> <y column> <z column> 
+        [size column] [red column]
+        [green column] [blue column] [alpha column]``
+
+        Add a series of points to a yt scene. If a volume has not yet
+        been added, then a default volume is added. If the x, y-, or
+        z-axis limits have not yet been set, then they are set by the
+        limits of the data. If the size column is unspecified, 'none',
+        or 'None', then the default value of 3 is used. If the color
+        columns are unspecified, 'none' or 'None', then [1,1,1] is
+        used, and finally the default for the alpha column is 0.5. If
+        any of the values for the color columns are less than zero or
+        greater than 1, then that color column is rescaled to [0,1].
         """
 
         if len(args)<3:
@@ -2808,10 +2974,18 @@ class o2graph_plotter(yt_plot_base):
         """
         Documentation for o2graph command ``yt-vertex-list``:
         
-        Command-line arguments: ``[kwargs]``
+        For objects of type ``table``:
 
-        Plot a series of line segments between a list of
-        vertices specified in an O\ :sub:`2`\ scl table.
+        Draw a line from a series of vertices in a table.
+
+        Command-line arguments: ``<x column> <y column> <z column> 
+        [kwargs]``
+        
+        Create a series of yt LineSource objects in a visualization
+        using the three specified columns as vertices. One line segment
+        will be drawn from the values in the first row to the values in
+        the second row, one line segment from the second row to the
+        third row, and so on.
         """
 
         if len(args)<3:
