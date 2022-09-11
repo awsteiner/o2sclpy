@@ -1606,12 +1606,20 @@ class o2graph_plotter(yt_plot_base):
                       args[0],'and',args[1])
                 
             vvdx=std_vector_vector(link)
-            retx=mult_vector_spec(link,args[0],vvdx,False,self.verbose,False)
+            retx=mult_vector_spec(link,args[0],vvdx,False,self.verbose,
+                                  False)
             vvdy=std_vector_vector(link)
-            rety=mult_vector_spec(link,args[1],vvdy,False,self.verbose,False)
+            rety=mult_vector_spec(link,args[1],vvdy,False,self.verbose,
+                                  False)
+            
 
             for i in range(0,vvdx.size()):
                 for j in range(0,vvdy.size()):
+                    if len(vvdx[i])!=len(vvdy[j]):
+                        print('o2graph command plotv warning: x vector',
+                              i,'and y vector',j,'dont have the same',
+                              'size.')
+                        print('  Length of x:',len(vvdx[i]),'y:',len(vvdy[j]))
                     if self.logx==True:
                         if self.logy==True:
                             if len(args)>=3:
