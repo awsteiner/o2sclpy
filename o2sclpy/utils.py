@@ -692,15 +692,41 @@ def length_without_colors(strt):
         if strt[index]!=chr(27):
             count=count+1
         elif index+2<len(strt) and strt[index+1]=='[' and strt[index+2]=='m':
+            # default_fgbg case
             index=index+2
         elif index+3<len(strt) and strt[index+1]=='[' and strt[index+3]=='m':
+            # underline, lowint, bold case
             index=index+3
         elif index+4<len(strt) and strt[index+1]=='[' and strt[index+4]=='m':
+            # red_fg, blue_fg, etc. case
             index=index+4
         elif index+2<len(strt) and strt[index+1]=='(' and strt[index+2]=='0':
+            # alt font case
             index=index+2
         elif index+2<len(strt) and strt[index+1]=='(' and strt[index+2]=='B':
+            # normal font case
             index=index+2
+        elif (index+8<len(strt) and strt[index+1]=='[' and
+              (strt[index+2]=='3' or strt[index+2]=='4') and
+              strt[index+3]=='8' and strt[index+4]==';' and
+              strt[index+5]=='5' and strt[index+6]==';' and
+              strt[index+8]=='m'):
+            # eight bit fg/bg case with single digit color
+            index=index+8
+        elif (index+9<len(strt) and strt[index+1]=='[' and
+              (strt[index+2]=='3' or strt[index+2]=='4') and
+              strt[index+3]=='8' and strt[index+4]==';' and
+              strt[index+5]=='5' and strt[index+6]==';' and
+              strt[index+9]=='m'):
+            # eight bit fg/bg case with double digit color
+            index=index+9
+        elif (index+10<len(strt) and strt[index+1]=='[' and
+              (strt[index+2]=='3' or strt[index+2]=='4') and
+              strt[index+3]=='8' and strt[index+4]==';' and
+              strt[index+5]=='5' and strt[index+6]==';' and
+              strt[index+10]=='m'):
+            # eight bit fg/bg case with triple digit color
+            index=index+10
         index=index+1
     return count
             

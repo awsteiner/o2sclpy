@@ -51,7 +51,7 @@ from o2sclpy.doc_data import version
 from o2sclpy.hdf import *
 from o2sclpy.base import *
 
-base_list_new=[
+base_list=[
     ["addcbar",plot_base.addcbar.__doc__],
     ["arrow",plot_base.arrow.__doc__],
     ["backend",
@@ -149,7 +149,7 @@ base_list_new=[
     ["zlimits",plot_base.zlimits.__doc__]
 ]
 
-extra_list_new=[
+extra_list=[
     ["double[]","plot1",0],
     ["hist","hist-plot",0],
     ["hist","plot",0],
@@ -187,16 +187,16 @@ def doc_replacements(s,ter,amp,link):
 
     amt=acol_manager(link,amp)
     
-    # Replace commands in base_list_new
-    for i in range(0,len(base_list_new)):
-        s=s.replace('``'+base_list_new[i][0]+'``',
+    # Replace commands in base_list
+    for i in range(0,len(base_list)):
+        s=s.replace('``'+base_list[i][0]+'``',
                     force_string(amt.get_command_color())+
-                    base_list_new[i][0]+
+                    base_list[i][0]+
                     force_string(amt.get_default_color()))
-    for i in range(0,len(extra_list_new)):
-        s=s.replace('``'+extra_list_new[i][1]+'``',
+    for i in range(0,len(extra_list)):
+        s=s.replace('``'+extra_list[i][1]+'``',
                     force_string(amt.get_command_color())+
-                    extra_list_new[i][1]+
+                    extra_list[i][1]+
                     force_string(amt.get_default_color()))
 
     # For ``code`` formatting
@@ -442,7 +442,7 @@ class o2graph_plotter(yt_plot_base):
         """
         Desc
         """
-        for line in base_list_new:
+        for line in base_list:
             if line[0]=="plotv":
                 line[1]=o2graph_plotter.plotv.__doc__
             elif line[0]=="yt-ann":
@@ -455,7 +455,7 @@ class o2graph_plotter(yt_plot_base):
                 line[1]=o2graph_plotter.yt_text.__doc__
             elif line[0]=="yt-tf":
                 line[1]=o2graph_plotter.yt_tf_func.__doc__
-        for line in extra_list_new:
+        for line in extra_list:
             if line[1]=="den-plot":
                 line[2]=o2graph_plotter.den_plot_o2graph.__doc__
             if line[1]=="den-plot-rgb":
@@ -2571,7 +2571,7 @@ class o2graph_plotter(yt_plot_base):
         match=False
 
         # Handle the case of an o2graph command from the base list
-        for line in base_list_new:
+        for line in base_list:
             if cmd==line[0]:
                 match=True
                 reformat_python_docs(cmd,line[1],amp,link)
@@ -2579,7 +2579,7 @@ class o2graph_plotter(yt_plot_base):
         # Handle the case of an o2graph command from the
         # extra list
         if match==False:
-            for line in extra_list_new:
+            for line in extra_list:
                 if ((curr_type==line[0] or
                      curr_type==force_bytes(line[0])) and
                     cmd==line[1]):
@@ -2735,14 +2735,14 @@ class o2graph_plotter(yt_plot_base):
                     desc=cl.option_short_desc(tlist[j])
                     full_list.append([tlist[j],desc])
 
-                for line2 in base_list_new:
+                for line2 in base_list:
                     short=reformat_python_docs(line2[0],line2[1],amp,
                                                link,True)
                     full_list.append([force_bytes(line2[0]),
                                       force_bytes(short)])
 
                 if curr_type!='':
-                    for line in extra_list_new:
+                    for line in extra_list:
                         if force_bytes(line[0])==curr_type:
                             full_list.append([force_bytes(line[1]),
                                               force_bytes(line[2])])
@@ -2766,6 +2766,7 @@ class o2graph_plotter(yt_plot_base):
                     print(strt)
                 print('\n'+str_line)
                 help_topics=sorted(acol_help_topics+o2graph_help_topics)
+                
                 strt='Additional help topics: '
                 for j in range(0,len(help_topics)):
                     if j<len(help_topics)-1:
@@ -2776,6 +2777,7 @@ class o2graph_plotter(yt_plot_base):
                         strt+=('and '+force_string(amt.get_help_color())+
                                help_topics[j]+
                                force_string(amt.get_default_color())+'.')
+                        
                 tlist=wrap_line(strt)
                 for j in range(0,len(tlist)):
                     print(tlist[j])
@@ -3453,7 +3455,7 @@ class o2graph_plotter(yt_plot_base):
                   'object:\n')
 
             comm_list=[]
-            for line in base_list_new:
+            for line in base_list:
                 comm_list.append(force_bytes(line[0]))
             comm_list_dec=sorted(comm_list)
             for i in range(0,len(comm_list_dec)):
@@ -3477,7 +3479,7 @@ class o2graph_plotter(yt_plot_base):
                 amt.command_del(force_bytes(this_type2))
                 amt.command_add(old_type)
                 
-                for line in extra_list_new:
+                for line in extra_list:
                     if (this_type==line[0] or
                         this_type==force_bytes(line[0])):
                         comm_list.append(force_bytes(line[1]))
@@ -3535,7 +3537,7 @@ class o2graph_plotter(yt_plot_base):
                   'object.')
             print('')
             comm_list=[]
-            for line in base_list_new:
+            for line in base_list:
                 comm_list.append(force_bytes(line[0]))
 
             comm_list2=sorted(comm_list)
@@ -3551,7 +3553,7 @@ class o2graph_plotter(yt_plot_base):
                   ter.type_str(curr_type,amt)+':')
             print('')
             comm_list=[]
-            for line in extra_list_new:
+            for line in extra_list:
                 if (curr_type==line[0] or
                     curr_type==force_bytes(line[0])):
                     comm_list.append(force_bytes(line[1]))
@@ -3577,9 +3579,9 @@ class o2graph_plotter(yt_plot_base):
             
             comm_list=cl.get_option_list()
             
-            for line in base_list_new:
+            for line in base_list:
                 comm_list.append(force_bytes(line[0]))
-            for line in extra_list_new:
+            for line in extra_list:
                 if (curr_type==line[0] or
                     curr_type==force_bytes(line[0])):
                     comm_list.append(force_bytes(line[1]))
