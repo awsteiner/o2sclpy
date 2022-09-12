@@ -261,7 +261,10 @@ def reformat_python_docs(cmd,doc_str,amp,link,
             print(i,'x',reflist2[i],'x')
     
     ter=terminal_py()
-    ncols=os.get_terminal_size().columns
+    try:
+        ncols=os.get_terminal_size().columns
+    except:
+        ncols=80
 
     short=''
     parm_desc=''
