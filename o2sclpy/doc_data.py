@@ -51,6 +51,11 @@ List of types which have additional plotting commands
 """
 
 extra_list=[
+    ["double[]","plot1","","",""],
+    ["hist","hist-plot","","",""],
+    ["hist","plot","","",""],
+    ["int[]","plot1","","",""],
+    ["size_t[]","plot1","","",""],
     ["table","plot","","",""],
     ["table","plot-color","","",""],
     ["table","rplot","","",""],
@@ -64,67 +69,7 @@ extra_list=[
     ["table3d","den-plot","","",""],
     ["table3d","den-plot-rgb","","",""],
     ["table3d","yt-mesh","","",""],
-    ["table3d","make-png","Create a png file from a table3d object.",
-     "<slice_r> <slice_g> <slice_b> <filename>",
-     "Create a .png file from "+
-     "the three specified table3d slices. This command requires pillow. "+
-     "To create a density-plot with axes instead, use den-plot-rgb."],
-    ["hist","hist-plot",
-     "Create a histogram plot from the current histogram.",
-     "[kwargs]","Create a histogram plot from the "+
-     "current histogram. "+
-     "This command uses the matplotlib hist() function, see "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html "+
-     "for information and keyword arguments."],
-    ["hist","plot","Plot the histogram.","[kwargs]",
-     "Plot the histogram weights as a function "+
-     "of the bin representative values. "+
-     "Some useful kwargs (which apply for all three object types) are "+
-     "color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
-     "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
-     "markerfacecoloralt (mfcalt), markersize (ms). For example: \"o2graph "+
-     "-create x 0 10 0.2 -function sin(x) y "+
-     "-plot x y lw=0,marker='+' -show\". "+
-     "This command uses the matplotlib plot() function, see "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
-     "for information and keyword arguments. This command does not yet "+
-     "support the matplotlib format parameter."],
-    ["double[]","plot1","Plot the array.","[kwargs]",
-     "Plot the array. Some useful kwargs "+
-     "are color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
-     "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
-     "markerfacecoloralt (mfcalt), markersize (ms). "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
-     "for information and keyword arguments. This command does not yet "+
-     "support the matplotlib format parameter."],
-    ["int[]","plot1","Plot the array.","[kwargs]",
-     "Plot the array. Some useful kwargs "+
-     "are color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
-     "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
-     "markerfacecoloralt (mfcalt), markersize (ms). "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
-     "for information and keyword arguments. This command does not yet "+
-     "support the matplotlib format parameter."],
-    ["size_t[]","plot1","Plot the array.","[kwargs]",
-     "Plot the array. Some useful kwargs "+
-     "are color (c), dashes, linestyle (ls), linewidth (lw), marker, "+
-     "markeredgecolor (mec), markeredgewidth (mew), markerfacecolor (mfc), "+
-     "markerfacecoloralt (mfcalt), markersize (ms). "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
-     "for information and keyword arguments. This command does not yet "+
-     "support the matplotlib format parameter."],
-    ["vector<contour_line>","plot","Plot the contour lines.","[kwargs]",
-     "Plot the set of contour lines. Some "+
-     "useful kwargs (which apply for all three "+
-     "object types) are color (c), dashes, linestyle (ls), linewidth (lw), "+
-     "marker, markeredgecolor (mec), markeredgewidth (mew), markerfacecolor "+
-     "(mfc), markerfacecoloralt (mfcalt), markersize (ms). For example: "+
-     "\"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y "+
-     "lw=0,marker='+' -show\". "+
-     "This command uses the matplotlib plot() function, see "+
-     "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html "+
-     "for information and keyword arguments. This command does not yet "+
-     "support the matplotlib format parameter."],
+    ["table3d","make-png","","",""],
     ["hist_2d","den-plot","Create a density plot from a hist_2d object",
      "[kwargs]","Create a density plot from the current histogram (assuming "+
      "equally-spaced bins). Logarithmic x- or y-axes are handled by taking "+

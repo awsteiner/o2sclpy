@@ -150,7 +150,12 @@ base_list_new=[
 ]
 
 extra_list_new=[
+    ["double[]","plot1",0],
+    ["hist","hist-plot",0],
     ["hist","plot",0],
+    ["int[]","plot1",0],
+    ["prob_dens_mdim_amr","plot",0],
+    ["size_t[]","plot1",0],
     ["table","errorbar",0],
     ["table","hist-plot",0],
     ["table","hist2d-plot",0],
@@ -163,6 +168,8 @@ extra_list_new=[
     ["table","yt-vertex-list",0],
     ["table3d","den-plot",0],
     ["table3d","den-plot-rgb",0],
+    ["table3d","make-png",0],
+    ["vector<contour_line>","plot",0],
 ]
 
 def doc_replacements(s,ter,amp,link):
@@ -736,9 +743,14 @@ class o2graph_plotter(yt_plot_base):
     def make_png_o2graph(self,o2scl,amp,link,args):
         """
         Documentation for o2graph command ``make-png``:
+        
+        For objects of type ``table3d``:
 
-        Create png from a ``table3d`` object using three slices
-        to specify the red, green, and blue values.
+        Command-line arguments: ``<slice r> <slice g> <slice b> [kwargs]``
+
+        Create a .png file from the three specified table3d slices.
+        This command requires pillow. To create a density-plot with
+        axes instead, use den-plot-rgb.
         """
 
         curr_type=o2scl_get_type(o2scl,amp,link)
@@ -799,6 +811,42 @@ class o2graph_plotter(yt_plot_base):
         markersize (ms). For example: \"o2graph -create x 0 10 0.2
         -function sin(x) y -plot x y lw=0,marker='+' -show\". This
         command uses the matplotlib plot() function, see
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
+        for information and keyword arguments. This command does not
+        yet support the matplotlib format parameter.
+
+        For objects of type ``vector<contour_line>``:
+
+        Plot the histogram
+
+        Command-line arguments: ``[kwargs]``
+
+        Plot the set of contour lines. Some useful kwargs (which apply
+        for all three object types) are color (c), dashes, linestyle
+        (ls), linewidth (lw), marker, markeredgecolor (mec),
+        markeredgewidth (mew), markerfacecolor (mfc),
+        markerfacecoloralt (mfcalt), markersize (ms). For example:
+        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
+        lw=0,marker='+' -show\". This command uses the matplotlib
+        plot() function, see
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
+        for information and keyword arguments. This command does not
+        yet support the matplotlib format parameter.
+
+        For objects of type ``prob_dens_mdim_amr``:
+
+        Plot the histogram
+
+        Command-line arguments: ``[kwargs]``
+
+        Plot the set of contour lines. Some useful kwargs (which apply
+        for all three object types) are color (c), dashes, linestyle
+        (ls), linewidth (lw), marker, markeredgecolor (mec),
+        markeredgewidth (mew), markerfacecolor (mfc),
+        markerfacecoloralt (mfcalt), markersize (ms). For example:
+        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
+        lw=0,marker='+' -show\". This command uses the matplotlib
+        plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1263,6 +1311,17 @@ class o2graph_plotter(yt_plot_base):
         object. This command uses the matplotlib hist() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
         for information and keyword arguments.
+
+        For objects of type ``hist``:
+
+        Create a histogram plot from the current histogram.
+        
+        Command-line arguments: ``[kwargs]``
+
+        Create a histogram plot from the current histogram. This
+        command uses the matplotlib hist() function, see
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
+        for information and keyword arguments.
         """
 
         curr_type=o2scl_get_type(o2scl,amp,link)
@@ -1502,6 +1561,48 @@ class o2graph_plotter(yt_plot_base):
         example: \"o2graph -create x 0 10 0.2 -function sin(x) y
         -plot1 y ls='--',marker='o' -show\". This command uses the
         matplotlib plot() function, see
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
+        for information and keyword arguments. This command does not
+        yet support the matplotlib format parameter.
+
+        For objects of type ``double[]``:
+
+        Plot the array.
+
+        Command-line arguments: ``[kwargs]``
+
+        Plot the array. Some useful kwargs are color (c), dashes,
+        linestyle (ls), linewidth (lw), marker, markeredgecolor (mec),
+        markeredgewidth (mew), markerfacecolor (mfc),
+        markerfacecoloralt (mfcalt), markersize (ms).
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
+        for information and keyword arguments. This command does not
+        yet support the matplotlib format parameter.
+
+        For objects of type ``int[]``:
+
+        Plot the array.
+
+        Command-line arguments: ``[kwargs]``
+
+        Plot the array. Some useful kwargs are color (c), dashes,
+        linestyle (ls), linewidth (lw), marker, markeredgecolor (mec),
+        markeredgewidth (mew), markerfacecolor (mfc),
+        markerfacecoloralt (mfcalt), markersize (ms).
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
+        for information and keyword arguments. This command does not
+        yet support the matplotlib format parameter.
+
+        For objects of type ``size_t[]``:
+
+        Plot the array.
+
+        Command-line arguments: ``[kwargs]``
+
+        Plot the array. Some useful kwargs are color (c), dashes,
+        linestyle (ls), linewidth (lw), marker, markeredgecolor (mec),
+        markeredgewidth (mew), markerfacecolor (mfc),
+        markerfacecoloralt (mfcalt), markersize (ms).
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
