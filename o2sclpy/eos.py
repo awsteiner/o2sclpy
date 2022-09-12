@@ -4158,6 +4158,18 @@ class nstar_cold:
         func(self._ptr,value)
         return
 
+    def get_def_tov(self):
+        """
+        Get object of type :class:`tov_solve`
+        """
+        func1=self._link.o2scl.o2scl_nstar_cold_get_def_tov
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=tov_solve(self._link,ptr)
+        return obj
+
+
     @property
     def eos_neg(self):
         """
