@@ -160,6 +160,13 @@ class yt_plot_base(plot_base):
     If true, then the yt camera object has been created
     """
 
+    def __init__(self):
+        """
+        Desc
+        """
+        super().__init__()
+        return
+        
     def yt_update_text(self):
         """
         Update the text objects during an animation by removing them from

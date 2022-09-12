@@ -481,6 +481,8 @@ class o2graph_plotter(yt_plot_base):
                 line[2]=o2graph_plotter.yt_scatter.__doc__
             elif line[1]=="yt-vertex-list":
                 line[2]=o2graph_plotter.yt_vertex_list.__doc__
+
+        super().__init__()
         return
 
     def set_wrapper(self,o2scl,amp,link,args):
