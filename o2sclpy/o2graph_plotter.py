@@ -33,7 +33,7 @@ import textwrap
 import code 
 
 from o2sclpy.doc_data import cmaps, new_cmaps
-from o2sclpy.doc_data import extra_types, extra_list, param_list
+from o2sclpy.doc_data import extra_types, param_list
 from o2sclpy.doc_data import yt_param_list, acol_help_topics
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
@@ -169,6 +169,12 @@ extra_list_new=[
     ["table3d","den-plot",0],
     ["table3d","den-plot-rgb",0],
     ["table3d","make-png",0],
+    ["tensor","den-plot",0],
+    ["tensor<int>","den-plot",0],
+    ["tensor<size_t>","den-plot",0],
+    ["tensor_grid","den-plot",0],
+    ["tensor_grid","den-plot-anim",0],
+    ["tensor_grid","yt-add-vol",0],
     ["vector<contour_line>","plot",0],
 ]
 
@@ -451,6 +457,8 @@ class o2graph_plotter(yt_plot_base):
                 line[2]=o2graph_plotter.den_plot_o2graph.__doc__
             if line[1]=="den-plot-rgb":
                 line[2]=o2graph_plotter.den_plot_rgb_o2graph.__doc__
+            if line[1]=="den-plot-rgb":
+                line[2]=o2graph_plotter.den_plot_anim.__doc__
             if line[1]=="errorbar":
                 line[2]=o2graph_plotter.errorbar.__doc__
             elif line[1]=="hist-plot":
@@ -467,6 +475,8 @@ class o2graph_plotter(yt_plot_base):
                 line[2]=o2graph_plotter.rplot.__doc__
             elif line[1]=="scatter":
                 line[2]=o2graph_plotter.scatter.__doc__
+            elif line[1]=="yt-anim":
+                line[2]=o2graph_plotter.yt_anim.__doc__
             elif line[1]=="yt-scatter":
                 line[2]=o2graph_plotter.yt_scatter.__doc__
             elif line[1]=="yt-vertex-list":
@@ -616,7 +626,8 @@ class o2graph_plotter(yt_plot_base):
         return
 
     def den_plot_o2graph(self,o2scl,amp,link,args):
-        """Documentation for o2graph command ``den-plot``:
+        """
+        Documentation for o2graph command ``den-plot``:
 
         For objects of type ``table3d``:
 
@@ -651,11 +662,64 @@ class o2graph_plotter(yt_plot_base):
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.pcolormesh.html
         for more information and keyword arguments.
 
-        """
-        # Old docs:
-        #Density plot from a ``table3d``, ``hist_2d``, ``tensor_grid``,
-        #``tensor``, ``tensor<int>``, or ``tensor<size_t>`` object.
+        For objects of type ``tensor``:
 
+        Create a density plot from a tensor object.
+
+        Command-line arguments: ``[index_1 index_2] [kwargs]``
+
+        If the tensor has rank 2 and the indices are not specified,
+        then plot the first index along the x-axis and the second
+        index along the y-axis. A z-axis density legend is print on
+        the RHS if colbar is set to 1 before plotting. If z-axis
+        limits are specified, then values larger than the upper limit
+        are set equal to the upper limit and values smaller than the
+        lower limit are set equal to the lower limit before plotting.
+
+        For objects of type ``tensor<int>``:
+
+        Create a density plot from a tensor<int> object.
+
+        Command-line arguments: ``[index_1 index_2] [kwargs]``
+
+        If the tensor has rank 2 and the indices are not specified,
+        then plot the first index along the x-axis and the second
+        index along the y-axis. A z-axis density legend is print on
+        the RHS if colbar is set to 1 before plotting. If z-axis
+        limits are specified, then values larger than the upper limit
+        are set equal to the upper limit and values smaller than the
+        lower limit are set equal to the lower limit before plotting.
+
+        For objects of type ``tensor<size_t>``:
+
+        Create a density plot from a tensor<size_t> object.
+
+        Command-line arguments: ``[index_1 index_2] [kwargs]``
+
+        If the tensor has rank 2 and the indices are not specified,
+        then plot the first index along the x-axis and the second
+        index along the y-axis. A z-axis density legend is print on
+        the RHS if colbar is set to 1 before plotting. If z-axis
+        limits are specified, then values larger than the upper limit
+        are set equal to the upper limit and values smaller than the
+        lower limit are set equal to the lower limit before plotting.
+
+        For objects of type ``tensor_grid``:
+
+        Create a density plot from a tensor_grid object.
+
+        Command-line arguments: ``[index_1 index_2] [kwargs]``
+
+        If the tensor has rank 2 and the indices are not specified,
+        then plot the first index along the x-axis and the second
+        index along the y-axis. A z-axis density legend is print on
+        the RHS if colbar is set to 1 before plotting. If z-axis
+        limits are specified, then values larger than the upper limit
+        are set equal to the upper limit and values smaller than the
+        lower limit are set equal to the lower limit before plotting.
+
+        """
+        
         curr_type=o2scl_get_type(o2scl,amp,link)
         amt=acol_manager(link,amp)
 
@@ -817,7 +881,7 @@ class o2graph_plotter(yt_plot_base):
 
         For objects of type ``vector<contour_line>``:
 
-        Plot the histogram
+        Plot the contour lines.
 
         Command-line arguments: ``[kwargs]``
 
@@ -835,7 +899,7 @@ class o2graph_plotter(yt_plot_base):
 
         For objects of type ``prob_dens_mdim_amr``:
 
-        Plot the histogram
+        Plot the probability distribution.
 
         Command-line arguments: ``[kwargs]``
 
@@ -1988,6 +2052,14 @@ class o2graph_plotter(yt_plot_base):
 
         Add a volume source to a yt visualization from a
         tensor_grid object.
+
+             "Add a tensor_grid object as a yt volume source",
+     "[kwargs]","This adds the volumetric data specified in the "+
+     "tensor_grid object as a yt volume source. The transfer "+
+     "function previously specified by 'yt-tf' is used, or if "+
+     "unspecified, then yt's transfer_function_helper is used "+
+     "to create a 3 layer default transfer function."],
+
         """
 
         curr_type=o2scl_get_type(o2scl,amp,link)
@@ -2509,30 +2581,6 @@ class o2graph_plotter(yt_plot_base):
                     match=True
                     reformat_python_docs_type(curr_type,cmd,line[2],amp,link)
 
-        # If we haven't matched yet, then show commands for
-        # other types
-        if match==False:
-            for line in extra_list:
-                if cmd==line[1]:
-                    match=True
-                    str_line=ter.horiz_line()
-                    print('\n'+str_line)
-                    print('Type: '+force_string(amt.get_type_color())+
-                          line[0]+force_string(amt.get_default_color())+':')
-                    print('Usage: '+
-                          force_string(amt.get_command_color())+
-                          cmd+force_string(amt.get_default_color())+' '
-                          +line[3]+'\n\n'+line[2]+'\n')
-                    
-                    tempx_arr=line[4].split('\n')
-                    for j in range(0,len(tempx_arr)):
-                        if len(tempx_arr[j])<79:
-                            print(tempx_arr[j])
-                        else:
-                            str_list=textwrap.wrap(tempx_arr[j],79)
-                            for i in range (0,len(str_list)):
-                                print(str_list[i])
-
         # If we haven't matched yet, check for get/set parameters
         if match==False:
             for line in param_list:
@@ -2689,7 +2737,7 @@ class o2graph_plotter(yt_plot_base):
                                       force_bytes(short)])
 
                 if curr_type!='':
-                    for line in extra_list:
+                    for line in extra_list_new:
                         if force_bytes(line[0])==curr_type:
                             full_list.append([force_bytes(line[1]),
                                               force_bytes(line[2])])
@@ -3424,7 +3472,7 @@ class o2graph_plotter(yt_plot_base):
                 amt.command_del(force_bytes(this_type2))
                 amt.command_add(old_type)
                 
-                for line in extra_list:
+                for line in extra_list_new:
                     if (this_type==line[0] or
                         this_type==force_bytes(line[0])):
                         comm_list.append(force_bytes(line[1]))
@@ -3498,7 +3546,7 @@ class o2graph_plotter(yt_plot_base):
                   ter.type_str(curr_type,amt)+':')
             print('')
             comm_list=[]
-            for line in extra_list:
+            for line in extra_list_new:
                 if (curr_type==line[0] or
                     curr_type==force_bytes(line[0])):
                     comm_list.append(force_bytes(line[1]))
@@ -3526,7 +3574,7 @@ class o2graph_plotter(yt_plot_base):
             
             for line in base_list_new:
                 comm_list.append(force_bytes(line[0]))
-            for line in extra_list:
+            for line in extra_list_new:
                 if (curr_type==line[0] or
                     curr_type==force_bytes(line[0])):
                     comm_list.append(force_bytes(line[1]))
