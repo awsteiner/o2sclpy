@@ -2558,6 +2558,7 @@ class o2graph_plotter(yt_plot_base):
         curr_type=o2scl_get_type(o2scl,amp,link)
 
         if len(args)==1:
+            # If just a command is specified
             
             cmd=args[0]
             
@@ -2586,6 +2587,15 @@ class o2graph_plotter(yt_plot_base):
                     match=True
                     reformat_python_docs_type(curr_type,cmd,line[2],amp,link)
 
+        # Handle the case of an o2graph command from the
+        # extra list without a matching type
+        if match==False:
+            for line in extra_list:
+                if cmd==line[1]:
+                    match=True
+                    print('\n'+str_line)
+                    reformat_python_docs_type(line[0],cmd,line[2],amp,link)
+                    
         # If we haven't matched yet, check for get/set parameters
         if match==False:
             for line in param_list:

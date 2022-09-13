@@ -9,6 +9,16 @@ import ctypes
 import numpy
 import sys
 
+def test_eos(eti):
+    ve=eti.get_full_vece()
+    vp=eti.get_full_vecp()
+    vnb=eti.get_full_vecnb()
+    for i in range(0,len(ve)-1):
+        assert ve[i]<ve[i+1]
+        assert vp[i]<vp[i+1]
+        assert vnb[i]<vnb[i+1]
+    return
+
 plots=True
 if 'pytest' in sys.modules:
     plots=False
@@ -40,7 +50,9 @@ nc.set_eos(sk)
 
 # Compute the EOS
 
-ret1=nc.calc_eos(0.01)
+eos_ret=nc.calc_eos(0.01)
+assert eos_ret==0
+tab=nc.get_eos_results()
 
 # Create the object which interpolates the EOS for the TOV
 # solver. Use the default crust EOS.
@@ -48,26 +60,72 @@ ret1=nc.calc_eos(0.01)
 eti=o2sclpy.eos_tov_interp(link)
 eti.default_low_dens_eos()
 eti.read_table(tab,'ed','pr','nb')
+test_eos(eti)
 
 # Specify the EOS and determine the M-R curve
 
-ts=o2sclpy.tov_solve(link)
+ts=nc.get_def_tov()
+ts.verbose=0
 ts.set_eos(eti)
 ts.mvsr()
 
-print(ts.get_tov_results().max('gm'))
+pb=o2sclpy.plot_base()
+pb.fig_dict='left_margin=0.16'
+pb.canvas()
+pb.xtitle(r'$ \varepsilon~(\mathrm{M}_{\odot}/\mathrm{km}^3) $')
+pb.ytitle(r'$ P~(\mathrm{M}_{\odot}/\mathrm{km}^3) $')
+pb.xlimits(3.0e-8,3.0e-4)
+pb.ylimits(3.0e-11,1.0e-5)
+import matplotlib.pyplot as plot
+
+print('Default: %7.6e' % ts.get_results().max('gm'))
 
 eti.gcp10_low_dens_eos()
+test_eos(eti)
+plot.loglog(eti.get_full_vece(),eti.get_full_vecp())
+ts.mvsr()
 
-print(ts.get_tov_results().max('gm'))
+print('GCP10 %7.6e' % ts.get_results().max('gm'))
+
+eti.sho11_low_dens_eos()
+test_eos(eti)
+plot.loglog(eti.get_full_vece(),eti.get_full_vecp())
+ts.mvsr()
+
+print('SHO11 %7.6e' % ts.get_results().max('gm'))
+
+#eti.s12_low_dens_eos('Rs')
+#test_eos(eti)
+#plot.loglog(eti.get_full_vece(),eti.get_full_vecp())
+#ts.mvsr()
+
+#print('S12 Rs %7.6e' % ts.get_results().max('gm'))
 
 eti.s12_low_dens_eos()
+test_eos(eti)
+plot.loglog(eti.get_full_vece(),eti.get_full_vecp())
+ts.mvsr()
 
-print(ts.get_tov_results().max('gm'))
+print('S12 SLy4 %7.6e' % ts.get_results().max('gm'))
 
+eti.ngl13_low_dens_eos(80.0)
+test_eos(eti)
+plot.loglog(eti.get_full_vece(),eti.get_full_vecp())
+ts.mvsr()
+
+print('NGL13 L=80 %7.6e' % ts.get_results().max('gm'))
+
+eti.ngl13_low_dens_eos2(34.0,80.0,0.08)
+test_eos(eti)
+plot.loglog(eti.get_full_vece(),eti.get_full_vecp())
+ts.mvsr()
+
+print('NGL13(2) S=34 L=80 0.08 %7.6e' % ts.get_results().max('gm'))
+
+pb.show()
 
 # For testing using ``pytest``:
 
 def test_fun():
-    assert numpy.allclose(Lambda,297.0,rtol=8.0e-3)
+    assert 0==0
     return

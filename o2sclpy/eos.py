@@ -2943,6 +2943,66 @@ class eos_tov_interp(eos_tov):
         func(self._ptr,value)
         return
 
+    def get_full_vece(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_eos_tov_interp_get_full_vece
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_full_vece(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_eos_tov_interp_set_full_vece
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_full_vecp(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_eos_tov_interp_get_full_vecp
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_full_vecp(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_eos_tov_interp_set_full_vecp
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_full_vecnb(self):
+        """
+        Get object of type :class:`std::vector<double>`
+        """
+        func1=self._link.o2scl.o2scl_eos_tov_interp_get_full_vecnb
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector(self._link,ptr)
+        return obj
+
+    def set_full_vecnb(self,value):
+        """
+        Set object of type :class:`std::vector<double>`
+        """
+        func=self._link.o2scl.o2scl_eos_tov_interp_set_full_vecnb
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
     def read_table(self,eos,s_cole,s_colp,s_colnb=""):
         """
         | Parameters:
@@ -4168,7 +4228,6 @@ class nstar_cold:
         ptr=func1(self._ptr)
         obj=tov_solve(self._link,ptr)
         return obj
-
 
     @property
     def eos_neg(self):
