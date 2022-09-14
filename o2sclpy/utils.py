@@ -669,15 +669,15 @@ class terminal_py:
         return (force_string(amt.get_type_color())+strt+
                 force_string(amt.get_default_color()))
     
-    def cmd_str(self,strt):
+    def cmd_str(self,strt,amt):
         return (force_string(amt.get_command_color())+strt+
                 force_string(amt.get_default_color()))
     
-    def topic_str(self,strt):
+    def topic_str(self,strt,amt):
         return (force_string(amt.get_help_color())+strt+
                 force_string(amt.get_default_color()))
     
-    def var_str(self,strt):
+    def var_str(self,strt,amt):
         return (force_string(amt.get_param_color())+strt+
                 force_string(amt.get_default_color()))
 

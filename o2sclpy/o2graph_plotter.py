@@ -702,8 +702,7 @@ class o2graph_plotter(yt_plot_base):
         return
 
     def den_plot_o2graph(self,o2scl,amp,link,args):
-        """
-        Documentation for o2graph command ``den-plot``:
+        """Documentation for o2graph command ``den-plot``:
 
         For objects of type ``table3d``:
 
@@ -712,25 +711,28 @@ class o2graph_plotter(yt_plot_base):
         Command-line arguments: ``<slice> [kwargs]``
 
         Creates a density plot from the specified slice. A z-axis
-        density legend "is print on the RHS if colbar is set to True
-        before plotting. "If z-axis limits are specified, then values
-        larger than the upper "limit "are set equal to the upper limit
-        and values smaller than the lower "limit are set equal to the
-        lower limit before plotting. The x- "and y-axis limits
-        (xlo,xhi,ylo,yhi) are ignored. The python "function imshow()
-        is used, unless 'pcm=True' is specified, in "which case the
-        pcolormesh() function is used instead. When 'pcm=False',
-        logarithmic scales are handled by taking the base 10 log of
-        the x- or y-grids specified in the table3d object before
-        plotting. When 'pcm=True', " logarithmic axes can be handled
-        automatically. The imshow() function presumes a uniform linear
-        or logarithmic x- and y-axis grid, and the den-plot function
-        will output a warning if this is not the case. The
-        pcolormesh() function can handle arbitrary x and y-axis grids.
-        If ``logz`` is set to true, then the base 10 logarithm is
-        taken of the data before the density plot is constructed. Some
-        useful kwargs are cmap, interpolation (for imshow), alpha,
-        vmin, and vmax. 
+        density legend is displayed on the RHS if colbar is set to True
+        before plotting. If z-axis limits are specified, then values
+        larger than the upper limit are set equal to the upper limit
+        and values smaller than the lower limit are set equal to the
+        lower limit before plotting. The x- and y-axis limits
+        (xlo,xhi,ylo,yhi) are ignored. 
+
+        The python function imshow() is used, unless 'pcm=True' is
+        specified, in which case the pcolormesh() function is used
+        instead. When 'pcm=False', logarithmic scales are handled by
+        taking the base 10 log of the x- or y-grids specified in the
+        table3d object before plotting. When 'pcm=True', logarithmic
+        axes can be handled automatically. The imshow() function
+        presumes a uniform linear or logarithmic x- and y-axis grid,
+        and the den-plot function will output a warning if this is not
+        the case. The pcolormesh() function can handle arbitrary x and
+        y-axis grids. If ``logz`` is set to true, then the base 10
+        logarithm is taken of the data before the density plot is
+        constructed. 
+
+        Some useful kwargs are cmap, interpolation (for
+        imshow), alpha, vmin, and vmax.
 
         See 
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html
@@ -1577,8 +1579,7 @@ class o2graph_plotter(yt_plot_base):
         return
                                  
     def errorbar(self,o2scl,amp,link,args):
-        """
-        Documentation for o2graph command ``errorbar``:
+        """Documentation for o2graph command ``errorbar``:
 
         For objects of type ``table``:
 
@@ -1586,14 +1587,16 @@ class o2graph_plotter(yt_plot_base):
 
         Command-line arguments: ``<x> <y> <xerr> <yerr> [kwargs]``
 
-        Plot column <y> versus column <x> with "+ symmetric error bars
+        Plot column <y> versus column <x> with symmetric error bars
         given in column <xerr> and <yerr>. For no uncertainty in
         either the x or y direction, just use 0 for <xerr> or <yerr>,
         respectively.
 
         Some useful kwargs for the errorbar command are:
 
-        keyword    description                      default value
+        ========== ================================= =============
+        keyword    description                       default value
+        ========== ================================= =============
         ecolor     error bar color                   None
         elinewidth error bar line width              None
         capsize    cap size in points                None
@@ -1604,10 +1607,12 @@ class o2graph_plotter(yt_plot_base):
         xuplims    x value is upper limit            False
         errorevery draw error bars on subset of data 1
         capthick   thickness of error bar cap        None
+        ========== ================================= =============
 
         For error points with no lines use, e.g. lw=0,elinewidth=1.
         See also ``error-point`` for plotting a single point with
         errorbars.
+
         """
 
         curr_type=o2scl_get_type(o2scl,amp,link)
@@ -2326,8 +2331,7 @@ class o2graph_plotter(yt_plot_base):
         return
         
     def den_plot_anim(self,o2scl,amp,args):
-        """
-        Documentation for o2graph command ``den-plot-anim``:
+        """Documentation for o2graph command ``den-plot-anim``:
 
         Create an animated density plot from a rank 3 tensor_grid
         object
@@ -2335,15 +2339,16 @@ class o2graph_plotter(yt_plot_base):
         Command-line arguments: ``<x index> <y index> <z index [+'r']>
         <mp4 filename>``
 
-        Create an mp4 animation of a density plot from a tensor_grid3
-        object. The first argument specifies which tensor index is
-        along the x axis (either ``0``, ``1`` or ``2``), the second
-        argument is the tensor index is along the y axis (either
-        ``0``, ``1`` or ``2``), and the third argument is the tensor
-        index which will be animated. If the third argument has an
-        additional ``r`` suffix, then the animation will be reversed,
-        so that the first frame corresponds to the largest value of
-        the grid for the associated index.
+        Create an mp4 animation of a density plot from a
+        ``tensor_grid`` object with rank 3. The first argument
+        specifies which tensor index is along the x axis (either
+        ``0``, ``1`` or ``2``), the second argument is the tensor
+        index is along the y axis (either ``0``, ``1`` or ``2``), and
+        the third argument is the tensor index which will be animated.
+        If the third argument has an additional ``r`` suffix, then the
+        animation will be reversed, so that the first frame
+        corresponds to the largest value of the grid for the
+        associated index.
 
         Experimental.
 
@@ -3507,7 +3512,9 @@ class o2graph_plotter(yt_plot_base):
         Output the currently available commands.
         """
 
+        amt=acol_manager(link,amp)
         ter=terminal_py()
+        cl=amt.get_cl()
         
         if len(args)>0 and args[0]=='all':
 
@@ -3517,14 +3524,17 @@ class o2graph_plotter(yt_plot_base):
             old_type=amt.get_type()
             amt.command_del(old_type)
             amt.command_add(b'')
-            base_acol_comm_list=cl.get_option_list()
+            list_temp=cl.get_option_list()
+            base_acol_comm_list=[]
+            for i in range(0,len(list_temp)):
+                base_acol_comm_list.append(list_temp[i])
             amt.command_del(b'')
             amt.command_add(old_type)
             
             base_acol_comm_list=sorted(base_acol_comm_list)
             comm_list=[]
             for i in range(0,len(base_acol_comm_list)):
-                st=base_acol_comm_list[i].decode('utf-8')
+                st=force_string(base_acol_comm_list[i])
                 comm_list.append(ter.cmd_str(st,amt))
             
             comm_rows=screenify_py(comm_list)
@@ -3552,13 +3562,16 @@ class o2graph_plotter(yt_plot_base):
             for this_type in acol_types:
                 
                 print('Acol and o2graph commands for an object of type '+
-                      ter.type_str(str(this_type,amt))+':\n')
+                      ter.type_str(force_string(this_type),amt)+':\n')
                 
                 old_type=amt.get_type()
                 amt.command_del(old_type)
-                amt.command_add(force_bytes(this_type2))
-                comm_list=cl.get_option_list()
-                amt.command_del(force_bytes(this_type2))
+                amt.command_add(force_bytes(this_type))
+                temp_list=cl.get_option_list()
+                comm_list=[]
+                for i in range(0,len(temp_list)):
+                    comm_list.append(temp_list[i])
+                amt.command_del(force_bytes(this_type))
                 amt.command_add(old_type)
                 
                 for line in extra_list:
@@ -3597,7 +3610,10 @@ class o2graph_plotter(yt_plot_base):
             old_type=amt.get_type()
             amt.command_del(old_type)
             amt.command_add(force_bytes(curr_type))
-            comm_list=cl.get_option_list()
+            temp_list=cl.get_option_list()
+            comm_list=[]
+            for i in range(0,len(temp_list)):
+                comm_list.append(temp_list[i])
             amt.command_del(force_bytes(curr_type))
             amt.command_add(old_type)
                 
