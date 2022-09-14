@@ -883,10 +883,9 @@ class plot_base:
         Command-line arguments: ``<x> <y> [<x err> <yerr>] or 
         [<x lo> <x hi> <y lo> <y hi>]``
 
-        Some useful kwargs for the error-point command are:
+        Some useful kwargs for the ``error-point`` command are:
         
         keyword    description                      default value
-        ---------------------------------------------------------
         ecolor     error bar color                   None
         capsize    cap size in points                None
         barsabove  plot error bars on top of point   False
@@ -897,7 +896,7 @@ class plot_base:
         errorevery draw error bars on subset of data 1
         capthick   thickness of error bar cap        None
 
-        See also errorbar for for plotting columns from a table object
+        See also ``errorbar`` for for plotting columns from a table object
 
         """
         if err1=='None' or err1=='none':

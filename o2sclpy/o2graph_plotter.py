@@ -206,6 +206,13 @@ def doc_replacements(s,ter,amp,link,script=False):
                     extra_list[i][1]+
                     force_string(amt.get_default_color()))
         
+    s=s.replace('o2graph',
+                (force_string(amt.get_exec_color())+'o2graph'+
+                 force_string(amt.get_default_color())))
+    s=s.replace('O2scl',
+                (force_string(amt.get_exec_color())+'O₂scl'+
+                 force_string(amt.get_default_color())))
+        
     # Replace parameters in param_list
     for i in range(0,len(param_list)):
         s=s.replace('``'+param_list[i][0]+'``',
@@ -1575,19 +1582,18 @@ class o2graph_plotter(yt_plot_base):
 
         For objects of type ``table``:
 
-        Plot the specified columns with errobars.
+        Plot the specified columns with errorbars.
 
         Command-line arguments: ``<x> <y> <xerr> <yerr> [kwargs]``
 
         Plot column <y> versus column <x> with "+ symmetric error bars
-        given in "+ column <xerr> and <yerr>. For no uncertainty in
+        given in column <xerr> and <yerr>. For no uncertainty in
         either the x or y direction, just use 0 for <xerr> or <yerr>,
         respectively.
 
         Some useful kwargs for the errorbar command are:
 
         keyword    description                      default value
-        ---------------------------------------------------------
         ecolor     error bar color                   None
         elinewidth error bar line width              None
         capsize    cap size in points                None
@@ -1600,7 +1606,7 @@ class o2graph_plotter(yt_plot_base):
         capthick   thickness of error bar cap        None
 
         For error points with no lines use, e.g. lw=0,elinewidth=1.
-        See also 'error-point' for plotting a single point with
+        See also ``error-point`` for plotting a single point with
         errorbars.
         """
 
@@ -2993,27 +2999,27 @@ class o2graph_plotter(yt_plot_base):
         return
 
     def yt_ann_func(self,o2scl,amp,args):
-        """
-        Documentation for o2graph command ``yt-ann``:
+        """Documentation for o2graph command ``yt-ann``:
 
         Annotate a yt rendering (experimental).
 
         Command-line arguments: ``[args]``
         
-        The 'yt-ann' command adds a list of o2graph commands that can
-        be used to annotate a yt rendering. Annotations are normal
-        o2graph 2D plotting commands built upon a coordinate system with
-        (0,0) as the lower-left corner of the image and (1,1) as the
-        upper-right corner.
-        yt-ann command arguments may include dashes but must end with the
-        word 'end'.
+        The ``yt-ann`` command adds a list of o2graph commands that
+        can be used to annotate a yt rendering. Annotations are normal
+        o2graph 2D plotting commands built upon a coordinate system
+        with (0,0) as the lower-left corner of the image and (1,1) as
+        the upper-right corner. Arguments for ``yt-ann`` may include
+        dashes but must end with the word 'end'.
         
-        Examples are:\n  -yt-ann -text 0.1 0.95 \"Ann. example\"
-        color=w,ha=left end
+        For example::
+
+          -yt-ann -text 0.1 0.95 \"Ann. example\" color=w,ha=left end
         
         The list or arguments in `args` must end with 'end'. 
         If `args` contains only one entry ('end'), then the
         list of annotations is cleared.
+
         """
 
         if len(args)==1 and force_bytes(args[0])==b'end':
