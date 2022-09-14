@@ -289,9 +289,12 @@ class plot_base:
         Create a new color map named <cmap name> which consists of
         equal-sized gradients between the list of specified color
         pairs. Matplotlib colors, (r,g,b) colors, and xkcd colors are
-        all allowed. For example 'o2graph -cmap2 c \"(0.5,0.5,0.7)\"
-        \"xkcd:light red\" -create table3d x grid:0,40,1 y grid:0,40,1
-        z \"x+y\" -den-plot z cmap=c -show'.
+        all allowed. For example::
+
+          o2graph -cmap2 c "(0.5,0.5,0.7)" "xkcd:light red" \\
+          -create table3d x grid:0,40,1 y grid:0,40,1 \\
+          z "x+y" -den-plot z cmap=c -show'
+
         """
 
         N=len(col_list)
@@ -663,11 +666,11 @@ class plot_base:
 
         Command-line arguments: ``<x low> <x high>``
 
-        The xlimits command sets xlo and xhi to the specified limits
-        and sets xset to True. If a plotting canvas is currently open,
+        The xlimits command sets ``xlo`` and ``xhi`` to the specified limits
+        and sets ``xset`` to True. If a plotting canvas is currently open,
         then the x-limits on the current axis are modified. Future
         plots are also plot with the specified x-limits. If <low> and
-        <high> are identical then xset is set to False and the x
+        <high> are identical then ``xset`` is set to False and the x
         limits are automatically set by matplotlib.
         """
         if xlo==xhi:
@@ -693,12 +696,13 @@ class plot_base:
 
         Command-line arguments: ``<y low> <y high>``
 
-        The ylimits command sets ylo and yhi to the specified limits
-        and sets yset to True. If a plotting canvas is currently open,
-        then the y-limits on the current axis are modified. Future
-        plots are also plot with the specified y-limits. If <low> and
-        <high> are identical then yset is set to False and the y
-        limits are automatically set by matplotlib.
+        The ``ylimits`` command sets ``ylo`` and ``yhi`` to the
+        specified limits and sets ``yset`` to True. If a plotting
+        canvas is currently open, then the y-limits on the current
+        axis are modified. Future plots are also plot with the
+        specified y-limits. If <low> and <high> are identical then
+        ``yset`` is set to False and the y limits are automatically
+        set by matplotlib.
         """
         if ylo==yhi:
             self.yset=False
@@ -716,19 +720,19 @@ class plot_base:
         return
 
     def zlimits(self,zlo,zhi):
-        """
-        Documentation for o2graph command ``zlimits``:
+        """Documentation for o2graph command ``zlimits``:
 
         Set the z-axis limits
 
         Command-line arguments: ``<z low> <z high>``
 
-        The zlimits command sets zlo and zhi to the specified limits
-        and sets zset to True. If a plotting canvas is currently open,
-        then the z-limits on the current axis are modified. Future
-        plots are also plot with the specified z-limits. If <low> and
-        <high> are identical then zset is set to False and the z
-        limits are automatically set by matplotlib.
+        The ``zlimits`` command sets ``zlo`` and ``zhi`` to the
+        specified limits and sets ``zset`` to True. If a plotting canvas
+        is currently open, then the z-limits on the current axis are
+        modified. Future plots are also plot with the specified
+        z-limits. If <low> and <high> are identical then ``zset`` is set
+        to False and the z limits are automatically set by matplotlib.
+
         """
         if zlo==zhi:
             self.zset=False
@@ -746,14 +750,17 @@ class plot_base:
 
         Plot a line from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
 
-        Command-line arguments: ``x1 y1 x2 y2 [kwargs]``
+        Command-line arguments: ``<x1> <y1> <x2> <y2> [kwargs]``
 
-        Plot a line from (x1,y1) to (xy,y2). Some useful kwargs are
-        color (c), dashes, linestyle (ls), linewidth (lw), marker,
-        markeredgecolor (mec), markeredgewidth (mew), markerfacecolor
-        (mfc), markerfacecoloralt (mfcalt), markersize (ms). For
-        example: o2graph -line 0.05 0.05 0.95 0.95 lw=0,marker='+'
-        -show
+        Plot a line from ``(x1,y1)`` to ``(xy,y2)``. Some useful
+        kwargs are color (c), dashes, linestyle (ls), linewidth (lw),
+        marker, markeredgecolor (mec), markeredgewidth (mew),
+        markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize
+        (ms). For example::
+
+            o2graph -line 0.05 0.05 0.95 0.95 lw=0,marker='+' \\
+            -show
+
         """
         if self.verbose>2:
             print('Line',x1,y1,x2,y1)
@@ -1333,19 +1340,18 @@ class plot_base:
 
         Command-line arguments: ``<x> <y> <text> [kwargs]``
 
-        The 'text' command plots text in the data coordinates defined
-        by the current axes with the font size determined by the value
-        of the parameter 'font'. LaTeX is used for text rendering by
-        default, but this setting can be changed using, e.g. '-set
-        usetex 0'. Some useful kwargs are fontfamily, fontstyle,
-        fontsize, color, backgroundcolor, rotation,
+        The ``text`` command plots text in the data coordinates
+        defined by the current axes with the font size determined by
+        the value of the parameter 'font'. LaTeX is used for text
+        rendering by default, but this setting can be changed using,
+        e.g. '-set usetex 0'. Some useful kwargs are fontfamily,
+        fontstyle, fontsize, color, backgroundcolor, rotation,
         horizontalalignment (ha), and verticalalignment (va). Note
         that you must disable LaTeX rendering to change fontfamily or
         fontstyle.
 
-        If ``tx`` and ``ty`` are strings, then they are passed through
-        the ``eval()`` function and converted to floating-point
-        numbers.
+        If <x> or <y> are strings, then they are passed through the
+        ``eval()`` function and converted to floating-point numbers.
         """
         if self.canvas_flag==False:
             self.canvas()
@@ -1382,24 +1388,25 @@ class plot_base:
         return
 
     def textbox(self,tx,ty,strt,boxprops='',**kwargs):
-        """
-        Documentation for o2graph command ``textbox``:
+        """Documentation for o2graph command ``textbox``:
 
         Plot a box with text.
 
         Command-line arguments: ``<x1> <y1> <text> [bbox properties] 
         [kwargs]``
         
-        Plot text <text> and a box at location <x1> <y1>. For example,
-        textbox 0.5 0.5 \"$ f(x) $\" \"alpha=0.8,facecolor=white\"
-        . This command uses the standard axis text function, but
-        adds a bounding box with the specified properties. Typical
-        bbox properties are boxstyle (Circle, DArrow, LArrow,
-        RArrow, Round, Round4, Roundtooth, Sawtooth, Square),
-        alpha, color, edgecolor (ec), facecolor (fc), fill, hatch
-        ({'/','\','|','-','+','x','o','O','.', '*'}), linestyle
-        (ls), and linewidth (lw). The keyword arguments are for the
-        text properties, and follow "+ those of the text command.
+        Plot text <text> and a box at location <x1> <y1>. For example::
+        
+          textbox 0.5 0.5 \"$ f(x) $\" \"alpha=0.8,facecolor=white\"
+
+        This command uses the standard axis text function, but adds a
+        bounding box with the specified properties. Typical bbox
+        properties are boxstyle (Circle, DArrow, LArrow, RArrow,
+        Round, Round4, Roundtooth, Sawtooth, Square), alpha, color,
+        edgecolor (ec), facecolor (fc), fill, hatch ({'/', '\', '|',
+        '-', '+', 'x', 'o', 'O', '.', '*'}), linestyle (ls), and
+        linewidth (lw). The keyword arguments are for the text
+        properties, and follow those of the text command.
 
         """
         if self.canvas_flag==False:
@@ -1620,7 +1627,7 @@ class plot_base:
 
         Select an axis from the current list of axes
 
-        [name]
+        Command-line arguments: ``[name]``
 
         Select which axis to use for subsequent plotting commands. If
         [name] is not specified, then the names of all current axes
@@ -1677,7 +1684,7 @@ class plot_base:
 
         Modify current axes properties.
 
-        [kwargs]
+        Command-line arguments: ``[kwargs]``
 
         alpha            float>0      alpha value for region inside axes 
         labelsize        float>0      font size for labels 
@@ -1803,22 +1810,22 @@ class plot_base:
         return
     
     def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):
-        """
-        Documentation for o2graph command ``addcbar``:
+        """Documentation for o2graph command ``addcbar``:
 
         Add a color bar.
         
         Command-line arguments: ``<left> <bottom> <width> <height>
         [kwargs]``
 
-        Add a new colorbar or a colorbar from the most recently created
-        image at the location specified by ``left``, ``bottom``,
-        ``width`` and ``height``. If the image keyword is 'last', 
-        then the last density plot (command 'den-plot') or 2d 
-        histogram plot (command 'hist2d-plot') is used. If 
-        the image keyword is 'new', then a colormap must be 
-        specified using the 'cmap' keyword and the color map is
-        used to create the colorbar.
+        Add a new colorbar or a colorbar from the most recently
+        created image at the location specified by ``left``,
+        ``bottom``, ``width`` and ``height``. If the image keyword is
+        'last', then the last density plot (e.g. from command
+        ``den-plot``) or two-dimensional histogram plot (e.g. from
+        command ``hist2d-plot``) is used. If the image keyword is
+        'new', then a colormap must be specified using the 'cmap'
+        keyword and the color map is used to create the colorbar.
+
         """
 
         import matplotlib.pyplot as plot

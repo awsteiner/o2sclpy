@@ -568,7 +568,7 @@ class yt_plot_base(plot_base):
 
         Command-line arguments: ``<x> <y> <z> <text> reorient=False``
 
-        Plot text given in ``textstr`` in a yt volume visualization at
+        Plot text given in ``<textstr>`` in a yt volume visualization at
         location ``(tx,ty,tz)``. If reorient is ``True``, then 
         the during an animation, the text will be redrawn so that
         it is parallel to the camera. The ``scale`` and ``font``

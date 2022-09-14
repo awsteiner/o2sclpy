@@ -178,7 +178,7 @@ extra_list=[
     ["vector<contour_line>","plot",0],
 ]
 
-def doc_replacements(s,ter,amp,link):
+def doc_replacements(s,ter,amp,link,script=False):
     """
     Make some replacements from RST formatting to the terminal screen.
 
@@ -186,6 +186,11 @@ def doc_replacements(s,ter,amp,link):
     """
 
     amt=acol_manager(link,amp)
+
+    if script:
+        s=(force_string(amt.get_exec_color())+s+
+           force_string(amt.get_default_color()))
+        return s
     
     # Replace commands in base_list
     for i in range(0,len(base_list)):
@@ -193,11 +198,52 @@ def doc_replacements(s,ter,amp,link):
                     force_string(amt.get_command_color())+
                     base_list[i][0]+
                     force_string(amt.get_default_color()))
+        
+    # Replace commands in extra_list
     for i in range(0,len(extra_list)):
         s=s.replace('``'+extra_list[i][1]+'``',
                     force_string(amt.get_command_color())+
                     extra_list[i][1]+
                     force_string(amt.get_default_color()))
+        
+    # Replace parameters in param_list
+    for i in range(0,len(param_list)):
+        s=s.replace('``'+param_list[i][0]+'``',
+                    force_string(amt.get_param_color())+
+                    param_list[i][0]+
+                    force_string(amt.get_default_color()))
+
+    # Replace yt_parameters in yt_param_list
+    for i in range(0,len(yt_param_list)):
+        s=s.replace('``'+yt_param_list[i][0]+'``',
+                    force_string(amt.get_param_color())+
+                    yt_param_list[i][0]+
+                    force_string(amt.get_default_color()))
+
+    # Replace yt_parameters in acol_types
+    for i in range(0,len(acol_types)):
+        s=s.replace('``'+acol_types[i]+'``',
+                    force_string(amt.get_type_color())+
+                    acol_types[i]+
+                    force_string(amt.get_default_color()))
+
+    # Decorate URLs
+    if s.find('https://')!=-1:
+        ix=s.find('https://')
+        found=False
+        j=ix
+        while j!=len(s) and found==False:
+            if s[j]==' ':
+                found=True
+            else:
+                j=j+1
+        if j==len(s):
+            s=(s[0:ix]+force_string(amt.get_url_color())+
+               s[ix:len(s)]+force_string(amt.get_default_color()))
+        else:
+            s=(s[0:ix]+force_string(amt.get_url_color())+
+               s[ix:j]+force_string(amt.get_default_color())+
+               s[j:len(s)])
 
     # For ``code`` formatting
     s=s.replace(' ``',' ')
@@ -298,15 +344,31 @@ def reformat_python_docs(cmd,doc_str,amp,link,
     if len(reflist2)>=4:
         print('')
         print('Long description:')
+        last_pgh_colons=False
         for j in range(3,len(reflist2)):
             if len(reflist2[j])>0:
-                long_help=doc_replacements(reflist2[j].replace('\n',' '),
-                                           ter,amp,link)
-                tmplist=wrap_line(long_help,ncols-1)
+                if last_pgh_colons:
+                    long_help=doc_replacements(reflist2[j].replace('\n',' '),
+                                               ter,amp,link,script=True)
+                    tmplist=long_help.split(' \ ')
+                else:
+                    long_help=doc_replacements(reflist2[j].replace('\n',' '),
+                                               ter,amp,link)
+                    tmplist=wrap_line(long_help,ncols-1)
                 if j!=3:
                     print('')
                 for k in range(0,len(tmplist)):
-                    print(tmplist[k])
+                    if last_pgh_colons:
+                        if k!=len(tmplist)-1:
+                            print(' ',tmplist[k],'\\')
+                        else:
+                            print(' ',tmplist[k])
+                    else:
+                        print(tmplist[k])
+                if long_help[-2:]=='::':
+                    last_pgh_colons=True
+                else:
+                    last_pgh_colons=False
                     
     return
 
@@ -317,7 +379,7 @@ def reformat_python_docs_type(curr_type,cmd,doc_str,amp,link,
     """
     
     amt=acol_manager(link,amp)
-    
+
     reflist=doc_str.split('\n')
     
     for i in range(0,len(reflist)):
@@ -478,6 +540,8 @@ class o2graph_plotter(yt_plot_base):
                 line[2]=o2graph_plotter.rplot.__doc__
             elif line[1]=="scatter":
                 line[2]=o2graph_plotter.scatter.__doc__
+            elif line[1]=="yt-add-vol":
+                line[2]=o2graph_plotter.yt_add_vol.__doc__
             elif line[1]=="yt-anim":
                 line[2]=o2graph_plotter.yt_anim.__doc__
             elif line[1]=="yt-scatter":
@@ -2055,15 +2119,17 @@ class o2graph_plotter(yt_plot_base):
         """
         Documentation for o2graph command ``yt-add-vol``:
 
-        Add a volume source to a yt visualization from a
-        tensor_grid object.
+        For objects of type ``tensor_grid``:
 
-             "Add a tensor_grid object as a yt volume source",
-     "[kwargs]","This adds the volumetric data specified in the "+
-     "tensor_grid object as a yt volume source. The transfer "+
-     "function previously specified by 'yt-tf' is used, or if "+
-     "unspecified, then yt's transfer_function_helper is used "+
-     "to create a 3 layer default transfer function."],
+        Add a tensor_grid object as a yt volume source
+
+        Command-line arguments: ``[kwargs]``
+
+        This command adds the volumetric data specified in the
+        ``tensor_grid`` object as a yt volume source. The transfer
+        function previously specified by ``yt-tf`` is used, or if
+        unspecified, then yt's transfer_function_helper is used to
+        create a 3 layer default transfer function.
 
         """
 
