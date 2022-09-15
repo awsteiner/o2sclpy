@@ -679,12 +679,15 @@ class plot_base:
         self.xlo=xlo
         self.xhi=xhi
         self.xset=True
-        if self.canvas_flag==True:
-            self.axes.set_xlim(self.xlo,self.xhi)
-            if self.logx==True:
-                self.axes.set_xscale('log')
-            else:
-                self.axes.set_xscale('linear')
+        
+        #if self.canvas_flag==True:
+        
+        self.axes.set_xlim(self.xlo,self.xhi)
+        if self.logx==True:
+            self.axes.set_xscale('log')
+        else:
+            self.axes.set_xscale('linear')
+            
         # End of function plot_base::xlimits()
         return
 
@@ -710,12 +713,15 @@ class plot_base:
         self.ylo=ylo
         self.yhi=yhi
         self.yset=True
-        if self.canvas_flag==True:
-            self.axes.set_ylim(self.ylo,self.yhi)
-            if self.logy==True:
-                self.axes.set_yscale('log')
-            else:
-                self.axes.set_yscale('linear')
+        
+        #        if self.canvas_flag==True:
+
+        self.axes.set_ylim(self.ylo,self.yhi)
+        if self.logy==True:
+            self.axes.set_yscale('log')
+        else:
+            self.axes.set_yscale('linear')
+            
         # End of function plot_base::ylimits()
         return
 
@@ -1545,7 +1551,8 @@ class plot_base:
         # Make the call to subplots()
         self.fig,axis_temp=plot.subplots(nrows=nr,ncols=nc,
                                          figsize=(dct["fig_size_x"],
-                                                  dct["fig_size_y"]))
+                                                  dct["fig_size_y"]),**kwargs)
+        
         # Reformulate the axis objects into the axes_dict
         nsub=0
         if nr==1 and nc==1:
