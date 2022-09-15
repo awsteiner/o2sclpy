@@ -140,7 +140,8 @@ for i_eos in range(0,a21_tab.get_nlines(),
 
 # Show all the EOSs
 
-pb.show()
+plot.savefig('crust_var2.png')
+plot.show()
 
 # For testing using ``pytest``:
 
