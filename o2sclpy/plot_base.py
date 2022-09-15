@@ -679,14 +679,13 @@ class plot_base:
         self.xlo=xlo
         self.xhi=xhi
         self.xset=True
-        
-        #if self.canvas_flag==True:
-        
-        self.axes.set_xlim(self.xlo,self.xhi)
-        if self.logx==True:
-            self.axes.set_xscale('log')
-        else:
-            self.axes.set_xscale('linear')
+
+        if self.canvas_flag==True:
+            self.axes.set_xlim(self.xlo,self.xhi)
+            if self.logx==True:
+                self.axes.set_xscale('log')
+            else:
+                self.axes.set_xscale('linear')
             
         # End of function plot_base::xlimits()
         return
@@ -714,13 +713,12 @@ class plot_base:
         self.yhi=yhi
         self.yset=True
         
-        #        if self.canvas_flag==True:
-
-        self.axes.set_ylim(self.ylo,self.yhi)
-        if self.logy==True:
-            self.axes.set_yscale('log')
-        else:
-            self.axes.set_yscale('linear')
+        if self.canvas_flag==True:
+            self.axes.set_ylim(self.ylo,self.yhi)
+            if self.logy==True:
+                self.axes.set_yscale('log')
+            else:
+                self.axes.set_yscale('linear')
             
         # End of function plot_base::ylimits()
         return
@@ -733,11 +731,9 @@ class plot_base:
         Command-line arguments: ``<z low> <z high>``
 
         The ``zlimits`` command sets ``zlo`` and ``zhi`` to the
-        specified limits and sets ``zset`` to True. If a plotting canvas
-        is currently open, then the z-limits on the current axis are
-        modified. Future plots are also plot with the specified
-        z-limits. If <low> and <high> are identical then ``zset`` is set
-        to False and the z limits are automatically set by matplotlib.
+        specified limits and sets ``zset`` to True. 
+        If <low> and <high> are identical then ``zset`` is set
+        to False.
 
         """
         if zlo==zhi:
@@ -1053,7 +1049,8 @@ class plot_base:
         (No arguments.)
 
         Show the current plot on the screen and begin the graphical
-        user interface. This is similar to ``plot.show()``.
+        user interface. When the editor is not enabled this just
+        runs ``matplotlib.pyplot.show()``.
         """
 
         import matplotlib.pyplot as plot
