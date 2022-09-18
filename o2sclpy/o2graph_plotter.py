@@ -1856,7 +1856,6 @@ class o2graph_plotter(yt_plot_base):
             vvdy=std_vector_vector(link)
             rety=mult_vector_spec(link,args[1],vvdy,False,self.verbose,
                                   False)
-            
 
             for i in range(0,vvdx.size()):
                 for j in range(0,vvdy.size()):
@@ -1897,14 +1896,10 @@ class o2graph_plotter(yt_plot_base):
             if self.verbose>1:
                 print('Calling mult_vectors_to_conts() with',
                       args[0])
-            vvdy=o2sclpy.std_vector_vector(link)
-            o2sclpy.mult_vector_spec(link,args[0],vvdy,verbose,False)
-            maxlen=0
-            for i in range(0,len(vvdy)):
-                if vvdy[i].size()>maxlen:
-                    maxlen=vvdy[i].size()
-            vvdx=[i for i in range(0,maxlen)]
-
+                
+            vvdy=std_vector_vector(link)
+            mult_vector_spec(link,args[0],vvdy,False,self.verbose,False)
+            
             kwstring=''
             if (len(args)>=3 and (force_bytes(args[1])==b'none' or
                                   force_bytes(args[1])==b'None')):
@@ -1913,9 +1908,10 @@ class o2graph_plotter(yt_plot_base):
                 kwstring=args[1]
             
             for j in range(0,vvdy.size()):
+                vvdx=[i for i in range(0,len(vvdy[j]))]
                 if self.logx==True:
                     if self.logy==True:
-                        if kwstring!='':
+                        if kwstring!='':                            
                             self.axes.loglog(vvdx,vvdy[j],
                                              **string_to_dict(kwstring))
                         else:
