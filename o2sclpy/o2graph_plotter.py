@@ -1520,7 +1520,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::hist_plot()
         return
                                  
-    def hist2d_plot(self,o2scl,amp,args):
+    def hist2d_plot(self,o2scl,amp,link,args):
         """
         Documentation for o2graph command ``hist2d-plot``:
 
