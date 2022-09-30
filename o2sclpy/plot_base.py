@@ -1640,7 +1640,7 @@ class plot_base:
         if name=='':
             print('Axes names:',self.axes_dict.keys())
         elif len(name)==1:
-            self.axes=self.axes_dict["subplot"+name]
+            self.axes=self.axes_dict["subplot"+str(name)]
         else:
             self.axes=self.axes_dict[name]
         
@@ -1935,10 +1935,13 @@ class plot_base:
     #     return
 
     def plot(self,args,**kwargs):
-        """
-        Plot a two-dimensional set of data
+        """Plot a two-dimensional set of data
         
-        args can be [table,col1,col2] or ....
+        The argument list ``args`` can be of the form ``[table,colum
+        1,column 2]`` or ``[table_units,colum 1,column 2]`` or
+        ``[shared_ptr_table_units,colum 1,column 2]``. Otherwise,
+        ``args[0]`` and ``args[1]`` are interpreted as arrays to be
+        directly sent to the ``matplotlib.pyplot.plot()`` function.
         """
 
         if len(args)<2:
@@ -1956,50 +1959,130 @@ class plot_base:
             xv=tab[force_bytes(args[1])][0:tab.get_nlines()]
             yv=tab[force_bytes(args[2])][0:tab.get_nlines()]
 
-            if failed==False:
-        
-                if self.canvas_flag==False:
-                    self.canvas()
-                if self.logx==True:
-                    if self.logy==True:
-                        if len(args)<3:
-                            self.axes.loglog(xv,yv)
-                        else:
-                            self.axes.loglog(xv,yv,**kwargs)
-                    else:
-                        if len(args)<3:
-                            self.axes.semilogx(xv,yv)
-                        else:
-                            self.axes.semilogx(xv,yv,**kwargs)
-                else:
-                    if self.logy==True:
-                        if len(args)<3:
-                            self.axes.semilogy(xv,yv)
-                        else:
-                            self.axes.semilogy(xv,yv,**kwargs)
-                    else:
-                        if len(args)<3:
-                            self.axes.plot(xv,yv)
-                        else:
-                            self.axes.plot(xv,yv,**kwargs)
-                            
         else:
-                
-            print('plot() does not support type',type(args[0]))
+
+            xv=args[0]
+            yv=args[1]
+            
+        if failed==False:
+    
+            if self.canvas_flag==False:
+                self.canvas()
+            if self.logx==True:
+                if self.logy==True:
+                    if len(args)<3:
+                        self.axes.loglog(xv,yv)
+                    else:
+                        self.axes.loglog(xv,yv,**kwargs)
+                else:
+                    if len(args)<3:
+                        self.axes.semilogx(xv,yv)
+                    else:
+                        self.axes.semilogx(xv,yv,**kwargs)
+            else:
+                if self.logy==True:
+                    if len(args)<3:
+                        self.axes.semilogy(xv,yv)
+                    else:
+                        self.axes.semilogy(xv,yv,**kwargs)
+                else:
+                    if len(args)<3:
+                        self.axes.plot(xv,yv)
+                    else:
+                        self.axes.plot(xv,yv,**kwargs)
                             
         return
 
-    def den_plot(self,table3d,slice_name,**kwargs):
+    def den_plot(self,args,**kwargs):
         """
-        Create a density plot from a slice of a table3d object.
+        Create a density plot from a matrix or a 
+        slice of a table3d object.
         """
         
-        nxt=table3d.get_nx()
-        nyt=table3d.get_ny()
-        sl=table3d.get_slice(slice_name).to_numpy()
-        sl=sl.transpose()
-        xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
-        ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
+        if len(args)<1:
+            print('Failed, not enough information to plot.')
+            return
+
+        val=kwargs.pop('pcm',None)
+        if val==True:
+            pcm=True
+        else:
+            pcm=False
+
+        if str(type(args[0]))=='<class \'o2sclpy.base.table3d\'>':
+
+            table3d=args[0]
+            slice_name=args[1]
+            nxt=table3d.get_nx()
+            nyt=table3d.get_ny()
+            sl=table3d.get_slice(slice_name).to_numpy()
+            sl=sl.transpose()
+            xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
+            ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
+
+            if pcm==False:
+                
+                diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
+                mean_x=numpy.mean(diffs_x)
+                std_x=numpy.std(diffs_x)
+                diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
+                mean_y=numpy.mean(diffs_y)
+                std_y=numpy.std(diffs_y)
+            
+                if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
+                    print('Warning in o2graph::o2graph_plotter::den_plot():')
+                    print('  Nonlinearity of x or y grid is greater than '+
+                          '10^{-4}.')
+                    print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
+                          (std_x/mean_x))
+                    print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
+                          (std_y/mean_y))
+                    print('  The density plot may not be properly scaled.')
+                
+                extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+                extent2=xgrid[nxt-1]+(xgrid[nxt-1]-
+                                           xgrid[nxt-2])/2
+                extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+                extent4=ygrid[nyt-1]+(ygrid[nyt-1]-
+                                           ygrid[nyt-2])/2
+            
+        elif str(type(args[0]))=='<class \'o2sclpy.other.hist_2d\'>':
+
+            h2d=args[0]
+            nxt=h2d.size_x()
+            nyt=h2d.size_y()
+            sl=h2d.get_wgts.to_numpy()
+            sl=sl.transpose()
+
+            if pcm==False:
+                extent1=h2d.get_x_low_i(0)
+                extent2=h2d.get_x_high_i(nxt-1)
+                extent3=h2d.get_y_low_i(0)
+                extent4=h2d.get_y_high_i(nyt-1)
+            else:
+                xgrid=o2sclpy.std_vector_size_t(link)
+                ygrid=o2sclpy.std_vector_size_t(link)
+                h2d.create_x_rep_vec(xgrid)
+                h2d.create_y_rep_vec(ygrid)
+
+        elif len(args)<3:
+
+            print('This code is untested.')
+            sl=args[0]
+            shap=sl.shape()
+            nxt=shap[0]
+            xyt=shap[1]
+            xgrid=[i for i in range(0,nxt)]
+            ygrid=[i for i in range(0,nyt)]
+        
+        else:
+
+            print('This code is untested.')
+            xgrid=args[0]
+            ygrid=args[1]
+            nxt=len(xgrid)
+            nyt=len(ygrid)
+            sl=args[2]
         
         # If logz was specified, then manually apply the
         # log to the data. Alternatively, we should consider
@@ -2039,7 +2122,7 @@ class plot_base:
         if self.canvas_flag==False:
             self.canvas()
             
-        if kwargs.pop('pcm',None)==True:
+        if pcm==True:
             
             print('Creating density plot using pcolormesh()')
             if self.logx==True:
@@ -2056,35 +2139,11 @@ class plot_base:
             self.axes.set_yscale('linear')
             
             if self.logx==True:
-                xgrid=[math.log(ptrx[i],10) for i in
+                xgrid=[math.log(xgrid[i],10) for i in
                        range(0,nxt)]
             if self.logy==True:
-                ygrid=[math.log(ptry[i],10) for i in
+                ygrid=[math.log(ygrid[i],10) for i in
                        range(0,nyt)]
-
-            diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
-            mean_x=numpy.mean(diffs_x)
-            std_x=numpy.std(diffs_x)
-            diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
-            mean_y=numpy.mean(diffs_y)
-            std_y=numpy.std(diffs_y)
-            
-            if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
-                print('Warning in o2graph::o2graph_plotter::den_plot():')
-                print('  Nonlinearity of x or y grid is greater than '+
-                      '10^{-4}.')
-                print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
-                      (std_x/mean_x))
-                print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
-                      (std_y/mean_y))
-                print('  The density plot may not be properly scaled.')
-                
-            extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-            extent2=xgrid[nxt-1]+(xgrid[nxt-1]-
-                                       xgrid[nxt-2])/2
-            extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-            extent4=ygrid[nyt-1]+(ygrid[nyt-1]-
-                                       ygrid[nyt-2])/2
 
             f=self.axes.imshow
             self.last_image=f(sl,interpolation='nearest',

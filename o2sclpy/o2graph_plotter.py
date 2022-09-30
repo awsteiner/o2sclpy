@@ -830,7 +830,7 @@ class o2graph_plotter(yt_plot_base):
             if len(args)>=3:
                 kwstring=args[2]
         elif curr_type==b'hist_2d':
-            print('not yet supported.')
+            print('Command den-plot not yet supported for hist_2d.')
             return
         elif curr_type==b'table3d':
             slice_name=args[0]
@@ -842,7 +842,7 @@ class o2graph_plotter(yt_plot_base):
             return
 
         dctt=string_to_dict(kwstring)
-        self.den_plot(amt.get_table3d_obj(),slice_name,**dctt)
+        self.den_plot([amt.get_table3d_obj(),slice_name],**dctt)
 
         return
 
