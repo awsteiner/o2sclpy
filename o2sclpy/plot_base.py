@@ -1639,7 +1639,7 @@ class plot_base:
 
         if name=='':
             print('Axes names:',self.axes_dict.keys())
-        elif len(name)==1:
+        elif len(str(name))==1:
             self.axes=self.axes_dict["subplot"+str(name)]
         else:
             self.axes=self.axes_dict[name]
@@ -2009,6 +2009,8 @@ class plot_base:
         else:
             pcm=False
 
+        extent_from_grid=False
+            
         if str(type(args[0]))=='<class \'o2sclpy.base.table3d\'>':
 
             table3d=args[0]
@@ -2021,31 +2023,8 @@ class plot_base:
             ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
 
             if pcm==False:
-                
-                diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
-                mean_x=numpy.mean(diffs_x)
-                std_x=numpy.std(diffs_x)
-                diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
-                mean_y=numpy.mean(diffs_y)
-                std_y=numpy.std(diffs_y)
-            
-                if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
-                    print('Warning in o2graph::o2graph_plotter::den_plot():')
-                    print('  Nonlinearity of x or y grid is greater than '+
-                          '10^{-4}.')
-                    print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
-                          (std_x/mean_x))
-                    print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
-                          (std_y/mean_y))
-                    print('  The density plot may not be properly scaled.')
-                
-                extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-                extent2=xgrid[nxt-1]+(xgrid[nxt-1]-
-                                           xgrid[nxt-2])/2
-                extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-                extent4=ygrid[nyt-1]+(ygrid[nyt-1]-
-                                           ygrid[nyt-2])/2
-            
+                extent_from_grid=True
+
         elif str(type(args[0]))=='<class \'o2sclpy.other.hist_2d\'>':
 
             h2d=args[0]
@@ -2067,23 +2046,62 @@ class plot_base:
 
         elif len(args)<3:
 
-            print('This code is untested.')
             sl=args[0]
+            sl=sl.transpose()
             shap=sl.shape()
             nxt=shap[0]
             xyt=shap[1]
             xgrid=[i for i in range(0,nxt)]
             ygrid=[i for i in range(0,nyt)]
-        
+
+            if pcm==False:
+                extent_from_grid=True
+            
         else:
 
-            print('This code is untested.')
             xgrid=args[0]
             ygrid=args[1]
             nxt=len(xgrid)
             nyt=len(ygrid)
             sl=args[2]
-        
+            sl=sl.transpose()
+
+            if pcm==False:
+                extent_from_grid=True
+                
+        if extent_from_grid==True:
+                
+            if self.logx==True:
+                xgrid=[math.log(xgrid[i],10) for i in
+                       range(0,nxt)]
+            if self.logy==True:
+                ygrid=[math.log(ygrid[i],10) for i in
+                       range(0,nyt)]
+
+            diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
+            mean_x=numpy.mean(diffs_x)
+            std_x=numpy.std(diffs_x)
+            diffs_y=[ygrid[i+1]-ygrid[i] for i in range(0,len(ygrid)-1)]
+            mean_y=numpy.mean(diffs_y)
+            std_y=numpy.std(diffs_y)
+            
+            if std_x/mean_x>1.0e-4 or std_x/mean_x>1.0e-4:
+                print('Warning in o2graph::o2graph_plotter::den_plot():')
+                print('  Nonlinearity of x or y grid is greater than '+
+                      '10^{-4}.')
+                print('  Value of std(diff_x)/mean(diff_x): %7.6e .' %
+                      (std_x/mean_x))
+                print('  Value of std(diff_y)/mean(diff_y): %7.6e .' %
+                      (std_y/mean_y))
+                print('  The density plot may not be properly scaled.')
+                
+            extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
+            extent2=xgrid[nxt-1]+(xgrid[nxt-1]-
+                                  xgrid[nxt-2])/2
+            extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
+            extent4=ygrid[nyt-1]+(ygrid[nyt-1]-
+                                  ygrid[nyt-2])/2
+            
         # If logz was specified, then manually apply the
         # log to the data. Alternatively, we should consider
         # using 'LogNorm' here, as suggested in
@@ -2138,13 +2156,6 @@ class plot_base:
             self.axes.set_xscale('linear')
             self.axes.set_yscale('linear')
             
-            if self.logx==True:
-                xgrid=[math.log(xgrid[i],10) for i in
-                       range(0,nxt)]
-            if self.logy==True:
-                ygrid=[math.log(ygrid[i],10) for i in
-                       range(0,nyt)]
-
             f=self.axes.imshow
             self.last_image=f(sl,interpolation='nearest',
                               origin='lower',extent=[extent1,extent2,
