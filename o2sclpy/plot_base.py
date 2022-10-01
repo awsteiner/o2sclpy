@@ -24,7 +24,7 @@ import numpy
 import os
 
 # For system type detection
-import platform
+#import platform
 
 # To create new color maps
 from matplotlib.colors import LinearSegmentedColormap
@@ -1994,9 +1994,8 @@ class plot_base:
         return
 
     def den_plot(self,args,**kwargs):
-        """
-        Create a density plot from a matrix or a 
-        slice of a table3d object.
+        """Create a density plot from a matrix, a slice of a table3d object,
+        or a hist_2d object.
         """
         
         if len(args)<1:

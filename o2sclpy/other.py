@@ -1246,6 +1246,303 @@ class hist:
         return
 
 
+class hist_2d:
+    """
+    Python interface for O\ :sub:`2`\ scl class ``hist_2d``,
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/hist_2d.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class hist_2d
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_hist_2d
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class hist_2d
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_hist_2d
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class hist_2d
+        
+        Returns: hist_2d object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class hist_2d
+        
+        Returns: new copy of the hist_2d object
+        """
+
+        new_obj=type(self)(self._link)
+        f2=self._link.o2scl.o2scl_copy_hist_2d
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
+        return new_obj
+
+    @property
+    def extend_rhs(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_hist_2d_get_extend_rhs
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @extend_rhs.setter
+    def extend_rhs(self,value):
+        """
+        Setter function for hist_2d::extend_rhs .
+        """
+        func=self._link.o2scl.o2scl_hist_2d_set_extend_rhs
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def extend_lhs(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_hist_2d_get_extend_lhs
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @extend_lhs.setter
+    def extend_lhs(self,value):
+        """
+        Setter function for hist_2d::extend_lhs .
+        """
+        func=self._link.o2scl.o2scl_hist_2d_set_extend_lhs
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def create_x_rep_vec(self,v):
+        """
+        | Parameters:
+        | *v*: :class:`std_vector` object
+        """
+        func=self._link.o2scl.o2scl_hist_2d_create_x_rep_vec
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,v._ptr)
+        return
+
+    def create_y_rep_vec(self,v):
+        """
+        | Parameters:
+        | *v*: :class:`std_vector` object
+        """
+        func=self._link.o2scl.o2scl_hist_2d_create_y_rep_vec
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,v._ptr)
+        return
+
+    def from_table(self,t,colx,coly,n_bins_x,n_bins_y):
+        """
+        | Parameters:
+        | *t*: :class:`table<>` object
+        | *colx*: string
+        | *coly*: string
+        | *n_bins_x*: ``size_t``
+        | *n_bins_y*: ``size_t``
+        """
+        colx_=ctypes.c_char_p(force_bytes(colx))
+        coly_=ctypes.c_char_p(force_bytes(coly))
+        func=self._link.o2scl.o2scl_hist_2d_from_table
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_size_t]
+        func(self._ptr,t._ptr,colx_,coly_,n_bins_x,n_bins_y)
+        return
+
+    def from_table_wgt(self,t,colx,coly,colz,n_bins_x,n_bins_y):
+        """
+        | Parameters:
+        | *t*: :class:`table<>` object
+        | *colx*: string
+        | *coly*: string
+        | *colz*: string
+        | *n_bins_x*: ``size_t``
+        | *n_bins_y*: ``size_t``
+        """
+        colx_=ctypes.c_char_p(force_bytes(colx))
+        coly_=ctypes.c_char_p(force_bytes(coly))
+        colz_=ctypes.c_char_p(force_bytes(colz))
+        func=self._link.o2scl.o2scl_hist_2d_from_table_wgt
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_size_t]
+        func(self._ptr,t._ptr,colx_,coly_,colz_,n_bins_x,n_bins_y)
+        return
+
+    def size_x(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_hist_2d_size_x
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def size_y(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_hist_2d_size_y
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def set_bin_edges_grid(self,gx,gy):
+        """
+        | Parameters:
+        | *gx*: :class:`uniform_grid<double>` object
+        | *gy*: :class:`uniform_grid<double>` object
+        """
+        func=self._link.o2scl.o2scl_hist_2d_set_bin_edges_grid
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,gx._ptr,gy._ptr)
+        return
+
+    def set_bin_edges_vec(self,nx,vx,ny,vy):
+        """
+        | Parameters:
+        | *nx*: ``size_t``
+        | *vx*: :class:`vector<double>` object
+        | *ny*: ``size_t``
+        | *vy*: :class:`vector<double>` object
+        """
+        func=self._link.o2scl.o2scl_hist_2d_set_bin_edges_vec
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,nx,vx._ptr,ny,vy._ptr)
+        return
+
+    def update(self,x,y,val=1.0):
+        """
+        | Parameters:
+        | *x*: ``double``
+        | *y*: ``double``
+        | *val* =1.0: ``double``
+        """
+        func=self._link.o2scl.o2scl_hist_2d_update
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,x,y,val)
+        return
+
+    def update_i(self,i,j,val=1.0):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *j*: ``size_t``
+        | *val* =1.0: ``double``
+        """
+        func=self._link.o2scl.o2scl_hist_2d_update_i
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_double]
+        func(self._ptr,i,j,val)
+        return
+
+    def get_wgt_i(self,i,j):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *j*: ``size_t``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_hist_2d_get_wgt_i
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        ret=func(self._ptr,i,j)
+        return ret
+
+    def get_wgt(self,x,y):
+        """
+        | Parameters:
+        | *x*: ``double``
+        | *y*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_hist_2d_get_wgt
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,x,y)
+        return ret
+
+    def set_wgt_i(self,i,j,val):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *j*: ``size_t``
+        | *val*: ``double``
+        """
+        func=self._link.o2scl.o2scl_hist_2d_set_wgt_i
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_double]
+        func(self._ptr,i,j,val)
+        return
+
+    def set_wgt(self,x,y,val):
+        """
+        | Parameters:
+        | *x*: ``double``
+        | *y*: ``double``
+        | *val*: ``double``
+        """
+        func=self._link.o2scl.o2scl_hist_2d_set_wgt
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,x,y,val)
+        return
+
+    def clear(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_hist_2d_clear
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def clear_wgts(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_hist_2d_clear_wgts
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+
 class contour_line:
     """
     Python interface for O\ :sub:`2`\ scl class ``contour_line``,

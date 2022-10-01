@@ -301,6 +301,15 @@ class std_vector:
         for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
         return ret
+    
+    def from_list(self,lst):
+        """
+        Set the vector with a python list
+        """
+        self.resize(len(lst))
+        for i in range(0,len(lst)):
+            self[i]=lst[i]
+        return
 
 class std_vector_int:
     """
@@ -7096,7 +7105,6 @@ class columnify:
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
 
-
     @property
     def align_right(self):
         """
@@ -7106,7 +7114,6 @@ class columnify:
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
-
 
     @property
     def align_lmid(self):
@@ -7118,7 +7125,6 @@ class columnify:
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
 
-
     @property
     def align_rmid(self):
         """
@@ -7128,7 +7134,6 @@ class columnify:
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
-
 
     @property
     def align_dp(self):
@@ -7140,7 +7145,6 @@ class columnify:
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
 
-
     @property
     def align_lnum(self):
         """
@@ -7150,7 +7154,6 @@ class columnify:
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
-
 
 
 class format_float:
@@ -7622,7 +7625,6 @@ class interp_krige_optim:
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
 
-
     @property
     def mode_loo_cv_bf(self):
         """
@@ -7633,7 +7635,6 @@ class interp_krige_optim:
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
 
-
     @property
     def mode_max_lml(self):
         """
@@ -7643,7 +7644,6 @@ class interp_krige_optim:
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
-
 
     @property
     def verbose(self):

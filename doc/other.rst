@@ -14,6 +14,7 @@ Other classes from O\ :sub:`2`\ scl
 * :ref:`Class fermi_dirac_integ_gsl`
 * :ref:`Class bessel_K_exp_integ_gsl`
 * :ref:`Class hist`
+* :ref:`Class hist_2d`
 * :ref:`Class contour_line`
 * :ref:`Class vector_contour_line`
 * :ref:`Class contour`
@@ -124,6 +125,18 @@ Class hist
         .. automethod:: __copy__
         .. automethod:: __deepcopy__
         .. automethod:: __getitem__
+
+Class hist_2d
+-------------
+
+.. autoclass:: o2sclpy.hist_2d
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __deepcopy__
 
 Class contour_line
 ------------------
