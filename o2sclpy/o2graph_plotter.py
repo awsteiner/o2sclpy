@@ -1053,9 +1053,13 @@ class o2graph_plotter(yt_plot_base):
             pdma=amt.get_pdma_obj()
             ndimx=pdma.n_dim
             mesh=pdma.get_mesh()
-            n=mesh.size()
+            nx=mesh.size()
             lowx=pdma.get_low()
             highx=pdma.get_high()
+
+            if len(args)<2:
+                print('Not enough arguments to plot for an object',
+                      'of type prob_dens_mdim_amr.')
             
             dimx=int(args[0])
             dimy=int(args[1])
@@ -1082,28 +1086,26 @@ class o2graph_plotter(yt_plot_base):
                 
             import matplotlib.patches as patches
 
-            for i in range(0,nx.value):
+            for i in range(0,nx):
 
-                # iy=ctypes.c_int(i)
-                # lowy=double_ptr()
-                # highy=double_ptr()
-                # fvy=ctypes.c_double(0.0)
-                # wy=ctypes.c_double(0.0)
-                # get_cube_fn(amp,iy,ctypes.byref(lowy),
-                #             ctypes.byref(highy),
-                #             ctypes.byref(fvy),
-                #             ctypes.byref(wy))
-                
-                left=lowy[dimx]
-                lower=lowy[dimy]
-                right=highy[dimx]
-                upper=highy[dimy]
+                print(type(mesh))
+                print(type(mesh[i]))
+                m2=mesh[i]
+                low2=m2.get_low()
+                high2=m2.get_high()
+                left=low2[dimx]
+                lower=low2[dimy]
+                right=high2[dimx]
+                upper=high2[dimy]
+                fvy=m2.frac_vol
+                wy=m2.weight
                 w=right-left
                 h=upper-lower
+                print('%d %7.6e %7.6e %7.6e %7.6e' % (nx,left,lower,w,h))
 
                 if len(args)<4:
                     r=patches.Rectangle((left,lower),w,h,0.0,
-                                        alpha=fvy.value)
+                                        alpha=fvy)
                     self.axes.add_patch(r)
                 else:
                     strtemp='alpha='+str(fvy.value)+','+args[3]

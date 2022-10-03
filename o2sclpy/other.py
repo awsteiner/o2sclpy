@@ -2448,7 +2448,8 @@ class std_vector_hypercube:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        return ret
+        hc=hypercube(self._link,ret)
+        return hc
 
     def __setitem__(self,i,value):
         """
