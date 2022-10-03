@@ -1070,6 +1070,8 @@ class o2graph_plotter(yt_plot_base):
             self.xhi=highx[dimx]
             self.yhi=highx[dimy]
             self.yset=True
+            print('%7.6e %7.6e %7.6e %7.6e' %
+                  (self.xlo,self.ylo,self.xhi,self.yhi))
 
             if self.canvas_flag==False:
                 self.canvas()
@@ -1088,8 +1090,6 @@ class o2graph_plotter(yt_plot_base):
 
             for i in range(0,nx):
 
-                print(type(mesh))
-                print(type(mesh[i]))
                 m2=mesh[i]
                 low2=m2.get_low()
                 high2=m2.get_high()
@@ -1101,11 +1101,12 @@ class o2graph_plotter(yt_plot_base):
                 wy=m2.weight
                 w=right-left
                 h=upper-lower
-                print('%d %7.6e %7.6e %7.6e %7.6e' % (nx,left,lower,w,h))
+                print('%d %7.6e %7.6e %7.6e %7.6e %7.6e %7.6e' %
+                      (i,left,lower,w,h,fvy,wy))
 
                 if len(args)<4:
                     r=patches.Rectangle((left,lower),w,h,0.0,
-                                        alpha=fvy)
+                                        alpha=1,fill=None,lw=1)
                     self.axes.add_patch(r)
                 else:
                     strtemp='alpha='+str(fvy.value)+','+args[3]
@@ -1132,7 +1133,7 @@ class o2graph_plotter(yt_plot_base):
                 
                 if self.logx==True:
                     if self.logy==True:
-                        if len(args)<1:
+                        if len(args)<2:
                             self.axes.loglog(xv,yv)
                         else:
                             self.axes.loglog(xv,yv,**string_to_dict(args[0]))
