@@ -3665,7 +3665,7 @@ class o2graph_plotter(yt_plot_base):
                         
         else:
 
-            curr_type=o2scl_get_type(o2scl,amp)
+            curr_type=o2scl_get_type(o2scl,amp,link)
 
             if curr_type==b'':
                 print('O2graph commands which do not require a '+
@@ -3674,7 +3674,7 @@ class o2graph_plotter(yt_plot_base):
                 print('O2graph commands for an object of type '+
                       ter.type_str(curr_type.decode('utf-8'),amt)+':\n')
             
-            comm_list=cl.get_option_list()
+            comm_list=cl.get_option_list().to_list()
             
             for line in base_list:
                 comm_list.append(force_bytes(line[0]))

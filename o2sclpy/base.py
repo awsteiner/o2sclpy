@@ -709,10 +709,22 @@ class std_vector_string:
         return self.size()
     
     def set_list(self,ls):
+        """
+        Set the object from a python list
+        """
         self.resize(len(ls))
         for i in range(0,len(ls)):
             self[i]=force_bytes(ls[i])
         return
+    
+    def to_list(self):
+        """
+        Set the object from a python list
+        """
+        ret=[]
+        for i in range(0,self.size()):
+            ret.append(self[i])
+        return ret
 
 class ublas_vector:
     """
