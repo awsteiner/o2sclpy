@@ -62,6 +62,10 @@ class.
 * :ref:`Class cmd_line_arg`
 * :ref:`Class cli`
 * :ref:`Class shared_ptr_table_units`
+* :ref:`Function rearrange_and_copy2`
+* :ref:`Function rearrange_and_copy2_int`
+* :ref:`Function rearrange_and_copy2_size_t`
+* :ref:`Function grid_rearrange_and_copy`
 * :ref:`Function fermi_function`
 * :ref:`Function bose_function`
 * :ref:`Function quadratic_extremum_x`
@@ -723,6 +727,26 @@ Class shared_ptr_table_units
 
         .. automethod:: __init__
         .. automethod:: __del__
+
+Function rearrange_and_copy2
+----------------------------
+
+.. autofunction:: o2sclpy.rearrange_and_copy2(link,t,spec,verbose,err_on_fail)
+
+Function rearrange_and_copy2_int
+--------------------------------
+
+.. autofunction:: o2sclpy.rearrange_and_copy2_int(link,t,spec,verbose,err_on_fail)
+
+Function rearrange_and_copy2_size_t
+-----------------------------------
+
+.. autofunction:: o2sclpy.rearrange_and_copy2_size_t(link,t,spec,verbose,err_on_fail)
+
+Function grid_rearrange_and_copy
+--------------------------------
+
+.. autofunction:: o2sclpy.grid_rearrange_and_copy(link,t,spec,verbose,err_on_fail)
 
 Function fermi_function
 -----------------------
