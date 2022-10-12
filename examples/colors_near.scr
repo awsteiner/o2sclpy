@@ -1,4 +1,4 @@
-o2graph -backend Agg -help colors-near blue figures/near_blue.png \
--help colors-near "#ff8200" figures/near_hex.png \
--help colors-near "(0.1,0.1,0.4)" figures/near_rgb.png 
+o2graph -backend Agg -colors near blue figures/near_blue.png \
+-colors near "#ff8200" figures/near_hex.png \
+-colors near "(0.1,0.1,0.4)" figures/near_rgb.png 
 

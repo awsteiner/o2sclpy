@@ -543,7 +543,7 @@ class hdf_file:
         """
         | Parameters:
         | *name*: string
-        | *t*: :class:`tensor<int>` object
+        | *t*: :class:`tensor_int` object
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
@@ -557,7 +557,7 @@ class hdf_file:
         """
         | Parameters:
         | *name*: string
-        | *t*: :class:`tensor<size_t>` object
+        | *t*: :class:`tensor_size_t` object
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
@@ -585,7 +585,7 @@ class hdf_file:
         """
         | Parameters:
         | *name*: string
-        | *t*: :class:`tensor<int>` object
+        | *t*: :class:`tensor_int` object
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
@@ -599,7 +599,7 @@ class hdf_file:
         """
         | Parameters:
         | *name*: string
-        | *t*: :class:`tensor<size_t>` object
+        | *t*: :class:`tensor_size_t` object
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
@@ -1262,7 +1262,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=tensor<int>(self._link,ptr)
+        obj=tensor_int(self._link,ptr)
         return obj
 
     def set_tensor_int_obj(self,value):
@@ -1282,7 +1282,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=tensor<size_t>(self._link,ptr)
+        obj=tensor_size_t(self._link,ptr)
         return obj
 
     def set_tensor_size_t_obj(self,value):
@@ -1493,6 +1493,21 @@ class acol_manager:
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,value._ptr)
         return
+
+    def help_found(self,arg1,arg2):
+        """
+        | Parameters:
+        | *arg1*: string
+        | *arg2*: string
+        | Returns: a Python boolean
+        """
+        arg1_=ctypes.c_char_p(force_bytes(arg1))
+        arg2_=ctypes.c_char_p(force_bytes(arg2))
+        func=self._link.o2scl.o2scl_hdf_acol_manager_help_found
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
+        ret=func(self._ptr,arg1_,arg2_)
+        return ret
 
     def run_empty(self):
         """

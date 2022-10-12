@@ -364,8 +364,8 @@ def cmap_list_func():
           'reversed by using a "_r" suffix.')
     print(' ')
     print("To create a plot of the colormaps, use",
-          "'o2graph -help cmaps-plot' or")
-    print("'o2graph -help cmaps-plot plot_file.png'")
+          "'o2graph -cmap plot' or")
+    print("'o2graph -cmap plot plot_file.png'")
     return
 
 def cmaps_plot(fname=''):
@@ -488,14 +488,16 @@ def colors_plot(fname='',dpi=10):
                     for name, color in colors.items())
     sorted_names=[name for hsv, name in by_hsv]
     n=len(sorted_names)
-    header=1
+    header=2.5
     ncols=4
     nrows=n//ncols
-    plot.rc('text',usetex=True)
+    plot.rc('text',usetex=False)
     plot.rc('font',family='serif')
-    fig,axes=plot.subplots(figsize=(8,6.6))
+    fig,axes=plot.subplots(figsize=(9.5,6.4))
+    #fig,axes=plot.subplots(figsize=(8,6.6))
+    #print('dpi',dpi)
     # Get height and width
-    fig.set_dpi(dpi)
+    #fig.set_dpi(dpi)
     X,Y=fig.get_dpi()*fig.get_size_inches()
     h=Y/(nrows+1+header)
     w=X/ncols
@@ -507,20 +509,21 @@ def colors_plot(fname='',dpi=10):
         xi_line=w*(col+0.05)
         xf_line=w*(col+0.25)
         xi_text=w*(col+0.3)
-        axes.text(xi_text,y,name,fontsize=(h*0.6),
-                ha='left',va='center')
+        axes.text(xi_text,y+h*0.5,name,fontsize=(h*0.3),
+                  ha='left',va='center')
 
-        axes.hlines(y+h*0.1,xi_line,xf_line,
-                  color=colors[name],linewidth=(h*0.8))
+        axes.hlines(y+h*0.5,xi_line,xf_line,
+                    color=colors[name],linewidth=(h*0.31))
 
-        axes.set_xlim(0,X)
-        axes.set_ylim(0,Y+header)
-        axes.set_axis_off()
+    axes.set_xlim(0,X)
+    axes.set_ylim(0,Y+header)
+    axes.set_axis_off()
                             
     fig.subplots_adjust(left=0,right=1,top=1,bottom=0,
                         hspace=0,wspace=0)
-    axes.text(X*0.5,(Y+header)*0.965,r'$ \mathrm{O}_2\mathrm{sc'+
-              'lpy~colors~summary} $',fontsize=16,ha='center')
+    axes.text(X*0.5,(Y+header)*0.965,'O2sclpy colors summary',
+              fontsize=16,ha='center')
+
     if fname!='':
         plot.savefig(fname)
         print('Created image file '+fname+'.')
@@ -532,6 +535,9 @@ def colors_plot(fname='',dpi=10):
     elif fname=='':
         print('Backend is Agg but no filename is specified',
               'so no output was created.')
+        
+    plot.rc('text',usetex=True)
+        
     return
 
 def color_list():

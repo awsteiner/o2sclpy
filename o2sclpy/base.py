@@ -9020,7 +9020,7 @@ class shared_ptr_table_units(table_units):
         f(self._s_ptr)
         return
 
-def rearrange_and_copy2(link,t,spec,verbose=0,err_on_fail=True):
+def rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9031,13 +9031,13 @@ def rearrange_and_copy2(link,t,spec,verbose=0,err_on_fail=True):
         | Returns: ``tensor`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_rearrange_and_copy2_tensor_double__wrapper
+    func=link.o2scl.o2scl_rearrange_and_copy_tensor_double__wrapper
     func.restype=tensor
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
     return ret
 
-def rearrange_and_copy2_int(link,t,spec,verbose=0,err_on_fail=True):
+def rearrange_and_copy_int(link,t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9045,16 +9045,16 @@ def rearrange_and_copy2_int(link,t,spec,verbose=0,err_on_fail=True):
         | *spec*: string
         | *verbose*: ``int``
         | *err_on_fail*: ``bool``
-        | Returns: ``tensor<int>`` object
+        | Returns: ``tensor_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_rearrange_and_copy2_tensor_int_int__wrapper
-    func.restype=tensor<int>
+    func=link.o2scl.o2scl_rearrange_and_copy_tensor_int_int__wrapper
+    func.restype=tensor_int
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
     return ret
 
-def rearrange_and_copy2_size_t(link,t,spec,verbose=0,err_on_fail=True):
+def rearrange_and_copy_size_t(link,t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9062,11 +9062,11 @@ def rearrange_and_copy2_size_t(link,t,spec,verbose=0,err_on_fail=True):
         | *spec*: string
         | *verbose*: ``int``
         | *err_on_fail*: ``bool``
-        | Returns: ``tensor<size_t>`` object
+        | Returns: ``tensor_size_t`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_rearrange_and_copy2_tensor_size_t_size_t__wrapper
-    func.restype=tensor<size_t>
+    func=link.o2scl.o2scl_rearrange_and_copy_tensor_size_t_size_t__wrapper
+    func.restype=tensor_size_t
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
     return ret
@@ -9082,7 +9082,7 @@ def grid_rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
         | Returns: ``tensor_grid`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_grid_rearrange_and_copy2_tensor_grid_double__wrapper
+    func=link.o2scl.o2scl_grid_rearrange_and_copy_tensor_grid_double__wrapper
     func.restype=tensor_grid
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)

@@ -62,9 +62,9 @@ class.
 * :ref:`Class cmd_line_arg`
 * :ref:`Class cli`
 * :ref:`Class shared_ptr_table_units`
-* :ref:`Function rearrange_and_copy2`
-* :ref:`Function rearrange_and_copy2_int`
-* :ref:`Function rearrange_and_copy2_size_t`
+* :ref:`Function rearrange_and_copy`
+* :ref:`Function rearrange_and_copy_int`
+* :ref:`Function rearrange_and_copy_size_t`
 * :ref:`Function grid_rearrange_and_copy`
 * :ref:`Function fermi_function`
 * :ref:`Function bose_function`
@@ -728,20 +728,20 @@ Class shared_ptr_table_units
         .. automethod:: __init__
         .. automethod:: __del__
 
-Function rearrange_and_copy2
-----------------------------
+Function rearrange_and_copy
+---------------------------
 
-.. autofunction:: o2sclpy.rearrange_and_copy2(link,t,spec,verbose,err_on_fail)
+.. autofunction:: o2sclpy.rearrange_and_copy(link,t,spec,verbose,err_on_fail)
 
-Function rearrange_and_copy2_int
---------------------------------
+Function rearrange_and_copy_int
+-------------------------------
 
-.. autofunction:: o2sclpy.rearrange_and_copy2_int(link,t,spec,verbose,err_on_fail)
+.. autofunction:: o2sclpy.rearrange_and_copy_int(link,t,spec,verbose,err_on_fail)
 
-Function rearrange_and_copy2_size_t
------------------------------------
+Function rearrange_and_copy_size_t
+----------------------------------
 
-.. autofunction:: o2sclpy.rearrange_and_copy2_size_t(link,t,spec,verbose,err_on_fail)
+.. autofunction:: o2sclpy.rearrange_and_copy_size_t(link,t,spec,verbose,err_on_fail)
 
 Function grid_rearrange_and_copy
 --------------------------------

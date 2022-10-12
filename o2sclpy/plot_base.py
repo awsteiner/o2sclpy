@@ -35,6 +35,8 @@ import matplotlib.patches as patches
 from o2sclpy.utils import parse_arguments, string_to_dict
 from o2sclpy.utils import force_bytes, default_plot
 from o2sclpy.utils import string_to_color
+from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
+from o2sclpy.plot_info import colors_plot, color_list, colors_near
 
 class plot_base:
     """
@@ -188,13 +190,47 @@ class plot_base:
         """
         self.new_cmaps()
     
-    def cmap(self,cmap_name,col_list):
+    def colors(self,args=[]):
+        """Documentation for o2graph command ``colors``:
+
+        Show color information
+        """
+
+        if len(args)>=1 and args[0]=='list':
+            color_list()
+            return
+
+        if len(args)>=1 and args[0]=='plot':
+            if len(args)>=2:
+                colors_plot(args[1])
+            else:
+                colors_plot()
+            return
+
+        if len(args)>=1 and args[0]=='near':
+            if len(args)>=3:
+                colors_near(col=args[1],fname=args[2])
+            elif len(args)>=2:
+                colors_near(col=args[1])
+            else:
+                colors_near()
+            return
+
+        if len(args)>=1 and args[0]=='xkcd':
+            xkcd_colors_list()
+            return
+
+        print('Arguments for command "colors" not understood.')
+        return
+    
+    def cmap(self,cmap_name,col_list=[]):
         """Documentation for o2graph command ``cmap``:
 
         Create a continuous colormap.
 
         Command-line arguments: ``<cmap name> <color 1> <color 2> 
-        [color3]...``
+        [color3]...`` or ``<cmap name> "sharp" <color 1> <color 2>
+        [color3 color4]...`` or ``list`` or ``plot [filename]``
 
         Create a new color map named <cmap name> which consists of
         equal-sized gradients between the specified list of at least
@@ -205,167 +241,162 @@ class plot_base:
           -create table3d x grid:0,40,1 y grid:0,40,1 z "x+y" \\
           -den-plot z cmap=c -show
 
+        or::
+
+          o2graph -cmap c sharp "(0.5,0.5,0.7)" "xkcd:light red" \\
+          green "(0,0,0)" -create table3d x grid:0,40,1 y grid:0,40,1 \\
+          z "x+y" -den-plot z cmap=c -show
+
         """
 
         if self.verbose>1:
             print('cmap name:',cmap_name,'list:',col_list)
+
+        if cmap_name=='list':
         
-        # This value is used to indicate values in the colormap
-        # tuples that are ignored by LinearSegmentedColormap()
-        unused=0.0
-
-        N=len(col_list)
-        
-        col_r=numpy.ones((N,3))
-        col_g=numpy.ones((N,3))
-        col_b=numpy.ones((N,3))
-
-        # Convert the colors to RGBA arrays (the alpha value is
-        # ignored)
-        rgb_list=[]
-        from matplotlib.colors import to_rgba
-        for i in range(0,N):
-            if isinstance(col_list[i],str):
-                rgb_list.append(to_rgba(string_to_color(col_list[i])))
-            else:
-                rgb_list.append(to_rgba(col_list[i]))
-
-        if self.verbose>1:
-            print('rgb_list:',rgb_list)
-
-        for i in range(0,N):
-            col_r[i][0]=float(i)/float(N-1)
-            col_g[i][0]=float(i)/float(N-1)
-            col_b[i][0]=float(i)/float(N-1)
-            if i==0:
-                col_r[i][1]=unused
-                col_g[i][1]=unused
-                col_b[i][1]=unused
-                col_r[i][2]=rgb_list[0][0]
-                col_g[i][2]=rgb_list[0][1]
-                col_b[i][2]=rgb_list[0][2]
-            elif i==N-1:
-                col_r[i][1]=rgb_list[N-1][0]
-                col_g[i][1]=rgb_list[N-1][1]
-                col_b[i][1]=rgb_list[N-1][2]
-                col_r[i][2]=unused
-                col_g[i][2]=unused
-                col_b[i][2]=unused
-            else:
-                col_r[i][1]=rgb_list[i][0]
-                col_g[i][1]=rgb_list[i][1]
-                col_b[i][1]=rgb_list[i][2]
-                col_r[i][2]=rgb_list[i][0]
-                col_g[i][2]=rgb_list[i][1]
-                col_b[i][2]=rgb_list[i][2]
-
-            if self.verbose>1:
-                print('red',col_r[i][0],col_r[i][1],col_r[i][2])
-                print('green',col_g[i][0],col_g[i][1],col_g[i][2])
-                print('blue',col_b[i][0],col_b[i][1],col_b[i][2])
-                print('')
-
-        cdict={'red': col_r, 'green': col_g, 'blue': col_b}
-        
-        import matplotlib.pyplot as plot
-
-        cmap_obj=LinearSegmentedColormap(cmap_name,cdict)
-        plot.register_cmap(cmap=cmap_obj)
-            
-        # Colormap reversed
-        cmapr_obj=cmap_obj.reversed()
-        plot.register_cmap(cmap=cmapr_obj)
-        
-        return
-        
-    def cmap2(self,cmap_name,col_list):
-        """Documentation for o2graph command ``cmap2``:
-
-        Create a colormap with sharp transitions
-
-        Command-line arguments: ``<cmap name> <color 1> <color 2>
-        [color3 color4]...``
-
-        Create a new color map named <cmap name> which consists of
-        equal-sized gradients between the list of specified color
-        pairs. Matplotlib colors, (r,g,b) colors, and xkcd colors are
-        all allowed. For example::
-
-          o2graph -cmap2 c "(0.5,0.5,0.7)" "xkcd:light red" \\
-          -create table3d x grid:0,40,1 y grid:0,40,1 \\
-          z "x+y" -den-plot z cmap=c -show'
-
-        """
-
-        N=len(col_list)
-        
-        if N%2==1:
-            print('Must have an even number of arguments in cmap2.')
+            cmap_list_func()
             return
+
+        elif cmap_name=='plot':
         
-        if self.verbose>1:
-            print('cmap name:',cmap_name,'list:',col_list)
-        
-        # This value is used to indicate values in the colormap
-        # tuples that are ignored by LinearSegmentedColormap()
-        unused=0.0
-
-        col_r=numpy.ones((N/2+1,3))
-        col_g=numpy.ones((N/2+1,3))
-        col_b=numpy.ones((N/2+1,3))
-
-        # Convert the colors to RGBA arrays (the alpha value is
-        # ignored)
-        rgb_list=[]
-        from matplotlib.colors import to_rgba
-        for i in range(0,N):
-            if isinstance(col_list[i],str):
-                rgb_list.append(to_rgba(string_to_color(col_list[i])))
+            if len(col_list)>=1:
+                cmaps_plot(col_list[0])
             else:
-                rgb_list.append(to_rgba(col_list[i]))
+                cmaps_plot()
+            return
 
-        if self.verbose>1:
-            print('rgb_list:',rgb_list)
+        elif col_list[0]=='sharp':
 
-        for i in range(0,N/2+1):
-            col_r[i][0]=float(i)/float(N-1)
-            col_g[i][0]=float(i)/float(N-1)
-            col_b[i][0]=float(i)/float(N-1)
-            if i==0:
-                col_r[i][1]=unused
-                col_g[i][1]=unused
-                col_b[i][1]=unused
-                col_r[i][2]=rgb_list[0][0]
-                col_g[i][2]=rgb_list[0][1]
-                col_b[i][2]=rgb_list[0][2]
-            elif i==N/2:
-                col_r[i][1]=rgb_list[N-1][0]
-                col_g[i][1]=rgb_list[N-1][1]
-                col_b[i][1]=rgb_list[N-1][2]
-                col_r[i][2]=unused
-                col_g[i][2]=unused
-                col_b[i][2]=unused
-            else:
-                col_r[i][1]=rgb_list[i/2+1][0]
-                col_g[i][1]=rgb_list[i/2+1][1]
-                col_b[i][1]=rgb_list[i/2+1][2]
-                col_r[i][2]=rgb_list[i/2+2][0]
-                col_g[i][2]=rgb_list[i/2+2][1]
-                col_b[i][2]=rgb_list[i/2+2][2]
-
+            col_list=col_list[1:]
+            
+            N=len(col_list)
+            
+            if N%2==1:
+                print('Must have an even number of arguments in cmap2.')
+                return
+            
             if self.verbose>1:
-                print('red',col_r[i][0],col_r[i][1],col_r[i][2])
-                print('green',col_g[i][0],col_g[i][1],col_g[i][2])
-                print('blue',col_b[i][0],col_b[i][1],col_b[i][2])
-                print('')
+                print('cmap name:',cmap_name,'list:',col_list)
+            
+            # This value is used to indicate values in the colormap
+            # tuples that are ignored by LinearSegmentedColormap()
+            unused=0.0
+    
+            col_r=numpy.ones((int(N/2+1),3))
+            col_g=numpy.ones((int(N/2+1),3))
+            col_b=numpy.ones((int(N/2+1),3))
+    
+            # Convert the colors to RGBA arrays (the alpha value is
+            # ignored)
+            rgb_list=[]
+            from matplotlib.colors import to_rgba
+            for i in range(0,N):
+                if isinstance(col_list[i],str):
+                    rgb_list.append(to_rgba(string_to_color(col_list[i])))
+                else:
+                    rgb_list.append(to_rgba(col_list[i]))
+    
+            if self.verbose>1:
+                print('rgb_list:',rgb_list)
 
-        cdict={'red': col_r, 'green': col_g, 'blue': col_b}
-        
+            for i in range(0,int(N/2)+1):
+                col_r[i][0]=float(i)/float(N/2)
+                col_g[i][0]=float(i)/float(N/2)
+                col_b[i][0]=float(i)/float(N/2)
+                if i==0:
+                    col_r[i][1]=unused
+                    col_g[i][1]=unused
+                    col_b[i][1]=unused
+                    col_r[i][2]=rgb_list[0][0]
+                    col_g[i][2]=rgb_list[0][1]
+                    col_b[i][2]=rgb_list[0][2]
+                elif i==N/2:
+                    col_r[i][1]=rgb_list[N-1][0]
+                    col_g[i][1]=rgb_list[N-1][1]
+                    col_b[i][1]=rgb_list[N-1][2]
+                    col_r[i][2]=unused
+                    col_g[i][2]=unused
+                    col_b[i][2]=unused
+                else:
+                    col_r[i][1]=rgb_list[int(i/2+1)][0]
+                    col_g[i][1]=rgb_list[int(i/2+1)][1]
+                    col_b[i][1]=rgb_list[int(i/2+1)][2]
+                    col_r[i][2]=rgb_list[int(i/2+2)][0]
+                    col_g[i][2]=rgb_list[int(i/2+2)][1]
+                    col_b[i][2]=rgb_list[int(i/2+2)][2]
+    
+                if self.verbose>1:
+                    print('red',col_r[i][0],col_r[i][1],col_r[i][2])
+                    print('green',col_g[i][0],col_g[i][1],col_g[i][2])
+                    print('blue',col_b[i][0],col_b[i][1],col_b[i][2])
+                    print('')
+    
+            cdict={'red': col_r, 'green': col_g, 'blue': col_b}
+            
+        else:
+            
+            # This value is used to indicate values in the colormap
+            # tuples that are ignored by LinearSegmentedColormap()
+            unused=0.0
+    
+            N=len(col_list)
+            
+            col_r=numpy.ones((N,3))
+            col_g=numpy.ones((N,3))
+            col_b=numpy.ones((N,3))
+    
+            # Convert the colors to RGBA arrays (the alpha value is
+            # ignored)
+            rgb_list=[]
+            from matplotlib.colors import to_rgba
+            for i in range(0,N):
+                if isinstance(col_list[i],str):
+                    rgb_list.append(to_rgba(string_to_color(col_list[i])))
+                else:
+                    rgb_list.append(to_rgba(col_list[i]))
+    
+            if self.verbose>1:
+                print('rgb_list:',rgb_list)
+    
+            for i in range(0,N):
+                col_r[i][0]=float(i)/float(N-1)
+                col_g[i][0]=float(i)/float(N-1)
+                col_b[i][0]=float(i)/float(N-1)
+                if i==0:
+                    col_r[i][1]=unused
+                    col_g[i][1]=unused
+                    col_b[i][1]=unused
+                    col_r[i][2]=rgb_list[0][0]
+                    col_g[i][2]=rgb_list[0][1]
+                    col_b[i][2]=rgb_list[0][2]
+                elif i==N-1:
+                    col_r[i][1]=rgb_list[N-1][0]
+                    col_g[i][1]=rgb_list[N-1][1]
+                    col_b[i][1]=rgb_list[N-1][2]
+                    col_r[i][2]=unused
+                    col_g[i][2]=unused
+                    col_b[i][2]=unused
+                else:
+                    col_r[i][1]=rgb_list[i][0]
+                    col_g[i][1]=rgb_list[i][1]
+                    col_b[i][1]=rgb_list[i][2]
+                    col_r[i][2]=rgb_list[i][0]
+                    col_g[i][2]=rgb_list[i][1]
+                    col_b[i][2]=rgb_list[i][2]
+    
+                if self.verbose>1:
+                    print('red',col_r[i][0],col_r[i][1],col_r[i][2])
+                    print('green',col_g[i][0],col_g[i][1],col_g[i][2])
+                    print('blue',col_b[i][0],col_b[i][1],col_b[i][2])
+                    print('')
+    
+            cdict={'red': col_r, 'green': col_g, 'blue': col_b}
+            
         import matplotlib.pyplot as plot
 
         cmap_obj=LinearSegmentedColormap(cmap_name,cdict)
         plot.register_cmap(cmap=cmap_obj)
-            
+                
         # Colormap reversed
         cmapr_obj=cmap_obj.reversed()
         plot.register_cmap(cmap=cmapr_obj)
@@ -1314,7 +1345,7 @@ class plot_base:
             yhi_tbox.on_submit(ylim_hi_update)
             
             plot.rc('text',usetex=True)
-            
+
         plot.show()
         
         # End of function plot_base::show()

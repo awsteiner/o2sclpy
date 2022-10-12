@@ -71,7 +71,7 @@ base_list=[
      "(No arguments.)\n\n"+
      "Clear the current figure."],
     ["cmap",plot_base.cmap.__doc__],
-    ["cmap2",plot_base.cmap2.__doc__],
+    ["colors",plot_base.colors.__doc__],
     ["ellipse",plot_base.ellipse.__doc__],
     ["error-point",plot_base.error_point.__doc__],
     ["eval","Documentation for eval\n\n"+
@@ -413,7 +413,8 @@ def reformat_python_docs_type(curr_type,cmd,doc_str,amp,link,
     sect_found=False
     jfound=0
     for j in range(0,len(reflist2)):
-        if reflist2[j]==("For objects of type ``"+curr_type+"``:"):
+        if reflist2[j]==("For objects of type ``"+
+                         force_string(curr_type)+"``:"):
             sect_found=True
             jfound=j+1
 
@@ -2707,42 +2708,8 @@ class o2graph_plotter(yt_plot_base):
                                 print(str_list[i])
 
         finished=False
-        
-        if cmd=='cmaps' and len(args)==1:
-            cmap_list_func()
-            finished=True
 
-        if (len(args)==1 or len(args)==2) and args[0]=='cmaps-plot':
-            if len(args)==2:
-                cmaps_plot(args[1])
-            else:
-                cmaps_plot()
-            finished=True
-            
-        if (len(args)==1 or len(args)==2) and args[0]=='colors-plot':
-            if len(args)==2:
-                colors_plot(args[1])
-            else:
-                colors_plot()
-            finished=True
-
-        if (len(args)<=3 and len(args)>=1 and args[0]=='colors-near'):
-            if len(args)==3:
-                colors_near(col=args[1],fname=args[2])
-            elif len(args)==2:
-                colors_near(col=args[1])
-            else:
-                colors_near()
-            finished=True
-                        
-        if (cmd=='colors') and len(args)==1:
-            color_list()
-            finished=True
-                        
-        if (cmd=='xkcd-colors') and len(args)==1:
-            xkcd_colors_list()
-            finished=True
-
+        # Handle o2graph topics
         if (cmd=='markers') and len(args)==1:
             marker_list()
             finished=True
@@ -2755,121 +2722,89 @@ class o2graph_plotter(yt_plot_base):
             finished=True
 
         # Handle acol topics and types
-        if (len(args)==1 and cmd in acol_help_topics):
+        if len(args)==1:
+            if amt.help_found(args[0],'')==True:
+                self.gen_acol(o2scl,amp,link,'help',args)
+                finished=True
+        elif len(args)==2 and amt.help_found(args[0],args[1])==True:
             self.gen_acol(o2scl,amp,link,'help',args)
             finished=True
+
+        # If there was no match, do a command list
+        if finished==False:
             
-        if match==False and finished==False:
-
-            # Since we didn't match anything above, see if
-            # it is an acol command
-            
-            acol_match=False
-                
-            # If len(args)>=2, then the user gave a type,
-            # so check options based on that type
-            if len(args)>=2:
-
-                old_type=amt.get_type()
-                amt.command_del(old_type)
-                amt.command_add(force_bytes(curr_type))
-                tlist=cl.get_option_list()
-                amt.command_del(force_bytes(curr_type))
-                amt.command_add(old_type)
-
-                # If specified, look up command in acol list
-                if len(args)>0:
-                    for j in range(0,len(tlist)):
-                        if string_equal_dash(tlist[j],cmd):
-                            acol_match=True
-
-            # If either len(args)<2 or the last section failed, then in
-            # either case we need to compute tlist 
-            if acol_match==False:
-
-                # Check acol options based on the current type
-                tlist=cl.get_option_list()
-
-                if len(args)<2:
-                    # If specified, look up command in acol list
-                    acol_match=False
-                    if len(args)>0:
-                        for j in range(0,len(tlist)):
-                            if string_equal_dash(tlist[j],args[0]):
-                                acol_match=True
-
-            # If there was no match, do a command list
-            if acol_match==False:
-
-                print('o2graph: A data viewing and '+
-                      'processing program for '+ter.bold()+
-                      'O2scl'+ter.default_fgbg()+
-                      '.\n  Version: '+version)
-                print(' ')
-                if curr_type==b'':
-                    print('List of command-line options which',
-                          'do not require a current object:\n')
-                else:
-                    # AWS removed decode on 10/27/2020
-                    # and converted to force_string() on 5/6/22
-                    print('List of command-line options',
-                          '(current object type is',
-                          force_string(curr_type)+'):\n')
-                full_list=[]
-
-                for j in range(0,len(tlist)):
-                    desc=cl.option_short_desc(tlist[j])
-                    full_list.append([tlist[j],desc])
-
-                for line2 in base_list:
-                    short=reformat_python_docs(line2[0],line2[1],amp,
-                                               link,True)
-                    full_list.append([force_bytes(line2[0]),
-                                      force_bytes(short)])
-
-                if curr_type!='':
-                    for line in extra_list:
-                        if force_bytes(line[0])==curr_type:
-                            full_list.append([force_bytes(line[1]),
-                                              force_bytes(line[2])])
-
-                full_list2=sorted(full_list,key=lambda x: x[0])
-                max_len=0
-                for k in range(0,len(full_list2)):
-                    full_list2[k][0]=(force_string(amt.get_command_color())+
-                                      full_list2[k][0].decode('utf-8')+
-                                      force_string(amt.get_default_color()))
-                    full_list2[k][1]=full_list2[k][1].decode('utf-8')
-                    if length_without_colors(full_list2[k][0])>max_len:
-                        max_len=length_without_colors(full_list2[k][0])
-                for k in range(0,len(full_list2)):
-                    strt='  '
-                    extra=max_len-length_without_colors(full_list2[k][0])
-                    strt+='-'+full_list2[k][0]
-                    for ij in range(0,extra):
-                        strt+=' '
-                    strt+=' '+full_list2[k][1]
-                    print(strt)
-                print('\n'+str_line)
-                help_topics=sorted(acol_help_topics+o2graph_help_topics)
-                
-                strt='Additional help topics: '
-                for j in range(0,len(help_topics)):
-                    if j<len(help_topics)-1:
-                        strt+=(force_string(amt.get_help_color())+
-                               help_topics[j]+
-                               force_string(amt.get_default_color())+', ')
-                    else:
-                        strt+=('and '+force_string(amt.get_help_color())+
-                               help_topics[j]+
-                               force_string(amt.get_default_color())+'.')
-                        
-                tlist=wrap_line(strt)
-                for j in range(0,len(tlist)):
-                    print(tlist[j])
+            print('o2graph: A data viewing and '+
+                  'processing program for '+ter.bold()+
+                  'O2scl'+ter.default_fgbg()+
+                  '.\n  Version: '+version)
+            print(' ')
+            if curr_type==b'':
+                print('List of command-line options which',
+                      'do not require a current object:\n')
             else:
-                # Otherwise, it's an acol command so
-                self.gen_acol(o2scl,amp,link,'help',args)
+                # AWS removed decode on 10/27/2020
+                # and converted to force_string() on 5/6/22
+                print('List of command-line options',
+                      '(current object type is',
+                      force_string(amt.get_type_color())+
+                      force_string(curr_type)+
+                      force_string(amt.get_default_color())+'):\n')
+            full_list=[]
+
+            tlist=cl.get_option_list()
+            for j in range(0,len(tlist)):
+                desc=cl.option_short_desc(tlist[j])
+                full_list.append([tlist[j],desc])
+
+            for line2 in base_list:
+                short=reformat_python_docs(line2[0],line2[1],amp,
+                                           link,True)
+                full_list.append([force_bytes(line2[0]),
+                                  force_bytes(short)])
+
+            if curr_type!='':
+                for line in extra_list:
+                    if force_bytes(line[0])==curr_type:
+                        short=reformat_python_docs_type(curr_type,line[1],
+                                                        line[2],amp,
+                                                        link,True)
+                        full_list.append([force_bytes(line[1]),
+                                          force_bytes(short)])
+
+            full_list2=sorted(full_list,key=lambda x: x[0])
+            max_len=0
+            for k in range(0,len(full_list2)):
+                full_list2[k][0]=(force_string(amt.get_command_color())+
+                                  full_list2[k][0].decode('utf-8')+
+                                  force_string(amt.get_default_color()))
+                full_list2[k][1]=full_list2[k][1].decode('utf-8')
+                if length_without_colors(full_list2[k][0])>max_len:
+                    max_len=length_without_colors(full_list2[k][0])
+            for k in range(0,len(full_list2)):
+                strt='  '
+                extra=max_len-length_without_colors(full_list2[k][0])
+                strt+='-'+full_list2[k][0]
+                for ij in range(0,extra):
+                    strt+=' '
+                strt+=' '+full_list2[k][1]
+                print(strt)
+            print('\n'+str_line)
+            help_topics=sorted(acol_help_topics+o2graph_help_topics)
+                
+            strt='Additional help topics: '
+            for j in range(0,len(help_topics)):
+                if j<len(help_topics)-1:
+                    strt+=(force_string(amt.get_help_color())+
+                           help_topics[j]+
+                           force_string(amt.get_default_color())+', ')
+                else:
+                    strt+=('and '+force_string(amt.get_help_color())+
+                           help_topics[j]+
+                           force_string(amt.get_default_color())+'.')
+                        
+            tlist=wrap_line(strt)
+            for j in range(0,len(tlist)):
+                print(tlist[j])
             
         # If the user specified 'help set', then print
         # the o2graph parameter documentation
@@ -4465,27 +4400,29 @@ class o2graph_plotter(yt_plot_base):
                     else:
                         self.ell_max(strlist[ix+1],strlist[ix+2:ix_next])
                         
+                elif cmd_name=='colors':
+
+                    if self.verbose>2:
+                        print('Process colors.')
+                        print('args:',strlist[ix:ix_next])
+                        
+                    if ix_next-ix<1:
+                        print('Not enough parameters for ell-max option.')
+                    else:
+                        self.colors(strlist[ix+1:ix_next])
+                        
                 elif cmd_name=='cmap':
 
                     if self.verbose>2:
                         print('Process cmap.')
                         print('args:',strlist[ix:ix_next])
                         
-                    if ix_next-ix<3:
+                    if ix_next-ix<2:
                         print('Not enough parameters for cmap option.')
+                    elif ix_next-ix<3:
+                        self.cmap(strlist[ix+1])
                     else:
                         self.cmap(strlist[ix+1],strlist[ix+2:ix_next])
-                        
-                elif cmd_name=='cmap2':
-
-                    if self.verbose>2:
-                        print('Process cmap2.')
-                        print('args:',strlist[ix:ix_next])
-                        
-                    if ix_next-ix<3:
-                        print('Not enough parameters for cmap2 option.')
-                    else:
-                        self.cmap2(strlist[ix+1],strlist[ix+2:ix_next])
                         
                 elif cmd_name=='make-png':
 

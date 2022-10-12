@@ -1,1 +1,1 @@
-o2graph -backend Agg -help cmaps-plot figures/cmaps.png
+o2graph -backend Agg -cmap plot figures/cmaps.png
