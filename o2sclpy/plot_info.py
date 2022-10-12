@@ -410,7 +410,7 @@ def cmaps_plot(fname=''):
                              bottom=0.15/fig_y,
                              left=0.01,right=0.99,
                              wspace=0.01)
-    plot.rc('text',usetex=True)
+    plot.rc('text',usetex=False)
     plot.rc('font',family='serif')
 
     for i in range(0,nrows):
@@ -421,7 +421,6 @@ def cmaps_plot(fname=''):
     col_ctr=0
     for category, cmap_list in cmaps:
         for name in cmap_list:
-            name2=name.replace('_','\_')
             ax=axes[row_ctr][col_ctr]
             ax.imshow(gradient,aspect='auto',
                              cmap=plot.get_cmap(name))
@@ -430,9 +429,9 @@ def cmaps_plot(fname=''):
                                 fill=True,
                                 transform=ax.transAxes)
             ax.add_patch(r)
-            ax.text(0.5,0.45,name2,
+            ax.text(0.5,0.45,name,
                                 va='center',ha='center',
-                                fontsize=8,color=(0,0,0),
+                                fontsize=10,color=(0,0,0),
                                 transform=ax.transAxes)
             row_ctr=row_ctr+1
             if row_ctr>=nrows:
@@ -440,14 +439,13 @@ def cmaps_plot(fname=''):
                 col_ctr=col_ctr+1
     for category, cmap_list in new_cmaps:
         for name in cmap_list:
-            name2=name.replace('_','\_')
             ax=axes[row_ctr][col_ctr]
             ax.imshow(gradient,aspect='auto',
                       cmap=plot.get_cmap(name))
             r=patches.Rectangle((0.32,0.1),0.36,0.8,0,fc=(1,1,1,0.7),lw=0,
                                 fill=True,transform=ax.transAxes)
             ax.add_patch(r)
-            ax.text(0.5,0.45,name2,va='center',ha='center',
+            ax.text(0.5,0.45,name,va='center',ha='center',
                     fontsize=8,color=(0,0,0),transform=ax.transAxes)
             row_ctr=row_ctr+1
             if row_ctr>=nrows:
@@ -473,6 +471,8 @@ def cmaps_plot(fname=''):
     elif fname=='':
         print('Backend is Agg but no filename is specified',
               'so no output was created.')
+        
+    plot.rc('text',usetex=True)
     return
 
 def colors_plot(fname='',dpi=10):
@@ -488,7 +488,7 @@ def colors_plot(fname='',dpi=10):
                     for name, color in colors.items())
     sorted_names=[name for hsv, name in by_hsv]
     n=len(sorted_names)
-    header=2.5
+    header=2
     ncols=4
     nrows=n//ncols
     plot.rc('text',usetex=False)
@@ -521,7 +521,7 @@ def colors_plot(fname='',dpi=10):
                             
     fig.subplots_adjust(left=0,right=1,top=1,bottom=0,
                         hspace=0,wspace=0)
-    axes.text(X*0.5,(Y+header)*0.965,'O2sclpy colors summary',
+    axes.text(X*0.5,(Y+header)*0.965,r'$ \mathrm{O}_{2}\mathrm{sclpy~colors~summary} $',
               fontsize=16,ha='center')
 
     if fname!='':
