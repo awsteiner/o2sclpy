@@ -219,6 +219,7 @@ def colors_near(col='',fname=''):
         colors=dict(**mc.CSS4_COLORS,**mc.XKCD_COLORS)
 
         # Remove leading space
+        col_orig=col
         while col[0].isspace():
             col=col[1:]
 
@@ -235,7 +236,7 @@ def colors_near(col='',fname=''):
         # all four entries are between 0 and 1
         
         colt=to_rgba(col)
-        print('converted',col,'to',colt)
+        print('o2sclpy.plot_info.colors_near() converted',col_orig,'to',colt)
         ir=colt[0]
         ig=colt[1]
         ib=colt[2]
