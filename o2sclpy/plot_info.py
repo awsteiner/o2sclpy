@@ -280,7 +280,7 @@ def colors_near(col='',fname=''):
             ncols=4
             nrows=n//ncols
             #print('ncols,nrows',ncols,nrows)
-            plot.rc('text',usetex=True)
+            plot.rc('text',usetex=False)
             plot.rc('font',family='serif')
             fig,axes=plot.subplots(figsize=(9.5,6.4))
             # Get height and width
@@ -294,11 +294,16 @@ def colors_near(col='',fname=''):
                 y=Y-((row+header)*h)-h
                 xi_line=w*(column+0.05)
                 xf_line=w*(column+0.25)
-                xi_text=w*(column+0.3)
-                
-                axes.text(xi_text,y,selected[i][0],
-                          fontsize=(h*0.4),
-                          ha='left',va='center')
+                xi_text=w*(column+0.27)
+
+                if len(selected[i][0])>15:
+                    axes.text(xi_text,y,selected[i][0],
+                              fontsize=(h*0.3),
+                              ha='left',va='center')
+                else:
+                    axes.text(xi_text,y,selected[i][0],
+                              fontsize=(h*0.4),
+                              ha='left',va='center')
     
                 axes.hlines(y+h*0.1,xi_line,xf_line,
                             color=selected[i][0],
@@ -332,6 +337,9 @@ def colors_near(col='',fname=''):
             elif fname=='':
                 print('Backend is Agg but no filename is specified',
                       'so no output was created.')
+
+            plot.rc('text',usetex=True)
+                
         else:
             print('Error. Not enough colors selected in colors_near().')
             
@@ -576,7 +584,7 @@ def color_list():
     print(' ')
     outs=("o2sclpy also supports the (r,g,b) format, the [r,g,b,a] format, "+
           "the HTML format, the grayscale single-value format, "+
-          "and the XKCD colors (see '-help xkcd-colors' for a list). "+
+          "and the XKCD colors (see '-colors xkcd' for a list). "+
           "For (r,g,b) colors, parentheses must be used, and the r, g,"+
           " and b numbers should be from 0.0 to 1.0. For [r,g,b,a] "+
           "colors, square brackets must be used and the r, g, b, "+
@@ -588,8 +596,8 @@ def color_list():
         print(str_list[i])
     print(' ')
     print("To create a plot of colors, use",
-          "'o2graph -help colors-plot' or")
-    print("'o2graph -help colors-plot plot_file.png'")
+          "'o2graph -colors plot' or")
+    print("'o2graph -colors plot plot_file.png'")
     return
 
 def xkcd_colors_list():

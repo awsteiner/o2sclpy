@@ -194,6 +194,33 @@ class plot_base:
         """Documentation for o2graph command ``colors``:
 
         Show color information
+
+        Command-line arguments: ``list`` or ``plot [filename]`` or 
+        ``near <color> [filename]`` or ``xkcd``.
+
+        The ``colors`` command outputs or plots information about
+        matplotlib colors.
+
+        If the ``list`` argument is given, then the 8 base colors and
+        their RGB definitions are output and then 148 CSS4 colors
+        (which include the 8 base colors) are output along with their
+        associated hexadecimal values.
+
+        If the ``plot`` argument is given, then the 148 CSS4 colors
+        are plotted in a matplotlib figure. If an additional filename
+        argument is specified, the figure is written to the specified
+        file. 
+
+        If the ``near`` argument is given, then the 80 colors 
+        closest to <color> are plotted in a matplotlib figure. If 
+        an additional filename argument is specified, then the 
+        figure is written to the specified file. To determine 
+        which colors are "nearest", the sum of the absolute
+        values of the differences in the RGB values are used.
+
+        Finally, if the ``xkcd`` argument is given, then all 
+        949 xkcd colors are listed along with their HTML
+        hexadecimal RBG values.
         """
 
         if len(args)>=1 and args[0]=='list':
