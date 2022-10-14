@@ -236,7 +236,9 @@ def colors_near(col='',fname=''):
         # all four entries are between 0 and 1
         
         colt=to_rgba(col)
-        print('o2sclpy.plot_info.colors_near() converted',col_orig,'to',colt)
+        print('o2sclpy.plot_info.colors_near() converted',col_orig,
+              'to:\n  (%7.6e,%7.6e,%7.6e,%7.6e).' % (colt[0],colt[1],
+                                                     colt[2],colt[3]))
         ir=colt[0]
         ig=colt[1]
         ib=colt[2]

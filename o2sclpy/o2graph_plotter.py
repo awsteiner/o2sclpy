@@ -2707,31 +2707,30 @@ class o2graph_plotter(yt_plot_base):
                             for i in range (0,len(str_list)):
                                 print(str_list[i])
 
-        finished=False
-
         # Handle o2graph topics
         if (cmd=='markers') and len(args)==1:
             marker_list()
-            finished=True
+            match=True
             
         if (len(args)==1 or len(args)==2) and args[0]=='markers-plot':
             if len(args)==2:
                 markers_plot(args[1])
             else:
                 markers_plot()
-            finished=True
+            match=True
 
         # Handle acol topics and types
-        if len(args)==1:
-            if amt.help_found(args[0],'')==True:
+        if match==False:
+            if len(args)==1:
+                if amt.help_found(args[0],'')==True:
+                    self.gen_acol(o2scl,amp,link,'help',args)
+                    match=True
+            elif len(args)==2 and amt.help_found(args[0],args[1])==True:
                 self.gen_acol(o2scl,amp,link,'help',args)
-                finished=True
-        elif len(args)==2 and amt.help_found(args[0],args[1])==True:
-            self.gen_acol(o2scl,amp,link,'help',args)
-            finished=True
+                match=True
 
         # If there was no match, do a command list
-        if finished==False:
+        if match==False:
             
             print('o2graph: A data viewing and '+
                   'processing program for '+ter.bold()+
