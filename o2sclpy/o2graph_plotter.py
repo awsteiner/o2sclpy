@@ -530,7 +530,7 @@ class o2graph_plotter(yt_plot_base):
                 line[2]=o2graph_plotter.den_plot_o2graph.__doc__
             if line[1]=="den-plot-rgb":
                 line[2]=o2graph_plotter.den_plot_rgb_o2graph.__doc__
-            if line[1]=="den-plot-rgb":
+            if line[1]=="den-plot-anim":
                 line[2]=o2graph_plotter.den_plot_anim.__doc__
             if line[1]=="errorbar":
                 line[2]=o2graph_plotter.errorbar.__doc__
@@ -2330,7 +2330,7 @@ class o2graph_plotter(yt_plot_base):
         # End of function o2graph_plotter::yt_add_vol()
         return
         
-    def den_plot_anim(self,o2scl,amp,args):
+    def den_plot_anim(self,o2scl,amp,link,args):
         """Documentation for o2graph command ``den-plot-anim``:
 
         Create an animated density plot from a rank 3 tensor_grid
@@ -2416,9 +2416,8 @@ class o2graph_plotter(yt_plot_base):
                 print('Large number of frames (',n_frames,') not',
                       'supported in den-plot-anim.')
                 return
-            
-            arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
-            print(arr.shape)
+
+            arr=data.reshape((nx,ny,nz))
 
             if self.colbar==True:
                 # The animation of the colorbar messes up the
@@ -2671,6 +2670,7 @@ class o2graph_plotter(yt_plot_base):
                 if cmd==line[1]:
                     match=True
                     print('\n'+str_line)
+                    print('here2')
                     reformat_python_docs_type(line[0],cmd,line[2],amp,link)
                     
         # If we haven't matched yet, check for get/set parameters
@@ -2764,6 +2764,7 @@ class o2graph_plotter(yt_plot_base):
             if curr_type!='':
                 for line in extra_list:
                     if force_bytes(line[0])==curr_type:
+                        print('here3')
                         short=reformat_python_docs_type(curr_type,line[1],
                                                         line[2],amp,
                                                         link,True)
@@ -4804,7 +4805,8 @@ class o2graph_plotter(yt_plot_base):
                         print('Process den-plot-anim.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.den_plot_anim(o2scl,amp,strlist[ix+1:ix_next])
+                    self.den_plot_anim(o2scl,amp,link,
+                                       strlist[ix+1:ix_next])
                 
                 elif cmd_name=='plot1':
                     

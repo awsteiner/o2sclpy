@@ -5266,16 +5266,12 @@ class tensor:
         self.resize_vector(len(svst),svst)
         return
 
-class tensor_grid:
+class tensor_grid(tensor):
     """
     Python interface for O\ :sub:`2`\ scl class ``tensor_grid``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/tensor_grid.html .
     """
-
-    _ptr=0
-    _link=0
-    _owner=True
 
     def __init__(self,link,pointer=0):
         """
