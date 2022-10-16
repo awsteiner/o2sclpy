@@ -65,7 +65,7 @@ test:
 		examples/buchdahl.py \
 		examples/tov.py \
 		examples/test_examples.py \
-		-s -v
+		-s -v > test.out 2>&1 &
 
 testq:
 	pytest o2sclpy/test \

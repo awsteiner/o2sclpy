@@ -27,7 +27,6 @@ import os
 #import platform
 
 # To create new color maps
-from matplotlib.colors import LinearSegmentedColormap
 
 # For rectangles and ellipses
 import matplotlib.patches as patches
@@ -419,14 +418,18 @@ class plot_base:
     
             cdict={'red': col_r, 'green': col_g, 'blue': col_b}
             
-        import matplotlib.pyplot as plot
+        import matplotlib
+        from matplotlib.colors import LinearSegmentedColormap
+        #import matplotlib.pyplot as plot
 
         cmap_obj=LinearSegmentedColormap(cmap_name,cdict)
-        plot.register_cmap(cmap=cmap_obj)
+        #plot.register_cmap(cmap=cmap_obj)
+        matplotlib.colormaps.register(cmap=cmap_obj)
                 
         # Colormap reversed
         cmapr_obj=cmap_obj.reversed()
-        plot.register_cmap(cmap=cmapr_obj)
+        #plot.register_cmap(cmap=cmapr_obj)
+        matplotlib.colormaps.register(cmap=cmapr_obj)
         
         return
         
@@ -436,6 +439,8 @@ class plot_base:
         """
 
         import matplotlib.pyplot as plot
+        import matplotlib
+        from matplotlib.colors import LinearSegmentedColormap
 
         if 'jet2' not in plot.colormaps():
             # LinearSegmentedColormap
@@ -456,11 +461,13 @@ class plot_base:
                    'green': ((0.0,unused,1.0),(1.0,0.0,unused)),
                    'blue': ((0.0,unused,1.0),(1.0,0.0,unused))}
             reds2=LinearSegmentedColormap('reds2',cdict)
-            plot.register_cmap(cmap=reds2)
+            matplotlib.colormaps.register(cmap=reds2)
+            #plot.register_cmap(cmap=reds2)
             
             # Colormap reds2, reversed
             reds2_r=reds2.reversed()
-            plot.register_cmap(cmap=reds2_r)
+            matplotlib.colormaps.register(cmap=reds2_r)
+            #plot.register_cmap(cmap=reds2_r)
             
             # A new version of the ``jet`` colormap which starts with
             # white instead of blue. In order, the index colors are white,
@@ -475,11 +482,13 @@ class plot_base:
                             (0.4,0.0,0.0),(0.6,0.0,0.0),
                             (0.8,0.0,0.0),(1.0,0.0,unused))}
             jet2=LinearSegmentedColormap('jet2',cdict)
-            plot.register_cmap(cmap=jet2)
+            matplotlib.colormaps.register(cmap=jet2)
+            #plot.register_cmap(cmap=jet2)
     
             # Colormap jet2, reversed
             jet2_r=jet2.reversed()
-            plot.register_cmap(cmap=jet2_r)
+            matplotlib.colormaps.register(cmap=jet2_r)
+            #plot.register_cmap(cmap=jet2_r)
     
             # A new version of the ``pastel`` colormap which starts with
             # white instead of blue. In order, the index colors are white,
@@ -494,33 +503,39 @@ class plot_base:
                             (0.4,0.3,0.3),(0.6,0.3,0.3),
                             (0.8,0.3,0.3),(1.0,0.3,unused))}
             pastel2=LinearSegmentedColormap('pastel2',cdict)
-            plot.register_cmap(cmap=pastel2)
+            matplotlib.colormaps.register(cmap=pastel2)
+            #plot.register_cmap(cmap=pastel2)
             
             # Colormap pastel2, reversed
             pastel2_r=pastel2.reversed()
-            plot.register_cmap(cmap=pastel2_r)
+            matplotlib.colormaps.register(cmap=pastel2_r)
+            #plot.register_cmap(cmap=pastel2_r)
     
             # A white to green colormap
             cdict={'red': ((0.0,unused,1.0),(1.0,0.0,unused)),
                    'green': ((0.0,unused,1.0),(1.0,1.0,unused)),
                    'blue': ((0.0,unused,1.0),(1.0,0.0,unused))}
             greens2=LinearSegmentedColormap('greens2',cdict)
-            plot.register_cmap(cmap=greens2)
+            matplotlib.colormaps.register(cmap=greens2)
+            #plot.register_cmap(cmap=greens2)
             
             # Colormap greens2, reversed
             greens2_r=greens2.reversed()
-            plot.register_cmap(cmap=greens2_r)
+            matplotlib.colormaps.register(cmap=greens2_r)
+            #plot.register_cmap(cmap=greens2_r)
             
             # A white to blue colormap
             cdict={'red': ((0.0,unused,1.0),(1.0,0.0,unused)),
                    'green': ((0.0,unused,1.0),(1.0,0.0,unused)),
                    'blue': ((0.0,unused,1.0),(1.0,1.0,unused))}
             blues2=LinearSegmentedColormap('blues2',cdict)
-            plot.register_cmap(cmap=blues2)
+            matplotlib.colormaps.register(cmap=blues2)
+            #plot.register_cmap(cmap=blues2)
             
             # Colormap blues2, reversed
             blues2_r=blues2.reversed()
-            plot.register_cmap(cmap=blues2_r)
+            matplotlib.colormaps.register(cmap=blues2_r)
+            #plot.register_cmap(cmap=blues2_r)
 
         # End of function plot_base::new_cmaps()
         return

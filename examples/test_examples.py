@@ -97,9 +97,11 @@ def test_table_errorbar():
     return
 
 def test_textbox():
+    print('Running examples/test_examples.py:test_textbox().')
     ret=os.system('cd examples; ./textbox.scr')
     assert ret==0
     compare_images('textbox')
+    print('Done in examples/test_examples.py:test_textbox().')
     return
 
 def test_table_scatter():

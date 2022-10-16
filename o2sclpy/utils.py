@@ -406,6 +406,8 @@ def string_to_dict(s):
                 arr2[1]=float(arr2[1])
             if arr2[0]=='capthick':
                 arr2[1]=float(arr2[1])
+            if arr2[0]=='rotation':
+                arr2[1]=float(arr2[1])
 
             # Convert strings to bool values
             if arr2[0]=='sharex':

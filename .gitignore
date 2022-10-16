@@ -1,3 +1,4 @@
+test.out
 .snapcraft
 *.bz2
 o2graph*.png
@@ -12,5 +13,4 @@ o2sclpy/__pycache__
 *~
 .ipynb_checkpoints
 __pycache__
-
 dsh.o2

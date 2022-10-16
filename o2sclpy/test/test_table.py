@@ -94,12 +94,17 @@ def subtest_hdf5(link,tmp_path):
 
 def test_all(tmp_path):
 
+    print('Running test_table.py:test_all().')
+    
     link=o2sclpy.linker()
     link.link_o2scl()
 
     subtest_basic(link)
     subtest_copying(link)
     subtest_hdf5(link,tmp_path)
+    
+    print('Done in test_table.py:test_all().')
+    
     return
     
 if __name__ == '__main__':

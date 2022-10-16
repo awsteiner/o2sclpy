@@ -1,9 +1,16 @@
 import numpy
 import o2sclpy
 import matplotlib.pyplot as plot
+import sys
+
+show_flag=True
+if 'pytest' in sys.modules:
+    show_flag=False
 
 def test_all(tmp_path):
 
+    print('Running test_den_plot.py:test_all().')
+    
     link=o2sclpy.linker()
     link.link_o2scl()
 
@@ -87,9 +94,12 @@ def test_all(tmp_path):
                 pb.save('test_den_plot1.png')
             elif k==2:
                 pb.save('test_den_plot2.png')
-            
-        pb.show()
+
+        if show_flag:
+            pb.show()
         
+    print('Done in test_den_plot.py:test_all().')
+    
     return
     
 if __name__ == '__main__':

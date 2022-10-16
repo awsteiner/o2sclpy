@@ -9028,10 +9028,12 @@ def rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
     func=link.o2scl.o2scl_rearrange_and_copy_tensor_double__wrapper
-    func.restype=tensor
+    func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
-    return ret
+    ten=tensor(link,ret)
+    ten._owner=True
+    return ten
 
 def rearrange_and_copy_int(link,t,spec,verbose=0,err_on_fail=True):
     """
@@ -9045,10 +9047,12 @@ def rearrange_and_copy_int(link,t,spec,verbose=0,err_on_fail=True):
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
     func=link.o2scl.o2scl_rearrange_and_copy_tensor_int_int__wrapper
-    func.restype=tensor_int
+    func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
-    return ret
+    ten=tensor(link,ret)
+    ten._owner=True
+    return ten
 
 def rearrange_and_copy_size_t(link,t,spec,verbose=0,err_on_fail=True):
     """
@@ -9062,10 +9066,12 @@ def rearrange_and_copy_size_t(link,t,spec,verbose=0,err_on_fail=True):
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
     func=link.o2scl.o2scl_rearrange_and_copy_tensor_size_t_size_t__wrapper
-    func.restype=tensor_size_t
+    func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
-    return ret
+    ten=tensor(link,ret)
+    ten._owner=True
+    return ten
 
 def grid_rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
     """
@@ -9079,10 +9085,12 @@ def grid_rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
     func=link.o2scl.o2scl_grid_rearrange_and_copy_tensor_grid_double__wrapper
-    func.restype=tensor_grid
+    func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
-    return ret
+    ten=tensor(link,ret)
+    ten._owner=True
+    return ten
 
 def fermi_function(link,E,mu,T,limit=40.0):
     """

@@ -268,9 +268,15 @@ def colors_near(col='',fname=''):
 
         # If col was converted to (r,g,b), then convert back to a
         # string.
-        col_fixpound=str(col).replace('#','\\#')
-        title=(r'$ \mathrm{O}_2\mathrm{sc'+
-               'lpy~list~of~colors~near~'+col_fixpound+'}: $')
+
+        # AWS, 10/16/22: This replacement was necessary with
+        # usetex=True, but now usetex=False, so we remove it
+        #col_fixpound=str(col).replace('#','\\#')
+        
+        #title=(r'$ \mathrm{O}_2\mathrm{sc'+
+        #'lpy~list~of~colors~near~'+col+'}: $')
+        title=r'$ O_{2}sclpy~list~of~colors~near~'+str(col)+': $'
+               
         #print('title',title)
 
         if len(selected)>80:
