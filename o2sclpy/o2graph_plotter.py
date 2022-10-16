@@ -823,10 +823,12 @@ class o2graph_plotter(yt_plot_base):
             if len(args)>=3:
                 kwstring=args[2]
         elif curr_type==b'tensor_grid':
-            svst=o2sclpy.std_vector_size_t(link)
-            svst.resize(amt.tensor_grid_obj.get_rank())
-            func=amt.tensor_grid_obj.copy_table3d_align_setxy
-            func(args[0],args[1],svst,amt.table3d_obj)
+            svst=std_vector_size_t(link)
+            tg=amt.get_tensor_grid_obj()
+            svst.resize(tg.get_rank())
+            func=tg.copy_table3d_align_setxy
+            t3d=amt.get_table3d_obj()
+            func(args[0],args[1],svst,t3d)
             slice_name='z'
             if len(args)>=3:
                 kwstring=args[2]
