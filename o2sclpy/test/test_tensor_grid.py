@@ -1,0 +1,110 @@
+import o2sclpy
+import copy
+import numpy
+import math
+
+def f(x,y,z):
+    return (math.sin(x)+math.sin(2*y))*math.exp(-z*z)
+
+
+def def_tensor_grid(link):
+    tg=o2sclpy.tensor_grid(link)
+    tg.resize([21,21,21])
+    lst2=o2sclpy.std_vector(link)
+    lst3=[]
+    for i in range(0,21):
+        lst3.append(i*0.1-1.0)
+    for i in range(0,21):
+        lst3.append(i*0.1)
+    for i in range(0,21):
+        lst3.append(i*0.1+1.0)
+    lst2.from_list(lst3)
+    tg.set_grid_packed(lst2)
+    for i in range(0,21):
+        for j in range(0,21):
+            for k in range(0,21):
+                temp_list=[i,j,k]
+                x=tg.get_grid(0,i)
+                y=tg.get_grid(1,j)
+                z=tg.get_grid(2,k)
+                tg.set(temp_list,f(x,y,z))
+    return tg
+
+def subtest_basic(link):
+
+    tg=def_tensor_grid(link)
+    assert tg.get_rank()==3,'get_rank()'
+    assert tg.get_size(1)==21,'get_size()'
+    assert tg.total_size()==9261,'total_size()'
+    assert tg.is_grid_set()==True,'is_grid_set()'
+    
+    #tg2=o2sclpy.rearrange_and_copy(link,tg,
+    #'index(0),index(1),fixed(2,2)')
+    #assert tg2.total_size()==6,'total_size() after rearrange'
+    return
+
+def subtest_copy_table3d(link):
+    tg=def_tensor_grid(link)
+    sv=o2sclpy.std_vector_size_t(link)
+    sv.resize(3)
+    sv[1]=5
+    t3d=o2sclpy.table3d(link)
+    tg.copy_table3d_align(0,2,sv,t3d)
+    return
+
+def subtest_hdf5(link,tmp_path):
+    
+    p=tmp_path/"tensor_grid.o2"
+    filename=bytes(str(p),'utf-8')
+    
+    ten1=def_tensor_grid(link)
+
+    # Write ten1 to a file
+    hf=o2sclpy.hdf_file(link)
+    hf.open_or_create(filename)
+    o2sclpy.hdf_output_tensor_grid(link,hf,ten1,b'tensor_grid')
+    hf.close()
+
+    # Open the file and read into ten2
+    hf.open(filename,False,True)
+    name=o2sclpy.std_string(link)
+    ten2=o2sclpy.tensor_grid(link)
+    o2sclpy.hdf_input_tensor_grid(link,hf,ten2,b'tensor_grid')
+    hf.close()
+
+    sz1=ten1.get_size_arr()
+    sz2=ten2.get_size_arr()
+    assert len(sz1)==len(sz2),"copy after hdf_input() 1"
+    assert sz1[0]==sz2[0],"copy after hdf_input() 2"
+    assert sz1[1]==sz2[1],"copy after hdf_input() 3"
+    assert sz1[2]==sz2[2],"copy after hdf_input() 4"
+    
+    return
+
+def subtest_copying(link):
+    
+    ten1=def_tensor_grid(link)
+    ten1.set([1,2,0],4)
+    ten2=copy.copy(ten1)
+    assert ten2.get([1,2,0])==4,'Check the shallow copy'
+    
+    ten3=copy.deepcopy(ten1)
+    ten2.set([1,2,0],5)
+    assert ten1.get([1,2,0])==5,'Show changes in the second impact the first'
+    assert ten3.get([1,2,0])==4,'Show deep copy works'
+    
+    return
+
+def test_all(tmp_path):
+    link=o2sclpy.linker()
+    link.link_o2scl()
+
+    subtest_basic(link)
+    subtest_copying(link)
+    subtest_copy_table3d(link)
+    subtest_hdf5(link,tmp_path)
+    return
+        
+if __name__ == '__main__':
+    test_all()
+    print('All tests passed.')
