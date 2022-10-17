@@ -6,7 +6,6 @@ import math
 def f(x,y,z):
     return (math.sin(x)+math.sin(2*y))*math.exp(-z*z)
 
-
 def def_tensor_grid(link):
     tg=o2sclpy.tensor_grid(link)
     tg.resize([21,21,21])
@@ -38,18 +37,40 @@ def subtest_basic(link):
     assert tg.total_size()==9261,'total_size()'
     assert tg.is_grid_set()==True,'is_grid_set()'
     
-    #tg2=o2sclpy.rearrange_and_copy(link,tg,
-    #'index(0),index(1),fixed(2,2)')
-    #assert tg2.total_size()==6,'total_size() after rearrange'
+    return
+
+def subtest_interp(link):
+
+    tg=def_tensor_grid(link)
+
+    sv=o2sclpy.std_vector(link)
+    sv.from_list([0.12,0.56,1.34])
+    assert numpy.allclose(tg.interp_linear(sv),
+                          f(sv[0],sv[1],sv[2]),4.0e-3),'interp_linear'
+    
+    return
+
+def subtest_rearrange(link):
+
+    tg=def_tensor_grid(link)
+
+    tg2=o2sclpy.grid_rearrange_and_copy(link,tg,
+                                        'index(0),index(1),fixed(2,2)')
+    assert str(type(tg2))=="<class 'o2sclpy.base.tensor_grid'>",'type'
+    assert tg2.total_size()==441,'total_size() after rearrange'
+    
     return
 
 def subtest_copy_table3d(link):
+    
     tg=def_tensor_grid(link)
+    
     sv=o2sclpy.std_vector_size_t(link)
     sv.resize(3)
     sv[1]=5
     t3d=o2sclpy.table3d(link)
     tg.copy_table3d_align(0,2,sv,t3d)
+    
     return
 
 def subtest_hdf5(link,tmp_path):
@@ -102,6 +123,8 @@ def test_all(tmp_path):
     subtest_basic(link)
     subtest_copying(link)
     subtest_copy_table3d(link)
+    subtest_interp(link)
+    subtest_rearrange(link)
     subtest_hdf5(link,tmp_path)
     return
         

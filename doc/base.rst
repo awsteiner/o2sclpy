@@ -43,9 +43,9 @@ class.
 * :ref:`Class ix_grid`
 * :ref:`Class ix_gridw`
 * :ref:`Class tensor`
-* :ref:`Class tensor_grid`
 * :ref:`Class tensor_int`
 * :ref:`Class tensor_size_t`
+* :ref:`Class tensor_grid`
 * :ref:`Class find_constants_const_entry`
 * :ref:`Class find_constants`
 * :ref:`Class convert_units_der_unit`
@@ -516,18 +516,6 @@ Class tensor
         .. automethod:: __copy__
         .. automethod:: __deepcopy__
 
-Class tensor_grid
------------------
-
-.. autoclass:: o2sclpy.tensor_grid
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-        .. automethod:: __deepcopy__
-
 Class tensor_int
 ----------------
 
@@ -544,6 +532,18 @@ Class tensor_size_t
 -------------------
 
 .. autoclass:: o2sclpy.tensor_size_t
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __deepcopy__
+
+Class tensor_grid
+-----------------
+
+.. autoclass:: o2sclpy.tensor_grid
         :members:
         :undoc-members:
 
