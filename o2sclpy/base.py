@@ -5361,7 +5361,7 @@ class tensor_grid(tensor):
         ret=func(self._ptr,grid_point._ptr)
         return ret
 
-    def resize(self,rank,dim):
+    def resize_vector(self,rank,dim):
         """
         | Parameters:
         | *rank*: ``size_t``
@@ -5553,6 +5553,15 @@ class tensor_grid(tensor):
         func(self._ptr,t3d._ptr,slice_,n_points,low,high,width)
         return
 
+    def resize(self,index):
+        """
+        Copy ``index`` to an :class:`std_vector_size_t` object 
+        and resize
+        """
+        svst=std_vector_size_t(self._link)
+        svst.init_py(index)
+        self.resize_vector(len(svst),svst)
+        return
 
 class tensor_int:
     """
