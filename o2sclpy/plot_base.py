@@ -914,10 +914,16 @@ class plot_base:
             print('Arrow',x1,y1,x2,y1,arrowprops)
         if self.canvas_flag==False:
             self.canvas()
-        self.axes.annotate("",xy=(float(eval(x2)),float(eval(y2))),
-                           xycoords='data',
-                           xytext=(float(eval(x1)),float(eval(y1))),
-                           textcoords='data',
+        if isinstance(x1,str):
+            x1=float(eval(x1))
+        if isinstance(y1,str):
+            y1=float(eval(y1))
+        if isinstance(x2,str):
+            x2=float(eval(x2))
+        if isinstance(y2,str):
+            y2=float(eval(y2))
+        self.axes.annotate("",xy=(x2,y2),xycoords='data',
+                           xytext=(x1,y1),textcoords='data',
                            arrowprops=string_to_dict(arrowprops))
         # End of function plot_base::arrow()
         return
@@ -1101,14 +1107,19 @@ class plot_base:
             print('Ellipse',x,y,w,h,angle)
         if self.canvas_flag==False:
             self.canvas()
-        fx=float(eval(x))
-        fy=float(eval(y))
-        fw=float(eval(w))
-        fh=float(eval(h))
-        fangle=float(eval(angle))
+        if isinstance(x,str):
+            x=float(eval(x))
+        if isinstance(y,str):
+            y=float(eval(y))
+        if isinstance(w,str):
+            w=float(eval(w))
+        if isinstance(h,str):
+            h=float(eval(h))
+        if isinstance(angle,str):
+            angle=float(eval(angle))
         if self.canvas_flag==False:
             self.canvas()
-        r=patches.Ellipse((fx,fy),fw,fh,fangle,**kwargs)
+        r=patches.Ellipse((x,y),w,h,angle,**kwargs)
         self.axes.add_patch(r)
         # End of function plot_base::ellipse()
         return

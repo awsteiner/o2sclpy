@@ -3,5 +3,5 @@
 #
 o2graph -create tensor_grid 3 100 100 100 \
         -function "sin(x0/20+x1/20)*sin(x2/20)" \
-	-den-plot-anim 0 1 2r dpa.mp4
+	-den-plot-anim 0 1 2r figures/dpa.mp4
 	
