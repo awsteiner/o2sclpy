@@ -663,8 +663,6 @@ class o2graph_plotter(yt_plot_base):
 
         amt=acol_manager(link,amp)
         pdmg=amt.get_pdmg_obj()
-
-        
         
         if self.canvas_flag==False:
             self.canvas()
@@ -2339,7 +2337,7 @@ class o2graph_plotter(yt_plot_base):
         object
 
         Command-line arguments: ``<x index> <y index> <z index [+'r']>
-        <mp4 filename>``
+        <mp4 filename> [kwargs for imshow()]``
 
         Create an mp4 animation of a density plot from a
         ``tensor_grid`` object with rank 3. The first argument
@@ -2414,6 +2412,11 @@ class o2graph_plotter(yt_plot_base):
             elif args[2]=='2r':
                 n_frames=nz
 
+            kwstring=''
+            if len(args)>=5:
+                kwstring=args[4]
+            dctt=string_to_dict(kwstring)
+                
             if n_frames>9999:
                 print('Large number of frames (',n_frames,') not',
                       'supported in den-plot-anim.')
@@ -2430,8 +2433,7 @@ class o2graph_plotter(yt_plot_base):
                 if ('right_margin' not in dct.keys() or
                     dct['right_margin']<0.1):
                     dct['right_margin']=0.15
-                if ('top_margin' not in dct.keys() or
-                    dct['top_margin']<0.06):
+                if 'top_margin' not in dct.keys():
                     dct['top_margin']=0.06
                 if 'left_margin' not in dct.keys():
                     dct['left_margin']=0.14
@@ -2441,6 +2443,9 @@ class o2graph_plotter(yt_plot_base):
                 lm=dct['left_margin']
                 tm=dct['top_margin']
                 bm=dct['bottom_margin']
+                if self.verbose>1:
+                    print('o2graph_plotter.den_plot_anim(): margins',
+                          rm,lm,tm,bm)
                 if self.canvas_flag==False:
                     if 'fontsize' not in dct.keys():
                         dct['fontsize']=self.font
@@ -2469,7 +2474,7 @@ class o2graph_plotter(yt_plot_base):
             if self.logy==True:
                 for i in range(0,len(ygrid)):
                     ygrid[i]=math.log(ygrid[i],10)
-                        
+
             for k in range(0,n_frames):
                 if args[2]=='0':
                     sl=arr[k,:,:]
@@ -2549,7 +2554,7 @@ class o2graph_plotter(yt_plot_base):
                                                  origin='lower',
                                                  extent=[tmp1,tmp2,
                                                          tmp3,tmp4],
-                                                 aspect='auto')
+                                                 aspect='auto',**dctt)
                 
                 if self.colbar==True:
                     dpa_cax2=self.fig.add_axes([1.0-rm*0.9,

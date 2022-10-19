@@ -1,7 +1,8 @@
 # This example creates a density plot and overlying contour plot
 # with two independent variables.
 #
-o2graph -create tensor_grid 3 100 100 100 \
-        -function "sin(x0/20+x1/20)*sin(x2/20)" \
-	-den-plot-anim 0 1 2r figures/dpa.mp4
-	
+o2graph -set fig_dict "right_margin=0.25,top_margin=0.01" \
+        -set colbar 1 -xtitle x -ytitle y \
+        -create tensor_grid 3 100 100 100 \
+        -function "(sin(x0/8)+sin(x1/8))*exp(-x2*x2/1e3)" \
+	-den-plot-anim 0 1 2r figures/dpa.mp4 "vmin=-2,vmax=2"

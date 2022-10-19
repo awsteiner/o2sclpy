@@ -1782,7 +1782,7 @@ class cloud_file:
         return ret
 
 
-def hdf_input_table(link,hf,t,name):
+def hdf_input_table(link,hf,t,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1826,7 +1826,7 @@ def hdf_output_table(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_table_units(link,hf,t,name):
+def hdf_input_table_units(link,hf,t,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1870,7 +1870,7 @@ def hdf_output_table_units(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_table3d(link,hf,t,name):
+def hdf_input_table3d(link,hf,t,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1914,7 +1914,7 @@ def hdf_output_table3d(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_uniform_grid(link,hf,t,name):
+def hdf_input_uniform_grid(link,hf,t,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1958,7 +1958,7 @@ def hdf_output_uniform_grid(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_tensor_grid(link,hf,t,name):
+def hdf_input_tensor_grid(link,hf,t,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
