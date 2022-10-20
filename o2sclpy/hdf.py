@@ -1804,11 +1804,9 @@ def hdf_input_n_table(link,hf,t,name):
         | *t*: :class:`table<>` object
         | *name*: :class:`std::string` object
     """
-    name.__del__()
-    name._ptr=ctypes.c_void_p()
     func=link.o2scl.o2scl_hdf_hdf_input_n_table_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
-    func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(hf._ptr,t._ptr,name._ptr)
     name._owner=True
     return
 
@@ -1848,11 +1846,9 @@ def hdf_input_n_table_units(link,hf,t,name):
         | *t*: :class:`table_units<>` object
         | *name*: :class:`std::string` object
     """
-    name.__del__()
-    name._ptr=ctypes.c_void_p()
     func=link.o2scl.o2scl_hdf_hdf_input_n_table_units_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
-    func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(hf._ptr,t._ptr,name._ptr)
     name._owner=True
     return
 
@@ -1892,11 +1888,9 @@ def hdf_input_n_table3d(link,hf,t,name):
         | *t*: :class:`table3d` object
         | *name*: :class:`std::string` object
     """
-    name.__del__()
-    name._ptr=ctypes.c_void_p()
     func=link.o2scl.o2scl_hdf_hdf_input_n_table3d_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
-    func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(hf._ptr,t._ptr,name._ptr)
     name._owner=True
     return
 
@@ -1936,11 +1930,9 @@ def hdf_input_n_uniform_grid(link,hf,t,name):
         | *t*: :class:`uniform_grid<>` object
         | *name*: :class:`std::string` object
     """
-    name.__del__()
-    name._ptr=ctypes.c_void_p()
     func=link.o2scl.o2scl_hdf_hdf_input_n_uniform_grid_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
-    func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(hf._ptr,t._ptr,name._ptr)
     name._owner=True
     return
 
@@ -1980,11 +1972,9 @@ def hdf_input_n_tensor_grid(link,hf,t,name):
         | *t*: :class:`tensor_grid<>` object
         | *name*: :class:`std::string` object
     """
-    name.__del__()
-    name._ptr=ctypes.c_void_p()
     func=link.o2scl.o2scl_hdf_hdf_input_n_tensor_grid_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_void_p)]
-    func(hf._ptr,t._ptr,ctypes.byref(name._ptr))
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(hf._ptr,t._ptr,name._ptr)
     name._owner=True
     return
 

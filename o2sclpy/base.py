@@ -9581,11 +9581,9 @@ def wordexp_single_file(link,fname):
         | *link* :class:`linker` object
         | *fname*: :class:`std::string` object
     """
-    fname.__del__()
-    fname._ptr=ctypes.c_void_p()
     func=link.o2scl.o2scl_wordexp_single_file_wrapper
-    func.argtypes=[ctypes.POINTER(ctypes.c_void_p)]
-    func(ctypes.byref(fname._ptr))
+    func.argtypes=[ctypes.c_void_p]
+    func(fname._ptr)
     fname._owner=True
     return
 
@@ -9657,12 +9655,10 @@ def string_to_uint_list(link,x,list):
         | *list*: :class:`vector<size_t>` object
         | Returns: ``ctypes.c_int`` object
     """
-    x.__del__()
-    x._ptr=ctypes.c_void_p()
     func=link.o2scl.o2scl_string_to_uint_list_vector_size_t__wrapper
     func.restype=ctypes.c_int
-    func.argtypes=[ctypes.POINTER(ctypes.c_void_p),ctypes.c_void_p]
-    ret=func(ctypes.byref(x._ptr),list._ptr)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+    ret=func(x._ptr,list._ptr)
     x._owner=True
     return ret
 
