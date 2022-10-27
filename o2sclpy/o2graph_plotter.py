@@ -1764,7 +1764,7 @@ class o2graph_plotter(yt_plot_base):
         if curr_type==b'table':
 
             tab=amt.get_table_obj()
-            yv=tab[force_bytes(args[0])]
+            yv=tab[force_bytes(args[0])][0:tab.get_nlines()]
             args=args[1:]
 
         elif curr_type==b'double[]':
