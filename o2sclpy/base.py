@@ -2979,6 +2979,18 @@ class uniform_grid:
         func(self._ptr,v._ptr)
         return
 
+    def to_numpy(self):
+        """
+        Copy the vector to a numpy array
+    
+        Returns: a one-dimensional ``numpy`` array
+        """
+        v=std_vector(self._link)
+        self.vector(v)
+        ret=numpy.zeros((self.get_npoints()))
+        for i in range(0,self.get_npoints()):
+            ret[i]=v[i]
+        return ret
 
 class uniform_grid_end(uniform_grid):
     """
