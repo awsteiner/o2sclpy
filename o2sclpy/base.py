@@ -2981,7 +2981,7 @@ class uniform_grid:
 
     def to_numpy(self):
         """
-        Copy the vector to a numpy array
+        Copy the ``uniform_grid`` object to a numpy array
     
         Returns: a one-dimensional ``numpy`` array
         """
