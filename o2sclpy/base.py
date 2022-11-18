@@ -2701,6 +2701,16 @@ class table:
             vec[i]=v[i]
         self.line_of_data_vector(vec)
         return
+                                 
+    def row_to_dict(self,row):
+        """
+        Convert the specified row to a python dictionary
+        """
+        dct={}
+        for i in range(0,self.get_ncolumns()):
+            dct[self.get_column_name(i)]=self.get(self.get_column_name(i),
+                                                  row)
+        return dct
 
 class table_units(table):
     """
@@ -2969,6 +2979,18 @@ class uniform_grid:
         func(self._ptr,v._ptr)
         return
 
+    def to_numpy(self):
+        """
+        Copy the ``uniform_grid`` object to a numpy array
+    
+        Returns: a one-dimensional ``numpy`` array
+        """
+        v=std_vector(self._link)
+        self.vector(v)
+        ret=numpy.zeros((self.get_npoints()))
+        for i in range(0,self.get_npoints()):
+            ret[i]=v[i]
+        return ret
 
 class uniform_grid_end(uniform_grid):
     """

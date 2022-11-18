@@ -2113,7 +2113,7 @@ class plot_base:
             h2d=args[0]
             nxt=h2d.size_x()
             nyt=h2d.size_y()
-            sl=h2d.get_wgts.to_numpy()
+            sl=h2d.get_wgts().to_numpy()
             sl=sl.transpose()
 
             if pcm==False:

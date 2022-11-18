@@ -1992,6 +1992,48 @@ def hdf_output_tensor_grid(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
+def hdf_input_vector_contour_line(link,hf,v,name=""):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *v*: :class:`std::vector<contour_line>` object
+        | *name*: string
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=link.o2scl.o2scl_hdf_hdf_input_vector_contour_line_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,v._ptr,name_)
+    return
+
+def hdf_input_n_vector_contour_line(link,hf,v,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *v*: :class:`std::vector<contour_line>` object
+        | *name*: :class:`std::string` object
+    """
+    func=link.o2scl.o2scl_hdf_hdf_input_n_vector_contour_line_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(hf._ptr,v._ptr,name._ptr)
+    name._owner=True
+    return
+
+def hdf_output_vector_contour_line(link,hf,v,name):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *hf*: :class:`hdf_file` object
+        | *v*: :class:`std::vector<contour_line>` object
+        | *name*: string
+    """
+    name_=ctypes.c_char_p(force_bytes(name))
+    func=link.o2scl.o2scl_hdf_hdf_output_vector_contour_line_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
+    func(hf._ptr,v._ptr,name_)
+    return
+
 def value_spec(link,spec,d,verbose=0,err_on_fail=True):
     """
         | Parameters:

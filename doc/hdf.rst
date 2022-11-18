@@ -23,6 +23,9 @@ HDF5 classes from O\ :sub:`2`\ scl
 * :ref:`Function hdf_input_tensor_grid`
 * :ref:`Function hdf_input_n_tensor_grid`
 * :ref:`Function hdf_output_tensor_grid`
+* :ref:`Function hdf_input_vector_contour_line`
+* :ref:`Function hdf_input_n_vector_contour_line`
+* :ref:`Function hdf_output_vector_contour_line`
 * :ref:`Function value_spec`
 * :ref:`Function vector_spec`
 * :ref:`Function strings_spec`
@@ -136,6 +139,21 @@ Function hdf_output_tensor_grid
 -------------------------------
 
 .. autofunction:: o2sclpy.hdf_output_tensor_grid(link,hf,t,name)
+
+Function hdf_input_vector_contour_line
+--------------------------------------
+
+.. autofunction:: o2sclpy.hdf_input_vector_contour_line(link,hf,v,name)
+
+Function hdf_input_n_vector_contour_line
+----------------------------------------
+
+.. autofunction:: o2sclpy.hdf_input_n_vector_contour_line(link,hf,v,name)
+
+Function hdf_output_vector_contour_line
+---------------------------------------
+
+.. autofunction:: o2sclpy.hdf_output_vector_contour_line(link,hf,v,name)
 
 Function value_spec
 -------------------
