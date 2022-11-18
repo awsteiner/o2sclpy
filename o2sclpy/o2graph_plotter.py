@@ -153,6 +153,7 @@ extra_list=[
     ["double[]","plot1",0],
     ["hist","hist-plot",0],
     ["hist","plot",0],
+    ["hist_2d","den-plot",0],
     ["int[]","plot1",0],
     ["prob_dens_mdim_amr","plot",0],
     ["size_t[]","plot1",0],
@@ -705,17 +706,51 @@ class o2graph_plotter(yt_plot_base):
 
         For objects of type ``table3d``:
 
-        Create a density plot from a specified slice
+        Create a density plot from a slice of a table3d
 
         Command-line arguments: ``<slice> [kwargs]``
 
         Creates a density plot from the specified slice. A z-axis
-        density legend is displayed on the RHS if colbar is set to True
-        before plotting. If z-axis limits are specified, then values
-        larger than the upper limit are set equal to the upper limit
-        and values smaller than the lower limit are set equal to the
-        lower limit before plotting. The x- and y-axis limits
-        (xlo,xhi,ylo,yhi) are ignored. 
+        density legend is displayed on the RHS if ``colbar`` is set to
+        True before plotting. If z-axis limits are specified, then
+        values larger than the upper limit are set equal to the upper
+        limit and values smaller than the lower limit are set equal to
+        the lower limit before plotting. 
+
+        The python function imshow() is used, unless 'pcm=True' is
+        specified, in which case the pcolormesh() function is used
+        instead. When 'pcm=False', logarithmic scales are handled by
+        taking the base 10 log of the x- or y-grids specified in the
+        table3d object before plotting. When 'pcm=True', logarithmic
+        axes can be handled automatically. The imshow() function
+        presumes a uniform linear or logarithmic x- and y-axis grid,
+        and the den-plot function will output a warning if this is not
+        the case. The pcolormesh() function can handle arbitrary x and
+        y-axis grids. If ``logz`` is set to true, then the base 10
+        logarithm is taken of the data before the density plot is
+        constructed. 
+
+        Some useful kwargs are cmap, interpolation (for
+        imshow), alpha, vmin, and vmax. 
+
+        See 
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html
+        and
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.pcolormesh.html
+        for more information and keyword arguments.
+
+        For objects of type ``hist_2d``:
+
+        Create a density plot from a hist_2d object
+
+        Command-line arguments: ``[kwargs]``
+
+        Creates a density plot from the current two-dimensional
+        histogram. A z-axis density legend is displayed on the RHS if
+        ``colbar`` is set to True before plotting. If z-axis limits
+        are specified, then values larger than the upper limit are set
+        equal to the upper limit and values smaller than the lower
+        limit are set equal to the lower limit before plotting.
 
         The python function imshow() is used, unless 'pcm=True' is
         specified, in which case the pcolormesh() function is used
@@ -748,7 +783,7 @@ class o2graph_plotter(yt_plot_base):
         If the tensor has rank 2 and the indices are not specified,
         then plot the first index along the x-axis and the second
         index along the y-axis. A z-axis density legend is print on
-        the RHS if colbar is set to 1 before plotting. If z-axis
+        the RHS if ``colbar`` is set to 1 before plotting. If z-axis
         limits are specified, then values larger than the upper limit
         are set equal to the upper limit and values smaller than the
         lower limit are set equal to the lower limit before plotting.
@@ -762,7 +797,7 @@ class o2graph_plotter(yt_plot_base):
         If the tensor has rank 2 and the indices are not specified,
         then plot the first index along the x-axis and the second
         index along the y-axis. A z-axis density legend is print on
-        the RHS if colbar is set to 1 before plotting. If z-axis
+        the RHS if ``colbar`` is set to 1 before plotting. If z-axis
         limits are specified, then values larger than the upper limit
         are set equal to the upper limit and values smaller than the
         lower limit are set equal to the lower limit before plotting.
@@ -776,7 +811,7 @@ class o2graph_plotter(yt_plot_base):
         If the tensor has rank 2 and the indices are not specified,
         then plot the first index along the x-axis and the second
         index along the y-axis. A z-axis density legend is print on
-        the RHS if colbar is set to 1 before plotting. If z-axis
+        the RHS if ``colbar`` is set to 1 before plotting. If z-axis
         limits are specified, then values larger than the upper limit
         are set equal to the upper limit and values smaller than the
         lower limit are set equal to the lower limit before plotting.
@@ -790,7 +825,7 @@ class o2graph_plotter(yt_plot_base):
         If the tensor has rank 2 and the indices are not specified,
         then plot the first index along the x-axis and the second
         index along the y-axis. A z-axis density legend is print on
-        the RHS if colbar is set to 1 before plotting. If z-axis
+        the RHS if ``colbar`` is set to 1 before plotting. If z-axis
         limits are specified, then values larger than the upper limit
         are set equal to the upper limit and values smaller than the
         lower limit are set equal to the lower limit before plotting.
@@ -831,8 +866,14 @@ class o2graph_plotter(yt_plot_base):
             if len(args)>=3:
                 kwstring=args[2]
         elif curr_type==b'hist_2d':
-            print('Command den-plot not yet supported for hist_2d.')
+            
+            if len(args)>=1:
+                kwstring=args[0]
+                
+            dctt=string_to_dict(kwstring)
+            self.den_plot([amt.get_hist_2d_obj()],**dctt)
             return
+        
         elif curr_type==b'table3d':
             slice_name=args[0]
             if len(args)>=2:
@@ -2677,7 +2718,7 @@ class o2graph_plotter(yt_plot_base):
                 if cmd==line[1]:
                     match=True
                     print('\n'+str_line)
-                    print('here2')
+                    #print('here2')
                     reformat_python_docs_type(line[0],cmd,line[2],amp,link)
                     
         # If we haven't matched yet, check for get/set parameters
@@ -2771,7 +2812,7 @@ class o2graph_plotter(yt_plot_base):
             if curr_type!='':
                 for line in extra_list:
                     if force_bytes(line[0])==curr_type:
-                        print('here3')
+                        #print('here3')
                         short=reformat_python_docs_type(curr_type,line[1],
                                                         line[2],amp,
                                                         link,True)

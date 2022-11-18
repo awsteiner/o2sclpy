@@ -1514,6 +1514,54 @@ class hist_2d:
         func(self._ptr,i,j,val)
         return
 
+    def get_x_low_i(self,i):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_hist_2d_get_x_low_i
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,i)
+        return ret
+
+    def get_x_high_i(self,i):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_hist_2d_get_x_high_i
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,i)
+        return ret
+
+    def get_y_low_i(self,i):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_hist_2d_get_y_low_i
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,i)
+        return ret
+
+    def get_y_high_i(self,i):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_hist_2d_get_y_high_i
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,i)
+        return ret
+
     def set_wgt(self,x,y,val):
         """
         | Parameters:
@@ -1525,6 +1573,17 @@ class hist_2d:
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double]
         func(self._ptr,x,y,val)
         return
+
+    def get_wgts(self):
+        """
+        | Returns: :class:`ublas_matrix` object
+        """
+        func=self._link.o2scl.o2scl_hist_2d_get_wgts
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        ret2=ublas_matrix(self._link,ret)
+        return ret2
 
     def clear(self):
         """
