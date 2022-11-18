@@ -913,8 +913,8 @@ class o2graph_plotter(yt_plot_base):
             kwstring=args[4]
 
         dctt=string_to_dict(kwstring)
-        self.den_plot(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
-                      fname,**dctt)
+        self.den_plot_rgb(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
+                          make_png=fname,**dctt)
             
         return
 

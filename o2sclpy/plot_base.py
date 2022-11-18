@@ -2260,7 +2260,8 @@ class plot_base:
                 
         return
     
-    def den_plot_rgb(self,table3d,slice_r,slice_g,slice_b,**kwargs):
+    def den_plot_rgb(self,table3d,slice_r,slice_g,slice_b,
+                     make_png=False,**kwargs):
         """
         Density plot from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
@@ -2272,15 +2273,23 @@ class plot_base:
         ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
 
         slr=table3d.get_slice(slice_r).to_numpy()
-        slr=slr.transpose()
+        # Commented out on 11/5 for ima.cpp
+        #slr=slr.transpose()
         slg=table3d.get_slice(slice_g).to_numpy()
-        slg=slg.transpose()
+        # Commented out on 11/5 for ima.cpp
+        #slg=slg.transpose()
         slb=table3d.get_slice(slice_b).to_numpy()
-        slb=slb.transpose()
+        # Commented out on 11/5 for ima.cpp
+        #slb=slb.transpose()
 
         # Allocate the python storage
         sl_all=numpy.zeros((nyt,nxt,3))
 
+        #    self.den_plot_rgb(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
+        #File "/usr/local/lib/python3.10/dist-packages/o2sclpy/
+        #plot_base.py", line 2287, in den_plot_rgb
+        #sl_all[j,i,0]=slr[i,j]
+        
         for i in range(0,nxt):
             for j in range(0,nyt):
                 sl_all[j,i,0]=slr[i,j]
@@ -2311,6 +2320,44 @@ class plot_base:
         #             elif sl_b[i][j]<self.zlo:
         #                 sl_b[i][j]=self.zlo
 
+        if len(make_png)>0:
+            from PIL import Image
+            im=Image.new(mode='RGB',size=(nxt,nyt))
+            pixels=im.load()
+            
+            min_val=sl_all[0,0,0]
+            max_val=sl_all[0,0,0]
+            
+            for i in range(0,nxt):
+                for j in range(0,nyt):
+                    if sl_all[j,i,0]<min_val:
+                        min_val=sl_all[j,i,0]
+                    if sl_all[j,i,1]<min_val:
+                        min_val=sl_all[j,i,1]
+                    if sl_all[j,i,2]<min_val:
+                        min_val=sl_all[j,i,2]
+                    if sl_all[j,i,0]>max_val:
+                        max_val=sl_all[j,i,0]
+                    if sl_all[j,i,1]>max_val:
+                        max_val=sl_all[j,i,1]
+                    if sl_all[j,i,2]>max_val:
+                        max_val=sl_all[j,i,2]
+
+            print('o2graph::make-png(): Minimum is',
+                  min_val,'maximum is',max_val,'.')
+                        
+            for i in range(0,nxt):
+                for j in range(0,nyt):
+                    pixels[i,j]=(int(256*(sl_all[j,i,0]-min_val)/
+                                     (max_val-min_val)),
+                                 int(256*(sl_all[j,i,1]-min_val)/
+                                     (max_val-min_val)),
+                                 int(256*(sl_all[j,i,2]-min_val)/
+                                     (max_val-min_val)))
+
+            im.save(make_png)
+            return
+        
         if self.canvas_flag==False:
             self.canvas()
 
@@ -2321,10 +2368,10 @@ class plot_base:
             
         if self.logx==True:
             xgrid=[math.log(ptrx[i],10) for i in
-                   range(0,nx.value)]
+                   range(0,nxt)]
         if self.logy==True:
             ygrid=[math.log(ptry[i],10) for i in
-                   range(0,ny.value)]
+                   range(0,nyt)]
 
         diffs_x=[xgrid[i+1]-xgrid[i] for i in range(0,len(xgrid)-1)]
         mean_x=numpy.mean(diffs_x)
@@ -2344,11 +2391,11 @@ class plot_base:
             print('  The density plot may not be properly scaled.')
                 
         extent1=xgrid[0]-(xgrid[1]-xgrid[0])/2
-        extent2=xgrid[nx.value-1]+(xgrid[nx.value-1]-
-                                   xgrid[nx.value-2])/2
+        extent2=xgrid[nxt-1]+(xgrid[nxt-1]-
+                                   xgrid[nxt-2])/2
         extent3=ygrid[0]-(ygrid[1]-ygrid[0])/2
-        extent4=ygrid[ny.value-1]+(ygrid[ny.value-1]-
-                                   ygrid[ny.value-2])/2
+        extent4=ygrid[nyt-1]+(ygrid[nyt-1]-
+                                   ygrid[nyt-2])/2
                         
         f=self.axes.imshow
         self.last_image=f(sl_all,
