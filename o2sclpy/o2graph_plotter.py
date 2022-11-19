@@ -1289,8 +1289,7 @@ class o2graph_plotter(yt_plot_base):
                                        **string_to_dict(args[4]))
 
                 if self.colbar==True:
-                    cbar=self.fig.colorbar(mapper,
-                                           ax=self.axes)
+                    cbar=self.fig.colorbar(mapper,ax=self.axes)
                     cbar.ax.tick_params('both',length=6,width=1,which='major')
                     cbar.ax.tick_params(labelsize=self.font*0.8)
                     
@@ -2473,6 +2472,7 @@ class o2graph_plotter(yt_plot_base):
                 dct=string_to_dict(self.fig_dict)
                 if ('right_margin' not in dct.keys() or
                     dct['right_margin']<0.1):
+                    print('xxx')
                     dct['right_margin']=0.15
                 if 'top_margin' not in dct.keys():
                     dct['top_margin']=0.06

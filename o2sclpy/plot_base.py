@@ -1927,6 +1927,11 @@ class plot_base:
         axname="cbar"+str(ifound)
         
         if image=='last':
+            #print('1')
+            #print(self.axes)
+            #print('2')
+            #print(self.fig)
+            #print('3')
             self.axes=self.fig.add_axes([left,bottom,width,height])
             self.axes_dict[axname]=self.axes
             print('Created new axes named',axname)
