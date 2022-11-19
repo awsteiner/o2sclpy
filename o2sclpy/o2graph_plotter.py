@@ -1884,6 +1884,10 @@ class o2graph_plotter(yt_plot_base):
         amt=acol_manager(link,amp)
         curr_type=o2scl_get_type(o2scl,amp,link)
 
+        if len(args)>=3:
+            kwargs=string_to_dict(args[2])
+            filt=kwargs.pop('filter','')
+        
         if self.canvas_flag==False:
             self.canvas()
 
@@ -1908,30 +1912,38 @@ class o2graph_plotter(yt_plot_base):
                               i,'and y vector',j,'dont have the same',
                               'size.')
                         print('  Length of x:',len(vvdx[i]),'y:',len(vvdy[j]))
+                    if len(filt)>0:
+                        for k in range(0,len(vvdx[i])):
+                            x=vvdx[i][k]
+                            y=vvdy[j][k]
+                            if eval(filt)==False:
+                                print('need to erase')
+                                print('eval',x,y,k,eval(filt))
+                                quit()
                     if self.logx==True:
                         if self.logy==True:
                             if len(args)>=3:
                                 self.axes.loglog(vvdx[i],vvdy[j],
-                                                 **string_to_dict(args[2]))
+                                                 **kwargs)
                             else:
                                 self.axes.loglog(vvdx[i],vvdy[j])
                         else:
                             if len(args)>=3:
                                 self.axes.semilogx(vvdx[i],vvdy[j],
-                                                 **string_to_dict(args[2]))
+                                                 **kwargs)
                             else:
                                 self.axes.semilogx(vvdx[i],vvdy[j])
                     else:
                         if self.logy==True:
                             if len(args)>=3:
                                 self.axes.semilogy(vvdx[i],vvdy[j],
-                                                 **string_to_dict(args[2]))
+                                                 **kwargs)
                             else:
                                 self.axes.semilogy(vvdx[i],vvdy[j])
                         else:
                             if len(args)>=3:
                                 self.axes.plot(vvdx[i],vvdy[j],
-                                                 **string_to_dict(args[2]))
+                                               **kwargs)
                             else:
                                 self.axes.plot(vvdx[i],vvdy[j])
             
@@ -5040,7 +5052,7 @@ class o2graph_plotter(yt_plot_base):
                     elif ix_next-ix==2:
                         self.xtitle(strlist[ix+1])
                     elif ix_next-ix>2 and ix_next-ix<5:
-                        print('All three location parameters needed.')
+                        print('All three location parameters (xtitle).')
                     elif ix_next-ix==5:
                         self.xtitle(strlist[ix+1],
                                     loc=[float(eval(strlist[ix+2])),
@@ -5058,7 +5070,7 @@ class o2graph_plotter(yt_plot_base):
                     elif ix_next-ix==2:
                         self.ytitle(strlist[ix+1])
                     elif ix_next-ix>2 and ix_next-ix<5:
-                        print('All three location parameters needed.')
+                        print('All three location parameters needed (ytitle).')
                     elif ix_next-ix==5:
                         self.ytitle(strlist[ix+1],
                                     loc=[float(eval(strlist[ix+2])),
