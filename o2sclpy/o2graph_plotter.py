@@ -1884,6 +1884,7 @@ class o2graph_plotter(yt_plot_base):
         amt=acol_manager(link,amp)
         curr_type=o2scl_get_type(o2scl,amp,link)
 
+        filt=''
         if len(args)>=3:
             kwargs=string_to_dict(args[2])
             filt=kwargs.pop('filter','')
