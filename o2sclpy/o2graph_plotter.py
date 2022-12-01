@@ -1908,45 +1908,54 @@ class o2graph_plotter(yt_plot_base):
 
             for i in range(0,vvdx.size()):
                 for j in range(0,vvdy.size()):
-                    if len(vvdx[i])!=len(vvdy[j]):
+
+                    xarr=vvdx[i]
+                    yarr=vvdy[j]
+                    
+                    if len(xarr)!=len(yarr):
                         print('o2graph command plotv warning: x vector',
                               i,'and y vector',j,'dont have the same',
                               'size.')
-                        print('  Length of x:',len(vvdx[i]),'y:',len(vvdy[j]))
+                        print('  Length of x:',len(xarr),'y:',len(yarr))
                     if len(filt)>0:
-                        for k in range(0,len(vvdx[i])):
-                            x=vvdx[i][k]
-                            y=vvdy[j][k]
-                            if eval(filt)==False:
-                                print('need to erase')
-                                print('eval',x,y,k,eval(filt))
-                                quit()
+                        xarr2=[]
+                        yarr2=[]
+                        for k in range(0,len(xarr)):
+                            if k<len(xarr):
+                                x=xarr[k]
+                                y=yarr[k]
+                                if eval(filt)==True:
+                                    xarr2.append(xarr[k])
+                                    yarr2.append(yarr[k])
+                    else:
+                        xarr2=xarr
+                        yarr2=yarr
                     if self.logx==True:
                         if self.logy==True:
                             if len(args)>=3:
-                                self.axes.loglog(vvdx[i],vvdy[j],
+                                self.axes.loglog(xarr2,yarr2,
                                                  **kwargs)
                             else:
-                                self.axes.loglog(vvdx[i],vvdy[j])
+                                self.axes.loglog(xarr2,yarr2)
                         else:
                             if len(args)>=3:
-                                self.axes.semilogx(vvdx[i],vvdy[j],
+                                self.axes.semilogx(xarr2,yarr2,
                                                  **kwargs)
                             else:
-                                self.axes.semilogx(vvdx[i],vvdy[j])
+                                self.axes.semilogx(xarr2,yarr2)
                     else:
                         if self.logy==True:
                             if len(args)>=3:
-                                self.axes.semilogy(vvdx[i],vvdy[j],
+                                self.axes.semilogy(xarr2,yarr2,
                                                  **kwargs)
                             else:
-                                self.axes.semilogy(vvdx[i],vvdy[j])
+                                self.axes.semilogy(xarr2,yarr2)
                         else:
                             if len(args)>=3:
-                                self.axes.plot(vvdx[i],vvdy[j],
+                                self.axes.plot(xarr2,yarr2,
                                                **kwargs)
                             else:
-                                self.axes.plot(vvdx[i],vvdy[j])
+                                self.axes.plot(xarr2,yarr2)
             
         else:
             
