@@ -1863,8 +1863,7 @@ class o2graph_plotter(yt_plot_base):
         return
             
     def plotv(self,o2scl,amp,link,args):
-        """
-        Documentation for o2graph command ``plotv``:
+        """Documentation for o2graph command ``plotv``:
 
         Plot several vector-like data sets.
 
@@ -1879,6 +1878,13 @@ class o2graph_plotter(yt_plot_base):
         truncated. Any kwargs are applied to all curves plotted. For
         details on multiple vector specifications, use o2graph -help
         mult-vector-spec.
+
+        There is an additional keyword argument ``filter``. The filter
+        is parsed through the python eval() function and all pairs of
+        points for which the function evaluates to False are omitted
+        from the plot. Local variables of interest are ``x`` and
+        ``y``, corresponding to the x and y value at each point, and
+        ``k``, the current array index.
         """
 
         amt=acol_manager(link,amp)
@@ -1974,33 +1980,50 @@ class o2graph_plotter(yt_plot_base):
                 kwstring=args[1]
             
             for j in range(0,vvdy.size()):
-                vvdx=[i for i in range(0,len(vvdy[j]))]
+
+                yarr=vvdy[j]
+                xarr=[i for i in range(0,len(vvdy[j]))]
+
+                if len(filt)>0:
+                    xarr2=[]
+                    yarr2=[]
+                    for k in range(0,len(xarr)):
+                        if k<len(xarr):
+                        x=xarr[k]
+                        y=yarr[k]
+                        if eval(filt)==True:
+                            xarr2.append(xarr[k])
+                            yarr2.append(yarr[k])
+                else:
+                    xarr2=xarr
+                    yarr2=yarr
+                
                 if self.logx==True:
                     if self.logy==True:
                         if kwstring!='':                            
-                            self.axes.loglog(vvdx,vvdy[j],
+                            self.axes.loglog(xarr2,yarr2,
                                              **string_to_dict(kwstring))
                         else:
-                            self.axes.loglog(vvdx,vvdy[j])
+                            self.axes.loglog(xarr2,yarr2)
                     else:
                         if kwstring!='':
-                            self.axes.semilogx(vvdx,vvdy[j],
+                            self.axes.semilogx(xarr2,yarr2,
                                              **string_to_dict(kwstring))
                         else:
-                            self.axes.semilogx(vvdx,vvdy[j])
+                            self.axes.semilogx(xarr2,yarr2)
                 else:
                     if self.logy==True:
                         if kwstring!='':
-                            self.axes.semilogy(vvdx,vvdy[j],
+                            self.axes.semilogy(xarr2,yarr2,
                                              **string_to_dict(kwstring))
                         else:
-                            self.axes.semilogy(vvdx,vvdy[j])
+                            self.axes.semilogy(xarr2,yarr2)
                     else:
                         if kwstring!='':
-                            self.axes.plot(vvdx,vvdy[j],
+                            self.axes.plot(xarr2,yarr2,
                                              **string_to_dict(kwstring))
                         else:
-                            self.axes.plot(vvdx,vvdy[j])
+                            self.axes.plot(xarr2,yarr2)
                     
         # End of function o2graph_plotter::plotv()
         return
