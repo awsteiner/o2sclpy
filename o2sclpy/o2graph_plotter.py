@@ -1991,11 +1991,11 @@ class o2graph_plotter(yt_plot_base):
                     yarr2=[]
                     for k in range(0,len(xarr)):
                         if k<len(xarr):
-                        x=xarr[k]
-                        y=yarr[k]
-                        if eval(filt)==True:
-                            xarr2.append(xarr[k])
-                            yarr2.append(yarr[k])
+                            x=xarr[k]
+                            y=yarr[k]
+                            if eval(filt)==True:
+                                xarr2.append(xarr[k])
+                                yarr2.append(yarr[k])
                 else:
                     xarr2=xarr
                     yarr2=yarr
