@@ -2266,10 +2266,18 @@ class plot_base:
         return
     
     def den_plot_rgb(self,table3d,slice_r,slice_g,slice_b,
-                     make_png=False,**kwargs):
+                     make_png='',renorm=False,**kwargs):
         """
         Density plot from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
+
+        If make_png is non-empty, then a .png is created, with no
+        axes, and stored in a file given the specified name.
+        In the case a .png file is to be created and renorm is 
+        True, then the data is renormalized to ensure the minimum
+        is 0 and the maximum is 255. Otherwise, the data is 
+        set to 0 if it is less than 0 and set to 255 when it is
+        greater than 255. 
         """
 
         nxt=table3d.get_nx()
@@ -2290,11 +2298,6 @@ class plot_base:
         # Allocate the python storage
         sl_all=numpy.zeros((nyt,nxt,3))
 
-        #    self.den_plot_rgb(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
-        #File "/usr/local/lib/python3.10/dist-packages/o2sclpy/
-        #plot_base.py", line 2287, in den_plot_rgb
-        #sl_all[j,i,0]=slr[i,j]
-        
         for i in range(0,nxt):
             for j in range(0,nyt):
                 sl_all[j,i,0]=slr[i,j]
@@ -2329,36 +2332,52 @@ class plot_base:
             from PIL import Image
             im=Image.new(mode='RGB',size=(nxt,nyt))
             pixels=im.load()
-            
-            min_val=sl_all[0,0,0]
-            max_val=sl_all[0,0,0]
-            
-            for i in range(0,nxt):
-                for j in range(0,nyt):
-                    if sl_all[j,i,0]<min_val:
-                        min_val=sl_all[j,i,0]
-                    if sl_all[j,i,1]<min_val:
-                        min_val=sl_all[j,i,1]
-                    if sl_all[j,i,2]<min_val:
-                        min_val=sl_all[j,i,2]
-                    if sl_all[j,i,0]>max_val:
-                        max_val=sl_all[j,i,0]
-                    if sl_all[j,i,1]>max_val:
-                        max_val=sl_all[j,i,1]
-                    if sl_all[j,i,2]>max_val:
-                        max_val=sl_all[j,i,2]
 
-            print('o2graph::make-png(): Minimum is',
-                  min_val,'maximum is',max_val,'.')
+            if renorm:
+                min_val=sl_all[0,0,0]
+                max_val=sl_all[0,0,0]
+            
+                for i in range(0,nxt):
+                    for j in range(0,nyt):
+                        if sl_all[j,i,0]<min_val:
+                            min_val=sl_all[j,i,0]
+                        if sl_all[j,i,1]<min_val:
+                            min_val=sl_all[j,i,1]
+                        if sl_all[j,i,2]<min_val:
+                            min_val=sl_all[j,i,2]
+                        if sl_all[j,i,0]>max_val:
+                            max_val=sl_all[j,i,0]
+                        if sl_all[j,i,1]>max_val:
+                            max_val=sl_all[j,i,1]
+                        if sl_all[j,i,2]>max_val:
+                            max_val=sl_all[j,i,2]
+
+                print('o2graph::make-png(): Minimum is',
+                      min_val,'maximum is',max_val,'.')
                         
-            for i in range(0,nxt):
-                for j in range(0,nyt):
-                    pixels[i,j]=(int(256*(sl_all[j,i,0]-min_val)/
-                                     (max_val-min_val)),
-                                 int(256*(sl_all[j,i,1]-min_val)/
-                                     (max_val-min_val)),
-                                 int(256*(sl_all[j,i,2]-min_val)/
-                                     (max_val-min_val)))
+                for i in range(0,nxt):
+                    for j in range(0,nyt):
+                        pixels[i,j]=(int(256*(sl_all[j,i,0]-min_val)/
+                                         (max_val-min_val)),
+                                     int(256*(sl_all[j,i,1]-min_val)/
+                                         (max_val-min_val)),
+                                     int(256*(sl_all[j,i,2]-min_val)/
+                                         (max_val-min_val)))
+            else:
+                for i in range(0,nxt):
+                    for j in range(0,nyt):
+                        if sl_all[j,i,0]<0:
+                            sl_all[j,i,0]=0
+                        if sl_all[j,i,1]<0:
+                            sl_all[j,i,1]=0
+                        if sl_all[j,i,2]<0:
+                            sl_all[j,i,2]=0
+                        if sl_all[j,i,0]>255:
+                            sl_all[j,i,0]=255
+                        if sl_all[j,i,1]>255:
+                            sl_all[j,i,1]=255
+                        if sl_all[j,i,2]>255:
+                            sl_all[j,i,2]=255
 
             im.save(make_png)
             return
