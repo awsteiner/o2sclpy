@@ -2378,6 +2378,9 @@ class plot_base:
                             sl_all[j,i,1]=255
                         if sl_all[j,i,2]>255:
                             sl_all[j,i,2]=255
+                        pixels[i,j]=(int(sl_all[j,i,0]),
+                                     int(sl_all[j,i,1]),
+                                     int(sl_all[j,i,2]))
 
             im.save(make_png)
             return
