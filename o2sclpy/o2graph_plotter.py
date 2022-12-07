@@ -953,9 +953,9 @@ class o2graph_plotter(yt_plot_base):
         if len(args)>=5:
             kwstring=args[4]
 
-        renorm=kwargs.pop('renorm',False)
-            
         dctt=string_to_dict(kwstring)
+        renorm=dctt.pop('renorm',False)
+            
         self.den_plot_rgb(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
                           make_png=fname,renorm=renorm,**dctt)
             

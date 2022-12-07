@@ -2382,7 +2382,7 @@ class plot_base:
                                      int(sl_all[j,i,1]),
                                      int(sl_all[j,i,2]))
 
-            im.save(make_png)
+            im.save(make_png,optimize=True)
             return
         
         if self.canvas_flag==False:
@@ -2499,7 +2499,7 @@ class plot_base:
                              int(256*(sl_all[j,i,2]-min_val)/
                                  (max_val-min_val)))
 
-        im.save(fname)
+        im.save(fname,optimize=True)
             
         return
     
