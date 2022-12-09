@@ -874,6 +874,26 @@ class acol_manager:
         func(self._ptr,value)
         return
 
+    def get_def_args(self):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_def_args
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
+
+    def set_def_args(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_def_args
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
     def get_type(self):
         """
         Get object of type :class:`std::string`
@@ -1494,6 +1514,26 @@ class acol_manager:
         func(self._ptr,value._ptr)
         return
 
+    def get_color_spec(self):
+        """
+        Get object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_get_color_spec
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p]
+        s=std_string(self._link)
+        s._ptr=func(self._ptr)
+        return s.to_bytes()
+
+    def set_color_spec(self,value):
+        """
+        Set object of type :class:`std::string`
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_set_color_spec
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
     def help_found(self,arg1,arg2):
         """
         | Parameters:
@@ -1514,6 +1554,16 @@ class acol_manager:
         | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_run_empty
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def validate_interp_type(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_validate_interp_type
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)

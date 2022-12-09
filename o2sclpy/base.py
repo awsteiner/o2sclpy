@@ -9299,17 +9299,18 @@ class cli:
         ret=func(self._ptr,v)
         return ret
 
-    def parse_for_aliases(self,sv,allow_undashed):
+    def parse_for_aliases(self,sv,allow_undashed,debug=False):
         """
         | Parameters:
         | *sv*: :class:`std_vector_string` object
         | *allow_undashed*: ``bool``
+        | *debug* =false: ``bool``
         | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_cli_parse_for_aliases
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
-        ret=func(self._ptr,sv._ptr,allow_undashed)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_bool]
+        ret=func(self._ptr,sv._ptr,allow_undashed,debug)
         return ret
 
     def apply_aliases(self,sv,istart,debug=False):

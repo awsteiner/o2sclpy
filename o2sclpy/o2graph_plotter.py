@@ -2165,6 +2165,11 @@ class o2graph_plotter(yt_plot_base):
         # Create an acol_manager object and get the pointer
         am=acol_manager(link)
         amp=am._ptr
+
+        s=std_string(link)
+        s.init_bytes(b'O2GRAPH_DEFAULTS')
+        am.set_env_var_name(s)
+        
         am.run_empty()
         cl=am.get_cl()
 
@@ -2175,22 +2180,31 @@ class o2graph_plotter(yt_plot_base):
                   b'O2scl'+force_bytes(ter.default_fgbg())+
                   b'.\n  Version: '+force_bytes(version)+b'\n')
 
-        s=std_string(link)
-        
-        s.init_bytes(b'O2GRAPH_DEFAULTS')
-        am.set_env_var_name(s)
-        
         s.init_bytes(b'o2graph')
         cl.set_cmd_name(s)
         
         s.init_bytes(cmd_desc)
         cl.set_desc(s)
 
-        if True:
-            vs=std_vector_string(link)
-            vs.set_list(argv)
-            cl.apply_aliases(vs,0)
-            
+        # 12/9 The problem here is that o2graph appears to be
+        # using acol to process the aliases. I think everything
+        # may be fixed now with aliases.
+        
+        #if 'O2GRAPH_DEFAULTS' in os.environ:
+        #    am.def_args=os.environ['O2GRAPH_DEFAULTS']
+        #    vs_da=am.def_args.split()
+        #    print('parsing default args')
+        #    print('vs_da:',vs_da);
+        #    vs_da2=std_vector_string(link)
+        #    vs_da2.set_list(vs_da)
+        #    print('here, going to pfa')
+        #    cl.parse_for_aliases(vs_da2,True)
+        #    print('vs2:',vs_da);
+        #    self.parse_string_list(vs_da,o2scl,amp,link)
+        #    print('done.')
+        #else:
+        #    am.def_args=''
+
         if len(argv)<=1:
             done_flag=False
             readline.parse_and_bind('tab: complete')
@@ -2204,7 +2218,14 @@ class o2graph_plotter(yt_plot_base):
                     strlist[0]='-'+strlist[0]
                     self.parse_string_list(strlist,o2scl,amp,link)
         else:
-            strlist=[str(argv[i]) for i in range(1,len(argv))]
+            
+            vs=std_vector_string(link)
+            vs.set_list(argv)
+            cl.apply_aliases(vs,0,True)
+            strlist=[]
+            for i in range(0,len(vs)):
+                strlist.append(force_string(vs[i]))
+            
             if self.verbose>2:
                 print('Number of arguments:',len(strlist),'arguments.')
                 print('Argument List:',strlist)

@@ -31,9 +31,6 @@ l=linker()
 backend=l.get_library_settings(sys.argv)
 l.link_o2scl()
 
-#if os.getenv('O2GRAPH_TEST')=='1':
-#    backend='Agg'
-    
 if backend!='':
     import matplotlib
     matplotlib.use(backend)
