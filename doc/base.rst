@@ -52,9 +52,8 @@ class.
 * :ref:`Class convert_units`
 * :ref:`Class columnify`
 * :ref:`Class format_float`
-* :ref:`Class interp`
 * :ref:`Class interp_vec`
-* :ref:`Class interp_krige_optim`
+* :ref:`Class interp_krige_optim_rbf_noise`
 * :ref:`Class terminal`
 * :ref:`Class gen_test_number`
 * :ref:`Class funct_string`
@@ -618,17 +617,6 @@ Class format_float
         .. automethod:: __del__
         .. automethod:: __copy__
 
-Class interp
-------------
-
-.. autoclass:: o2sclpy.interp
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
 Class interp_vec
 ----------------
 
@@ -640,10 +628,10 @@ Class interp_vec
         .. automethod:: __del__
         .. automethod:: __copy__
 
-Class interp_krige_optim
-------------------------
+Class interp_krige_optim_rbf_noise
+----------------------------------
 
-.. autoclass:: o2sclpy.interp_krige_optim
+.. autoclass:: o2sclpy.interp_krige_optim_rbf_noise
         :members:
         :undoc-members:
 

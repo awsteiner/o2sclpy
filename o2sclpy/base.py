@@ -7669,134 +7669,6 @@ class format_float:
         return strt.to_bytes()
 
 
-class interp:
-    """
-    Python interface for O₂scl class ``interp<std::vector<double>>``,
-    see
-    https://neutronstars.utk.edu/code/o2scl/html/class/interp<std::vector<double>>.html .
-    
-    """
-
-    _ptr=0
-    _link=0
-    _owner=True
-
-    def __init__(self,link,pointer=0):
-        """
-        Init function for class interp
-
-        | Parameters:
-        | *link* :class:`linker` object
-        | *pointer* ``ctypes.c_void_p`` pointer
-
-        """
-
-        if pointer==0:
-            f=link.o2scl.o2scl_create_interp_std_vector_double_
-            f.restype=ctypes.c_void_p
-            f.argtypes=[]
-            self._ptr=f()
-        else:
-            self._ptr=pointer
-            self._owner=False
-        self._link=link
-        return
-
-    def __del__(self):
-        """
-        Delete function for class interp
-        """
-
-        if self._owner==True:
-            f=self._link.o2scl.o2scl_free_interp_std_vector_double_
-            f.argtypes=[ctypes.c_void_p]
-            f(self._ptr)
-            self._owner=False
-            self._ptr=0
-        return
-
-    def __copy__(self):
-        """
-        Shallow copy function for class interp
-        
-        Returns: interp object
-        """
-
-        new_obj=type(self)(self._link,self._ptr)
-        return new_obj
-
-    def eval(self,x0,n,x,y):
-        """
-        | Parameters:
-        | *x0*: ``double``
-        | *n*: ``size_t``
-        | *x*: :class:`std_vector` object
-        | *y*: :class:`std_vector` object
-        | Returns: a Python float
-        """
-        func=self._link.o2scl.o2scl_interp_std_vector_double__eval
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
-        ret=func(self._ptr,x0,n,x._ptr,y._ptr)
-        return ret
-
-    def deriv(self,x0,n,x,y):
-        """
-        | Parameters:
-        | *x0*: ``double``
-        | *n*: ``size_t``
-        | *x*: :class:`std_vector` object
-        | *y*: :class:`std_vector` object
-        | Returns: a Python float
-        """
-        func=self._link.o2scl.o2scl_interp_std_vector_double__deriv
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
-        ret=func(self._ptr,x0,n,x._ptr,y._ptr)
-        return ret
-
-    def deriv2(self,x0,n,x,y):
-        """
-        | Parameters:
-        | *x0*: ``double``
-        | *n*: ``size_t``
-        | *x*: :class:`std_vector` object
-        | *y*: :class:`std_vector` object
-        | Returns: a Python float
-        """
-        func=self._link.o2scl.o2scl_interp_std_vector_double__deriv2
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
-        ret=func(self._ptr,x0,n,x._ptr,y._ptr)
-        return ret
-
-    def integ(self,x1,x2,n,x,y):
-        """
-        | Parameters:
-        | *x1*: ``double``
-        | *x2*: ``double``
-        | *n*: ``size_t``
-        | *x*: :class:`std_vector` object
-        | *y*: :class:`std_vector` object
-        | Returns: a Python float
-        """
-        func=self._link.o2scl.o2scl_interp_std_vector_double__integ
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
-        ret=func(self._ptr,x1,x2,n,x._ptr,y._ptr)
-        return ret
-
-    def set_type(self,interp_type):
-        """
-        | Parameters:
-        | *interp_type*: ``int``
-        """
-        func=self._link.o2scl.o2scl_interp_std_vector_double__set_type
-        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
-        func(self._ptr,interp_type)
-        return
-
-
 class interp_vec:
     """
     Python interface for O₂scl class ``interp_vec<std::vector<double>>``,
@@ -7924,11 +7796,11 @@ class interp_vec:
         return ret
 
 
-class interp_krige_optim:
+class interp_krige_optim_rbf_noise:
     """
-    Python interface for O₂scl class ``interp_krige_optim<std::vector<double>>``,
+    Python interface for O₂scl class ``interp_krige_optim<std::vector<double>,std::vector<double>,covar_funct_rbf_noise>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/interp_krige_optim<std::vector<double>>.html .
+    https://neutronstars.utk.edu/code/o2scl/html/class/interp_krige_optim<std::vector<double>,std::vector<double>,covar_funct_rbf_noise>.html .
     
     """
 
@@ -7938,7 +7810,7 @@ class interp_krige_optim:
 
     def __init__(self,link,pointer=0):
         """
-        Init function for class interp_krige_optim
+        Init function for class interp_krige_optim_rbf_noise
 
         | Parameters:
         | *link* :class:`linker` object
@@ -7947,7 +7819,7 @@ class interp_krige_optim:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_interp_krige_optim_std_vector_double_
+            f=link.o2scl.o2scl_create_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -7959,11 +7831,11 @@ class interp_krige_optim:
 
     def __del__(self):
         """
-        Delete function for class interp_krige_optim
+        Delete function for class interp_krige_optim_rbf_noise
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_interp_krige_optim_std_vector_double_
+            f=self._link.o2scl.o2scl_free_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -7972,9 +7844,9 @@ class interp_krige_optim:
 
     def __copy__(self):
         """
-        Shallow copy function for class interp_krige_optim
+        Shallow copy function for class interp_krige_optim_rbf_noise
         
-        Returns: interp_krige_optim object
+        Returns: interp_krige_optim_rbf_noise object
         """
 
         new_obj=type(self)(self._link,self._ptr)
@@ -7985,7 +7857,7 @@ class interp_krige_optim:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_mode_loo_cv
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__get_mode_loo_cv
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -7995,7 +7867,7 @@ class interp_krige_optim:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_mode_loo_cv_bf
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__get_mode_loo_cv_bf
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -8005,7 +7877,7 @@ class interp_krige_optim:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_mode_max_lml
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__get_mode_max_lml
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -8015,7 +7887,7 @@ class interp_krige_optim:
         """
         Property of type ``ctypes.c_int``
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_verbose
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__get_verbose
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -8023,9 +7895,9 @@ class interp_krige_optim:
     @verbose.setter
     def verbose(self,value):
         """
-        Setter function for interp_krige_optim<std::vector<double>>::verbose .
+        Setter function for interp_krige_optim<std::vector<double>,std::vector<double>,covar_funct_rbf_noise>::verbose .
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_verbose
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__set_verbose
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,value)
         return
@@ -8035,7 +7907,7 @@ class interp_krige_optim:
         """
         Property of type ``ctypes.c_size_t``
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_mode
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__get_mode
         func.restype=ctypes.c_size_t
         func.argtypes=[ctypes.c_void_p]
         return func(self._ptr)
@@ -8043,80 +7915,23 @@ class interp_krige_optim:
     @mode.setter
     def mode(self,value):
         """
-        Setter function for interp_krige_optim<std::vector<double>>::mode .
+        Setter function for interp_krige_optim<std::vector<double>,std::vector<double>,covar_funct_rbf_noise>::mode .
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_mode
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__set_mode
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,value)
         return
 
-    @property
-    def nlen(self):
-        """
-        Property of type ``ctypes.c_size_t``
-        """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_nlen
-        func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @nlen.setter
-    def nlen(self,value):
-        """
-        Setter function for interp_krige_optim<std::vector<double>>::nlen .
-        """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_nlen
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
-        func(self._ptr,value)
-        return
-
-    @property
-    def full_min(self):
-        """
-        Property of type ``ctypes.c_bool``
-        """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__get_full_min
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @full_min.setter
-    def full_min(self,value):
-        """
-        Setter function for interp_krige_optim<std::vector<double>>::full_min .
-        """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_full_min
-        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
-        func(self._ptr,value)
-        return
-
-    def set_noise(self,size,x,y,noise_var,rescale=False):
+    def set(self,size,x,y):
         """
         | Parameters:
         | *size*: ``size_t``
         | *x*: :class:`std_vector` object
         | *y*: :class:`std_vector` object
-        | *noise_var*: ``double``
-        | *rescale* =false: ``bool``
-        | Returns: a Python int
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set_noise
-        func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_bool]
-        ret=func(self._ptr,size,x._ptr,y._ptr,noise_var,rescale)
-        return ret
-
-    def set(self,size,x,y,rescale):
-        """
-        | Parameters:
-        | *size*: ``size_t``
-        | *x*: :class:`std_vector` object
-        | *y*: :class:`std_vector` object
-        | *rescale*: ``bool``
-        """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__set
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
-        func(self._ptr,size,x._ptr,y._ptr,rescale)
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,size,x._ptr,y._ptr)
         return
 
     def eval(self,x0):
@@ -8125,7 +7940,7 @@ class interp_krige_optim:
         | *x0*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__eval
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__eval
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,x0)
@@ -8137,7 +7952,7 @@ class interp_krige_optim:
         | *x0*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__deriv
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__deriv
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,x0)
@@ -8149,7 +7964,7 @@ class interp_krige_optim:
         | *x0*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__deriv2
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__deriv2
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,x0)
@@ -8161,7 +7976,7 @@ class interp_krige_optim:
         | *x0*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__sigma
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__sigma
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,x0)
@@ -8173,7 +7988,7 @@ class interp_krige_optim:
         | *x0*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__sample
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__sample
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,x0)
@@ -8185,7 +8000,7 @@ class interp_krige_optim:
         | *x*: :class:`std_vector` object
         | *y*: :class:`std_vector` object
         """
-        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double__sample_vec
+        func=self._link.o2scl.o2scl_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise__sample_vec
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,x._ptr,y._ptr)
         return
