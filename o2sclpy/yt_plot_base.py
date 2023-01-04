@@ -100,8 +100,8 @@ class yt_plot_base(plot_base):
     move, and the second entry in each sublist is always the 
     number of frames over which to complete the move.
 
-    Note that this is not set using -set or -get but by the
-    'yt-path' command.
+    Note that this is not set using -set or -get but by the 'yt-path'
+    command.
     """
     yt_ann=[]
     """
@@ -566,17 +566,29 @@ class yt_plot_base(plot_base):
 
         Add text to the yt volume.
 
-        Command-line arguments: ``<x> <y> <z> <text> reorient=False``
+        Command-line arguments: ``<x> <y> <z> <text> [kwargs]``
 
         Plot text given in ``<textstr>`` in a yt volume visualization at
-        location ``(tx,ty,tz)``. If reorient is ``True``, then 
-        the during an animation, the text will be redrawn so that
-        it is parallel to the camera. The ``scale`` and ``font``
-        parameters are passed on to the yt_text_to_scene() function.
+        location ``(tx,ty,tz)``. 
+
+        The keyword arguments and their defaults are
+        ``textcolor=(1,1,1,0.5)``, ``reorient=False``, ``scale=0.6``,
+        ``font=30``, ``keyname='o2sclpy_text'``, ``dpi=100``,
+        ``filename=''``, and ``coords=''``.
+
+        If ``coords`` is empty or ``user``, then the given coordinates
+        are assumed to be in the user coordinate system. If ``coords``
+        is ``internal``, then the coordinates are assumed to be in the
+        internal coordinate system from ``[0,0,0]`` to ``[1,1,1]``. If
+        reorient is ``True``, then the during an animation, the text
+        will be redrawn so that it is parallel to the camera. The
+        ``scale`` and ``font`` parameters are passed on to the
+        yt_text_to_scene() function. 
 
         In the future, the plan is to allow tx, ty, and tz to be
         functions of 'i', so the text can be moved. For now tx, ty,
         and tz are just floating point numbers.
+
         """
 
         if (self.xset==False or self.yset==False or
@@ -837,19 +849,22 @@ class yt_plot_base(plot_base):
 
         Add an axis to the yt volume.
 
-        Command-line arguments: ``xval=1.0,yval=1.0,zval=1.0,
-        color=[1.0,1.0,1.0,0.5],coords='internal',keyname='o2sclpy_axis'``
-        
-        This command plots an axis from the origin to the three points
-        ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. There are
-        two keyword arguments, the first is ``color=[1,1,1,0.5]``, the
-        color of the axis arrows. The other is a string for the
-        coordinate system, and keyname, the name for the yt object.
-        Use ``coords=user`` for the user-based coordinate system and
-        ``coords=internal`` for the internal coordinate system.
+        Command-line arguments: ``[kwargs]``
 
-        Note that it is often most convenient to create the 
-        first volume source to set the scaling of the user-based
+        This command plots an axis from the origin to the three points
+        ``[0,0,xval]``, ``[0,yval,0]``, and ``[0,0,zval]``. The values
+        ``xval``, ``yval``, and ``zval`` are keyword arguments which
+        default to 1.0. The keyword argument ``color=[1,1,1,0.5]``
+        specifies the color of the axis arrows. The keyword argument
+        ``coords`` specifies the coordinate system. Use
+        ``coords=user`` for the user-based coordinate system and
+        ``coords=internal`` (the default) for the internal coordinate
+        system. The final keyword argument ``keyname=o2sclpy_axis`` is
+        the name for the yt object.
+
+        Note that it is often most convenient to create the first
+        volume source (e.g. either with ``yt-add-vol``
+        or``yt-scatter``) to set the scaling of the user-based
         coordinate system before using the ``yt-axis`` command.
 
         This function creates a PointSource at the origin and then
@@ -858,7 +873,6 @@ class yt_plot_base(plot_base):
         three arrows. The arrows are constructed with one main
         LineSource and then several smaller LineSource objects in a
         conical shape to create the arrow heads.
-
         """
 
         if self.yt_scene==0:

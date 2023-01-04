@@ -3096,8 +3096,8 @@ class o2graph_plotter(yt_plot_base):
         Add scattered points to a yt scene
         
         Command-line arguments: ``<x column> <y column> <z column> 
-        [size column] [red column]
-        [green column] [blue column] [alpha column]``
+        [size column] [red column] [green column] [blue column] 
+        [alpha column]``
 
         Add a series of points to a yt scene. If a volume has not yet
         been added, then a default volume is added. If the x, y-, or
@@ -3995,7 +3995,7 @@ class o2graph_plotter(yt_plot_base):
 
         Render the yt volume visualization.
 
-        <filename or pattern> [movie output filename]
+        Command-line arguments: ``<filename or pattern> [kwargs]``
 
         Perform the volume rendering. If yt_path is empty, then the
         first argument is the filename. If yt_path is not empty then
@@ -4003,6 +4003,10 @@ class o2graph_plotter(yt_plot_base):
         each frame will be stored. If yt_path is not empty and a movie
         filename is given, then ffmpeg will be used to combine the
         frames into an mp4 file.
+
+        The keyword argument ``mov_fname`` specifies the output
+        movie file (if an animation is specified with ``yt-path``).
+        If empty, the filename ``o2graph.mp4`` is used. 
         """
 
         if self.yt_scene==0:
