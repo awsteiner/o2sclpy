@@ -1723,7 +1723,7 @@ class plot_base:
 
         if name=='':
             print('Axes names:',self.axes_dict.keys())
-        elif len(str(name))==1:
+        elif len(str(name))==1 or len(str(name))==2:
             self.axes=self.axes_dict["subplot"+str(name)]
         else:
             self.axes=self.axes_dict[name]
