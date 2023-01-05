@@ -32,8 +32,7 @@ import textwrap
 # For code.interact() in 'python' command
 import code 
 
-from o2sclpy.doc_data import cmaps, new_cmaps
-from o2sclpy.doc_data import extra_types, param_list
+from o2sclpy.doc_data import cmaps, new_cmaps, extra_types
 from o2sclpy.doc_data import yt_param_list, acol_help_topics
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
@@ -178,6 +177,51 @@ extra_list=[
     ["tensor_grid","yt-add-vol",0],
     ["vector<contour_line>","plot",0],
 ]
+
+param_list=[
+    ["colbar","If true, den-plot adds a color legend (default False)."],
+    ["editor","If true, open the plot editor."],
+    ["fig_dict",("Dictionary for figure properties. The default value is "+
+                 "blank and implies ('fig_size_x=6.0, fig_size_y=6.0, "+
+                 "ticks_in=False, "+
+                 "rt_ticks=False, left_margin=0.14, right_margin=0.04, "+
+                 "bottom_margin=0.12, top_margin=0.04, fontsize=16'). "+
+                 "The x and y sizes of the figure object are in "+
+                 "fig_size_x and fig_size_y. The value ticks_in refers "+
+                 "to whether or not the ticks are inside or outside the "+
+                 "plot. The value of rt_ticks refers to whether or not "+
+                 "tick marks are plotted on the right and top sides of "+
+                 "the plot. If the font size is unspecified, then "+
+                 "the 'font' setting is used. "+
+                 "The font size parameter is multiplied by 0.8 "+
+                 "and then used for the axis labels. Note that this "+
+                 "value must be set before the plotting canvas is"+
+                 "created (which is done by 'subplots' or automatically "+
+                 "when the first object is added to the plot) in order "+
+                 "to have any effect.")],
+    ["font","Font scaling for text objects (default 16)."],
+    ["logx","If true, use a logarithmic x-axis (default False)."],
+    ["logy","If true, use a logarithmic y-axis (default False)."],
+    ["logz","If true, use a logarithmic z-axis (default False)."],
+    ["usetex","If true, use LaTeX for text rendering (default True)."],
+    ["verbose","Verbosity parameter (default 1)."],
+    ["xhi","Upper limit for x-axis (function if starts with '(')."],
+    ["xlo","Lower limit for x-axis (function if starts with '(')."],
+    ["xset","If true, x-axis limits have been set (default False)."],
+    ["yhi","Upper limit for y-axis (function if starts with '(')."],
+    ["ylo","Lower limit for y-axis (function if starts with '(')."],
+    ["yset","If true, y-axis limits have been set (default False)."],
+    ["zlo","Lower limit for z-axis (function if starts with '(')."],
+    ["zhi","Upper limit for z-axis (function if starts with '(')."],
+    ["zset","If true, z-axis limits have been set (default False)."]
+]
+"""
+List of o2sclpy parameters
+
+A list of 2-element entries, name and description
+"""
+
+#"Lower limit for y-axis (function if starts with '(')."],
 
 def doc_replacements(s,ter,amp,link,script=False):
     """
@@ -2794,8 +2838,8 @@ class o2graph_plotter(yt_plot_base):
             for line in param_list:
                 if cmd==line[0]:
                     match=True
-                    print('O2graph parameter modified by get/set: '+
-                          line[0]+'\n')
+                    print('O2graph parameter modified by get and set',
+                          'commands: '+line[0]+'\n')
                     
                     tempx_arr=line[1].split('\n')
                     for j in range(0,len(tempx_arr)):
