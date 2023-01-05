@@ -50,24 +50,6 @@ extra_types=["table","table3d","hist_2d","hist","double[]","int[]",
 List of types which have additional plotting commands
 """
 
-yt_param_list=[
-    ["yt_filter","Filter for yt-generated images (default '')"],
-    ["yt_focus","The camera focus (default is the center of the volume)."],
-    ["yt_path","The animation path (typically set using 'yt-path')."],
-    ["yt_position","The camera position "+
-     "(default is '[1.5,0.6,0.7] internal')."],
-    ["yt_north","The camera north vector (default [0.0,0.0,1.0])."],
-    ["yt_width","The camera width relative to the domain volume< "+
-     "(default [1.5,1.5,1.5])."],
-    ["yt_resolution","The rendering resolution (default (512,512))."],
-    ["yt_sigma_clip","Sigma clipping parameter (default 4.0)."]
-]
-"""
-List of yt parameters for o2sclpy
-
-A list of 2-element entries, name and description
-"""
-
 acol_help_topics=["functions","index-spec","mult-vector-spec","strings-spec",
                   "types","value-spec","vector-spec"]
 

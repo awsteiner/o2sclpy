@@ -46,13 +46,7 @@ class yt_plot_base(plot_base):
 
     yt_filter=''
     """
-    Filter for yt images. If non-empty, must contain the 
-    strings '%i' for input file and '%o' for output file. A typical
-    example is something like
-
-    convert -contrast-stretch 0 %i %o 
-
-    which uses imagemagick to adjust the color curve.
+    Filter for yt images. 
     """
     yt_resolution=(512,512)
     """
@@ -60,25 +54,19 @@ class yt_plot_base(plot_base):
     """
     yt_focus='default'
     """
-    yt camera focus as a string. The string 'default' is equivalent
-    to '[0.5,0.5,0.5] internal'. Either in the 'internal' or 'user' 
-    unit system.
+    yt camera focus as a string. 
     """
     yt_position='default'
     """
-    yt camera position as a string. The string 'default' is equivalent
-    to '[1.5,0.6,0.7] internal'. Either in the 'internal' or 'user' 
-    unit system.
+    yt camera position as a string. 
     """
     yt_width='default'
     """
-    yt camera width as a string. The string 'default' is equivalent to 
-    '[1.5,1.5,1.5]'. Always in the internal unit system.
+    yt camera width as a string.
     """
     yt_north='default'
     """
-    yt camera north vector string. The string 'default' is equivalent to
-    '[1.0,0.0,0.0]'. Always in the internal unit system.
+    yt camera north vector string. 
     """
     yt_sigma_clip=4.0
     """
@@ -89,19 +77,7 @@ class yt_plot_base(plot_base):
     
     yt_path=[]
     """
-    yt animation path (default []), as list of lists. The
-    list contains instructions such as
-
-    ['yaw',100,0.01]
-    ['zoom',100,2.0]
-    ...
-
-    where the first entry in each sublist is always a type
-    move, and the second entry in each sublist is always the 
-    number of frames over which to complete the move.
-
-    Note that this is not set using -set or -get but by the 'yt-path'
-    command.
+    yt animation path (default []), as list of lists.
     """
     yt_ann=[]
     """

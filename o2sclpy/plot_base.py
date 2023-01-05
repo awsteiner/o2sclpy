@@ -129,7 +129,7 @@ class plot_base:
     """
     colbar=False
     """
-    If True, then include a color legend for density plots (default False)
+    If True, then include a color bar for density plots (default False)
     """
     left_margin=0.14
     """
@@ -149,23 +149,11 @@ class plot_base:
     """
     font=16
     """
-    Font size for :py:func:`o2sclpy.plot_base.text()`,
-    :py:func:`o2sclpy.plot_base.ttext()`, and axis titles (default
-    16). Axis labels are set by this size times 0.8 .
+    Font size text objects and axis titles (default 16)
     """
     fig_dict=''
     """
-    A dictionary which refers to the figure and axis defaults for
-    :py:func:`o2sclpy.default_plot()`. The default value is
-    ``('fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,'+
-    'rt_ticks=False,left_margin=0.14,right_margin=0.04,'+
-    'bottom_margin=0.12,top_margin=0.04,fontsize=16')`` . The x and y
-    sizes of the figure object are in fig_size_x and fig_size_y. The
-    value ticks_in refers to whether or not the ticks are inside or
-    outside the plot. The value of rt_ticks refers to whether or not
-    tick marks are plotted on the right and top sides of the plot. The
-    font size parameter is multiplied by 0.8 and then used for the
-    axis labels.
+    A dictionary which refers to the figure and axis defaults
     """
     ticks_in=False
     """

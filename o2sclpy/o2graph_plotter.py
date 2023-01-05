@@ -33,7 +33,7 @@ import textwrap
 import code 
 
 from o2sclpy.doc_data import cmaps, new_cmaps, extra_types
-from o2sclpy.doc_data import yt_param_list, acol_help_topics
+from o2sclpy.doc_data import acol_help_topics
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot
@@ -221,7 +221,45 @@ List of o2sclpy parameters
 A list of 2-element entries, name and description
 """
 
-#"Lower limit for y-axis (function if starts with '(')."],
+yt_param_list=[
+    ["yt_filter",("Filter for yt-generated images (default '')"+
+                  "\n\nIf non-empty, must contain the "+
+                  "strings '%i' for input file and '%o' for "+
+                  "output file. A typical example is something like\n\n"+
+                  "convert -contrast-stretch 0 %i %o\n\n"+
+                  "which uses imagemagick to adjust the color curve.")],
+    ["yt_focus",("The yt camera focus as a string. "+
+                 "The string 'default' is equivalent "+
+                 "to '[0.5,0.5,0.5] internal'. This string can be "+
+                 "either in the "+
+                 "'internal' or 'user' unit system.")],
+    ["yt_path",("The yt animation path (default []), as list of "+
+                "lists. The list contains instructions such as\n\n"+
+                "['yaw',100,0.01]\n['zoom',100,2.0]\n...\n\n"+
+                "where the first entry in each sublist is always a type "+
+                "move, and the second entry in each sublist is always the "+
+                "number of frames over which to complete the move.\n\n"+
+                "Note that this variable is not set using -set or -get but "+
+                "by the 'yt-path' command.")],
+    ["yt_position",("The yt camera position as a string "+
+                    "The string 'default' is equivalent "+
+                    "to '[1.5,0.6,0.7] internal'. This string can be "+
+                    "either in the 'internal' or 'user' unit system.")],
+    ["yt_north",("The yt camera north vector string. "+
+                 "The string 'default' is equivalent to "
+                 "'[1.0,0.0,0.0]'. Always in the internal "+
+                 "unit system.")],
+    ["yt_width",("The yt camera width relative to the domain volume "+
+                 "as a string. The string 'default' is equivalent to "+
+                 "'[1.5,1.5,1.5]'. Always in the internal unit system.")],
+    ["yt_resolution","The rendering resolution (default (512,512))."],
+    ["yt_sigma_clip","Sigma clipping parameter (default 4.0)."]
+]
+"""
+List of yt parameters for o2sclpy
+
+A list of 2-element entries, name and description
+"""
 
 def doc_replacements(s,ter,amp,link,script=False):
     """
@@ -2838,7 +2876,7 @@ class o2graph_plotter(yt_plot_base):
             for line in param_list:
                 if cmd==line[0]:
                     match=True
-                    print('O2graph parameter modified by get and set',
+                    print('O2graph parameter modified by the get and set',
                           'commands: '+line[0]+'\n')
                     
                     tempx_arr=line[1].split('\n')
@@ -2856,7 +2894,8 @@ class o2graph_plotter(yt_plot_base):
             for line in yt_param_list:
                 if cmd==line[0]:
                     match=True
-                    print('yt parameter modified by get/set: '+line[0]+'\n')
+                    print('yt parameter modified by the get and',
+                          'set commands: '+line[0]+'\n')
                     
                     tempx_arr=line[1].split('\n')
                     for j in range(0,len(tempx_arr)):
