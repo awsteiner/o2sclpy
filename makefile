@@ -67,6 +67,7 @@ test:
 		examples/test_examples.py \
 		-s -v > test.out 2>&1 &
 
+# This target is used by cron scripts to redirect the testing output
 testq:
 	pytest o2sclpy/test \
 		examples/link_o2scl.py \
