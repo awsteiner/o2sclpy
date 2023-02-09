@@ -34,6 +34,12 @@ import platform
 import ctypes
 from ctypes.util import find_library
 
+def cpp_test(x):
+    """
+    Desc
+    """
+    return x*numpy.pi
+
 def remove_spaces(string):
     """
     Remove spaces at the beginning specified string and return the 
