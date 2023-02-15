@@ -155,7 +155,7 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     import matplotlib.pyplot as plot
 
     """
-    This function sets up the O\ :sub:`2`\ sclpy ``matplotlib``
+    This function sets up the O2sclpy ``matplotlib``
     defaults. It returns a pair of objects, the figure object and axes
     object. The fontsize argument times 0.8 is used 
     for the size of the font labels. Setting the ``ticks_in`` argument
