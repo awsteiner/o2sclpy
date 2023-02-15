@@ -766,7 +766,7 @@ class o2graph_plotter(yt_plot_base):
     def gen_acol(self,o2scl,amp,link,cmd_name,args):
         """
         Run a general ``acol`` command named ``cmd_name`` with arguments
-        stored in ``args``. This function uses the O\ :sub:`2`\ scl function
+        stored in ``args``. This function uses the O2scl function
         ``o2scl_acol_parse()``.
         """
 
@@ -3535,7 +3535,7 @@ class o2graph_plotter(yt_plot_base):
         
     def yt_mesh(self,o2scl,amp,link,args):
         """
-        Plot a mesh from vertices specified by a slice of O\ :sub:`2`\ scl
+        Plot a mesh from vertices specified by a slice of O2scl
         table3d object.
         """
 
