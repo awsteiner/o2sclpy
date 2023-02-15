@@ -5,7 +5,8 @@ help:
 	@echo "-------------------------------------------------------------"
 	@echo "Developer targets:"
 	@echo "doc:       Make the documentation (requires sphinx & breathe)"
-	@echo "test:      Test the library"
+	@echo "test:      Test the library and output results to test.out"
+	@echo "testq:     Test the library and output results to the screen"
 	@echo "sync-doc:  Copies documentation to webserver"
 	@echo "open-doc:  Open local documentation in browser"
 	@echo "web-doc:   Open web documentation in browser (after sync-doc)"
@@ -79,7 +80,7 @@ testq:
 		examples/DSH.py \
 		examples/buchdahl.py \
 		examples/tov.py \
-		examples/test_examples.py 
+		examples/test_examples.py -s -v
 
 ifeq ($(MACHINE),isospin)
 PIP3_CMD = sudo pip3

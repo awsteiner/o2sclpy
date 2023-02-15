@@ -40,6 +40,40 @@ def cpp_test(x):
     """
     return x*numpy.pi
 
+class interpm_sklearn_gpr:
+
+    gpr=0
+    verbose=0
+    kernel=0
+    outformat='numpy'
+
+    def __init__(self,kernel='RBF',verbose=1,outformat='numpy'):
+        
+        self.verbose=verbose
+        from sklearn.gaussian_process.kernels import RBF
+        self.kernel=1*RBF(1)
+        self.outformat=outformat
+        return
+
+    def set_data(self,in_data,out_data):
+        
+        from sklearn.gaussian_process import GaussianProcessRegressor
+
+        if self.verbose>1:
+            print('interpm_sklearn::set_data(): ...')
+            
+        self.gpr=GaussianProcessRegressor(kernel=self.kernel,
+                                          normalize_y=True).fit(in_data,
+                                                                out_data)
+        
+        return
+
+    def eval(self,v):
+        yp=self.gpr.predict([v])
+        if self.outformat=='list':
+            return yp[0].tolist()
+        return yp[0]
+
 def remove_spaces(string):
     """
     Remove spaces at the beginning specified string and return the 
