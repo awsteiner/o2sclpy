@@ -41,34 +41,56 @@ def cpp_test(x):
     return x*numpy.pi
 
 class interpm_sklearn_gpr:
+    """
+    Desc
+    """
 
     gpr=0
     verbose=0
     kernel=0
     outformat='numpy'
 
-    def __init__(self,kernel='RBF',verbose=1,outformat='numpy'):
-        
-        self.verbose=verbose
-        from sklearn.gaussian_process.kernels import RBF
-        self.kernel=1*RBF(1)
-        self.outformat=outformat
-        return
+    def set_data(self,in_data,out_data,kernel='RBF',normalize_y=True,
+                 output='numpy',verbose=0):
+        """
+        Desc
+        """
 
-    def set_data(self,in_data,out_data):
+        if verbose>0:
+            print('interpm_sklearn_gpr::set_data():')
+            print('  kernel:',kernel)
+            print('  normalize_y:',normalize_y)
+            print('  output:',output)
+            print('  in_data shape:',numpy.shape(in_data))
+            print('  out_data shape:',numpy.shape(out_data))
         
         from sklearn.gaussian_process import GaussianProcessRegressor
+        from sklearn.gaussian_process.kernels import RBF
+
+        self.kernel=1*RBF(1)
+        self.outformat=outformat
+        self.verbose=verbose
 
         if self.verbose>1:
             print('interpm_sklearn::set_data(): ...')
             
-        self.gpr=GaussianProcessRegressor(kernel=self.kernel,
+        self.gpr=GaussianProcessRegressor(kernel=kernel,
                                           normalize_y=True).fit(in_data,
                                                                 out_data)
         
         return
 
+    def set_data_str(self,in_data,out_data,options):
+        """
+        Desc
+        """
+        set_data(in_data,out_data,**options)
+        return
+        
     def eval(self,v):
+        """
+        Desc
+        """
         yp=self.gpr.predict([v])
         if self.outformat=='list':
             return yp[0].tolist()
