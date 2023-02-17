@@ -51,7 +51,7 @@ class interpm_sklearn_gpr:
     outformat='numpy'
 
     def set_data(self,in_data,out_data,kernel='RBF',normalize_y=True,
-                 output='numpy',verbose=0):
+                 outformat='numpy',verbose=1):
         """
         Desc
         """
@@ -60,33 +60,34 @@ class interpm_sklearn_gpr:
             print('interpm_sklearn_gpr::set_data():')
             print('  kernel:',kernel)
             print('  normalize_y:',normalize_y)
-            print('  output:',output)
+            print('  outformat:',outformat)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
-        
+
         from sklearn.gaussian_process import GaussianProcessRegressor
         from sklearn.gaussian_process.kernels import RBF
 
-        self.kernel=1*RBF(1)
+        self.kernel=1.0*RBF(1.0)
         self.outformat=outformat
         self.verbose=verbose
 
         if self.verbose>1:
             print('interpm_sklearn::set_data(): ...')
             
-        self.gpr=GaussianProcessRegressor(kernel=kernel,
+        self.gpr=GaussianProcessRegressor(kernel=self.kernel,
                                           normalize_y=True).fit(in_data,
                                                                 out_data)
         
         return
-
-    def set_data_str(self,in_data,out_data,options):
+    
+    def set_data_str(self,in_data,out_data,options=''):
         """
         Desc
         """
-        set_data(in_data,out_data,**options)
+
+        self.set_data(in_data,out_data)
         return
-        
+    
     def eval(self,v):
         """
         Desc
