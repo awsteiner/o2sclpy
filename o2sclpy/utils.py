@@ -50,8 +50,49 @@ class interpm_sklearn_gpr:
     kernel=0
     outformat='numpy'
 
-    def set_data(self,in_data,out_data,kernel='RBF',normalize_y=True,
-                 outformat='numpy',verbose=1):
+    def string_to_dict(self,s):
+        """
+        Convert a string to a dictionary.
+        """
+        
+        # First split into keyword = value pairs
+        arr=s.split(',')
+        # Create empty dictionary
+        dct={}
+
+        if len(s)==0:
+            return dct
+        
+        for i in range(0,len(arr)):
+
+            # For each pair, split keyword and value.
+            arr2=arr[i].split('=')
+        
+            # Remove preceeding and trailing whitespace from the
+            # keywords (not for the values)
+            while arr2[0][0].isspace():
+                arr2[0]=arr2[0][1:]
+            while arr2[0][len(arr2[0])-1].isspace():
+                arr2[0]=arr2[0][:-1]
+
+            # Remove quotes if necessary
+            if len(arr2)>1 and len(arr2[1])>2:
+                if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
+                    arr2[1]=arr2[1][1:len(arr2[1])-1]
+                if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
+                    arr2[1]=arr2[1][1:len(arr2[1])-1]
+
+            if arr2[0]=='verbose':
+                arr2[1]=int(arr2[1])
+            if arr2[0]=='normalize_y':
+                arr2[1]=(arr2[1]=='True')
+                    
+            dct[arr2[0]]=arr2[1]
+
+        return dct
+    
+    def set_data(self,in_data,out_data,kernel='1.0*RBF(1.0)',
+                 normalize_y=True,outformat='numpy',verbose=0):
         """
         Desc
         """
@@ -67,25 +108,30 @@ class interpm_sklearn_gpr:
         from sklearn.gaussian_process import GaussianProcessRegressor
         from sklearn.gaussian_process.kernels import RBF
 
-        self.kernel=1.0*RBF(1.0)
+        self.kernel=eval(kernel)
         self.outformat=outformat
         self.verbose=verbose
 
-        if self.verbose>1:
-            print('interpm_sklearn::set_data(): ...')
-            
-        self.gpr=GaussianProcessRegressor(kernel=self.kernel,
-                                          normalize_y=True).fit(in_data,
-                                                                out_data)
-        
+        try:
+            self.gpr=GaussianProcessRegressor(kernel=self.kernel,
+                                              normalize_y=True).fit(in_data,
+                                                                    out_data)
+        except Exception as e:
+            print('Exception:',e)
+            pass
+
         return
     
-    def set_data_str(self,in_data,out_data,options=''):
+    def set_data_str(self,in_data,out_data,options):
         """
         Desc
         """
 
-        self.set_data(in_data,out_data)
+        dct=self.string_to_dict(options)
+        print('String:',options,'Dictionary:',dct)
+              
+        self.set_data(in_data,out_data,**dct)
+
         return
     
     def eval(self,v):
@@ -93,8 +139,10 @@ class interpm_sklearn_gpr:
         Desc
         """
         yp=self.gpr.predict([v])
+        print('here eval',type(yp))
         if self.outformat=='list':
             return yp[0].tolist()
+        print('here2 eval',type(yp[0]))
         return yp[0]
 
 def remove_spaces(string):

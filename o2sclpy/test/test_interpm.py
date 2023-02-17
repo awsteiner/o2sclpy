@@ -1,7 +1,7 @@
 import o2sclpy
 import numpy
 
-def test_all(tmp_path):
+def test_all():
 
     N=1000
     
