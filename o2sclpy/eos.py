@@ -1,7 +1,7 @@
 """
   -------------------------------------------------------------------
 
-  Copyright (C) 2020-2022, Andrew W. Steiner
+  Copyright (C) 2020-2023, Andrew W. Steiner
 
   This file is part of O2scl.
 
@@ -30,7 +30,7 @@ from o2sclpy.part import *
 
 class eos_base:
     """
-    Python interface for O\ :sub:`2`\ scl class eos_base.
+    Python interface for O2scl class eos_base.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_base.html .
     """
@@ -106,7 +106,7 @@ class eos_base:
 
 class eos_had_base(eos_base):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_had_base.
+    Python interface for O2scl class eos_had_base.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_base.html .
     """
@@ -771,7 +771,7 @@ class eos_had_base(eos_base):
 
 class eos_had_eden_base(eos_had_base):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_had_eden_base.
+    Python interface for O2scl class eos_had_eden_base.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_eden_base.html .
     """
@@ -824,7 +824,7 @@ class eos_had_eden_base(eos_had_base):
 
 class eos_had_pres_base(eos_had_base):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_had_pres_base.
+    Python interface for O2scl class eos_had_pres_base.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_pres_base.html .
     """
@@ -877,7 +877,7 @@ class eos_had_pres_base(eos_had_base):
 
 class eos_had_temp_base(eos_had_base):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_had_temp_base.
+    Python interface for O2scl class eos_had_temp_base.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_base.html .
     """
@@ -960,7 +960,7 @@ class eos_had_temp_base(eos_had_base):
 
 class eos_had_temp_eden_base(eos_had_temp_base):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_had_temp_eden_base.
+    Python interface for O2scl class eos_had_temp_eden_base.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_eden_base.html .
     """
@@ -1013,7 +1013,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
 
 class eos_had_temp_pres_base(eos_had_temp_base):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_had_temp_pres_base.
+    Python interface for O2scl class eos_had_temp_pres_base.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_pres_base.html .
     """
@@ -1066,7 +1066,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
 
 class eos_had_skyrme(eos_had_temp_eden_base):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_had_skyrme.
+    Python interface for O2scl class eos_had_skyrme.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_skyrme.html .
     """
@@ -1458,7 +1458,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
 class eos_had_apr(eos_had_temp_eden_base):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_had_apr.
+    Python interface for O2scl class eos_had_apr.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_apr.html .
     """
@@ -1550,7 +1550,7 @@ class eos_had_apr(eos_had_temp_eden_base):
 
 class eos_had_rmf(eos_had_temp_pres_base):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_had_rmf.
+    Python interface for O2scl class eos_had_rmf.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_rmf.html .
     """
@@ -2113,7 +2113,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
 
 class eos_quark(eos_base):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_quark.
+    Python interface for O2scl class eos_quark.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark.html .
     """
@@ -2165,7 +2165,7 @@ class eos_quark(eos_base):
 
 class eos_quark_bag(eos_quark):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_quark_bag.
+    Python interface for O2scl class eos_quark_bag.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark_bag.html .
     """
@@ -2237,7 +2237,7 @@ class eos_quark_bag(eos_quark):
 
 class eos_quark_njl(eos_quark):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_quark_njl.
+    Python interface for O2scl class eos_quark_njl.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark_njl.html .
     """
@@ -2409,7 +2409,7 @@ class eos_quark_njl(eos_quark):
 
 class eos_tov:
     """
-    Python interface for O\ :sub:`2`\ scl class eos_tov.
+    Python interface for O2scl class eos_tov.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov.html .
     """
@@ -2581,7 +2581,7 @@ class eos_tov:
 
 class eos_tov_buchdahl(eos_tov):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_tov_buchdahl.
+    Python interface for O2scl class eos_tov_buchdahl.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_buchdahl.html .
     """
@@ -2748,7 +2748,7 @@ class eos_tov_buchdahl(eos_tov):
 
 class eos_tov_polytrope(eos_tov):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_tov_polytrope.
+    Python interface for O2scl class eos_tov_polytrope.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_polytrope.html .
     """
@@ -2811,7 +2811,7 @@ class eos_tov_polytrope(eos_tov):
 
 class eos_tov_linear(eos_tov):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_tov_linear.
+    Python interface for O2scl class eos_tov_linear.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_linear.html .
     """
@@ -2874,7 +2874,7 @@ class eos_tov_linear(eos_tov):
 
 class eos_tov_interp(eos_tov):
     """
-    Python interface for O\ :sub:`2`\ scl class eos_tov_interp.
+    Python interface for O2scl class eos_tov_interp.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_interp.html .
     """
@@ -3097,7 +3097,7 @@ class eos_tov_interp(eos_tov):
 
 class tov_solve:
     """
-    Python interface for O\ :sub:`2`\ scl class tov_solve.
+    Python interface for O2scl class tov_solve.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/tov_solve.html .
     """
@@ -3799,7 +3799,7 @@ class tov_solve:
 
 class tov_love:
     """
-    Python interface for O\ :sub:`2`\ scl class tov_love.
+    Python interface for O2scl class tov_love.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/tov_love.html .
     """
@@ -4045,7 +4045,7 @@ class tov_love:
 
 class nstar_cold:
     """
-    Python interface for O\ :sub:`2`\ scl class nstar_cold.
+    Python interface for O2scl class nstar_cold.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nstar_cold.html .
     """
@@ -4476,7 +4476,7 @@ class nstar_cold:
 
 class nucleus_rmf:
     """
-    Python interface for O\ :sub:`2`\ scl class nucleus_rmf.
+    Python interface for O2scl class nucleus_rmf.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucleus_rmf.html .
     """

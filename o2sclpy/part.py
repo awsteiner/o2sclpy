@@ -1,7 +1,7 @@
 """
   -------------------------------------------------------------------
 
-  Copyright (C) 2020-2022, Andrew W. Steiner
+  Copyright (C) 2020-2023, Andrew W. Steiner
 
   This file is part of O2scl.
 
@@ -529,7 +529,7 @@ class fermion(part):
 
 class quark(fermion):
     """
-    Python interface for O\ :sub:`2`\ scl class ``quark``,
+    Python interface for O2scl class ``quark``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/quark.html .
     """
@@ -1285,7 +1285,7 @@ class fermion_nonrel(fermion_zerot):
 
 class boson(part):
     """
-    Python interface for O\ :sub:`2`\ scl class ``boson``,
+    Python interface for O2scl class ``boson``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/boson.html .
     """
@@ -1357,7 +1357,7 @@ class boson(part):
 
 class boson_rel:
     """
-    Python interface for O\ :sub:`2`\ scl class ``boson_rel``,
+    Python interface for O2scl class ``boson_rel``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/boson_rel.html .
     """
@@ -2739,7 +2739,7 @@ class classical_deriv_thermo:
 
 class fermion_mag_zerot:
     """
-    Python interface for O\ :sub:`2`\ scl class ``fermion_mag_zerot``,
+    Python interface for O2scl class ``fermion_mag_zerot``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/fermion_mag_zerot.html .
     """

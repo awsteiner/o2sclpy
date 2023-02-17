@@ -1,7 +1,7 @@
 """
   -------------------------------------------------------------------
 
-  Copyright (C) 2020-2022, Andrew W. Steiner
+  Copyright (C) 2020-2023, Andrew W. Steiner
 
   This file is part of O2scl.
 
@@ -30,7 +30,7 @@ from o2sclpy.other import *
 
 class hdf_file:
     """
-    Python interface for O\ :sub:`2`\ scl class ``hdf_file``,
+    Python interface for O2scl class ``hdf_file``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/hdf_file.html .
     """
@@ -761,7 +761,7 @@ class hdf_file:
 
 class acol_manager:
     """
-    Python interface for O\ :sub:`2`\ scl class ``acol_manager``,
+    Python interface for O2scl class ``acol_manager``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/acol_manager.html .
     """
@@ -1604,7 +1604,7 @@ class acol_manager:
 
 class cloud_file:
     """
-    Python interface for O\ :sub:`2`\ scl class ``cloud_file``,
+    Python interface for O2scl class ``cloud_file``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/cloud_file.html .
     """

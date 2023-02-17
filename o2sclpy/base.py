@@ -1,7 +1,7 @@
 """
   -------------------------------------------------------------------
 
-  Copyright (C) 2020-2022, Andrew W. Steiner
+  Copyright (C) 2020-2023, Andrew W. Steiner
 
   This file is part of O2scl.
 
@@ -2259,6 +2259,17 @@ class table:
         func=self._link.o2scl.o2scl_table__delete_rows_func
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         func(self._ptr,func_)
+        return
+
+    def delete_rows_ends(self,row_start,row_end):
+        """
+        | Parameters:
+        | *row_start*: ``size_t``
+        | *row_end*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_table__delete_rows_ends
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        func(self._ptr,row_start,row_end)
         return
 
     def line_of_names(self,names):

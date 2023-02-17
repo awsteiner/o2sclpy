@@ -1,7 +1,7 @@
 """
   -------------------------------------------------------------------
 
-  Copyright (C) 2020-2022, Andrew W. Steiner
+  Copyright (C) 2020-2023, Andrew W. Steiner
 
   This file is part of O2scl.
 
@@ -29,7 +29,7 @@ from o2sclpy.base import *
 
 class slack_messenger:
     """
-    Python interface for O\ :sub:`2`\ scl class ``slack_messenger``,
+    Python interface for O2scl class ``slack_messenger``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/slack_messenger.html .
     """
@@ -272,7 +272,7 @@ class slack_messenger:
 
 class quadratic_real_coeff_gsl:
     """
-    Python interface for O\ :sub:`2`\ scl class ``quadratic_real_coeff_gsl``,
+    Python interface for O2scl class ``quadratic_real_coeff_gsl``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/quadratic_real_coeff_gsl.html .
     """
@@ -360,7 +360,7 @@ class quadratic_real_coeff_gsl:
 
 class quadratic_real_coeff_gsl2:
     """
-    Python interface for O\ :sub:`2`\ scl class ``quadratic_real_coeff_gsl2<>``,
+    Python interface for O2scl class ``quadratic_real_coeff_gsl2<>``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/quadratic_real_coeff_gsl2<>.html .
     """
@@ -448,7 +448,7 @@ class quadratic_real_coeff_gsl2:
 
 class cubic_real_coeff_cern:
     """
-    Python interface for O\ :sub:`2`\ scl class ``cubic_real_coeff_cern<>``,
+    Python interface for O2scl class ``cubic_real_coeff_cern<>``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/cubic_real_coeff_cern<>.html .
     """
@@ -540,7 +540,7 @@ class cubic_real_coeff_cern:
 
 class cubic_real_coeff_gsl:
     """
-    Python interface for O\ :sub:`2`\ scl class ``cubic_real_coeff_gsl``,
+    Python interface for O2scl class ``cubic_real_coeff_gsl``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/cubic_real_coeff_gsl.html .
     """
@@ -632,7 +632,7 @@ class cubic_real_coeff_gsl:
 
 class quartic_real_coeff_cern:
     """
-    Python interface for O\ :sub:`2`\ scl class ``quartic_real_coeff_cern<>``,
+    Python interface for O2scl class ``quartic_real_coeff_cern<>``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/quartic_real_coeff_cern<>.html .
     """
@@ -728,7 +728,7 @@ class quartic_real_coeff_cern:
 
 class fermi_dirac_integ_gsl:
     """
-    Python interface for O\ :sub:`2`\ scl class ``fermi_dirac_integ_gsl``,
+    Python interface for O2scl class ``fermi_dirac_integ_gsl``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/fermi_dirac_integ_gsl.html .
     """
@@ -844,7 +844,7 @@ class fermi_dirac_integ_gsl:
 
 class bessel_K_exp_integ_gsl:
     """
-    Python interface for O\ :sub:`2`\ scl class ``bessel_K_exp_integ_gsl``,
+    Python interface for O2scl class ``bessel_K_exp_integ_gsl``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/bessel_K_exp_integ_gsl.html .
     """
@@ -936,7 +936,7 @@ class bessel_K_exp_integ_gsl:
 
 class hist:
     """
-    Python interface for O\ :sub:`2`\ scl class ``hist``,
+    Python interface for O2scl class ``hist``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/hist.html .
     """
@@ -1248,7 +1248,7 @@ class hist:
 
 class hist_2d:
     """
-    Python interface for O\ :sub:`2`\ scl class ``hist_2d``,
+    Python interface for O2scl class ``hist_2d``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/hist_2d.html .
     """
@@ -1604,7 +1604,7 @@ class hist_2d:
 
 class contour_line:
     """
-    Python interface for O\ :sub:`2`\ scl class ``contour_line``,
+    Python interface for O2scl class ``contour_line``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/contour_line.html .
     """
@@ -1733,7 +1733,7 @@ class contour_line:
 
 class vector_contour_line:
     """
-    Python interface for O\ :sub:`2`\ scl class ``std::vector<contour_line>``,
+    Python interface for O2scl class ``std::vector<contour_line>``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/std::vector<contour_line>.html .
     """
@@ -1841,7 +1841,7 @@ class vector_contour_line:
 
 class contour:
     """
-    Python interface for O\ :sub:`2`\ scl class ``contour``,
+    Python interface for O2scl class ``contour``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/contour.html .
     """
@@ -1990,7 +1990,7 @@ class contour:
 
 class prob_dens_mdim:
     """
-    Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim<std::vector<double>>``,
+    Python interface for O2scl class ``prob_dens_mdim<std::vector<double>>``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim<std::vector<double>>.html .
     """
@@ -2091,7 +2091,7 @@ class prob_dens_mdim:
 
 class prob_dens_mdim_biv_gaussian(prob_dens_mdim):
     """
-    Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim_biv_gaussian<std::vector<double>>``,
+    Python interface for O2scl class ``prob_dens_mdim_biv_gaussian<std::vector<double>>``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_biv_gaussian<std::vector<double>>.html .
     """
@@ -2184,7 +2184,7 @@ class prob_dens_mdim_biv_gaussian(prob_dens_mdim):
 
 class prob_dens_mdim_gaussian(prob_dens_mdim):
     """
-    Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim_gaussian<>``,
+    Python interface for O2scl class ``prob_dens_mdim_gaussian<>``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_gaussian<>.html .
     """
@@ -2248,7 +2248,7 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
 
 class hypercube:
     """
-    Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim_amr<>::hypercube``,
+    Python interface for O2scl class ``prob_dens_mdim_amr<>::hypercube``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_amr<>::hypercube.html .
     """
@@ -2424,7 +2424,7 @@ class hypercube:
 
 class std_vector_hypercube:
     """
-    Python interface for O\ :sub:`2`\ scl class ``std::vector<prob_dens_mdim_amr<>::hypercube>``,
+    Python interface for O2scl class ``std::vector<prob_dens_mdim_amr<>::hypercube>``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/std::vector<prob_dens_mdim_amr<>::hypercube>.html .
     """
@@ -2524,7 +2524,7 @@ class std_vector_hypercube:
 
 class prob_dens_mdim_amr(prob_dens_mdim):
     """
-    Python interface for O\ :sub:`2`\ scl class ``prob_dens_mdim_amr<>``,
+    Python interface for O2scl class ``prob_dens_mdim_amr<>``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_amr<>.html .
     """
