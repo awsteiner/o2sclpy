@@ -1,0 +1,1 @@
+o2graph -create table y "grid:0,1,0.02" -function "abs(sin(1000*y))" z -function "y^2-3*z^2+y*z" f -internal table.o2 -set verbose 2 -interp-table3d py_gp none y z "grid:0,1,0.01" "grid:0,1,0.01" f -den-plot f -read table.o2 -function 30.0 size -scatter y z size none color=black -function 50 size -scatter y z size f marker=+ -show

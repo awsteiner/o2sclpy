@@ -1481,6 +1481,9 @@ class o2graph_plotter(yt_plot_base):
 
         """
 
+        if self.verbose>1:
+            print('In o2graph_plotter::scatter().')
+        
         import matplotlib.pyplot as plot
         
         curr_type=o2scl_get_type(o2scl,amp,link)
