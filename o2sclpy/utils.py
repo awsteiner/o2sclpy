@@ -142,8 +142,8 @@ class interpm_sklearn_gpr:
         print('here eval',type(yp))
         if self.outformat=='list':
             return yp[0].tolist()
-        print('here2 eval',type(yp[0]))
-        return yp[0]
+        print('here2 eval',type(yp))
+        return yp
 
 def remove_spaces(string):
     """
