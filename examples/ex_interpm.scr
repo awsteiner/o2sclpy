@@ -1,2 +1,13 @@
-#o2graph -create table y "grid:0,1,0.02" -function "abs(sin(1000*y))" z -function "y^2-3*z^2+y*z" f -internal table.o2 -set verbose 2 -interp-table3d py_gp none y z "grid:0,1,0.01" "grid:0,1,0.01" f -den-plot f -read table.o2 -function 30.0 size -scatter y z size none color=black -function 50 size -scatter y z size f marker=+ -show
-acol -create table y "grid:0,1,0.02" -function "abs(sin(1000*y))" z -function "y^2-3*z^2+y*z" f -internal table.o2 -set verbose 2 -interp-table3d py_nn none y z "grid:0,1,0.01" "grid:0,1,0.01" f -internal table3d.o2
+# IDW interpolation
+acol -create table y "grid:0,1,0.02" -function "abs(sin(1000*y))" z -function "y^2-3*z^2+y*z" f -internal table.o2 -set verbose 2 -interp-table3d idw none y z "grid:0,1,0.01" "grid:0,1,0.01" f -internal table3d_idw.o2
+# GP interpolation
+acol -read table.o2 -set verbose 2 -interp-table3d gp none y z "grid:0,1,0.01" "grid:0,1,0.01" f -internal table3d_gp.o2
+# Py GP interpolation
+acol -read table.o2 -set verbose 2 -interp-table3d py_gp none y z "grid:0,1,0.01" "grid:0,1,0.01" f -internal table3d_py_gp.o2
+# Py DNN interpolation
+acol -read table.o2 -set verbose 2 -interp-table3d py_dnn none y z "grid:0,1,0.01" "grid:0,1,0.01" f -internal table3d_py_dnn.o2
+acol -read table3d_idw.o2 -rename f f_idw \
+-cat table3d_gp.o2 -rename f f_gp \
+-cat table3d_py_gp.o2 -rename f f_py_gp \
+-cat table3d_py_dnn.o2 -rename f f_py_dnn -internal table_all.o2
+

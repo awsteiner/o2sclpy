@@ -28,122 +28,19 @@ import os
 import numpy
 
 # To test between Linux/OSX using system()
-import platform
+# AWS, 2/20/23, apparently no longer used
+#import platform
 
 # For CDLL loading
-import ctypes
-from ctypes.util import find_library
+# AWS, 2/20/23, apparently no longer used
+#import ctypes
+#from ctypes.util import find_library
 
 def cpp_test(x):
     """
     Desc
     """
     return x*numpy.pi
-
-class interpm_sklearn_gpr:
-    """
-    Desc
-    """
-
-    gpr=0
-    verbose=0
-    kernel=0
-    outformat='numpy'
-
-    def string_to_dict(self,s):
-        """
-        Convert a string to a dictionary.
-        """
-        
-        # First split into keyword = value pairs
-        arr=s.split(',')
-        # Create empty dictionary
-        dct={}
-
-        if len(s)==0:
-            return dct
-        
-        for i in range(0,len(arr)):
-
-            # For each pair, split keyword and value.
-            arr2=arr[i].split('=')
-        
-            # Remove preceeding and trailing whitespace from the
-            # keywords (not for the values)
-            while arr2[0][0].isspace():
-                arr2[0]=arr2[0][1:]
-            while arr2[0][len(arr2[0])-1].isspace():
-                arr2[0]=arr2[0][:-1]
-
-            # Remove quotes if necessary
-            if len(arr2)>1 and len(arr2[1])>2:
-                if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-                if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-
-            if arr2[0]=='verbose':
-                arr2[1]=int(arr2[1])
-            if arr2[0]=='normalize_y':
-                arr2[1]=(arr2[1]=='True')
-                    
-            dct[arr2[0]]=arr2[1]
-
-        return dct
-    
-    def set_data(self,in_data,out_data,kernel='1.0*RBF(1.0)',
-                 normalize_y=True,outformat='numpy',verbose=0):
-        """
-        Desc
-        """
-
-        if verbose>0:
-            print('interpm_sklearn_gpr::set_data():')
-            print('  kernel:',kernel)
-            print('  normalize_y:',normalize_y)
-            print('  outformat:',outformat)
-            print('  in_data shape:',numpy.shape(in_data))
-            print('  out_data shape:',numpy.shape(out_data))
-
-        from sklearn.gaussian_process import GaussianProcessRegressor
-        from sklearn.gaussian_process.kernels import RBF
-
-        self.kernel=eval(kernel)
-        self.outformat=outformat
-        self.verbose=verbose
-
-        try:
-            self.gpr=GaussianProcessRegressor(kernel=self.kernel,
-                                              normalize_y=True).fit(in_data,
-                                                                    out_data)
-        except Exception as e:
-            print('Exception:',e)
-            pass
-
-        return
-    
-    def set_data_str(self,in_data,out_data,options):
-        """
-        Desc
-        """
-
-        dct=self.string_to_dict(options)
-        print('String:',options,'Dictionary:',dct)
-              
-        self.set_data(in_data,out_data,**dct)
-
-        return
-    
-    def eval(self,v):
-        """
-        Desc
-        """
-        yp=self.gpr.predict([v])
-        print('here eval',type(yp))
-        if self.outformat=='list':
-            return yp[0].tolist()
-        print('here2 eval',type(yp))
-        return yp
 
 def remove_spaces(string):
     """

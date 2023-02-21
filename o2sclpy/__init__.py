@@ -40,6 +40,7 @@ from o2sclpy.hdf import *
 from o2sclpy.hdf_add import *
 from o2sclpy.other import *
 from o2sclpy.cap_cout import *
+from o2sclpy.interpm import *
 
 """
 The version number string
