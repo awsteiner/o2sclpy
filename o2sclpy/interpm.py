@@ -27,10 +27,11 @@ class interpm_sklearn_gp:
     Gaussian process from scikit-learn
     """
 
-    gp=0
-    verbose=0
-    kernel=0
-    outformat='numpy'
+    def __init__(self):
+        self.gp=0
+        self.verbose=0
+        self.kernel=0
+        self.outformat='numpy'
 
     def string_to_dict(self,s):
         """
@@ -89,16 +90,18 @@ class interpm_sklearn_gp:
             print('  out_data shape:',numpy.shape(out_data))
 
         from sklearn.gaussian_process import GaussianProcessRegressor
-        from sklearn.gaussian_process.kernels import RBF
+        from sklearn.gaussian_process.kernels import RBF, DotProduct
+        from sklearn.gaussian_process.kernels import RationalQuadratic
+        from sklearn.gaussian_process.kernels import Matern, WhiteKernel
 
         self.kernel=eval(kernel)
         self.outformat=outformat
         self.verbose=verbose
 
         try:
-            self.gp=GaussianProcessRegressor(kernel=self.kernel,
-                                              normalize_y=True).fit(in_data,
-                                                                    out_data)
+            func=GaussianProcessRegressor
+            self.gp=func(normalize_y=True,
+                         kernel=self.kernel).fit(in_data,out_data)
         except Exception as e:
             print('Exception in interpm_sklearn_gp:',e)
             pass
@@ -129,11 +132,11 @@ class interpm_sklearn_gp:
             if self.verbose>1:
                 print('interpm_sklearn_gp::eval(): type(yp),yp:',
                       type(yp),yp)
-            return yp
+            return numpy.ascontiguousarray(yp)
         if self.verbose>1:
             print('interpm_sklearn_gp::eval(): type(yp[0]),yp[0]:',
                   type(yp[0]),yp[0])
-        return yp[0]
+        return numpy.ascontiguousarray(yp[0])
 
 class interpm_tf_dnn:
     """
@@ -143,14 +146,12 @@ class interpm_tf_dnn:
 
     def __init__(self):
         
-        from sklearn.preprocessing import QuantileTransformer
-        
         self.verbose=0
         self.kernel=0
         self.outformat='numpy'
         self.dnn=0
-        self.SS1=QuantileTransformer()
-        self.SS2=QuantileTransformer()
+        self.SS1=0
+        self.SS2=0
 
         return
     
@@ -200,11 +201,20 @@ class interpm_tf_dnn:
 
         return dct
     
-    def set_data(self,in_data,out_data,
-                 outformat='numpy',verbose=0,activation='tanh',
-                 batch_size=32,epochs=100,test_size=0.15):
+    def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
+                 activation='tanh',batch_size=32,epochs=100,
+                 transform='default',test_size=0.15):
         """
         Set the input and output data to train the interpolator
+
+        some activation functions: 
+        relu [0,\infty]
+        sigmoid [0,1]
+        tanh [-1,1]
+
+        transformations:
+        quantile transforms to [0,1]
+        MinMaxScaler transforms to [a,b]
         """
 
         from sklearn.model_selection import train_test_split
@@ -222,7 +232,15 @@ class interpm_tf_dnn:
         self.outformat=outformat
         self.verbose=verbose
 
-        print("  Here.")
+        from sklearn.preprocessing import QuantileTransformer
+        from sklearn.preprocessing import MinMaxScaler
+        if activation=='tanh':
+            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            self.SS2=MinMaxScaler(feature_range=(-1,1))
+        else:
+            self.SS1=QuantileTransformer()
+            self.SS2=QuantileTransformer()
+        
         in_data_trans=self.SS1.fit_transform(in_data)
         out_data_trans=self.SS2.fit_transform(out_data)
 
@@ -230,20 +248,19 @@ class interpm_tf_dnn:
             print('  in_data_trans shape:',numpy.shape(in_data_trans))
             print('  out_data_trans shape:',numpy.shape(out_data_trans))
             
-        print("  Here2.")
         try:
             x_train,x_test,y_train,y_test=train_test_split(
                 in_data_trans,out_data_trans,test_size=test_size)
         except Exception as e:
-            print('Exception in interpm_tf_dnn:',e)
+            print('Exception 1 in interpm_tf_dnn:',e)
             pass
 
         nd_in=numpy.shape(in_data)[1]
-        print('nd_in:',nd_in)
         nd_out=numpy.shape(out_data)[1]
-        print('nd_out:',nd_out)
         
-        print("  Training DNN model.")
+        if verbose>0:
+            print("  Training DNN model.")
+            
         try:
             model=tf.keras.Sequential(
                 [
@@ -255,14 +272,17 @@ class interpm_tf_dnn:
         except Exception as e:
             print('Exception 2 in interpm_tf_dnn:',e)
             pass
-        print('summary:',model.summary())
+        
+        if verbose>0:
+            print('summary:',model.summary())
 
         model.compile(loss='mean_squared_error',
                       optimizer='adam',metrics=['accuracy'])
         model.fit(x_train,y_train,batch_size=batch_size,epochs=epochs,
                   validation_data=(x_test,y_test),verbose=0)
 
-        print("  Training done.")
+        if verbose>0:
+            print("  Training done.")
         print("  Test Score: [loss, accuracy]: ",
               model.evaluate(x_test, y_test, verbose=0))
         self.dnn=model
@@ -288,14 +308,12 @@ class interpm_tf_dnn:
         """
 
         v_trans=0
-        print('v:',v)
         try:
             v_trans=self.SS1.transform(v.reshape(1,-1))
         except Exception as e:
             print('Exception 3 in interpm_tf_dnn:',e)
             pass
 
-        print('x:',v_trans)
         try:
             pred=self.dnn.predict(v_trans, verbose=1)
         except Exception as e:
@@ -324,7 +342,7 @@ class interpm_tf_dnn:
             for i in range(0,n_out):
                 out_double[i]=pred_trans[i]
                     
-            return out_double
+            return numpy.ascontiguousarray(out_double)
         
         if self.verbose>1:
             print('interpm_tf_dnn::eval():',
@@ -338,5 +356,4 @@ class interpm_tf_dnn:
         for i in range(0,n_out):
             out_double[i]=pred_trans[0][i]
             
-        return out_double
-
+        return numpy.ascontiguousarray(out_double)
