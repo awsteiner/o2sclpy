@@ -196,6 +196,8 @@ class interpm_tf_dnn:
                 arr2[1]=int(arr2[1])
             elif arr2[0]=='test_size':
                 arr2[1]=float(arr2[1])
+            elif arr2[0]=='evaluate':
+                arr2[1]=bool(arr2[1])
                     
             dct[arr2[0]]=arr2[1]
 
@@ -203,7 +205,7 @@ class interpm_tf_dnn:
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  activation='tanh',batch_size=32,epochs=100,
-                 transform='default',test_size=0.15):
+                 transform='default',test_size=0.0,evaluate=False):
         """
         Set the input and output data to train the interpolator
 
@@ -244,22 +246,36 @@ class interpm_tf_dnn:
         in_data_trans=self.SS1.fit_transform(in_data)
         out_data_trans=self.SS2.fit_transform(out_data)
 
+        minv=in_data_trans(0,0)
+        maxv=in_data_trans(0,0)
+        for j in range(0,numpy.shape(in_data)[1]):
+            if in_data_trans(j,0)<minv:
+                minv=in_data_trans(j,0)
+            if in_data_trans(j,0)>maxv:
+                maxv=in_data_trans(j,0)
+        print('min,max',minv,maxv)
+
         if verbose>0:
             print('  in_data_trans shape:',numpy.shape(in_data_trans))
             print('  out_data_trans shape:',numpy.shape(out_data_trans))
-            
-        try:
-            x_train,x_test,y_train,y_test=train_test_split(
-                in_data_trans,out_data_trans,test_size=test_size)
-        except Exception as e:
-            print('Exception 1 in interpm_tf_dnn:',e)
-            pass
+
+        if test_size>0.0:
+            try:
+                x_train,x_test,y_train,y_test=train_test_split(
+                    in_data_trans,out_data_trans,test_size=test_size)
+            except Exception as e:
+                print('Exception in interpm_tf_dnn::set_data()',
+                      'at test_train_split().',e)
+                pass
+        else:
+            x_train=in_data_trans
+            y_train=out_data_trans
 
         nd_in=numpy.shape(in_data)[1]
         nd_out=numpy.shape(out_data)[1]
         
         if verbose>0:
-            print("  Training DNN model.")
+            print('  Training DNN model.')
             
         try:
             model=tf.keras.Sequential(
@@ -270,21 +286,27 @@ class interpm_tf_dnn:
                     tf.keras.layers.Dense(nd_out,activation=activation)
                 ])
         except Exception as e:
-            print('Exception 2 in interpm_tf_dnn:',e)
+            print('Exception in interpm_tf_dnn::set_data()',
+                  'at model definition.',e)
             pass
         
         if verbose>0:
             print('summary:',model.summary())
 
+        # Compile the model for training
         model.compile(loss='mean_squared_error',
                       optimizer='adam',metrics=['accuracy'])
+        # Fit the model to training data
         model.fit(x_train,y_train,batch_size=batch_size,epochs=epochs,
-                  validation_data=(x_test,y_test),verbose=0)
+                  validation_data=(x_test,y_test),verbose=verbose)
 
-        if verbose>0:
-            print("  Training done.")
-        print("  Test Score: [loss, accuracy]: ",
-              model.evaluate(x_test, y_test, verbose=0))
+        if evaluate==True:
+            # Return loss value and metrics
+            if verbose>0:
+                print('  Training done.')
+            print('  Test Score: [loss, accuracy]:',
+                  model.evaluate(x_test,y_test,verbose=verbose))
+            
         self.dnn=model
 
         return

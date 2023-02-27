@@ -5,9 +5,15 @@ acol -read table.o2 -set verbose 2 -interp-table3d gp none y z "grid:0,1,0.01" "
 # Py GP interpolation
 acol -read table.o2 -set verbose 2 -interp-table3d py_gp none y z "grid:0,1,0.01" "grid:0,1,0.01" f -internal table3d_py_gp.o2
 # Py DNN interpolation
-acol -read table.o2 -set verbose 2 -interp-table3d py_dnn none y z "grid:0,1,0.01" "grid:0,1,0.01" f -internal table3d_py_dnn.o2
+acol -read table.o2 -set verbose 2 -interp-table3d py_dnn activation=relu y z "grid:0,1,0.01" "grid:0,1,0.01" f -internal table3d_py_dnn1.o2
+acol -read table.o2 -set verbose 2 -interp-table3d py_dnn activation=sigmoid y z "grid:0,1,0.01" "grid:0,1,0.01" f -internal table3d_py_dnn2.o2
+acol -read table.o2 -set verbose 2 -interp-table3d py_dnn activation=tanh y z "grid:0,1,0.01" "grid:0,1,0.01" f -internal table3d_py_dnn3.o2
 acol -read table3d_idw.o2 -rename f f_idw \
 -cat table3d_gp.o2 -rename f f_gp \
 -cat table3d_py_gp.o2 -rename f f_py_gp \
--cat table3d_py_dnn.o2 -rename f f_py_dnn -internal table_all.o2
+-cat table3d_py_dnn.o2 -rename f f_py_dnn1 \
+-cat table3d_py_dnn.o2 -rename f f_py_dnn2 \
+-cat table3d_py_dnn.o2 -rename f f_py_dnn3 \
+-internal table_all.o2
+
 
