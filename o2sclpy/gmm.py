@@ -82,7 +82,7 @@ class gmm_sklearn:
         a numpy array of shape (n_samples,n_coordinates)
         """
 
-        if verbose>0:
+        if verbose>1:
             print('gmm_sklearn::set_data():')
             print('  verbose:',verbose)
             print('  n_components:',n_components)
@@ -101,6 +101,9 @@ class gmm_sklearn:
             print('Exception in gmm_sklearn:',e)
             pass
 
+        if self.verbose>0:
+            print('gmm_sklearn::set_data(): Score:',self.gm.score(in_data))
+        
         return
 
     def get_data(self):
@@ -111,7 +114,7 @@ class gmm_sklearn:
         covariances), and the Cholesky decomposition of the
         precisions.
         """
-        if self.verbose>0:
+        if self.verbose>1:
             print('gmm_sklearn::get_data():')
             print('  weights:',self.gm.weights_)
             print('  means: ',self.gm.means_)
