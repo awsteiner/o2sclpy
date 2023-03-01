@@ -34,8 +34,8 @@ def test_all():
             x[i,0]=0.1+0.2*numpy.sin(i*1.0e6)
             x[i,1]=0.1+0.2*numpy.cos(i*1.0e6)
     
-    gs=gmm_sklearn()
-    gs.set_data_str(x,'verbose=2,n_components=3')
+    gs=o2sclpy.gmm_sklearn()
+    gs.set_data_str(x,'verbose=2,n_components=2')
     print(gs.eval([0.7,0.7]))
     print(gs.eval([0.0,0.0]))
     print('w',gs.gm.weights_)
@@ -43,7 +43,7 @@ def test_all():
     print('c',gs.gm.covariances_)
     print('p',gs.gm.precisions_)
     print(gs.get_data())
-            
+
     return
 
 if __name__ == '__main__':
