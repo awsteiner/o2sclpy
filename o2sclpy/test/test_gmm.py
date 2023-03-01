@@ -24,24 +24,25 @@ import numpy
 
 def test_all():
 
-    N=1000
-    
+    N=100
     x=numpy.zeros((N,2))
-    for i in range(0,N):
-        for j in range(0,2):
-            x[i,0]=numpy.sin(i)
-            x[i,1]=numpy.cos(i)
-            
-    y=numpy.zeros((N,1))
-    for i in range(0,N):
-        for j in range(0,1):
-            y[i,j]=x[i,0]**3+3.0*(x[i,1]**2)
-            if abs(x[i,0]-0.2)<0.17 and abs(x[i,1]-0.1)<0.17:
-                print(x[i,0],x[i,1],y[i,0])
-
-    im=o2sclpy.interpm_sklearn_gp()
-    im.set_data_str(x,y,'verbose=2')
-    print(im.eval([0.2,0.1]),0.2**3+3*(0.1**2))
+    for i in range(0,100):
+        if i%2==0:
+            x[i,0]=0.5+0.2*numpy.sin(i*1.0e6)
+            x[i,1]=0.5+0.2*numpy.cos(i*1.0e6)
+        else:
+            x[i,0]=0.1+0.2*numpy.sin(i*1.0e6)
+            x[i,1]=0.1+0.2*numpy.cos(i*1.0e6)
+    
+    gs=gmm_sklearn()
+    gs.set_data_str(x,'verbose=2,n_components=3')
+    print(gs.eval([0.7,0.7]))
+    print(gs.eval([0.0,0.0]))
+    print('w',gs.gm.weights_)
+    print('m',gs.gm.means_)
+    print('c',gs.gm.covariances_)
+    print('p',gs.gm.precisions_)
+    print(gs.get_data())
             
     return
 
