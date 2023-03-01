@@ -246,16 +246,22 @@ class interpm_tf_dnn:
         in_data_trans=self.SS1.fit_transform(in_data)
         out_data_trans=self.SS2.fit_transform(out_data)
 
-        minv=in_data_trans(0,0)
-        maxv=in_data_trans(0,0)
+        try:
+            minv=in_data_trans[0,0]
+            maxv=in_data_trans[0,0]
+        except Exception as e:
+            print('Exception in interpm_tf_dnn::set_data()',
+                  'at transform().',e)
+            pass
+        
         for j in range(0,numpy.shape(in_data)[1]):
-            if in_data_trans(j,0)<minv:
-                minv=in_data_trans(j,0)
-            if in_data_trans(j,0)>maxv:
-                maxv=in_data_trans(j,0)
-        print('min,max',minv,maxv)
+            if in_data_trans[j,0]<minv:
+                minv=in_data_trans[j,0]
+            if in_data_trans[j,0]>maxv:
+                maxv=in_data_trans[j,0]
 
         if verbose>0:
+            print('min,max',minv,maxv)
             print('  in_data_trans shape:',numpy.shape(in_data_trans))
             print('  out_data_trans shape:',numpy.shape(out_data_trans))
 
@@ -293,12 +299,23 @@ class interpm_tf_dnn:
         if verbose>0:
             print('summary:',model.summary())
 
-        # Compile the model for training
-        model.compile(loss='mean_squared_error',
-                      optimizer='adam',metrics=['accuracy'])
-        # Fit the model to training data
-        model.fit(x_train,y_train,batch_size=batch_size,epochs=epochs,
-                  validation_data=(x_test,y_test),verbose=verbose)
+        try:
+            # Compile the model for training
+            model.compile(loss='mean_squared_error',
+                          optimizer='adam',metrics=['accuracy'])
+            if test_size>0.0:
+                # Fit the model to training data
+                model.fit(x_train,y_train,batch_size=batch_size,epochs=epochs,
+                          validation_data=(x_test,y_test),verbose=verbose)
+            else:
+                # Fit the model to training data
+                model.fit(x_train,y_train,batch_size=batch_size,epochs=epochs,
+                          verbose=verbose)
+                
+        except Exception as e:
+            print('Exception in interpm_tf_dnn::set_data()',
+                  'at model fitting.',e)
+            pass
 
         if evaluate==True:
             # Return loss value and metrics
