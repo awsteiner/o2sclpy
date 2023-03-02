@@ -99,7 +99,7 @@ class gmm_sklearn:
             self.gm=GaussianMixture(n_components=n_components).fit(in_data)
         except Exception as e:
             print('Exception in gmm_sklearn:',e)
-            pass
+            raise
 
         if self.verbose>0:
             print('gmm_sklearn::set_data(): Score:',self.gm.score(in_data))
