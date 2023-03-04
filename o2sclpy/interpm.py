@@ -105,7 +105,7 @@ class interpm_sklearn_gp:
                          kernel=self.kernel).fit(in_data,out_data)
         except Exception as e:
             print('Exception in interpm_sklearn_gp:',e)
-            raise
+            pass
 
         return
     
@@ -206,7 +206,7 @@ class interpm_tf_dnn:
         return dct
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
-                 activation='relu',batch_size=32,epochs=100,
+                 activation='relu',batch_size=None,epochs=100,
                  transform='default',test_size=0.0,evaluate=False):
         """
         Set the input and output data to train the interpolator
@@ -264,7 +264,7 @@ class interpm_tf_dnn:
             except Exception as e:
                 print('Exception in interpm_tf_dnn::set_data()',
                       'at min,max().',e)
-                raise
+                pass
             
             for j in range(0,numpy.shape(out_data)[0]):
                 if out_data[j,0]<minv_old:
@@ -286,7 +286,7 @@ class interpm_tf_dnn:
             except Exception as e:
                 print('Exception in interpm_tf_dnn::set_data()',
                       'at test_train_split().',e)
-                raise
+                pass
         else:
             x_train=in_data_trans
             y_train=out_data_trans
@@ -295,6 +295,7 @@ class interpm_tf_dnn:
         nd_out=numpy.shape(out_data)[1]
         
         if self.verbose>0:
+            print('nd_in,nd_out:',nd_in,nd_out)
             print('  Training DNN model.')
             
         try:
@@ -302,14 +303,14 @@ class interpm_tf_dnn:
                 [
                     tf.keras.layers.Dense(
                         nd_in,input_shape=(nd_in,),activation=activation),
-                    tf.keras.layers.Dense(8,activation=activation),
-                    tf.keras.layers.Dense(8,activation=activation),
+                    tf.keras.layers.Dense(12,activation=activation),
+                    tf.keras.layers.Dense(12,activation=activation),
                     tf.keras.layers.Dense(nd_out,activation=activation)
                 ])
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
                   'at model definition.',e)
-            raise
+            pass
         
         if self.verbose>0:
             print('summary:',model.summary())
@@ -332,7 +333,7 @@ class interpm_tf_dnn:
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
                   'at model fitting.',e)
-            raise
+            pass
 
         if evaluate==True:
             # Return loss value and metrics
@@ -363,26 +364,31 @@ class interpm_tf_dnn:
         Evaluate the NN at point ``v``.
         """
 
-        if self.transform is not 'none':
+        if self.transform!='none':
             v_trans=0
             try:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
             except Exception as e:
-                print('Exception 3 in interpm_tf_dnn:',e)
-                raise
+                print('Exception at input transformation in interpm_tf_dnn:',
+                      e)
+                pass
+        else:
+            v_trans=v.reshape(1,-1)
 
         try:
             pred=self.dnn.predict(v_trans, verbose=self.verbose)
         except Exception as e:
             print('Exception 4 in interpm_tf_dnn:',e)
-            raise
+            pass
             
-        if self.transform is not 'none':
+        if self.transform!='none':
             try:
                 pred_trans=self.SS2.inverse_transform(pred)
             except Exception as e:
                 print('Exception 5 in interpm_tf_dnn:',e)
-                raise
+                pass
+        else:
+            pred_trans=pred
     
         if self.outformat=='list':
             return pred_trans.tolist()

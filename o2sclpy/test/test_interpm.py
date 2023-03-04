@@ -22,26 +22,41 @@
 import o2sclpy
 import numpy
 
+def f(x,y):
+    return (numpy.sin(x*10)+2.0*numpy.tan(y))/5.0+0.14
+
+def f2(x,y):
+    fv=f(x,y)
+    return 2.0-fv*fv*fv
+
 def test_all():
 
-    N=1000
-    
+    N=100
     x=numpy.zeros((N,2))
     for i in range(0,N):
-        for j in range(0,2):
-            x[i,0]=numpy.sin(i)
-            x[i,1]=numpy.cos(i)
+        x[i,0]=float(i)/float(N)
+        x[i,1]=numpy.abs(numpy.sin(1.0e8*float(i)))
             
     y=numpy.zeros((N,1))
     for i in range(0,N):
-        for j in range(0,1):
-            y[i,j]=x[i,0]**3+3.0*(x[i,1]**2)
-            if abs(x[i,0]-0.2)<0.17 and abs(x[i,1]-0.1)<0.17:
-                print(x[i,0],x[i,1],y[i,0])
+        y[i,0]=f(x[i,0],x[i,1])
 
-    im=o2sclpy.interpm_sklearn_gp()
-    im.set_data_str(x,y,'verbose=2')
-    print(im.eval([0.2,0.1]),0.2**3+3*(0.1**2))
+    if True:
+        im=o2sclpy.interpm_sklearn_gp()
+        im.set_data_str(x,y,'verbose=2')
+        exact=f(0.5,0.5)
+        v=numpy.array([0.5,0.5])
+        interp=im.eval(v)[0]
+        print('exact,interp:',exact,interp)
+        assert numpy.allclose(exact,interp,rtol=1.0e-4)
+
+    if True:
+        im2=o2sclpy.interpm_tf_dnn()
+        im2.set_data_str(x,y,('verbose=1,activation=relu,'+
+                              'test_size=0.15,batch_size=10,transform=none'))
+        print(f(0.5,0.5))
+        v=numpy.array([0.5,0.5])
+        print(im2.eval(v))
             
     return
 
