@@ -207,7 +207,8 @@ class interpm_tf_dnn:
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  activation='relu',batch_size=None,epochs=100,
-                 transform='default',test_size=0.0,evaluate=False):
+                 transform='default',test_size=0.0,evaluate=False,
+                 hlayers=[8,8,8],loss='mean_squared_error'):
         """
         Set the input and output data to train the interpolator
 
@@ -276,8 +277,10 @@ class interpm_tf_dnn:
                 if out_data_trans[j,0]>maxv:
                     maxv=out_data_trans[j,0]
 
-            print('min,max before transformation:',minv_old,maxv_old)
-            print('min,max after transformation :',minv,maxv)
+            print('min,max before transformation: %7.6e %7.6e' %
+                  (minv_old,maxv_old))
+            print('min,max after transformation : %7.6e %7.6e' %
+                  (minv,maxv))
             
         if test_size>0.0:
             try:
@@ -299,14 +302,14 @@ class interpm_tf_dnn:
             print('  Training DNN model.')
             
         try:
-            model=tf.keras.Sequential(
-                [
-                    tf.keras.layers.Dense(
-                        nd_in,input_shape=(nd_in,),activation=activation),
-                    tf.keras.layers.Dense(12,activation=activation),
-                    tf.keras.layers.Dense(12,activation=activation),
-                    tf.keras.layers.Dense(nd_out,activation=activation)
-                ])
+            layers=[tf.keras.layers.Dense(hlayers[0],input_shape=(nd_in,),
+                                     activation=activation)]
+            for i in range(1,len(hlayers)):
+                layers.append(tf.keras.layers.Dense(hlayers[i],
+                                                    activation=activation))
+            layers.append(tf.keras.layers.Dense(nd_out,
+                                                activation=activation))
+            model=tf.keras.Sequential(layers)
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
                   'at model definition.',e)
@@ -317,8 +320,7 @@ class interpm_tf_dnn:
 
         try:
             # Compile the model for training
-            model.compile(loss='mean_squared_error',
-                          optimizer='adam',metrics=['accuracy'])
+            model.compile(loss=loss,optimizer='adam')
             if test_size>0.0:
                 # Fit the model to training data
                 model.fit(x_train,y_train,batch_size=batch_size,

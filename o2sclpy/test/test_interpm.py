@@ -47,16 +47,18 @@ def test_all():
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
         interp=im.eval(v)[0]
-        print('exact,interp:',exact,interp)
+        print('exact,interp: %7.6e %7.6e' % (exact,interp))
         assert numpy.allclose(exact,interp,rtol=1.0e-4)
 
     if True:
         im2=o2sclpy.interpm_tf_dnn()
-        im2.set_data_str(x,y,('verbose=1,activation=relu,'+
+        im2.set_data_str(x,y,('verbose=1,activation=sigmoid,epochs=100,'+
                               'test_size=0.15,batch_size=10,transform=none'))
-        print(f(0.5,0.5))
+        exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
-        print(im2.eval(v))
+        interp=im2.eval(v)[0]
+        print('exact,interp: %7.6e %7.6e' % (exact,interp))
+        assert numpy.allclose(exact,interp,rtol=1.0)
             
     return
 

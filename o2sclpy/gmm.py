@@ -27,6 +27,8 @@ class gmm_sklearn:
     specified set of data.
 
     This is an experimental and very simplifed interface.
+
+    Todos: fix get_data() for other covariance types.
     """
 
     def __init__(self):
@@ -76,16 +78,18 @@ class gmm_sklearn:
 
         return dct
     
-    def set_data(self,in_data,verbose=0,n_components=2):
+    def set_data(self,in_data,verbose=0,n_components=2,
+                 covariance_type='full'):
         """
         Fit the mixture model with the specified input data, 
         a numpy array of shape (n_samples,n_coordinates)
         """
 
-        if verbose>1:
+        if verbose>0:
             print('gmm_sklearn::set_data():')
             print('  verbose:',verbose)
             print('  n_components:',n_components)
+            print('  covariance_type:',covariance_type)
             print('  in_data shape:',numpy.shape(in_data))
             print('')
 
@@ -96,9 +100,12 @@ class gmm_sklearn:
         self.n_dim=numpy.shape(in_data)[1]
 
         try:
-            self.gm=GaussianMixture(n_components=n_components).fit(in_data)
+            self.gm=GaussianMixture(n_components=n_components,
+                                    covariance_type=covariance_type,
+                                    verbose=verbose).fit(in_data)
         except Exception as e:
-            print('Exception in gmm_sklearn:',e)
+            print('Exception in gmm_sklearn::set_data()',
+                  'Gaussian mixture fit failed.\n  ',e)
             raise
 
         if self.verbose>0:

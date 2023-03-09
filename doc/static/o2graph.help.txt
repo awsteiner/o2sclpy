@@ -6,14 +6,14 @@ List of command-line options which do not require a current object:
   -addcbar         Add a color bar.
   -alias           Create a command alias.
   -arrow           Plot an arrow.
-  -autocorr        Compute autocorrelation coefficients from a set of vectors. 
+  -autocorr        Compute autocorrelation coefficients. 
   -backend         Select the matplotlib backend to use.
   -calc            Compute the value of a constant expression. 
   -canvas          Create a plotting canvas.
   -clear           Clear the current object. 
   -clf             Clear the current figure.
   -cmap            Create a continuous colormap.
-  -cmap2           Create a colormap with sharp transitions
+  -colors          Show color information
   -commands        List available commands for current or specified type.
   -constant        Get or modify a physical or numerical constant. 
   -convert         Manipulate or use a unit conversion factor. 
@@ -87,6 +87,5 @@ List of command-line options which do not require a current object:
   -zlimits         Set the z-axis limits
 
 ------------------------------------------------------------------------------
-Additional help topics: cmaps, cmaps-plot, colors, colors-near, colors-plot,
-functions, index-spec, markers, markers-plot, mult-vector-spec, strings-spec,
-types, value-spec, vector-spec, and xkcd-colors.
+Additional help topics: functions, index-spec, markers, markers-plot,
+mult-vector-spec, strings-spec, types, value-spec, and vector-spec.
