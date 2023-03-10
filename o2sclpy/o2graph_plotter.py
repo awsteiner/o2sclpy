@@ -5484,15 +5484,20 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
                     self.gen_acol(o2scl,amp,link,cmd_name,
                                   strlist[ix+1:ix_next])
-                    if (cmd_name=='v' or cmd_name=='version'):
-                        try:
-                            import h5py
-                        except:
-                            print('\n(Import h5py failed.)')
-                        else:
-                            vv=h5py.h5.get_libversion()
-                            print('\nHDF5 version from h5py:',
-                                  vv[0],vv[1],vv[2])
+                    # AWS, 3/9/23: I had to take this out, I think
+                    # because it's not supported in the older version
+                    # of HDF5 which is used in Ubuntu, but at some
+                    # point I can put it back.
+                    #
+                    # if (cmd_name=='v' or cmd_name=='version'):
+                    #     try:
+                    #         import h5py
+                    #     except:
+                    #         print('\n(Import h5py failed.)')
+                    #     else:
+                    #         vv=h5py.h5.get_libversion()
+                    #         print('\nHDF5 version from h5py:',
+                    #               vv[0],vv[1],vv[2])
                     
                 # Increment to the next option
                 ix=ix_next
