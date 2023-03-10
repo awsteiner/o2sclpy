@@ -1,6 +1,7 @@
 #  -------------------------------------------------------------------
 #  
-#  Copyright (C) 2023, Andrew W. Steiner
+#  Copyright (C) 2022-2023, Mahamudul Hasan Anik, Satyajit Roy, and
+#  Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
 #  
@@ -52,14 +53,14 @@ def test_all():
 
     if True:
         im2=o2sclpy.interpm_tf_dnn()
-        im2.set_data_str(x,y,('verbose=1,activation=sigmoid,epochs=100,'+
-                              'test_size=0.15,batch_size=10,transform=none'))
+        im2.set_data_str(x,y,('verbose=1,activation=relu,epochs=100,'+
+                              'test_size=0.0,batch_size=10,transform=none'))
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
         interp=im2.eval(v)[0]
         print('exact,interp: %7.6e %7.6e' % (exact,interp))
         assert numpy.allclose(exact,interp,rtol=1.0)
-            
+
     return
 
 if __name__ == '__main__':
