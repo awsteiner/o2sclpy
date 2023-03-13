@@ -207,9 +207,10 @@ class interpm_tf_dnn:
         return dct
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
-                 activation='relu',batch_size=None,epochs=100,
+                 activations=['relu','relu','relu'],
+                 batch_size=None,epochs=100,
                  transform='default',test_size=0.0,evaluate=False,
-                 hlayers=[8,8,8],loss='mean_squared_error'):
+                 hlayers=[32,16,8],loss='mean_squared_error'):
         """
         Set the input and output data to train the interpolator
 
@@ -232,7 +233,8 @@ class interpm_tf_dnn:
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
             print('  batch_size:',batch_size)
-            print('  activation:',activation)
+            print('  layers:',hlayers)
+            print('  activation functions:',activations)
             print('  transform:',transform)
             print('  epochs:',epochs)
             print('  test_size:',test_size)
@@ -243,7 +245,7 @@ class interpm_tf_dnn:
 
         from sklearn.preprocessing import QuantileTransformer
         from sklearn.preprocessing import MinMaxScaler
-        if self.transform!='none':
+        if False and self.transform!='none':
             if activation=='tanh':
                 self.SS1=MinMaxScaler(feature_range=(-1,1))
                 self.SS2=MinMaxScaler(feature_range=(-1,1))
@@ -303,13 +305,22 @@ class interpm_tf_dnn:
             print('  Training DNN model.')
             
         try:
+            nl=len(hlayers)
+            na=len(activations)
             layers=[tf.keras.layers.Dense(hlayers[0],input_shape=(nd_in,),
-                                     activation=activation)]
-            for i in range(1,len(hlayers)):
+                                          activation=activations[0])]
+            if self.verbose>0:
+                print('Layer: dense',hlayers[0],nd_in,activations[0])
+            for i in range(1,nl):
+                act=activations[i%na]
                 layers.append(tf.keras.layers.Dense(hlayers[i],
-                                                    activation=activation))
+                                                    activation=act))
+                if self.verbose>0:
+                    print('Layer: dense',hlayers[i],act)
             layers.append(tf.keras.layers.Dense(nd_out,
-                                                activation=activation))
+                                                activation='linear'))
+            if self.verbose>0:
+                print('Layer: dense',nd_out,'linear')
             model=tf.keras.Sequential(layers)
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
