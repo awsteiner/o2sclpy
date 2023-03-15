@@ -368,8 +368,12 @@ class interpm_tf_dnn:
 
         dct=self.string_to_dict(options)
         print('String:',options,'Dictionary:',dct)
-              
-        self.set_data(in_data,out_data,**dct)
+
+        try:
+            self.set_data(in_data,out_data,**dct)
+        except Exception as e:
+            print('Call to set_data() failed.')
+            pass
 
         return
     

@@ -20,6 +20,7 @@
 #  -------------------------------------------------------------------
 #
 import numpy
+from o2sclpy.hdf import *
 
 class gmm_sklearn:
     """
@@ -142,6 +143,39 @@ class gmm_sklearn:
                 numpy.ascontiguousarray(ctemp),
                 numpy.ascontiguousarray(ptemp),
                 numpy.ascontiguousarray(pctemp))
+
+    def o2graph_to_gmm(self,o2scl,amp,link,args):
+        """
+        The function providing the 'to-gmm' command for 
+        o2graph.
+        """
+        
+        curr_type=o2scl_get_type(o2scl,amp,link)
+        amt=acol_manager(link,amp)
+
+        n_g=int(args[0])
+        cols=args[1:]
+        print('otg',n_g,cols)
+        n_c=len(cols)
+
+        if curr_type!=b'table':
+            print("Command 'den-plot' not supported for type",
+                  curr_type,".")
+            return
+            
+        n_l=amt.table_obj.get_nlines()
+        x=numpy.zeros((n_l,n_c))
+        for i in range(0,n_c):
+            for j in range(0,n_l):
+                x[j,i]=amt.table_obj.get(cols[i],j)
+        gs.set_data(x,'n_components='+str(n_g))
+
+        means=numpy.reshape(self.gm.means_,
+                            (self.n_dim*self.n_components))
+        covars=numpy.reshape(self.gm.covariances_,
+                            (self.n_dim*self.n_dim*self.n_components))
+        
+        return
     
     def set_data_str(self,in_data,options):
         """
