@@ -138,7 +138,7 @@ class gmm_sklearn:
             print('  Chol. decomp.:',self.gm.precisions_cholesky_)
             print('')
 
-            if covariance_type=='full':
+            if self.covariance_type=='full':
                 mtemp=numpy.reshape(self.gm.means_,
                                     (self.n_dim*self.n_components))
                 ctemp=numpy.reshape(self.gm.covariances_,
@@ -147,7 +147,7 @@ class gmm_sklearn:
                                     (self.n_dim*self.n_dim*self.n_components))
                 pctemp=numpy.reshape(self.gm.precisions_cholesky_,
                                      (self.n_dim*self.n_dim*self.n_components))
-            elif covariance_type=='diag':
+            elif self.covariance_type=='diag':
                 mtemp=numpy.reshape(self.gm.means_,
                                     (self.n_dim*self.n_components))
                 ctemp=numpy.reshape(self.gm.covariances_,
@@ -156,7 +156,7 @@ class gmm_sklearn:
                                     (self.n_dim*self.n_components))
                 pctemp=numpy.reshape(self.gm.precisions_cholesky_,
                                      (self.n_dim*self.n_components))
-            elif covariance_type=='tied':
+            elif self.covariance_type=='tied':
                 mtemp=numpy.reshape(self.gm.means_,
                                     (self.n_dim*self.n_components))
                 ctemp=numpy.reshape(self.gm.covariances_,
@@ -165,7 +165,7 @@ class gmm_sklearn:
                                     (self.n_dim*self.n_dim))
                 pctemp=numpy.reshape(self.gm.precisions_cholesky_,
                                      (self.n_dim*self.n_dim))
-            elif covariance_type=='spherical':
+            elif self.covariance_type=='spherical':
                 mtemp=numpy.reshape(self.gm.means_,
                                     (self.n_dim*self.n_components))
                 ctemp=numpy.reshape(self.gm.covariances_,
