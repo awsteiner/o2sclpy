@@ -36,6 +36,8 @@ class gmm_sklearn:
         self.verbose=0
         self.n_components=0
         self.n_dim=0
+        self.convariance_type=0
+        self.gm=0
 
     def string_to_dict(self,s):
         """
@@ -98,8 +100,13 @@ class gmm_sklearn:
 
         self.verbose=verbose
         self.n_components=n_components
+        self.covariance_type=covariance_type
         self.n_dim=numpy.shape(in_data)[1]
 
+        if (covariance_type!='full' and covariance_type!='spherical' and
+            covariance_type!='tied' and covariance_type!='diag'):
+            raise('Incorrect covariance type in gmm_sklearn.')
+        
         try:
             self.gm=GaussianMixture(n_components=n_components,
                                     covariance_type=covariance_type,
@@ -130,14 +137,43 @@ class gmm_sklearn:
             print('  precisions:',self.gm.precisions_)
             print('  Chol. decomp.:',self.gm.precisions_cholesky_)
             print('')
-        mtemp=numpy.reshape(self.gm.means_,
-                            (self.n_dim*self.n_components))
-        ctemp=numpy.reshape(self.gm.covariances_,
-                            (self.n_dim*self.n_dim*self.n_components))
-        ptemp=numpy.reshape(self.gm.precisions_,
-                            (self.n_dim*self.n_dim*self.n_components))
-        pctemp=numpy.reshape(self.gm.precisions_cholesky_,
-                            (self.n_dim*self.n_dim*self.n_components))
+
+            if covariance_type=='full':
+                mtemp=numpy.reshape(self.gm.means_,
+                                    (self.n_dim*self.n_components))
+                ctemp=numpy.reshape(self.gm.covariances_,
+                                    (self.n_dim*self.n_dim*self.n_components))
+                ptemp=numpy.reshape(self.gm.precisions_,
+                                    (self.n_dim*self.n_dim*self.n_components))
+                pctemp=numpy.reshape(self.gm.precisions_cholesky_,
+                                     (self.n_dim*self.n_dim*self.n_components))
+            elif covariance_type=='diag':
+                mtemp=numpy.reshape(self.gm.means_,
+                                    (self.n_dim*self.n_components))
+                ctemp=numpy.reshape(self.gm.covariances_,
+                                    (self.n_dim*self.n_components))
+                ptemp=numpy.reshape(self.gm.precisions_,
+                                    (self.n_dim*self.n_components))
+                pctemp=numpy.reshape(self.gm.precisions_cholesky_,
+                                     (self.n_dim*self.n_components))
+            elif covariance_type=='tied':
+                mtemp=numpy.reshape(self.gm.means_,
+                                    (self.n_dim*self.n_components))
+                ctemp=numpy.reshape(self.gm.covariances_,
+                                    (self.n_dim*self.n_dim))
+                ptemp=numpy.reshape(self.gm.precisions_,
+                                    (self.n_dim*self.n_dim))
+                pctemp=numpy.reshape(self.gm.precisions_cholesky_,
+                                     (self.n_dim*self.n_dim))
+            elif covariance_type=='spherical':
+                mtemp=numpy.reshape(self.gm.means_,
+                                    (self.n_dim*self.n_components))
+                ctemp=numpy.reshape(self.gm.covariances_,
+                                    (self.n_components))
+                ptemp=numpy.reshape(self.gm.precisions_,
+                                    (self.n_components))
+                pctemp=numpy.reshape(self.gm.precisions_cholesky_,
+                                     (self.n_components))
         return (numpy.ascontiguousarray(self.gm.weights_),
                 numpy.ascontiguousarray(mtemp),
                 numpy.ascontiguousarray(ctemp),
@@ -159,7 +195,7 @@ class gmm_sklearn:
         n_c=len(cols)
 
         if curr_type!=b'table':
-            print("Command 'den-plot' not supported for type",
+            print("Command 'to-gmm' not supported for type",
                   curr_type,".")
             return
             
