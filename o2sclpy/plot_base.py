@@ -2036,6 +2036,14 @@ class plot_base:
             xv=tab[force_bytes(args[1])][0:tab.get_nlines()]
             yv=tab[force_bytes(args[2])][0:tab.get_nlines()]
 
+        elif str(type(args[0]))=='<class \'o2sclpy.base.std_vector_vector\'>':
+            
+            failed=False
+
+            vvd=args[0]
+            xv=vvd[args[1]][0:tab.get_nlines()]
+            yv=vvd[args[2]][0:tab.get_nlines()]
+
         else:
 
             xv=args[0]

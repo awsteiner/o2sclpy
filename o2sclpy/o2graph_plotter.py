@@ -544,7 +544,10 @@ def reformat_python_docs_type(curr_type,cmd,doc_str,amp,link,
         if parm_desc[-2:]=='``':
             parm_desc=parm_desc[0:-2]
             
-    print('Usage: '+force_string(amt.get_command_color())+cmd+
+    print('Usage for type '+
+          force_string(amt.get_type_color())+curr_type+
+          force_string(amt.get_default_color())+': '+
+          force_string(amt.get_command_color())+cmd+
           force_string(amt.get_default_color())+' '+parm_desc)
     
     print('Short description:',short)
@@ -1131,6 +1134,21 @@ class o2graph_plotter(yt_plot_base):
                 self.plot([tab,args[0],args[1]])
             else:
                 self.plot([tab,args[0],args[1]],**string_to_dict(args[2]))
+
+            failed=False
+
+            # End of section for 'table' type
+            
+        elif curr_type==b'vec_vec_double':
+            
+            amt=acol_manager(link,amp)
+            vvd=amt.get_vvdouble_obj()
+            
+            if len(args)<3:
+                self.plot([vvd,int(args[0]),int(args[1])])
+            else:
+                self.plot([vvd,int(args[0]),int(args[1])],
+                          **string_to_dict(args[2]))
 
             failed=False
 
