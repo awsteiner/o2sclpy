@@ -2014,11 +2014,15 @@ class plot_base:
     def plot(self,args,**kwargs):
         """Plot a two-dimensional set of data
         
-        The argument list ``args`` can be of the form ``[table,colum
-        1,column 2]`` or ``[table_units,colum 1,column 2]`` or
-        ``[shared_ptr_table_units,colum 1,column 2]``. Otherwise,
-        ``args[0]`` and ``args[1]`` are interpreted as arrays to be
-        directly sent to the ``matplotlib.pyplot.plot()`` function.
+        The argument list ``args`` can be of the form ``[table,column
+        name 1, column name 2]`` or ``[table_units,column name
+        1,column name 2]`` or ``[shared_ptr_table_units, column name
+        1, column name 2]`` or ``[vec_vec_double, column index 1]`` or
+        ``[vec_vec_double, column index1, column index 2]``.
+        Otherwise, ``args[0]`` and ``args[1]`` are interpreted as
+        arrays to be directly sent to the ``matplotlib.pyplot.plot()``
+        function.
+
         """
 
         if len(args)<2:
@@ -2040,9 +2044,21 @@ class plot_base:
             
             failed=False
 
-            vvd=args[0]
-            xv=vvd[args[1]][0:tab.get_nlines()]
-            yv=vvd[args[2]][0:tab.get_nlines()]
+            if len(args)>2:
+                vvd=args[0]
+                n1=len(vvd[args[1]])
+                n2=len(vvd[args[2]])
+                if n1<n2:
+                    xv=vvd[args[1]][0:n1]
+                    yv=vvd[args[2]][0:n1]
+                else:
+                    xv=vvd[args[1]][0:n2]
+                    yv=vvd[args[2]][0:n2]
+            else:
+                vvd=args[0]
+                n1=len(vvd[args[1]])
+                xv=[i for i in range(0,n1)]
+                yv=vvd[args[1]]
 
         else:
 

@@ -1047,8 +1047,7 @@ class o2graph_plotter(yt_plot_base):
         return
 
     def plot_o2graph(self,o2scl,amp,args,link):
-        """
-        Documentation for o2graph command ``plot``:
+        """Documentation for o2graph command ``plot``:
 
         For objects of type ``table``:
 
@@ -1059,6 +1058,26 @@ class o2graph_plotter(yt_plot_base):
         Plot column <y> versus
         column <x>. Some useful kwargs are color (c), dashes,
         linestyle (ls), linewidth (lw), marker, markeredgecolor (mec),
+        markeredgewidth (mew), markerfacecolor (mfc),
+        markerfacecoloralt (mfcalt), markersize (ms). For example:
+        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
+        lw=0,marker='+' -show\". This command uses the matplotlib
+        plot() function, see
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
+        for information and keyword arguments. This command does not
+        yet support the matplotlib format parameter.
+
+        For objects of type ``vec_vec_double``:
+
+        Plot one or two columns.
+
+        Command-line arguments: ``<x index> [y index or 'none'] [kwargs]``
+
+        Plot vector with index [index y] versus vector with index
+        <index x>. Alternatively, if the second argument is the
+        string 'none', plot the vector with index <index x>.
+        Some useful kwargs are color (c), dashes, linestyle
+        (ls), linewidth (lw), marker, markeredgecolor (mec),
         markeredgewidth (mew), markerfacecolor (mfc),
         markerfacecoloralt (mfcalt), markersize (ms). For example:
         \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
@@ -1121,6 +1140,7 @@ class o2graph_plotter(yt_plot_base):
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
+
         """
 
         curr_type=o2scl_get_type(o2scl,amp,link)
@@ -1144,7 +1164,9 @@ class o2graph_plotter(yt_plot_base):
             amt=acol_manager(link,amp)
             vvd=amt.get_vvdouble_obj()
             
-            if len(args)<3:
+            if len(args)<2 or args[1]=='none':
+                self.plot([vvd,int(args[0])])
+            elif len(args)<3:
                 self.plot([vvd,int(args[0]),int(args[1])])
             else:
                 self.plot([vvd,int(args[0]),int(args[1])],
@@ -1152,7 +1174,7 @@ class o2graph_plotter(yt_plot_base):
 
             failed=False
 
-            # End of section for 'table' type
+            # End of section for 'vec_vec_double' type
             
         elif curr_type==b'hist':
 
