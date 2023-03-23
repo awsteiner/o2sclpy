@@ -53,8 +53,10 @@ def test_all():
 
     if True:
         im2=o2sclpy.interpm_tf_dnn()
-        im2.set_data_str(x,y,('verbose=1,epochs=100,'+
-                              'test_size=0.15,batch_size=4,transform=none'))
+        im2.set_data(x,y,verbose=1,epochs=600,
+                     test_size=0.15,batch_size=8,transform='none',
+                     activations=['relu','relu','relu','relu'],
+                     hlayers=[128,64,32,16])
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
         interp=im2.eval(v)[0]

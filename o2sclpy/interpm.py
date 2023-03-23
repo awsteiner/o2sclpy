@@ -207,10 +207,10 @@ class interpm_tf_dnn:
         return dct
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
-                 activations=['relu','relu','relu'],
+                 activations=['relu','relu'],
                  batch_size=None,epochs=100,
                  transform='default',test_size=0.0,evaluate=False,
-                 hlayers=[32,16,8],loss='mean_squared_error'):
+                 hlayers=[8,8],loss='mean_squared_error'):
         """
         Set the input and output data to train the interpolator
 
