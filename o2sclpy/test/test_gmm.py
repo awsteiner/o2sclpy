@@ -22,7 +22,7 @@
 import o2sclpy
 import numpy
 
-def test_all():
+def test_gmm():
 
     N=100
     x=numpy.zeros((N,2))
@@ -46,6 +46,31 @@ def test_all():
 
     return
 
+def test_bgmm():
+
+    N=100
+    x=numpy.zeros((N,2))
+    for i in range(0,100):
+        if i%2==0:
+            x[i,0]=0.5+0.2*numpy.sin(i*1.0e6)
+            x[i,1]=0.5+0.2*numpy.cos(i*1.0e6)
+        else:
+            x[i,0]=0.1+0.2*numpy.sin(i*1.0e6)
+            x[i,1]=0.1+0.2*numpy.cos(i*1.0e6)
+    
+    gs=o2sclpy.bgmm_sklearn()
+    gs.set_data_str(x,'verbose=2,n_components=2')
+    print(gs.eval([0.7,0.7]))
+    print(gs.eval([0.0,0.0]))
+    print('w',gs.bgm.weights_)
+    print('m',gs.bgm.means_)
+    print('c',gs.bgm.covariances_)
+    print('p',gs.bgm.precisions_)
+    print(gs.get_data())
+
+    return
+
 if __name__ == '__main__':
-    test_all()
+    test_gmm()
+    test_bgmm()
     print('All tests passed.')
