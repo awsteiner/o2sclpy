@@ -40,29 +40,23 @@ from o2sclpy.plot_info import colors_plot, color_list, colors_near
 
 class plot_base:
     """
-    A base class for plotting classes :py:class:`o2sclpy.plotter` and
-    :py:class:`o2sclpy.o2graph_plotter` . The principal purpose
-    of this class is just to provide some additional simplification
-    to python code which makes plots using matplotlib.
-
-    """
-
-    cbar=0
-    """ 
-    Colorbar?
+    This class currently has two goals: (i) some simplifications for
+    making plots using matplotlib and (ii) provide an interface for
+    easily plotting o2scl objects with matplotlib.
     """
 
     last_image=0
     """
-    The last image object created (used for addcbar)
+    The last image object created (used for addcbar())
     """
     axes=0
     """ 
-    Axis object
+    Current axis object
     """
     axes_dict={}
     """
-    Dictionary of axis objects 
+    Dictionary of axis objects (used by subplots() and selax() to manage
+    multiple axis objects)
     """
     fig=0
     """ 
@@ -164,19 +158,21 @@ class plot_base:
     """
     If true, include ticks on right side and top (default False)
     """
-
     editor=False
     """
-    If true, open the editor
+    If true, open the GUI editor (experimental)
     """
-    
     ax_left_panel=0
     """
-    Desc
+    Left panel axis for the editor
     """
     ax_right_panel=0
     """
-    Desc
+    Right panel axis for the editor
+    """
+    link2=0
+    """
+    Link to the O2scl library DLL
     """
     
     def __init__(self):
@@ -1923,11 +1919,6 @@ class plot_base:
         axname="cbar"+str(ifound)
         
         if image=='last':
-            #print('1')
-            #print(self.axes)
-            #print('2')
-            #print(self.fig)
-            #print('3')
             self.axes=self.fig.add_axes([left,bottom,width,height])
             self.axes_dict[axname]=self.axes
             print('Created new axes named',axname)
@@ -2025,7 +2016,7 @@ class plot_base:
         The argument list ``args`` can be of the form ``[table,column
         name 1, column name 2]`` or ``[table_units,column name
         1,column name 2]`` or ``[shared_ptr_table_units, column name
-        1, column name 2]`` or ``[hist,link]`` or ``[vec_vec_double,
+        1, column name 2]`` or ``[hist]`` or ``[vec_vec_double,
         column index 1]`` or ``[vec_vec_double, column index1, column
         index 2]``. Otherwise, ``args[0]`` and ``args[1]`` are
         interpreted as arrays to be directly sent to the
@@ -2050,13 +2041,16 @@ class plot_base:
             
         elif str(type(args[0]))=='<class \'o2sclpy.other.hist\'>':
 
+            if self.link2==0:
+                print('o2scl library dll not set.')
+                return
+            
             failed=False
 
             h=args[0]
-            link=args[1]
             n=h.size()
             yv=[h[i] for i in range(0,n)]
-            reps=std_vector(link)
+            reps=std_vector(self.link2)
             h.create_rep_vec(reps)
             xv=[reps[i] for i in range(0,n)]
 
@@ -2120,7 +2114,7 @@ class plot_base:
         or a hist_2d object.
 
         The argument list ``args`` can be of the form ``[numpy
-        matrix]`` or ``[table3d,slice name]`` or ``[hist_2d,link]``.
+        matrix]`` or ``[table3d,slice name]`` or ``[hist_2d]``.
         """
         
         if len(args)<1:
@@ -2152,7 +2146,6 @@ class plot_base:
         elif str(type(args[0]))=='<class \'o2sclpy.other.hist_2d\'>':
 
             h2d=args[0]
-            link=args[1]
             nxt=h2d.size_x()
             nyt=h2d.size_y()
             sl=h2d.get_wgts().to_numpy()
@@ -2164,8 +2157,11 @@ class plot_base:
                 extent3=h2d.get_y_low_i(0)
                 extent4=h2d.get_y_high_i(nyt-1)
             else:
-                xgrid=o2sclpy.std_vector_size_t(link)
-                ygrid=o2sclpy.std_vector_size_t(link)
+                if self.link2==0:
+                    print('o2scl library dll not set.')
+                    return
+                xgrid=o2sclpy.std_vector_size_t(self.link2)
+                ygrid=o2sclpy.std_vector_size_t(self.link2)
                 h2d.create_x_rep_vec(xgrid)
                 h2d.create_y_rep_vec(ygrid)
 
