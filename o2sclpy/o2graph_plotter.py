@@ -923,40 +923,62 @@ class o2graph_plotter(yt_plot_base):
         kwstring=''
         slice_name=''
         if curr_type==b'tensor':
-            amt.tensor_obj.copy_table3d(args[0],args[1],
-                                        amt.table3d_obj)
+            if len(args)>=2:
+                amt.get_tensor_obj().copy_table3d(args[0],args[1],
+                                                  amt.get_table3d_obj())
+            else:
+                amt.get_tensor_obj().copy_table3d(0,1,amt.get_table3d_obj())
             slice_name='z'
             if len(args)>=3:
                 kwstring=args[2]
+            elif len(args)==1:
+                kwstring=args[0]
         elif curr_type==b'tensor<size_t>':
-            amt.tensor_size_t_obj.copy_table3d(args[0],args[1],
-                                               amt.table3d_obj)
+            if len(args)>=2:
+                amt.get_tensor_size_t_obj().copy_table3d(args[0],args[1],
+                                                         amt.get_table3d_obj())
+            else:
+                amt.get_tensor_size_t_obj().copy_table3d(0,1,
+                                                         amt.get_table3d_obj())
             slice_name='z'
             if len(args)>=3:
                 kwstring=args[2]
+            elif len(args)==1:
+                kwstring=args[0]
         elif curr_type==b'tensor<int>':
-            amt.tensor_int_obj.copy_table3d(args[0],args[1],
-                                            amt.table3d_obj)
+            if len(args)>=2:
+                amt.get_tensor_int_obj().copy_table3d(args[0],args[1],
+                                                      amt.get_table3d_obj())
+            else:
+                amt.get_tensor_int_obj().copy_table3d(0,1,
+                                                      amt.get_table3d_obj())
             slice_name='z'
             if len(args)>=3:
                 kwstring=args[2]
+            elif len(args)==1:
+                kwstring=args[0]
         elif curr_type==b'tensor_grid':
             svst=std_vector_size_t(link)
             tg=amt.get_tensor_grid_obj()
             svst.resize(tg.get_rank())
             func=tg.copy_table3d_align_setxy
             t3d=amt.get_table3d_obj()
-            func(args[0],args[1],svst,t3d)
+            if len(args)>=2:
+                func(args[0],args[1],svst,t3d)
+            else:
+                func(0,1,svst,t3d)
             slice_name='z'
             if len(args)>=3:
                 kwstring=args[2]
+            elif len(args)==1:
+                kwstring=args[0]
         elif curr_type==b'hist_2d':
             
             if len(args)>=1:
                 kwstring=args[0]
                 
             dctt=string_to_dict(kwstring)
-            self.den_plot([amt.get_hist_2d_obj()],**dctt)
+            self.den_plot([amt.get_hist_2d_obj(),link],**dctt)
             return
         
         elif curr_type==b'table3d':
@@ -1180,38 +1202,14 @@ class o2graph_plotter(yt_plot_base):
 
             amt=acol_manager(link,amp)
             hist=amt.get_hist_obj()
-            wgts=hist.get_wgts()
-            reps=std_vector(link)
-            hist.create_rep_vec(reps)
-
-            xv=reps.to_numpy()
-            yv=wgts.to_numpy()
-    
-            if self.canvas_flag==False:
-                self.canvas()
-            if self.logx==True:
-                if self.logy==True:
-                    if len(args)<1:
-                        self.axes.loglog(xv,yv)
-                    else:
-                        self.axes.loglog(xv,yv,**string_to_dict(args[0]))
-                else:
-                    if len(args)<1:
-                        self.axes.semilogx(xv,yv)
-                    else:
-                        self.axes.semilogx(xv,yv,**string_to_dict(args[0]))
+            
+            if len(args)<3:
+                self.plot([hist,link])
             else:
-                if self.logy==True:
-                    if len(args)<1:
-                        self.axes.semilogy(xv,yv)
-                    else:
-                        self.axes.semilogy(xv,yv,**string_to_dict(args[0]))
-                else:
-                    if len(args)<1:
-                        self.axes.plot(xv,yv)
-                    else:
-                        self.axes.plot(xv,yv,**string_to_dict(args[0]))
-                            
+                self.plot([hist,link],**string_to_dict(args[0]))
+
+            failed=False
+            
             # End of section for 'hist' type
         elif curr_type==b'prob_dens_mdim_amr':
 

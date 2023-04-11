@@ -34,6 +34,7 @@ import matplotlib.patches as patches
 from o2sclpy.utils import parse_arguments, string_to_dict
 from o2sclpy.utils import force_bytes, default_plot
 from o2sclpy.utils import string_to_color
+from o2sclpy.base import std_vector
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
 from o2sclpy.plot_info import colors_plot, color_list, colors_near
 
@@ -168,8 +169,15 @@ class plot_base:
     """
     If true, open the editor
     """
+    
     ax_left_panel=0
+    """
+    Desc
+    """
     ax_right_panel=0
+    """
+    Desc
+    """
     
     def __init__(self):
         """
@@ -2017,11 +2025,11 @@ class plot_base:
         The argument list ``args`` can be of the form ``[table,column
         name 1, column name 2]`` or ``[table_units,column name
         1,column name 2]`` or ``[shared_ptr_table_units, column name
-        1, column name 2]`` or ``[vec_vec_double, column index 1]`` or
-        ``[vec_vec_double, column index1, column index 2]``.
-        Otherwise, ``args[0]`` and ``args[1]`` are interpreted as
-        arrays to be directly sent to the ``matplotlib.pyplot.plot()``
-        function.
+        1, column name 2]`` or ``[hist,link]`` or ``[vec_vec_double,
+        column index 1]`` or ``[vec_vec_double, column index1, column
+        index 2]``. Otherwise, ``args[0]`` and ``args[1]`` are
+        interpreted as arrays to be directly sent to the
+        ``matplotlib.pyplot.plot()`` function.
 
         """
 
@@ -2039,6 +2047,18 @@ class plot_base:
             tab=args[0]
             xv=tab[force_bytes(args[1])][0:tab.get_nlines()]
             yv=tab[force_bytes(args[2])][0:tab.get_nlines()]
+            
+        elif str(type(args[0]))=='<class \'o2sclpy.other.hist\'>':
+
+            failed=False
+
+            h=args[0]
+            link=args[1]
+            n=h.size()
+            yv=[h[i] for i in range(0,n)]
+            reps=std_vector(link)
+            h.create_rep_vec(reps)
+            xv=[reps[i] for i in range(0,n)]
 
         elif str(type(args[0]))=='<class \'o2sclpy.base.std_vector_vector\'>':
             
@@ -2095,8 +2115,12 @@ class plot_base:
         return
 
     def den_plot(self,args,**kwargs):
-        """Create a density plot from a matrix, a slice of a table3d object,
+        """
+        Create a density plot from a matrix, a slice of a table3d object,
         or a hist_2d object.
+
+        The argument list ``args`` can be of the form ``[numpy
+        matrix]`` or ``[table3d,slice name]`` or ``[hist_2d,link]``.
         """
         
         if len(args)<1:
@@ -2128,6 +2152,7 @@ class plot_base:
         elif str(type(args[0]))=='<class \'o2sclpy.other.hist_2d\'>':
 
             h2d=args[0]
+            link=args[1]
             nxt=h2d.size_x()
             nyt=h2d.size_y()
             sl=h2d.get_wgts().to_numpy()
@@ -2144,6 +2169,56 @@ class plot_base:
                 h2d.create_x_rep_vec(xgrid)
                 h2d.create_y_rep_vec(ygrid)
 
+        elif str(type(args[0]))=='<class \'o2sclpy.base.tensor\'>':
+
+            ten=args[0]
+            rk=ten.get_rank()
+
+            if rk<2:
+                print('Must have rank of at least 2.')
+            
+            nx=ten.get_size(0)
+            ny=ten.get_size(1)
+            
+            sl=numpy.zeros((nx,ny))
+            ix=[0 for i in range(0,rk)]
+            for i in range(0,nx):
+                for j in range(0,ny):
+                    ix[0]=i
+                    ix[1]=j
+                    sl[i][j]=ten.get(ix)
+
+            xgrid=[i for i in range(0,nx)]
+            ygrid=[j for j in range(0,ny)]
+
+            if pcm==False:
+                extent_from_grid=True
+            
+        elif str(type(args[0]))=='<class \'o2sclpy.base.tensor_grid\'>':
+                
+            ten=args[0]
+            rk=ten.get_rank()
+
+            if rk<2:
+                print('Must have rank of at least 2.')
+            
+            nx=ten.get_size(0)
+            ny=ten.get_size(1)
+            
+            sl=numpy.zeros((nx,ny))
+            ix=[0 for i in range(0,rk)]
+            for i in range(0,nx):
+                for j in range(0,ny):
+                    ix[0]=i
+                    ix[1]=j
+                    sl[i][j]=ten.get(ix)
+
+            xgrid=[ten.get_grid(0,i) for i in range(0,nx)]
+            ygrid=[ten.get_grid(1,j) for j in range(0,ny)]
+
+            if pcm==False:
+                extent_from_grid=True
+            
         elif len(args)<3:
 
             sl=args[0]
