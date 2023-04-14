@@ -245,7 +245,7 @@ class interpm_tf_dnn:
 
         from sklearn.preprocessing import QuantileTransformer
         from sklearn.preprocessing import MinMaxScaler
-        if False and self.transform!='none':
+        if self.transform!='none':
             if activation=='tanh':
                 self.SS1=MinMaxScaler(feature_range=(-1,1))
                 self.SS2=MinMaxScaler(feature_range=(-1,1))
