@@ -47,9 +47,14 @@ def test_all():
         im.set_data_str(x,y,'verbose=2')
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
-        interp=im.eval(v)[0]
+        interp=im.eval(v)
         print('exact,interp: %7.6e %7.6e' % (exact,interp))
         assert numpy.allclose(exact,interp,rtol=1.0e-4)
+        
+        interp2,std2=im.eval_unc(v)
+        print('exact,interp: %7.6e %7.6e %7.6e' % (exact,interp,std2))
+        assert numpy.allclose(exact,interp2,rtol=1.0e-4)
+        assert numpy.allclose(0,std2,atol=1.0e-5)
 
     if True:
         im2=o2sclpy.interpm_tf_dnn()

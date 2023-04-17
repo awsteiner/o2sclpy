@@ -77,7 +77,7 @@ class interpm_sklearn_gp:
         return dct
     
     def set_data(self,in_data,out_data,
-                 kernel='1.0*RBF(1.0,(1e-2,1e2))',
+                 kernel='1.0*RBF(1.0,(1e-2,1e2))',test_size=0.0,
                  normalize_y=True,outformat='numpy',verbose=0):
         """
         Set the input and output data to train the interpolator
@@ -100,12 +100,25 @@ class interpm_sklearn_gp:
         self.outformat=outformat
         self.verbose=verbose
 
+        if test_size>0.0:
+            try:
+                in_train,in_test,out_train,out_test=train_test_split(
+                    in_data,out_data,test_size=test_size)
+            except Exception as e:
+                print('Exception in interpm_sklearn_gp::set_data()',
+                      'at test_train_split().',e)
+                pass
+        else:
+            in_train=in_data
+            out_train=out_data
+            
         try:
             func=GaussianProcessRegressor
             self.gp=func(normalize_y=True,
-                         kernel=self.kernel).fit(in_data,out_data)
+                         kernel=self.kernel).fit(in_train,out_train)
         except Exception as e:
-            print('Exception in interpm_sklearn_gp:',e)
+            print('Exception in interpm_sklearn_gp::set_data()',
+                  'at fit().',e)
             pass
 
         return
@@ -139,6 +152,25 @@ class interpm_sklearn_gp:
             print('interpm_sklearn_gp::eval(): type(yp[0]),v,yp[0]:',
                   type(yp[0]),v,yp[0])
         return numpy.ascontiguousarray(yp[0])
+
+    def eval_unc(self,v):
+        """
+        Evaluate the GP and its uncertainty at point ``v``.
+        """
+        yp,std=self.gp.predict([v],return_std=True)
+        if self.outformat=='list':
+            return yp[0].tolist(),std[0].tolist()
+        if yp.ndim==1:
+            if self.verbose>1:
+                print('interpm_sklearn_gp::eval(): type(yp),v,yp:',
+                      type(yp),v,yp)
+            return (numpy.ascontiguousarray(yp),
+                    numpy.ascontiguousarray(std))
+        if self.verbose>1:
+            print('interpm_sklearn_gp::eval(): type(yp[0]),v,yp[0]:',
+                  type(yp[0]),v,yp[0])
+        return (numpy.ascontiguousarray(yp[0]),
+                numpy.ascontiguousarray(std[0]))
 
 class interpm_tf_dnn:
     """
