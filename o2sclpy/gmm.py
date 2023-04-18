@@ -28,8 +28,6 @@ class gmm_sklearn:
     specified set of data.
 
     This is an experimental and very simplifed interface.
-
-    Todos: fix get_data() for other covariance types.
     """
 
     def __init__(self):
