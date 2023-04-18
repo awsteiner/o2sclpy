@@ -20,7 +20,6 @@
 #  -------------------------------------------------------------------
 #
 import numpy
-from o2sclpy.hdf import *
 
 class gmm_sklearn:
     """
