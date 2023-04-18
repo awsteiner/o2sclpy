@@ -27,7 +27,8 @@ class gmm_sklearn:
     Use scikit-learn to generate a Gaussian mixture model of a 
     specified set of data.
 
-    This is an experimental and very simplifed interface.
+    This is an experimental and very simplifed interface, mostly
+    to provide easier interaction with C++. 
     """
 
     def __init__(self):
@@ -232,16 +233,29 @@ class gmm_sklearn:
 
         return
 
-    def sample(self,n_samples=1):
+    def log_pdf(self,x):
+        """
+        Return the log likelihood
+        """
+        sc=self.gm.score(x)
+        return sc
+    
+    def sample(self):
         """
         Sample the Gaussian mixture model
         """
-        return self.gm.sample(n_samples=n_samples)
+        s=self.gm.sample(n_samples=1)
+
+        if self.outformat=='list':
+            return s[0].tolist()
+
+        return numpy.ascontiguousarray(s[0])
     
-    def eval(self,v):
+    def components(self,v):
         """
-        Evaluate the mixture model at point ``v``, and return
-        the normalized weights for each component as a contiguous numpy 
+        Evaluate the density of each component in the Gaussian mixture
+        at point ``v``, and return the density of
+        each component as a contiguous numpy 
         array
         """
         yp=self.gm.predict_proba([v])

@@ -36,8 +36,8 @@ def test_gmm():
     
     gs=o2sclpy.gmm_sklearn()
     gs.set_data_str(x,'verbose=2,n_components=2')
-    print(gs.eval([0.7,0.7]))
-    print(gs.eval([0.0,0.0]))
+    print(gs.components([0.7,0.7]))
+    print(gs.components([0.0,0.0]))
     print('w',gs.gm.weights_)
     print('m',gs.gm.means_)
     print('c',gs.gm.covariances_)
@@ -60,8 +60,8 @@ def test_bgmm():
     
     gs=o2sclpy.bgmm_sklearn()
     gs.set_data_str(x,'verbose=2,n_components=2')
-    print(gs.eval([0.7,0.7]))
-    print(gs.eval([0.0,0.0]))
+    print(gs.components([0.7,0.7]))
+    print(gs.components([0.0,0.0]))
     print('w',gs.bgm.weights_)
     print('m',gs.bgm.means_)
     print('c',gs.bgm.covariances_)
