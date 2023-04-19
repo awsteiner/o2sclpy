@@ -24,7 +24,10 @@ import numpy
 import random
 
 def test_kde1():
-
+    """ 
+    test with transform='none'
+    """
+    
     N=200
     x=numpy.zeros((N,2))
     for i in range(0,N):
@@ -36,20 +39,22 @@ def test_kde1():
             x[i,1]=0.2+0.1*random.random()
     
     ks=o2sclpy.kde_sklearn()
-    ks.set_data(x,numpy.logspace(-3,3,100),verbose=2,bandwidth=0.01,
-                transform='none')
+    ks.set_data(x,numpy.logspace(-3,3,100),verbose=2,transform='none')
     print('bw',ks.get_bandwidth())
     for i in range(0,10):
         s=ks.sample()
         print(s[0],s[1])
-    print(ks.log_density([-0.7,0.2]))
-    print(ks.log_density([0,0]))
-    print(ks.log_density([0.7,0.5]))
+    print(ks.log_pdf([-0.7,0.2]))
+    print(ks.log_pdf([0,0]))
+    print(ks.log_pdf([0.7,0.5]))
 
     return
 
 def test_kde2():
-
+    """
+    test baseline model
+    """
+    
     N=200
     x=numpy.zeros((N,2))
     for i in range(0,N):
@@ -61,18 +66,78 @@ def test_kde2():
             x[i,1]=90*(0.2+0.1*random.random())
     
     ks=o2sclpy.kde_sklearn()
-    ks.set_data(x,numpy.logspace(-3,3,100),verbose=2,bandwidth=0.01)
+    ks.set_data(x,numpy.logspace(-3,3,100),verbose=2)
     print('bw',ks.get_bandwidth())
     for i in range(0,10):
         s=ks.sample()
         print(s[0],s[1])
-    print(ks.log_density([-6300,18]))
-    print(ks.log_density([0,0]))
-    print(ks.log_density([6300,45]))
+    print(ks.log_pdf([-6300,18]))
+    print(ks.log_pdf([0,0]))
+    print(ks.log_pdf([6300,45]))
+
+    return
+
+def test_kde3():
+    """
+    test with scott bandwidth
+    """
+    
+    N=200
+    x=numpy.zeros((N,2))
+    for i in range(0,N):
+        if i%2==0:
+            x[i,0]=9000*(0.7+0.1*numpy.sin(float(i*1e4)))
+            x[i,1]=90*(0.5+0.1*numpy.cos(float(i*1e4)))
+        else:
+            x[i,0]=9000*(-0.7+0.1*numpy.sin(float(i*1e4)))
+            x[i,1]=90*(0.2+0.1*numpy.cos(float(i*1e4)))
+    
+    ks=o2sclpy.kde_sklearn()
+    ks.set_data(x,numpy.logspace(-3,3,100),verbose=2,bandwidth='scott')
+    print('bw',ks.get_bandwidth())
+    for i in range(0,10):
+        s=ks.sample()
+        print(s[0],s[1])
+    print(ks.log_pdf([-6300,18]))
+    print(ks.log_pdf([0,0]))
+    print(ks.log_pdf([6300,45]))
+
+    return
+
+def test_kde4():
+    """
+    test scipy KDE
+    """
+    
+    N=200
+    x=numpy.zeros((N,2))
+    for i in range(0,N):
+        if i%2==0:
+            x[i,0]=9000*(0.7+0.1*numpy.sin(float(i*1e4)))
+            x[i,1]=90*(0.5+0.1*numpy.cos(float(i*1e4)))
+        else:
+            x[i,0]=9000*(-0.7+0.1*numpy.sin(float(i*1e4)))
+            x[i,1]=90*(0.2+0.1*numpy.cos(float(i*1e4)))
+    
+    ks=o2sclpy.kde_scipy()
+    ks.set_data(x,verbose=2)
+    print('bw',ks.get_bandwidth())
+    for i in range(0,10):
+        s=ks.sample()
+        print(s[0],s[1])
+    print(ks.log_pdf([-6300,18]))
+    print(ks.log_pdf([0,0]))
+    print(ks.log_pdf([6300,45]))
 
     return
 
 if __name__ == '__main__':
+    print('----------------------------------------------------')
     test_kde1()
+    print('----------------------------------------------------')
     test_kde2()
+    print('----------------------------------------------------')
+    test_kde3()
+    print('----------------------------------------------------')
+    test_kde4()
     print('All tests passed.')
