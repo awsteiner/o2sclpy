@@ -324,7 +324,7 @@ class kde_scipy:
 
         print('weights shape:',weights,numpy.shape(weights))
               
-        self.set_data(in_data,weights,**dct)
+        self.set_data(in_data,weights=weights,**dct)
 
         return
 
