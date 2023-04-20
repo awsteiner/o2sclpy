@@ -160,6 +160,7 @@ extra_list=[
     ["table","hist-plot",0],
     ["table","hist2d-plot",0],
     ["table","plot",0],
+    ["table","to-kde",0],
     ["table","plot1",0],
     ["table","plot-color",0],
     ["table","rplot",0],
@@ -617,6 +618,8 @@ class o2graph_plotter(yt_plot_base):
             elif line[0]=="yt-tf":
                 line[1]=o2graph_plotter.yt_tf_func.__doc__
         for line in extra_list:
+            if line[1]=="to-kde":
+                line[2]=o2graph_plotter.to_kde.__doc__
             if line[1]=="den-plot":
                 line[2]=o2graph_plotter.den_plot_o2graph.__doc__
             if line[1]=="den-plot-rgb":
@@ -790,6 +793,26 @@ class o2graph_plotter(yt_plot_base):
         
         # End of function o2graph_plotter::gen_acol()
         return
+
+    def to_kde(self,o2scl,amp,link,args):
+        """Documentation for o2graph command ``to-kde``:
+
+        For objects of type ``table``:
+
+        Convert columns in a table to a KDE
+
+        Command-line arguments: ``<options or 'none'> 
+        <column 1> [column 2] ...``
+
+        Desc.
+        """
+        
+        curr_type=o2scl_get_type(o2scl,amp,self.link2)
+        amt=acol_manager(self.link2,amp)
+        print('here')
+        quit()
+        #if curr_type==b'table':
+        #else:
 
     def den_plot_o2graph(self,o2scl,amp,link,args):
         """Documentation for o2graph command ``den-plot``:
@@ -5041,6 +5064,15 @@ class o2graph_plotter(yt_plot_base):
 
                     self.den_plot_o2graph(o2scl,amp,self.link2,
                                           strlist[ix+1:ix_next])
+                
+                elif cmd_name=='to-kde':
+                    
+                    if self.verbose>2:
+                        print('Process to-kde.')
+                        print('args:',strlist[ix:ix_next])
+
+                    self.to_kde(o2scl,amp,self.link2,
+                                strlist[ix+1:ix_next])
                 
                 elif cmd_name=='den-plot-rgb':
                     
