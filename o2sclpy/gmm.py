@@ -487,7 +487,7 @@ class bgmm_sklearn:
         """
         return self.bgm.sample(n_samples=n_samples)
     
-    def eval(self,v):
+    def components(self,v):
         """
         Evaluate the mixture model at point ``v``, and return
         the normalized weights for each component as a contiguous numpy 
