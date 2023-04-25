@@ -323,8 +323,11 @@ class kde_scipy:
             print('String:',options,'Dictionary:',dct)
 
         print('weights shape:',weights,numpy.shape(weights))
-              
-        self.set_data(in_data,weights=weights,**dct)
+
+        if numpy.shape(weights)[0]>0:
+            self.set_data(in_data,weights=weights,**dct)
+        else:
+            self.set_data(in_data,**dct)
 
         return
 

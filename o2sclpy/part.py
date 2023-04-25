@@ -957,26 +957,6 @@ class fermion_rel(fermion_thermo):
         return
 
     @property
-    def exp_limit(self):
-        """
-        Property of type ``ctypes.c_double``
-        """
-        func=self._link.o2scl.o2scl_fermion_rel_get_exp_limit
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @exp_limit.setter
-    def exp_limit(self,value):
-        """
-        Setter function for fermion_rel::exp_limit .
-        """
-        func=self._link.o2scl.o2scl_fermion_rel_set_exp_limit
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
-        func(self._ptr,value)
-        return
-
-    @property
     def upper_limit_fac(self):
         """
         Property of type ``ctypes.c_double``

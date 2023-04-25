@@ -143,42 +143,43 @@ class gmm_sklearn:
             print('  Chol. decomp.:',self.gm.precisions_cholesky_)
             print('')
 
-            if self.covariance_type=='full':
-                mtemp=numpy.reshape(self.gm.means_,
-                                    (self.n_dim*self.n_components))
-                ctemp=numpy.reshape(self.gm.covariances_,
-                                    (self.n_dim*self.n_dim*self.n_components))
-                ptemp=numpy.reshape(self.gm.precisions_,
-                                    (self.n_dim*self.n_dim*self.n_components))
-                pctemp=numpy.reshape(self.gm.precisions_cholesky_,
-                                     (self.n_dim*self.n_dim*self.n_components))
-            elif self.covariance_type=='diag':
-                mtemp=numpy.reshape(self.gm.means_,
-                                    (self.n_dim*self.n_components))
-                ctemp=numpy.reshape(self.gm.covariances_,
-                                    (self.n_dim*self.n_components))
-                ptemp=numpy.reshape(self.gm.precisions_,
-                                    (self.n_dim*self.n_components))
-                pctemp=numpy.reshape(self.gm.precisions_cholesky_,
-                                     (self.n_dim*self.n_components))
-            elif self.covariance_type=='tied':
-                mtemp=numpy.reshape(self.gm.means_,
-                                    (self.n_dim*self.n_components))
-                ctemp=numpy.reshape(self.gm.covariances_,
-                                    (self.n_dim*self.n_dim))
-                ptemp=numpy.reshape(self.gm.precisions_,
-                                    (self.n_dim*self.n_dim))
-                pctemp=numpy.reshape(self.gm.precisions_cholesky_,
-                                     (self.n_dim*self.n_dim))
-            elif self.covariance_type=='spherical':
-                mtemp=numpy.reshape(self.gm.means_,
-                                    (self.n_dim*self.n_components))
-                ctemp=numpy.reshape(self.gm.covariances_,
-                                    (self.n_components))
-                ptemp=numpy.reshape(self.gm.precisions_,
-                                    (self.n_components))
-                pctemp=numpy.reshape(self.gm.precisions_cholesky_,
-                                     (self.n_components))
+        if self.covariance_type=='full':
+            mtemp=numpy.reshape(self.gm.means_,
+                                (self.n_dim*self.n_components))
+            ctemp=numpy.reshape(self.gm.covariances_,
+                                (self.n_dim*self.n_dim*self.n_components))
+            ptemp=numpy.reshape(self.gm.precisions_,
+                                (self.n_dim*self.n_dim*self.n_components))
+            pctemp=numpy.reshape(self.gm.precisions_cholesky_,
+                                 (self.n_dim*self.n_dim*self.n_components))
+        elif self.covariance_type=='diag':
+            mtemp=numpy.reshape(self.gm.means_,
+                                (self.n_dim*self.n_components))
+            ctemp=numpy.reshape(self.gm.covariances_,
+                                (self.n_dim*self.n_components))
+            ptemp=numpy.reshape(self.gm.precisions_,
+                                (self.n_dim*self.n_components))
+            pctemp=numpy.reshape(self.gm.precisions_cholesky_,
+                                 (self.n_dim*self.n_components))
+        elif self.covariance_type=='tied':
+            mtemp=numpy.reshape(self.gm.means_,
+                                (self.n_dim*self.n_components))
+            ctemp=numpy.reshape(self.gm.covariances_,
+                                (self.n_dim*self.n_dim))
+            ptemp=numpy.reshape(self.gm.precisions_,
+                                (self.n_dim*self.n_dim))
+            pctemp=numpy.reshape(self.gm.precisions_cholesky_,
+                                 (self.n_dim*self.n_dim))
+        elif self.covariance_type=='spherical':
+            mtemp=numpy.reshape(self.gm.means_,
+                                (self.n_dim*self.n_components))
+            ctemp=numpy.reshape(self.gm.covariances_,
+                                (self.n_components))
+            ptemp=numpy.reshape(self.gm.precisions_,
+                                (self.n_components))
+            pctemp=numpy.reshape(self.gm.precisions_cholesky_,
+                                 (self.n_components))
+            
         return (numpy.ascontiguousarray(self.gm.weights_),
                 numpy.ascontiguousarray(mtemp),
                 numpy.ascontiguousarray(ctemp),
