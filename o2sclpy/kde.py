@@ -39,6 +39,7 @@ class kde_sklearn:
         self.transform=0
         self.kernel=0
         self.SS1=0
+        self.data=0
 
     def string_to_dict(self,s):
         """
@@ -106,6 +107,7 @@ class kde_sklearn:
         self.transform=transform
         self.kernel=kernel
         self.n_dim=numpy.shape(in_data)[1]
+        self.data=in_data
 
         from sklearn.preprocessing import QuantileTransformer
         from sklearn.preprocessing import MinMaxScaler
@@ -182,7 +184,8 @@ class kde_sklearn:
             else:
                 out_trans=out
             
-        #print('out_trans:',type(out_trans),numpy.shape(out_trans),out_trans)
+        #print('out_trans:',type(out_trans),numpy.shape(out_trans),out_trans,
+        #self.outformat)
 
         if self.outformat=='list':
             return out_trans.tolist()
@@ -336,14 +339,17 @@ class kde_scipy:
         Sample the Gaussian mixture model
         """
         out=self.kde.resample(size=n_samples)
-        #print('out:',type(out),numpy.shape(out),out,out.transpose())
+        
+        #print('out scipy:',type(out),numpy.shape(out),
+        #out,out.transpose())
         
         if self.transform!='none':
             out_trans=self.SS1.inverse_transform(out.transpose())[0]
         else:
             out_trans=(out.transpose())[0]
             
-        #print('out_trans:',type(out_trans),numpy.shape(out_trans),out_trans)
+        #print('out_trans scipy:',type(out_trans),
+        #numpy.shape(out_trans),out_trans)
 
         if self.outformat=='list':
             return out_trans.tolist()
