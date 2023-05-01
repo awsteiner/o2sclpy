@@ -90,6 +90,7 @@ base_list=[
     ["inset",plot_base.inset.__doc__],
     ["line",plot_base.line.__doc__],
     ["modax",plot_base.modax.__doc__],
+    ["mpg",0],
     ["o2scl-addl-libs",
      "Specify a list of list of additional libraries to load."],
     ["o2scl-cpp-lib",
@@ -615,6 +616,8 @@ class o2graph_plotter(yt_plot_base):
                 line[1]=o2graph_plotter.yt_render.__doc__
             elif line[0]=="yt-text":
                 line[1]=o2graph_plotter.yt_text.__doc__
+            elif line[0]=="mpg":
+                line[1]=o2graph_plotter.mp4.__doc__
             elif line[0]=="yt-tf":
                 line[1]=o2graph_plotter.yt_tf_func.__doc__
         for line in extra_list:
@@ -814,6 +817,32 @@ class o2graph_plotter(yt_plot_base):
         #if curr_type==b'table':
         #else:
 
+    def mp4(self,args):
+        """
+        Documentation for o2graph command ``mpg``:
+
+        Create an mpg file from a series of images.
+
+        Command-line arguments: ``<pattern> <output>``
+
+        Typical patterns are "prefix%02dsuffix" and outputs
+        are "out.mp4"
+        """
+        if len(args)<2:
+            print('Command mpg needs more arguments.')
+            return
+        pattern=args[0]
+        output=args[1]
+        if output[-4:]!='.mp4':
+            output=output+'.mp4'
+        cmd=('ffmpeg -y -r 10 -f image2 -i '+pattern+
+             ' -vcodec libx264 '+
+             '-crf 25 -pix_fmt yuv420p '+output)
+        print('Executing ',cmd)
+        os.system(cmd)
+        
+        return
+        
     def den_plot_o2graph(self,o2scl,amp,link,args):
         """Documentation for o2graph command ``den-plot``:
 
@@ -1090,9 +1119,13 @@ class o2graph_plotter(yt_plot_base):
 
         dctt=string_to_dict(kwstring)
         renorm=dctt.pop('renorm',False)
-            
-        self.den_plot_rgb(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
-                          make_png=fname,renorm=renorm,**dctt)
+
+        try:
+            self.den_plot_rgb(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
+                              make_png=fname,renorm=renorm,**dctt)
+        except Exception as e:
+            print('Exception in make_png_o2graph()',e)
+            raise
             
         return
 
@@ -5064,6 +5097,14 @@ class o2graph_plotter(yt_plot_base):
 
                     self.den_plot_o2graph(o2scl,amp,self.link2,
                                           strlist[ix+1:ix_next])
+                
+                elif cmd_name=='mpg':
+                    
+                    if self.verbose>2:
+                        print('Process mpg.')
+                        print('args:',strlist[ix:ix_next])
+
+                    self.mp4(strlist[ix+1:ix_next])
                 
                 elif cmd_name=='to-kde':
                     

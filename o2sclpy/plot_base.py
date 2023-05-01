@@ -2412,9 +2412,13 @@ class plot_base:
         #                 sl_b[i][j]=self.zlo
 
         if len(make_png)>0:
-            from PIL import Image
-            im=Image.new(mode='RGB',size=(nxt,nyt))
-            pixels=im.load()
+            try:
+                from PIL import Image
+                im=Image.new(mode='RGB',size=(nxt,nyt))
+                pixels=im.load()
+            except Exception as e:
+                print('Exception in den_plot_rgb() create image',e)
+                raise
 
             if renorm:
                 min_val=sl_all[0,0,0]
@@ -2465,7 +2469,11 @@ class plot_base:
                                      int(sl_all[j,i,1]),
                                      int(sl_all[j,i,2]))
 
-            im.save(make_png,optimize=True)
+            try:
+                im.save(make_png,optimize=True)
+            except Exception as e:
+                print('Exception in den_plot_rgb() save image',e)
+                raise
             return
         
         if self.canvas_flag==False:
