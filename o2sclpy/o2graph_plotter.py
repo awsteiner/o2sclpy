@@ -90,6 +90,7 @@ base_list=[
      "and then calls matplotlib.pyplot.show()."],
     ["inset",plot_base.inset.__doc__],
     ["kde-plot",0],
+    ["kde-2d-plot",0],
     ["line",plot_base.line.__doc__],
     ["modax",plot_base.modax.__doc__],
     ["mp4",0],
@@ -622,6 +623,8 @@ class o2graph_plotter(yt_plot_base):
                 line[1]=o2graph_plotter.mp4.__doc__
             elif line[0]=="kde-plot":
                 line[1]=o2graph_plotter.kde_plot.__doc__
+            elif line[0]=="kde-2d-plot":
+                line[1]=o2graph_plotter.kde_2d_plot.__doc__
             elif line[0]=="yt-tf":
                 line[1]=o2graph_plotter.yt_tf_func.__doc__
         for line in extra_list:
@@ -1187,6 +1190,80 @@ class o2graph_plotter(yt_plot_base):
                 
         else:
             print("Command 'kde-plot' not supported for type",
+                  curr_type,".")
+            return
+        
+        # End of function o2graph_plotter::plot_o2graph()
+        return
+
+    def kde_2d_plot(self,o2scl,amp,args,link):
+        """Documentation for o2graph command ``kde-2d-plot``:
+
+        For objects of type ``table``:
+
+        Plot a KDE of two columns
+
+        Command-line arguments: ``<column x> <column y> [options]``
+
+        Desc.
+        """
+        curr_type=o2scl_get_type(o2scl,amp,link)
+
+        if curr_type==b'table':
+            
+            amt=acol_manager(link,amp)
+            tab=amt.get_table_obj()
+
+            # Copy the table data to a numpy array
+            x=numpy.zeros((tab.get_nlines(),2))
+            for i in range(0,tab.get_nlines()):
+                x[i,0]=tab.get(args[0],i)
+                x[i,1]=tab.get(args[1],i)
+
+            x0_min=x[0,0]
+            x0_max=x[0,0]
+            x1_min=x[0,1]
+            x1_max=x[0,1]
+            for i in range(1,tab.get_nlines()):
+                if x[i,0]<x0_min:
+                    x0_min=x[i,0]
+                if x[i,0]>x0_max:
+                    x0_max=x[i,0]
+                if x[i,1]<x1_min:
+                    x1_min=x[i,1]
+                if x[i,1]>x1_max:
+                    x1_max=x[i,1]
+                
+            k=kde_sklearn()
+            bw_array=[10**(float(i)/4.0-2.0) for i in range(0,17)]
+
+            if len(args)>2:
+                k.set_data_str(x,bw_array,args[1])
+            else:
+                k.set_data_str(x,bw_array,'')
+
+            x0a=[]
+            x0p=x0_min
+            for i in range(0,201):
+                x0a.append(x0p)
+                x0p=x0p+(x0_max-x0_min)/200.0
+            x1a=[]
+            x1p=x1_min
+            for i in range(0,201):
+                x1a.append(x1p)
+                x1p=x1p+(x1_max-x1_min)/200.0
+            z=numpy.zeros((200,200))
+            for i in range(0,201):
+                for j in range(0,201):
+                    z[i,j]=k.pdf([x0a[i],x1a[j]])
+
+            if len(args)<3:
+                self.den_plot([x0a,x1a,z])
+            else:
+                self.den_plot([x0a,x1a,z],**string_to_dict(args[2]))
+                
+        else:
+            print("Command 'kde-2d-plot' not supported for type",
                   curr_type,".")
             return
         
@@ -5178,6 +5255,15 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
 
                     self.kde_plot(o2scl,amp,strlist[ix+1:ix_next],
+                                  self.link2)
+                
+                elif cmd_name=='kde-2d-plot':
+                    
+                    if self.verbose>2:
+                        print('Process kde-2d-plot.')
+                        print('args:',strlist[ix:ix_next])
+
+                    self.kde_2d_plot(o2scl,amp,strlist[ix+1:ix_next],
                                   self.link2)
                 
                 elif cmd_name=='to-kde':
