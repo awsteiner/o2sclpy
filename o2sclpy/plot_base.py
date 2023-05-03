@@ -2076,6 +2076,8 @@ class plot_base:
 
         else:
 
+            failed=False
+            
             xv=args[0]
             yv=args[1]
             
@@ -2105,6 +2107,12 @@ class plot_base:
                         self.axes.plot(xv,yv)
                     else:
                         self.axes.plot(xv,yv,**kwargs)
+
+            # AWS, added 5/3/23, I think this should be here?
+            if self.xset==True:
+                self.axes.set_xlim(self.xlo,self.xhi)
+            if self.yset==True:
+                self.axes.set_ylim(self.ylo,self.yhi)
                             
         return
 
