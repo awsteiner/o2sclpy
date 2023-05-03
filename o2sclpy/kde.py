@@ -203,6 +203,12 @@ class kde_sklearn:
         #print('x,x_trans:',x,x_trans)
         res=self.kde.score(x_trans)
         return res
+
+    def pdf(self,x):
+        """
+        Return the likelihood 
+        """
+        return numpy.exp(self.log_pdf(x))
         
 class kde_scipy:
     """
@@ -370,13 +376,7 @@ class kde_scipy:
 
     def pdf(self,x):
         """
-        Return the log likelihood 
+        Return the likelihood 
         """
-        if self.transform!='none':
-            x_trans=self.SS1.transform([x])
-        else:
-            x_trans=[x]
-        #print('x,x_trans:',x,x_trans)
-        res=self.kde.logpdf(x_trans)[0]
-        return res
+        return numpy.exp(self.log_pdf(x))
     
