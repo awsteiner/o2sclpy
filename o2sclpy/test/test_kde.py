@@ -131,6 +131,33 @@ def test_kde4():
 
     return
 
+def test_kde5():
+    """
+    Compare log pdf of two KDEs
+    """
+    
+    N=200
+    x=numpy.zeros((N,1))
+    for i in range(0,N):
+        if i%2==0:
+            x[i,0]=0.7+0.1*numpy.sin(float(i*1e4))
+        else:
+            x[i,0]=-0.7+0.1*numpy.sin(float(i*1e4))
+    
+    ks1=o2sclpy.kde_sklearn()
+    ks2=o2sclpy.kde_scipy()
+    ks1.set_data(x,[0.007],verbose=2)
+    ks2.set_data(x,bw_method=0.007,verbose=2)
+    print('bws:',ks1.get_bandwidth(),ks2.get_bandwidth())
+
+    for i in range(0,100):
+        xx=float(i)/50-1.0
+        print('%3d %7.6e %7.6e %7.6e %7.6e %7.6e' %
+              (i,xx,ks1.log_pdf([xx]),ks1.pdf([xx]),
+               ks2.log_pdf([xx]),ks2.pdf([xx])))
+
+    return
+
 if __name__ == '__main__':
     print('----------------------------------------------------')
     test_kde1()
@@ -140,4 +167,6 @@ if __name__ == '__main__':
     test_kde3()
     print('----------------------------------------------------')
     test_kde4()
+    print('----------------------------------------------------')
+    test_kde5()
     print('All tests passed.')
