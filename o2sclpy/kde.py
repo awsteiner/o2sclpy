@@ -378,5 +378,11 @@ class kde_scipy:
         """
         Return the likelihood 
         """
-        return numpy.exp(self.log_pdf(x))
+        if self.transform!='none':
+            x_trans=self.SS1.transform([x])
+        else:
+            x_trans=[x]
+        #print('x,x_trans:',x,x_trans)
+        res=self.kde.pdf(x_trans)[0]
+        return res
     
