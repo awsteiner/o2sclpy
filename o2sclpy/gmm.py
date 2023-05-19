@@ -21,6 +21,8 @@
 #
 import numpy
 
+from o2sclpy.utils import string_to_dict2
+
 class gmm_sklearn:
     """
     Use scikit-learn to generate a Gaussian mixture model of a 
@@ -37,7 +39,8 @@ class gmm_sklearn:
         self.convariance_type=0
         self.gm=0
 
-    def string_to_dict(self,s):
+    def string_to_dict(self,s,list_of_ints=['verbose','n_components'],
+                       list_of_floats=['tol','reg_covar']):
         """
         Convert a string to a dictionary, converting strings to 
         values when necessary.
@@ -70,13 +73,9 @@ class gmm_sklearn:
                 if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
                     arr2[1]=arr2[1][1:len(arr2[1])-1]
 
-            if arr2[0]=='verbose':
+            if arr2[0] in list_of_ints:
                 arr2[1]=int(arr2[1])
-            if arr2[0]=='n_components':
-                arr2[1]=int(arr2[1])
-            if arr2[0]=='tol':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='reg_covar':
+            if arr2[0] in list_of_floats:
                 arr2[1]=float(arr2[1])
                     
             dct[arr2[0]]=arr2[1]
@@ -225,7 +224,8 @@ class gmm_sklearn:
         using a string to specify the keyword arguments.
         """
 
-        dct=self.string_to_dict(options)
+        dct=string_to_dict2(options,list_of_ints=['verbose','n_components'],
+                            list_of_floats=['tol','reg_covar'])
         if self.verbose>1:
             print('String:',options,'Dictionary:',dct)
               

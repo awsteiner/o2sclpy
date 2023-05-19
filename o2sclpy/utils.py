@@ -275,6 +275,48 @@ def parse_arguments(argv,verbose=0):
             ix=ix_next
     return (list,unproc_list)
 
+def string_to_dict2(s,list_of_ints=[],list_of_floats=[]):
+    """
+    Convert a string to a dictionary, converting strings to 
+    values when necessary.
+    """
+        
+    # First split into keyword = value pairs
+    arr=s.split(',')
+    # Create empty dictionary
+    dct={}
+
+    if len(s)==0:
+        return dct
+        
+    for i in range(0,len(arr)):
+
+        # For each pair, split keyword and value.
+        arr2=arr[i].split('=')
+        
+        # Remove preceeding and trailing whitespace from the
+        # keywords (not for the values)
+        while arr2[0][0].isspace():
+            arr2[0]=arr2[0][1:]
+        while arr2[0][len(arr2[0])-1].isspace():
+            arr2[0]=arr2[0][:-1]
+
+        # Remove quotes if necessary
+        if len(arr2)>1 and len(arr2[1])>2:
+            if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
+                arr2[1]=arr2[1][1:len(arr2[1])-1]
+            if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
+                arr2[1]=arr2[1][1:len(arr2[1])-1]
+
+        if arr2[0] in list_of_ints:
+            arr2[1]=int(arr2[1])
+        if arr2[0] in list_of_floats:
+            arr2[1]=float(arr2[1])
+                    
+        dct[arr2[0]]=arr2[1]
+
+    return dct
+
 def string_to_dict(s):
     """
     Convert a string to a dictionary, with extra processing for
