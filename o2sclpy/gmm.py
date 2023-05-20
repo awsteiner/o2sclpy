@@ -27,9 +27,9 @@ class gmm_sklearn:
     """
     Use scikit-learn to generate a Gaussian mixture model of a 
     specified set of data.
-
-    This is an experimental and very simplifed interface, mostly
-    to provide easier interaction with C++. 
+    
+    This is an experimental interface to provide easier interaction
+    with C++.
     """
 
     def __init__(self):
@@ -77,9 +77,6 @@ class gmm_sklearn:
                   'Gaussian mixture fit failed.\n  ',e)
             raise
 
-        if self.verbose>0:
-            print('gmm_sklearn::set_data(): Score:',self.gm.score(in_data))
-        
         return
 
     def get_data(self):
@@ -190,50 +187,116 @@ class gmm_sklearn:
 
         return
 
-    def log_pdf(self,x):
+    def predict(self,v):
         """
-        Return the log likelihood
+        Predict the labels (the index of the Gaussian) given a
+        vector or vectors v and return them in a one-dimensional
+        numpy array with data type int64. 
         """
-        sc=self.gm.score(x)
-        return sc
+
+        if numpy.shape(v)==((self.n_dim,)):
+            # If the user just gave a one-dimensional vector, then
+            # convert to a two-dimensional vector
+            yp=self.gm.predict([v])
+        else:
+            # Otherwise, call the predict() function as normal
+            yp=self.gm.predict(v)
+
+        if self.verbose>1:
+            print('gmm_sklearn::predict(): type(yp),yp:',
+                   type(yp),yp,yp.dtype)
+        return numpy.ascontiguousarray(yp)
     
-    def sample(self):
+    def score(self,x):
         """
-        Sample the Gaussian mixture model
+        Return the per-sample average log likelihood of the data as a
+        single floating point value given the vector or vectors
+        specified in x.
         """
-        s=self.gm.sample(n_samples=1)
+        if numpy.shape(x)==((self.n_dim,)):
+            # If the user just gave a one-dimensional vector, then
+            # convert to a two-dimensional vector
+            s=self.gm.score([x])
+        else:
+            # Otherwise, call the predict() function as normal
+            s=self.gm.score(x)
+        return s
+    
+    def score_samples(self,x):
+        """
+        Given a vector (or list of vectors) in ``x``, return
+        the log likelihood at each point as a numpy array.
+        """
+        if numpy.shape(x)==((self.n_dim,)):
+            # If the user just gave a one-dimensional vector, then
+            # convert to a two-dimensional vector
+            ss=self.gm.score_samples([x])
+        else:
+            
+            # Otherwise, call the predict() function as normal
+            ss=self.gm.score_samples(x)
 
-        if self.outformat=='list':
-            return s[0].tolist()
-
-        return numpy.ascontiguousarray(s[0])
+        # Return the scores
+        if self.verbose>1:
+            print('gmm_sklearn::score_samples(): type(ss),ss:',
+                   type(ss),ss)
+        return numpy.ascontiguousarray(ss)
+    
+    def sample(self,n_samples=1):
+        """
+        Sample the Gaussian mixture model, returning a tuple with two
+        components, the first being an 2D array of the coordinates of
+        the new samples and the second being a 1D array of the labels
+        for each new sample.
+        """
+        s=self.gm.sample(n_samples=n_samples)
+        return s
     
     def components(self,v):
         """
-        Evaluate the density of each component in the Gaussian mixture
-        at point ``v``, and return the density of
-        each component as a contiguous numpy 
-        array
+        For a point (or set of points) specified in ``v``, use the
+        Gaussian mixture at to compute the density (or densities) of
+        each component as a contiguous numpy array. Each array will
+        have entries which sum to 1.
         """
-        yp=self.gm.predict_proba([v])
+
+        if numpy.shape(v)==((self.n_dim,)):
+            # If the user just gave a one-dimensional vector, then
+            # convert to a two-dimensional vector
+            yp=self.gm.predict_proba([v])
+        else:
+            # Otherwise, call the predict_proba() function as normal
+            yp=self.gm.predict_proba(v)
+
         if yp.ndim==1:
+            # If the output is only a one-dimensional vector, then
+            # just return it
             if self.verbose>1:
-                print('gmm_sklearn::eval(): type(yp),yp:',
+                print('gmm_sklearn::components(): type(yp),yp:',
                       type(yp),yp)
             return numpy.ascontiguousarray(yp)
-        if self.verbose>1:
-            print('gmm_sklearn::eval(): type(yp[0]),yp[0]:',
-                  type(yp[0]),yp[0])
-        return numpy.ascontiguousarray(yp[0])
+        
+        if numpy.shape(v)==((self.n_dim,)):
+            # If the user input was one-dimensional, then make the
+            # output one-dimensional as well
+            if self.verbose>1:
+                print('gmm_sklearn::components(): type(yp[0]),yp[0]:',
+                      type(yp[0]),yp[0])
+            return numpy.ascontiguousarray(yp[0])
 
+        # Otherwise, just return the full output
+        if self.verbose>1:
+            print('gmm_sklearn::components(): type(yp),yp:',
+                   type(yp),yp)
+        return numpy.ascontiguousarray(yp)
+        
 class bgmm_sklearn:
     """
-    Use scikit-learn to generate a Gaussian mixture model of a 
+    Use scikit-learn to generate a Bayesian Gaussian mixture model of a 
     specified set of data.
 
-    This is an experimental and very simplifed interface.
-
-    Todos: fix get_data() for other covariance types.
+    This is an experimental interface to provide easier interaction
+    with C++.
     """
 
     def __init__(self):
@@ -394,26 +457,105 @@ class bgmm_sklearn:
 
         return
 
+    def predict(self,v):
+        """
+        Predict the labels (the index of the Gaussian) given a
+        vector or vectors v and return them in a one-dimensional
+        numpy array with data type int64. 
+        """
+
+        if numpy.shape(v)==((self.n_dim,)):
+            # If the user just gave a one-dimensional vector, then
+            # convert to a two-dimensional vector
+            yp=self.bgm.predict([v])
+        else:
+            # Otherwise, call the predict() function as normal
+            yp=self.bgm.predict(v)
+
+        if self.verbose>1:
+            print('gmm_sklearn::predict(): type(yp),yp:',
+                   type(yp),yp,yp.dtype)
+        return numpy.ascontiguousarray(yp)
+    
+    def score(self,x):
+        """
+        Return the per-sample average log likelihood of the data as a
+        single floating point value given the vector or vectors
+        specified in x.
+        """
+        if numpy.shape(x)==((self.n_dim,)):
+            # If the user just gave a one-dimensional vector, then
+            # convert to a two-dimensional vector
+            s=self.bgm.score([x])
+        else:
+            # Otherwise, call the predict() function as normal
+            s=self.bgm.score(x)
+        return s
+    
+    def score_samples(self,x):
+        """
+        Given a vector (or list of vectors) in ``x``, return
+        the log likelihood at each point as a numpy array.
+        """
+        if numpy.shape(x)==((self.n_dim,)):
+            # If the user just gave a one-dimensional vector, then
+            # convert to a two-dimensional vector
+            ss=self.bgm.score_samples([x])
+        else:
+            
+            # Otherwise, call the predict() function as normal
+            ss=self.bgm.score_samples(x)
+
+        # Return the scores
+        if self.verbose>1:
+            print('gmm_sklearn::score_samples(): type(ss),ss:',
+                   type(ss),ss)
+        return numpy.ascontiguousarray(ss)
+    
     def sample(self,n_samples=1):
         """
-        Sample the Gaussian mixture model
+        Sample the Gaussian mixture model, returning a tuple with two
+        components, the first being an 2D array of the coordinates of
+        the new samples and the second being a 1D array of the labels
+        for each new sample.
         """
-        return self.bgm.sample(n_samples=n_samples)
+        s=self.bgm.sample(n_samples=n_samples)
+        return s
     
     def components(self,v):
         """
-        Evaluate the mixture model at point ``v``, and return
-        the normalized weights for each component as a contiguous numpy 
-        array
+        For a point (or set of points) specified in ``v``, use the
+        Gaussian mixture at to compute the density (or densities) of
+        each component as a contiguous numpy array. Each array will
+        have entries which sum to 1.
         """
-        yp=self.bgm.predict_proba([v])
+
+        if numpy.shape(v)==((self.n_dim,)):
+            # If the user just gave a one-dimensional vector, then
+            # convert to a two-dimensional vector
+            yp=self.bgm.predict_proba([v])
+        else:
+            # Otherwise, call the predict_proba() function as normal
+            yp=self.bgm.predict_proba(v)
+
         if yp.ndim==1:
+            # If the output is only a one-dimensional vector, then
+            # just return it
             if self.verbose>1:
-                print('bgmm_sklearn::eval(): type(yp),yp:',
+                print('gmm_sklearn::components(): type(yp),yp:',
                       type(yp),yp)
             return numpy.ascontiguousarray(yp)
+        
+        if numpy.shape(v)==((self.n_dim,)):
+            # If the user input was one-dimensional, then make the
+            # output one-dimensional as well
+            if self.verbose>1:
+                print('gmm_sklearn::components(): type(yp[0]),yp[0]:',
+                      type(yp[0]),yp[0])
+            return numpy.ascontiguousarray(yp[0])
+
+        # Otherwise, just return the full output
         if self.verbose>1:
-            print('bgmm_sklearn::eval(): type(yp[0]),yp[0]:',
-                  type(yp[0]),yp[0])
-        return numpy.ascontiguousarray(yp[0])
-    
+            print('gmm_sklearn::components(): type(yp),yp:',
+                   type(yp),yp)
+        return numpy.ascontiguousarray(yp)
