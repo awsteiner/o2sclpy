@@ -44,7 +44,7 @@ def test_all():
 
     if True:
         im=o2sclpy.interpm_sklearn_gp()
-        im.set_data_str(x,y,'verbose=2')
+        im.set_data_str(x,y,'verbose=2,test_size=0.1')
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
         interp=im.eval(v)
@@ -58,8 +58,8 @@ def test_all():
 
     if True:
         im2=o2sclpy.interpm_tf_dnn()
-        im2.set_data(x,y,verbose=1,epochs=600,
-                     test_size=0.15,batch_size=8,transform='none',
+        im2.set_data(x,y,verbose=1,epochs=200,
+                     test_size=0.0,batch_size=8,transform='none',
                      activations=['relu','relu','relu','relu'],
                      hlayers=[128,64,32,16])
         exact=f(0.5,0.5)

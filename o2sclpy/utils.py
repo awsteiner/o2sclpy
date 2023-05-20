@@ -275,7 +275,7 @@ def parse_arguments(argv,verbose=0):
             ix=ix_next
     return (list,unproc_list)
 
-def string_to_dict2(s,list_of_ints=[],list_of_floats=[]):
+def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[]):
     """
     Convert a string to a dictionary, converting strings to 
     values when necessary.
@@ -312,6 +312,8 @@ def string_to_dict2(s,list_of_ints=[],list_of_floats=[]):
             arr2[1]=int(arr2[1])
         if arr2[0] in list_of_floats:
             arr2[1]=float(arr2[1])
+        if arr2[0] in list_of_bools:
+            arr2[1]=bool(arr2[1])
                     
         dct[arr2[0]]=arr2[1]
 

@@ -69,6 +69,8 @@ class interpm_sklearn_gp:
 
             if arr2[0]=='verbose':
                 arr2[1]=int(arr2[1])
+            if arr2[0]=='test_size':
+                arr2[1]=float(arr2[1])
             if arr2[0]=='normalize_y':
                 arr2[1]=(arr2[1]=='True')
                     
@@ -102,6 +104,7 @@ class interpm_sklearn_gp:
 
         if test_size>0.0:
             try:
+                from sklearn.model_selection import train_test_split
                 in_train,in_test,out_train,out_test=train_test_split(
                     in_data,out_data,test_size=test_size)
             except Exception as e:
@@ -120,6 +123,10 @@ class interpm_sklearn_gp:
             print('Exception in interpm_sklearn_gp::set_data()',
                   'at fit().',e)
             pass
+
+        if test_size>0.0:
+            print('score:',self.gp.score(in_test,out_test))
+            quit()
 
         return
     

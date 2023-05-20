@@ -39,49 +39,6 @@ class gmm_sklearn:
         self.convariance_type=0
         self.gm=0
 
-    def string_to_dict(self,s,list_of_ints=['verbose','n_components'],
-                       list_of_floats=['tol','reg_covar']):
-        """
-        Convert a string to a dictionary, converting strings to 
-        values when necessary.
-        """
-        
-        # First split into keyword = value pairs
-        arr=s.split(',')
-        # Create empty dictionary
-        dct={}
-
-        if len(s)==0:
-            return dct
-        
-        for i in range(0,len(arr)):
-
-            # For each pair, split keyword and value.
-            arr2=arr[i].split('=')
-        
-            # Remove preceeding and trailing whitespace from the
-            # keywords (not for the values)
-            while arr2[0][0].isspace():
-                arr2[0]=arr2[0][1:]
-            while arr2[0][len(arr2[0])-1].isspace():
-                arr2[0]=arr2[0][:-1]
-
-            # Remove quotes if necessary
-            if len(arr2)>1 and len(arr2[1])>2:
-                if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-                if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-
-            if arr2[0] in list_of_ints:
-                arr2[1]=int(arr2[1])
-            if arr2[0] in list_of_floats:
-                arr2[1]=float(arr2[1])
-                    
-            dct[arr2[0]]=arr2[1]
-
-        return dct
-    
     def set_data(self,in_data,verbose=0,n_components=2,
                  covariance_type='full',tol=0.001,reg_covar=1.0e-6,
                  max_iter=100,n_init=1):
@@ -286,52 +243,6 @@ class bgmm_sklearn:
         self.convariance_type=0
         self.bgm=0
 
-    def string_to_dict(self,s):
-        """
-        Convert a string to a dictionary, converting strings to 
-        values when necessary.
-        """
-        
-        # First split into keyword = value pairs
-        arr=s.split(',')
-        # Create empty dictionary
-        dct={}
-
-        if len(s)==0:
-            return dct
-        
-        for i in range(0,len(arr)):
-
-            # For each pair, split keyword and value.
-            arr2=arr[i].split('=')
-        
-            # Remove preceeding and trailing whitespace from the
-            # keywords (not for the values)
-            while arr2[0][0].isspace():
-                arr2[0]=arr2[0][1:]
-            while arr2[0][len(arr2[0])-1].isspace():
-                arr2[0]=arr2[0][:-1]
-
-            # Remove quotes if necessary
-            if len(arr2)>1 and len(arr2[1])>2:
-                if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-                if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-
-            if arr2[0]=='verbose':
-                arr2[1]=int(arr2[1])
-            if arr2[0]=='n_components':
-                arr2[1]=int(arr2[1])
-            if arr2[0]=='tol':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='reg_covar':
-                arr2[1]=float(arr2[1])
-                    
-            dct[arr2[0]]=arr2[1]
-
-        return dct
-    
     def set_data(self,in_data,verbose=0,n_components=2,
                  covariance_type='full',tol=0.001,reg_covar=1.0e-6,
                  max_iter=100,n_init=1):
@@ -474,7 +385,8 @@ class bgmm_sklearn:
         using a string to specify the keyword arguments.
         """
 
-        dct=self.string_to_dict(options)
+        dct=string_to_dict2(options,list_of_ints=['verbose','n_components'],
+                            list_of_floats=['tol','reg_covar'])
         if self.verbose>1:
             print('String:',options,'Dictionary:',dct)
               
