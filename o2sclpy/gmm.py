@@ -207,7 +207,7 @@ class gmm_sklearn:
                    type(yp),yp,yp.dtype)
         return numpy.ascontiguousarray(yp)
     
-    def score(self,x):
+    def log_pdf(self,x):
         """
         Return the per-sample average log likelihood of the data as a
         single floating point value given the vector or vectors
@@ -215,11 +215,14 @@ class gmm_sklearn:
         """
         if numpy.shape(x)==((self.n_dim,)):
             # If the user just gave a one-dimensional vector, then
-            # convert to a two-dimensional vector
+            # convert to a two-dimensional vector and return a
+            # single floating point value
             s=self.gm.score([x])
-        else:
-            # Otherwise, call the predict() function as normal
-            s=self.gm.score(x)
+            return s[0]
+
+        # Otherwise, call the score() function as normal
+        s=self.gm.score(x)
+        
         return s
     
     def score_samples(self,x):
@@ -477,7 +480,7 @@ class bgmm_sklearn:
                    type(yp),yp,yp.dtype)
         return numpy.ascontiguousarray(yp)
     
-    def score(self,x):
+    def log_pdf(self,x):
         """
         Return the per-sample average log likelihood of the data as a
         single floating point value given the vector or vectors
@@ -485,11 +488,14 @@ class bgmm_sklearn:
         """
         if numpy.shape(x)==((self.n_dim,)):
             # If the user just gave a one-dimensional vector, then
-            # convert to a two-dimensional vector
+            # convert to a two-dimensional vector and return a
+            # single floating point value
             s=self.bgm.score([x])
-        else:
-            # Otherwise, call the predict() function as normal
-            s=self.bgm.score(x)
+            return s[0]
+        
+        # Otherwise, call the score() function as normal
+        s=self.bgm.score(x)
+        
         return s
     
     def score_samples(self,x):

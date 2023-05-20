@@ -21,14 +21,14 @@
 #
 import numpy
 
+from o2sclpy.utils import string_to_dict2
+
 class kde_sklearn:
     """
     Use scikit-learn to generate a KDE
 
     This is an experimental and very simplifed interface, mostly
     to provide easier interaction with C++. 
-    
-    Todo: add a test_train_split option?
     """
 
     def __init__(self):
@@ -41,46 +41,6 @@ class kde_sklearn:
         self.SS1=0
         self.data=0
 
-    def string_to_dict(self,s):
-        """
-        Convert a string to a dictionary, converting strings to 
-        values when necessary.
-        """
-        
-        # First split into keyword = value pairs
-        arr=s.split(',')
-        # Create empty dictionary
-        dct={}
-
-        if len(s)==0:
-            return dct
-        
-        for i in range(0,len(arr)):
-
-            # For each pair, split keyword and value.
-            arr2=arr[i].split('=')
-        
-            # Remove preceeding and trailing whitespace from the
-            # keywords (not for the values)
-            while arr2[0][0].isspace():
-                arr2[0]=arr2[0][1:]
-            while arr2[0][len(arr2[0])-1].isspace():
-                arr2[0]=arr2[0][:-1]
-
-            # Remove quotes if necessary
-            if len(arr2)>1 and len(arr2[1])>2:
-                if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-                if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-
-            if arr2[0]=='verbose':
-                arr2[1]=int(arr2[1])
-                    
-            dct[arr2[0]]=arr2[1]
-
-        return dct
-    
     def set_data(self,in_data,bw_array,verbose=0,kernel='gaussian',
                  metric='euclidean',outformat='numpy',
                  transform='unit',bandwidth='none'):
@@ -156,7 +116,7 @@ class kde_sklearn:
         using a string to specify the keyword arguments.
         """
 
-        dct=self.string_to_dict(options)
+        dct=self.string_to_dict2(options,list_of_ints=['verbose'])
         if self.verbose>1:
             print('String:',options,'Dictionary:',dct)
               
