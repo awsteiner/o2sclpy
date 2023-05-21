@@ -27,8 +27,8 @@ class kde_sklearn:
     """
     Use scikit-learn to generate a KDE
 
-    This is an experimental and very simplifed interface, mostly
-    to provide easier interaction with C++. 
+    This is an experimental interface to provide easier interaction
+    with C++.
     """
 
     def __init__(self):
@@ -116,7 +116,7 @@ class kde_sklearn:
         using a string to specify the keyword arguments.
         """
 
-        dct=self.string_to_dict2(options,list_of_ints=['verbose'])
+        dct=string_to_dict2(options,list_of_ints=['verbose'])
         if self.verbose>1:
             print('String:',options,'Dictionary:',dct)
               
