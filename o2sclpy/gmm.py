@@ -215,10 +215,9 @@ class gmm_sklearn:
         """
         if numpy.shape(x)==((self.n_dim,)):
             # If the user just gave a one-dimensional vector, then
-            # convert to a two-dimensional vector and return a
-            # single floating point value
+            # convert to a two-dimensional vector
             s=self.gm.score([x])
-            return s[0]
+            return s
 
         # Otherwise, call the score() function as normal
         s=self.gm.score(x)
@@ -488,10 +487,9 @@ class bgmm_sklearn:
         """
         if numpy.shape(x)==((self.n_dim,)):
             # If the user just gave a one-dimensional vector, then
-            # convert to a two-dimensional vector and return a
-            # single floating point value
+            # convert to a two-dimensional vector
             s=self.bgm.score([x])
-            return s[0]
+            return s
         
         # Otherwise, call the score() function as normal
         s=self.bgm.score(x)

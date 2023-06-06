@@ -63,11 +63,11 @@ def test_gmm():
                       [0.1,0.1]]))
     print(' ')
     
-    # Test score()
-    print('score():')
-    print(gs.score([0.5,0.5]))
-    print(gs.score([0.2,0.2]))
-    print(gs.score([[0.2,0.2],
+    # Test log_pdf()
+    print('log_pdf():')
+    print(gs.log_pdf([0.5,0.5]))
+    print(gs.log_pdf([0.2,0.2]))
+    print(gs.log_pdf([[0.2,0.2],
                       [0.1,0.1]]))
     print(' ')
 
@@ -124,11 +124,11 @@ def test_bgmm():
                       [0.1,0.1]]))
     print(' ')
     
-    # Test score()
-    print('score():')
-    print(gs.score([0.5,0.5]))
-    print(gs.score([0.2,0.2]))
-    print(gs.score([[0.2,0.2],
+    # Test log_pdf()
+    print('log_pdf():')
+    print(gs.log_pdf([0.5,0.5]))
+    print(gs.log_pdf([0.2,0.2]))
+    print(gs.log_pdf([[0.2,0.2],
                       [0.1,0.1]]))
     print(' ')
 
