@@ -126,7 +126,6 @@ class interpm_sklearn_gp:
 
         if test_size>0.0:
             print('score:',self.gp.score(in_test,out_test))
-            quit()
 
         return
     
