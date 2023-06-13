@@ -26,7 +26,7 @@ List of command-line options which do not require a current object:
   -exec            Run the python code specified in a file.
   -exit            Exit (synonymous with 'quit').
   -filelist        List objects in a HDF5 file. 
-  -generic         Read an object generic text file. 
+  -generic         Read an object from a generic text file. 
   -get             Get the value of a parameter.
   -h5-copy         Copy an O₂scl-generated HDF5 file. 
   -help            Show help information.
@@ -34,9 +34,12 @@ List of command-line options which do not require a current object:
   -inset           Add a new set of axes
   -interactive     Toggle interactive mode. 
   -internal        Output current object in the internal HDF5 format. 
+  -kde-2d-plot     For objects of type ``table``:
+  -kde-plot        For objects of type ``table``:
   -license         Show license information.
   -line            Plot a line from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
   -modax           Modify current axes properties.
+  -mp4             Create an mp4 file from a series of images.
   -ninteg          Numerically integrate a user-specified function. 
   -no-intro        Do not print introductory text.
   -o2scl-addl-libs Specify a list of list of additional libraries to load.
