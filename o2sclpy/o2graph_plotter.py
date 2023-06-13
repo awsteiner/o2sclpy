@@ -1146,7 +1146,7 @@ class o2graph_plotter(yt_plot_base):
         Command-line arguments: ``<column> [plot kwargs] [kde kwargs]``
 
         Useful plot kwargs are all the usual plotting kwargs, plus
-        x_min=0, x_max=0, and n_points=201.
+        x_min=0, x_max=0, y_mult=1, and n_points=201.
 
         Useful KDE kwargs are kernel='gaussian', metric='euclidean',
         transform='unit', and bandwidth='none'.
@@ -1167,6 +1167,7 @@ class o2graph_plotter(yt_plot_base):
             x_min=0
             x_max=0
             n_points=201
+            y_mult=1
             
             # Convert kwargs to string so we can extract
             # n_points, x_min, and x_max
@@ -1174,9 +1175,11 @@ class o2graph_plotter(yt_plot_base):
             if len(args)>=2:
                 dct_plot=string_to_dict2(args[1],
                                          list_of_ints=['n_points'],
-                                         list_of_floats=['x_min','x_max'])
+                                         list_of_floats=['x_min','x_max',
+                                                         'y_mult'])
                 x_min=dct_plot.pop('x_min',0)
                 x_max=dct_plot.pop('x_max',0)
+                y_mult=dct_plot.pop('y_mult',1)
                 n_points=dct_plot.pop('n_points',201)
 
             # If x_min and x_max are not set, then determine them,
@@ -1195,7 +1198,7 @@ class o2graph_plotter(yt_plot_base):
                 else:
                     x_min=self.xlo
                     x_max=self.xhi
-            print('x_min,x_max,n_points:',x_min,x_max,n_points)
+            print('x_min,x_max,n_points,y_mult:',x_min,x_max,n_points,y_mult)
 
             # Use sklearn and a reasonable guess for the bandwidth,
             # between 1.0e-2 and 1.0e+2. Note that the KDE is
@@ -1215,7 +1218,7 @@ class o2graph_plotter(yt_plot_base):
             xp=x_min
             for i in range(0,n_points):
                 xa.append(xp)
-                ya.append(k.pdf([xp]))
+                ya.append(k.pdf([xp])*y_mult)
                 xp=xp+(x_max-x_min)/float(n_points-1)
 
             # Plot
