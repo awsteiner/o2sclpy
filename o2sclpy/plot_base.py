@@ -1,6 +1,6 @@
 #  -------------------------------------------------------------------
 #  
-#  Copyright (C) 2006-2022, Andrew W. Steiner
+#  Copyright (C) 2006-2023, Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
 #  
@@ -2107,26 +2107,14 @@ class plot_base:
                 self.canvas()
             if self.logx==True:
                 if self.logy==True:
-                    if len(args)<3:
-                        self.axes.loglog(xv,yv)
-                    else:
-                        self.axes.loglog(xv,yv,**kwargs)
+                    self.axes.loglog(xv,yv,**kwargs)
                 else:
-                    if len(args)<3:
-                        self.axes.semilogx(xv,yv)
-                    else:
-                        self.axes.semilogx(xv,yv,**kwargs)
+                    self.axes.semilogx(xv,yv,**kwargs)
             else:
                 if self.logy==True:
-                    if len(args)<3:
-                        self.axes.semilogy(xv,yv)
-                    else:
-                        self.axes.semilogy(xv,yv,**kwargs)
+                    self.axes.semilogy(xv,yv,**kwargs)
                 else:
-                    if len(args)<3:
-                        self.axes.plot(xv,yv)
-                    else:
-                        self.axes.plot(xv,yv,**kwargs)
+                    self.axes.plot(xv,yv,**kwargs)
 
             # AWS, added 5/3/23, I think this should be here?
             if self.xset==True:

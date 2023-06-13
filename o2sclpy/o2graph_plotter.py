@@ -1,6 +1,6 @@
 #  -------------------------------------------------------------------
 #  
-#  Copyright (C) 2006-2022, Andrew W. Steiner
+#  Copyright (C) 2006-2023, Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
 #  
@@ -1143,9 +1143,13 @@ class o2graph_plotter(yt_plot_base):
 
         Plot a KDE of one column
 
-        Command-line arguments: ``<column> [options]``
+        Command-line arguments: ``<column> [plot kwargs] [kde kwargs]``
 
-        Desc.
+        Useful plot kwargs are all the usual plotting kwargs, plus
+        x_min=0, x_max=0, and n_points=201.
+
+        Useful KDE kwargs are kernel='gaussian', metric='euclidean',
+        transform='unit', and bandwidth='none'.
         """
         curr_type=o2scl_get_type(o2scl,amp,link)
 
@@ -1154,39 +1158,71 @@ class o2graph_plotter(yt_plot_base):
             amt=acol_manager(link,amp)
             tab=amt.get_table_obj()
 
-            # Copy the table data to a numpy array
+            # Copy the table data to a 2D numpy array
             x=numpy.zeros((tab.get_nlines(),1))
             for i in range(0,tab.get_nlines()):
                 x[i,0]=tab.get(args[0],i)
 
-            x_min=x[0,0]
-            x_max=x[0,0]
-            for i in range(1,tab.get_nlines()):
-                if x[i,0]<x_min:
-                    x_min=x[i,0]
-                if x[i,0]>x_max:
-                    x_max=x[i,0]
-                
+            # Set defaults
+            x_min=0
+            x_max=0
+            n_points=201
+            
+            # Convert kwargs to string so we can extract
+            # n_points, x_min, and x_max
+            dct_plot={}
+            if len(args)>=2:
+                dct_plot=string_to_dict2(args[1],
+                                         list_of_ints=['n_points'],
+                                         list_of_floats=['x_min','x_max'])
+                x_min=dct_plot.pop('x_min',0)
+                x_max=dct_plot.pop('x_max',0)
+                n_points=dct_plot.pop('n_points',201)
+
+            # If x_min and x_max are not set, then determine them,
+            # either from the plot limits or from the minimum
+            # and maximum of the data
+            if x_min>=x_max:
+                if self.xset==False:
+                    # Determine min and max of data
+                    x_min=x[0,0]
+                    x_max=x[0,0]
+                    for i in range(1,tab.get_nlines()):
+                        if x[i,0]<x_min:
+                            x_min=x[i,0]
+                        if x[i,0]>x_max:
+                            x_max=x[i,0]
+                else:
+                    x_min=self.xlo
+                    x_max=self.xhi
+            print('x_min,x_max,n_points:',x_min,x_max,n_points)
+
+            # Use sklearn and a reasonable guess for the bandwidth,
+            # between 1.0e-2 and 1.0e+2. Note that the KDE is
+            # rescaled by default. 
             k=kde_sklearn()
             bw_array=[10**(float(i)/4.0-2.0) for i in range(0,17)]
 
-            if len(args)>2:
-                k.set_data_str(x,bw_array,args[1])
+            # Set the KDE
+            if len(args)>=3:
+                k.set_data_str(x,bw_array,args[2])
             else:
                 k.set_data_str(x,bw_array,'')
 
+            # Use the new KDE to create x and y-arrays
             xa=[]
             ya=[]
             xp=x_min
-            for i in range(0,201):
+            for i in range(0,n_points):
                 xa.append(xp)
                 ya.append(k.pdf([xp]))
-                xp=xp+(x_max-x_min)/200.0
+                xp=xp+(x_max-x_min)/float(n_points-1)
 
-            if len(args)<3:
+            # Plot
+            if len(args)<2:
                 self.plot([xa,ya])
             else:
-                self.plot([xa,ya],**string_to_dict(args[2]))
+                self.plot([xa,ya],**dct_plot)
                 
         else:
             print("Command 'kde-plot' not supported for type",
@@ -5229,7 +5265,8 @@ class o2graph_plotter(yt_plot_base):
                         print('Process hist2d-plot.')
                         print('args:',strlist[ix:ix_next])
                         
-                    self.hist2d_plot(o2scl,amp,self.link2,strlist[ix+1:ix_next])
+                    self.hist2d_plot(o2scl,amp,self.link2,
+                                     strlist[ix+1:ix_next])
                             
                 elif cmd_name=='den-plot':
                     

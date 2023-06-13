@@ -9,6 +9,7 @@ Reference for Python objects
    :maxdepth: 3
 
    plot_ref
+   class_ml
    class_plot_base
    class_yt_plot_base
    class_o2graph_plotter

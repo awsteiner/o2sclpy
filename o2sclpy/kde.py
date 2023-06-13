@@ -25,10 +25,18 @@ from o2sclpy.utils import string_to_dict2
 
 class kde_sklearn:
     """
-    Use scikit-learn to generate a KDE
+    Use scikit-learn to generate a KDE.
 
     This is an experimental interface to provide easier interaction
     with C++.
+
+    .. todo:: 
+
+       * Fix the comparison between sklearn and scipy, making
+         sure they both produce the same log_pdf() in the 
+         correct conditions. Ensure the integral is normalized
+         when appropriate. 
+    
     """
 
     def __init__(self):
@@ -80,7 +88,7 @@ class kde_sklearn:
                 
         try:
 
-            if bandwidth=='none':
+            if bandwidth=='none' or bandwidth=='None':
                 grid=GridSearchCV(KernelDensity(kernel=kernel),
                                   {"bandwidth": bw_array})
                 grid.fit(in_data_trans)
@@ -90,8 +98,7 @@ class kde_sklearn:
                                        bandwidth=bandwidth).fit(in_data_trans)
             
             if self.verbose>0:
-                print('Optimal bandwidth: ',
-                      self.kde.bandwidth_)
+                print('Bandwidth: ',self.kde.bandwidth_)
             
         except Exception as e:
             print('Exception in kde_sklearn::set_data()',
@@ -176,8 +183,6 @@ class kde_scipy:
 
     This is an experimental and very simplifed interface, mostly
     to provide easier interaction with C++. 
-    
-    Todo: add a test_train_split option?
     """
 
     def __init__(self):
@@ -266,7 +271,7 @@ class kde_scipy:
                                         weights=weights)
             
             if self.verbose>0:
-                print('Optimal bandwidth: ',self.kde.factor)
+                print('Bandwidth: ',self.kde.factor)
             
         except Exception as e:
             print('Exception in kde_scipy::set_data()',
