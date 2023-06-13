@@ -25,6 +25,12 @@ Other O₂sclpy variables
 .. autodata:: o2sclpy.new_cmaps
 .. autodata:: o2sclpy.extra_types
 
+Extra class for todo items
+--------------------------
+              
+.. autoclass:: o2sclpy.todo_list
+
+              
 
 
 
