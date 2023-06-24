@@ -123,11 +123,18 @@ class kde_sklearn:
         using a string to specify the keyword arguments.
         """
 
-        dct=string_to_dict2(options,list_of_ints=['verbose'])
-        if self.verbose>1:
-            print('String:',options,'Dictionary:',dct)
-              
-        self.set_data(in_data,bw_array,**dct)
+        try:
+            dct=string_to_dict2(options,list_of_ints=['verbose'])
+            if self.verbose>1:
+                print('String:',options,'Dictionary:',dct)
+                  
+            self.set_data(in_data,bw_array,**dct)
+        except Exception as e:
+            print('Exception in kde_sklearn::set_data_str()',
+                  'KDE failed.\n  ',e)
+            raise
+
+        return
 
         return
 
@@ -247,22 +254,32 @@ class kde_scipy:
             print('  transform:',transform)
             print('')
 
-        from scipy import stats
-        import numpy
+        try:
+            from scipy import stats
+            import numpy
+            
+            self.verbose=verbose
+            self.outformat=outformat
+            self.transform=transform
+            self.n_dim=numpy.shape(in_data)[1]
+            
+            from sklearn.preprocessing import QuantileTransformer
+            from sklearn.preprocessing import MinMaxScaler
+        except Exception as e:
+            print('Exception in kde_scipy::set_data() at sklearn import',
+                  'KDE failed.\n  ',e)
+            raise
 
-        self.verbose=verbose
-        self.outformat=outformat
-        self.transform=transform
-        self.n_dim=numpy.shape(in_data)[1]
-
-        from sklearn.preprocessing import QuantileTransformer
-        from sklearn.preprocessing import MinMaxScaler
-
-        if self.transform=='unit':
-            self.SS1=MinMaxScaler(feature_range=(0,1))
-            in_data_trans=self.SS1.fit_transform(in_data)
-        else:
-            in_data_trans=in_data
+        try:
+            if self.transform=='unit':
+                self.SS1=MinMaxScaler(feature_range=(0,1))
+                in_data_trans=self.SS1.fit_transform(in_data)
+            else:
+                in_data_trans=in_data
+        except Exception as e:
+            print('Exception in kde_scipy::set_data() at transform',
+                  'KDE failed.\n  ',e)
+            raise
 
         try:
 
@@ -292,16 +309,21 @@ class kde_scipy:
         using a string to specify the keyword arguments.
         """
 
-        dct=self.string_to_dict(options)
-        if self.verbose>1:
-            print('String:',options,'Dictionary:',dct)
-
-        print('weights shape:',weights,numpy.shape(weights))
-
-        if numpy.shape(weights)[0]>0:
-            self.set_data(in_data,weights=weights,**dct)
-        else:
-            self.set_data(in_data,**dct)
+        try:
+            dct=self.string_to_dict(options)
+            if self.verbose>1:
+                print('String:',options,'Dictionary:',dct)
+    
+            print('weights shape:',weights,numpy.shape(weights))
+    
+            if numpy.shape(weights)[0]>0:
+                self.set_data(in_data,weights=weights,**dct)
+            else:
+                self.set_data(in_data,**dct)
+        except Exception as e:
+            print('Exception in kde_scipy::set_data_str()',
+                  'KDE failed.\n  ',e)
+            raise
 
         return
 
