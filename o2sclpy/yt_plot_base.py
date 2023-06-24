@@ -26,12 +26,6 @@ import os
 # For system type detection
 import platform
 
-# To create new color maps
-from matplotlib.colors import LinearSegmentedColormap
-
-# For rectangles and ellipses
-import matplotlib.patches as patches
-
 from o2sclpy.utils import parse_arguments, string_to_dict
 from o2sclpy.utils import force_bytes, default_plot, get_str_array
 from o2sclpy.utils import string_to_color
