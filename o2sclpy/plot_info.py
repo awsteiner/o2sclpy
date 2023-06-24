@@ -24,9 +24,6 @@ import sys
 import numpy
 import textwrap
 
-# For rectangles
-import matplotlib.patches as patches
-
 from o2sclpy.utils import default_plot, string_to_dict, terminal_py
 from o2sclpy.doc_data import cmaps, new_cmaps
 
@@ -392,6 +389,7 @@ def cmaps_plot(fname=''):
     print('Generating colormap summary figure.')
                         
     import matplotlib.pyplot as plot
+    import matplotlib.patches as patches
     
     # An internal implementation of
     # https://matplotlib.org/3.1.0/gallery/
