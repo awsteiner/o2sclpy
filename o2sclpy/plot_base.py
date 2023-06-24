@@ -28,9 +28,6 @@ import os
 
 # To create new color maps
 
-# For rectangles and ellipses
-import matplotlib.patches as patches
-
 from o2sclpy.utils import parse_arguments, string_to_dict
 from o2sclpy.utils import force_bytes, default_plot
 from o2sclpy.utils import string_to_color
@@ -1071,6 +1068,8 @@ class plot_base:
         (ec), facecolor (fc), fill, hatch, linestyle (ls), linewidth
         (lw).
         """
+        import matplotlib.patches as patches
+
         if self.verbose>2:
             print('Rect',x1,y1,x2,y1)
         if self.canvas_flag==False:
@@ -1115,6 +1114,8 @@ class plot_base:
         kwargs are alpha, color, edgecolor (ec), facecolor (fc), fill,
         hatch, linestyle (ls), linewidth (lw).
         """
+        import matplotlib.patches as patches
+
         if self.verbose>2:
             print('Ellipse',x,y,w,h,angle)
         if self.canvas_flag==False:
