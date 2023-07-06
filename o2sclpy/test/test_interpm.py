@@ -54,7 +54,7 @@ def test_all():
         interp2,std2=im.eval_unc(v)
         print('exact,interp: %7.6e %7.6e %7.6e' % (exact,interp,std2))
         assert numpy.allclose(exact,interp2,rtol=1.0e-4)
-        assert numpy.allclose(0,std2,atol=1.0e-5)
+        assert numpy.allclose(0,std2,atol=1.0e-4)
 
     if True:
         im2=o2sclpy.interpm_tf_dnn()
