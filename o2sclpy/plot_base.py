@@ -300,6 +300,7 @@ class plot_base:
             col_r=numpy.ones((int(N/2+1),3))
             col_g=numpy.ones((int(N/2+1),3))
             col_b=numpy.ones((int(N/2+1),3))
+            col_a=numpy.ones((int(N/2+1),3))
     
             # Convert the colors to RGBA arrays (the alpha value is
             # ignored)
@@ -318,35 +319,44 @@ class plot_base:
                 col_r[i][0]=float(i)/float(N/2)
                 col_g[i][0]=float(i)/float(N/2)
                 col_b[i][0]=float(i)/float(N/2)
+                col_a[i][0]=float(i)/float(N/2)
                 if i==0:
                     col_r[i][1]=unused
                     col_g[i][1]=unused
                     col_b[i][1]=unused
+                    col_a[i][1]=unused
                     col_r[i][2]=rgb_list[0][0]
                     col_g[i][2]=rgb_list[0][1]
                     col_b[i][2]=rgb_list[0][2]
+                    col_a[i][2]=rgb_list[0][3]
                 elif i==N/2:
                     col_r[i][1]=rgb_list[N-1][0]
                     col_g[i][1]=rgb_list[N-1][1]
                     col_b[i][1]=rgb_list[N-1][2]
+                    col_a[i][1]=rgb_list[N-1][3]
                     col_r[i][2]=unused
                     col_g[i][2]=unused
                     col_b[i][2]=unused
+                    col_a[i][2]=unused
                 else:
                     col_r[i][1]=rgb_list[int(i/2+1)][0]
                     col_g[i][1]=rgb_list[int(i/2+1)][1]
                     col_b[i][1]=rgb_list[int(i/2+1)][2]
+                    col_a[i][1]=rgb_list[int(i/2+1)][3]
                     col_r[i][2]=rgb_list[int(i/2+2)][0]
                     col_g[i][2]=rgb_list[int(i/2+2)][1]
                     col_b[i][2]=rgb_list[int(i/2+2)][2]
+                    col_a[i][2]=rgb_list[int(i/2+2)][3]
     
                 if self.verbose>1:
                     print('red',col_r[i][0],col_r[i][1],col_r[i][2])
                     print('green',col_g[i][0],col_g[i][1],col_g[i][2])
                     print('blue',col_b[i][0],col_b[i][1],col_b[i][2])
+                    print('alpha',col_a[i][0],col_a[i][1],col_a[i][2])
                     print('')
     
-            cdict={'red': col_r, 'green': col_g, 'blue': col_b}
+            cdict={'red': col_r, 'green': col_g, 'blue': col_b,
+                   'alpha': col_a}
             
         else:
             
@@ -359,6 +369,7 @@ class plot_base:
             col_r=numpy.ones((N,3))
             col_g=numpy.ones((N,3))
             col_b=numpy.ones((N,3))
+            col_a=numpy.ones((N,3))
     
             # Convert the colors to RGBA arrays (the alpha value is
             # ignored)
@@ -377,35 +388,44 @@ class plot_base:
                 col_r[i][0]=float(i)/float(N-1)
                 col_g[i][0]=float(i)/float(N-1)
                 col_b[i][0]=float(i)/float(N-1)
+                col_a[i][0]=float(i)/float(N-1)
                 if i==0:
                     col_r[i][1]=unused
                     col_g[i][1]=unused
                     col_b[i][1]=unused
+                    col_a[i][1]=unused
                     col_r[i][2]=rgb_list[0][0]
                     col_g[i][2]=rgb_list[0][1]
                     col_b[i][2]=rgb_list[0][2]
+                    col_a[i][2]=rgb_list[0][3]
                 elif i==N-1:
                     col_r[i][1]=rgb_list[N-1][0]
                     col_g[i][1]=rgb_list[N-1][1]
                     col_b[i][1]=rgb_list[N-1][2]
+                    col_a[i][1]=rgb_list[N-1][3]
                     col_r[i][2]=unused
                     col_g[i][2]=unused
                     col_b[i][2]=unused
+                    col_a[i][2]=unused
                 else:
                     col_r[i][1]=rgb_list[i][0]
                     col_g[i][1]=rgb_list[i][1]
                     col_b[i][1]=rgb_list[i][2]
+                    col_a[i][1]=rgb_list[i][3]
                     col_r[i][2]=rgb_list[i][0]
                     col_g[i][2]=rgb_list[i][1]
                     col_b[i][2]=rgb_list[i][2]
+                    col_a[i][2]=rgb_list[i][3]
     
                 if self.verbose>1:
                     print('red',col_r[i][0],col_r[i][1],col_r[i][2])
                     print('green',col_g[i][0],col_g[i][1],col_g[i][2])
                     print('blue',col_b[i][0],col_b[i][1],col_b[i][2])
+                    print('alpha',col_a[i][0],col_a[i][1],col_a[i][2])
                     print('')
     
-            cdict={'red': col_r, 'green': col_g, 'blue': col_b}
+            cdict={'red': col_r, 'green': col_g, 'blue': col_b,
+                   'alpha': col_a}
             
         import matplotlib
         from matplotlib.colors import LinearSegmentedColormap
