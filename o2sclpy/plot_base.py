@@ -349,9 +349,9 @@ class plot_base:
                     col_a[i][2]=rgb_list[int(i/2+2)][3]
     
                 if self.verbose>1:
-                    print('red',col_r[i][0],col_r[i][1],col_r[i][2])
+                    print('red  ',col_r[i][0],col_r[i][1],col_r[i][2])
                     print('green',col_g[i][0],col_g[i][1],col_g[i][2])
-                    print('blue',col_b[i][0],col_b[i][1],col_b[i][2])
+                    print('blue ',col_b[i][0],col_b[i][1],col_b[i][2])
                     print('alpha',col_a[i][0],col_a[i][1],col_a[i][2])
                     print('')
     
@@ -418,9 +418,9 @@ class plot_base:
                     col_a[i][2]=rgb_list[i][3]
     
                 if self.verbose>1:
-                    print('red',col_r[i][0],col_r[i][1],col_r[i][2])
+                    print('red  ',col_r[i][0],col_r[i][1],col_r[i][2])
                     print('green',col_g[i][0],col_g[i][1],col_g[i][2])
-                    print('blue',col_b[i][0],col_b[i][1],col_b[i][2])
+                    print('blue ',col_b[i][0],col_b[i][1],col_b[i][2])
                     print('alpha',col_a[i][0],col_a[i][1],col_a[i][2])
                     print('')
     
