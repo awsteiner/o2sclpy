@@ -144,6 +144,14 @@ Subplot example 3
 .. image:: static/figures/subplots3.png
    :width: 70%
 	   
+Colormap and transparency example
+---------------------------------
+
+.. include:: ../examples/cmap_den_plot.scr
+   :literal:
+.. image:: static/figures/cmap_den_plot.png
+   :width: 70%
+	   
 Internal structure
 ------------------
 

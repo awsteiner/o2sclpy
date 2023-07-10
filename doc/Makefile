@@ -40,6 +40,7 @@ test-sync:
 
 statfiles:
 	cd static/examples; ./backend.scr
+	cd static/examples; ./cmap_den_plot.scr
 	cd static/examples; ./table3d_den_plot.scr
 	cd static/examples; ./table_errorbar.scr
 	cd static/examples; ./table_hist2dplot.scr

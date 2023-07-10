@@ -249,8 +249,8 @@ class plot_base:
 
         Create a new color map named <cmap name> which consists of
         equal-sized gradients between the specified list of at least
-        two colors. Matplotlib colors, (r,g,b) colors, and xkcd colors
-        are all allowed. For example::
+        two colors. Matplotlib colors, (r,g,b) colors, [r,g,b,a] colors,
+        and xkcd colors are all allowed. For example::
 
           o2graph -cmap c forestgreen "(0.5,0.5,0.7)" "xkcd:light red" \\
           -create table3d x grid:0,40,1 y grid:0,40,1 z "x+y" \\
