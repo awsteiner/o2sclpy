@@ -1,7 +1,7 @@
 .. _o2sclpy:
 
-O₂sclpy: v0.928a1
-=================
+O₂sclpy: v0.928
+===============
 
 O₂sclpy is both a python interface to the C++ library,
 :ref:`O2scl <o2scl>`, and a high-level plotting script, ``o2graph``,
