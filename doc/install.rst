@@ -10,7 +10,7 @@ The release version, O₂sclpy 0.928, requires the O₂scl v0.928 release
 from https://github.com/awsteiner/o2scl/releases/tag/v0.928 .
 
 .. and the
-   development version, O₂sclpy 0.928a1, requires that the most recent
+   development version, O₂sclpy 0.929a1, requires that the most recent
    version of O₂scl from the master branch on github is installed on your
    machine.
 
@@ -18,7 +18,7 @@ The most recent release version of O₂sclpy can be installed with e.g.
 ``pip3 install o2sclpy``.
 
 .. If you want to install the development
-   version (v0.928a1), you can clone the git repository, change directory
+   version (v0.929a1), you can clone the git repository, change directory
    to the O₂sclpy directory, and then use e.g. ``pip3 install .`` if you
    want to use the pip package manager or ``python3 setup.py install`` to
    do a direct installation.
