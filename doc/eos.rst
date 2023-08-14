@@ -6,6 +6,7 @@ EOS classes
 :ref:`O2sclpy <o2sclpy>`
 
 * :ref:`Class eos_base`
+* :ref:`Class eos_leptons`
 * :ref:`Class eos_had_base`
 * :ref:`Class eos_had_eden_base`
 * :ref:`Class eos_had_pres_base`
@@ -34,6 +35,17 @@ Class eos_base
 --------------
 
 .. autoclass:: o2sclpy.eos_base
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class eos_leptons
+-----------------
+
+.. autoclass:: o2sclpy.eos_leptons
         :members:
         :undoc-members:
 

@@ -739,12 +739,12 @@ Function grid_rearrange_and_copy
 Function fermi_function
 -----------------------
 
-.. autofunction:: o2sclpy.fermi_function(link,E,mu,T,limit)
+.. autofunction:: o2sclpy.fermi_function(link,x)
 
 Function bose_function
 ----------------------
 
-.. autofunction:: o2sclpy.bose_function(link,E,mu,T,limit)
+.. autofunction:: o2sclpy.bose_function(link,x)
 
 Function quadratic_extremum_x
 -----------------------------

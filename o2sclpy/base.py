@@ -9300,36 +9300,30 @@ def grid_rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
     ten._owner=True
     return ten
 
-def fermi_function(link,E,mu,T,limit=40.0):
+def fermi_function(link,x):
     """
         | Parameters:
         | *link* :class:`linker` object
-        | *E*: ``double``
-        | *mu*: ``double``
-        | *T*: ``double``
-        | *limit*: ``double``
+        | *x*: ``double``
         | Returns: ``ctypes.c_double`` object
     """
     func=link.o2scl.o2scl_fermi_function_wrapper
     func.restype=ctypes.c_double
-    func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
-    ret=func(E,mu,T,limit)
+    func.argtypes=[ctypes.c_double]
+    ret=func(x)
     return ret
 
-def bose_function(link,E,mu,T,limit=40.0):
+def bose_function(link,x):
     """
         | Parameters:
         | *link* :class:`linker` object
-        | *E*: ``double``
-        | *mu*: ``double``
-        | *T*: ``double``
-        | *limit*: ``double``
+        | *x*: ``double``
         | Returns: ``ctypes.c_double`` object
     """
     func=link.o2scl.o2scl_bose_function_wrapper
     func.restype=ctypes.c_double
-    func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
-    ret=func(E,mu,T,limit)
+    func.argtypes=[ctypes.c_double]
+    ret=func(x)
     return ret
 
 def quadratic_extremum_x(link,x1,x2,x3,y1,y2,y3):

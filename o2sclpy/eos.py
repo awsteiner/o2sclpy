@@ -30,7 +30,7 @@ from o2sclpy.part import *
 
 class eos_base:
     """
-    Python interface for O2scl class eos_base.
+    Python interface for O2scl class ``eos_base``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_base.html .
     """
@@ -104,9 +104,406 @@ class eos_base:
         return
 
 
+class eos_leptons:
+    """
+    Python interface for O2scl class ``eos_leptons``.
+    See
+    https://neutronstars.utk.edu/code/o2scl/html/class/eos_leptons.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class eos_leptons
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_eos_leptons
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_leptons
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_eos_leptons
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class eos_leptons
+        
+        Returns: eos_leptons object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def get_th(self):
+        """
+        Get object of type :class:`o2scl::thermo`
+        """
+        func1=self._link.o2scl.o2scl_eos_leptons_get_th
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=thermo(self._link,ptr)
+        return obj
+
+    def set_th(self,value):
+        """
+        Set object of type :class:`o2scl::thermo`
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_th
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_e(self):
+        """
+        Get object of type :class:`o2scl::fermion`
+        """
+        func1=self._link.o2scl.o2scl_eos_leptons_get_e
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=fermion(self._link,ptr)
+        return obj
+
+    def set_e(self,value):
+        """
+        Set object of type :class:`o2scl::fermion`
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_e
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_mu(self):
+        """
+        Get object of type :class:`o2scl::fermion`
+        """
+        func1=self._link.o2scl.o2scl_eos_leptons_get_mu
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=fermion(self._link,ptr)
+        return obj
+
+    def set_mu(self,value):
+        """
+        Set object of type :class:`o2scl::fermion`
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_mu
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ph(self):
+        """
+        Get object of type :class:`o2scl::boson`
+        """
+        func1=self._link.o2scl.o2scl_eos_leptons_get_ph
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=boson(self._link,ptr)
+        return obj
+
+    def set_ph(self,value):
+        """
+        Set object of type :class:`o2scl::boson`
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_ph
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ed(self):
+        """
+        Get object of type :class:`o2scl::part_deriv_press`
+        """
+        func1=self._link.o2scl.o2scl_eos_leptons_get_ed
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=part_deriv_press(self._link,ptr)
+        return obj
+
+    def set_ed(self,value):
+        """
+        Set object of type :class:`o2scl::part_deriv_press`
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_ed
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_mud(self):
+        """
+        Get object of type :class:`o2scl::part_deriv_press`
+        """
+        func1=self._link.o2scl.o2scl_eos_leptons_get_mud
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=part_deriv_press(self._link,ptr)
+        return obj
+
+    def set_mud(self,value):
+        """
+        Set object of type :class:`o2scl::part_deriv_press`
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_mud
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_phd(self):
+        """
+        Get object of type :class:`o2scl::part_deriv_press`
+        """
+        func1=self._link.o2scl.o2scl_eos_leptons_get_phd
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=part_deriv_press(self._link,ptr)
+        return obj
+
+    def set_phd(self,value):
+        """
+        Set object of type :class:`o2scl::part_deriv_press`
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_phd
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def include_muons(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_get_include_muons
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @include_muons.setter
+    def include_muons(self,value):
+        """
+        Setter function for eos_leptons::include_muons .
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_include_muons
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def include_deriv(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_get_include_deriv
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @include_deriv.setter
+    def include_deriv(self,value):
+        """
+        Setter function for eos_leptons::include_deriv .
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_include_deriv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def pde_from_density(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_get_pde_from_density
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @pde_from_density.setter
+    def pde_from_density(self,value):
+        """
+        Setter function for eos_leptons::pde_from_density .
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_pde_from_density
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def verbose(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for eos_leptons::verbose .
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def err_nonconv(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_get_err_nonconv
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @err_nonconv.setter
+    def err_nonconv(self,value):
+        """
+        Setter function for eos_leptons::err_nonconv .
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_err_nonconv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def get_frel(self):
+        """
+        Get object of type :class:`o2scl::fermion_rel`
+        """
+        func1=self._link.o2scl.o2scl_eos_leptons_get_frel
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=fermion_rel(self._link,ptr)
+        return obj
+
+    def set_frel(self,value):
+        """
+        Set object of type :class:`o2scl::fermion_rel`
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_set_frel
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def default_acc(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_default_acc
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def improved_acc(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_improved_acc
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def ld_acc(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_ld_acc
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def fp_25_acc(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_fp_25_acc
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def pair_mu(self,T):
+        """
+        | Parameters:
+        | *T*: ``double``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_pair_mu
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,T)
+        return ret
+
+    def pair_mu_eq(self,T):
+        """
+        | Parameters:
+        | *T*: ``double``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_pair_mu_eq
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,T)
+        return ret
+
+    def pair_density(self,T):
+        """
+        | Parameters:
+        | *T*: ``double``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_pair_density
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,T)
+        return ret
+
+    def pair_density_eq(self,nq,T):
+        """
+        | Parameters:
+        | *nq*: ``double``
+        | *T*: ``double``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_eos_leptons_pair_density_eq
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,nq,T)
+        return ret
+
+
 class eos_had_base(eos_base):
     """
-    Python interface for O2scl class eos_had_base.
+    Python interface for O2scl class ``eos_had_base``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_base.html .
     """
@@ -771,7 +1168,7 @@ class eos_had_base(eos_base):
 
 class eos_had_eden_base(eos_had_base):
     """
-    Python interface for O2scl class eos_had_eden_base.
+    Python interface for O2scl class ``eos_had_eden_base``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_eden_base.html .
     """
@@ -824,7 +1221,7 @@ class eos_had_eden_base(eos_had_base):
 
 class eos_had_pres_base(eos_had_base):
     """
-    Python interface for O2scl class eos_had_pres_base.
+    Python interface for O2scl class ``eos_had_pres_base``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_pres_base.html .
     """
@@ -877,7 +1274,7 @@ class eos_had_pres_base(eos_had_base):
 
 class eos_had_temp_base(eos_had_base):
     """
-    Python interface for O2scl class eos_had_temp_base.
+    Python interface for O2scl class ``eos_had_temp_base``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_base.html .
     """
@@ -960,7 +1357,7 @@ class eos_had_temp_base(eos_had_base):
 
 class eos_had_temp_eden_base(eos_had_temp_base):
     """
-    Python interface for O2scl class eos_had_temp_eden_base.
+    Python interface for O2scl class ``eos_had_temp_eden_base``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_eden_base.html .
     """
@@ -1013,7 +1410,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
 
 class eos_had_temp_pres_base(eos_had_temp_base):
     """
-    Python interface for O2scl class eos_had_temp_pres_base.
+    Python interface for O2scl class ``eos_had_temp_pres_base``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_pres_base.html .
     """
@@ -1066,7 +1463,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
 
 class eos_had_skyrme(eos_had_temp_eden_base):
     """
-    Python interface for O2scl class eos_had_skyrme.
+    Python interface for O2scl class ``eos_had_skyrme``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_skyrme.html .
     """
@@ -1458,7 +1855,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
 class eos_had_apr(eos_had_temp_eden_base):
     """
-    Python interface for O2scl class eos_had_apr.
+    Python interface for O2scl class ``eos_had_apr``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_apr.html .
     """
@@ -1550,7 +1947,7 @@ class eos_had_apr(eos_had_temp_eden_base):
 
 class eos_had_rmf(eos_had_temp_pres_base):
     """
-    Python interface for O2scl class eos_had_rmf.
+    Python interface for O2scl class ``eos_had_rmf``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_rmf.html .
     """
@@ -2113,7 +2510,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
 
 class eos_quark(eos_base):
     """
-    Python interface for O2scl class eos_quark.
+    Python interface for O2scl class ``eos_quark``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark.html .
     """
@@ -2165,7 +2562,7 @@ class eos_quark(eos_base):
 
 class eos_quark_bag(eos_quark):
     """
-    Python interface for O2scl class eos_quark_bag.
+    Python interface for O2scl class ``eos_quark_bag``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark_bag.html .
     """
@@ -2237,7 +2634,7 @@ class eos_quark_bag(eos_quark):
 
 class eos_quark_njl(eos_quark):
     """
-    Python interface for O2scl class eos_quark_njl.
+    Python interface for O2scl class ``eos_quark_njl``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark_njl.html .
     """
@@ -2409,7 +2806,7 @@ class eos_quark_njl(eos_quark):
 
 class eos_tov:
     """
-    Python interface for O2scl class eos_tov.
+    Python interface for O2scl class ``eos_tov``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov.html .
     """
@@ -2581,7 +2978,7 @@ class eos_tov:
 
 class eos_tov_buchdahl(eos_tov):
     """
-    Python interface for O2scl class eos_tov_buchdahl.
+    Python interface for O2scl class ``eos_tov_buchdahl``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_buchdahl.html .
     """
@@ -2748,7 +3145,7 @@ class eos_tov_buchdahl(eos_tov):
 
 class eos_tov_polytrope(eos_tov):
     """
-    Python interface for O2scl class eos_tov_polytrope.
+    Python interface for O2scl class ``eos_tov_polytrope``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_polytrope.html .
     """
@@ -2811,7 +3208,7 @@ class eos_tov_polytrope(eos_tov):
 
 class eos_tov_linear(eos_tov):
     """
-    Python interface for O2scl class eos_tov_linear.
+    Python interface for O2scl class ``eos_tov_linear``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_linear.html .
     """
@@ -2874,7 +3271,7 @@ class eos_tov_linear(eos_tov):
 
 class eos_tov_interp(eos_tov):
     """
-    Python interface for O2scl class eos_tov_interp.
+    Python interface for O2scl class ``eos_tov_interp``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_interp.html .
     """
@@ -3097,7 +3494,7 @@ class eos_tov_interp(eos_tov):
 
 class tov_solve:
     """
-    Python interface for O2scl class tov_solve.
+    Python interface for O2scl class ``tov_solve``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/tov_solve.html .
     """
@@ -3799,7 +4196,7 @@ class tov_solve:
 
 class tov_love:
     """
-    Python interface for O2scl class tov_love.
+    Python interface for O2scl class ``tov_love``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/tov_love.html .
     """
@@ -4045,7 +4442,7 @@ class tov_love:
 
 class nstar_cold:
     """
-    Python interface for O2scl class nstar_cold.
+    Python interface for O2scl class ``nstar_cold``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nstar_cold.html .
     """
@@ -4476,7 +4873,7 @@ class nstar_cold:
 
 class nucleus_rmf:
     """
-    Python interface for O2scl class nucleus_rmf.
+    Python interface for O2scl class ``nucleus_rmf``.
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucleus_rmf.html .
     """
