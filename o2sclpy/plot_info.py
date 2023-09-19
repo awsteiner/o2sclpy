@@ -25,7 +25,7 @@ import numpy
 import textwrap
 
 from o2sclpy.utils import default_plot, string_to_dict, terminal_py
-from o2sclpy.doc_data import cmaps, new_cmaps
+from o2sclpy.doc_data import cmaps, new_cmaps, yt_cmaps
 
 def marker_list():
     """ 
@@ -358,6 +358,15 @@ def cmap_list_func():
     print('Matplotlib colormaps:')
     ter=terminal_py()
     print(ter.horiz_line())
+    
+    inc_yt=False
+    try:
+        import cmyt
+    except:
+        pass
+    else:
+        inc_yt=True
+        
     for category, cmap_list in cmaps:
         list2=''
         for name in cmap_list:
@@ -366,6 +375,15 @@ def cmap_list_func():
         for i in range (0,len(str_list)):
             print(str_list[i])
         print(' ')
+    if inc_yt==True:
+        for category, cmap_list in yt_cmaps:
+            list2=''
+            for name in cmap_list:
+                list2+=name+' '
+            str_list=textwrap.wrap(category+': '+list2,79)
+            for i in range (0,len(str_list)):
+                print(str_list[i])
+            print(' ')
     for category, cmap_list in new_cmaps:
         list2=''
         for name in cmap_list:
@@ -392,7 +410,7 @@ def cmaps_plot(fname=''):
     import matplotlib.patches as patches
     
     # An internal implementation of
-    # https://matplotlib.org/3.1.0/gallery/
+    # https://matplotlib.org/stable/gallery/
     # color/colormap_reference.html
                         
     #self.left_margin=0.01
@@ -401,11 +419,23 @@ def cmaps_plot(fname=''):
     #self.bottom_margin=0.01
     gradient=numpy.linspace(0,1,256)
     gradient=numpy.vstack((gradient,gradient))
-                        
+
+    inc_yt=False
+    try:
+        import cmyt
+    except:
+        pass
+    else:
+        inc_yt=True
+    
     nrows=0
     for category, cmap_list in cmaps:
         for name in cmap_list:
             nrows=nrows+1
+    if inc_yt==True:
+        for category, cmap_list in yt_cmaps:
+            for name in cmap_list:
+                nrows=nrows+1
     for category, cmap_list in new_cmaps:
         for name in cmap_list:
             nrows=nrows+1
@@ -452,6 +482,21 @@ def cmaps_plot(fname=''):
             if row_ctr>=nrows:
                 row_ctr=0
                 col_ctr=col_ctr+1
+    if inc_yt==True:
+        for category, cmap_list in yt_cmaps:
+            for name in cmap_list:
+                ax=axes[row_ctr][col_ctr]
+                ax.imshow(gradient,aspect='auto',
+                          cmap=plot.get_cmap(name))
+                r=patches.Rectangle((0.32,0.1),0.36,0.8,0,fc=(1,1,1,0.7),lw=0,
+                                    fill=True,transform=ax.transAxes)
+                ax.add_patch(r)
+                ax.text(0.5,0.45,name,va='center',ha='center',
+                        fontsize=8,color=(0,0,0),transform=ax.transAxes)
+                row_ctr=row_ctr+1
+                if row_ctr>=nrows:
+                    row_ctr=0
+                    col_ctr=col_ctr+1
     for category, cmap_list in new_cmaps:
         for name in cmap_list:
             ax=axes[row_ctr][col_ctr]

@@ -241,20 +241,25 @@ class plot_base:
     def cmap(self,cmap_name,col_list=[]):
         """Documentation for o2graph command ``cmap``:
 
-        Create a continuous colormap.
+        Create a continuous colormap or list colormaps.
 
         Command-line arguments: ``<cmap name> <color 1> <color 2> 
         [color3]...`` or ``<cmap name> "sharp" <color 1> <color 2>
         [color3 color4]...`` or ``list`` or ``plot [filename]``
 
-        Create a new color map named <cmap name> which consists of
-        equal-sized gradients between the specified list of at least
-        two colors. Matplotlib colors, (r,g,b) colors, [r,g,b,a] colors,
+        In the first form, this command creates a new color map named
+        <cmap name> which consists of equal-sized gradients between
+        the specified list of at least two colors. In the second form,
+        when the keyword sharp is given, the color map consists of
+        gradients between each pair of colors with a sharp transition
+        between successive pairs.
+
+        Matplotlib colors, (r,g,b) colors, [r,g,b,a] colors,
         and xkcd colors are all allowed. For example::
 
-          o2graph -cmap c forestgreen "(0.5,0.5,0.7)" "xkcd:light red" \\
-          -create table3d x grid:0,40,1 y grid:0,40,1 z "x+y" \\
-          -den-plot z cmap=c -show
+          o2graph -cmap c forestgreen "[0.5,0.5,0.7,0.5]" \\
+          "xkcd:light red" -create table3d x grid:0,40,1 y grid:0,40,1 \\
+          z "x+y" -den-plot z cmap=c -show
 
         or::
 
@@ -262,6 +267,16 @@ class plot_base:
           green "(0,0,0)" -create table3d x grid:0,40,1 y grid:0,40,1 \\
           z "x+y" -den-plot z cmap=c -show
 
+        In the third form, the cmap command lists all of the 
+        available colormaps. Finally, in the fourth form, the 
+        cmap command plots all available colormaps, optionally storing
+        this plot in a file, e.g.::
+
+          o2graph -cmap plot cmap_plot.png
+
+        To get more information on the available colors, see::
+
+          o2graph -colors list 
         """
 
         if self.verbose>1:
@@ -1938,7 +1953,9 @@ class plot_base:
                 if axname not in self.axes_dict:
                     ifound=i
         axname="cbar"+str(ifound)
-        
+        if cmap[0:5]=='cmyt.':
+            import cmyt
+                
         if image=='last':
             self.axes=self.fig.add_axes([left,bottom,width,height])
             self.axes_dict[axname]=self.axes
@@ -2144,6 +2161,9 @@ class plot_base:
         else:
             pcm=False
 
+        if kwargs['cmap'][0:5]=='cmyt.':
+            import cmyt
+            
         extent_from_grid=False
             
         if str(type(args[0]))=='<class \'o2sclpy.base.table3d\'>':

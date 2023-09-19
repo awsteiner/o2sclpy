@@ -78,7 +78,7 @@ base_list=[
      "Run the python eval() function.\n\n"+
      "<python code>\n\n"+
      "Take the python code given and execute it using eval(). "+
-     "For example, 'o2graph -eval \"print(numpy.pi)\"'."],
+     "For example::\n\no2graph -eval \"print(numpy.pi)\""],
     ["exec","Documentation for exec\n\n"+
      "Run the python code specified in a file.\n\n"+
      "<filename>\n\n"+
@@ -1615,6 +1615,8 @@ class o2graph_plotter(yt_plot_base):
             zv=tab[force_bytes(args[2])]
             
             cmap=args[3]
+            if args[3][0:5]=='cmyt.':
+                import cmyt
 
             if failed==False:
 
