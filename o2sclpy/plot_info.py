@@ -369,8 +369,12 @@ def cmap_list_func():
         
     for category, cmap_list in cmaps:
         list2=''
+        i=0
         for name in cmap_list:
-            list2+=name+' '
+            if i>0:
+                list2+=', '
+            list2+=name
+            i=i+1
         str_list=textwrap.wrap(category+': '+list2,79)
         for i in range (0,len(str_list)):
             print(str_list[i])
@@ -378,16 +382,24 @@ def cmap_list_func():
     if inc_yt==True:
         for category, cmap_list in yt_cmaps:
             list2=''
+            i=0
             for name in cmap_list:
-                list2+=name+' '
+                if i>0:
+                    list2+=', '
+                list2+=name
+                i=i+1
             str_list=textwrap.wrap(category+': '+list2,79)
             for i in range (0,len(str_list)):
                 print(str_list[i])
             print(' ')
     for category, cmap_list in new_cmaps:
         list2=''
+        i=0
         for name in cmap_list:
-            list2+=name+' '
+            if i>0:
+                list2+=', '
+            list2+=name
+            i=i+1
         str_list=textwrap.wrap(category+': '+list2,79)
         for i in range (0,len(str_list)):
             print(str_list[i])
