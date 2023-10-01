@@ -2161,7 +2161,7 @@ class plot_base:
         else:
             pcm=False
 
-        if kwargs['cmap'][0:5]=='cmyt.':
+        if 'cmap' in kwargs and kwargs['cmap'][0:5]=='cmyt.':
             import cmyt
             
         extent_from_grid=False
