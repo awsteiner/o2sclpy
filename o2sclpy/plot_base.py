@@ -1109,7 +1109,7 @@ class plot_base:
         h=abs(y1-y2)
         if self.canvas_flag==False:
             self.canvas()
-        r=patches.Rectangle((left,lower),w,h,angle,**kwargs)
+        r=patches.Rectangle((left,lower),w,h,angle=angle,**kwargs)
         self.axes.add_patch(r)
         # End of function plot_base::rect()
         return

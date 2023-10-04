@@ -1510,12 +1510,12 @@ class o2graph_plotter(yt_plot_base):
                       (i,left,lower,w,h,fvy,wy))
 
                 if len(args)<4:
-                    r=patches.Rectangle((left,lower),w,h,0.0,
+                    r=patches.Rectangle((left,lower),w,h,angle=0.0,
                                         alpha=1,fill=None,lw=1)
                     self.axes.add_patch(r)
                 else:
                     strtemp='alpha='+str(fvy.value)+','+args[3]
-                    r=patches.Rectangle((left,lower),w,h,0.0,
+                    r=patches.Rectangle((left,lower),w,h,angle=0.0,
                                         **string_to_dict(strtemp))
                     self.axes.add_patch(r)
                             

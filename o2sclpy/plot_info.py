@@ -480,8 +480,8 @@ def cmaps_plot(fname=''):
         for name in cmap_list:
             ax=axes[row_ctr][col_ctr]
             ax.imshow(gradient,aspect='auto',
-                             cmap=plot.get_cmap(name))
-            r=patches.Rectangle((0.32,0.1),0.36,0.8,0,
+                      cmap=plot.get_cmap(name))
+            r=patches.Rectangle((0.32,0.1),0.36,0.8,angle=0,
                                 fc=(1,1,1,0.7),lw=0,
                                 fill=True,
                                 transform=ax.transAxes)
@@ -500,7 +500,8 @@ def cmaps_plot(fname=''):
                 ax=axes[row_ctr][col_ctr]
                 ax.imshow(gradient,aspect='auto',
                           cmap=plot.get_cmap(name))
-                r=patches.Rectangle((0.32,0.1),0.36,0.8,0,fc=(1,1,1,0.7),lw=0,
+                r=patches.Rectangle((0.32,0.1),0.36,0.8,
+                                    angle=0,fc=(1,1,1,0.7),lw=0,
                                     fill=True,transform=ax.transAxes)
                 ax.add_patch(r)
                 ax.text(0.5,0.45,name,va='center',ha='center',
@@ -514,7 +515,8 @@ def cmaps_plot(fname=''):
             ax=axes[row_ctr][col_ctr]
             ax.imshow(gradient,aspect='auto',
                       cmap=plot.get_cmap(name))
-            r=patches.Rectangle((0.32,0.1),0.36,0.8,0,fc=(1,1,1,0.7),lw=0,
+            r=patches.Rectangle((0.32,0.1),0.36,0.8,
+                                angle=0,fc=(1,1,1,0.7),lw=0,
                                 fill=True,transform=ax.transAxes)
             ax.add_patch(r)
             ax.text(0.5,0.45,name,va='center',ha='center',
