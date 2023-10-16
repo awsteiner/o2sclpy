@@ -1147,7 +1147,7 @@ class plot_base:
             angle=float(eval(angle))
         if self.canvas_flag==False:
             self.canvas()
-        r=patches.Ellipse((x,y),w,h,angle,**kwargs)
+        r=patches.Ellipse((x,y),w,h,angle=angle,**kwargs)
         self.axes.add_patch(r)
         # End of function plot_base::ellipse()
         return

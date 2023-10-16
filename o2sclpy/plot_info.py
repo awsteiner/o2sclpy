@@ -272,7 +272,11 @@ def colors_near(col='',fname=''):
         
         #title=(r'$ \mathrm{O}_2\mathrm{sc'+
         #'lpy~list~of~colors~near~'+col+'}: $')
-        title=r'$ O_{2}sclpy~list~of~colors~near~'+str(col)+': $'
+
+        # AWS, 10/16/23: took latex out of the title
+        # because it was causing errors in matplotlib
+        
+        title=r'O2sclpy list of colors near '+str(col)+':'
                
         #print('title',title)
 
