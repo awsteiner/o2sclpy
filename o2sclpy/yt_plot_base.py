@@ -242,6 +242,64 @@ class yt_plot_base(plot_base):
         # End of function plot_base::yt_line()
         return
         
+    def yt_point(self,point1,rad,color=[1.0,1.0,1.0,0.5],
+                coords='user',keyname='o2sclpy_point'):
+        """
+        Plot a point in a yt volume visualization.
+        """
+
+        from yt.visualization.volume_rendering.api \
+            import PointSource
+
+        x1=point1[0]
+        y1=point1[1]
+        z1=point1[2]
+        
+        if self.xset==False:
+            self.xlo=x1-1
+            self.xhi=x1+1
+            print('Set xlimits to',self.xlo,self.xhi)
+            self.xset=True
+        if self.yset==False:
+            self.ylo=y1-1
+            self.yhi=y1+1
+            print('Set ylimits to',self.ylo,self.yhi)
+            self.yset=True
+        if self.zset==False:
+            self.zlo=z1-1
+            self.zhi=z1+1
+            print('Set zlimits to',self.zlo,self.zhi)
+            self.zset=True
+        
+        icnt=0
+        if self.yt_scene!=0:
+            for key, value in self.yt_scene.sources.items():
+                icnt=icnt+1
+        if icnt==0:
+            self.yt_def_vol()
+
+        # Coordinate transformation
+        if coords!='internal':
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+
+        # Convert color to [r,g,b,a] for yt
+        from matplotlib.colors import to_rgba
+        colt=to_rgba(color)
+        colors=numpy.array([[colt[0],colt[1],colt[2],colt[3]]])
+        
+        point_array=numpy.array([[(x1-self.xlo)/(self.xhi-self.xlo),
+                                  (y1-self.ylo)/(self.yhi-self.ylo),
+                                  (z1-self.zlo)/(self.zhi-self.zlo)]])
+        ps=PointSource(point_array,colors,radii=int(rad))
+        print('o2graph:yt-point: Adding point source.')
+        kname=self.yt_unique_keyname(keyname)
+        self.yt_scene.add_source(ps,keyname=kname)
+
+        # End of function plot_base::yt_point()
+        return
+        
     def yt_arrow(self,point1,point2,color=[1.0,1.0,1.0,0.5],n_lines=40,
                  frac_length=0.05,radius=0.0125,coords='user',
                  keyname='o2sclpy_arrow'):

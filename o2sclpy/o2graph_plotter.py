@@ -4965,7 +4965,8 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-scatter.')
                     else:
-                        self.yt_scatter(o2scl,amp,self.link2,strlist[ix+1:ix_next])
+                        self.yt_scatter(o2scl,amp,
+                                        self.link2,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-path':
 
@@ -5079,6 +5080,28 @@ class o2graph_plotter(yt_plot_base):
                         y2=float(eval(strlist[ix+5]))
                         z2=float(eval(strlist[ix+6]))
                         self.yt_line([x1,y1,z1],[x2,y2,z2])
+                                                    
+                elif cmd_name=='yt-point':
+
+                    if self.verbose>2:
+                        print('Process yt-point.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<5:
+                        print('Not enough parameters for yt-point.')
+                    elif ix_next-ix>5:
+                        x1=float(eval(strlist[ix+1]))
+                        y1=float(eval(strlist[ix+2]))
+                        z1=float(eval(strlist[ix+3]))
+                        rad=float(eval(strlist[ix+4]))
+                        self.yt_point([x1,y1,z1],rad,
+                                      **string_to_dict(strlist[ix+5]))
+                    else:
+                        x1=float(eval(strlist[ix+1]))
+                        y1=float(eval(strlist[ix+2]))
+                        z1=float(eval(strlist[ix+3]))
+                        rad=float(eval(strlist[ix+4]))
+                        self.yt_point([x1,y1,z1],rad)
                                                     
                 elif cmd_name=='yt-box':
 
