@@ -3147,7 +3147,8 @@ class o2graph_plotter(yt_plot_base):
                      curr_type==force_bytes(line[0])) and
                     cmd==line[1]):
                     match=True
-                    reformat_python_docs_type(curr_type,cmd,line[2],amp,self.link2)
+                    reformat_python_docs_type(curr_type,cmd,line[2],amp,
+                                              self.link2)
 
         # Handle the case of an o2graph command from the
         # extra list without a matching type
@@ -3157,7 +3158,8 @@ class o2graph_plotter(yt_plot_base):
                     match=True
                     print('\n'+str_line)
                     #print('here2')
-                    reformat_python_docs_type(line[0],cmd,line[2],amp,self.link2)
+                    reformat_python_docs_type(line[0],cmd,line[2],amp,
+                                              self.link2)
                     
         # If we haven't matched yet, check for get/set parameters
         if match==False:
@@ -4127,10 +4129,9 @@ class o2graph_plotter(yt_plot_base):
         
         if len(self.yt_ann)==0:
             
-            # No animation and no annotation, so just call
-            # scene.save()
+            # No annotation, so just call scene.save()
             print('o2graph:yt_save_annotate: Calling yt_scene.save()',
-                  'with filename',fname)
+                  'with filename',fname,self.yt_sigma_clip)
             self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
             
         else:
@@ -4440,10 +4441,14 @@ class o2graph_plotter(yt_plot_base):
                         
                         i_frame=i_frame+1
                         
-                        print(self.yt_camera)
-                        print('normal_vector:',self.yt_camera.normal_vector)
-                        print('north_vector:',self.yt_camera.north_vector)
-                        print('origin:',self.yt_camera.lens.origin)
+                        if self.verbose>=2:
+                            print(self.yt_camera)
+                            print('normal_vector:',
+                                  self.yt_camera.normal_vector)
+                            print('north_vector:',
+                                  self.yt_camera.north_vector)
+                            print('origin:',
+                                  self.yt_camera.lens.origin)
 
                         # We can't use the yt yaw() function because
                         # it modifies the camera properties in an
@@ -4477,10 +4482,11 @@ class o2graph_plotter(yt_plot_base):
                         self.yt_camera.width=[wid[0],wid[1],wid[2]]
                         self.yt_camera.switch_orientation()
                             
-                        print('Camera width [%0.6e,%0.6e,%0.6e]' %
-                              (self.yt_camera.width[0],
-                               self.yt_camera.width[1],
-                               self.yt_camera.width[2]))
+                        if self.verbose>=2:
+                            print('Camera width [%0.6e,%0.6e,%0.6e]' %
+                                  (self.yt_camera.width[0],
+                                   self.yt_camera.width[1],
+                                   self.yt_camera.width[2]))
                             
                         # Update text objects
                         self.yt_update_text()
@@ -4769,6 +4775,9 @@ class o2graph_plotter(yt_plot_base):
 
             if loop==True:
                 cmd=cmd+' -stream_loop -1'
+
+            print('Putting ffmpeg output in /tmp/ffmpeg.out.')
+            cmd=cmd+' > /tmp/ffmpeg.out 2>&1'
                 
             print('ffmpeg command:',cmd)
             os.system(cmd)
@@ -5245,7 +5254,8 @@ class o2graph_plotter(yt_plot_base):
                         print('Process plot.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.plot_o2graph(o2scl,amp,strlist[ix+1:ix_next],self.link2)
+                    self.plot_o2graph(o2scl,amp,strlist[ix+1:ix_next],
+                                      self.link2)
 
                 elif cmd_name=='plot-color':
                     

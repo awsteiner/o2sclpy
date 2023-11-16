@@ -209,6 +209,15 @@ class plot_base:
         Finally, if the "xkcd" argument is given, then all 
         949 xkcd colors are listed along with their HTML
         hexadecimal RBG values.
+
+        Color arguments in o2graph supports the (r,g,b) format, the
+        [r,g,b,a] format, the HTML format, the grayscale single-value
+        format, and the XKCD colors. For (r,g,b) colors, parentheses
+        must be used, and the r, g, and b numbers should be from 0.0
+        to 1.0. For [r,g,b,a] colors, square brackets must be used and
+        the r, g, b, and a numbers should be from 0.0 to 1.0. The HTML
+        format is #RRGGBB where RR, GG, and BB are two-digit
+        hexadecimal values.
         """
 
         if len(args)>=1 and args[0]=='list':

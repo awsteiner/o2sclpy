@@ -163,10 +163,38 @@ class yt_plot_base(plot_base):
 
     def yt_line(self,point1,point2,color=[1.0,1.0,1.0,0.5],
                 coords='user',keyname='o2sclpy_line'):
-        """
-        Plot a line in a yt volume visualization.
-        """
+        """Documentation for o2graph command ``yt-line``:
 
+        Plot a line in a yt volume visualization.
+
+        Command-line arguments: ``x1 y1 z1 x2 y2 z2 [kwargs]``
+
+        Plot a line between point (x1,y1,z1) and (x2,y2,z2) in a yt
+        visualization. Possible kwargs are color=[1.0,1.0,1.0,0.5]
+        coords='user' and keyname='o2sclpy_line'. The possible values
+        for coords are 'user', which refers the user-specified
+        coordinate system, and 'internal', which is always between
+        (0,0,0) and (1,1,1). See ``o2graph -help colors``
+        for information on the color kwarg.
+
+        If the x, y, and z limits have not yet been set, then this
+        command uses the line coordinates to set them. If the x
+        coordinates of the endpoints are equal to x0 and the x limits
+        have not yet been set, then the x limits are x0-1 and x0+1.
+        Similarly for the y and z coordinates. If a yt scene has noet
+        yet been created, then an empty volume and scene will be
+        created.
+
+        o2graph -set xlo 0 -set xhi 2 -set ylo 0 -set yhi 2 \
+        -set zhi 0 -set zhi 2 \
+        -yt-line 0.2 1.0 0.0 1.0 1.0 2.0 color=#FF0000 \
+        -yt-line 1.0 1.0 2.0 1.8 1.0 0.0 "color=(0,0,1)" \
+        -yt-line 0.6 1.0 1.0 1.4 1.0 1.0 "color=xkcd:rose" \
+        -set yt_sigma_clip 1 \
+        -yt-path yaw 100 1.0 \
+        -yt-render "/tmp/ytl_*.png" mov_fname=yt_line.mp4
+        """
+        
         from yt.visualization.volume_rendering.api \
             import LineSource
 
@@ -178,7 +206,10 @@ class yt_plot_base(plot_base):
         z2=point2[2]
         
         if self.xset==False:
-            if x1<x2:
+            if x1==x2:
+                self.xlo=x1-1
+                self.xhi=x2+1
+            elif x1<x2:
                 self.xlo=x1
                 self.xhi=x2
             else:
@@ -187,7 +218,10 @@ class yt_plot_base(plot_base):
             print('Set xlimits to',self.xlo,self.xhi)
             self.xset=True
         if self.yset==False:
-            if y1<y2:
+            if y1==y2:
+                self.ylo=y1-1
+                self.yhi=y2+1
+            elif y1<y2:
                 self.ylo=y1
                 self.yhi=y2
             else:
@@ -196,7 +230,10 @@ class yt_plot_base(plot_base):
             print('Set ylimits to',self.ylo,self.yhi)
             self.yset=True
         if self.zset==False:
-            if z1<z2:
+            if z1==z2:
+                self.zlo=z1-1
+                self.zhi=z2+1
+            elif z1<z2:
                 self.zlo=z1
                 self.zhi=z2
             else:
@@ -227,12 +264,7 @@ class yt_plot_base(plot_base):
         colt2=[colt[0],colt[1],colt[2],colt[3]]
         colors=[colt2]
         
-        vertices=numpy.array([[[(x1-self.xlo)/(self.xhi-self.xlo),
-                                (y1-self.ylo)/(self.yhi-self.ylo),
-                                (z1-self.zlo)/(self.zhi-self.zlo)],
-                               [(x2-self.xlo)/(self.xhi-self.xlo),
-                                (y2-self.ylo)/(self.yhi-self.ylo),
-                                (z2-self.zlo)/(self.zhi-self.zlo)]]])
+        vertices=numpy.array([[[x1,y1,z1],[x2,y2,z2]]])
         colors=numpy.array([colt2])
         ls=LineSource(vertices,colors)
         print('o2graph:yt-line: Adding line source.')
@@ -964,6 +996,8 @@ class yt_plot_base(plot_base):
         from yt.visualization.volume_rendering.api \
             import create_volume_source
 
+        yt.set_log_level("warning")
+        
         if self.verbose>0:
             print('No volume object, adding yt volume.')
             
