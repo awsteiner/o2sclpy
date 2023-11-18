@@ -50,6 +50,7 @@ from o2sclpy.doc_data import version
 from o2sclpy.hdf import *
 from o2sclpy.base import *
 from o2sclpy.kde import *
+from yt.visualization._commons import get_canvas
 
 base_list=[
     ["addcbar",plot_base.addcbar.__doc__],
@@ -824,16 +825,18 @@ class o2graph_plotter(yt_plot_base):
         #if curr_type==b'table':
         #else:
 
-    def mp4(self,args):
-        """
-        Documentation for o2graph command ``mp4``:
+    def mp4(self,args,loop=False,vf=''):
+        """Documentation for o2graph command ``mp4``:
 
         Create an mp4 file from a series of images.
 
         Command-line arguments: ``<pattern> <output>``
 
-        Typical patterns are "prefix%02dsuffix" and outputs
-        are "out.mp4"
+        Typical patterns are "prefix%02dsuffix" and outputs are
+        "out.mp4". If the "mp4" suffix is omitted, it is automatically
+        added.
+
+        Typical video filter is e.g. vf='eq=brightness=0.5:contrast=10'.
         """
         if len(args)<2:
             print('Command mpg needs more arguments.')
@@ -843,9 +846,15 @@ class o2graph_plotter(yt_plot_base):
         if output[-4:]!='.mp4':
             output=output+'.mp4'
         cmd=('ffmpeg -y -r 10 -f image2 -i '+pattern+
-             ' -vcodec libx264 '+
-             '-crf 25 -pix_fmt yuv420p '+output)
-        print('Executing ',cmd)
+             ' -vcodec libx264')
+        if vf!='':
+            cmd=cmd+' -vf '+vf
+        if loop==True:
+            cmd=cmd+' -stream_loop -1'
+            
+        cmd=cmd+' -crf 25 -pix_fmt yuv420p '+output
+        
+        print('o2graph_plottter::mp4(): Executing "'+cmd+'".')
         os.system(cmd)
         
         return
@@ -3078,23 +3087,27 @@ class o2graph_plotter(yt_plot_base):
             suffix='.png'
             mov_fname=args[3]
             if n_frames>=1000:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%04d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%04d'+suffix,mov_fname])
+                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                #prefix+'%04d'+suffix+' -vcodec libx264 '+
+                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             elif n_frames>=100:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%03d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%03d'+suffix,mov_fname])
+                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                #prefix+'%03d'+suffix+' -vcodec libx264 '+
+                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             elif n_frames>=10:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%02d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%02d'+suffix,mov_fname])
+                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                #prefix+'%02d'+suffix+' -vcodec libx264 '+
+                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             else:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%01d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
-            print('ffmpeg command:',cmd)
-            os.system(cmd)
+                self.mp4([prefix+'%01d'+suffix,mov_fname])
+                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                #prefix+'%01d'+suffix+' -vcodec libx264 '+
+                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
+            #print('ffmpeg command:',cmd)
+            #os.system(cmd)
 
             # End of "if curr_type==b'tensor_grid':"
                 
@@ -4156,8 +4169,8 @@ class o2graph_plotter(yt_plot_base):
             self.canvas_flag=False
             #axt.axes.text(0.1,0.9,'test',color='w',transform=tf,
             #fontsize=self.font*1.25)
-            from yt.visualization._mpl_imports import FigureCanvasAgg
-            canvast=FigureCanvasAgg(self.yt_scene._render_figure)
+            canvast=get_canvas(self.yt_scene._render_figure,
+                               fname)
             self.yt_scene._render_figure.canvas=canvast
             #self.yt_scene._render_figure.tight_layout(pad=0.0)
             plot.subplots_adjust(left=0.0,bottom=0.0,
@@ -4757,30 +4770,34 @@ class o2graph_plotter(yt_plot_base):
             # file if it already exists
             
             if n_frames>=1000:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%04d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%04d'+suffix,mov_fname],loop=loop)
+                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                #prefix+'%04d'+suffix+' -vcodec libx264 '+
+                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             elif n_frames>=100:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%03d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%03d'+suffix,mov_fname],loop=loop)
+                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                #prefix+'%03d'+suffix+' -vcodec libx264 '+
+                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             elif n_frames>=10:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%02d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%02d'+suffix,mov_fname],loop=loop)
+                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                #prefix+'%02d'+suffix+' -vcodec libx264 '+
+                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             else:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%01d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
-
-            if loop==True:
-                cmd=cmd+' -stream_loop -1'
-
-            print('Putting ffmpeg output in /tmp/ffmpeg.out.')
-            cmd=cmd+' > /tmp/ffmpeg.out 2>&1'
+                self.mp4([prefix+'%01d'+suffix,mov_fname],loop=loop)
+                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
+                #prefix+'%01d'+suffix+' -vcodec libx264 '+
+                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
                 
-            print('ffmpeg command:',cmd)
-            os.system(cmd)
+            #if loop==True:
+            #cmd=cmd+' -stream_loop -1'
+
+            #print('Putting ffmpeg output in /tmp/ffmpeg.out.')
+            #cmd=cmd+' > /tmp/ffmpeg.out 2>&1'
+                
+            #print('ffmpeg command:',cmd)
+            #os.system(cmd)
 
             # End of else for 'if len(self.yt_path)==0:'
             
