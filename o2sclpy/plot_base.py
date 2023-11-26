@@ -1516,7 +1516,7 @@ class plot_base:
 
         The ``text`` command plots text in the data coordinates
         defined by the current axes with the font size determined by
-        the value of the parameter 'font'. LaTeX is used for text
+        the value of the parameter ``font``. LaTeX is used for text
         rendering by default, but this setting can be changed using,
         e.g. '-set usetex 0'. Some useful kwargs are fontfamily
         ('serif', 'sans-serif', 'cursive', 'fantasy', 'monospace'),
@@ -1526,8 +1526,9 @@ class plot_base:
         rendering to change fontfamily or fontstyle.
 
         If <x> or <y> are strings, then they are passed through the
-        ``eval()`` function and converted to floating-point numbers.
-
+        ``eval()`` function and converted to floating-point numbers. A
+        figure and axes are created using
+        :py:func:`o2sclpy.plot_base.canvas()`, if necessary.
         """
         if self.canvas_flag==False:
             self.canvas()
@@ -1591,7 +1592,6 @@ class plot_base:
         '-', '+', 'x', 'o', 'O', '.', '*'}), linestyle (ls), and
         linewidth (lw). The keyword arguments are for the text
         properties, and follow those of the text command.
-
         """
         if self.canvas_flag==False:
             self.canvas()
@@ -1636,9 +1636,9 @@ class plot_base:
 
         Command-line arguments: ``<x> <y> <text> [kwargs]``
 
-        The ttext command plots text in the window coordinates
+        The ``ttext`` command plots text in the window coordinates
         [typically (0,0) to (1,1)] with the font size determined by
-        the value of the parameter font. LaTeX is used for text
+        the value of the parameter ``font``. LaTeX is used for text
         rendering by default, but this setting can be changed using,
         e.g. '-set usetex 0'. Some useful kwargs are fontfamily,
         fontstyle, fontsize, color, backgroundcolor, rotation,
@@ -1647,14 +1647,10 @@ class plot_base:
         you must disable LaTeX rendering to change fontfamily or
         fontstyle.
 
-        Plot text in the native coordinate system using a transAxes
-        transformation. This function uses the class font size and and
-        centering in the horizontal and vertical directions by
-        default. A figure and axes are created using
-        :py:func:`o2sclpy.plot_base.canvas()`, if they have not been
-        created already. If ``tx`` and ``ty`` are strings, then they
-        are passed through the ``eval()`` function and converted to
-        floating-point numbers.
+        If <x> or <y> are strings, then they are passed through the
+        ``eval()`` function and converted to floating-point numbers. A
+        figure and axes are created using
+        :py:func:`o2sclpy.plot_base.canvas()`, if necessary.
 
         """
         if self.canvas_flag==False:
