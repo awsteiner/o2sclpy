@@ -839,12 +839,18 @@ class o2graph_plotter(yt_plot_base):
         Typical video filter is e.g. vf='eq=brightness=0.5:contrast=10'.
         """
         if len(args)<2:
-            print('Command mpg needs more arguments.')
+            print('Command mp4 needs more arguments.')
             return
         pattern=args[0]
         output=args[1]
         if output[-4:]!='.mp4':
             output=output+'.mp4'
+
+        # -y means overwrite output without asking
+        # -r 10 means set the framerate to 10 frames per second
+        # -vcodec sets the video codec
+        # -pix_fmt sets the pixel format
+            
         cmd=('ffmpeg -y -r 10 -f image2 -i '+pattern+
              ' -vcodec libx264')
         if vf!='':
@@ -2676,8 +2682,10 @@ class o2graph_plotter(yt_plot_base):
                       '%7.6e %7.6e %7.6e %7.6e %7.6e %7.6e' % (
                           self.xlo,self.xhi,
                           self.ylo,self.yhi,self.zlo,self.zhi))
-            
+
             arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
+            arr3=arr.reshape((nx,ny,nz))
+            
             self.yt_volume_data.append(numpy.copy(arr))
             # Rescale to the internal coordinate system
             bbox=numpy.array([[(gridx[0]-self.xlo)/(self.xhi-self.xlo),
@@ -2687,16 +2695,16 @@ class o2graph_plotter(yt_plot_base):
                               [(gridz[0]-self.zlo)/(self.zhi-self.zlo),
                                (gridz[nz-1]-self.zlo)/(self.zhi-self.zlo)]])
             self.yt_volume_bbox.append(numpy.copy(bbox))
-            arr2=self.yt_volume_data[len(self.yt_volume_data)-1]
             bbox2=self.yt_volume_bbox[len(self.yt_volume_bbox)-1]
 
             func=yt.load_uniform_grid
-            self.yt_data_sources.append(func(dict(density=arr2),
-                                             arr2.shape,bbox=bbox2))
+            self.yt_data_sources.append(func(dict(density=arr3),
+                                             (nx,ny,nz),bbox=bbox2))
             ds=self.yt_data_sources[len(self.yt_data_sources)-1]
 
-            self.yt_vols.append(create_volume_source(ds,field=('gas',
-                                                               'density')))
+            cvs=create_volume_source
+            self.yt_vols.append(cvs(ds,field=('gas','density')))
+                                              
             vol=self.yt_vols[len(self.yt_vols)-1]
             vol.log_field=False
 
@@ -3088,26 +3096,12 @@ class o2graph_plotter(yt_plot_base):
             mov_fname=args[3]
             if n_frames>=1000:
                 self.mp4([prefix+'%04d'+suffix,mov_fname])
-                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                #prefix+'%04d'+suffix+' -vcodec libx264 '+
-                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             elif n_frames>=100:
                 self.mp4([prefix+'%03d'+suffix,mov_fname])
-                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                #prefix+'%03d'+suffix+' -vcodec libx264 '+
-                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             elif n_frames>=10:
                 self.mp4([prefix+'%02d'+suffix,mov_fname])
-                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                #prefix+'%02d'+suffix+' -vcodec libx264 '+
-                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             else:
                 self.mp4([prefix+'%01d'+suffix,mov_fname])
-                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                #prefix+'%01d'+suffix+' -vcodec libx264 '+
-                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
-            #print('ffmpeg command:',cmd)
-            #os.system(cmd)
 
             # End of "if curr_type==b'tensor_grid':"
                 
@@ -4771,33 +4765,12 @@ class o2graph_plotter(yt_plot_base):
             
             if n_frames>=1000:
                 self.mp4([prefix+'%04d'+suffix,mov_fname],loop=loop)
-                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                #prefix+'%04d'+suffix+' -vcodec libx264 '+
-                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             elif n_frames>=100:
                 self.mp4([prefix+'%03d'+suffix,mov_fname],loop=loop)
-                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                #prefix+'%03d'+suffix+' -vcodec libx264 '+
-                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             elif n_frames>=10:
                 self.mp4([prefix+'%02d'+suffix,mov_fname],loop=loop)
-                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                #prefix+'%02d'+suffix+' -vcodec libx264 '+
-                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
             else:
                 self.mp4([prefix+'%01d'+suffix,mov_fname],loop=loop)
-                #cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                #prefix+'%01d'+suffix+' -vcodec libx264 '+
-                #'-crf 25 -pix_fmt yuv420p '+mov_fname)
-                
-            #if loop==True:
-            #cmd=cmd+' -stream_loop -1'
-
-            #print('Putting ffmpeg output in /tmp/ffmpeg.out.')
-            #cmd=cmd+' > /tmp/ffmpeg.out 2>&1'
-                
-            #print('ffmpeg command:',cmd)
-            #os.system(cmd)
 
             # End of else for 'if len(self.yt_path)==0:'
             

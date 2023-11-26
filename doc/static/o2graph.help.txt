@@ -12,8 +12,8 @@ List of command-line options which do not require a current object:
   -canvas          Create a plotting canvas.
   -clear           Clear the current object. 
   -clf             Clear the current figure.
-  -cmap            Create a continuous colormap.
-  -colors          Show color information
+  -cmap            Create a continuous colormap or list colormaps.
+  -colors          Show color information.
   -commands        List available commands for current or specified type.
   -constant        Get or modify a physical or numerical constant. 
   -convert         Manipulate or use a unit conversion factor. 

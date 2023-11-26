@@ -171,17 +171,21 @@ class plot_base:
     """
     Link to the O2scl library DLL
     """
+    usetex=True
+    """
+    If true, then use LaTeX for text objects (default True)
+    """
     
     def __init__(self):
-        """
-        Desc
+        """The plot_base init method, which only calls
+        plot_base::new_cmaps().
         """
         self.new_cmaps()
     
     def colors(self,args=[]):
         """Documentation for o2graph command ``colors``:
 
-        Show color information
+        Show color information.
 
         Command-line arguments: ``list`` or ``plot [filename]`` or 
         ``near <color> [filename]`` or ``xkcd``.
@@ -467,8 +471,11 @@ class plot_base:
         return
         
     def new_cmaps(self):
-        """
-        Add a few new colormaps
+        """Add a few new colormaps. This function is called by
+        plot_base::__init__().
+
+        This function adds the colormaps 'jet2' 'pastel2', 'reds2',
+        'greens2', and 'blues2'.
         """
 
         import matplotlib.pyplot as plot
@@ -574,8 +581,9 @@ class plot_base:
         return
 
     def set(self,name,value):
-        """
-        Set the value of parameter named ``name`` to value ``value``
+        """Set the value of parameter named ``name`` to value ``value``. The
+        documentation for the o2graph command ``set`` is given in
+        O₂scl.
         """
         
         import matplotlib.pyplot as plot
@@ -710,8 +718,8 @@ class plot_base:
         return
 
     def get(self,name):
-        """
-        Output the value of parameter named ``name``
+        """Output the value of parameter named ``name``. The documentation
+        for the o2graph command ``get`` is given in O₂scl.
         """
         if name=='colbar':
             print('The value of colbar is',self.colbar,'.')
@@ -765,19 +773,19 @@ class plot_base:
         return
 
     def xlimits(self,xlo,xhi):
-        """
-        Documentation for o2graph command ``xlimits``:
+        """Documentation for o2graph command ``xlimits``:
 
         Set the x-axis limits
 
         Command-line arguments: ``<x low> <x high>``
 
-        The xlimits command sets ``xlo`` and ``xhi`` to the specified limits
-        and sets ``xset`` to True. If a plotting canvas is currently open,
-        then the x-limits on the current axis are modified. Future
-        plots are also plot with the specified x-limits. If <low> and
-        <high> are identical then ``xset`` is set to False and the x
-        limits are automatically set by matplotlib.
+        The xlimits command sets ``xlo`` and ``xhi`` to the specified
+        limits and sets ``xset`` to True. If a plotting canvas is
+        currently open, then the x-limits on the current axis are
+        modified. Future plots are also plot with the specified
+        x-limits. If <low> and <high> are identical then ``xset`` is
+        set to False and the x limits are automatically set by
+        matplotlib.
         """
         if xlo==xhi:
             self.xset=False
@@ -837,10 +845,8 @@ class plot_base:
         Command-line arguments: ``<z low> <z high>``
 
         The ``zlimits`` command sets ``zlo`` and ``zhi`` to the
-        specified limits and sets ``zset`` to True. 
-        If <low> and <high> are identical then ``zset`` is set
-        to False.
-
+        specified limits and sets ``zset`` to True. If <low> and
+        <high> are identical then ``zset`` is set to False.
         """
         if zlo==zhi:
             self.zset=False
@@ -866,8 +872,8 @@ class plot_base:
         markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize
         (ms). For example::
 
-            o2graph -line 0.05 0.05 0.95 0.95 lw=0,marker='+' \\
-            -show
+            o2graph -line 0.05 0.05 0.95 0.95 \\
+            lw=2,marker='+',ms=10,c=xkcd:'light purple' -show
 
         """
         if self.verbose>2:
@@ -903,29 +909,29 @@ class plot_base:
         and connectionstyle attributes should be listed along with
         other arrowprops attributes. Examples for arrowprops are::
 
-            * arrowstyle=->,connectionstyle=arc3
-            * arrowstyle=-|>,connectionstyle=arc,fc=red,ec=blue
+            * arrowstyle=->,connectionstyle=arc3 \\
+            * arrowstyle=-|>,connectionstyle=arc,fc=red,ec=blue \\
             * arrowstyle=-|>,connectionstyle=arc,head_length=4.0,
-              head_width=1.0
+              head_width=1.0 \\
             * arrowstyle=->,connectionstyle=arc3,head_length=4.0,
-              head_width=1.0,rad=-0.1 
+              head_width=1.0,rad=-0.1 \\
             * arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,
-              head_width=1.0,rad=-0.1
+              head_width=1.0,rad=-0.1 \\
         
         Summary for arrowstyle argument (angleB is renamed to 
         as_angleB)::
 
-            Name    Attributes
-            -       None
-            ->      head_length=0.4,head_width=0.2
-            -[      widthB=1.0,lengthB=0.2,as_angleB=None
-            |-      widthA=1.0,widthB=1.0
-            -|      head_length=0.4,head_width=0.2
-            <-      head_length=0.4,head_width=0.2
-            <|      head_length=0.4,head_width=0.2
-            fancy   head_length=0.4,head_width=0.4,tail_width=0.4
-            simple  head_length=0.5,head_width=0.5,tail_width=0.2
-            wedge   tail_width=0.3,shrink_factor=0.5
+            Name    Attributes \\
+            -       None \\
+            ->      head_length=0.4,head_width=0.2 \\
+            -[      widthB=1.0,lengthB=0.2,as_angleB=None \\
+            |-      widthA=1.0,widthB=1.0 \\
+            -|      head_length=0.4,head_width=0.2 \\
+            <-      head_length=0.4,head_width=0.2 \\
+            <|      head_length=0.4,head_width=0.2 \\
+            fancy   head_length=0.4,head_width=0.4,tail_width=0.4 \\
+            simple  head_length=0.5,head_width=0.5,tail_width=0.2 \\
+            wedge   tail_width=0.3,shrink_factor=0.5 \\
         
         (note that fancy, simple or wedge require arc3 or angle3 connection 
         styles)
@@ -933,15 +939,27 @@ class plot_base:
         Summary for connectionstyle argument (angleB is renamed to 
         cs_angleB)::
 
-            Name    Attributes
-            * angle   angleA=90,cs_angleB=0,rad=0.0
-            * angle3  angleA=90,cs_angleB=0
-            * arc     angleA=0,cs_angleB=0,armA=None,armB=None,rad=0.0
-            * arc3    rad=0.0
-            * bar     armA=0.0,armB=0.0,fraction=0.3,angle=None
+            Name    Attributes \\
+            * angle   angleA=90,cs_angleB=0,rad=0.0 \\
+            * angle3  angleA=90,cs_angleB=0 \\
+            * arc     angleA=0,cs_angleB=0,armA=None,armB=None,rad=0.0 \\
+            * arc3    rad=0.0 \\
+            * bar     armA=0.0,armB=0.0,fraction=0.3,angle=None \\
 
         See https://matplotlib.org/2.0.2/users/annotations.html for more.
+        For example::
 
+            o2graph -xlimits 0 1 -ylimits 0 1.2 \\
+            -arrow 0.2 0.2 0.8 0.2 \\
+            arrowstyle='->',connectionstyle=arc3 \\
+            -arrow 0.2 0.4 0.8 0.4 \\
+            arrowstyle='-|>',connectionstyle=arc,fc=red,ec=blue \\
+            -arrow 0.2 0.6 0.8 0.6 \\
+            arrowstyle='-|>',connectionstyle=arc,head_length=4.0,head_width=1.0 \\
+            -arrow 0.2 0.8 0.8 0.8 \\
+            arrowstyle='->',connectionstyle=arc3,head_length=4.0,head_width=1.0,rad=-0.1 \\
+            -arrow 0.2 1.0 0.8 1.0 arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,head_width=1.0,rad=-0.1 \\
+            -show
         """
         if self.verbose>2:
             print('Arrow',x1,y1,x2,y1,arrowprops)
@@ -962,14 +980,33 @@ class plot_base:
         return
 
     def point(self,xval,yval,**kwargs):
-        """
-        Documentation for o2graph command ``point``:
+        """Documentation for o2graph command ``point``:
 
         Plot a single point.
 
-        Command-line arguments: ``<x> <y> [kwargs]``
+        Command-line arguments: ``<x> <y> <kwargs>``
 
-        Plot a single point.
+        Plot a single point. Some useful kwargs are color, marker,
+        markeredgecolor (mec), markeredgewidth (mew), and markersize
+        (ms). Note that the 'marker' keyword argument to specify the
+        marker type must be specified. For example::
+
+            o2graph -xlimits 0 1 -ylimits 0 1 -point 0.5 0.5 \\
+            marker='o',ms=10,c='xkcd:sea green',mec=blue,mew=2 -show
+
+        or::
+
+            o2graph -xlimits 0 1 -ylimits 0 1 -point 0.5 0.5 \\
+            marker='$\int_0^{\infty}x^2~dx$',ms=300,c=green,mec=red -show
+
+        To list the marker types, use::
+
+            o2graph -help markers
+
+        or::
+
+            o2graph -help markers-plot
+
         """
         if self.verbose>2:
             print('point',xval,yval,kwargs)
@@ -997,17 +1034,17 @@ class plot_base:
         Command-line arguments: ``<x> <y> [<x err> <yerr>] or 
         [<x lo> <x hi> <y lo> <y hi>]``
 
-        Some useful kwargs for the ``error-point`` command are:
+        Some useful kwargs for the ``error-point`` command are::
         
-        keyword    description                      default value
-        ecolor     error bar color                   None
-        capsize    cap size in points                None
-        barsabove  plot error bars on top of point   False
-        lolims     y value is lower limit            False
-        uplims     y value is upper limit            False
-        xlolims    x value is lower limit            False
-        xuplims    x value is upper limit            False
-        errorevery draw error bars on subset of data 1
+        keyword    description                       default value \\
+        ecolor     error bar color                   None \\
+        capsize    cap size in points                None \\
+        barsabove  plot error bars on top of point   False \\
+        lolims     y value is lower limit            False \\
+        uplims     y value is upper limit            False \\
+        xlolims    x value is lower limit            False \\
+        xuplims    x value is upper limit            False \\
+        errorevery draw error bars on subset of data 1 \\
         capthick   thickness of error bar cap        None
 
         See also ``errorbar`` for for plotting columns from a table object
@@ -1078,8 +1115,7 @@ class plot_base:
         return
 
     def rect(self,x1,y1,x2,y2,angle=0,**kwargs):
-        """
-        Documentation for o2graph command ``rect``:
+        """Documentation for o2graph command ``rect``:
 
         Plot a rectangle.
 
@@ -1089,8 +1125,19 @@ class plot_base:
         <angle>. By default, the rectangle has no border, but the
         linewidth ('lw') and edgecolor kwargs can be used to specify
         one if desired. Some useful kwargs are alpha, color, edgecolor
-        (ec), facecolor (fc), fill, hatch, linestyle (ls), linewidth
-        (lw).
+        (ec), facecolor (fc), fill, hatch ('/', '\\', '|', '-', '+',
+        'x', 'o', 'O', '.', '*'), linestyle (ls), linewidth (lw). In
+        order to specify keyword arguments, an angle must be also
+        specified.
+
+        For example::
+
+            o2graph -xlimits 0 0.8 -ylimits 0 0.6 \\
+            -text 0.55 0.35 "blah" -rect 0.2 0.2 0.5 0.5 \\
+            -rect 0.3 0.3 0.7 0.4 0 \\
+            fc=green,alpha=0.5,ls=-.,ec='xkcd:burnt orange',lw=2,hatch='///' \\
+            -show
+
         """
         import matplotlib.patches as patches
 
@@ -1136,7 +1183,11 @@ class plot_base:
         ellipse has no border, but the linewidth ('lw') and edgecolor
         kwargs can be used to specify one if desired. Some useful
         kwargs are alpha, color, edgecolor (ec), facecolor (fc), fill,
-        hatch, linestyle (ls), linewidth (lw).
+        hatch, linestyle (ls), linewidth (lw). For example::
+
+            o2graph -ellipse 0.5 0.5 0.8 0.2 45 \\
+            fc='#ccccff',ec=black,lw=2,hatch='|||',ls=':' -show
+        
         """
         import matplotlib.patches as patches
 
@@ -1443,9 +1494,9 @@ class plot_base:
 
     def save(self,filename):
         """
-        Save plot to file named ``filename``. If the verbose parameter is
-        greater than zero, then this function prints the filename to
-        the screen.
+        Save plot to file named ``filename``, using the extension to set
+        the file type. If the verbose parameter is greater than zero,
+        then this function prints the filename to the screen.
         """
         
         import matplotlib.pyplot as plot
@@ -1467,14 +1518,16 @@ class plot_base:
         defined by the current axes with the font size determined by
         the value of the parameter 'font'. LaTeX is used for text
         rendering by default, but this setting can be changed using,
-        e.g. '-set usetex 0'. Some useful kwargs are fontfamily,
-        fontstyle, fontsize, color, backgroundcolor, rotation,
-        horizontalalignment (ha), and verticalalignment (va). Note
-        that you must disable LaTeX rendering to change fontfamily or
-        fontstyle.
+        e.g. '-set usetex 0'. Some useful kwargs are fontfamily
+        ('serif', 'sans-serif', 'cursive', 'fantasy', 'monospace'),
+        fontstyle ('normal', 'italic', 'oblique'), fontsize, color,
+        backgroundcolor, rotation, horizontalalignment (ha), and
+        verticalalignment (va). Note that you must disable LaTeX
+        rendering to change fontfamily or fontstyle.
 
         If <x> or <y> are strings, then they are passed through the
         ``eval()`` function and converted to floating-point numbers.
+
         """
         if self.canvas_flag==False:
             self.canvas()
@@ -1505,6 +1558,14 @@ class plot_base:
         if isinstance(ty,str):
             ty=float(eval(ty))
 
+        import matplotlib.pyplot as plot
+        if self.usetex==False or self.usetex==0:
+            print('false')
+            plot.rc('text',usetex=False)
+        else:
+            print('true')
+            plot.rc('text',usetex=True)
+        
         self.axes.text(tx,ty,textstr,**kwargs)
         
         # End of function plot_base::text()
