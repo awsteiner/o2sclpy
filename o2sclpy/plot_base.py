@@ -1837,9 +1837,17 @@ class plot_base:
         This command creates a new set of axes, adds the new axes
         to the list of axes, and sets the new axes as the current.
         The axes object is named 'inset0' for the first inset, then
-        'inset1', and so on.
+        'inset1', and so on. For example::
+
+            o2graph -inset 0.5 0.2 0.4 0.4 -selax main \\
+            -line 0.1 0.1 0.9 0.9 -selax inset0 \\
+            -line 0.1 0.9 0.9 0.1 -show
+
         """
 
+        if self.canvas_flag==False:
+            self.canvas()
+            
         # Create a unique axes label i.e. inset0
         ifound=9
         for i in range(0,8):
@@ -1867,28 +1875,31 @@ class plot_base:
 
         Command-line arguments: ``[kwargs]``
 
-        alpha            float>0      alpha value for region inside axes 
-        labelsize        float>0      font size for labels 
-        x_loc            b,t,tb       placement of x-axis (bottom, top, or both)
-        x_major_loc      float>0      linear increment for x-axis major ticks 
-        x_minor_loc      float>0      linear increment for x-axis minor ticks 
-        x_minor_tick_dir in,out,inout direction of x-axis minor ticks 
-        x_minor_tick_len float>0      length of x-axis minor ticks 
-        x_minor_tick_wid float>0      width of x-axis minor ticks 
-        x_tick_dir       in,out,inout direction of x-axis major ticks 
-        x_tick_len       float>0      length of x-axis major ticks 
-        x_tick_wid       float>0      width of x-axis major ticks 
-        x_visible        T/F          set x-axis visible or invisible 
-        y_loc            l,r,lr       placement of y-axis (left, right, or both)
-        y_major_loc      float>0      linear increment for x-axis major ticks 
-        y_minor_loc      float>0      linear increment for x-axis minor ticks 
-        y_minor_tick_dir in,out,inout direction of y-axis minor ticks 
-        y_minor_tick_len float>0      length of y-axis minor ticks 
-        y_minor_tick_wid float>0      width of y-axis minor ticks 
-        y_tick_dir       in,out,inout direction of y-axis major ticks 
-        y_tick_len       float>0      length of y-axis major ticks 
-        y_tick_wid       float>0      width of y-axis major ticks 
-        y_visible        T/F          set y-axis visible or invisible
+        The axis properties which can be modified are::
+
+        Property         Values       Description \\
+        alpha            float>0      alpha value for region inside axes \\
+        labelsize        float>0      font size for labels \\
+        x_loc            b,t,tb       placement of x-axis (bottom, top, or both) \\
+        x_major_loc      float>0      linear increment for x-axis major ticks  \\
+        x_minor_loc      float>0      linear increment for x-axis minor ticks  \\
+        x_minor_tick_dir in,out,inout direction of x-axis minor ticks  \\
+        x_minor_tick_len float>0      length of x-axis minor ticks  \\
+        x_minor_tick_wid float>0      width of x-axis minor ticks  \\
+        x_tick_dir       in,out,inout direction of x-axis major ticks  \\
+        x_tick_len       float>0      length of x-axis major ticks  \\
+        x_tick_wid       float>0      width of x-axis major ticks  \\
+        x_visible        T/F          set x-axis visible or invisible  \\
+        y_loc            l,r,lr       placement of y-axis (left, right, or both) \\
+        y_major_loc      float>0      linear increment for x-axis major ticks  \\
+        y_minor_loc      float>0      linear increment for x-axis minor ticks  \\
+        y_minor_tick_dir in,out,inout direction of y-axis minor ticks  \\
+        y_minor_tick_len float>0      length of y-axis minor ticks  \\
+        y_minor_tick_wid float>0      width of y-axis minor ticks  \\
+        y_tick_dir       in,out,inout direction of y-axis major ticks  \\
+        y_tick_len       float>0      length of y-axis major ticks  \\
+        y_tick_wid       float>0      width of y-axis major ticks  \\
+        y_visible        T/F          set y-axis visible or invisible \\
         """
 
         import matplotlib.pyplot as plot
@@ -1992,7 +2003,7 @@ class plot_base:
     
     def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):
         """Documentation for o2graph command ``addcbar``:
-
+        
         Add a color bar.
         
         Command-line arguments: ``<left> <bottom> <width> <height>
@@ -2000,13 +2011,14 @@ class plot_base:
 
         Add a new colorbar or a colorbar from the most recently
         created image at the location specified by ``left``,
-        ``bottom``, ``width`` and ``height``. If the image keyword is
-        'last', then the last density plot (e.g. from command
-        ``den-plot``) or two-dimensional histogram plot (e.g. from
-        command ``hist2d-plot``) is used. If the image keyword is
-        'new', then a colormap must be specified using the 'cmap'
-        keyword and the color map is used to create the colorbar.
-
+        ``bottom``, ``width`` and ``height``. This command has a
+        keyword ``image`` which specifies the image which the colorbar
+        should refer to. If the image keyword is 'last', then the last
+        density plot (e.g. from command ``den-plot``) or
+        two-dimensional histogram plot (e.g. from command
+        ``hist2d-plot``) is used. If the image keyword is 'new', then
+        a colormap must be specified using the 'cmap' keyword and the
+        color map is used to create the colorbar.
         """
 
         import matplotlib.pyplot as plot
@@ -2050,17 +2062,16 @@ class plot_base:
         return
 
     def canvas(self):
-        """
-        Documentation for o2graph command ``canvas``:
+        """Documentation for o2graph command ``canvas``:
 
         Create a plotting canvas.
 
         Command-line arguments: (No arguments.)
 
-        Create an empty plotting canvas. For example 'o2graph
-        -canvas -show'. Typically, 'o2graph' creates
-        the canvas automatically so explicitly using this command
-        is unnecessary.
+        Create an empty plotting canvas. For example 'o2graph -canvas
+        -show'. Typically, 'o2graph' creates the canvas automatically
+        when the first object is plotted so explicitly using this
+        command is unnecessary.
 
         This function creates a default figure using default_plot()
         and axis object using the xtitle and ytitle for the
@@ -2124,8 +2135,11 @@ class plot_base:
         column index 1]`` or ``[vec_vec_double, column index1, column
         index 2]``. Otherwise, ``args[0]`` and ``args[1]`` are
         interpreted as arrays to be directly sent to the
-        ``matplotlib.pyplot.plot()`` function.
+        matplotlib.pyplot.plot() function.
 
+        The documentation for the o2graph ``plot`` command is 
+        in the docstring for
+        :py:func:`o2sclpy.o2graph_plotter.plot_o2graph()`.
         """
 
         if len(args)<2:
@@ -2209,12 +2223,15 @@ class plot_base:
         return
 
     def den_plot(self,args,**kwargs):
-        """
-        Create a density plot from a matrix, a slice of a table3d object,
+        """Create a density plot from a matrix, a slice of a table3d object,
         or a hist_2d object.
 
         The argument list ``args`` can be of the form ``[numpy
         matrix]`` or ``[table3d,slice name]`` or ``[hist_2d]``.
+
+        The documentation for the o2graph ``den-plot`` command is in
+        the docstring for
+        :py:func:`o2sclpy.o2graph_plotter.den_plot_o2graph()`.
         """
         
         if len(args)<1:
@@ -2227,6 +2244,7 @@ class plot_base:
         else:
             pcm=False
 
+        # If necessary, import cmyt for the cmyt colormaps
         if 'cmap' in kwargs and kwargs['cmap'][0:5]=='cmyt.':
             import cmyt
             
@@ -2453,8 +2471,7 @@ class plot_base:
     
     def den_plot_rgb(self,table3d,slice_r,slice_g,slice_b,
                      make_png='',renorm=False,**kwargs):
-        """
-        Density plot from a ``table3d`` object using three slices
+        """Density plot from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
 
         If make_png is non-empty, then a .png is created, with no
@@ -2464,6 +2481,10 @@ class plot_base:
         is 0 and the maximum is 255. Otherwise, the data is 
         set to 0 if it is less than 0 and set to 255 when it is
         greater than 255. 
+
+        The documentation for the o2graph ``den-plot-rgb`` command is
+        in the docstring for
+        :py:func:`o2sclpy.o2graph_plotter.den_plot_rgb_o2graph()`.
         """
 
         nxt=table3d.get_nx()
@@ -2542,7 +2563,7 @@ class plot_base:
                         if sl_all[j,i,2]>max_val:
                             max_val=sl_all[j,i,2]
 
-                print('o2graph::make-png(): Minimum is',
+                print('o2graph::den_plot_rgb (make-png)(): Minimum is',
                       min_val,'maximum is',max_val,'.')
                         
                 for i in range(0,nxt):
@@ -2579,6 +2600,37 @@ class plot_base:
                 raise
             return
         
+        if renorm:
+            min_val=sl_all[0,0,0]
+            max_val=sl_all[0,0,0]
+            
+            for i in range(0,nxt):
+                for j in range(0,nyt):
+                    if sl_all[j,i,0]<min_val:
+                        min_val=sl_all[j,i,0]
+                    if sl_all[j,i,1]<min_val:
+                        min_val=sl_all[j,i,1]
+                    if sl_all[j,i,2]<min_val:
+                        min_val=sl_all[j,i,2]
+                    if sl_all[j,i,0]>max_val:
+                        max_val=sl_all[j,i,0]
+                    if sl_all[j,i,1]>max_val:
+                        max_val=sl_all[j,i,1]
+                    if sl_all[j,i,2]>max_val:
+                        max_val=sl_all[j,i,2]
+
+            print('o2graph::den_plot_rgb(): Minimum is',
+                  min_val,'maximum is',max_val,'.')
+                        
+            for i in range(0,nxt):
+                for j in range(0,nyt):
+                    sl_all[j,i,0]=((sl_all[j,i,0]-min_val)/
+                                   (max_val-min_val))
+                    sl_all[j,i,1]=((sl_all[j,i,1]-min_val)/
+                                   (max_val-min_val))
+                    sl_all[j,i,2]=((sl_all[j,i,2]-min_val)/
+                                   (max_val-min_val))
+                    
         if self.canvas_flag==False:
             self.canvas()
 
@@ -2633,9 +2685,12 @@ class plot_base:
         return
 
     def make_png(self,table3d,slice_r,slice_g,slice_b,fname,**kwargs):
-        """
-        Create png from a ``table3d`` object using three slices
+        """Create png from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
+
+        The documentation for the o2graph ``make-png`` command is in
+        the docstring for
+        :py:func:`o2sclpy.o2graph_plotter.make_png_o2graph()`.
         """
         
         nxt=table3d.get_nx()

@@ -361,7 +361,7 @@ def doc_replacements(s,ter,amp,link,script=False):
 def o2scl_get_type(o2scl,amp,link):
     """
     Get the type of the current object stored in the acol_manager
-    pointer
+    pointer and return as a bytes object.
     """
 
     amt=acol_manager(link,amp)
@@ -1086,7 +1086,10 @@ class o2graph_plotter(yt_plot_base):
 
         Create a density plot from the three specified slices. This
         command uses imshow(). To directly create a .png file with no
-        axes, use make-png instead.
+        axes, use make-png instead. For example::
+
+            o2graph -create table3d x "grid:0,1,0.01" y "grid:0,1,0.01" \\
+            r "x" -function "y" g -function 0 b -den-plot-rgb r g b -show
         """
 
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
@@ -1104,9 +1107,9 @@ class o2graph_plotter(yt_plot_base):
         if len(args)>=4:
             kwstring=args[3]
 
-        dctt=string_to_dict(kwstring)
-        self.den_plot(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
-                      **dctt)
+        dctt=string_to_dict2(kwstring,list_of_bools=['renorm'])
+        self.den_plot_rgb(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
+                          **dctt)
 
         return
 
