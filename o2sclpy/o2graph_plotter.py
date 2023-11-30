@@ -1456,15 +1456,11 @@ class o2graph_plotter(yt_plot_base):
             amt=acol_manager(self.link2,amp)
             vvd=amt.get_vvdouble_obj()
 
-            print('hm1',len(args),args)
             if len(args)<2:
-                print('h0')
                 self.plot([vvd,int(args[0])])
             elif len(args)<3:
-                print('h1')
                 self.plot([vvd,int(args[0]),int(args[1])])
             else:
-                print('h2')
                 if args[1]=='none':
                     self.plot([vvd,int(args[0])],
                               **string_to_dict(args[2]))
