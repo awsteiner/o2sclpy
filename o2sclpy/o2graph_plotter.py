@@ -1381,7 +1381,7 @@ class o2graph_plotter(yt_plot_base):
         markeredgewidth (mew), markerfacecolor (mfc),
         markerfacecoloralt (mfcalt), markersize (ms). For example::
         
-            o2graph -create vec_vec_double grid:0,10,0.2 "func:51:sin(i)" \
+            o2graph -create vec_vec_double grid:0,10,0.2 "func:51:sin(i)" \\
             -plot 0 1 "lw=0,marker=+" -show
 
         This command uses the matplotlib plot() function, see
@@ -1404,7 +1404,7 @@ class o2graph_plotter(yt_plot_base):
 
             o2graph -create table x grid:0,10,0.01 \\
             -function "abs(sin(x))" y -to-hist y 20 \\
-            -plot "lw=0,marker=+" -show. 
+            -plot "lw=0,marker=+" -show
 
         This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
@@ -1423,9 +1423,9 @@ class o2graph_plotter(yt_plot_base):
         markeredgewidth (mew), markerfacecolor (mfc),
         markerfacecoloralt (mfcalt), markersize (ms). For example::
         
-            o2graph -create table3d x grid:0,1,0.02 y grid:0,1,0.02 \\
-            z "(exp(-(x-0.4)^2)+exp(-(x-0.6)^2))*exp(-(y-0.4)^2)" \\
-            -contours 0.5 -plot "lw=2" -show 
+            o2graph -create table3d x grid:0,1,0.02 y grid:0,1,0.02 z \\
+            "(exp(-(x-0.2)^2/0.1)+exp(-(x-0.9)^2/0.1))*exp(-(y-0.4)^2/0.1)" \\
+            -contours 0.5 z -plot "lw=2" -show 
 
         This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
@@ -1451,7 +1451,6 @@ class o2graph_plotter(yt_plot_base):
         """
 
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
-        print('here0',curr_type)
                         
         if curr_type==b'table':
             
