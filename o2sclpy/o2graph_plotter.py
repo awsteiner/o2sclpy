@@ -562,15 +562,31 @@ def reformat_python_docs_type(curr_type,cmd,doc_str,amp,link,
     if len(reflist3)>2:
         print('')
         print('Long description:')
+        last_pgh_colons=False
         for j in range(2,len(reflist3)):
             if len(reflist3[j])>0:
-                long_help=doc_replacements(reflist3[j].replace('\n',' '),
-                                           ter,amp,link)
-                tmplist=wrap_line(long_help,ncols-1)
-                if j!=3:
+                if last_pgh_colons:
+                    long_help=doc_replacements(reflist3[j].replace('\n',' '),
+                                               ter,amp,link,script=True)
+                    tmplist=long_help.split(' \ ')
+                else:
+                    long_help=doc_replacements(reflist3[j].replace('\n',' '),
+                                               ter,amp,link)
+                    tmplist=wrap_line(long_help,ncols-1)
+                if j!=2:
                     print('')
                 for k in range(0,len(tmplist)):
-                    print(tmplist[k])
+                    if last_pgh_colons:
+                        if k!=len(tmplist)-1:
+                            print(' ',tmplist[k],'\\')
+                        else:
+                            print(' ',tmplist[k])
+                    else:
+                        print(tmplist[k])
+                if long_help[-2:]=='::':
+                    last_pgh_colons=True
+                else:
+                    last_pgh_colons=False
                     
     return
 
