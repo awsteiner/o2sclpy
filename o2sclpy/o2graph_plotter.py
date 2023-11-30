@@ -122,7 +122,7 @@ base_list=[
      "Adjust the spacing for subplots after using the 'subplots' "+
      "command. All arguments are keyword arguments. The kwargs "+
      "for 'subadj' are left, right, bottom, top, "+
-     "wspace, and hspace. This just a wrapper to the "+
+     "wspace, and hspace. This command is a wrapper to the "+
      "pyplot.subplots_adjust() function. Note that, unlike the "+
      "margin settings for the fig_dict parameter, the values "+
      "'right' and 'top' are defined relative to the lower-left "+
@@ -182,6 +182,7 @@ extra_list=[
     ["tensor_grid","den-plot-anim",0],
     ["tensor_grid","yt-add-vol",0],
     ["vector<contour_line>","plot",0],
+    ["vec_vec_double","plot",0],
 ]
 
 param_list=[
@@ -820,7 +821,7 @@ class o2graph_plotter(yt_plot_base):
         
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
         amt=acol_manager(self.link2,amp)
-        print('here')
+        print('Command to-kde is not yet finished.')
         quit()
         #if curr_type==b'table':
         #else:
@@ -1250,7 +1251,7 @@ class o2graph_plotter(yt_plot_base):
                   curr_type,".")
             return
         
-        # End of function o2graph_plotter::plot_o2graph()
+        # End of function o2graph_plotter::kde_plot()
         return
 
     def kde_2d_plot(self,o2scl,amp,args,link):
@@ -1324,7 +1325,7 @@ class o2graph_plotter(yt_plot_base):
                   curr_type,".")
             return
         
-        # End of function o2graph_plotter::plot_o2graph()
+        # End of function o2graph_plotter::kde_2d_plot()
         return
 
     def plot_o2graph(self,o2scl,amp,args,link):
@@ -1340,10 +1341,12 @@ class o2graph_plotter(yt_plot_base):
         column <x>. Some useful kwargs are color (c), dashes,
         linestyle (ls), linewidth (lw), marker, markeredgecolor (mec),
         markeredgewidth (mew), markerfacecolor (mfc),
-        markerfacecoloralt (mfcalt), markersize (ms). For example:
-        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
-        lw=0,marker='+' -show\". This command uses the matplotlib
-        plot() function, see
+        markerfacecoloralt (mfcalt), markersize (ms). For example::
+
+            o2graph -create table x grid:0,10,0.2 -function "sin(x)" y \\
+            -plot x y "lw=0,marker=+" -show 
+
+        This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1360,10 +1363,12 @@ class o2graph_plotter(yt_plot_base):
         Some useful kwargs are color (c), dashes, linestyle
         (ls), linewidth (lw), marker, markeredgecolor (mec),
         markeredgewidth (mew), markerfacecolor (mfc),
-        markerfacecoloralt (mfcalt), markersize (ms). For example:
-        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
-        lw=0,marker='+' -show\". This command uses the matplotlib
-        plot() function, see
+        markerfacecoloralt (mfcalt), markersize (ms). For example::
+        
+            o2graph -create vec_vec_double grid:0,10,0.2 "func:51:sin(i)" \
+            -plot 0 1 "lw=0,marker=+" -show
+
+        This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1379,9 +1384,13 @@ class o2graph_plotter(yt_plot_base):
         three object types) are color (c), dashes, linestyle (ls),
         linewidth (lw), marker, markeredgecolor (mec), markeredgewidth
         (mew), markerfacecolor (mfc), markerfacecoloralt (mfcalt),
-        markersize (ms). For example: \"o2graph -create x 0 10 0.2
-        -function sin(x) y -plot x y lw=0,marker='+' -show\". This
-        command uses the matplotlib plot() function, see
+        markersize (ms). For example::
+
+            o2graph -create table x grid:0,10,0.01 \\
+            -function "abs(sin(x))" y -to-hist y 20 \\
+            -plot "lw=0,marker=+" -show. 
+
+        This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1396,10 +1405,13 @@ class o2graph_plotter(yt_plot_base):
         for all three object types) are color (c), dashes, linestyle
         (ls), linewidth (lw), marker, markeredgecolor (mec),
         markeredgewidth (mew), markerfacecolor (mfc),
-        markerfacecoloralt (mfcalt), markersize (ms). For example:
-        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
-        lw=0,marker='+' -show\". This command uses the matplotlib
-        plot() function, see
+        markerfacecoloralt (mfcalt), markersize (ms). For example::
+        
+            o2graph -create table3d x grid:0,1,0.02 y grid:0,1,0.02 \\
+            z "(exp(-(x-0.4)^2)+exp(-(x-0.6)^2))*exp(-(y-0.4)^2)" \\
+            -contours 0.5 -plot "lw=2" -show 
+
+        This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1414,10 +1426,8 @@ class o2graph_plotter(yt_plot_base):
         for all three object types) are color (c), dashes, linestyle
         (ls), linewidth (lw), marker, markeredgecolor (mec),
         markeredgewidth (mew), markerfacecolor (mfc),
-        markerfacecoloralt (mfcalt), markersize (ms). For example:
-        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
-        lw=0,marker='+' -show\". This command uses the matplotlib
-        plot() function, see
+        markerfacecoloralt (mfcalt), markersize (ms). This command
+        uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1425,6 +1435,7 @@ class o2graph_plotter(yt_plot_base):
         """
 
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
+        print('here0',curr_type)
                         
         if curr_type==b'table':
             
@@ -1444,14 +1455,22 @@ class o2graph_plotter(yt_plot_base):
             
             amt=acol_manager(self.link2,amp)
             vvd=amt.get_vvdouble_obj()
-            
-            if len(args)<2 or args[1]=='none':
+
+            print('hm1',len(args),args)
+            if len(args)<2:
+                print('h0')
                 self.plot([vvd,int(args[0])])
             elif len(args)<3:
+                print('h1')
                 self.plot([vvd,int(args[0]),int(args[1])])
             else:
-                self.plot([vvd,int(args[0]),int(args[1])],
-                          **string_to_dict(args[2]))
+                print('h2')
+                if args[1]=='none':
+                    self.plot([vvd,int(args[0])],
+                              **string_to_dict(args[2]))
+                else:
+                    self.plot([vvd,int(args[0]),int(args[1])],
+                              **string_to_dict(args[2]))
 
             failed=False
 

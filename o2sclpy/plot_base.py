@@ -1826,25 +1826,25 @@ class plot_base:
         return
 
     def inset(self,left,bottom,width,height,**kwargs):
-        """
-        Documentation for o2graph command ``inset``:
+        """Documentation for o2graph command ``inset``:
         
         Add a new set of axes
         
         Command-line arguments: ``<left> <bottom> <width> <height>
         [kwargs]``
 
-        This command creates a new set of axes, adds the new axes
-        to the list of axes, and sets the new axes as the current.
-        The axes object is named 'inset0' for the first inset, then
-        'inset1', and so on. For example::
+        This command creates a new set of axes, adds the new axes to
+        the list of axes, and sets the new axes as the current. The
+        values <left>, <bottom>, <width>, and <height> refer to a
+        normalized coordinate system where the lower-left hand corner
+        of the figure is (0,0) and the upper-right hand corner is
+        (1,1). The axes object is named 'inset0' for the first inset,
+        then 'inset1', and so on. For example::
 
             o2graph -inset 0.5 0.2 0.4 0.4 -selax main \\
-            -line 0.1 0.1 0.9 0.9 -selax inset0 \\
+            -line 100 100 900 900 -selax inset0 \\
             -line 0.1 0.9 0.9 0.1 -show
-
         """
-
         if self.canvas_flag==False:
             self.canvas()
             
@@ -2178,19 +2178,19 @@ class plot_base:
 
             if len(args)>2:
                 vvd=args[0]
-                n1=len(vvd[args[1]])
-                n2=len(vvd[args[2]])
+                n1=len(vvd[int(args[1])])
+                n2=len(vvd[int(args[2])])
                 if n1<n2:
-                    xv=vvd[args[1]][0:n1]
-                    yv=vvd[args[2]][0:n1]
+                    xv=vvd[int(args[1])][0:n1]
+                    yv=vvd[int(args[2])][0:n1]
                 else:
-                    xv=vvd[args[1]][0:n2]
-                    yv=vvd[args[2]][0:n2]
+                    xv=vvd[int(args[1])][0:n2]
+                    yv=vvd[int(args[2])][0:n2]
             else:
                 vvd=args[0]
-                n1=len(vvd[args[1]])
+                n1=len(vvd[int(args[1])])
                 xv=[i for i in range(0,n1)]
-                yv=vvd[args[1]]
+                yv=vvd[int(args[1])]
 
         else:
 
