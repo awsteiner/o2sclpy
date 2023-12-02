@@ -95,6 +95,7 @@ base_list=[
     ["line",plot_base.line.__doc__],
     ["modax",plot_base.modax.__doc__],
     ["mp4",0],
+    ["obj",0],
     ["o2scl-addl-libs",
      "Specify a list of list of additional libraries to load."],
     ["o2scl-cpp-lib",
@@ -1128,6 +1129,172 @@ class o2graph_plotter(yt_plot_base):
         self.den_plot_rgb(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
                           **dctt)
 
+        return
+
+    def obj_o2graph(self,o2scl,amp,link,args):
+        """
+        """
+
+        curr_type=o2scl_get_type(o2scl,amp,self.link2)
+        amt=acol_manager(self.link2,amp)
+
+        kwstring=''
+        if curr_type!=b'table3d':
+            print("Command 'den-plot-rgb' not supported for type",
+                  curr_type,".")
+            return
+
+        slice=args[0]
+        filename=args[1]
+        if len(args)>=3:
+            kwstring=args[2]
+
+        dctt=string_to_dict2(kwstring)
+
+        table3d=amt.get_table3d_obj()
+        nxt=table3d.get_nx()
+        nyt=table3d.get_ny()
+        sl=table3d.get_slice(slice).to_numpy()
+        xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
+        ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
+        x_min=numpy.min(xgrid)
+        x_max=numpy.max(xgrid)
+        y_min=numpy.min(ygrid)
+        y_max=numpy.max(ygrid)
+        sl_min=numpy.min(sl)
+        sl_max=numpy.max(sl)
+
+        f=open(filename,'w')
+
+        vertices=[]
+        faces=[]
+        k=1
+        for i in range(0,nxt):
+            for j in range(0,nyt):
+                arr=[(xgrid[i]-x_min)/(x_max-x_min),
+                     (ygrid[j]-y_min)/(y_max-y_min),
+                     (sl[i,j]-sl_min)/(sl_max-sl_min)]
+                vertices.append(arr)
+                print('vert',i,j,arr)
+                f.write('v '+('%7.6e' % arr[0])+' '+
+                        ('%7.6e' % arr[1])+' '+
+                        ('%7.6e' % arr[2])+'\n')
+                if i<nxt-1 and j<nyt-1:
+                    arr2=[k,k+1,k+nyt]
+                    print('face',arr2)
+                    faces.append(arr2)
+                    arr3=[k+1,k+1+nyt,k+nyt]
+                    print('face',arr3)
+                    faces.append(arr3)
+                k=k+1
+
+        print('axes')
+        rad=0.04
+        n_theta=20
+        for i in range(0,n_theta):
+            theta=float(i)*2.0*numpy.pi/n_theta
+            
+            arr=[rad*numpy.cos(theta),
+                 rad*numpy.sin(theta),0]
+            vertices.append(arr)
+            print('vert',i,k,arr)
+            f.write('v '+('%7.6e' % arr[0])+' '+
+                    ('%7.6e' % arr[1])+' '+
+                    ('%7.6e' % arr[2])+'\n')
+            arr=[rad*numpy.cos(theta),
+                 rad*numpy.sin(theta),1]
+            vertices.append(arr)
+            print('vert',i,k+1,arr)
+            f.write('v '+('%7.6e' % arr[0])+' '+
+                    ('%7.6e' % arr[1])+' '+
+                    ('%7.6e' % arr[2])+'\n')
+
+            if i<n_theta-1:
+                arr2=[k,k+1,k+6]
+                faces.append(arr2)
+                arr3=[k+1,k+6,k+7]
+                faces.append(arr3)
+            else:
+                arr2=[k,k+1,k+6-n_theta*6]
+                faces.append(arr2)
+                arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
+                faces.append(arr3)
+            
+            k=k+2
+            
+            arr=[0,rad*numpy.cos(theta),
+                 rad*numpy.sin(theta)]
+            vertices.append(arr)
+            print('vert',i,k,arr)
+            f.write('v '+('%7.6e' % arr[0])+' '+
+                    ('%7.6e' % arr[1])+' '+
+                    ('%7.6e' % arr[2])+'\n')
+            arr=[1,rad*numpy.cos(theta),
+                 rad*numpy.sin(theta)]
+            vertices.append(arr)
+            print('vert',i,k+1,arr)
+            f.write('v '+('%7.6e' % arr[0])+' '+
+                    ('%7.6e' % arr[1])+' '+
+                    ('%7.6e' % arr[2])+'\n')
+            
+            if i<n_theta-1:
+                arr2=[k,k+1,k+6]
+                faces.append(arr2)
+                arr3=[k+1,k+6,k+7]
+                faces.append(arr3)
+            else:
+                arr2=[k,k+1,k+6-n_theta*6]
+                faces.append(arr2)
+                arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
+                faces.append(arr3)
+            
+            k=k+2
+            
+            arr=[rad*numpy.cos(theta),0,
+                 rad*numpy.sin(theta)]
+            vertices.append(arr)
+            print('vert',i,k,arr)
+            f.write('v '+('%7.6e' % arr[0])+' '+
+                    ('%7.6e' % arr[1])+' '+
+                    ('%7.6e' % arr[2])+'\n')
+            arr=[rad*numpy.cos(theta),1,
+                 rad*numpy.sin(theta)]
+            vertices.append(arr)
+            print('vert',i,k+1,arr)
+            f.write('v '+('%7.6e' % arr[0])+' '+
+                    ('%7.6e' % arr[1])+' '+
+                    ('%7.6e' % arr[2])+'\n')
+
+            if i<n_theta-1:
+                arr2=[k,k+1,k+6]
+                faces.append(arr2)
+                arr3=[k+1,k+6,k+7]
+                faces.append(arr3)
+            else:
+                arr2=[k,k+1,k+6-n_theta*6]
+                faces.append(arr2)
+                arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
+                faces.append(arr3)
+            
+            k=k+2
+
+        (xy,xy2)=self.yt_text_to_points([0.5,-0.1,-0.1],[1,0,0],[0,0,1],
+                                        'x title')
+        print(xy
+
+        #def yt_text_to_points(self,veco,vecx,vecy,text,dpi=100,font=30,
+        #textcolor=(1,1,1,0.5),show=False,filename=''):
+        
+
+        for k in range(0,len(faces)):
+            #print('faces',k,faces[k][0],faces[k][1],faces[k][2])
+            f.write('f '+
+                    ('%i' % faces[k][0])+' '+
+                    ('%i' % faces[k][1])+' '+
+                    ('%i' % faces[k][2])+'\n')
+
+        f.close()
+        
         return
 
     def make_png_o2graph(self,o2scl,amp,link,args):
@@ -5380,6 +5547,15 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
 
                     self.den_plot_rgb_o2graph(o2scl,amp,self.link2,
+                                              strlist[ix+1:ix_next])
+                
+                elif cmd_name=='obj':
+                    
+                    if self.verbose>2:
+                        print('Process den-plot-rgb.')
+                        print('args:',strlist[ix:ix_next])
+
+                    self.obj_o2graph(o2scl,amp,self.link2,
                                               strlist[ix+1:ix_next])
                 
                 elif cmd_name=='den-plot-anim':
