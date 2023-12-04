@@ -1150,6 +1150,8 @@ class o2graph_plotter(yt_plot_base):
             kwstring=args[2]
 
         dctt=string_to_dict2(kwstring)
+        cmap=dctt.pop('cmap','')
+        mtl_file=dctt.pop('mtl_file','')
 
         table3d=amt.get_table3d_obj()
         nxt=table3d.get_nx()
@@ -1164,10 +1166,50 @@ class o2graph_plotter(yt_plot_base):
         sl_min=numpy.min(sl)
         sl_max=numpy.max(sl)
 
+        colors=False
+        color_map=0
+        norm=0
+        
+        if cmap!='' and mtl_file!='':
+            f2=open(mtl_file,'w')
+            
+            f2.write('newmtl axis\n')
+            f2.write('Ka 1.0 1.0 1.0\n')
+            f2.write('Kd 1.0 1.0 1.0\n')
+            f2.write('Ks 0.0 0.0 0.0\n')
+            f2.write('Ns 0.0\n')
+            
+            import matplotlib.cm as cm
+            from matplotlib.colors import Normalize
+            import matplotlib.pyplot as plot
+            
+            color_map=cm.get_cmap(cmap)
+            norm=plot.Normalize(0,255)
+            
+            for i in range(0,256):
+
+                rgb=color_map(norm(float(i)))[:3]
+                print(i,rgb)
+                
+                f2.write('newmtl cmap'+str(i)+'\n')
+                f2.write('Ka '+str(rgb[0])+' '+str(rgb[1])+' '+
+                         str(rgb[2])+'\n')
+                f2.write('Kd '+str(rgb[0])+' '+str(rgb[1])+' '+
+                         str(rgb[2])+'\n')
+                f2.write('Ks 0.0 0.0 0.0\n')
+                f2.write('Ns 0.0\n')
+                
+            f2.close()
+            colors=True
+            
         f=open(filename,'w')
 
+        if colors:
+            f.write('mtllib '+mtl_file+'\n')
+
         vertices=[]
-        faces=[]
+        axis_faces=[]
+        plot_faces=[]
         k=1
         for i in range(0,nxt):
             for j in range(0,nyt):
@@ -1180,16 +1222,16 @@ class o2graph_plotter(yt_plot_base):
                         ('%7.6e' % arr[1])+' '+
                         ('%7.6e' % arr[2])+'\n')
                 if i<nxt-1 and j<nyt-1:
-                    arr2=[k,k+1,k+nyt]
+                    arr2=[k,k+1,k+nyt,arr[2]]
                     print('face',arr2)
-                    faces.append(arr2)
-                    arr3=[k+1,k+1+nyt,k+nyt]
+                    plot_faces.append(arr2)
+                    arr3=[k+1,k+1+nyt,k+nyt,arr[2]]
                     print('face',arr3)
-                    faces.append(arr3)
+                    plot_faces.append(arr3)
                 k=k+1
 
         print('axes')
-        rad=0.04
+        rad=0.02
         n_theta=20
         for i in range(0,n_theta):
             theta=float(i)*2.0*numpy.pi/n_theta
@@ -1211,14 +1253,14 @@ class o2graph_plotter(yt_plot_base):
 
             if i<n_theta-1:
                 arr2=[k,k+1,k+6]
-                faces.append(arr2)
+                axis_faces.append(arr2)
                 arr3=[k+1,k+6,k+7]
-                faces.append(arr3)
+                axis_faces.append(arr3)
             else:
                 arr2=[k,k+1,k+6-n_theta*6]
-                faces.append(arr2)
+                axis_faces.append(arr2)
                 arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                faces.append(arr3)
+                axis_faces.append(arr3)
             
             k=k+2
             
@@ -1239,14 +1281,14 @@ class o2graph_plotter(yt_plot_base):
             
             if i<n_theta-1:
                 arr2=[k,k+1,k+6]
-                faces.append(arr2)
+                axis_faces.append(arr2)
                 arr3=[k+1,k+6,k+7]
-                faces.append(arr3)
+                axis_faces.append(arr3)
             else:
                 arr2=[k,k+1,k+6-n_theta*6]
-                faces.append(arr2)
+                axis_faces.append(arr2)
                 arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                faces.append(arr3)
+                axis_faces.append(arr3)
             
             k=k+2
             
@@ -1267,31 +1309,37 @@ class o2graph_plotter(yt_plot_base):
 
             if i<n_theta-1:
                 arr2=[k,k+1,k+6]
-                faces.append(arr2)
+                axis_faces.append(arr2)
                 arr3=[k+1,k+6,k+7]
-                faces.append(arr3)
+                axis_faces.append(arr3)
             else:
                 arr2=[k,k+1,k+6-n_theta*6]
-                faces.append(arr2)
+                axis_faces.append(arr2)
                 arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                faces.append(arr3)
+                axis_faces.append(arr3)
             
             k=k+2
 
-        (xy,xy2)=self.yt_text_to_points([0.5,-0.1,-0.1],[1,0,0],[0,0,1],
-                                        'x title')
-        print(xy
-
-        #def yt_text_to_points(self,veco,vecx,vecy,text,dpi=100,font=30,
-        #textcolor=(1,1,1,0.5),show=False,filename=''):
-        
-
-        for k in range(0,len(faces)):
-            #print('faces',k,faces[k][0],faces[k][1],faces[k][2])
+        f.write('g plot\n')
+        for k in range(0,len(plot_faces)):
+            #print('plot_faces',k,plot_faces[k][0],plot_faces[k][1],
+            #plot_faces[k][2])
+            if colors:
+                f.write('usemtl cmap'+str(int(plot_faces[k][3]*255.0))+'\n')
             f.write('f '+
-                    ('%i' % faces[k][0])+' '+
-                    ('%i' % faces[k][1])+' '+
-                    ('%i' % faces[k][2])+'\n')
+                    ('%i' % plot_faces[k][0])+' '+
+                    ('%i' % plot_faces[k][1])+' '+
+                    ('%i' % plot_faces[k][2])+'\n')
+        f.write('g axis\n')
+        if colors:
+            f.write('usemtl axis\n')
+        for k in range(0,len(axis_faces)):
+            #print('axis_faces',k,axis_faces[k][0],axis_faces[k][1],
+            #axis_faces[k][2])
+            f.write('f '+
+                    ('%i' % axis_faces[k][0])+' '+
+                    ('%i' % axis_faces[k][1])+' '+
+                    ('%i' % axis_faces[k][2])+'\n')
 
         f.close()
         

@@ -769,7 +769,8 @@ class yt_plot_base(plot_base):
         return
     
     def yt_text_to_points(self,veco,vecx,vecy,text,dpi=100,font=30,
-                          textcolor=(1,1,1,0.5),show=False,filename=''):
+                          textcolor=(1,1,1,0.5),show=False,filename='',
+                          facecolor=(0,0,0)):
         """
         Take three 3D vectors 'veco' (origin), 'vecx' (x direction) and
         'vecy' (y direction), and a string of text ('text'), and
@@ -801,8 +802,8 @@ class yt_plot_base(plot_base):
         plot.rc('text',usetex=True)
         fig=plot.figure(1,figsize=(6.4,4.8),dpi=dpi)
         axes=plot.axes([0,0,1,1])
-        fig.set_facecolor((0,0,0))
-        axes.set_facecolor((0,0,0))
+        fig.set_facecolor(facecolor)
+        axes.set_facecolor(facecolor)
 
         from matplotlib.colors import to_rgba
         alpha=to_rgba(textcolor)[3]
@@ -819,13 +820,18 @@ class yt_plot_base(plot_base):
             plot.show()
             
         X=numpy.array(fig.canvas.renderer._renderer)
+        #print("shapex:",numpy.shape(X))
         Y=[]
         Y2=[]
 
         # Note that the array is flipped, so ymax is obtained
         # from the width and xmax is obtained from the height
-        ymax=int(fig.get_dpi()*fig.get_figwidth())
-        xmax=int(fig.get_dpi()*fig.get_figheight())
+        #ymax=int(fig.get_dpi()*fig.get_figwidth())
+        #xmax=int(fig.get_dpi()*fig.get_figheight())
+        
+        xmax=numpy.shape(X)[0]
+        ymax=numpy.shape(X)[1]
+        #print('xmax,ymax',xmax,ymax)
         
         for i in range(0,xmax):
             for j in range(0,ymax):
