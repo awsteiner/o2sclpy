@@ -36,8 +36,8 @@ from o2sclpy.doc_data import cmaps, new_cmaps, extra_types
 from o2sclpy.doc_data import acol_help_topics
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
-from o2sclpy.utils import force_bytes, default_plot
-from o2sclpy.utils import is_number
+from o2sclpy.utils import force_bytes, default_plot, fv_cat
+from o2sclpy.utils import is_number, arrow, icosahedron
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import string_equal_dash
 from o2sclpy.utils import force_string, remove_spaces
@@ -1139,210 +1139,417 @@ class o2graph_plotter(yt_plot_base):
         amt=acol_manager(self.link2,amp)
 
         kwstring=''
-        if curr_type!=b'table3d':
+        if curr_type!=b'table3d' and curr_type!=b'table':
             print("Command 'den-plot-rgb' not supported for type",
                   curr_type,".")
             return
 
-        slice=args[0]
-        filename=args[1]
-        if len(args)>=3:
-            kwstring=args[2]
-
-        dctt=string_to_dict2(kwstring)
-        cmap=dctt.pop('cmap','')
-        mtl_file=dctt.pop('mtl_file','')
-
-        table3d=amt.get_table3d_obj()
-        nxt=table3d.get_nx()
-        nyt=table3d.get_ny()
-        sl=table3d.get_slice(slice).to_numpy()
-        xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
-        ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
-        x_min=numpy.min(xgrid)
-        x_max=numpy.max(xgrid)
-        y_min=numpy.min(ygrid)
-        y_max=numpy.max(ygrid)
-        sl_min=numpy.min(sl)
-        sl_max=numpy.max(sl)
-
-        colors=False
-        color_map=0
-        norm=0
+        if curr_type==b'table3d':
         
-        if cmap!='' and mtl_file!='':
-            f2=open(mtl_file,'w')
+            slice=args[0]
+            filename=args[1]
+            if len(args)>=3:
+                kwstring=args[2]
+    
+            dctt=string_to_dict2(kwstring)
+            cmap=dctt.pop('cmap','')
+            mtl_file=dctt.pop('mtl_file','')
+    
+            table3d=amt.get_table3d_obj()
+            nxt=table3d.get_nx()
+            nyt=table3d.get_ny()
+            sl=table3d.get_slice(slice).to_numpy()
+            xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
+            ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
+            x_min=numpy.min(xgrid)
+            x_max=numpy.max(xgrid)
+            y_min=numpy.min(ygrid)
+            y_max=numpy.max(ygrid)
+            sl_min=numpy.min(sl)
+            sl_max=numpy.max(sl)
             
-            f2.write('newmtl axis\n')
-            f2.write('Ka 1.0 1.0 1.0\n')
-            f2.write('Kd 1.0 1.0 1.0\n')
-            f2.write('Ks 0.0 0.0 0.0\n')
-            f2.write('Ns 0.0\n')
-            
-            import matplotlib.cm as cm
-            from matplotlib.colors import Normalize
-            import matplotlib.pyplot as plot
-            
-            color_map=cm.get_cmap(cmap)
-            norm=plot.Normalize(0,255)
-            
-            for i in range(0,256):
+            arr_vert,arr_face=arrow(0,0,0,1,0,0,group='x_axis')
+            arr_vert2,arr_face2=arrow(0,0,0,0,1,0,group='y_axis')
+            arr_vert3,arr_face3=arrow(0,0,0,0,0,1,group='z_axis')
 
-                rgb=color_map(norm(float(i)))[:3]
-                print(i,rgb)
+            axis_vert,axis_face=fv_cat([arr_vert,arr_vert2,arr_vert3],
+                                       [arr_face,arr_face2,arr_face3])
+    
+            colors=False
+            color_map=0
+            norm=0
+            
+            if cmap!='' and mtl_file!='':
+                f2=open(mtl_file,'w')
                 
-                f2.write('newmtl cmap'+str(i)+'\n')
-                f2.write('Ka '+str(rgb[0])+' '+str(rgb[1])+' '+
-                         str(rgb[2])+'\n')
-                f2.write('Kd '+str(rgb[0])+' '+str(rgb[1])+' '+
-                         str(rgb[2])+'\n')
+                f2.write('newmtl axis\n')
+                f2.write('Ka 1.0 1.0 1.0\n')
+                f2.write('Kd 1.0 1.0 1.0\n')
                 f2.write('Ks 0.0 0.0 0.0\n')
                 f2.write('Ns 0.0\n')
                 
-            f2.close()
-            colors=True
-            
-        f=open(filename,'w')
-
-        if colors:
-            f.write('mtllib '+mtl_file+'\n')
-
-        vertices=[]
-        axis_faces=[]
-        plot_faces=[]
-        k=1
-        for i in range(0,nxt):
-            for j in range(0,nyt):
-                arr=[(xgrid[i]-x_min)/(x_max-x_min),
-                     (ygrid[j]-y_min)/(y_max-y_min),
-                     (sl[i,j]-sl_min)/(sl_max-sl_min)]
+                import matplotlib.cm as cm
+                from matplotlib.colors import Normalize
+                import matplotlib.pyplot as plot
+                
+                color_map=cm.get_cmap(cmap)
+                norm=plot.Normalize(0,255)
+                
+                for i in range(0,256):
+    
+                    rgb=color_map(norm(float(i)))[:3]
+                    #print(i,rgb)
+                    
+                    f2.write('newmtl cmap'+str(i)+'\n')
+                    f2.write('Ka '+str(rgb[0])+' '+str(rgb[1])+' '+
+                             str(rgb[2])+'\n')
+                    f2.write('Kd '+str(rgb[0])+' '+str(rgb[1])+' '+
+                             str(rgb[2])+'\n')
+                    f2.write('Ks 0.0 0.0 0.0\n')
+                    f2.write('Ns 0.0\n')
+                    
+                f2.close()
+                colors=True
+                
+            vertices=[]
+            axis_faces=[]
+            plot_faces=[]
+            k=1
+            for i in range(0,nxt):
+                for j in range(0,nyt):
+                    arr=[(xgrid[i]-x_min)/(x_max-x_min),
+                         (ygrid[j]-y_min)/(y_max-y_min),
+                         (sl[i,j]-sl_min)/(sl_max-sl_min)]
+                    vertices.append(arr)
+                    #print('vert',i,j,arr)
+                    #f.write('v '+('%7.6e' % arr[0])+' '+
+                    #('%7.6e' % arr[1])+' '+
+                    #('%7.6e' % arr[2])+'\n')
+                    if i<nxt-1 and j<nyt-1:
+                        arr2=[k,k+1,k+nyt,arr[2]]
+                        #print('face',arr2)
+                        plot_faces.append(arr2)
+                        arr3=[k+1,k+1+nyt,k+nyt,arr[2]]
+                        #print('face',arr3)
+                        plot_faces.append(arr3)
+                    k=k+1
+    
+            #print('axes')
+            rad=0.02
+            n_theta=20
+            for i in range(0,n_theta):
+                theta=float(i)*2.0*numpy.pi/n_theta
+                
+                arr=[rad*numpy.cos(theta),
+                     rad*numpy.sin(theta),0]
                 vertices.append(arr)
-                print('vert',i,j,arr)
+                #print('vert',i,k,arr)
+                #f.write('v '+('%7.6e' % arr[0])+' '+
+                #('%7.6e' % arr[1])+' '+
+                #('%7.6e' % arr[2])+'\n')
+                arr=[rad*numpy.cos(theta),
+                     rad*numpy.sin(theta),1]
+                vertices.append(arr)
+                #print('vert',i,k+1,arr)
+                #f.write('v '+('%7.6e' % arr[0])+' '+
+                #('%7.6e' % arr[1])+' '+
+                #('%7.6e' % arr[2])+'\n')
+    
+                if i<n_theta-1:
+                    arr2=[k,k+1,k+6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6,k+7]
+                    axis_faces.append(arr3)
+                else:
+                    arr2=[k,k+1,k+6-n_theta*6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
+                    axis_faces.append(arr3)
+                
+                k=k+2
+                
+                arr=[0,rad*numpy.cos(theta),
+                     rad*numpy.sin(theta)]
+                vertices.append(arr)
+                #print('vert',i,k,arr)
+                #f.write('v '+('%7.6e' % arr[0])+' '+
+                #('%7.6e' % arr[1])+' '+
+                #('%7.6e' % arr[2])+'\n')
+                arr=[1,rad*numpy.cos(theta),
+                     rad*numpy.sin(theta)]
+                vertices.append(arr)
+                #print('vert',i,k+1,arr)
+                #f.write('v '+('%7.6e' % arr[0])+' '+
+                #('%7.6e' % arr[1])+' '+
+                #('%7.6e' % arr[2])+'\n')
+                
+                if i<n_theta-1:
+                    arr2=[k,k+1,k+6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6,k+7]
+                    axis_faces.append(arr3)
+                else:
+                    arr2=[k,k+1,k+6-n_theta*6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
+                    axis_faces.append(arr3)
+                
+                k=k+2
+                
+                arr=[rad*numpy.cos(theta),0,
+                     rad*numpy.sin(theta)]
+                vertices.append(arr)
+                #print('vert',i,k,arr)
+                #f.write('v '+('%7.6e' % arr[0])+' '+
+                #('%7.6e' % arr[1])+' '+
+                #('%7.6e' % arr[2])+'\n')
+                arr=[rad*numpy.cos(theta),1,
+                     rad*numpy.sin(theta)]
+                vertices.append(arr)
+                #print('vert',i,k+1,arr)
+                #f.write('v '+('%7.6e' % arr[0])+' '+
+                #('%7.6e' % arr[1])+' '+
+                #('%7.6e' % arr[2])+'\n')
+    
+                if i<n_theta-1:
+                    arr2=[k,k+1,k+6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6,k+7]
+                    axis_faces.append(arr3)
+                else:
+                    arr2=[k,k+1,k+6-n_theta*6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
+                    axis_faces.append(arr3)
+                
+                k=k+2
+    
+            f=open(filename,'w')
+    
+            #if colors:
+            #f.write('mtllib '+mtl_file+'\n')
+
+            for k in range(0,len(axis_vert)):
+                f.write('v '+
+                        ('%7.6e' % axis_vert[k][0])+' '+
+                        ('%7.6e' % axis_vert[k][1])+' '+
+                        ('%7.6e' % axis_vert[k][2])+'\n')
+                
+            #f.write('g plot\n')
+            for k in range(0,len(axis_face)):
+                #print('axis_face',k,axis_face[k][0],axis_face[k][1],
+                #axis_face[k][2])
+                #if colors:
+                #f.write('usemtl cmap'+str(int(axis_face[k][3]*255.0))+'\n')
+                f.write('f '+
+                        ('%i' % axis_face[k][0])+' '+
+                        ('%i' % axis_face[k][1])+' '+
+                        ('%i' % axis_face[k][2])+'\n')
+                for j in range(0,3):
+                    if axis_face[k][j]-1>=len(axis_vert):
+                        print('Problem with vertex',j,'of face',k+1)
+                        quit()
+            #f.write('g axis\n')
+            #if colors:
+            #f.write('usemtl axis\n')
+            #for k in range(0,len(axis_faces)):
+            #print('axis_faces',k,axis_faces[k][0],axis_faces[k][1],
+            #axis_faces[k][2])
+            #f.write('f '+
+            #('%i' % axis_faces[k][0])+' '+
+            #('%i' % axis_faces[k][1])+' '+
+            #('%i' % axis_faces[k][2])+'\n')
+    
+            f.close()
+
+        else:
+
+            col_x=args[0]
+            col_y=args[1]
+            col_z=args[2]
+            filename=args[3]
+            if len(args)>=5:
+                kwstring=args[4]
+    
+            dctt=string_to_dict2(kwstring)
+            cmap=dctt.pop('cmap','')
+            mtl_file=dctt.pop('mtl_file','')
+            col_r=dctt.pop('col_r','')
+            col_g=dctt.pop('col_g','')
+            col_b=dctt.pop('col_b','')
+    
+            table=amt.get_table_obj()
+            n=table3d.get_nlines()
+            
+            xlo=numpy.min(table[col_x])
+            xhi=numpy.max(table[col_x])
+            ylo=numpy.min(table[col_y])
+            yhi=numpy.max(table[col_y])
+            zlo=numpy.min(table[col_z])
+            zlo=numpy.max(table[col_z])
+            if col_r!='':
+                rlo=numpy.min(table[col_r])
+                rhi=numpy.max(table[col_r])
+            if col_g!='':
+                glo=numpy.min(table[col_g])
+                ghi=numpy.max(table[col_g])
+            if col_b!='':
+                blo=numpy.min(table[col_b])
+                bhi=numpy.max(table[col_b])
+    
+            colors=False
+            color_map=0
+            norm=0
+            
+            f=open(filename,'w')
+    
+            if mtl_file!='':
+                colors=True
+                f.write('mtllib '+mtl_file+'\n')
+                
+            vertices=[]
+            axis_faces=[]
+            plot_faces=[]
+            color_cache=[]
+            k=1
+            for i in range(0,n):
+                x_norm=(table[col_x][i]-xlo)/(xhi-xlo)
+                y_norm=(table[col_y][i]-ylo)/(yhi-ylo)
+                z_norm=(table[col_z][i]-zlo)/(zhi-zlo)
+                # We choose not 255^3 colors but 17^3 colors 
+                r_norm=15*int(17*(table[col_z][i]-rlo)/(rhi-rlo))
+                g_norm=15*int(17*(table[col_z][i]-glo)/(ghi-glo))
+                b_norm=15*int(17*(table[col_z][i]-blo)/(bhi-blo))
+                
+                if [r_norm,g_norm,b_norm] not in color_cache:
+                    color_cache.append([r_norm,g_norm,b_norm])
+                col_index=color_cache.index([r_norm,g_norm,b_norm])
+                
+                point_vert,point_face=icosahedron(xnorm,ynorm,znorm,0.04,
+                                                  col_index)
+                
+                n_curr=len(vertices)
+                for j in range(0,len(point_vert)):
+                    vertices.append(point_vert)
+                for j in range(0,len(point_face)):
+                    plot_faces.append([point_face[j][0]+n_curr,
+                                       point_face[j][1]+n_curr,
+                                       point_face[j][2]+n_curr,
+                                       point_face[j][3]])
+    
+            print('axes')
+            rad=0.01
+            n_theta=20
+            for i in range(0,n_theta):
+                theta=float(i)*2.0*numpy.pi/n_theta
+                
+                arr=[rad*numpy.cos(theta),
+                     rad*numpy.sin(theta),0]
+                vertices.append(arr)
+                #print('vert',i,k,arr)
                 f.write('v '+('%7.6e' % arr[0])+' '+
                         ('%7.6e' % arr[1])+' '+
                         ('%7.6e' % arr[2])+'\n')
-                if i<nxt-1 and j<nyt-1:
-                    arr2=[k,k+1,k+nyt,arr[2]]
-                    print('face',arr2)
-                    plot_faces.append(arr2)
-                    arr3=[k+1,k+1+nyt,k+nyt,arr[2]]
-                    print('face',arr3)
-                    plot_faces.append(arr3)
-                k=k+1
-
-        print('axes')
-        rad=0.02
-        n_theta=20
-        for i in range(0,n_theta):
-            theta=float(i)*2.0*numpy.pi/n_theta
-            
-            arr=[rad*numpy.cos(theta),
-                 rad*numpy.sin(theta),0]
-            vertices.append(arr)
-            print('vert',i,k,arr)
-            f.write('v '+('%7.6e' % arr[0])+' '+
-                    ('%7.6e' % arr[1])+' '+
-                    ('%7.6e' % arr[2])+'\n')
-            arr=[rad*numpy.cos(theta),
-                 rad*numpy.sin(theta),1]
-            vertices.append(arr)
-            print('vert',i,k+1,arr)
-            f.write('v '+('%7.6e' % arr[0])+' '+
-                    ('%7.6e' % arr[1])+' '+
-                    ('%7.6e' % arr[2])+'\n')
-
-            if i<n_theta-1:
-                arr2=[k,k+1,k+6]
-                axis_faces.append(arr2)
-                arr3=[k+1,k+6,k+7]
-                axis_faces.append(arr3)
-            else:
-                arr2=[k,k+1,k+6-n_theta*6]
-                axis_faces.append(arr2)
-                arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                axis_faces.append(arr3)
-            
-            k=k+2
-            
-            arr=[0,rad*numpy.cos(theta),
-                 rad*numpy.sin(theta)]
-            vertices.append(arr)
-            print('vert',i,k,arr)
-            f.write('v '+('%7.6e' % arr[0])+' '+
-                    ('%7.6e' % arr[1])+' '+
-                    ('%7.6e' % arr[2])+'\n')
-            arr=[1,rad*numpy.cos(theta),
-                 rad*numpy.sin(theta)]
-            vertices.append(arr)
-            print('vert',i,k+1,arr)
-            f.write('v '+('%7.6e' % arr[0])+' '+
-                    ('%7.6e' % arr[1])+' '+
-                    ('%7.6e' % arr[2])+'\n')
-            
-            if i<n_theta-1:
-                arr2=[k,k+1,k+6]
-                axis_faces.append(arr2)
-                arr3=[k+1,k+6,k+7]
-                axis_faces.append(arr3)
-            else:
-                arr2=[k,k+1,k+6-n_theta*6]
-                axis_faces.append(arr2)
-                arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                axis_faces.append(arr3)
-            
-            k=k+2
-            
-            arr=[rad*numpy.cos(theta),0,
-                 rad*numpy.sin(theta)]
-            vertices.append(arr)
-            print('vert',i,k,arr)
-            f.write('v '+('%7.6e' % arr[0])+' '+
-                    ('%7.6e' % arr[1])+' '+
-                    ('%7.6e' % arr[2])+'\n')
-            arr=[rad*numpy.cos(theta),1,
-                 rad*numpy.sin(theta)]
-            vertices.append(arr)
-            print('vert',i,k+1,arr)
-            f.write('v '+('%7.6e' % arr[0])+' '+
-                    ('%7.6e' % arr[1])+' '+
-                    ('%7.6e' % arr[2])+'\n')
-
-            if i<n_theta-1:
-                arr2=[k,k+1,k+6]
-                axis_faces.append(arr2)
-                arr3=[k+1,k+6,k+7]
-                axis_faces.append(arr3)
-            else:
-                arr2=[k,k+1,k+6-n_theta*6]
-                axis_faces.append(arr2)
-                arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                axis_faces.append(arr3)
-            
-            k=k+2
-
-        f.write('g plot\n')
-        for k in range(0,len(plot_faces)):
-            #print('plot_faces',k,plot_faces[k][0],plot_faces[k][1],
-            #plot_faces[k][2])
+                arr=[rad*numpy.cos(theta),
+                     rad*numpy.sin(theta),1]
+                vertices.append(arr)
+                #print('vert',i,k+1,arr)
+                f.write('v '+('%7.6e' % arr[0])+' '+
+                        ('%7.6e' % arr[1])+' '+
+                        ('%7.6e' % arr[2])+'\n')
+    
+                if i<n_theta-1:
+                    arr2=[k,k+1,k+6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6,k+7]
+                    axis_faces.append(arr3)
+                else:
+                    arr2=[k,k+1,k+6-n_theta*6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
+                    axis_faces.append(arr3)
+                
+                k=k+2
+                
+                arr=[0,rad*numpy.cos(theta),
+                     rad*numpy.sin(theta)]
+                vertices.append(arr)
+                #print('vert',i,k,arr)
+                f.write('v '+('%7.6e' % arr[0])+' '+
+                        ('%7.6e' % arr[1])+' '+
+                        ('%7.6e' % arr[2])+'\n')
+                arr=[1,rad*numpy.cos(theta),
+                     rad*numpy.sin(theta)]
+                vertices.append(arr)
+                #print('vert',i,k+1,arr)
+                f.write('v '+('%7.6e' % arr[0])+' '+
+                        ('%7.6e' % arr[1])+' '+
+                        ('%7.6e' % arr[2])+'\n')
+                
+                if i<n_theta-1:
+                    arr2=[k,k+1,k+6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6,k+7]
+                    axis_faces.append(arr3)
+                else:
+                    arr2=[k,k+1,k+6-n_theta*6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
+                    axis_faces.append(arr3)
+                
+                k=k+2
+                
+                arr=[rad*numpy.cos(theta),0,
+                     rad*numpy.sin(theta)]
+                vertices.append(arr)
+                #print('vert',i,k,arr)
+                f.write('v '+('%7.6e' % arr[0])+' '+
+                        ('%7.6e' % arr[1])+' '+
+                        ('%7.6e' % arr[2])+'\n')
+                arr=[rad*numpy.cos(theta),1,
+                     rad*numpy.sin(theta)]
+                vertices.append(arr)
+                #print('vert',i,k+1,arr)
+                f.write('v '+('%7.6e' % arr[0])+' '+
+                        ('%7.6e' % arr[1])+' '+
+                        ('%7.6e' % arr[2])+'\n')
+    
+                if i<n_theta-1:
+                    arr2=[k,k+1,k+6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6,k+7]
+                    axis_faces.append(arr3)
+                else:
+                    arr2=[k,k+1,k+6-n_theta*6]
+                    axis_faces.append(arr2)
+                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
+                    axis_faces.append(arr3)
+                
+                k=k+2
+    
+            f.write('g plot\n')
+            for k in range(0,len(plot_faces)):
+                #print('plot_faces',k,plot_faces[k][0],plot_faces[k][1],
+                #plot_faces[k][2])
+                if colors:
+                    f.write('usemtl cmap'+str(int(plot_faces[k][3]*255.0))+'\n')
+                f.write('f '+
+                        ('%i' % plot_faces[k][0])+' '+
+                        ('%i' % plot_faces[k][1])+' '+
+                        ('%i' % plot_faces[k][2])+'\n')
+            f.write('g axis\n')
             if colors:
-                f.write('usemtl cmap'+str(int(plot_faces[k][3]*255.0))+'\n')
-            f.write('f '+
-                    ('%i' % plot_faces[k][0])+' '+
-                    ('%i' % plot_faces[k][1])+' '+
-                    ('%i' % plot_faces[k][2])+'\n')
-        f.write('g axis\n')
-        if colors:
-            f.write('usemtl axis\n')
-        for k in range(0,len(axis_faces)):
-            #print('axis_faces',k,axis_faces[k][0],axis_faces[k][1],
-            #axis_faces[k][2])
-            f.write('f '+
-                    ('%i' % axis_faces[k][0])+' '+
-                    ('%i' % axis_faces[k][1])+' '+
-                    ('%i' % axis_faces[k][2])+'\n')
+                f.write('usemtl axis\n')
+            for k in range(0,len(axis_faces)):
+                #print('axis_faces',k,axis_faces[k][0],axis_faces[k][1],
+                #axis_faces[k][2])
+                f.write('f '+
+                        ('%i' % axis_faces[k][0])+' '+
+                        ('%i' % axis_faces[k][1])+' '+
+                        ('%i' % axis_faces[k][2])+'\n')
+    
+            f.close()
 
-        f.close()
-        
         return
 
     def make_png_o2graph(self,o2scl,amp,link,args):

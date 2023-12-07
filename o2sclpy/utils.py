@@ -36,6 +36,187 @@ import numpy
 #import ctypes
 #from ctypes.util import find_library
 
+def fv_cat(verts,faces):
+    """Concatenate a set of vertices and triangular faces, taking care to
+    adjust the vertex references in each face.
+
+    The input variable verts must be a list of 3-element lists (for x,
+    y, and z). The input variable faces must be a list of at least
+    three elements (one for each vertex in the triangle), but may
+    also contain additional elements, such as strings to represent
+    the group and the material.
+    """
+    if len(verts)==0 or len(faces)!=len(verts):
+        print('fv_append failed.')
+        quit()
+        
+    import copy
+    vert=copy.deepcopy(verts[0])
+    face=copy.deepcopy(faces[0])
+
+    partial_sum=len(verts[0])
+    for j in range(1,len(verts)):
+        vert=vert+verts[j]
+        for k in range(0,len(faces[j])):
+            arr=[]
+            for ell in range(0,len(faces[j][k])):
+                if ell<3:
+                    arr.append(faces[j][k][ell]+partial_sum)
+                else:
+                    arr.append(faces[j][k][ell])
+            face.append(arr)
+        partial_sum=partial_sum+len(verts[j])
+    return vert,face
+
+def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
+          head_width=3,group='',mat=''):
+    """Create a set of vertices and triangular faces for an
+    arrow.
+
+    The tail a cylinder with radius r beginning at (x1,y1,z1) and the
+    head is a cone with radius 2r with a point at (x2,y2,z2). The
+    variable tail_ratio specifies the length of the cylinder divided
+    by the distance between point 1 and point 2. The argument n_theta
+    specifies the number of vertices in the azimuthal direction.
+
+    This function returns a pair of two lists, the first is the
+    vertices and the second are the faces.
+    """
+
+    # The length of the arrow
+    arrow_len=numpy.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)
+
+    if r==0:
+        r=arrow_len/80
+    
+    # The end point of the tail (and the starting point of the head)
+    tail_end=[x1+(x2-x1)*tail_ratio,y1+(y2-y1)*tail_ratio,
+              z1+(z2-z1)*tail_ratio]
+    
+    vert=[]
+    face=[]
+
+    # Construct an arbitrary vector not along the arrow's axis
+    arb=[1,0,0]
+    if y1==y2 and z1==z2:
+        arb=[0,1,0]
+
+    # Take the transverse component
+    arb=[arb[0]-arb[0]*(x2-x1),
+         arb[1]-arb[1]*(y2-y1),
+         arb[2]-arb[2]*(z2-z1)]
+
+    # Renormalize to the correct length
+    arb_norm=numpy.sqrt(arb[0]*arb[0]+arb[1]*arb[1]+arb[2]*arb[2])
+    arb[0]=arb[0]/arb_norm*r
+    arb[1]=arb[1]/arb_norm*r
+    arb[2]=arb[2]/arb_norm*r
+
+    # The cross product of the arrow's axis with arb
+    cross=[(y2-y1)*arb[2]-(z2-z1)*arb[1],
+           (z2-z1)*arb[0]-(x2-x1)*arb[2],
+           (x2-x1)*arb[1]-(y2-y1)*arb[0]]
+    cross_norm=numpy.sqrt(cross[0]*cross[0]+cross[1]*cross[1]+
+                          cross[2]*cross[2])
+    for j in range(0,3):
+        cross[j]=cross[j]/cross_norm*r
+
+    # Handle the tail
+    for i in range(0,n_theta):
+        theta=float(i)*numpy.pi*2/float(n_theta)
+        vert.append([x1+arb[0]*numpy.cos(theta)+
+                     cross[0]*numpy.sin(theta),
+                     y1+arb[1]*numpy.cos(theta)+
+                     cross[1]*numpy.sin(theta),
+                     z1+arb[2]*numpy.cos(theta)+
+                     cross[2]*numpy.sin(theta)])
+        vert.append([tail_end[0]+arb[0]*numpy.cos(theta)+
+                     cross[0]*numpy.sin(theta),
+                     tail_end[1]+arb[1]*numpy.cos(theta)+
+                     cross[1]*numpy.sin(theta),
+                     tail_end[2]+arb[2]*numpy.cos(theta)+
+                     cross[2]*numpy.sin(theta)])
+        if i!=n_theta-1:
+            face.append([2*i+1,2*i+2,2*i+3,group,mat])
+            face.append([2*i+3,2*i+2,2*i+4,group,mat])
+        else:
+            face.append([2*i+1,2*i+2,1,group,mat])
+            face.append([1,2*i+2,2,group,mat])
+
+    # Handle the head
+    vert.append([x2,y2,z2])
+    point_index=len(vert)
+    
+    for j in range(0,3):
+        cross[j]=cross[j]/cross_norm*r*2.0
+        
+    for i in range(0,n_theta):
+        theta=float(i)*numpy.pi*2/float(n_theta)
+        vert.append([tail_end[0]+head_width*arb[0]*numpy.cos(theta)+
+                     head_width*cross[0]*numpy.sin(theta),
+                     tail_end[1]+head_width*arb[1]*numpy.cos(theta)+
+                     head_width*cross[1]*numpy.sin(theta),
+                     tail_end[2]+head_width*arb[2]*numpy.cos(theta)+
+                     head_width*cross[2]*numpy.sin(theta)])
+        if i==n_theta-1:
+            face.append([point_index+i+1,point_index+1,
+                         point_index,group,mat])
+        else:
+            face.append([point_index+i+1,point_index+i+2,
+                         point_index,group,mat])
+        
+    return vert,face
+
+def icosahedron(x,y,z,r,ix):
+    """Construct the vertices and faces of an icosahedron centered at
+    (x,y,z) with radius r
+    """
+    phi=(1.0+numpy.sqrt(5.0))*0.5
+    b=r/phi;
+    
+    vert=[]
+    vert.append([0,b,-r])
+    vert.append([b,r,0])
+    vert.append([-b,r,0])
+    vert.append([0,b,r])
+    vert.append([0,-b,r])
+    vert.append([-r,0,b])
+    vert.append([0,-b,-r])
+    vert.append([r,0,-b])
+    vert.append([r,0,b])
+    vert.append([-r,0,-b])
+    vert.append([b,-r,0])
+    vert.append([-b,-r,0])
+
+    for i in range(0,len(vert)):
+        vert[i][0]=vert[i][0]+x
+        vert[i][1]=vert[i][1]+y
+        vert[i][2]=vert[i][2]+z
+
+    face=[]
+    face.append([3,2,1,ix])
+    face.append([2,3,4,ix])
+    face.append([6,5,4,ix])
+    face.append([5,9,4,ix])
+    face.append([8,7,1,ix])
+    face.append([7,10,1,ix])
+    face.append([12,11,5,ix])
+    face.append([11,12,7,ix])
+    face.append([10,6,3,ix])
+    face.append([6,10,12,ix])
+    face.append([9,8,2,ix])
+    face.append([8,9,11,ix])
+    face.append([3,6,4,ix])
+    face.append([9,2,4,ix])
+    face.append([10,3,1,ix])
+    face.append([2,8,1,ix])
+    face.append([12,10,7,ix])
+    face.append([8,11,7,ix])
+    face.append([6,12,5,ix])
+    face.append([11,9,5,ix])
+
+    return vert,face
+    
 def cpp_test(x):
     """
     Desc
