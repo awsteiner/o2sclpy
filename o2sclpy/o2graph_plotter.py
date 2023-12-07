@@ -448,7 +448,7 @@ def reformat_python_docs(cmd,doc_str,amp,link,
                 if last_pgh_colons:
                     long_help=doc_replacements(reflist2[j].replace('\n',' '),
                                                ter,amp,link,script=True)
-                    tmplist=long_help.split(' \ ')
+                    tmplist=long_help.split(' \\ ')
                 else:
                     long_help=doc_replacements(reflist2[j].replace('\n',' '),
                                                ter,amp,link)
@@ -603,6 +603,50 @@ def table_get_column(o2scl,amp,link,name,return_pointer=False):
 
     return col
 
+from typing import ClassVar
+
+class material:
+    name: ClassVar[str]=''
+    Ka: ClassVar[list[float]]=[1.0,1.0,1.0]
+    Kd: ClassVar[list[float]]
+    Ks: ClassVar[list[float]]
+    Ns: ClassVar[float]
+    txt: ClassVar[str]
+
+    def __init__(name: str, Ka: list[float]):
+        self.name=name
+        self.Ka=Ka
+        return
+    
+class faces:
+    face: ClassVar[list[float]]
+    name: ClassVar[str]=''
+    mat: ClassVar[str]=''
+
+class threed_objects:
+    """
+    """
+    vert: ClassVar[list[list[float]]]=[]
+    face: ClassVar[list[faces]]
+    mat: ClassVar[list[material]]
+
+    def add_object(self, v: list[float], f: faces, m: material | int = 0):
+        """
+        """
+        lv=len(vert)
+        for i in range(0,len(v)):
+            vert.append(v[i])
+        for i in range(0,len(f.face)):
+            for j in range(0,3):
+                f.face[i][j]=f.face[i][j]+lv
+        if m!=0:
+           mat.append(m)
+           f.mat=m.name
+           mat.append(m)
+        face.append(f)
+        
+        return
+    
 class o2graph_plotter(yt_plot_base):
     """
     A plotting class for the o2graph script. This class is a child of the
