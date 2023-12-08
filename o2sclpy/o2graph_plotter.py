@@ -36,7 +36,7 @@ from o2sclpy.doc_data import cmaps, new_cmaps, extra_types
 from o2sclpy.doc_data import acol_help_topics
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
-from o2sclpy.utils import force_bytes, default_plot, fv_cat
+from o2sclpy.utils import force_bytes, default_plot
 from o2sclpy.utils import is_number, arrow, icosahedron
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import string_equal_dash
@@ -603,49 +603,317 @@ def table_get_column(o2scl,amp,link,name,return_pointer=False):
 
     return col
 
-from typing import ClassVar
-
 class material:
-    name: ClassVar[str]=''
-    Ka: ClassVar[list[float]]=[1.0,1.0,1.0]
-    Kd: ClassVar[list[float]]
-    Ks: ClassVar[list[float]]
-    Ns: ClassVar[float]
-    txt: ClassVar[str]
+    """
+    A simple material for a 3-d visualization
+    """
+    name: str
+    """
+    The name of the visualization
+    """
+    Ka: list[float]
+    """
+    The ambient color
+    """
+    Kd: list[float]
+    """
+    The diffuse color
+    """
+    Ks: list[float]
+    """
+    The specular color
+    """
+    Ns: float
+    """
+    The specular exponent
+    """
+    txt: str
+    """
+    The texture file
+    """
 
-    def __init__(name: str, Ka: list[float]):
+    def __init__(self, name: str, Ka: list[float]):
         self.name=name
         self.Ka=Ka
+        self.Kd=Ka
+        self.Ks=[0,0,0]
+        self.Ns=0
         return
     
-class faces:
-    face: ClassVar[list[float]]
-    name: ClassVar[str]=''
-    mat: ClassVar[str]=''
+class group_of_faces:
+    """
+    A group of faces
+    """
+    faces: list[list[int | str]]
+    """
+    The list of faces
+    """
+    name: str=''
+    """
+    The name of the material (blank for none, or for different material for
+    each face)
+    """
+    mat: str=''
+
+    def __init__(self, name: str, faces: list[list[int | str]],
+                 mat: str = ''):
+        """
+        Create a group given the specfied list of faces, name, and 
+        material.
+        """
+        self.name=name
+        self.faces=faces
+        self.mat=mat
+        return
+
+    def sort_by_mat(self):
+        """
+        Sort the faces by material name
+        """
+
+        # If no materials are specified in faces, there is nothing to do
+        found_four=False
+        for i in range(0,len(self.faces)):
+            if len(self.faces[i])>=4:
+                found_four=True
+        if found_four==False:
+            return
+
+        # Find if there at least two distinct materials 
+        two_mats=False
+        for i in range(0,len(self.faces)):
+            if (len(self.faces[i])>=4 and
+                self.faces[i][3]!=self.mat):
+                two_mats=True
+            if (i>0 and len(self.faces[i])>=4 and
+                len(self.faces[i-1]>=4) and
+                self.faces[i][3]!=self.faces[i-1][3]):
+                two_mats=True
+
+        # If there are not two distinct materials, there's nothing to do
+        if two_mats==False:
+            return
+
+        # Reorganize faces by material name
+        mat_list=[]
+        faces2=[]
+
+        # First, if a global material is specified, add all faces
+        # which don't have a material and assume that they'll use the
+        # global material.
+        if self.mat!='':
+
+            # This is true if self.mat has been added to 'mat_list'
+            base_name_added=False
+            for i in range(0,len(self.faces)):
+                if len(self.faces[i])==3:
+                    if base_name_added==False:
+                        mat_list.append(self.mat)
+                        base_name_added=True
+                    faces2.append(self.faces[i])
+                    
+            if base_name_added==False:
+                print('In function sort_by_mat():')
+                print('  A material was specified in "mat", but no face',
+                      'uses that material.')
+
+        # Now go through the list and find faces not already added to
+        # mat_list
+        for i in range(0,len(self.faces)):
+            if len(self.faces[i])>=4:
+                mat_name=self.faces[i][3]
+                if mat_name not in mat_list:
+                    # If it's not found, then add the current face,
+                    # and loop over the remaining faces which match
+                    faces2.append(self.faces[i])
+                    for j in range(i+1,len(self.faces)):
+                        if len(self.faces[j])>=4:
+                            if self.faces[j][3]==mat_name:
+                                faces2.append(self.faces[j])
+
+        print(len(self.faces),len(faces2))
+        quit()
+                 
+        self.faces=faces2
+        return
 
 class threed_objects:
     """
+    A set of three-dimensional objects
     """
-    vert: ClassVar[list[list[float]]]=[]
-    face: ClassVar[list[faces]]
-    mat: ClassVar[list[material]]
+    vert_list: list[list[float]]=[]
+    """
+    List of vertices
+    """
+    gf_list: list[group_of_faces]=[]
+    """
+    List of groups of faces
+    """
+    mat_list: list[material]=[]
+    """
+    List of materials
+    """
 
-    def add_object(self, v: list[float], f: faces, m: material | int = 0):
+    def add_object(self, lv: list[list[float]],
+                   gf: group_of_faces):
+        """Add an object given 'lv', a list of vertices, and 'gf', a group of
+        triangular faces among those vertices.
         """
-        """
-        lv=len(vert)
-        for i in range(0,len(v)):
-            vert.append(v[i])
-        for i in range(0,len(f.face)):
+
+        # Find the first empty vertex index
+        len_lv=len(self.vert_list)
+
+        # Add all of the vertices
+        for i in range(0,len(lv)):
+            self.vert_list.append(lv[i])
+
+        # Iterate over each face
+        for i in range(0,len(gf.faces)):
+            
+            # Adjust the faces to refer to the correct vertices
             for j in range(0,3):
-                f.face[i][j]=f.face[i][j]+lv
-        if m!=0:
-           mat.append(m)
-           f.mat=m.name
-           mat.append(m)
-        face.append(f)
+                gf.faces[i][j]=gf.faces[i][j]+len_lv
+                
+            # Check if there is an undefined material in this face
+            if len(gf.faces[i])>=4:
+                mat_found=False
+                for k in range(0,len(self.mat_list)):
+                    if self.mat_list[k].name==gf.faces[i][3]:
+                        mat_found=True
+                if mat_found==False:
+                    print('Face',i,'refers to a material',
+                          gf.faces[i][3],'which is not in the list of',
+                          'materials.')
+                    quit()
+                    
+        # Check if there is an undefined material in the
+        # group_of_faces data member 'mat'
+        if gf.mat!='':
+            mat_found=False
+            for k in range(0,len(self.mat_list)):
+                if self.mat_list[k].name==gf.mat:
+                    mat_found=True
+            if mat_found==False:
+                print('The group of faces names a material',
+                      gf.mat,'which is not in the list of',
+                      'materials.')
+                quit()
+
+        # Sort the group of vertices by material for output later
+        for i in range(0,len(self.gf_list)):
+            self.gf_list[i].sort_by_mat()
+                
+        # Add the group of faces to the list
+        self.gf_list.append(gf)
         
         return
+
+    def add_object_mat(self, v: list[list[float]],
+                       gf: group_of_faces, m: material):
+        """Add an object given 'lv', a list of vertices, and 'gf', a group of
+        triangular faces among those vertices, and 'm', the material
+        for all of the faces.
+        """
+        gf.mat_list=m
+        # Add the material if not found
+        mat_found=False
+        for i in range(0,len(self.mat_list)):
+            if self.mat_list[i].name==m.name:
+                mat_found=True
+        if mat_found==False:
+            self.mat_list.append(m)
+        self.add_object(v,gf)
+        return
+
+    def add_object_mat_list(self, v: list[list[float]],
+                            gf: group_of_faces, lm: list[material]):
+        """Add an object given 'lv', a list of vertices, and 'gf', a group of
+        triangular faces among those vertices, and 'm', the material
+        for all of the faces.
+        """
+        for k in range(0,len(lm)):
+            # Add the material if not found
+            mat_found=False
+            for i in range(0,len(self.mat_list)):
+                if self.mat_list[i].name==lm[k].name:
+                    mat_found=True
+            if mat_found==False:
+                self.mat_list.append(lm[k])
+        self.add_object(v,gf)
+        return
+
+    def write_obj(self, prefix: str):
+        """Write all objects to an '.obj' file, creating a '.mtl' file if
+        necessary
+        """
+
+        # Remove suffix if it is present
+        if prefix[-4:]=='.obj':
+            prefix=prefix[:-4]
+        obj_file=prefix+'.obj'
+        mtl_file=prefix+'.mtl'
+        
+        f=open(obj_file,'w')
+        if len(self.mat_list)>0:
+            f.write('mtllib '+mtl_file+'\n')
+
+        # Add vertices
+        for k in range(0,len(self.vert_list)):
+            f.write('v '+
+                    ('%7.6e' % self.vert_list[k][0])+' '+
+                    ('%7.6e' % self.vert_list[k][1])+' '+
+                    ('%7.6e' % self.vert_list[k][2])+'\n')
+
+        # Add each set of faces as a group
+        for i in range(0,len(self.gf_list)):
+            f.write('g '+self.gf_list[i].name+'\n')
+            # If the base material is used, output that first
+            if (self.gf_list[i].mat!='' and
+                len(self.gf_list[i].faces[0])==3):
+                f.write('usemtl '+self.gf_list[i].mat+'\n')
+            for k in range(0,len(self.gf_list[i].faces)):
+                # Take care of the cases when we need to change materials
+                if k==0 and len(self.gf_list[i].faces[k])==4:
+                    f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
+                if (len(self.gf_list[i].faces[k-1])==3 and 
+                    len(self.gf_list[i].faces[k])>=4):
+                    f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
+                if (len(self.gf_list[i].faces[k-1])==4 and 
+                    len(self.gf_list[i].faces[k])>=4 and
+                    self.gf_list[i].faces[k-1][3]!=
+                    self.gf_list[i].faces[k][3]):
+                    f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
+                # Write the face
+                f.write('f '+
+                        ('%i' % self.gf_list[i].faces[k][0])+' '+
+                        ('%i' % self.gf_list[i].faces[k][1])+' '+
+                        ('%i' % self.gf_list[i].faces[k][2])+'\n')
+                # Check that the face refers to a valid vertex
+                for j in range(0,3):
+                    if self.gf_list[i].faces[k][j]-1>=len(self.vert_list):
+                        print('Problem with vertex',j,'of face',k+1,
+                              'in group',i)
+        f.close()
+
+        # Create the materials file
+        if len(self.mat_list)>0:
+            f=open(mtl_file,'w')
+            for i in range(0,len(self.mat_list)):
+                f.write('newmtl '+self.mat_list[i].name+'\n')
+                f.write('Ka '+str(self.mat_list[i].Ka[0])+' '+
+                        str(self.mat_list[i].Ka[1])+' '+
+                        str(self.mat_list[i].Ka[2])+'\n')
+                f.write('Kd '+str(self.mat_list[i].Kd[0])+' '+
+                        str(self.mat_list[i].Kd[1])+' '+
+                        str(self.mat_list[i].Kd[2])+'\n')
+                f.write('Ks '+str(self.mat_list[i].Ks[0])+' '+
+                        str(self.mat_list[i].Kd[1])+' '+
+                        str(self.mat_list[i].Kd[2])+'\n')
+                f.write('Ns '+str(self.mat_list[i].Ns)+'\n')
+            f.close()
+                        
+        return
+        
     
 class o2graph_plotter(yt_plot_base):
     """
@@ -1191,7 +1459,7 @@ class o2graph_plotter(yt_plot_base):
         if curr_type==b'table3d':
         
             slice=args[0]
-            filename=args[1]
+            prefix=args[1]
             if len(args)>=3:
                 kwstring=args[2]
     
@@ -1212,25 +1480,29 @@ class o2graph_plotter(yt_plot_base):
             sl_min=numpy.min(sl)
             sl_max=numpy.max(sl)
             
-            arr_vert,arr_face=arrow(0,0,0,1,0,0,group='x_axis')
-            arr_vert2,arr_face2=arrow(0,0,0,0,1,0,group='y_axis')
-            arr_vert3,arr_face3=arrow(0,0,0,0,0,1,group='z_axis')
+            arr_vert,arr_face=arrow(0,0,0,1,0,0)
+            arr_vert2,arr_face2=arrow(0,0,0,0,1,0)
+            arr_vert3,arr_face3=arrow(0,0,0,0,0,1)
 
-            axis_vert,axis_face=fv_cat([arr_vert,arr_vert2,arr_vert3],
-                                       [arr_face,arr_face2,arr_face3])
-    
+            white=material('white',[1,1,1])
+            
+            to=threed_objects()
+            to.add_object_mat(arr_vert,
+                              group_of_faces('x-axis',arr_face,'white'),
+                              white)
+            to.add_object_mat(arr_vert2,
+                              group_of_faces('y-axis',arr_face2,'white'),
+                              white)
+            to.add_object_mat(arr_vert3,
+                              group_of_faces('z-axis',arr_face3,'white'),
+                              white)
+
             colors=False
             color_map=0
             norm=0
+            ml=[]
             
-            if cmap!='' and mtl_file!='':
-                f2=open(mtl_file,'w')
-                
-                f2.write('newmtl axis\n')
-                f2.write('Ka 1.0 1.0 1.0\n')
-                f2.write('Kd 1.0 1.0 1.0\n')
-                f2.write('Ks 0.0 0.0 0.0\n')
-                f2.write('Ns 0.0\n')
+            if cmap!='':
                 
                 import matplotlib.cm as cm
                 from matplotlib.colors import Normalize
@@ -1240,171 +1512,49 @@ class o2graph_plotter(yt_plot_base):
                 norm=plot.Normalize(0,255)
                 
                 for i in range(0,256):
-    
                     rgb=color_map(norm(float(i)))[:3]
-                    #print(i,rgb)
+                    ml.append(material('cmap_'+str(i),[rgb[0],rgb[1],
+                                                       rgb[2]]))
                     
-                    f2.write('newmtl cmap'+str(i)+'\n')
-                    f2.write('Ka '+str(rgb[0])+' '+str(rgb[1])+' '+
-                             str(rgb[2])+'\n')
-                    f2.write('Kd '+str(rgb[0])+' '+str(rgb[1])+' '+
-                             str(rgb[2])+'\n')
-                    f2.write('Ks 0.0 0.0 0.0\n')
-                    f2.write('Ns 0.0\n')
-                    
-                f2.close()
                 colors=True
                 
-            vertices=[]
-            axis_faces=[]
-            plot_faces=[]
+            den_vert=[]
+            den_plot=[]
             k=1
             for i in range(0,nxt):
                 for j in range(0,nyt):
                     arr=[(xgrid[i]-x_min)/(x_max-x_min),
                          (ygrid[j]-y_min)/(y_max-y_min),
                          (sl[i,j]-sl_min)/(sl_max-sl_min)]
-                    vertices.append(arr)
-                    #print('vert',i,j,arr)
-                    #f.write('v '+('%7.6e' % arr[0])+' '+
-                    #('%7.6e' % arr[1])+' '+
-                    #('%7.6e' % arr[2])+'\n')
+                    den_vert.append(arr)
                     if i<nxt-1 and j<nyt-1:
-                        arr2=[k,k+1,k+nyt,arr[2]]
-                        #print('face',arr2)
-                        plot_faces.append(arr2)
-                        arr3=[k+1,k+1+nyt,k+nyt,arr[2]]
-                        #print('face',arr3)
-                        plot_faces.append(arr3)
+                        if colors==True:
+                            cmap_ix=int(arr[2]*255)
+                            arr2=[k,k+1,k+nyt,arr[2],'cmap_'+str(cmap_ix)]
+                            den_plot.append(arr2)
+                            arr3=[k+1,k+1+nyt,k+nyt,arr[2],
+                                  'cmap_'+str(cmap_ix)]
+                            den_plot.append(arr3)
+                        else:
+                            arr2=[k,k+1,k+nyt,arr[2]]
+                            den_plot.append(arr2)
+                            arr3=[k+1,k+1+nyt,k+nyt,arr[2]]
+                            den_plot.append(arr3)
                     k=k+1
-    
-            #print('axes')
-            rad=0.02
-            n_theta=20
-            for i in range(0,n_theta):
-                theta=float(i)*2.0*numpy.pi/n_theta
-                
-                arr=[rad*numpy.cos(theta),
-                     rad*numpy.sin(theta),0]
-                vertices.append(arr)
-                #print('vert',i,k,arr)
-                #f.write('v '+('%7.6e' % arr[0])+' '+
-                #('%7.6e' % arr[1])+' '+
-                #('%7.6e' % arr[2])+'\n')
-                arr=[rad*numpy.cos(theta),
-                     rad*numpy.sin(theta),1]
-                vertices.append(arr)
-                #print('vert',i,k+1,arr)
-                #f.write('v '+('%7.6e' % arr[0])+' '+
-                #('%7.6e' % arr[1])+' '+
-                #('%7.6e' % arr[2])+'\n')
-    
-                if i<n_theta-1:
-                    arr2=[k,k+1,k+6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6,k+7]
-                    axis_faces.append(arr3)
-                else:
-                    arr2=[k,k+1,k+6-n_theta*6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                    axis_faces.append(arr3)
-                
-                k=k+2
-                
-                arr=[0,rad*numpy.cos(theta),
-                     rad*numpy.sin(theta)]
-                vertices.append(arr)
-                #print('vert',i,k,arr)
-                #f.write('v '+('%7.6e' % arr[0])+' '+
-                #('%7.6e' % arr[1])+' '+
-                #('%7.6e' % arr[2])+'\n')
-                arr=[1,rad*numpy.cos(theta),
-                     rad*numpy.sin(theta)]
-                vertices.append(arr)
-                #print('vert',i,k+1,arr)
-                #f.write('v '+('%7.6e' % arr[0])+' '+
-                #('%7.6e' % arr[1])+' '+
-                #('%7.6e' % arr[2])+'\n')
-                
-                if i<n_theta-1:
-                    arr2=[k,k+1,k+6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6,k+7]
-                    axis_faces.append(arr3)
-                else:
-                    arr2=[k,k+1,k+6-n_theta*6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                    axis_faces.append(arr3)
-                
-                k=k+2
-                
-                arr=[rad*numpy.cos(theta),0,
-                     rad*numpy.sin(theta)]
-                vertices.append(arr)
-                #print('vert',i,k,arr)
-                #f.write('v '+('%7.6e' % arr[0])+' '+
-                #('%7.6e' % arr[1])+' '+
-                #('%7.6e' % arr[2])+'\n')
-                arr=[rad*numpy.cos(theta),1,
-                     rad*numpy.sin(theta)]
-                vertices.append(arr)
-                #print('vert',i,k+1,arr)
-                #f.write('v '+('%7.6e' % arr[0])+' '+
-                #('%7.6e' % arr[1])+' '+
-                #('%7.6e' % arr[2])+'\n')
-    
-                if i<n_theta-1:
-                    arr2=[k,k+1,k+6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6,k+7]
-                    axis_faces.append(arr3)
-                else:
-                    arr2=[k,k+1,k+6-n_theta*6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                    axis_faces.append(arr3)
-                
-                k=k+2
-    
-            f=open(filename,'w')
-    
-            #if colors:
-            #f.write('mtllib '+mtl_file+'\n')
 
-            for k in range(0,len(axis_vert)):
-                f.write('v '+
-                        ('%7.6e' % axis_vert[k][0])+' '+
-                        ('%7.6e' % axis_vert[k][1])+' '+
-                        ('%7.6e' % axis_vert[k][2])+'\n')
-                
-            #f.write('g plot\n')
-            for k in range(0,len(axis_face)):
-                #print('axis_face',k,axis_face[k][0],axis_face[k][1],
-                #axis_face[k][2])
-                #if colors:
-                #f.write('usemtl cmap'+str(int(axis_face[k][3]*255.0))+'\n')
-                f.write('f '+
-                        ('%i' % axis_face[k][0])+' '+
-                        ('%i' % axis_face[k][1])+' '+
-                        ('%i' % axis_face[k][2])+'\n')
-                for j in range(0,3):
-                    if axis_face[k][j]-1>=len(axis_vert):
-                        print('Problem with vertex',j,'of face',k+1)
-                        quit()
-            #f.write('g axis\n')
-            #if colors:
-            #f.write('usemtl axis\n')
-            #for k in range(0,len(axis_faces)):
-            #print('axis_faces',k,axis_faces[k][0],axis_faces[k][1],
-            #axis_faces[k][2])
-            #f.write('f '+
-            #('%i' % axis_faces[k][0])+' '+
-            #('%i' % axis_faces[k][1])+' '+
-            #('%i' % axis_faces[k][2])+'\n')
-    
-            f.close()
+            if colors==True:
+                print('here1')
+                to.add_object_mat_list(den_vert,
+                                       group_of_faces('plot',den_plot,''),
+                                       ml)
+                print('here2')
+            else:
+                to.add_object_mat(den_vert,
+                                  group_of_faces('plot',den_plot,'white'),
+                                  white)
+                    
+            to.write_obj(prefix)
+
 
         else:
 

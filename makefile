@@ -82,6 +82,9 @@ testq:
 		examples/tov.py \
 		examples/test_examples.py -s -v
 
+mypy:
+	 mypy o2sclpy --ignore-missing-imports
+
 ifeq ($(MACHINE),isospin)
 PIP3_CMD = sudo pip3
 else

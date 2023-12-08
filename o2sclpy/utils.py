@@ -36,40 +36,8 @@ import numpy
 #import ctypes
 #from ctypes.util import find_library
 
-def fv_cat(verts,faces):
-    """Concatenate a set of vertices and triangular faces, taking care to
-    adjust the vertex references in each face.
-
-    The input variable verts must be a list of 3-element lists (for x,
-    y, and z). The input variable faces must be a list of at least
-    three elements (one for each vertex in the triangle), but may
-    also contain additional elements, such as strings to represent
-    the group and the material.
-    """
-    if len(verts)==0 or len(faces)!=len(verts):
-        print('fv_append failed.')
-        quit()
-        
-    import copy
-    vert=copy.deepcopy(verts[0])
-    face=copy.deepcopy(faces[0])
-
-    partial_sum=len(verts[0])
-    for j in range(1,len(verts)):
-        vert=vert+verts[j]
-        for k in range(0,len(faces[j])):
-            arr=[]
-            for ell in range(0,len(faces[j][k])):
-                if ell<3:
-                    arr.append(faces[j][k][ell]+partial_sum)
-                else:
-                    arr.append(faces[j][k][ell])
-            face.append(arr)
-        partial_sum=partial_sum+len(verts[j])
-    return vert,face
-
 def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
-          head_width=3,group='',mat=''):
+          head_width=3):
     """Create a set of vertices and triangular faces for an
     arrow.
 
@@ -137,11 +105,11 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
                      tail_end[2]+arb[2]*numpy.cos(theta)+
                      cross[2]*numpy.sin(theta)])
         if i!=n_theta-1:
-            face.append([2*i+1,2*i+2,2*i+3,group,mat])
-            face.append([2*i+3,2*i+2,2*i+4,group,mat])
+            face.append([2*i+1,2*i+2,2*i+3])
+            face.append([2*i+3,2*i+2,2*i+4])
         else:
-            face.append([2*i+1,2*i+2,1,group,mat])
-            face.append([1,2*i+2,2,group,mat])
+            face.append([2*i+1,2*i+2,1])
+            face.append([1,2*i+2,2])
 
     # Handle the head
     vert.append([x2,y2,z2])
@@ -160,14 +128,14 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
                      head_width*cross[2]*numpy.sin(theta)])
         if i==n_theta-1:
             face.append([point_index+i+1,point_index+1,
-                         point_index,group,mat])
+                         point_index])
         else:
             face.append([point_index+i+1,point_index+i+2,
-                         point_index,group,mat])
+                         point_index])
         
     return vert,face
 
-def icosahedron(x,y,z,r,ix):
+def icosahedron(x,y,z,r):
     """Construct the vertices and faces of an icosahedron centered at
     (x,y,z) with radius r
     """
@@ -194,26 +162,26 @@ def icosahedron(x,y,z,r,ix):
         vert[i][2]=vert[i][2]+z
 
     face=[]
-    face.append([3,2,1,ix])
-    face.append([2,3,4,ix])
-    face.append([6,5,4,ix])
-    face.append([5,9,4,ix])
-    face.append([8,7,1,ix])
-    face.append([7,10,1,ix])
-    face.append([12,11,5,ix])
-    face.append([11,12,7,ix])
-    face.append([10,6,3,ix])
-    face.append([6,10,12,ix])
-    face.append([9,8,2,ix])
-    face.append([8,9,11,ix])
-    face.append([3,6,4,ix])
-    face.append([9,2,4,ix])
-    face.append([10,3,1,ix])
-    face.append([2,8,1,ix])
-    face.append([12,10,7,ix])
-    face.append([8,11,7,ix])
-    face.append([6,12,5,ix])
-    face.append([11,9,5,ix])
+    face.append([3,2,1])
+    face.append([2,3,4])
+    face.append([6,5,4])
+    face.append([5,9,4])
+    face.append([8,7,1])
+    face.append([7,10,1])
+    face.append([12,11,5])
+    face.append([11,12,7])
+    face.append([10,6,3])
+    face.append([6,10,12])
+    face.append([9,8,2])
+    face.append([8,9,11])
+    face.append([3,6,4])
+    face.append([9,2,4])
+    face.append([10,3,1])
+    face.append([2,8,1])
+    face.append([12,10,7])
+    face.append([8,11,7])
+    face.append([6,12,5])
+    face.append([11,9,5])
 
     return vert,face
     
