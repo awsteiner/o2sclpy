@@ -1530,24 +1530,22 @@ class o2graph_plotter(yt_plot_base):
                     if i<nxt-1 and j<nyt-1:
                         if colors==True:
                             cmap_ix=int(arr[2]*255)
-                            arr2=[k,k+1,k+nyt,arr[2],'cmap_'+str(cmap_ix)]
+                            arr2=[k,k+1,k+nyt,'cmap_'+str(cmap_ix)]
                             den_plot.append(arr2)
-                            arr3=[k+1,k+1+nyt,k+nyt,arr[2],
+                            arr3=[k+1,k+1+nyt,k+nyt,
                                   'cmap_'+str(cmap_ix)]
                             den_plot.append(arr3)
                         else:
-                            arr2=[k,k+1,k+nyt,arr[2]]
+                            arr2=[k,k+1,k+nyt]
                             den_plot.append(arr2)
-                            arr3=[k+1,k+1+nyt,k+nyt,arr[2]]
+                            arr3=[k+1,k+1+nyt,k+nyt]
                             den_plot.append(arr3)
                     k=k+1
 
             if colors==True:
-                print('here1')
                 to.add_object_mat_list(den_vert,
                                        group_of_faces('plot',den_plot,''),
                                        ml)
-                print('here2')
             else:
                 to.add_object_mat(den_vert,
                                   group_of_faces('plot',den_plot,'white'),
