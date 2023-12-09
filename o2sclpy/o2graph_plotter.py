@@ -676,6 +676,7 @@ class group_of_faces:
         for i in range(0,len(self.faces)):
             if len(self.faces[i])>=4:
                 found_four=True
+        print('found_four',found_four)
         if found_four==False:
             return
 
@@ -686,11 +687,12 @@ class group_of_faces:
                 self.faces[i][3]!=self.mat):
                 two_mats=True
             if (i>0 and len(self.faces[i])>=4 and
-                len(self.faces[i-1]>=4) and
+                len(self.faces[i-1])>=4 and
                 self.faces[i][3]!=self.faces[i-1][3]):
                 two_mats=True
 
         # If there are not two distinct materials, there's nothing to do
+        print('two_mats',two_mats)
         if two_mats==False:
             return
 
@@ -714,25 +716,34 @@ class group_of_faces:
                     
             if base_name_added==False:
                 print('In function sort_by_mat():')
-                print('  A material was specified in "mat", but no face',
+                print('  A material named',self.mat,
+                      'was specified in "mat", but no face',
                       'uses that material.')
+                quit()
 
         # Now go through the list and find faces not already added to
         # mat_list
+        face_copies=[False for i in range(0,len(self.faces))]
         for i in range(0,len(self.faces)):
             if len(self.faces[i])>=4:
                 mat_name=self.faces[i][3]
                 if mat_name not in mat_list:
+                    print('Adding faces for',mat_name)
+                    mat_list.append(mat_name)
                     # If it's not found, then add the current face,
                     # and loop over the remaining faces which match
                     faces2.append(self.faces[i])
+                    face_copies[i]=True
                     for j in range(i+1,len(self.faces)):
-                        if len(self.faces[j])>=4:
-                            if self.faces[j][3]==mat_name:
-                                faces2.append(self.faces[j])
+                        if (len(self.faces[j])>=4 and
+                            self.faces[j][3]==mat_name and
+                            face_copies[j]==False):
+                            faces2.append(self.faces[j])
+                            face_copies[j]=True
 
-        print(len(self.faces),len(faces2))
-        quit()
+        if len(self.faces)!=len(faces2):
+            print('Problem in sort_by_name().')
+            quit()
                  
         self.faces=faces2
         return
@@ -764,10 +775,12 @@ class threed_objects:
         len_lv=len(self.vert_list)
 
         # Add all of the vertices
+        print('Add vertices.')
         for i in range(0,len(lv)):
             self.vert_list.append(lv[i])
 
         # Iterate over each face
+        print('Adjust faces for group',gf.name,'and check.')
         for i in range(0,len(gf.faces)):
             
             # Adjust the faces to refer to the correct vertices
@@ -788,6 +801,7 @@ class threed_objects:
                     
         # Check if there is an undefined material in the
         # group_of_faces data member 'mat'
+        print('Check again for undefined materials.')
         if gf.mat!='':
             mat_found=False
             for k in range(0,len(self.mat_list)):
@@ -800,21 +814,16 @@ class threed_objects:
                 quit()
 
         # Sort the group of vertices by material for output later
-        for i in range(0,len(self.gf_list)):
-            self.gf_list[i].sort_by_mat()
+        #for i in range(0,len(self.gf_list)):
+        print('Sort group named',gf.name,'by material.')
+        gf.sort_by_mat()
                 
         # Add the group of faces to the list
         self.gf_list.append(gf)
         
         return
 
-    def add_object_mat(self, v: list[list[float]],
-                       gf: group_of_faces, m: material):
-        """Add an object given 'lv', a list of vertices, and 'gf', a group of
-        triangular faces among those vertices, and 'm', the material
-        for all of the faces.
-        """
-        gf.mat_list=m
+    def add_mat(self, m: material):
         # Add the material if not found
         mat_found=False
         for i in range(0,len(self.mat_list)):
@@ -822,24 +831,31 @@ class threed_objects:
                 mat_found=True
         if mat_found==False:
             self.mat_list.append(m)
-        self.add_object(v,gf)
+        return
+    
+    def add_object_mat(self, lv: list[list[float]],
+                       gf: group_of_faces, m: material):
+        """Add an object given 'lv', a list of vertices, and 'gf', a group of
+        triangular faces among those vertices, and 'm', the material
+        for all of the faces.
+
+        """
+        self.add_mat(m)
+        if gf.mat=='':
+            gf.mat=m.name
+        self.add_object(lv,gf)
         return
 
-    def add_object_mat_list(self, v: list[list[float]],
+    def add_object_mat_list(self, lv: list[list[float]],
                             gf: group_of_faces, lm: list[material]):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices, and 'm', the material
         for all of the faces.
         """
+        
         for k in range(0,len(lm)):
-            # Add the material if not found
-            mat_found=False
-            for i in range(0,len(self.mat_list)):
-                if self.mat_list[i].name==lm[k].name:
-                    mat_found=True
-            if mat_found==False:
-                self.mat_list.append(lm[k])
-        self.add_object(v,gf)
+            self.add_mat(lm[k])
+        self.add_object(lv,gf)
         return
 
     def write_obj(self, prefix: str):
@@ -875,10 +891,10 @@ class threed_objects:
                 # Take care of the cases when we need to change materials
                 if k==0 and len(self.gf_list[i].faces[k])==4:
                     f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
-                if (len(self.gf_list[i].faces[k-1])==3 and 
+                elif (len(self.gf_list[i].faces[k-1])==3 and 
                     len(self.gf_list[i].faces[k])>=4):
                     f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
-                if (len(self.gf_list[i].faces[k-1])==4 and 
+                elif (len(self.gf_list[i].faces[k-1])==4 and 
                     len(self.gf_list[i].faces[k])>=4 and
                     self.gf_list[i].faces[k-1][3]!=
                     self.gf_list[i].faces[k][3]):
@@ -1473,12 +1489,15 @@ class o2graph_plotter(yt_plot_base):
             sl=table3d.get_slice(slice).to_numpy()
             xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
             ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
-            x_min=numpy.min(xgrid)
-            x_max=numpy.max(xgrid)
-            y_min=numpy.min(ygrid)
-            y_max=numpy.max(ygrid)
-            sl_min=numpy.min(sl)
-            sl_max=numpy.max(sl)
+            if self.xset==False:
+                self.xlo=numpy.min(xgrid)
+                self.xhi=numpy.max(xgrid)
+            if self.yset==False:
+                self.ylo=numpy.min(ygrid)
+                self.yhi=numpy.max(ygrid)
+            if self.zset==False:
+                self.zlo=numpy.min(sl)
+                self.zhi=numpy.max(sl)
             
             arr_vert,arr_face=arrow(0,0,0,1,0,0)
             arr_vert2,arr_face2=arrow(0,0,0,0,1,0)
@@ -1497,10 +1516,12 @@ class o2graph_plotter(yt_plot_base):
                               group_of_faces('z-axis',arr_face3,'white'),
                               white)
 
+            # If true, then a color map has been specified and we need
+            # to add materials
             colors=False
-            color_map=0
-            norm=0
-            ml=[]
+            # The list of 256 materials defined by the color map
+            # (not all will be needed for the 3d object
+            cmap_mats=[]
             
             if cmap!='':
                 
@@ -1513,42 +1534,75 @@ class o2graph_plotter(yt_plot_base):
                 
                 for i in range(0,256):
                     rgb=color_map(norm(float(i)))[:3]
-                    ml.append(material('cmap_'+str(i),[rgb[0],rgb[1],
-                                                       rgb[2]]))
+                    cmap_mats.append(material('cmap_'+str(i),[rgb[0],rgb[1],
+                                                           rgb[2]]))
                     
                 colors=True
-                
+
+            # Vertices for the density plot
             den_vert=[]
-            den_plot=[]
+            # Faces for the density plot
+            den_face=[]
+            # Materials for the density plot
+            den_ml=[]
+
+            # Vertex index for faces
             k=1
             for i in range(0,nxt):
                 for j in range(0,nyt):
-                    arr=[(xgrid[i]-x_min)/(x_max-x_min),
-                         (ygrid[j]-y_min)/(y_max-y_min),
-                         (sl[i,j]-sl_min)/(sl_max-sl_min)]
+                    arr=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
+                         (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
+                         (sl[i,j]-self.zlo)/(self.zhi-self.zlo)]
                     den_vert.append(arr)
                     if i<nxt-1 and j<nyt-1:
                         if colors==True:
-                            cmap_ix=int(arr[2]*255)
-                            arr2=[k,k+1,k+nyt,'cmap_'+str(cmap_ix)]
-                            den_plot.append(arr2)
-                            arr3=[k+1,k+1+nyt,k+nyt,
-                                  'cmap_'+str(cmap_ix)]
-                            den_plot.append(arr3)
+
+                            # Construct the colormap index
+                            cmap_ix=int(arr[2]*256)
+                            if cmap_ix>255:
+                                cmap_ix=255
+                            cmap_name='cmap_'+str(cmap_ix)
+
+                            # See if the corresponding material is already
+                            # in the list named 'den_ml'
+                            mat_found=False
+                            for ell in range(0,len(den_ml)):
+                                if den_ml[ell].name==cmap_name:
+                                    mat_found=True
+
+                            # If it was not found, find it in the list
+                            # named 'cmap_mats'
+                            if mat_found==False:
+                                for ell in range(0,len(cmap_mats)):
+                                    if cmap_mats[ell].name==cmap_name:
+                                        print('Adding material',cmap_name)
+                                        den_ml.append(cmap_mats[ell])
+                                        ell=len(cmap_mats)
+
+                            # Add the two triangles 
+                            arr2=[k,k+1,k+nyt,cmap_name]
+                            den_face.append(arr2)
+                            arr3=[k+1,k+1+nyt,k+nyt,cmap_name]
+                            den_face.append(arr3)
+                            
                         else:
+                            
                             arr2=[k,k+1,k+nyt]
-                            den_plot.append(arr2)
+                            den_face.append(arr2)
                             arr3=[k+1,k+1+nyt,k+nyt]
-                            den_plot.append(arr3)
+                            den_face.append(arr3)
+                            
                     k=k+1
 
             if colors==True:
                 to.add_object_mat_list(den_vert,
-                                       group_of_faces('plot',den_plot,''),
-                                       ml)
+                                       group_of_faces('plot',den_face),
+                                       den_ml)
+                for i in range(0,len(to.mat_list)):
+                    print('to.mat_list',i,to.mat_list[i].name)
             else:
                 to.add_object_mat(den_vert,
-                                  group_of_faces('plot',den_plot,'white'),
+                                  group_of_faces('plot',den_face,'white'),
                                   white)
                     
             to.write_obj(prefix)
@@ -1559,188 +1613,116 @@ class o2graph_plotter(yt_plot_base):
             col_x=args[0]
             col_y=args[1]
             col_z=args[2]
-            filename=args[3]
+            prefix=args[3]
             if len(args)>=5:
                 kwstring=args[4]
     
             dctt=string_to_dict2(kwstring)
             cmap=dctt.pop('cmap','')
-            mtl_file=dctt.pop('mtl_file','')
             col_r=dctt.pop('col_r','')
             col_g=dctt.pop('col_g','')
             col_b=dctt.pop('col_b','')
     
             table=amt.get_table_obj()
-            n=table3d.get_nlines()
+            n=table.get_nlines()
+
+            # If true, then a color map has been specified and we need
+            # to add materials
+            colors=False
             
-            xlo=numpy.min(table[col_x])
-            xhi=numpy.max(table[col_x])
-            ylo=numpy.min(table[col_y])
-            yhi=numpy.max(table[col_y])
-            zlo=numpy.min(table[col_z])
-            zlo=numpy.max(table[col_z])
+            if self.xset==False:
+                self.xlo=numpy.min(table[col_x])
+                self.xhi=numpy.max(table[col_x])
+            if self.yset==False:
+                self.ylo=numpy.min(table[col_y])
+                self.yhi=numpy.max(table[col_y])
+            if self.zset==False:
+                self.zlo=numpy.min(table[col_z])
+                self.zhi=numpy.max(table[col_z])
             if col_r!='':
                 rlo=numpy.min(table[col_r])
                 rhi=numpy.max(table[col_r])
+                colors=True
             if col_g!='':
                 glo=numpy.min(table[col_g])
                 ghi=numpy.max(table[col_g])
+                colors=True
             if col_b!='':
                 blo=numpy.min(table[col_b])
                 bhi=numpy.max(table[col_b])
-    
-            colors=False
-            color_map=0
-            norm=0
-            
-            f=open(filename,'w')
-    
-            if mtl_file!='':
                 colors=True
-                f.write('mtllib '+mtl_file+'\n')
-                
-            vertices=[]
-            axis_faces=[]
-            plot_faces=[]
+    
+            arr_vert,arr_face=arrow(0,0,0,1,0,0)
+            arr_vert2,arr_face2=arrow(0,0,0,0,1,0)
+            arr_vert3,arr_face3=arrow(0,0,0,0,0,1)
+
+            white=material('white',[1,1,1])
+            
+            to=threed_objects()
+            to.add_object_mat(arr_vert,
+                              group_of_faces('x-axis',arr_face,'white'),
+                              white)
+            to.add_object_mat(arr_vert2,
+                              group_of_faces('y-axis',arr_face2,'white'),
+                              white)
+            to.add_object_mat(arr_vert3,
+                              group_of_faces('z-axis',arr_face3,'white'),
+                              white)
+
+            scatter_vert=[]
+            scatter_face=[]
             color_cache=[]
+            
+            # Vertex index for faces
             k=1
             for i in range(0,n):
-                x_norm=(table[col_x][i]-xlo)/(xhi-xlo)
-                y_norm=(table[col_y][i]-ylo)/(yhi-ylo)
-                z_norm=(table[col_z][i]-zlo)/(zhi-zlo)
-                # We choose not 255^3 colors but 17^3 colors 
-                r_norm=15*int(17*(table[col_z][i]-rlo)/(rhi-rlo))
-                g_norm=15*int(17*(table[col_z][i]-glo)/(ghi-glo))
-                b_norm=15*int(17*(table[col_z][i]-blo)/(bhi-blo))
                 
+                x_norm=(table[col_x][i]-self.xlo)/(self.xhi-self.xlo)
+                y_norm=(table[col_y][i]-self.ylo)/(self.yhi-self.ylo)
+                z_norm=(table[col_z][i]-self.zlo)/(self.zhi-self.zlo)
+
+                # We choose not 255^3 colors but 17^3 colors
+                if col_r!='':
+                    r_norm=15*int(17*(table[col_r][i]-rlo)/(rhi-rlo))
+                else:
+                    r_norm=255
+                if col_g!='':
+                    g_norm=15*int(17*(table[col_g][i]-glo)/(ghi-glo))
+                else:
+                    g_norm=255
+                if col_b!='':
+                    b_norm=15*int(17*(table[col_b][i]-blo)/(bhi-blo))
+                else:
+                    b_norm=255
+
+                cmap_name=('cmap_'+str(r_norm)+'_'+str(g_norm)+'_'+
+                           str(b_norm))
                 if [r_norm,g_norm,b_norm] not in color_cache:
                     color_cache.append([r_norm,g_norm,b_norm])
+                    m=material(cmap_name,[float(r_norm)/255.0,
+                                            float(g_norm)/255.0,
+                                            float(b_norm)/255.0])
+                    to.add_mat(m)
+                    
                 col_index=color_cache.index([r_norm,g_norm,b_norm])
                 
-                point_vert,point_face=icosahedron(xnorm,ynorm,znorm,0.04,
-                                                  col_index)
-                
-                n_curr=len(vertices)
-                for j in range(0,len(point_vert)):
-                    vertices.append(point_vert)
-                for j in range(0,len(point_face)):
-                    plot_faces.append([point_face[j][0]+n_curr,
-                                       point_face[j][1]+n_curr,
-                                       point_face[j][2]+n_curr,
-                                       point_face[j][3]])
-    
-            print('axes')
-            rad=0.01
-            n_theta=20
-            for i in range(0,n_theta):
-                theta=float(i)*2.0*numpy.pi/n_theta
-                
-                arr=[rad*numpy.cos(theta),
-                     rad*numpy.sin(theta),0]
-                vertices.append(arr)
-                #print('vert',i,k,arr)
-                f.write('v '+('%7.6e' % arr[0])+' '+
-                        ('%7.6e' % arr[1])+' '+
-                        ('%7.6e' % arr[2])+'\n')
-                arr=[rad*numpy.cos(theta),
-                     rad*numpy.sin(theta),1]
-                vertices.append(arr)
-                #print('vert',i,k+1,arr)
-                f.write('v '+('%7.6e' % arr[0])+' '+
-                        ('%7.6e' % arr[1])+' '+
-                        ('%7.6e' % arr[2])+'\n')
-    
-                if i<n_theta-1:
-                    arr2=[k,k+1,k+6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6,k+7]
-                    axis_faces.append(arr3)
+                scatter_vert,scatter_face=icosahedron(x_norm,
+                                                      y_norm,z_norm,0.01)
+
+                if colors==False:
+                    to.add_object_mat(scatter_vert,
+                                      group_of_faces('point_'+str(i),
+                                                     scatter_face,'white'),
+                                      white)
                 else:
-                    arr2=[k,k+1,k+6-n_theta*6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                    axis_faces.append(arr3)
-                
-                k=k+2
-                
-                arr=[0,rad*numpy.cos(theta),
-                     rad*numpy.sin(theta)]
-                vertices.append(arr)
-                #print('vert',i,k,arr)
-                f.write('v '+('%7.6e' % arr[0])+' '+
-                        ('%7.6e' % arr[1])+' '+
-                        ('%7.6e' % arr[2])+'\n')
-                arr=[1,rad*numpy.cos(theta),
-                     rad*numpy.sin(theta)]
-                vertices.append(arr)
-                #print('vert',i,k+1,arr)
-                f.write('v '+('%7.6e' % arr[0])+' '+
-                        ('%7.6e' % arr[1])+' '+
-                        ('%7.6e' % arr[2])+'\n')
-                
-                if i<n_theta-1:
-                    arr2=[k,k+1,k+6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6,k+7]
-                    axis_faces.append(arr3)
-                else:
-                    arr2=[k,k+1,k+6-n_theta*6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                    axis_faces.append(arr3)
-                
-                k=k+2
-                
-                arr=[rad*numpy.cos(theta),0,
-                     rad*numpy.sin(theta)]
-                vertices.append(arr)
-                #print('vert',i,k,arr)
-                f.write('v '+('%7.6e' % arr[0])+' '+
-                        ('%7.6e' % arr[1])+' '+
-                        ('%7.6e' % arr[2])+'\n')
-                arr=[rad*numpy.cos(theta),1,
-                     rad*numpy.sin(theta)]
-                vertices.append(arr)
-                #print('vert',i,k+1,arr)
-                f.write('v '+('%7.6e' % arr[0])+' '+
-                        ('%7.6e' % arr[1])+' '+
-                        ('%7.6e' % arr[2])+'\n')
-    
-                if i<n_theta-1:
-                    arr2=[k,k+1,k+6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6,k+7]
-                    axis_faces.append(arr3)
-                else:
-                    arr2=[k,k+1,k+6-n_theta*6]
-                    axis_faces.append(arr2)
-                    arr3=[k+1,k+6-n_theta*6,k+7-n_theta*6]
-                    axis_faces.append(arr3)
-                
-                k=k+2
-    
-            f.write('g plot\n')
-            for k in range(0,len(plot_faces)):
-                #print('plot_faces',k,plot_faces[k][0],plot_faces[k][1],
-                #plot_faces[k][2])
-                if colors:
-                    f.write('usemtl cmap'+str(int(plot_faces[k][3]*255.0))+'\n')
-                f.write('f '+
-                        ('%i' % plot_faces[k][0])+' '+
-                        ('%i' % plot_faces[k][1])+' '+
-                        ('%i' % plot_faces[k][2])+'\n')
-            f.write('g axis\n')
-            if colors:
-                f.write('usemtl axis\n')
-            for k in range(0,len(axis_faces)):
-                #print('axis_faces',k,axis_faces[k][0],axis_faces[k][1],
-                #axis_faces[k][2])
-                f.write('f '+
-                        ('%i' % axis_faces[k][0])+' '+
-                        ('%i' % axis_faces[k][1])+' '+
-                        ('%i' % axis_faces[k][2])+'\n')
-    
-            f.close()
+                    for k in range(0,len(scatter_face)):
+                        scatter_face[k].append(cmap_name)
+                        #print('ksf:',k,scatter_face[k])
+                    to.add_object(scatter_vert,
+                                  group_of_faces('point_'+str(i),
+                                                 scatter_face))
+                    
+                to.write_obj(prefix)
 
         return
 
