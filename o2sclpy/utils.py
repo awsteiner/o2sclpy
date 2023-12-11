@@ -264,9 +264,18 @@ def force_string(obj):
         return obj.decode('utf-8')
     return obj
 
-def latex_to_png(tex: str, png_file: str, temp_dir='/tmp'):
+def latex_to_png(tex: str, png_file: str):
     """
-    A 
+    A simple routine to convert a LaTeX string to a png image.
+
+    Math mode is not assumed, so equations need to be surrounded
+    by dollar signs. A temporary file is created, and then that
+    file is processed by ``pdflatex`` and then the output is
+    renamed to the filename specified by the user with ``mv``. 
+    Pillow is used to obtain the image width and height, and 
+    those values are returned. 
+
+    This function works, but is not necessarily optimal.
     """
     import tempfile
     f=tempfile.NamedTemporaryFile(suffix='.tex',delete=False)
@@ -278,7 +287,10 @@ def latex_to_png(tex: str, png_file: str, temp_dir='/tmp'):
     f.write(force_bytes(tex+'\n'))
     f.write(force_bytes('\\end{document}\n'))
     f.close()
-    cmd1='pdflatex --shell-escape '+tex_file_name
+    loc=tex_file_name.rfind('/')
+    tdir=tex_file_name[0:loc+1]
+    tfile=tex_file_name[loc+1:]
+    cmd1='cd '+tdir+' && pdflatex --shell-escape '+tfile
     print('Running',cmd1)
     os.system(cmd1)
     cmd2='mv '+tex_file_name[:-4]+'.png '+png_file

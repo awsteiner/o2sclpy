@@ -629,20 +629,31 @@ class material:
     """
     txt: str
     """
-    The texture file
+    The texture filename, including extension
     """
 
-    def __init__(self, name: str, Ka: list[float]):
+    def __init__(self, name: str, Ka: list[float]=[1,1,1], txt: str=''):
+        """Create a new material with color in ``Ka`` and texture file in
+        ``txt``.
+        """
         self.name=name
         self.Ka=Ka
         self.Kd=Ka
         self.Ks=[0,0,0]
         self.Ns=0
+        self.txt=txt
         return
     
 class group_of_faces:
     """
-    A group of faces
+    A group of (triangular) faces
+
+    Right now, the faces either have 3, 4, 6, or 7 elements, corresponding
+    to the cases
+    * faces
+    * faces plus material
+    * faces plus texture coordinates
+    * faces plus texture coordinates plus material
     """
     faces: list[list[int | str]]
     """
@@ -650,10 +661,23 @@ class group_of_faces:
     """
     name: str=''
     """
-    The name of the material (blank for none, or for different material for
-    each face)
+    The name of the group.
+
+    This string is used for the ``g `` commands in ``obj`` files. It 
+    may be empty, in which case no ``g `` command is given. 
     """
     mat: str=''
+    """The name of the material (blank for none, or for different material for
+    each face)
+
+    Note that this string might be nonempty even when some of the
+    faces explicitly specify a material. In this case, this string
+    specifies the default material to be used for those faces which do
+    not specify their own material.
+
+    If this string is non-empty, but all of the faces specify a 
+    material, then the ``sort_by_mat()`` function will 
+    """
 
     def __init__(self, name: str, faces: list[list[int | str]],
                  mat: str = ''):
@@ -667,8 +691,9 @@ class group_of_faces:
         return
 
     def sort_by_mat(self):
-        """
-        Sort the faces by material name
+        """Sort the faces by material name, ensuring that the group and
+        material commands do not have to be issued for each face.
+
         """
 
         # If no materials are specified in faces, there is nothing to do
@@ -676,7 +701,7 @@ class group_of_faces:
         for i in range(0,len(self.faces)):
             if len(self.faces[i])>=4:
                 found_four=True
-        print('found_four',found_four)
+        #print('found_four',found_four)
         if found_four==False:
             return
 
@@ -692,7 +717,7 @@ class group_of_faces:
                 two_mats=True
 
         # If there are not two distinct materials, there's nothing to do
-        print('two_mats',two_mats)
+        #print('two_mats',two_mats)
         if two_mats==False:
             return
 
@@ -715,18 +740,20 @@ class group_of_faces:
                     faces2.append(self.faces[i])
                     
             if base_name_added==False:
-                print('In function sort_by_mat():')
-                print('  A material named',self.mat,
-                      'was specified in "mat", but no face',
-                      'uses that material.')
-                quit()
+                raise ValueError('In function sort_by_mat(): '+
+                                 '  A material named '+self.mat+
+                                 ' was specified in "mat", but no face '+
+                                 'uses that material.')
 
         # Now go through the list and find faces not already added to
         # mat_list
         face_copies=[False for i in range(0,len(self.faces))]
         for i in range(0,len(self.faces)):
-            if len(self.faces[i])>=4:
-                mat_name=self.faces[i][3]
+            if len(self.faces[i])==4 or len(self.faces[i])==7:
+                if len(self.faces[i])==4:
+                    mat_name=self.faces[i][3]
+                else:
+                    mat_name=self.faces[i][6]
                 if mat_name not in mat_list:
                     print('Adding faces for',mat_name)
                     mat_list.append(mat_name)
@@ -742,11 +769,61 @@ class group_of_faces:
                             face_copies[j]=True
 
         if len(self.faces)!=len(faces2):
-            print('Problem in sort_by_name().')
-            quit()
+            raise SyntaxError('The lists of faces do not match up in '+
+                              'sort_by_name().')
                  
         self.faces=faces2
         return
+
+def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name):
+    """
+    Create a rectangular prism with textures from a png created by a
+    LaTeX string
+
+    This function returns four objects: the vertices, the faces,
+    the texture uv coordinates, and the material object
+    """
+
+    w,h=latex_to_png(latex,png_file)
+    face=[]
+    vert=[]
+    facet=[]
+    text_uv=[]
+
+    m=material(mat_name,txt=png_file)
+
+    # Add the 8 vertices
+    vert.append([x1,y1,z1])
+    vert.append([x2,y1,z1])
+    vert.append([x1,y2,z1])
+    vert.append([x2,y2,z1])
+    vert.append([x1,y1,z2])
+    vert.append([x2,y1,z2])
+    vert.append([x1,y2,z2])
+    vert.append([x2,y2,z2])
+    
+    text_uv.append([0.0,0.0])
+    text_uv.append([0.0,1.0])
+    text_uv.append([1.0,0.0])
+    text_uv.append([1.0,1.0])
+
+    # The four sides with labels
+    face.append([1,2,3,1,2,3,mat_name])
+    face.append([3,2,4,3,2,4,mat_name])
+    face.append([1,2,5,1,2,3,mat_name])
+    face.append([5,2,6,3,2,4,mat_name])
+    face.append([3,4,7,1,2,3,mat_name])
+    face.append([7,4,8,3,2,4,mat_name])
+    face.append([5,6,7,1,2,3,mat_name])
+    face.append([7,6,8,3,2,4,mat_name])
+    
+    # The two sides without labels
+    face.append([2,4,6])
+    face.append([6,4,8])
+    face.append([1,5,3])
+    face.append([3,5,7])
+    
+    return vert,face,text_uv,m
 
 class threed_objects:
     """
@@ -755,6 +832,10 @@ class threed_objects:
     vert_list: list[list[float]]=[]
     """
     List of vertices
+    """
+    vt_list: list[list[float]]=[]
+    """
+    List of texture coordinates
     """
     gf_list: list[group_of_faces]=[]
     """
@@ -788,30 +869,29 @@ class threed_objects:
                 gf.faces[i][j]=gf.faces[i][j]+len_lv
                 
             # Check if there is an undefined material in this face
-            if len(gf.faces[i])>=4:
+            if len(gf.faces[i])==4:
                 mat_found=False
                 for k in range(0,len(self.mat_list)):
                     if self.mat_list[k].name==gf.faces[i][3]:
                         mat_found=True
                 if mat_found==False:
-                    print('Face',i,'refers to a material',
-                          gf.faces[i][3],'which is not in the list of',
-                          'materials.')
-                    quit()
+                    raise ValueError('Face '+str(i)+' refers to a '+
+                                     'material '+str(gf.faces[i][3])+
+                                     ' which is not in the list of '+
+                                     'materials.')
                     
         # Check if there is an undefined material in the
         # group_of_faces data member 'mat'
-        print('Check again for undefined materials.')
+        #print('Check again for undefined materials.')
         if gf.mat!='':
             mat_found=False
             for k in range(0,len(self.mat_list)):
                 if self.mat_list[k].name==gf.mat:
                     mat_found=True
             if mat_found==False:
-                print('The group of faces names a material',
-                      gf.mat,'which is not in the list of',
-                      'materials.')
-                quit()
+                raise ValueError('The group of faces names a material '+
+                                 gf.mat+' which is not in the list of '+
+                                 'materials.')
 
         # Sort the group of vertices by material for output later
         #for i in range(0,len(self.gf_list)):
@@ -880,16 +960,24 @@ class threed_objects:
                     ('%7.6e' % self.vert_list[k][1])+' '+
                     ('%7.6e' % self.vert_list[k][2])+'\n')
 
+        # Add vertices
+        for k in range(0,len(self.vt_list)):
+            f.write('vt '+
+                    ('%7.6e' % self.vt_list[k][0])+' '+
+                    ('%7.6e' % self.vt_list[k][1])+' '+
+                    ('%7.6e' % self.vt_list[k][2])+'\n')
+
         # Add each set of faces as a group
         for i in range(0,len(self.gf_list)):
-            f.write('g '+self.gf_list[i].name+'\n')
+            if self.gf_list[i].name!='':
+                f.write('g '+self.gf_list[i].name+'\n')
             # If the base material is used, output that first
             if (self.gf_list[i].mat!='' and
                 len(self.gf_list[i].faces[0])==3):
                 f.write('usemtl '+self.gf_list[i].mat+'\n')
             for k in range(0,len(self.gf_list[i].faces)):
                 # Take care of the cases when we need to change materials
-                if k==0 and len(self.gf_list[i].faces[k])==4:
+                if k==0 and len(self.gf_list[i].faces[k])>=4:
                     f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
                 elif (len(self.gf_list[i].faces[k-1])==3 and 
                     len(self.gf_list[i].faces[k])>=4):
@@ -899,11 +987,27 @@ class threed_objects:
                     self.gf_list[i].faces[k-1][3]!=
                     self.gf_list[i].faces[k][3]):
                     f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
-                # Write the face
-                f.write('f '+
-                        ('%i' % self.gf_list[i].faces[k][0])+' '+
-                        ('%i' % self.gf_list[i].faces[k][1])+' '+
-                        ('%i' % self.gf_list[i].faces[k][2])+'\n')
+                if len(self.gf_list[i].faces[k-1])>=6:
+                    # Write the face with vertex texture indices
+                    f.write('f '+
+                            ('%i' % self.gf_list[i].faces[k][0])+'/'+
+                            ('%i' % self.gf_list[i].faces[k][3])+' '+
+                            ('%i' % self.gf_list[i].faces[k][1])+'/'+
+                            ('%i' % self.gf_list[i].faces[k][4])+' '+
+                            ('%i' % self.gf_list[i].faces[k][2])+'/'+
+                            ('%i' % self.gf_list[i].faces[k][6])+'\n')
+                    # Check that the texture index
+                    # refers to a valid texture coordinate
+                    for j in range(3,6):
+                        if self.gf_list[i].faces[k][j]-1>=len(self.vt_list):
+                            print('Problem with vertex',j,'of face',k+1,
+                                  'in group',i)
+                else:
+                    # Write the face
+                    f.write('f '+
+                            ('%i' % self.gf_list[i].faces[k][0])+'/'+
+                            ('%i' % self.gf_list[i].faces[k][1])+'/'+
+                            ('%i' % self.gf_list[i].faces[k][2])+'\n')
                 # Check that the face refers to a valid vertex
                 for j in range(0,3):
                     if self.gf_list[i].faces[k][j]-1>=len(self.vert_list):
@@ -926,6 +1030,9 @@ class threed_objects:
                         str(self.mat_list[i].Kd[1])+' '+
                         str(self.mat_list[i].Kd[2])+'\n')
                 f.write('Ns '+str(self.mat_list[i].Ns)+'\n')
+                if self.mat_list[i].txt!='':
+                    f.write('map_Ka '+self.mat_list[i].txt+'\n')
+                    f.write('map_Kd '+self.mat_list[i].txt+'\n')
             f.close()
                         
         return
@@ -1473,15 +1580,90 @@ class o2graph_plotter(yt_plot_base):
             return
 
         if curr_type==b'table3d':
-        
-            slice=args[0]
             prefix=args[1]
             if len(args)>=3:
                 kwstring=args[2]
-    
-            dctt=string_to_dict2(kwstring)
-            cmap=dctt.pop('cmap','')
-            mtl_file=dctt.pop('mtl_file','')
+        else:
+            prefix=args[3]
+            if len(args)>=5:
+                kwstring=args[4]
+                
+        print('here',kwstring)
+        dctt=string_to_dict2(kwstring)
+        cmap=dctt.pop('cmap','')
+        mtl_file=dctt.pop('mtl_file','')
+        xtitle=dctt.pop('xtitle','')
+        ytitle=dctt.pop('ytitle','')
+        ztitle=dctt.pop('ztitle','')
+        print('here2',xtitle)
+        print('here2',ytitle)
+        print('here2',ztitle)
+        
+        arr_vert,arr_face=arrow(0,0,0,1,0,0)
+        arr_vert2,arr_face2=arrow(0,0,0,0,1,0)
+        arr_vert3,arr_face3=arrow(0,0,0,0,0,1)
+        
+        white=material('white',[1,1,1])
+        
+        to=threed_objects()
+        to.add_object_mat(arr_vert,
+                          group_of_faces('x-axis',arr_face,'white'),
+                          white)
+        to.add_object_mat(arr_vert2,
+                          group_of_faces('y-axis',arr_face2,'white'),
+                          white)
+        to.add_object_mat(arr_vert3,
+                          group_of_faces('z-axis',arr_face3,'white'),
+                          white)
+
+        print('i1')
+        if xtitle!='':
+            print('i1')
+            w,h=latex_to_png(xtitle,'xtitle.png')
+            print('i1')
+            width2=float(w)/float(h)*0.1
+            print('i1')
+            x_v,x_f,x_t,x_m=latex_prism(0.5-width2/2.0,-0.15,0.05,
+                                        0.5+width2/2.0,-0.05,-0.05,
+                                        xtitle,'xtitle.png','mat_xtitle')
+            print('i1')
+            to.add_mat(x_m)
+            print('i1')
+            to.add_object(x_v,group_of_faces('x-title',x_f))
+            print('i1')
+            if len(to.vt_list)==0:
+                for i in range(0,len(x_t)):
+                    to.vt_list.append(x_t[i])
+            print('i1')
+        print('i2')
+        if ytitle!='':
+            w,h=latex_to_png(ytitle,'ytitle.png')
+            width2=float(w)/float(h)*0.1
+            y_v,y_f,y_t,y_m=latey_prism(0.5-width2/2.0,-0.15,0.05,
+                                        0.5+width2/2.0,-0.05,-0.05,
+                                        ytitle,'ytitle.png','mat_ytitle')
+            to.add_mat(y_m)
+            to.add_object(y_v,group_of_faces('y-title',y_f))
+            if len(to.vt_list)==0:
+                for i in range(0,len(x_t)):
+                    to.vt_list.append(x_t[i])
+        print('i3')
+        if ztitle!='':
+            w,h=latex_to_png(ztitle,'ztitle.png')
+            width2=float(w)/float(h)*0.1
+            z_v,z_f,z_t,z_m=latez_prism(0.5-width2/2.0,-0.15,0.05,
+                                        0.5+width2/2.0,-0.05,-0.05,
+                                        ztitle,'ztitle.png','mat_ztitle')
+            to.add_mat(z_m)
+            to.add_object(z_v,group_of_faces('z-title',z_f))
+            if len(to.vt_list)==0:
+                for i in range(0,len(x_t)):
+                    to.vt_list.append(x_t[i])
+        print('i4')
+
+        if curr_type==b'table3d':
+        
+            slice=args[0]
     
             table3d=amt.get_table3d_obj()
             nxt=table3d.get_nx()
@@ -1499,23 +1681,6 @@ class o2graph_plotter(yt_plot_base):
                 self.zlo=numpy.min(sl)
                 self.zhi=numpy.max(sl)
             
-            arr_vert,arr_face=arrow(0,0,0,1,0,0)
-            arr_vert2,arr_face2=arrow(0,0,0,0,1,0)
-            arr_vert3,arr_face3=arrow(0,0,0,0,0,1)
-
-            white=material('white',[1,1,1])
-            
-            to=threed_objects()
-            to.add_object_mat(arr_vert,
-                              group_of_faces('x-axis',arr_face,'white'),
-                              white)
-            to.add_object_mat(arr_vert2,
-                              group_of_faces('y-axis',arr_face2,'white'),
-                              white)
-            to.add_object_mat(arr_vert3,
-                              group_of_faces('z-axis',arr_face3,'white'),
-                              white)
-
             # If true, then a color map has been specified and we need
             # to add materials
             colors=False
@@ -1605,20 +1770,12 @@ class o2graph_plotter(yt_plot_base):
                                   group_of_faces('plot',den_face,'white'),
                                   white)
                     
-            to.write_obj(prefix)
-
-
         else:
 
             col_x=args[0]
             col_y=args[1]
             col_z=args[2]
-            prefix=args[3]
-            if len(args)>=5:
-                kwstring=args[4]
     
-            dctt=string_to_dict2(kwstring)
-            cmap=dctt.pop('cmap','')
             col_r=dctt.pop('col_r','')
             col_g=dctt.pop('col_g','')
             col_b=dctt.pop('col_b','')
@@ -1652,23 +1809,6 @@ class o2graph_plotter(yt_plot_base):
                 bhi=numpy.max(table[col_b])
                 colors=True
     
-            arr_vert,arr_face=arrow(0,0,0,1,0,0)
-            arr_vert2,arr_face2=arrow(0,0,0,0,1,0)
-            arr_vert3,arr_face3=arrow(0,0,0,0,0,1)
-
-            white=material('white',[1,1,1])
-            
-            to=threed_objects()
-            to.add_object_mat(arr_vert,
-                              group_of_faces('x-axis',arr_face,'white'),
-                              white)
-            to.add_object_mat(arr_vert2,
-                              group_of_faces('y-axis',arr_face2,'white'),
-                              white)
-            to.add_object_mat(arr_vert3,
-                              group_of_faces('z-axis',arr_face3,'white'),
-                              white)
-
             scatter_vert=[]
             scatter_face=[]
             color_cache=[]
@@ -1722,7 +1862,7 @@ class o2graph_plotter(yt_plot_base):
                                   group_of_faces('point_'+str(i),
                                                  scatter_face))
                     
-                to.write_obj(prefix)
+            to.write_obj(prefix)
 
         return
 
@@ -5980,9 +6120,6 @@ class o2graph_plotter(yt_plot_base):
                 
                 elif cmd_name=='obj':
 
-                    w,h=latex_to_png('$ x^2 $','x.png')
-                    print('w,h',w,h)
-                    quit()
                     if self.verbose>2:
                         print('Process den-plot-rgb.')
                         print('args:',strlist[ix:ix_next])
