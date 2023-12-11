@@ -264,6 +264,30 @@ def force_string(obj):
         return obj.decode('utf-8')
     return obj
 
+def latex_to_png(tex: str, png_file: str, temp_dir='/tmp'):
+    """
+    A 
+    """
+    import tempfile
+    f=tempfile.NamedTemporaryFile(suffix='.tex',delete=False)
+    tex_file_name=f.name
+    print('Opened temporary file named ',tex_file_name)
+    f.write(force_bytes('\\documentclass[crop,border=0.5pt,'+
+                        'convert={outext=.png}]{standalone}\n'))
+    f.write(force_bytes('\\begin{document}\n'))
+    f.write(force_bytes(tex+'\n'))
+    f.write(force_bytes('\\end{document}\n'))
+    f.close()
+    cmd1='pdflatex --shell-escape '+tex_file_name
+    print('Running',cmd1)
+    os.system(cmd1)
+    cmd2='mv '+tex_file_name[:-4]+'.png '+png_file
+    print('Running',cmd2)
+    os.system(cmd2)
+    from PIL import Image
+    img=Image.open(png_file)
+    return img.width,img.height
+
 def default_plot(left_margin=0.14,bottom_margin=0.12,
                  right_margin=0.04,top_margin=0.04,fontsize=16,
                  fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,

@@ -39,7 +39,7 @@ from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot
 from o2sclpy.utils import is_number, arrow, icosahedron
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
-from o2sclpy.utils import string_equal_dash
+from o2sclpy.utils import string_equal_dash, latex_to_png
 from o2sclpy.utils import force_string, remove_spaces
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
@@ -5979,7 +5979,10 @@ class o2graph_plotter(yt_plot_base):
                                               strlist[ix+1:ix_next])
                 
                 elif cmd_name=='obj':
-                    
+
+                    w,h=latex_to_png('$ x^2 $','x.png')
+                    print('w,h',w,h)
+                    quit()
                     if self.verbose>2:
                         print('Process den-plot-rgb.')
                         print('args:',strlist[ix:ix_next])
