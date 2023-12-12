@@ -699,7 +699,7 @@ class group_of_faces:
         # If no materials are specified in faces, there is nothing to do
         found_four=False
         for i in range(0,len(self.faces)):
-            if len(self.faces[i])>=4:
+            if len(self.faces[i])==4 or len(self.faces[i])==7:
                 found_four=True
         #print('found_four',found_four)
         if found_four==False:
@@ -708,12 +708,27 @@ class group_of_faces:
         # Find if there at least two distinct materials 
         two_mats=False
         for i in range(0,len(self.faces)):
-            if (len(self.faces[i])>=4 and
+            if (len(self.faces[i])==4 and
                 self.faces[i][3]!=self.mat):
                 two_mats=True
-            if (i>0 and len(self.faces[i])>=4 and
-                len(self.faces[i-1])>=4 and
+            if (len(self.faces[i])==7 and
+                self.faces[i][6]!=self.mat):
+                two_mats=True
+            if (i>0 and len(self.faces[i])==4 and
+                len(self.faces[i-1])==4 and
                 self.faces[i][3]!=self.faces[i-1][3]):
+                two_mats=True
+            if (i>0 and len(self.faces[i])==7 and
+                len(self.faces[i-1])==7 and
+                self.faces[i][6]!=self.faces[i-1][6]):
+                two_mats=True
+            if (i>0 and len(self.faces[i])==7 and
+                len(self.faces[i-1])==4 and
+                self.faces[i][6]!=self.faces[i-1][3]):
+                two_mats=True
+            if (i>0 and len(self.faces[i])==4 and
+                len(self.faces[i-1])==7 and
+                self.faces[i][3]!=self.faces[i-1][6]):
                 two_mats=True
 
         # If there are not two distinct materials, there's nothing to do
@@ -733,7 +748,7 @@ class group_of_faces:
             # This is true if self.mat has been added to 'mat_list'
             base_name_added=False
             for i in range(0,len(self.faces)):
-                if len(self.faces[i])==3:
+                if len(self.faces[i])==3 or len(self.faces[i])==6:
                     if base_name_added==False:
                         mat_list.append(self.mat)
                         base_name_added=True
@@ -762,20 +777,26 @@ class group_of_faces:
                     faces2.append(self.faces[i])
                     face_copies[i]=True
                     for j in range(i+1,len(self.faces)):
-                        if (len(self.faces[j])>=4 and
+                        if (len(self.faces[j])==4 and
                             self.faces[j][3]==mat_name and
+                            face_copies[j]==False):
+                            faces2.append(self.faces[j])
+                            face_copies[j]=True
+                        if (len(self.faces[j])==7 and
+                            self.faces[j][6]==mat_name and
                             face_copies[j]==False):
                             faces2.append(self.faces[j])
                             face_copies[j]=True
 
         if len(self.faces)!=len(faces2):
+            print('sort_by_name():',len(self.faces),len(faces2))
             raise SyntaxError('The lists of faces do not match up in '+
                               'sort_by_name().')
                  
         self.faces=faces2
         return
 
-def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name):
+def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,end_mat='white'):
     """
     Create a rectangular prism with textures from a png created by a
     LaTeX string
@@ -818,10 +839,10 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name):
     face.append([7,6,8,3,2,4,mat_name])
     
     # The two sides without labels
-    face.append([2,4,6])
-    face.append([6,4,8])
-    face.append([1,5,3])
-    face.append([3,5,7])
+    face.append([2,4,6,end_mat])
+    face.append([6,4,8,end_mat])
+    face.append([1,5,3,end_mat])
+    face.append([3,5,7,end_mat])
     
     return vert,face,text_uv,m
 
@@ -877,6 +898,16 @@ class threed_objects:
                 if mat_found==False:
                     raise ValueError('Face '+str(i)+' refers to a '+
                                      'material '+str(gf.faces[i][3])+
+                                     ' which is not in the list of '+
+                                     'materials.')
+            if len(gf.faces[i])==7:
+                mat_found=False
+                for k in range(0,len(self.mat_list)):
+                    if self.mat_list[k].name==gf.faces[i][6]:
+                        mat_found=True
+                if mat_found==False:
+                    raise ValueError('Face '+str(i)+' refers to a '+
+                                     'material '+str(gf.faces[i][6])+
                                      ' which is not in the list of '+
                                      'materials.')
                     
@@ -1075,6 +1106,8 @@ class o2graph_plotter(yt_plot_base):
                 line[1]=o2graph_plotter.yt_text.__doc__
             elif line[0]=="mp4":
                 line[1]=o2graph_plotter.mp4.__doc__
+            elif line[0]=="obj":
+                line[1]=o2graph_plotter.obj_o2graph.__doc__
             elif line[0]=="kde-plot":
                 line[1]=o2graph_plotter.kde_plot.__doc__
             elif line[0]=="kde-2d-plot":
@@ -1616,50 +1649,39 @@ class o2graph_plotter(yt_plot_base):
                           group_of_faces('z-axis',arr_face3,'white'),
                           white)
 
-        print('i1')
         if xtitle!='':
-            print('i1')
             w,h=latex_to_png(xtitle,'xtitle.png')
-            print('i1')
             width2=float(w)/float(h)*0.1
-            print('i1')
             x_v,x_f,x_t,x_m=latex_prism(0.5-width2/2.0,-0.15,0.05,
                                         0.5+width2/2.0,-0.05,-0.05,
                                         xtitle,'xtitle.png','mat_xtitle')
-            print('i1')
             to.add_mat(x_m)
-            print('i1')
             to.add_object(x_v,group_of_faces('x-title',x_f))
-            print('i1')
             if len(to.vt_list)==0:
                 for i in range(0,len(x_t)):
                     to.vt_list.append(x_t[i])
-            print('i1')
-        print('i2')
         if ytitle!='':
             w,h=latex_to_png(ytitle,'ytitle.png')
             width2=float(w)/float(h)*0.1
-            y_v,y_f,y_t,y_m=latey_prism(0.5-width2/2.0,-0.15,0.05,
-                                        0.5+width2/2.0,-0.05,-0.05,
+            y_v,y_f,y_t,y_m=latex_prism(-0.15,0.5-width2/2.0,0.05,
+                                        -0.05,0.5+width2/2.0,-0.05,
                                         ytitle,'ytitle.png','mat_ytitle')
             to.add_mat(y_m)
             to.add_object(y_v,group_of_faces('y-title',y_f))
             if len(to.vt_list)==0:
                 for i in range(0,len(x_t)):
                     to.vt_list.append(x_t[i])
-        print('i3')
         if ztitle!='':
             w,h=latex_to_png(ztitle,'ztitle.png')
             width2=float(w)/float(h)*0.1
-            z_v,z_f,z_t,z_m=latez_prism(0.5-width2/2.0,-0.15,0.05,
-                                        0.5+width2/2.0,-0.05,-0.05,
+            z_v,z_f,z_t,z_m=latex_prism(-0.15,0.05,0.5-width2/2.0,
+                                        -0.05,-0.05,0.5+width2/2.0,
                                         ztitle,'ztitle.png','mat_ztitle')
             to.add_mat(z_m)
             to.add_object(z_v,group_of_faces('z-title',z_f))
             if len(to.vt_list)==0:
                 for i in range(0,len(x_t)):
                     to.vt_list.append(x_t[i])
-        print('i4')
 
         if curr_type==b'table3d':
         

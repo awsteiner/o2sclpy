@@ -45,6 +45,7 @@ List of command-line options which do not require a current object:
   -o2scl-addl-libs Specify a list of list of additional libraries to load.
   -o2scl-cpp-lib   Specify the location of the standard C++ library.
   -o2scl-lib-dir   Specify the directory for the libo2scl shared library.
+  -obj             
   -output          Output the current object to screen or text file. 
   -plotv           Plot several vector-like data sets.
   -point           Plot a single point.
