@@ -829,14 +829,14 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,end_mat='white'):
     text_uv.append([1.0,1.0])
 
     # The four sides with labels
-    face.append([1,2,3,1,2,3,mat_name])
-    face.append([3,2,4,3,2,4,mat_name])
-    face.append([1,2,5,1,2,3,mat_name])
-    face.append([5,2,6,3,2,4,mat_name])
-    face.append([3,4,7,1,2,3,mat_name])
-    face.append([7,4,8,3,2,4,mat_name])
-    face.append([5,6,7,1,2,3,mat_name])
-    face.append([7,6,8,3,2,4,mat_name])
+    face.append([1,2,3,1,3,2,mat_name])
+    face.append([2,3,4,3,2,4,mat_name])
+    face.append([1,2,5,2,4,1,mat_name])
+    face.append([5,2,6,1,4,3,mat_name])
+    face.append([3,4,7,4,2,3,mat_name])
+    face.append([7,4,8,3,2,1,mat_name])
+    face.append([5,6,7,2,3,1,mat_name])
+    face.append([7,6,8,2,3,4,mat_name])
     
     # The two sides without labels
     face.append([2,4,6,end_mat])
@@ -993,10 +993,10 @@ class threed_objects:
 
         # Add vertices
         for k in range(0,len(self.vt_list)):
+            print(k,self.vt_list[k])
             f.write('vt '+
                     ('%7.6e' % self.vt_list[k][0])+' '+
-                    ('%7.6e' % self.vt_list[k][1])+' '+
-                    ('%7.6e' % self.vt_list[k][2])+'\n')
+                    ('%7.6e' % self.vt_list[k][1])+'\n')
 
         # Add each set of faces as a group
         for i in range(0,len(self.gf_list)):
@@ -1006,19 +1006,27 @@ class threed_objects:
             if (self.gf_list[i].mat!='' and
                 len(self.gf_list[i].faces[0])==3):
                 f.write('usemtl '+self.gf_list[i].mat+'\n')
+            if (self.gf_list[i].mat!='' and
+                len(self.gf_list[i].faces[0])==6):
+                f.write('usemtl '+self.gf_list[i].mat+'\n')
             for k in range(0,len(self.gf_list[i].faces)):
                 # Take care of the cases when we need to change materials
-                if k==0 and len(self.gf_list[i].faces[k])>=4:
+                if k==0 and len(self.gf_list[i].faces[k])==4:
+                    f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
+                elif k==0 and len(self.gf_list[i].faces[k])==7:
+                    f.write('usemtl '+self.gf_list[i].faces[k][6]+'\n')
+                elif (len(self.gf_list[i].faces[k-1])==3 and 
+                      len(self.gf_list[i].faces[k])==4):
                     f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
                 elif (len(self.gf_list[i].faces[k-1])==3 and 
-                    len(self.gf_list[i].faces[k])>=4):
-                    f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
+                      len(self.gf_list[i].faces[k])==7):
+                    f.write('usemtl '+self.gf_list[i].faces[k][6]+'\n')
                 elif (len(self.gf_list[i].faces[k-1])==4 and 
                     len(self.gf_list[i].faces[k])>=4 and
                     self.gf_list[i].faces[k-1][3]!=
                     self.gf_list[i].faces[k][3]):
                     f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
-                if len(self.gf_list[i].faces[k-1])>=6:
+                if len(self.gf_list[i].faces[k])>=6:
                     # Write the face with vertex texture indices
                     f.write('f '+
                             ('%i' % self.gf_list[i].faces[k][0])+'/'+
@@ -1026,7 +1034,7 @@ class threed_objects:
                             ('%i' % self.gf_list[i].faces[k][1])+'/'+
                             ('%i' % self.gf_list[i].faces[k][4])+' '+
                             ('%i' % self.gf_list[i].faces[k][2])+'/'+
-                            ('%i' % self.gf_list[i].faces[k][6])+'\n')
+                            ('%i' % self.gf_list[i].faces[k][5])+'\n')
                     # Check that the texture index
                     # refers to a valid texture coordinate
                     for j in range(3,6):
@@ -1036,8 +1044,8 @@ class threed_objects:
                 else:
                     # Write the face
                     f.write('f '+
-                            ('%i' % self.gf_list[i].faces[k][0])+'/'+
-                            ('%i' % self.gf_list[i].faces[k][1])+'/'+
+                            ('%i' % self.gf_list[i].faces[k][0])+' '+
+                            ('%i' % self.gf_list[i].faces[k][1])+' '+
                             ('%i' % self.gf_list[i].faces[k][2])+'\n')
                 # Check that the face refers to a valid vertex
                 for j in range(0,3):
@@ -1884,7 +1892,7 @@ class o2graph_plotter(yt_plot_base):
                                   group_of_faces('point_'+str(i),
                                                  scatter_face))
                     
-            to.write_obj(prefix)
+        to.write_obj(prefix)
 
         return
 

@@ -272,6 +272,7 @@ def latex_to_png(tex: str, png_file: str):
     by dollar signs. A temporary file is created, and then that
     file is processed by ``pdflatex`` and then the output is
     renamed to the filename specified by the user with ``mv``. 
+    Finally, imagemagick ``convert`` is used to flatten the image.
     Pillow is used to obtain the image width and height, and 
     those values are returned. 
 
@@ -293,7 +294,8 @@ def latex_to_png(tex: str, png_file: str):
     cmd1='cd '+tdir+' && pdflatex --shell-escape '+tfile
     print('Running',cmd1)
     os.system(cmd1)
-    cmd2='mv '+tex_file_name[:-4]+'.png '+png_file
+    cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file+' && convert '+
+          png_file+' -background white -flatten '+png_file)
     print('Running',cmd2)
     os.system(cmd2)
     from PIL import Image
