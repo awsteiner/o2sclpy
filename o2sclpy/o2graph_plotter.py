@@ -835,8 +835,8 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,end_mat='white'):
     face.append([5,2,6,1,4,3,mat_name])
     face.append([3,4,7,4,2,3,mat_name])
     face.append([7,4,8,3,2,1,mat_name])
-    face.append([5,6,7,2,3,1,mat_name])
-    face.append([7,6,8,2,3,4,mat_name])
+    face.append([5,6,7,2,4,1,mat_name])
+    face.append([7,6,8,1,4,3,mat_name])
     
     # The two sides without labels
     face.append([2,4,6,end_mat])
