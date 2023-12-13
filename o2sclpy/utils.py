@@ -115,8 +115,8 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
     vert.append([x2,y2,z2])
     point_index=len(vert)
     
-    for j in range(0,3):
-        cross[j]=cross[j]/cross_norm*r*2.0
+#    for j in range(0,3):
+#        cross[j]=cross[j]/cross_norm*r*2.0
         
     for i in range(0,n_theta):
         theta=float(i)*numpy.pi*2/float(n_theta)

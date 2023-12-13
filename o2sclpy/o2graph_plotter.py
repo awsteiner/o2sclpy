@@ -796,7 +796,8 @@ class group_of_faces:
         self.faces=faces2
         return
 
-def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,end_mat='white'):
+def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
+                dir='x',end_mat='white'):
     """
     Create a rectangular prism with textures from a png created by a
     LaTeX string
@@ -828,22 +829,62 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,end_mat='white'):
     text_uv.append([1.0,0.0])
     text_uv.append([1.0,1.0])
 
-    # The four sides with labels
-    face.append([1,2,3,1,3,2,mat_name])
-    face.append([2,3,4,3,2,4,mat_name])
-    face.append([1,2,5,2,4,1,mat_name])
-    face.append([5,2,6,1,4,3,mat_name])
-    face.append([3,4,7,4,2,3,mat_name])
-    face.append([7,4,8,3,2,1,mat_name])
-    face.append([5,6,7,2,4,1,mat_name])
-    face.append([7,6,8,1,4,3,mat_name])
-    
-    # The two sides without labels
-    face.append([2,4,6,end_mat])
-    face.append([6,4,8,end_mat])
-    face.append([1,5,3,end_mat])
-    face.append([3,5,7,end_mat])
-    
+    if dir=='x':
+        
+        # The four sides with labels
+        face.append([1,2,3,1,3,2,mat_name])
+        face.append([2,3,4,3,2,4,mat_name])
+        face.append([1,2,5,2,4,1,mat_name])
+        face.append([5,2,6,1,4,3,mat_name])
+        face.append([3,4,7,4,2,3,mat_name])
+        face.append([7,4,8,3,2,1,mat_name])
+        face.append([5,6,7,2,4,1,mat_name])
+        face.append([7,6,8,1,4,3,mat_name])
+        
+        # The two sides without labels
+        face.append([2,4,6,end_mat])
+        face.append([6,4,8,end_mat])
+        face.append([1,5,3,end_mat])
+        face.append([3,5,7,end_mat])
+        
+    elif dir=='y':
+        
+        # The four sides with labels
+        face.append([3,1,4,4,2,3,mat_name])
+        face.append([4,1,2,3,2,1,mat_name])
+        face.append([6,5,8,2,1,4,mat_name])
+        face.append([8,5,7,4,1,3,mat_name])
+        face.append([4,2,8,4,2,3,mat_name])
+        face.append([8,2,6,3,2,1,mat_name])
+        #face.append([7,5,3,2,4,1,mat_name])
+        #face.append([3,5,1,1,4,3,mat_name])
+        face.append([3,1,7,2,4,1,mat_name])
+        face.append([7,1,5,1,4,3,mat_name])
+        
+        # The two sides without labels
+        face.append([3,4,7,end_mat])
+        face.append([7,4,8,end_mat])
+        face.append([1,2,5,end_mat])
+        face.append([5,2,6,end_mat])
+        
+    else:
+        
+        # The four sides with labels
+        face.append([1,2,3,1,3,2,mat_name])
+        face.append([2,3,4,3,2,4,mat_name])
+        face.append([1,2,5,2,4,1,mat_name])
+        face.append([5,2,6,1,4,3,mat_name])
+        face.append([2,4,6,4,2,3,mat_name])
+        face.append([6,4,8,3,2,1,mat_name])
+        face.append([1,5,3,2,4,1,mat_name])
+        face.append([3,5,7,1,4,3,mat_name])
+        
+        # The two sides without labels
+        face.append([3,4,7,end_mat])
+        face.append([7,4,8,end_mat])
+        face.append([5,6,7,end_mat])
+        face.append([7,6,8,end_mat])
+        
     return vert,face,text_uv,m
 
 class threed_objects:
@@ -1660,9 +1701,10 @@ class o2graph_plotter(yt_plot_base):
         if xtitle!='':
             w,h=latex_to_png(xtitle,'xtitle.png')
             width2=float(w)/float(h)*0.1
-            x_v,x_f,x_t,x_m=latex_prism(0.5-width2/2.0,-0.15,0.05,
-                                        0.5+width2/2.0,-0.05,-0.05,
-                                        xtitle,'xtitle.png','mat_xtitle')
+            x_v,x_f,x_t,x_m=latex_prism(0.5-width2/2.0,-0.15,-0.05,
+                                        0.5+width2/2.0,-0.05,-0.15,
+                                        xtitle,'xtitle.png','mat_xtitle',
+                                        dir='x')
             to.add_mat(x_m)
             to.add_object(x_v,group_of_faces('x-title',x_f))
             if len(to.vt_list)==0:
@@ -1671,9 +1713,10 @@ class o2graph_plotter(yt_plot_base):
         if ytitle!='':
             w,h=latex_to_png(ytitle,'ytitle.png')
             width2=float(w)/float(h)*0.1
-            y_v,y_f,y_t,y_m=latex_prism(-0.15,0.5-width2/2.0,0.05,
-                                        -0.05,0.5+width2/2.0,-0.05,
-                                        ytitle,'ytitle.png','mat_ytitle')
+            y_v,y_f,y_t,y_m=latex_prism(-0.15,0.5-width2/2.0,-0.05,
+                                        -0.05,0.5+width2/2.0,-0.15,
+                                        ytitle,'ytitle.png','mat_ytitle',
+                                        dir='y')
             to.add_mat(y_m)
             to.add_object(y_v,group_of_faces('y-title',y_f))
             if len(to.vt_list)==0:
@@ -1682,9 +1725,10 @@ class o2graph_plotter(yt_plot_base):
         if ztitle!='':
             w,h=latex_to_png(ztitle,'ztitle.png')
             width2=float(w)/float(h)*0.1
-            z_v,z_f,z_t,z_m=latex_prism(-0.15,0.05,0.5-width2/2.0,
-                                        -0.05,-0.05,0.5+width2/2.0,
-                                        ztitle,'ztitle.png','mat_ztitle')
+            z_v,z_f,z_t,z_m=latex_prism(-0.15,-0.05,0.5-width2/2.0,
+                                        -0.05,-0.15,0.5+width2/2.0,
+                                        ztitle,'ztitle.png','mat_ztitle',
+                                        dir='z')
             to.add_mat(z_m)
             to.add_object(z_v,group_of_faces('z-title',z_f))
             if len(to.vt_list)==0:
