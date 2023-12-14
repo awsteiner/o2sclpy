@@ -836,8 +836,8 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
         face.append([2,3,4,3,2,4,mat_name])
         face.append([1,2,5,2,4,1,mat_name])
         face.append([5,2,6,1,4,3,mat_name])
-        face.append([3,4,7,4,2,3,mat_name])
-        face.append([7,4,8,3,2,1,mat_name])
+        face.append([8,7,4,4,2,3,mat_name])
+        face.append([4,7,3,3,2,1,mat_name])
         face.append([5,6,7,2,4,1,mat_name])
         face.append([7,6,8,1,4,3,mat_name])
         
@@ -856,10 +856,8 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
         face.append([8,5,7,4,1,3,mat_name])
         face.append([4,2,8,4,2,3,mat_name])
         face.append([8,2,6,3,2,1,mat_name])
-        #face.append([7,5,3,2,4,1,mat_name])
-        #face.append([3,5,1,1,4,3,mat_name])
-        face.append([3,1,7,2,4,1,mat_name])
-        face.append([7,1,5,1,4,3,mat_name])
+        face.append([5,7,1,2,4,1,mat_name])
+        face.append([1,7,3,1,4,3,mat_name])
         
         # The two sides without labels
         face.append([3,4,7,end_mat])
@@ -870,18 +868,18 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
     else:
         
         # The four sides with labels
-        face.append([1,2,3,1,3,2,mat_name])
-        face.append([2,3,4,3,2,4,mat_name])
-        face.append([1,2,5,2,4,1,mat_name])
-        face.append([5,2,6,1,4,3,mat_name])
-        face.append([2,4,6,4,2,3,mat_name])
-        face.append([6,4,8,3,2,1,mat_name])
+        face.append([4,8,3,1,3,2,mat_name])
+        face.append([8,3,7,3,2,4,mat_name])
+        face.append([2,6,1,2,4,1,mat_name])
+        face.append([1,6,5,1,4,3,mat_name])
+        face.append([8,4,6,4,2,3,mat_name])
+        face.append([6,4,2,3,2,1,mat_name])
         face.append([1,5,3,2,4,1,mat_name])
         face.append([3,5,7,1,4,3,mat_name])
         
         # The two sides without labels
-        face.append([3,4,7,end_mat])
-        face.append([7,4,8,end_mat])
+        face.append([1,2,3,end_mat])
+        face.append([3,2,4,end_mat])
         face.append([5,6,7,end_mat])
         face.append([7,6,8,end_mat])
         
