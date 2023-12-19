@@ -96,6 +96,7 @@ base_list=[
     ["modax",plot_base.modax.__doc__],
     ["mp4",0],
     ["obj",0],
+    ["gltf",0],
     ["o2scl-addl-libs",
      "Specify a list of list of additional libraries to load."],
     ["o2scl-cpp-lib",
@@ -800,10 +801,17 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
                 dir='x',end_mat='white'):
     """
     Create a rectangular prism with textures from a png created by a
-    LaTeX string
+    LaTeX string on four sides.
 
     This function returns four objects: the vertices, the faces,
     the texture uv coordinates, and the material object
+
+    The variable dir is either 'x', 'y', or 'z', depending
+    on the orientation of the prism. For the 'x' direction,
+    the xy and xz faces have textures from the LaTeX object,
+    and the yz faces are set to the end material specified
+    in ``end_mat``. The normal vectors for all six faces point
+    outside the prism. 
     """
 
     w,h=latex_to_png(latex,png_file)
@@ -832,20 +840,20 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
     if dir=='x':
         
         # The four sides with labels
-        face.append([1,2,3,1,3,2,mat_name])
-        face.append([2,3,4,3,2,4,mat_name])
-        face.append([1,2,5,2,4,1,mat_name])
-        face.append([5,2,6,1,4,3,mat_name])
+        face.append([1,5,2,2,1,4,mat_name])
+        face.append([2,5,6,4,1,3,mat_name])
         face.append([8,7,4,4,2,3,mat_name])
         face.append([4,7,3,3,2,1,mat_name])
-        face.append([5,6,7,2,4,1,mat_name])
-        face.append([7,6,8,1,4,3,mat_name])
+        face.append([1,2,3,1,3,2,mat_name])
+        face.append([3,2,4,2,3,4,mat_name])
+        face.append([5,7,6,2,1,4,mat_name])
+        face.append([6,7,8,4,1,3,mat_name])
         
         # The two sides without labels
-        face.append([2,4,6,end_mat])
-        face.append([6,4,8,end_mat])
-        face.append([1,5,3,end_mat])
-        face.append([3,5,7,end_mat])
+        face.append([2,6,4,end_mat])
+        face.append([4,6,8,end_mat])
+        face.append([1,3,5,end_mat])
+        face.append([5,3,7,end_mat])
         
     elif dir=='y':
         
@@ -856,32 +864,33 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
         face.append([8,5,7,4,1,3,mat_name])
         face.append([4,2,8,4,2,3,mat_name])
         face.append([8,2,6,3,2,1,mat_name])
-        face.append([5,7,1,2,4,1,mat_name])
-        face.append([1,7,3,1,4,3,mat_name])
+        face.append([5,1,7,2,1,4,mat_name])
+        face.append([7,1,3,4,1,3,mat_name])
         
         # The two sides without labels
         face.append([3,4,7,end_mat])
         face.append([7,4,8,end_mat])
-        face.append([1,2,5,end_mat])
-        face.append([5,2,6,end_mat])
+        face.append([1,5,2,end_mat])
+        face.append([2,5,6,end_mat])
         
     else:
         
         # The four sides with labels
         face.append([4,8,3,1,3,2,mat_name])
-        face.append([8,3,7,3,2,4,mat_name])
-        face.append([2,6,1,2,4,1,mat_name])
-        face.append([1,6,5,1,4,3,mat_name])
+        face.append([3,8,7,2,3,4,mat_name])
+        face.append([2,1,6,2,1,4,mat_name])
+        face.append([6,1,5,4,1,3,mat_name])
+        
         face.append([8,4,6,4,2,3,mat_name])
         face.append([6,4,2,3,2,1,mat_name])
-        face.append([1,5,3,2,4,1,mat_name])
-        face.append([3,5,7,1,4,3,mat_name])
+        face.append([1,3,5,2,1,4,mat_name])
+        face.append([5,3,7,4,1,3,mat_name])
         
         # The two sides without labels
         face.append([1,2,3,end_mat])
         face.append([3,2,4,end_mat])
-        face.append([5,6,7,end_mat])
-        face.append([7,6,8,end_mat])
+        face.append([5,7,6,end_mat])
+        face.append([6,7,8,end_mat])
         
     return vert,face,text_uv,m
 
@@ -996,6 +1005,14 @@ class threed_objects:
         self.add_object(lv,gf)
         return
 
+    def is_mat(self, m: str):
+        """Return true if a a material named ``m`` has been added
+        """
+        for i in range(0,len(self.mat_list)):
+            if self.mat_list[i].name==m:
+                return True
+        return False
+    
     def add_object_mat_list(self, lv: list[list[float]],
                             gf: group_of_faces, lm: list[material]):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
@@ -1115,8 +1132,120 @@ class threed_objects:
                         
         return
         
+class td_plot_base(yt_plot_base):
+    """
+    A class for managing plots of three-dimensional data
+    """
+
+    def __init__(self):
+        super().__init__()
+        to=threed_objects()
+        return
+
+    def td_arrow(self,x1,y1,z1,x2,y2,z2,name='',
+                 mat : str | material = 'white')
+        """Documentation for o2graph command ``td-axis``:
+
+        Plot an axis in a 3d visualization
+
+        Command-line arguments: ``x1 y1 z1 x2 y2 z2 [kwargs]``
+        """
+        arr_vert,arr_face=arrow(x1,y1,z1,x2,y2,z2)
+
+        if not self.to.is_mat(mat_name):
+            white=material(mat_name,[1,1,1])
+            self.to.add_object_mat(arr_vert,
+                                   group_of_faces(name,arr_face,mat_name),
+                                   white)
+        else:
+            self.to.add_object(arr_vert,
+                               group_of_faces(name,arr_face,mat_name))
+
+        return
+
+    def td_axis_label(ldir : str, tex_label : str,
+                      mat_name : str = '', png_file : str = '',
+                      group_name : str = '', offset : float = 0.1,
+                      height : float = 0.1):
+        """Create an axis label in the direction ``ldir`` with label
+        ``tex_label``.
+        """
+
+        if ldir=='x':
+            
+            if png_file=='':
+                png_file='xtitle.png'
+            if mat_name=='':
+                mat_name='mat_xtitle'
+            if group_name=='':
+                group_name='x_title'
+            w,h=latex_to_png(xtitle,png_file)
+            width2=float(w)/float(h)*0.1
+            x_v,x_f,x_t,x_m=latex_prism(0.5-width2/2.0,-offset-height/2.0,
+                                        -offset+height/2.0,0.5+width2/2.0,
+                                        -offset+height/2.0,-offset-height/2.0,
+                                        tex_label,png_file,mat_name,
+                                        dir=ldir)
+            
+            self.to.add_mat(x_m)
+            self.to.add_object(x_v,group_of_faces(group_name,x_f))
+            if len(self.to.vt_list)==0:
+                for i in range(0,len(x_t)):
+                    self.to.vt_list.append(x_t[i])
+                    
+        elif ldir=='y':
+            
+            if png_file=='':
+                png_file='ytitle.png'
+            if mat_name=='':
+                mat_name='mat_ytitle'
+            if group_name=='':
+                group_name='y_title'
+            w,h=latex_to_png(ytitle,png_file)
+            width2=float(w)/float(h)*0.1
+            y_v,y_f,y_t,y_m=latex_prism(0.5-width2/2.0,-offset-height/2.0,
+                                        -offset+height/2.0,0.5+width2/2.0,
+                                        -offset+height/2.0,-offset-height/2.0,
+                                        tex_label,png_file,mat_name,
+                                        dir=ldir)
+            
+            self.to.add_mat(y_m)
+            self.to.add_object(y_v,group_of_faces(group_name,y_f))
+            if len(self.to.vt_list)==0:
+                for i in range(0,len(y_t)):
+                    self.to.vt_list.append(y_t[i])
+                    
+        elif ldir=='z':
+            
+            if png_file=='':
+                png_file='ztitle.png'
+            if mat_name=='':
+                mat_name='mat_ztitle'
+            if group_name=='':
+                group_name='z_title'
+            w,h=latex_to_png(ztitle,png_file)
+            width2=float(w)/float(h)*0.1
+            z_v,z_f,z_t,z_m=latex_prism(0.5-width2/2.0,-offset-height/2.0,
+                                        -offset+height/2.0,0.5+width2/2.0,
+                                        -offset+height/2.0,-offset-height/2.0,
+                                        tex_label,png_file,mat_name,
+                                        dir=ldir)
+            
+            self.to.add_mat(z_m)
+            self.to.add_object(z_v,group_of_faces(group_name,z_f))
+            if len(self.to.vt_list)==0:
+                for i in range(0,len(z_t)):
+                    self.to.vt_list.append(z_t[i])
+
+        else:
+
+            raise ValueError('Direction is not one of "x", "y", or '+
+                             '"z" in function td_axis_label().')
+                    
+            
+        return
     
-class o2graph_plotter(yt_plot_base):
+class o2graph_plotter(td_plot_base):
     """
     A plotting class for the o2graph script. This class is a child of the
     :py:class:`o2sclpy.plot_base` class.
@@ -1155,6 +1284,8 @@ class o2graph_plotter(yt_plot_base):
                 line[1]=o2graph_plotter.mp4.__doc__
             elif line[0]=="obj":
                 line[1]=o2graph_plotter.obj_o2graph.__doc__
+            elif line[0]=="gltf":
+                line[1]=o2graph_plotter.gltf_o2graph.__doc__
             elif line[0]=="kde-plot":
                 line[1]=o2graph_plotter.kde_plot.__doc__
             elif line[0]=="kde-2d-plot":
@@ -1646,6 +1777,57 @@ class o2graph_plotter(yt_plot_base):
 
         return
 
+    def gltf_o2graph(self,o2scl,amp,link,args):
+        """
+        """
+
+        curr_type=o2scl_get_type(o2scl,amp,self.link2)
+        amt=acol_manager(self.link2,amp)
+
+        kwstring=''
+        if curr_type!=b'table3d' and curr_type!=b'table':
+            print("Command 'den-plot-rgb' not supported for type",
+                  curr_type,".")
+            return
+
+        if curr_type==b'table3d':
+            prefix=args[1]
+            if len(args)>=3:
+                kwstring=args[2]
+        else:
+            prefix=args[3]
+            if len(args)>=5:
+                kwstring=args[4]
+                
+        print('here',kwstring)
+        dctt=string_to_dict2(kwstring)
+        cmap=dctt.pop('cmap','')
+        mtl_file=dctt.pop('mtl_file','')
+        xtitle=dctt.pop('xtitle','')
+        ytitle=dctt.pop('ytitle','')
+        ztitle=dctt.pop('ztitle','')
+        print('here2',xtitle)
+        print('here2',ytitle)
+        print('here2',ztitle)
+        
+        white=material('white',[1,1,1])
+        
+        to=threed_objects()
+
+        w,h=latex_to_png(xtitle,'xtitle.png')
+        width2=float(w)/float(h)*0.1
+        x_v,x_f,x_t,x_m=latex_prism(0.5-width2/2.0,-0.15,-0.05,
+                                    0.5+width2/2.0,-0.05,-0.15,
+                                    xtitle,'xtitle.png','mat_xtitle',
+                                    dir='x')
+        to.add_mat(x_m)
+        to.add_object(x_v,group_of_faces('x-title',x_f))
+        if len(to.vt_list)==0:
+            for i in range(0,len(x_t)):
+                to.vt_list.append(x_t[i])
+
+        return
+    
     def obj_o2graph(self,o2scl,amp,link,args):
         """
         """
@@ -1686,15 +1868,19 @@ class o2graph_plotter(yt_plot_base):
         white=material('white',[1,1,1])
         
         to=threed_objects()
-        to.add_object_mat(arr_vert,
-                          group_of_faces('x-axis',arr_face,'white'),
-                          white)
-        to.add_object_mat(arr_vert2,
-                          group_of_faces('y-axis',arr_face2,'white'),
-                          white)
-        to.add_object_mat(arr_vert3,
-                          group_of_faces('z-axis',arr_face3,'white'),
-                          white)
+        
+        if False:
+            to.add_object_mat(arr_vert,
+                              group_of_faces('x-axis',arr_face,'white'),
+                              white)
+            to.add_object_mat(arr_vert2,
+                              group_of_faces('y-axis',arr_face2,'white'),
+                              white)
+            to.add_object_mat(arr_vert3,
+                              group_of_faces('z-axis',arr_face3,'white'),
+                              white)
+        else:
+            to.add_mat(white)
 
         if xtitle!='':
             w,h=latex_to_png(xtitle,'xtitle.png')
@@ -1708,6 +1894,10 @@ class o2graph_plotter(yt_plot_base):
             if len(to.vt_list)==0:
                 for i in range(0,len(x_t)):
                     to.vt_list.append(x_t[i])
+
+            to.write_obj(prefix)
+            quit()
+            
         if ytitle!='':
             w,h=latex_to_png(ytitle,'ytitle.png')
             width2=float(w)/float(h)*0.1
@@ -1720,6 +1910,7 @@ class o2graph_plotter(yt_plot_base):
             if len(to.vt_list)==0:
                 for i in range(0,len(x_t)):
                     to.vt_list.append(x_t[i])
+                    
         if ztitle!='':
             w,h=latex_to_png(ztitle,'ztitle.png')
             width2=float(w)/float(h)*0.1
@@ -1817,16 +2008,16 @@ class o2graph_plotter(yt_plot_base):
                                         ell=len(cmap_mats)
 
                             # Add the two triangles 
-                            arr2=[k,k+1,k+nyt,cmap_name]
+                            arr2=[k,k+nyt,k+1,cmap_name]
                             den_face.append(arr2)
-                            arr3=[k+1,k+1+nyt,k+nyt,cmap_name]
+                            arr3=[k+nyt,k+1+nyt,k+1,cmap_name]
                             den_face.append(arr3)
                             
                         else:
                             
-                            arr2=[k,k+1,k+nyt]
+                            arr2=[k,k+nyt,k+1]
                             den_face.append(arr2)
-                            arr3=[k+1,k+1+nyt,k+nyt]
+                            arr3=[k+nyt,k+1+nyt,k+1]
                             den_face.append(arr3)
                             
                     k=k+1

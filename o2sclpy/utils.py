@@ -48,7 +48,9 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
     specifies the number of vertices in the azimuthal direction.
 
     This function returns a pair of two lists, the first is the
-    vertices and the second are the faces.
+    vertices and the second are the faces. The normal vectors always
+    point out away from the axis.
+
     """
 
     # The length of the arrow
