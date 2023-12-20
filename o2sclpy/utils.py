@@ -36,6 +36,30 @@ import numpy
 #import ctypes
 #from ctypes.util import find_library
 
+def cross(x,y,norm=False):
+    """Return the cross product between two vectors
+
+    If ``norm`` is ``True``, then normalize the cross product
+    afterwards.
+    """
+    cross=[x[1]*y[2]-x[2]*y[1],x[2]*y[0]-x[0]*y[2],
+           x[0]*y[1]-y[0]*x[1]]
+    if norm:
+        cross_norm=numpy.sqrt(cross[0]*cross[0]+cross[1]*cross[1]+
+                              cross[2]*cross[2])
+        cross[0]=cross[0]/cross_norm
+        cross[1]=cross[1]/cross_norm
+        cross[2]=cross[2]/cross_norm
+    return cross
+
+def norm3(x):
+    """Return a normalized version of x"""
+    mag=numpy.sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])
+    x[0]=x[0]/mag
+    x[1]=x[1]/mag
+    x[2]=x[2]/mag
+    return x
+
 def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
           head_width=3):
     """Create a set of vertices and triangular faces for an
@@ -46,17 +70,20 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
     variable tail_ratio specifies the length of the cylinder divided
     by the distance between point 1 and point 2. The argument n_theta
     specifies the number of vertices in the azimuthal direction.
+    If r is zero or negative, then it is set to the length of the
+    arrow divided by 80.
 
-    This function returns a pair of two lists, the first is the
-    vertices and the second are the faces. The normal vectors always
-    point out away from the axis.
-
+    This function returns a set of three lists, the first is the
+    vertices, the second are the vertex normals, and the third are the
+    faces. The normal vectors always point out away from the axis,
+    except for the single vertex at the head of the arrow, which 
+    points in the direction of the arrow.
     """
 
     # The length of the arrow
     arrow_len=numpy.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)
 
-    if r==0:
+    if r<=0:
         r=arrow_len/80
     
     # The end point of the tail (and the starting point of the head)
@@ -64,6 +91,7 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
               z1+(z2-z1)*tail_ratio]
     
     vert=[]
+    vn=[]
     face=[]
 
     # Construct an arbitrary vector not along the arrow's axis
@@ -100,12 +128,24 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
                      cross[1]*numpy.sin(theta),
                      z1+arb[2]*numpy.cos(theta)+
                      cross[2]*numpy.sin(theta)])
+        vn.append([arb[0]*numpy.cos(theta)+
+                   cross[0]*numpy.sin(theta),
+                   arb[1]*numpy.cos(theta)+
+                   cross[1]*numpy.sin(theta),
+                   arb[2]*numpy.cos(theta)+
+                   cross[2]*numpy.sin(theta)])
         vert.append([tail_end[0]+arb[0]*numpy.cos(theta)+
                      cross[0]*numpy.sin(theta),
                      tail_end[1]+arb[1]*numpy.cos(theta)+
                      cross[1]*numpy.sin(theta),
                      tail_end[2]+arb[2]*numpy.cos(theta)+
                      cross[2]*numpy.sin(theta)])
+        vn.append([arb[0]*numpy.cos(theta)+
+                   cross[0]*numpy.sin(theta),
+                   arb[1]*numpy.cos(theta)+
+                   cross[1]*numpy.sin(theta),
+                   arb[2]*numpy.cos(theta)+
+                   cross[2]*numpy.sin(theta)])
         if i!=n_theta-1:
             face.append([2*i+1,2*i+2,2*i+3])
             face.append([2*i+3,2*i+2,2*i+4])
@@ -115,6 +155,9 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
 
     # Handle the head
     vert.append([x2,y2,z2])
+    tmp=norm3([x2-x1,y2-y1,z2-z1])
+    vn.append(tmp)
+    
     point_index=len(vert)
     
 #    for j in range(0,3):
@@ -128,6 +171,12 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
                      head_width*cross[1]*numpy.sin(theta),
                      tail_end[2]+head_width*arb[2]*numpy.cos(theta)+
                      head_width*cross[2]*numpy.sin(theta)])
+        vn.append([head_width*arb[0]*numpy.cos(theta)+
+                   head_width*cross[0]*numpy.sin(theta),
+                   head_width*arb[1]*numpy.cos(theta)+
+                   head_width*cross[1]*numpy.sin(theta),
+                   head_width*arb[2]*numpy.cos(theta)+
+                   head_width*cross[2]*numpy.sin(theta)])
         if i==n_theta-1:
             face.append([point_index+i+1,point_index+1,
                          point_index])
@@ -135,34 +184,94 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
             face.append([point_index+i+1,point_index+i+2,
                          point_index])
         
-    return vert,face
+    return vert,vn,face
 
 def icosahedron(x,y,z,r):
     """Construct the vertices and faces of an icosahedron centered at
     (x,y,z) with radius r
+
+    This function returns a set of three lists, the first is the
+    vertices, the second are the vertex normals, and the third are the
+    faces. The normal vectors always point outwards.
     """
     phi=(1.0+numpy.sqrt(5.0))*0.5
     b=r/phi;
     
     vert=[]
-    vert.append([0,b,-r])
-    vert.append([b,r,0])
-    vert.append([-b,r,0])
-    vert.append([0,b,r])
-    vert.append([0,-b,r])
-    vert.append([-r,0,b])
-    vert.append([0,-b,-r])
-    vert.append([r,0,-b])
-    vert.append([r,0,b])
-    vert.append([-r,0,-b])
-    vert.append([b,-r,0])
-    vert.append([-b,-r,0])
+    vn=[]
+    
+    tmp=[0,b,-r]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
 
+    tmp=[0,b,-r]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[b,r,0]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[-b,r,0]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[0,b,r]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[0,-b,r]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[-r,0,b]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[0,-b,-r]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[r,0,-b]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[r,0,b]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[-r,0,-b]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[b,-r,0]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[-b,-r,0]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    # Shift the origin to the user-specified coordinates
     for i in range(0,len(vert)):
         vert[i][0]=vert[i][0]+x
         vert[i][1]=vert[i][1]+y
         vert[i][2]=vert[i][2]+z
 
+    # Enumerate the faces
     face=[]
     face.append([3,2,1])
     face.append([2,3,4])
@@ -185,7 +294,7 @@ def icosahedron(x,y,z,r):
     face.append([6,12,5])
     face.append([11,9,5])
 
-    return vert,face
+    return vert,vn,face
     
 def cpp_test(x):
     """

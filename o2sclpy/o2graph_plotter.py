@@ -132,6 +132,18 @@ base_list=[
      "subplots_adjust() function requires right>left and "+
      "top>bottom."],
     ["subplots",plot_base.subplots.__doc__],
+    ["td-axis","Documentation for td-axis\n\n"+
+     "Create a 3D axis label (experimental).\n\n"+
+     "<x label> <y label> <z label> [kwargs]\n\n"+
+     "Full desc."],
+    ["td-arrow","Documentation for td-arrow\n\n"+
+     "Create a 3D arrow (experimental).\n\n"+
+     "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]\n\n"+
+     "Full desc."],
+    ["td-den-plot","Documentation for td-den-plot\n\n"+
+     "Create a 3D density plot (experimental).\n\n"+
+     "<x label> <y label> <z label> [kwargs]\n\n"+
+     "Full desc."],
     ["text",plot_base.text.__doc__],
     ["textbox",plot_base.textbox.__doc__],
     ["ttext",plot_base.ttext.__doc__],
@@ -925,7 +937,7 @@ class threed_objects:
         len_lv=len(self.vert_list)
 
         # Add all of the vertices
-        print('Add vertices.')
+        print('threed_object::add_object(): Add vertices.')
         for i in range(0,len(lv)):
             self.vert_list.append(lv[i])
 
@@ -1139,31 +1151,192 @@ class td_plot_base(yt_plot_base):
 
     def __init__(self):
         super().__init__()
-        to=threed_objects()
+        self.to=threed_objects()
         return
 
-    def td_arrow(self,x1,y1,z1,x2,y2,z2,name='',
-                 mat : str | material = 'white')
-        """Documentation for o2graph command ``td-axis``:
+    def td_den_plot(self,o2scl,amp,args,cmap='',mat_name='white'):
+        """
+        Desc
+        """
+        curr_type=o2scl_get_type(o2scl,amp,self.link2)
+        amt=acol_manager(self.link2,amp)
+
+        kwstring=''
+        slice_name=''
+        slice=args[0]
+
+        if curr_type==b'table3d':
+            slice_name=args[0]
+            if len(args)>=2:
+                kwstring=args[1]
+        else:
+            print("Command 'td-den-plot' not supported for type",
+                  curr_type,".")
+            return
+
+        table3d=amt.get_table3d_obj()
+        nxt=table3d.get_nx()
+        nyt=table3d.get_ny()
+        sl=table3d.get_slice(slice).to_numpy()
+        xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
+        ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
+        
+        if self.xset==False:
+            self.xlo=numpy.min(xgrid)
+            self.xhi=numpy.max(xgrid)
+            if self.verbose>2:
+                print('td_den_plot(): x limits not set, so setting to',
+                      self.xlo,',',self.xhi)
+        if self.yset==False:
+            self.ylo=numpy.min(ygrid)
+            self.yhi=numpy.max(ygrid)
+            if self.verbose>2:
+                print('td_den_plot(): y limits not set, so setting to',
+                      self.ylo,',',self.yhi)
+        if self.zset==False:
+            self.zlo=numpy.min(sl)
+            self.zhi=numpy.max(sl)
+            if self.verbose>2:
+                print('td_den_plot(): z limits not set, so setting to',
+                      self.zlo,',',self.zhi)
+        
+        # If true, then a color map has been specified and we need
+        # to add materials
+        colors=False
+        
+        # The list of 256 materials defined by the color map
+        # (not all will be needed for the 3d object
+        cmap_mats=[]
+        
+        if cmap!='':
+            
+            import matplotlib.cm as cm
+            from matplotlib.colors import Normalize
+            import matplotlib.pyplot as plot
+            
+            color_map=cm.get_cmap(cmap)
+            norm=plot.Normalize(0,255)
+            
+            for i in range(0,256):
+                rgb=color_map(norm(float(i)))[:3]
+                cmap_mats.append(material('cmap_'+str(i),[rgb[0],rgb[1],
+                                                       rgb[2]]))
+                
+            colors=True
+            if self.verbose>2:
+                print('td_den_plot(): Using colors from cmap',cmap)
+            
+        # Vertices for the density plot
+        den_vert=[]
+        # Faces for the density plot
+        den_face=[]
+        # Materials for the density plot
+        den_ml=[]
+        
+         # Vertex index for faces
+        k=1
+        for i in range(0,nxt):
+            for j in range(0,nyt):
+                arr=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
+                     (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
+                     (sl[i,j]-self.zlo)/(self.zhi-self.zlo)]
+                den_vert.append(arr)
+                if i<nxt-1 and j<nyt-1:
+                    if colors==True:
+                        # Construct the colormap index
+                        cmap_ix=int(arr[2]*256)
+                        if cmap_ix>255:
+                            cmap_ix=255
+                        cmap_name='cmap_'+str(cmap_ix)
+                        # See if the corresponding material is already
+                        # in the list named 'den_ml'
+                        mat_found=False
+                        for ell in range(0,len(den_ml)):
+                            if den_ml[ell].name==cmap_name:
+                                mat_found=True
+                        # If it was not found, find it in the list
+                        # named 'cmap_mats'
+                        if mat_found==False:
+                            for ell in range(0,len(cmap_mats)):
+                                if cmap_mats[ell].name==cmap_name:
+                                    print('Adding material',cmap_name)
+                                    den_ml.append(cmap_mats[ell])
+                                    ell=len(cmap_mats)
+                         # Add the two triangles 
+                        arr2=[k,k+nyt,k+1,cmap_name]
+                        den_face.append(arr2)
+                        arr3=[k+nyt,k+1+nyt,k+1,cmap_name]
+                        den_face.append(arr3)
+                        
+                    else:
+                        
+                        arr2=[k,k+nyt,k+1]
+                        den_face.append(arr2)
+                        arr3=[k+nyt,k+1+nyt,k+1]
+                        den_face.append(arr3)
+                        
+                k=k+1
+                
+        if self.verbose>2:
+            print('td_den_plot(): adding',len(den_face),'faces.')
+        if colors==True:
+            self.to.add_object_mat_list(den_vert,
+                                   group_of_faces('plot',den_face),
+                                   den_ml)
+            for i in range(0,len(to.mat_list)):
+                print('to.mat_list',i,to.mat_list[i].name)
+        else:
+            
+            if self.to.is_mat(mat_name)==False:
+                
+                if mat_name=='white':
+                    white=material(mat_name,[1,1,1])
+                    self.to.add_mat(white)
+                else:
+                    print('Material '+mat_name+' not found in td-den-plot.')
+                    return
+            
+                self.to.add_object_mat(den_vert,
+                                       group_of_faces('plot',den_face,'white'),
+                                       white)
+
+        return
+        
+    def td_arrow(self,x1,y1,z1,x2,y2,z2,name,
+                 mat : str | material = 'white'):
+        """Documentation for o2graph command ``td-arrow``:
 
         Plot an axis in a 3d visualization
 
-        Command-line arguments: ``x1 y1 z1 x2 y2 z2 [kwargs]``
+        Command-line arguments: ``x1 y1 z1 x2 y2 z2 group_name [kwargs]``
         """
         arr_vert,arr_face=arrow(x1,y1,z1,x2,y2,z2)
 
-        if not self.to.is_mat(mat_name):
-            white=material(mat_name,[1,1,1])
-            self.to.add_object_mat(arr_vert,
-                                   group_of_faces(name,arr_face,mat_name),
-                                   white)
-        else:
+        if type(mat)==str:
+            if not self.to.is_mat(mat):
+                if mat=='white':
+                    white=material(mat_name,[1,1,1])
+                    self.to.add_mat(white)
+                else:
+                    print('No material named',mat,'in td-arrow')
+                    return
+            if self.verbose>2:
+                print('td_arrow() creating group named',name,'with material',
+                      mat+'.')
             self.to.add_object(arr_vert,
-                               group_of_faces(name,arr_face,mat_name))
+                               group_of_faces(name,arr_face,mat))
+        else:
+            if self.verbose>2:
+                print('td_arrow() creating group named',name,'with material',
+                      mat.name+'.')
+            if not self.to.is_mat(mat.name):
+                self.to.add_mat(mat)
+            self.to.add_object(arr_vert,
+                               group_of_faces(name,arr_face,mat.name))
 
         return
 
-    def td_axis_label(ldir : str, tex_label : str,
+    def td_axis_label(self, ldir : str, tex_label : str,
                       mat_name : str = '', png_file : str = '',
                       group_name : str = '', offset : float = 0.1,
                       height : float = 0.1):
@@ -1179,8 +1352,15 @@ class td_plot_base(yt_plot_base):
                 mat_name='mat_xtitle'
             if group_name=='':
                 group_name='x_title'
-            w,h=latex_to_png(xtitle,png_file)
+
+            if self.verbose>2:
+                print('td_axis_label(): png_file:',png_file,'mat_name:',
+                      mat_name,'group_name:',group_name)
+            w,h=latex_to_png(tex_label,png_file)
             width2=float(w)/float(h)*0.1
+            if self.verbose>2:
+                print('td_axis_label(): w:',w,'width2:',width2,
+                      'h:',h)
             x_v,x_f,x_t,x_m=latex_prism(0.5-width2/2.0,-offset-height/2.0,
                                         -offset+height/2.0,0.5+width2/2.0,
                                         -offset+height/2.0,-offset-height/2.0,
@@ -1201,8 +1381,14 @@ class td_plot_base(yt_plot_base):
                 mat_name='mat_ytitle'
             if group_name=='':
                 group_name='y_title'
-            w,h=latex_to_png(ytitle,png_file)
+            if self.verbose>2:
+                print('td_axis_label(): png_file:',png_file,'mat_name:',
+                      mat_name,'group_name:',group_name)
+            w,h=latex_to_png(tex_label,png_file)
             width2=float(w)/float(h)*0.1
+            if self.verbose>2:
+                print('td_axis_label(): w:',w,'width2:',width2,
+                      'h:',h)
             y_v,y_f,y_t,y_m=latex_prism(0.5-width2/2.0,-offset-height/2.0,
                                         -offset+height/2.0,0.5+width2/2.0,
                                         -offset+height/2.0,-offset-height/2.0,
@@ -1223,8 +1409,14 @@ class td_plot_base(yt_plot_base):
                 mat_name='mat_ztitle'
             if group_name=='':
                 group_name='z_title'
-            w,h=latex_to_png(ztitle,png_file)
+            if self.verbose>2:
+                print('td_axis_label(): png_file:',png_file,'mat_name:',
+                      mat_name,'group_name:',group_name)
+            w,h=latex_to_png(tex_label,png_file)
             width2=float(w)/float(h)*0.1
+            if self.verbose>2:
+                print('td_axis_label(): w:',w,'width2:',width2,
+                      'h:',h)
             z_v,z_f,z_t,z_m=latex_prism(0.5-width2/2.0,-offset-height/2.0,
                                         -offset+height/2.0,0.5+width2/2.0,
                                         -offset+height/2.0,-offset-height/2.0,
@@ -1238,10 +1430,12 @@ class td_plot_base(yt_plot_base):
                     self.to.vt_list.append(z_t[i])
 
         else:
-
-            raise ValueError('Direction is not one of "x", "y", or '+
-                             '"z" in function td_axis_label().')
-                    
+            if type(ldir)==str:
+                raise ValueError('Direction '+ldir+' is not one of "x", "y",'+
+                                 ' or "z" in function td_axis_label().')
+            else:
+                raise ValueError('Direction is not one of "x", "y",'+
+                                 ' or "z" in function td_axis_label().')
             
         return
     
@@ -1781,351 +1975,27 @@ class o2graph_plotter(td_plot_base):
         """
         """
 
-        curr_type=o2scl_get_type(o2scl,amp,self.link2)
-        amt=acol_manager(self.link2,amp)
+        prefix=args[0]
+        if len(args)>=2:
+            kwstring=args[1]
 
-        kwstring=''
-        if curr_type!=b'table3d' and curr_type!=b'table':
-            print("Command 'den-plot-rgb' not supported for type",
-                  curr_type,".")
-            return
-
-        if curr_type==b'table3d':
-            prefix=args[1]
-            if len(args)>=3:
-                kwstring=args[2]
-        else:
-            prefix=args[3]
-            if len(args)>=5:
-                kwstring=args[4]
-                
-        print('here',kwstring)
-        dctt=string_to_dict2(kwstring)
-        cmap=dctt.pop('cmap','')
-        mtl_file=dctt.pop('mtl_file','')
-        xtitle=dctt.pop('xtitle','')
-        ytitle=dctt.pop('ytitle','')
-        ztitle=dctt.pop('ztitle','')
-        print('here2',xtitle)
-        print('here2',ytitle)
-        print('here2',ztitle)
-        
-        white=material('white',[1,1,1])
-        
-        to=threed_objects()
-
-        w,h=latex_to_png(xtitle,'xtitle.png')
-        width2=float(w)/float(h)*0.1
-        x_v,x_f,x_t,x_m=latex_prism(0.5-width2/2.0,-0.15,-0.05,
-                                    0.5+width2/2.0,-0.05,-0.15,
-                                    xtitle,'xtitle.png','mat_xtitle',
-                                    dir='x')
-        to.add_mat(x_m)
-        to.add_object(x_v,group_of_faces('x-title',x_f))
-        if len(to.vt_list)==0:
-            for i in range(0,len(x_t)):
-                to.vt_list.append(x_t[i])
+        if self.verbose>2:
+            print('Writing gltf to file',prefix)
+        #self.to.write_obj(prefix)
 
         return
     
     def obj_o2graph(self,o2scl,amp,link,args):
+        """Produce an obj file
         """
-        """
 
-        curr_type=o2scl_get_type(o2scl,amp,self.link2)
-        amt=acol_manager(self.link2,amp)
+        prefix=args[0]
+        if len(args)>=2:
+            kwstring=args[1]
 
-        kwstring=''
-        if curr_type!=b'table3d' and curr_type!=b'table':
-            print("Command 'den-plot-rgb' not supported for type",
-                  curr_type,".")
-            return
-
-        if curr_type==b'table3d':
-            prefix=args[1]
-            if len(args)>=3:
-                kwstring=args[2]
-        else:
-            prefix=args[3]
-            if len(args)>=5:
-                kwstring=args[4]
-                
-        print('here',kwstring)
-        dctt=string_to_dict2(kwstring)
-        cmap=dctt.pop('cmap','')
-        mtl_file=dctt.pop('mtl_file','')
-        xtitle=dctt.pop('xtitle','')
-        ytitle=dctt.pop('ytitle','')
-        ztitle=dctt.pop('ztitle','')
-        print('here2',xtitle)
-        print('here2',ytitle)
-        print('here2',ztitle)
-        
-        arr_vert,arr_face=arrow(0,0,0,1,0,0)
-        arr_vert2,arr_face2=arrow(0,0,0,0,1,0)
-        arr_vert3,arr_face3=arrow(0,0,0,0,0,1)
-        
-        white=material('white',[1,1,1])
-        
-        to=threed_objects()
-        
-        if False:
-            to.add_object_mat(arr_vert,
-                              group_of_faces('x-axis',arr_face,'white'),
-                              white)
-            to.add_object_mat(arr_vert2,
-                              group_of_faces('y-axis',arr_face2,'white'),
-                              white)
-            to.add_object_mat(arr_vert3,
-                              group_of_faces('z-axis',arr_face3,'white'),
-                              white)
-        else:
-            to.add_mat(white)
-
-        if xtitle!='':
-            w,h=latex_to_png(xtitle,'xtitle.png')
-            width2=float(w)/float(h)*0.1
-            x_v,x_f,x_t,x_m=latex_prism(0.5-width2/2.0,-0.15,-0.05,
-                                        0.5+width2/2.0,-0.05,-0.15,
-                                        xtitle,'xtitle.png','mat_xtitle',
-                                        dir='x')
-            to.add_mat(x_m)
-            to.add_object(x_v,group_of_faces('x-title',x_f))
-            if len(to.vt_list)==0:
-                for i in range(0,len(x_t)):
-                    to.vt_list.append(x_t[i])
-
-            to.write_obj(prefix)
-            quit()
-            
-        if ytitle!='':
-            w,h=latex_to_png(ytitle,'ytitle.png')
-            width2=float(w)/float(h)*0.1
-            y_v,y_f,y_t,y_m=latex_prism(-0.15,0.5-width2/2.0,-0.05,
-                                        -0.05,0.5+width2/2.0,-0.15,
-                                        ytitle,'ytitle.png','mat_ytitle',
-                                        dir='y')
-            to.add_mat(y_m)
-            to.add_object(y_v,group_of_faces('y-title',y_f))
-            if len(to.vt_list)==0:
-                for i in range(0,len(x_t)):
-                    to.vt_list.append(x_t[i])
-                    
-        if ztitle!='':
-            w,h=latex_to_png(ztitle,'ztitle.png')
-            width2=float(w)/float(h)*0.1
-            z_v,z_f,z_t,z_m=latex_prism(-0.15,-0.05,0.5-width2/2.0,
-                                        -0.05,-0.15,0.5+width2/2.0,
-                                        ztitle,'ztitle.png','mat_ztitle',
-                                        dir='z')
-            to.add_mat(z_m)
-            to.add_object(z_v,group_of_faces('z-title',z_f))
-            if len(to.vt_list)==0:
-                for i in range(0,len(x_t)):
-                    to.vt_list.append(x_t[i])
-
-        if curr_type==b'table3d':
-        
-            slice=args[0]
-    
-            table3d=amt.get_table3d_obj()
-            nxt=table3d.get_nx()
-            nyt=table3d.get_ny()
-            sl=table3d.get_slice(slice).to_numpy()
-            xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
-            ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
-            if self.xset==False:
-                self.xlo=numpy.min(xgrid)
-                self.xhi=numpy.max(xgrid)
-            if self.yset==False:
-                self.ylo=numpy.min(ygrid)
-                self.yhi=numpy.max(ygrid)
-            if self.zset==False:
-                self.zlo=numpy.min(sl)
-                self.zhi=numpy.max(sl)
-            
-            # If true, then a color map has been specified and we need
-            # to add materials
-            colors=False
-            # The list of 256 materials defined by the color map
-            # (not all will be needed for the 3d object
-            cmap_mats=[]
-            
-            if cmap!='':
-                
-                import matplotlib.cm as cm
-                from matplotlib.colors import Normalize
-                import matplotlib.pyplot as plot
-                
-                color_map=cm.get_cmap(cmap)
-                norm=plot.Normalize(0,255)
-                
-                for i in range(0,256):
-                    rgb=color_map(norm(float(i)))[:3]
-                    cmap_mats.append(material('cmap_'+str(i),[rgb[0],rgb[1],
-                                                           rgb[2]]))
-                    
-                colors=True
-
-            # Vertices for the density plot
-            den_vert=[]
-            # Faces for the density plot
-            den_face=[]
-            # Materials for the density plot
-            den_ml=[]
-
-            # Vertex index for faces
-            k=1
-            for i in range(0,nxt):
-                for j in range(0,nyt):
-                    arr=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
-                         (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
-                         (sl[i,j]-self.zlo)/(self.zhi-self.zlo)]
-                    den_vert.append(arr)
-                    if i<nxt-1 and j<nyt-1:
-                        if colors==True:
-
-                            # Construct the colormap index
-                            cmap_ix=int(arr[2]*256)
-                            if cmap_ix>255:
-                                cmap_ix=255
-                            cmap_name='cmap_'+str(cmap_ix)
-
-                            # See if the corresponding material is already
-                            # in the list named 'den_ml'
-                            mat_found=False
-                            for ell in range(0,len(den_ml)):
-                                if den_ml[ell].name==cmap_name:
-                                    mat_found=True
-
-                            # If it was not found, find it in the list
-                            # named 'cmap_mats'
-                            if mat_found==False:
-                                for ell in range(0,len(cmap_mats)):
-                                    if cmap_mats[ell].name==cmap_name:
-                                        print('Adding material',cmap_name)
-                                        den_ml.append(cmap_mats[ell])
-                                        ell=len(cmap_mats)
-
-                            # Add the two triangles 
-                            arr2=[k,k+nyt,k+1,cmap_name]
-                            den_face.append(arr2)
-                            arr3=[k+nyt,k+1+nyt,k+1,cmap_name]
-                            den_face.append(arr3)
-                            
-                        else:
-                            
-                            arr2=[k,k+nyt,k+1]
-                            den_face.append(arr2)
-                            arr3=[k+nyt,k+1+nyt,k+1]
-                            den_face.append(arr3)
-                            
-                    k=k+1
-
-            if colors==True:
-                to.add_object_mat_list(den_vert,
-                                       group_of_faces('plot',den_face),
-                                       den_ml)
-                for i in range(0,len(to.mat_list)):
-                    print('to.mat_list',i,to.mat_list[i].name)
-            else:
-                to.add_object_mat(den_vert,
-                                  group_of_faces('plot',den_face,'white'),
-                                  white)
-                    
-        else:
-
-            col_x=args[0]
-            col_y=args[1]
-            col_z=args[2]
-    
-            col_r=dctt.pop('col_r','')
-            col_g=dctt.pop('col_g','')
-            col_b=dctt.pop('col_b','')
-    
-            table=amt.get_table_obj()
-            n=table.get_nlines()
-
-            # If true, then a color map has been specified and we need
-            # to add materials
-            colors=False
-            
-            if self.xset==False:
-                self.xlo=numpy.min(table[col_x])
-                self.xhi=numpy.max(table[col_x])
-            if self.yset==False:
-                self.ylo=numpy.min(table[col_y])
-                self.yhi=numpy.max(table[col_y])
-            if self.zset==False:
-                self.zlo=numpy.min(table[col_z])
-                self.zhi=numpy.max(table[col_z])
-            if col_r!='':
-                rlo=numpy.min(table[col_r])
-                rhi=numpy.max(table[col_r])
-                colors=True
-            if col_g!='':
-                glo=numpy.min(table[col_g])
-                ghi=numpy.max(table[col_g])
-                colors=True
-            if col_b!='':
-                blo=numpy.min(table[col_b])
-                bhi=numpy.max(table[col_b])
-                colors=True
-    
-            scatter_vert=[]
-            scatter_face=[]
-            color_cache=[]
-            
-            # Vertex index for faces
-            k=1
-            for i in range(0,n):
-                
-                x_norm=(table[col_x][i]-self.xlo)/(self.xhi-self.xlo)
-                y_norm=(table[col_y][i]-self.ylo)/(self.yhi-self.ylo)
-                z_norm=(table[col_z][i]-self.zlo)/(self.zhi-self.zlo)
-
-                # We choose not 255^3 colors but 17^3 colors
-                if col_r!='':
-                    r_norm=15*int(17*(table[col_r][i]-rlo)/(rhi-rlo))
-                else:
-                    r_norm=255
-                if col_g!='':
-                    g_norm=15*int(17*(table[col_g][i]-glo)/(ghi-glo))
-                else:
-                    g_norm=255
-                if col_b!='':
-                    b_norm=15*int(17*(table[col_b][i]-blo)/(bhi-blo))
-                else:
-                    b_norm=255
-
-                cmap_name=('cmap_'+str(r_norm)+'_'+str(g_norm)+'_'+
-                           str(b_norm))
-                if [r_norm,g_norm,b_norm] not in color_cache:
-                    color_cache.append([r_norm,g_norm,b_norm])
-                    m=material(cmap_name,[float(r_norm)/255.0,
-                                            float(g_norm)/255.0,
-                                            float(b_norm)/255.0])
-                    to.add_mat(m)
-                    
-                col_index=color_cache.index([r_norm,g_norm,b_norm])
-                
-                scatter_vert,scatter_face=icosahedron(x_norm,
-                                                      y_norm,z_norm,0.01)
-
-                if colors==False:
-                    to.add_object_mat(scatter_vert,
-                                      group_of_faces('point_'+str(i),
-                                                     scatter_face,'white'),
-                                      white)
-                else:
-                    for k in range(0,len(scatter_face)):
-                        scatter_face[k].append(cmap_name)
-                        #print('ksf:',k,scatter_face[k])
-                    to.add_object(scatter_vert,
-                                  group_of_faces('point_'+str(i),
-                                                 scatter_face))
-                    
-        to.write_obj(prefix)
+        if self.verbose>2:
+            print('Writing obj to file',prefix)
+        self.to.write_obj(prefix)
 
         return
 
@@ -6228,7 +6098,54 @@ class o2graph_plotter(td_plot_base):
                             icnt=icnt+1
                         if icnt==0:
                             print('No yt sources.')
-                    
+
+                elif cmd_name=='td-arrow':
+
+                    if self.verbose>2:
+                        print('Process td-axis.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix>=8:
+                        self.td_arrow(float(strlist[ix+1]),
+                                      float(strlist[ix+2]),
+                                      float(strlist[ix+3]),
+                                      float(strlist[ix+4]),
+                                      float(strlist[ix+5]),
+                                      float(strlist[ix+6]),
+                                      strlist[ix+7])
+                    else:
+                        print('Not enough arguments for td-arrow.')
+
+                elif cmd_name=='td-axis':
+
+                    if self.verbose>2:
+                        print('Process td-axis.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix>=4:
+                        self.td_arrow(0,0,0,1,0,0,'x_axis')
+                        self.td_arrow(0,0,0,0,1,0,'y_axis')
+                        self.td_arrow(0,0,0,0,0,1,'z_axis')
+                        self.td_axis_label('x',strlist[ix+1])
+                        self.td_axis_label('y',strlist[ix+2])
+                        self.td_axis_label('z',strlist[ix+3])
+                    else:
+                        print('Not enough arguments for td-axis.')
+                        
+                elif cmd_name=='td-den-plot':
+
+                    if self.verbose>2:
+                        print('Process td-den-plot.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix>=2:
+                        self.td_den_plot(o2scl,amp,[strlist[ix+1]])
+                    elif ix_next-ix>=3:
+                        self.td_den_plot(o2scl,amp,[strlist[ix+1]],
+                                         **string_to_dict(strlist[ix+2]))
+                    else:
+                        print('Not enough arguments for td-den-plot.')
+
                 elif cmd_name=='yt-axis':
 
                     if self.verbose>2:
@@ -6387,6 +6304,7 @@ class o2graph_plotter(td_plot_base):
                         print('Process den-plot-rgb.')
                         print('args:',strlist[ix:ix_next])
 
+                    print('going to obj_o2graph.')
                     self.obj_o2graph(o2scl,amp,self.link2,
                                               strlist[ix+1:ix_next])
                 
