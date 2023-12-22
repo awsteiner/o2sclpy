@@ -914,6 +914,10 @@ class threed_objects:
     """
     List of vertices
     """
+    vn_list: list[list[float]]=[]
+    """
+    List of vertex normals
+    """
     vt_list: list[list[float]]=[]
     """
     List of texture coordinates
@@ -928,11 +932,24 @@ class threed_objects:
     """
 
     def add_object(self, lv: list[list[float]],
-                   gf: group_of_faces):
+                   gf: group_of_faces, normals : list[list[float]] = [],
+                   texcoords : list[list[float]] = []):
+        
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices.
+
+        Optionally, also specify the vertex normals in ``normals``.
         """
 
+        if len(normals)>0 and len(normals)!=len(lv):
+            raise ValueError('List of normals has size',len(normals),
+                             'and list of vertices is of size',len(lv))
+        
+        if len(texcoords)>0 and len(texcoords)!=len(lv):
+            raise ValueError('List of texture coordinates has size',
+                             len(texcoords),
+                             'and list of vertices is of size',len(lv))
+        
         # Find the first empty vertex index
         len_lv=len(self.vert_list)
 
@@ -940,6 +957,18 @@ class threed_objects:
         print('threed_object::add_object(): Add vertices.')
         for i in range(0,len(lv)):
             self.vert_list.append(lv[i])
+
+        if len(normals)>0:
+            # Add the vertex normals
+            print('threed_object::add_object(): Add vertex normals.')
+            for i in range(0,len(normals)):
+                self.vn_list.append(lv[i])
+
+        if len(texcoords)>0:
+            # Add the texture coordinates
+            print('threed_object::add_object(): Add vertex texcoords.')
+            for i in range(0,len(texcoords)):
+                self.vn_list.append(lv[i])
 
         # Iterate over each face
         print('Adjust faces for group',gf.name,'and check.')
@@ -1005,7 +1034,9 @@ class threed_objects:
         return
     
     def add_object_mat(self, lv: list[list[float]],
-                       gf: group_of_faces, m: material):
+                       gf: group_of_faces, m: material,
+                       normals : list[list[float]] = [],
+                       texcoords : list[list[float]] = []):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices, and 'm', the material
         for all of the faces.
@@ -1014,7 +1045,7 @@ class threed_objects:
         self.add_mat(m)
         if gf.mat=='':
             gf.mat=m.name
-        self.add_object(lv,gf)
+        self.add_object(lv,gf,normals=normals,texcoords=texcoords)
         return
 
     def is_mat(self, m: str):
@@ -1142,6 +1173,185 @@ class threed_objects:
                     f.write('map_Kd '+self.mat_list[i].txt+'\n')
             f.close()
                         
+        return
+        
+    def write_gltf(self, prefix: str):
+        """Write all objects to an '.gltf' file, creating a '.bin' file
+        """
+
+        import json
+        from struct import pack
+        
+        # Remove suffix if it is present
+        if prefix[-5:]=='.gltf':
+            prefix=prefix[:-5]
+        gltf_file=prefix+'.gltf'
+        bin_file=prefix+'.bin'
+        
+        nodes_list=[]
+        for k in range(0,len(self.gf_list)):
+            nodes_list.append(k)
+            
+        #               "extensionsUsed": ["KHR_materials_specular",
+        #                                  "KHR_materials_ior"],
+            
+        jdat={"asset": {"generator": "o2sclpy", "version": "v0.928"},
+               "scene": 0,
+               "scenes": [{ "name": "Scene",
+                            "nodes": nodes_list
+                           }]
+               }
+        
+        nodes_list=[]
+        for k in range(0,len(self.gf_list)):
+            nodes_list.append({"mesh" : k,
+                               "name" : self.gf_list[k].name})
+            #"rotation" : [0,0,0,0]})
+        jdat["nodes"]=nodes_list
+
+        normals=False
+        if len(self.vn_list)==len(self.vert_list):
+            normals=True
+        texcoords=False
+        if len(self.vt_list)==len(self.vert_list):
+            texcoords=True
+
+        mesh_list=[]
+        acc_list=[]
+        buf_list=[]
+        
+        #curr_mat=self.gf_list[0].mat
+
+        f2=open(bin_file,'wb')
+        
+        # Add each set of faces as a group
+        acc_index=0
+        offset=0
+        for i in range(0,len(self.gf_list)):
+            
+            #for j in range(0,len(self.gf_list[i].faces)):
+            #if (len(self.gf_list[i].faces[j])>=4 and
+            #self.gf_list[i].faces[j][3]!=curr_mat):
+            #if i>0 and self.gf_list[i].mat!=curr_mat:
+            #acc_index=acc_index+2
+            #if normals:
+            #acc_index=acc_index+1
+            #if texcoords:
+            #acc_index=acc_index+1
+
+            att={}
+
+            face_bin=[]
+            vert_bin=[]
+            vert_map = [-1] * len(self.vert_list)
+            for j in range(0,len(self.gf_list[i].faces)):
+                # Map the first vertex
+                ix=self.gf_list[i].faces[j][0]-1
+                if vert_map[ix]==-1:
+                    vert_bin.append(self.vert_list[ix][0])
+                    vert_bin.append(self.vert_list[ix][1])
+                    vert_bin.append(self.vert_list[ix][2])
+                    vert_map[ix]=len(vert_bin)/3
+                # Map the second vertex
+                ix=self.gf_list[i].faces[j][1]-1
+                if vert_map[ix]==-1:
+                    vert_bin.append(self.vert_list[ix][0])
+                    vert_bin.append(self.vert_list[ix][1])
+                    vert_bin.append(self.vert_list[ix][2])
+                    vert_map[ix]=len(vert_bin)/3
+                # Map the third vertex
+                ix=self.gf_list[i].faces[j][2]-1
+                if vert_map[ix]==-1:
+                    vert_bin.append(self.vert_list[ix][0])
+                    vert_bin.append(self.vert_list[ix][1])
+                    vert_bin.append(self.vert_list[ix][2])
+                    vert_map[ix]=len(vert_bin)/3
+                # Add the three vertex indices to the face array
+                face_bin.append(vert_map[self.gf_list[i].faces[j][0]])
+                face_bin.append(vert_map[self.gf_list[i].faces[j][1]])
+                face_bin.append(vert_map[self.gf_list[i].faces[j][2]])
+            print('here',len(vert_bin))
+            print('face_bin:',face_bin)
+            dat1=pack('<'+'f'*len(vert_bin),*vert_bin)
+            dat2=pack('<'+'h'*len(face_bin),*face_bin)
+            f2.write(dat1)
+            f2.write(dat2)
+
+            # 5120 is signed byte
+            # 5121 is unsigned byte
+            # 5122 is signed short
+            # 5123 is unsigned short
+            # 5125 is unsigned int
+            # 5126 is signed float
+            
+            acc_list.append({"bufferView": acc_index,
+                             "componentType": 5126,
+                             "count": len(self.gf_list[i].faces),
+                             "type": "VEC3"})
+            att["POSITION"]=acc_index
+            acc_index=acc_index+1
+            if normals:
+                acc_list.append({"bufferView": acc_index,
+                                 "componentType": 5126,
+                                 "count": len(self.gf_list[i].faces),
+                                 "type": "VEC3"})
+                att["NORMAL"]=acc_index
+                acc_index=acc_index+1
+            if texcoords:
+                acc_list.append({"bufferView": acc_index,
+                                 "componentType": 5126,
+                                 "count": len(self.gf_list[i].faces),
+                                 "type": "VEC2"})
+                att["TEXCOORD_0"]=acc_index
+                acc_index=acc_index+1
+            acc_list.append({"bufferView": acc_index,
+                             "componentType": 5123,
+                             "count": len(self.gf_list[i].faces),
+                             "type": "SCALAR"})
+            mesh_list.append({"name": self.gf_list[i].name,
+                              "primitives": [{
+                                  "attributes": att,
+                                  "indices": acc_index}]})
+            acc_index=acc_index+1
+
+            # 34962 is "ARRAY_BUFFER"
+            # 34963 is "ELEMENT_ARRAY_BUFFER"
+            
+            buf_list.append({"buffer": 0,
+                             "byteLength": 4*3*len(self.gf_list[i].faces),
+                             "byteOffset": offset,
+                             "target": "34962"})
+            offset+=4*3*len(self.gf_list[i].faces)
+            if normals:
+                buf_list.append({"buffer": 0,
+                                 "byteLength": 4*3*len(self.gf_list[i].faces),
+                                 "byteOffset": offset,
+                                 "target": "34962"})
+                offset+=4*3*len(self.gf_list[i].faces)
+            if texcoords:
+                buf_list.append({"buffer": 0,
+                                 "byteLength": 4*2*len(self.gf_list[i].faces),
+                                 "byteOffset": offset,
+                                 "target": "34962"})
+                offset+=4*2*len(self.gf_list[i].faces)
+            buf_list.append({"buffer": 0,
+                             "byteLength": 2*len(self.gf_list[i].faces),
+                             "byteOffset": offset,
+                             "target": "34963"})
+            offset+=2*len(self.gf_list[i].faces)
+
+        jdat["meshes"]=mesh_list
+        jdat["accessors"]=acc_list
+        jdat["bufferViews"]=buf_list
+        jdat["buffers"]={"byteLength": offset,
+                         "uri": prefix+'.bin'}
+        
+        f=open(gltf_file,'w',encoding='utf-8')
+        json.dump(jdat,f,ensure_ascii=False,indent=2)
+        f.close()
+
+        f2.close()
+            
         return
         
 class td_plot_base(yt_plot_base):
@@ -1310,7 +1520,7 @@ class td_plot_base(yt_plot_base):
 
         Command-line arguments: ``x1 y1 z1 x2 y2 z2 group_name [kwargs]``
         """
-        arr_vert,arr_face=arrow(x1,y1,z1,x2,y2,z2)
+        arr_vert,arr_norm,arr_face=arrow(x1,y1,z1,x2,y2,z2)
 
         if type(mat)==str:
             if not self.to.is_mat(mat):
@@ -1981,7 +2191,7 @@ class o2graph_plotter(td_plot_base):
 
         if self.verbose>2:
             print('Writing gltf to file',prefix)
-        #self.to.write_obj(prefix)
+        self.to.write_gltf(prefix)
 
         return
     
@@ -6301,11 +6511,21 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='obj':
 
                     if self.verbose>2:
-                        print('Process den-plot-rgb.')
+                        print('Process obj.')
                         print('args:',strlist[ix:ix_next])
 
                     print('going to obj_o2graph.')
                     self.obj_o2graph(o2scl,amp,self.link2,
+                                              strlist[ix+1:ix_next])
+                
+                elif cmd_name=='gltf':
+
+                    if self.verbose>2:
+                        print('Process gltf.')
+                        print('args:',strlist[ix:ix_next])
+
+                    print('going to gltf_o2graph.')
+                    self.gltf_o2graph(o2scl,amp,self.link2,
                                               strlist[ix+1:ix_next])
                 
                 elif cmd_name=='den-plot-anim':
