@@ -33,7 +33,7 @@ import textwrap
 import code 
 
 from o2sclpy.doc_data import cmaps, new_cmaps, extra_types
-from o2sclpy.doc_data import acol_help_topics
+from o2sclpy.doc_data import acol_help_topics, version
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot
@@ -1189,13 +1189,15 @@ class threed_objects:
         bin_file=prefix+'.bin'
         
         nodes_list=[]
-        for k in range(0,len(self.gf_list)):
+        loop_end=len(self.gf_list)
+        
+        for k in range(0,loop_end):
             nodes_list.append(k)
             
         #               "extensionsUsed": ["KHR_materials_specular",
         #                                  "KHR_materials_ior"],
             
-        jdat={"asset": {"generator": "o2sclpy", "version": "v0.928"},
+        jdat={"asset": {"generator": "o2sclpy v"+version, "version": "2.0"},
                "scene": 0,
                "scenes": [{ "name": "Scene",
                             "nodes": nodes_list
@@ -1203,7 +1205,7 @@ class threed_objects:
                }
         
         nodes_list=[]
-        for k in range(0,len(self.gf_list)):
+        for k in range(0,loop_end):
             nodes_list.append({"mesh" : k,
                                "name" : self.gf_list[k].name})
             #"rotation" : [0,0,0,0]})
@@ -1227,7 +1229,8 @@ class threed_objects:
         # Add each set of faces as a group
         acc_index=0
         offset=0
-        for i in range(0,len(self.gf_list)):
+
+        for i in range(0,loop_end):
             
             #for j in range(0,len(self.gf_list[i].faces)):
             #if (len(self.gf_list[i].faces[j])>=4 and
@@ -1248,35 +1251,51 @@ class threed_objects:
                 # Map the first vertex
                 ix=self.gf_list[i].faces[j][0]-1
                 if vert_map[ix]==-1:
-                    vert_bin.append(self.vert_list[ix][0])
-                    vert_bin.append(self.vert_list[ix][1])
-                    vert_bin.append(self.vert_list[ix][2])
-                    vert_map[ix]=len(vert_bin)/3
+                    vert_bin.append(float(self.vert_list[ix][0]))
+                    vert_bin.append(float(self.vert_list[ix][1]))
+                    vert_bin.append(float(self.vert_list[ix][2]))
+                    vert_map[ix]=int(len(vert_bin)/3)-1
+                    face_bin.append(int(len(vert_bin)/3)-1)
+                else:
+                    face_bin.append(vert_map[ix])
                 # Map the second vertex
                 ix=self.gf_list[i].faces[j][1]-1
                 if vert_map[ix]==-1:
-                    vert_bin.append(self.vert_list[ix][0])
-                    vert_bin.append(self.vert_list[ix][1])
-                    vert_bin.append(self.vert_list[ix][2])
-                    vert_map[ix]=len(vert_bin)/3
+                    vert_bin.append(float(self.vert_list[ix][0]))
+                    vert_bin.append(float(self.vert_list[ix][1]))
+                    vert_bin.append(float(self.vert_list[ix][2]))
+                    vert_map[ix]=int(len(vert_bin)/3)-1
+                    face_bin.append(int(len(vert_bin)/3)-1)
+                else:
+                    face_bin.append(vert_map[ix])
                 # Map the third vertex
                 ix=self.gf_list[i].faces[j][2]-1
                 if vert_map[ix]==-1:
-                    vert_bin.append(self.vert_list[ix][0])
-                    vert_bin.append(self.vert_list[ix][1])
-                    vert_bin.append(self.vert_list[ix][2])
-                    vert_map[ix]=len(vert_bin)/3
-                # Add the three vertex indices to the face array
-                face_bin.append(vert_map[self.gf_list[i].faces[j][0]])
-                face_bin.append(vert_map[self.gf_list[i].faces[j][1]])
-                face_bin.append(vert_map[self.gf_list[i].faces[j][2]])
-            print('here',len(vert_bin))
-            print('face_bin:',face_bin)
+                    vert_bin.append(float(self.vert_list[ix][0]))
+                    vert_bin.append(float(self.vert_list[ix][1]))
+                    vert_bin.append(float(self.vert_list[ix][2]))
+                    vert_map[ix]=int(len(vert_bin)/3)-1
+                    face_bin.append(int(len(vert_bin)/3)-1)
+                else:
+                    face_bin.append(vert_map[ix])
+
             dat1=pack('<'+'f'*len(vert_bin),*vert_bin)
             dat2=pack('<'+'h'*len(face_bin),*face_bin)
             f2.write(dat1)
             f2.write(dat2)
 
+            max_v=[0,0,0]
+            min_v=[0,0,0]
+            for ii in range(0,len(vert_bin),3):
+                for jj in range(0,3):
+                    if ii==0 or vert_bin[ii+jj]<min_v[jj]:
+                        min_v[jj]=vert_bin[ii+jj]
+                    if ii==0 or vert_bin[ii+jj]>max_v[jj]:
+                        max_v[jj]=vert_bin[ii+jj]
+                        print(ii,jj,max_v[jj])
+            if i>=5:
+                print('vert_bin:',vert_bin)
+            
             # 5120 is signed byte
             # 5121 is unsigned byte
             # 5122 is signed short
@@ -1286,27 +1305,29 @@ class threed_objects:
             
             acc_list.append({"bufferView": acc_index,
                              "componentType": 5126,
-                             "count": len(self.gf_list[i].faces),
+                             "count": int(len(vert_bin)/3),
+                             "max": max_v,
+                             "min": min_v,
                              "type": "VEC3"})
             att["POSITION"]=acc_index
             acc_index=acc_index+1
             if normals:
                 acc_list.append({"bufferView": acc_index,
                                  "componentType": 5126,
-                                 "count": len(self.gf_list[i].faces),
+                                 "count": int(len(vert_bin)/3),
                                  "type": "VEC3"})
                 att["NORMAL"]=acc_index
                 acc_index=acc_index+1
             if texcoords:
                 acc_list.append({"bufferView": acc_index,
                                  "componentType": 5126,
-                                 "count": len(self.gf_list[i].faces),
+                                 "count": int(len(vert_bin)/2),
                                  "type": "VEC2"})
                 att["TEXCOORD_0"]=acc_index
                 acc_index=acc_index+1
             acc_list.append({"bufferView": acc_index,
                              "componentType": 5123,
-                             "count": len(self.gf_list[i].faces),
+                             "count": int(len(face_bin)/1),
                              "type": "SCALAR"})
             mesh_list.append({"name": self.gf_list[i].name,
                               "primitives": [{
@@ -1318,33 +1339,37 @@ class threed_objects:
             # 34963 is "ELEMENT_ARRAY_BUFFER"
             
             buf_list.append({"buffer": 0,
-                             "byteLength": 4*3*len(self.gf_list[i].faces),
+                             "byteLength": 4*len(vert_bin),
                              "byteOffset": offset,
-                             "target": "34962"})
-            offset+=4*3*len(self.gf_list[i].faces)
+                             "target": 34962})
+            offset+=4*len(vert_bin)
             if normals:
                 buf_list.append({"buffer": 0,
-                                 "byteLength": 4*3*len(self.gf_list[i].faces),
+                                 "byteLength": 4*len(vert_bin),
                                  "byteOffset": offset,
-                                 "target": "34962"})
-                offset+=4*3*len(self.gf_list[i].faces)
+                                 "target": 34962})
+                offset+=4*len(vert_bin)
             if texcoords:
                 buf_list.append({"buffer": 0,
-                                 "byteLength": 4*2*len(self.gf_list[i].faces),
+                                 "byteLength": 4*len(vert_bin),
                                  "byteOffset": offset,
-                                 "target": "34962"})
-                offset+=4*2*len(self.gf_list[i].faces)
+                                 "target": 34962})
+                offset+=4*len(vert_bin)
             buf_list.append({"buffer": 0,
-                             "byteLength": 2*len(self.gf_list[i].faces),
+                             "byteLength": 2*len(face_bin),
                              "byteOffset": offset,
-                             "target": "34963"})
-            offset+=2*len(self.gf_list[i].faces)
+                             "target": 34963})
+            offset+=2*len(face_bin)
+            print('len(face_bin):',self.gf_list[i].name,len(face_bin))
+            print('min,max:',min_v,max_v)
+            print('')
+        #quit()
 
         jdat["meshes"]=mesh_list
         jdat["accessors"]=acc_list
         jdat["bufferViews"]=buf_list
-        jdat["buffers"]={"byteLength": offset,
-                         "uri": prefix+'.bin'}
+        jdat["buffers"]=[{"byteLength": offset,
+                          "uri": prefix+'.bin'}]
         
         f=open(gltf_file,'w',encoding='utf-8')
         json.dump(jdat,f,ensure_ascii=False,indent=2)
