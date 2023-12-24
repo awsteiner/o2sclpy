@@ -826,7 +826,7 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
     outside the prism. 
     """
 
-    w,h=latex_to_png(latex,png_file)
+    w,h,w_new,h_new=latex_to_png(latex,png_file,power_two=True)
     face=[]
     vert=[]
     facet=[]
@@ -845,9 +845,9 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
     vert.append([x2,y2,z2])
     
     text_uv.append([0.0,0.0])
-    text_uv.append([0.0,1.0])
-    text_uv.append([1.0,0.0])
-    text_uv.append([1.0,1.0])
+    text_uv.append([0.0,float(h)/float(h_new)])
+    text_uv.append([float(w)/float(w_new),0.0])
+    text_uv.append([1.0,float(h)/float(h_new)])
 
     if dir=='x':
         
@@ -1415,6 +1415,7 @@ class threed_objects:
                 face_bin=[]
                 vert_bin=[]
                 vert_map = [-1] * len(self.vert_list)
+                prim_list=[]
                 
                 for j in range(0,len(self.gf_list[i].faces)):
 
@@ -1423,7 +1424,7 @@ class threed_objects:
                     lf1=len(self.gf_list[i].faces[j])
                     if lf1==4 or lf1==7 or lf1==10:
                         mat1=self.gf_list[i].faces[j][lf1-1]
-                    print(i,j,'mat1:',mat1)
+                    #print(i,j,'mat1:',mat1)
                     
                     # Map the first vertex
                     ix=self.gf_list[i].faces[j][0]-1
@@ -1560,16 +1561,16 @@ class threed_objects:
                                          "count": int(len(face_bin)/1),
                                          "type": "SCALAR"})
                         if mat_index==-1:
-                            mesh_list.append({"name": self.gf_list[i].name,
-                                              "primitives": [{
-                                                  "attributes": att,
-                                                  "indices": acc_index}]})
+                            prim_list.append({"attributes": att,
+                                              "indices": acc_index})
                         else:
+                            prim_list.append({"attributes": att,
+                                              "indices": acc_index,
+                                              "material": mat_index})
+                        if j==len(self.gf_list[i].faces)-1:
                             mesh_list.append({"name": self.gf_list[i].name,
-                                              "primitives": [{
-                                                  "attributes": att,
-                                                  "indices": acc_index,
-                                                  "material": mat_index}]})
+                                              "primitives": prim_list})
+                            
                         acc_index=acc_index+1
             
                         # 34962 is "ARRAY_BUFFER"
@@ -1841,7 +1842,7 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_axis_label(): png_file:',png_file,'mat_name:',
                       mat_name,'group_name:',group_name)
-            w,h=latex_to_png(tex_label,png_file)
+            w,h,w_new,h_new=latex_to_png(tex_label,png_file,power_two=True)
             width2=float(w)/float(h)*0.1
             if self.verbose>2:
                 print('td_axis_label(): w:',w,'width2:',width2,
@@ -1869,7 +1870,7 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_axis_label(): png_file:',png_file,'mat_name:',
                       mat_name,'group_name:',group_name)
-            w,h=latex_to_png(tex_label,png_file)
+            w,h,w_new,h_new=latex_to_png(tex_label,png_file,power_two=True)
             width2=float(w)/float(h)*0.1
             if self.verbose>2:
                 print('td_axis_label(): w:',w,'width2:',width2,
@@ -1897,7 +1898,7 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_axis_label(): png_file:',png_file,'mat_name:',
                       mat_name,'group_name:',group_name)
-            w,h=latex_to_png(tex_label,png_file)
+            w,h,w_new,h_new=latex_to_png(tex_label,png_file,power_two=True)
             width2=float(w)/float(h)*0.1
             if self.verbose>2:
                 print('td_axis_label(): w:',w,'width2:',width2,

@@ -375,7 +375,7 @@ def force_string(obj):
         return obj.decode('utf-8')
     return obj
 
-def latex_to_png(tex: str, png_file: str):
+def latex_to_png(tex: str, png_file: str, power_two=False):
     """
     A simple routine to convert a LaTeX string to a png image.
 
@@ -406,11 +406,24 @@ def latex_to_png(tex: str, png_file: str):
     print('Running',cmd1)
     os.system(cmd1)
     cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file+' && convert '+
-          png_file+' -background white -flatten '+png_file)
+          png_file+' -background white -flatten '+
+          png_file)
     print('Running',cmd2)
     os.system(cmd2)
     from PIL import Image
     img=Image.open(png_file)
+    if power_two:
+        w=img.width
+        h=img.height
+        w_new=2**(int(numpy.log2(w-1))+1)
+        h_new=2**(int(numpy.log2(h-1))+1)
+        print(w,h,w_new,h_new)
+        cmd3=('convert '+png_file+' -background white '+
+              '-extent '+str(w_new)+'x'+str(h_new)+' x'+
+              png_file)
+        print('Running',cmd3)
+        os.system(cmd3)
+        return img.width,img.height,w_new,h_new
     return img.width,img.height
 
 def default_plot(left_margin=0.14,bottom_margin=0.12,
