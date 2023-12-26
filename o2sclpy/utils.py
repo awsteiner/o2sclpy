@@ -419,7 +419,7 @@ def latex_to_png(tex: str, png_file: str, power_two=False):
         h_new=2**(int(numpy.log2(h-1))+1)
         print(w,h,w_new,h_new)
         cmd3=('convert '+png_file+' -background white '+
-              '-extent '+str(w_new)+'x'+str(h_new)+' x'+
+              '-extent '+str(w_new)+'x'+str(h_new)+' '+
               png_file)
         print('Running',cmd3)
         os.system(cmd3)

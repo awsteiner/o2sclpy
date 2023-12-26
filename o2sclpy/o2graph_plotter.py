@@ -1420,6 +1420,8 @@ class threed_objects:
             acc_list=[]
             buf_list=[]
             mat_json=[]
+            txt_list=[]
+            img_list=[]
             
             #curr_mat=self.gf_list[0].mat
     
@@ -1428,6 +1430,7 @@ class threed_objects:
             # Add each set of faces as a group
             acc_index=0
             offset=0
+            texture_index=0
     
             for i in range(0,len(self.gf_list)):
                 
@@ -1513,20 +1516,38 @@ class threed_objects:
                         if mat_found==False:
                             print('Could not find mat ',mat2)
                             quit()
-                            
-                        mat_json.append({"doubleSided": True,
-                                         "name": mat2,
-                                         "pbrMetallicRoughness": {
-                                             "baseColorFactor": [
-                                                 this_mat.Ka[0],
-                                                 this_mat.Ka[1],
-                                                 this_mat.Ka[2],
-                                                 1.0],
-                                             "metallicFactor": 0
-                                         }
-                                         })
-                        mat_index=len(mat_json)-1
 
+                        if this_mat.txt!='':
+                            mat_json.append({"doubleSided": True,
+                                             "name": mat2,
+                                             "pbrMetallicRoughness": {
+                                                 "baseColorTexture": {
+                                                     "index":
+                                                     texture_index
+                                                     },
+                                                 "metallicFactor": 0
+                                             }
+                                             })
+                            txt_list.append({"sampler": 0,
+                                             "source": texture_index})
+                            img_list.append({"mimeType": "image/png",
+                                             "name": mat2,
+                                             "uri": this_mat.txt})
+                            texture_index=texture_index+1
+                        else:
+                            mat_json.append({"doubleSided": True,
+                                             "name": mat2,
+                                             "pbrMetallicRoughness": {
+                                                 "baseColorFactor": [
+                                                     this_mat.Ka[0],
+                                                     this_mat.Ka[1],
+                                                     this_mat.Ka[2],
+                                                     1.0],
+                                                 "metallicFactor": 0
+                                             }
+                                             })
+                        mat_index=len(mat_json)-1
+                        
                     # If we're at the end, or we're switching materials,
                     # then add the primitive to the mesh and update
                     # the binary data file accordingly
@@ -1638,8 +1659,11 @@ class threed_objects:
             jdat["bufferViews"]=buf_list
             jdat["buffers"]=[{"byteLength": offset,
                               "uri": prefix+'.bin'}]
+            if len(txt_list)>0:
+                jdat["textures"]=txt_list
+                jdat["images"]=img_list
 
-        # write tje json file
+        # write the json file
         f=open(gltf_file,'w',encoding='utf-8')
         json.dump(jdat,f,ensure_ascii=False,indent=2)
         f.close()
