@@ -832,6 +832,26 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
     facet=[]
     text_uv=[]
 
+    if dir=='x':
+        xcent=(x1+x2)/2.0
+        height=abs(y2-y1)
+        width=w_new/h_new*height
+        x1=xcent-width/2.0
+        x2=xcent+width/2.0
+    elif dir=='y':
+        ycent=(y1+y2)/2.0
+        height=abs(z2-z1)
+        width=w_new/h_new*height
+        y1=ycent-width/2.0
+        y2=ycent+width/2.0
+    else:
+        zcent=(z1+z2)/2.0
+        height=abs(x2-x1)
+        width=w_new/h_new*height
+        z1=zcent-width/2.0
+        z2=zcent+width/2.0
+        print(x1,y1,z1,x2,y2,z2)
+
     m=material(mat_name,txt=png_file)
 
     # Add the 8 vertices
@@ -1201,12 +1221,12 @@ class threed_objects:
             #               "extensionsUsed": ["KHR_materials_specular",
             #                                  "KHR_materials_ior"],
                 
-            jdat={"asset": {"generator": "o2sclpy v"+version, "version": "2.0"},
+            jdat={"asset": {"generator": "O2sclpy v"+version, "version": "2.0"},
                    "scene": 0,
                    "scenes": [{ "name": "Scene",
                                 "nodes": nodes_list
                                }]
-                   }
+                  }
             
             nodes_list=[]
             for k in range(0,loop_end):
@@ -1842,13 +1862,9 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_axis_label(): png_file:',png_file,'mat_name:',
                       mat_name,'group_name:',group_name)
-            w,h,w_new,h_new=latex_to_png(tex_label,png_file,power_two=True)
-            width2=float(w)/float(h)*0.1
-            if self.verbose>2:
-                print('td_axis_label(): w:',w,'width2:',width2,
-                      'h:',h)
-            x_v,x_f,x_t,x_m=latex_prism(0.5-width2/2.0,-offset-height/2.0,
-                                        -offset+height/2.0,0.5+width2/2.0,
+                
+            x_v,x_f,x_t,x_m=latex_prism(0.5,-offset-height/2.0,
+                                        -offset+height/2.0,0.5,
                                         -offset+height/2.0,-offset-height/2.0,
                                         tex_label,png_file,mat_name,
                                         dir=ldir)
@@ -1867,17 +1883,14 @@ class td_plot_base(yt_plot_base):
                 mat_name='mat_ytitle'
             if group_name=='':
                 group_name='y_title'
+                
             if self.verbose>2:
                 print('td_axis_label(): png_file:',png_file,'mat_name:',
                       mat_name,'group_name:',group_name)
-            w,h,w_new,h_new=latex_to_png(tex_label,png_file,power_two=True)
-            width2=float(w)/float(h)*0.1
-            if self.verbose>2:
-                print('td_axis_label(): w:',w,'width2:',width2,
-                      'h:',h)
-            y_v,y_f,y_t,y_m=latex_prism(-offset-height/2.0,0.5-width2/2.0,
+                
+            y_v,y_f,y_t,y_m=latex_prism(-offset-height/2.0,0.5,
                                         -offset+height/2.0,-offset+height/2.0,
-                                        0.5+width2/2.0,-offset-height/2.0,
+                                        0.5,-offset-height/2.0,
                                         tex_label,png_file,mat_name,
                                         dir=ldir)
             
@@ -1895,17 +1908,14 @@ class td_plot_base(yt_plot_base):
                 mat_name='mat_ztitle'
             if group_name=='':
                 group_name='z_title'
+                
             if self.verbose>2:
                 print('td_axis_label(): png_file:',png_file,'mat_name:',
                       mat_name,'group_name:',group_name)
-            w,h,w_new,h_new=latex_to_png(tex_label,png_file,power_two=True)
-            width2=float(w)/float(h)*0.1
-            if self.verbose>2:
-                print('td_axis_label(): w:',w,'width2:',width2,
-                      'h:',h)
+                
             z_v,z_f,z_t,z_m=latex_prism(-offset-height/2.0,-offset+height/2.0,
-                                        0.5-width2/2.0,-offset+height/2.0,
-                                        -offset-height/2.0,0.5+width2/2.0,
+                                        0.5,-offset+height/2.0,
+                                        -offset-height/2.0,0.5,
                                         tex_label,png_file,mat_name,
                                         dir=ldir)
             
