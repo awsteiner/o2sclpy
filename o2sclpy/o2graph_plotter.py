@@ -668,6 +668,18 @@ class group_of_faces:
     * faces plus texture coordinates
     * faces plus texture coordinates plus material
     """
+    vert_list: list[list[float]]=[]
+    """
+    List of vertices
+    """
+    vn_list: list[list[float]]=[]
+    """
+    List of vertex normals
+    """
+    vt_list: list[list[float]]=[]
+    """
+    List of texture coordinates
+    """
     faces: list[list[int | str]]
     """
     The list of faces
@@ -984,18 +996,7 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
 class threed_objects:
     """A set of three-dimensional objects
     """
-    vert_list: list[list[float]]=[]
-    """
-    List of vertices
-    """
-    vn_list: list[list[float]]=[]
-    """
-    List of vertex normals
-    """
-    vt_list: list[list[float]]=[]
-    """
-    List of texture coordinates
-    """
+    
     gf_list: list[group_of_faces]=[]
     """
     List of groups of faces
@@ -1005,46 +1006,29 @@ class threed_objects:
     List of materials
     """
 
-    def add_object(self, lv: list[list[float]],
-                   gf: group_of_faces, normals : list[list[float]] = [],
-                   texcoords : list[list[float]] = []):
-        
+    def add_object(self, gf: group_of_faces):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices.
 
         Optionally, also specify the vertex normals in ``normals``.
         """
+        #normals : list[list[float]] = [],
+        #texcoords : list[list[float]] = []):
 
-        if len(normals)>0 and len(normals)!=len(lv):
+        if len(gf.vn_list)>0 and len(gf.vn_list)!=len(gf.vert_list):
             raise ValueError('List of normals has size',len(normals),
                              'and list of vertices is of size',len(lv))
         
-        if len(texcoords)>0 and len(texcoords)!=len(lv):
+        if len(gf.vt_list)>0 and len(gf.vt_list)!=len(gf.vert_list):
             raise ValueError('List of texture coordinates has size',
-                             slen(texcoords),
-                             'and list of vertices is of size',len(lv))
+                             len(gf.vt_list),
+                             'and list of vertices is of size',
+                             len(gf.vert_list))
 
         # Find the first empty vertex index
-        len_lv=len(self.vert_list)
-        len_lvt=len(self.vt_list)
-        len_lvn=len(self.vn_list)
-
-        # Add all of the vertices
-        print('threed_object::add_object(): add vertices.')
-        for i in range(0,len(lv)):
-            self.vert_list.append(lv[i])
-
-        if len(normals)>0:
-            # Add the vertex normals
-            print('threed_object::add_object(): Add vertex normals.')
-            for i in range(0,len(normals)):
-                self.vn_list.append(normals[i])
-    
-        if len(texcoords)>0:
-            # Add the texture coordinates
-            print('threed_object::add_object(): Add vertex texcoords.')
-            for i in range(0,len(texcoords)):
-                self.vt_list.append(texcoords[i])
+        len_lv=len(gf.vert_list)
+        len_lvt=len(gf.vt_list)
+        len_lvn=len(gf.vn_list)
 
         # Iterate over each face
         print('threed_object::add_object():',
@@ -1058,10 +1042,6 @@ class threed_objects:
                 raise ValueError('Face '+str(i)+' has more than 4 '+
                                  'elements.')
             
-            # Adjust the faces to refer to the correct vertices
-            for j in range(0,3):
-                gf.faces[i][j]=gf.faces[i][j]+len_lv
-                
             # Check if there is an undefined material in this face
             if len(gf.faces[i])==4:
                 mat_found=False
@@ -1077,7 +1057,6 @@ class threed_objects:
                     
         # Check if there is an undefined material in the
         # group_of_faces data member 'mat'
-        #print('Check again for undefined materials.')
         if gf.mat!='':
             mat_found=False
             for k in range(0,len(self.mat_list)):
@@ -1089,7 +1068,6 @@ class threed_objects:
                                  'materials.')
 
         # Sort the group of vertices by material for output later
-        #for i in range(0,len(self.gf_list)):
         print('threed_object::add_object(): Sort group named',
               gf.name,'by material.')
         gf.sort_by_mat()
@@ -1109,10 +1087,7 @@ class threed_objects:
             self.mat_list.append(m)
         return
     
-    def add_object_mat(self, lv: list[list[float]],
-                       gf: group_of_faces, m: material,
-                       normals : list[list[float]] = [],
-                       texcoords : list[list[float]] = []):
+    def add_object_mat(self, gf: group_of_faces, m: material):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices, and 'm', the material
         for all of the faces.
@@ -1121,7 +1096,7 @@ class threed_objects:
         self.add_mat(m)
         if gf.mat=='':
             gf.mat=m.name
-        self.add_object(lv,gf,normals=normals,texcoords=texcoords)
+        self.add_object(gf)
         return
 
     def is_mat(self, m: str):
@@ -1132,8 +1107,7 @@ class threed_objects:
                 return True
         return False
     
-    def add_object_mat_list(self, lv: list[list[float]],
-                            gf: group_of_faces, lm: list[material]):
+    def add_object_mat_list(self, gf: group_of_faces, lm: list[material]):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices, and 'm', the material
         for all of the faces.
@@ -1141,13 +1115,16 @@ class threed_objects:
         
         for k in range(0,len(lm)):
             self.add_mat(lm[k])
-        self.add_object(lv,gf)
+        self.add_object(gf)
         return
 
-    def write_obj(self, prefix: str):
+    def write_obj_old(self, prefix: str):
         """Write all objects to an '.obj' file, creating a '.mtl' file if
         necessary
+
+        (This function doesn't work anymore.)
         """
+        quit()
 
         # Remove suffix if it is present
         if prefix[-4:]=='.obj':
@@ -1263,7 +1240,7 @@ class threed_objects:
             prefix=prefix[:-5]
         gltf_file=prefix+'.gltf'
         bin_file=prefix+'.bin'
-
+        
         nodes_list=[]
             
         for k in range(0,len(self.gf_list)):
@@ -1284,13 +1261,6 @@ class threed_objects:
             #"rotation" : [0,0,0,0]})
         jdat["nodes"]=nodes_list
     
-        normals=False
-        if len(self.vn_list)==len(self.vert_list):
-            normals=True
-        texcoords=False
-        if len(self.vt_list)==len(self.vert_list):
-            texcoords=True
-    
         mesh_list=[]
         acc_list=[]
         buf_list=[]
@@ -1309,19 +1279,24 @@ class threed_objects:
     
         for i in range(0,len(self.gf_list)):
                 
+            normals=False
+            if len(self.gf_list[i].vn_list)==len(self.gf_list[i].vert_list):
+                normals=True
+            texcoords=False
+            if len(self.gf_list[i].vt_list)==len(self.gf_list[i].vert_list):
+                texcoords=True
+    
             att={}
             face_bin=[]
             norm_bin=[]
             txts_bin=[]
             vert_bin=[]
-            vert_map = [-1] * len(self.vert_list)
+            vert_map = [-1] * len(self.gf_list[i].vert_list)
             prim_list=[]
             mat_index=-1
                 
             for j in range(0,len(self.gf_list[i].faces)):
 
-                print('j:',j)
-                
                 # Determine the material for this face
                 mat1=''
                 lf1=len(self.gf_list[i].faces[j])
@@ -1336,16 +1311,16 @@ class threed_objects:
                     # helps ensure single precision and then
                     # validators don't complain that max and
                     # min are wrong.
-                    vert_bin.append(float(self.vert_list[ix][0]))
-                    vert_bin.append(float(self.vert_list[ix][1]))
-                    vert_bin.append(float(self.vert_list[ix][2]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][0]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][1]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][2]))
                     if normals:
-                        norm_bin.append(float(self.vn_list[ix][0]))
-                        norm_bin.append(float(self.vn_list[ix][1]))
-                        norm_bin.append(float(self.vn_list[ix][2]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][0]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][1]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][2]))
                     if texcoords:
-                        txts_bin.append(float(self.vt_list[ix][0]))
-                        txts_bin.append(float(self.vt_list[ix][1]))
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][0]))
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][1]))
                     vert_map[ix]=int(len(vert_bin)/3)
                     # We have to subtract one here because
                     # the point has already been added to 'vert_bin'
@@ -1355,16 +1330,16 @@ class threed_objects:
                 # Map the second vertex
                 ix=self.gf_list[i].faces[j][1]
                 if vert_map[ix]==-1:
-                    vert_bin.append(float(self.vert_list[ix][0]))
-                    vert_bin.append(float(self.vert_list[ix][1]))
-                    vert_bin.append(float(self.vert_list[ix][2]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][0]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][1]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][2]))
                     if normals:
-                        norm_bin.append(float(self.vn_list[ix][0]))
-                        norm_bin.append(float(self.vn_list[ix][1]))
-                        norm_bin.append(float(self.vn_list[ix][2]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][0]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][1]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][2]))
                     if texcoords:
-                        txts_bin.append(float(self.vt_list[ix][0]))
-                        txts_bin.append(float(self.vt_list[ix][1]))
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][0]))
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][1]))
                     vert_map[ix]=int(len(vert_bin)/3)
                     # We have to subtract one here because
                     # the point has already been added to 'vert_bin'
@@ -1374,16 +1349,16 @@ class threed_objects:
                 # Map the third vertex
                 ix=self.gf_list[i].faces[j][2]
                 if vert_map[ix]==-1:
-                    vert_bin.append(float(self.vert_list[ix][0]))
-                    vert_bin.append(float(self.vert_list[ix][1]))
-                    vert_bin.append(float(self.vert_list[ix][2]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][0]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][1]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][2]))
                     if normals:
-                        norm_bin.append(float(self.vn_list[ix][0]))
-                        norm_bin.append(float(self.vn_list[ix][1]))
-                        norm_bin.append(float(self.vn_list[ix][2]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][0]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][1]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][2]))
                     if texcoords:
-                        txts_bin.append(float(self.vt_list[ix][0]))
-                        txts_bin.append(float(self.vt_list[ix][1]))
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][0]))
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][1]))
                     vert_map[ix]=int(len(vert_bin)/3)
                     # We have to subtract one here because
                     # the point has already been added to 'vert_bin'
@@ -1565,7 +1540,7 @@ class threed_objects:
                     att={}
                     face_bin=[]
                     vert_bin=[]
-                    vert_map = [-1] * len(self.vert_list)
+                    vert_map = [-1] * len(self.gf_list[i].vert_list)
 
         # Add the top-level data to the json object
         jdat["meshes"]=mesh_list
@@ -1767,18 +1742,21 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_arrow() creating group named',name,'with material',
                       mat+'.')
-            self.to.add_object(arr_vert,
-                               group_of_faces(name,arr_face,mat),
-                               normals=arr_norm)
+            gf=group_of_faces(name,arr_face,mat)
+            gf.vert_list=arr_vert
+            gf.vn_list=arr_norm
+            self.to.add_object(gf)
+                               
         else:
             if self.verbose>2:
                 print('td_arrow() creating group named',name,'with material',
                       mat.name+'.')
             if not self.to.is_mat(mat.name):
                 self.to.add_mat(mat)
-            self.to.add_object(arr_vert,
-                               group_of_faces(name,arr_face,mat.name),
-                               normals=arr_norm)
+            gf=group_of_faces(name,arr_face,mat.name)
+            gf.vert_list=arr_vert
+            gf.vn_list=arr_norm
+            self.to.add_object(gf)
 
         return
 
@@ -1819,8 +1797,11 @@ class td_plot_base(yt_plot_base):
                                             dir=ldir)
 
             self.to.add_mat(x_m)
-            self.to.add_object(x_v,group_of_faces(group_name,x_f),
-                               normals=x_n,texcoords=x_t)
+            gf=group_of_faces(group_name,x_f)
+            gf.vert_list=x_v
+            gf.vn_list=x_n
+            gf.vt_list=x_t
+            self.to.add_object(x_v,gf)
             if len(self.to.vt_list)==0:
                 for i in range(0,len(x_t)):
                     self.to.vt_list.append(x_t[i])
@@ -1846,8 +1827,12 @@ class td_plot_base(yt_plot_base):
                                             dir=ldir)
             
             self.to.add_mat(y_m)
-            self.to.add_object(y_v,group_of_faces(group_name,y_f),
-                               normals=y_n,texcoords=y_t)
+            gf=group_of_faces(group_name,y_f)
+            gf.vert_list=y_v
+            gf.vn_list=y_n
+            gf.vt_list=y_t
+            self.to.add_object(y_v,gf)
+
             if len(self.to.vt_list)==0:
                 for i in range(0,len(y_t)):
                     self.to.vt_list.append(y_t[i])
@@ -1873,8 +1858,11 @@ class td_plot_base(yt_plot_base):
                                             dir=ldir)
             
             self.to.add_mat(z_m)
-            self.to.add_object(z_v,group_of_faces(group_name,z_f),
-                               normals=z_n,texcoords=z_t)
+            gf=group_of_faces(group_name,z_f)
+            gf.vert_list=z_v
+            gf.vn_list=z_n
+            gf.vt_list=z_t
+            self.to.add_object(z_v,gf)
             if len(self.to.vt_list)==0:
                 for i in range(0,len(z_t)):
                     self.to.vt_list.append(z_t[i])
@@ -6574,9 +6562,9 @@ class o2graph_plotter(td_plot_base):
 
                     if ix_next-ix>=4:
                         self.td_arrow(0,0,0,1,0,0,'x_axis')
-                        self.td_arrow(0,0,0,0,1,0,'y_axis')
-                        self.td_arrow(0,0,0,0,0,1,'z_axis')
-                        self.td_axis_label('x',strlist[ix+1])
+                        #self.td_arrow(0,0,0,0,1,0,'y_axis')
+                        #self.td_arrow(0,0,0,0,0,1,'z_axis')
+                        #self.td_axis_label('x',strlist[ix+1])
                         #self.td_axis_label('y',strlist[ix+2])
                         #self.td_axis_label('z',strlist[ix+3])
                     else:
