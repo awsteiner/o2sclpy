@@ -36,7 +36,7 @@ from o2sclpy.doc_data import cmaps, new_cmaps, extra_types
 from o2sclpy.doc_data import acol_help_topics, version
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
-from o2sclpy.utils import force_bytes, default_plot
+from o2sclpy.utils import force_bytes, default_plot, cross
 from o2sclpy.utils import is_number, arrow, icosahedron
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import string_equal_dash, latex_to_png
@@ -714,7 +714,7 @@ class group_of_faces:
         for i in range(0,len(self.faces)):
             if len(self.faces[i])==4 or len(self.faces[i])==7:
                 found_four=True
-        #print('found_four',found_four)
+        print('group_of_faces::sort_by_mat(): found_four',found_four)
         if found_four==False:
             return
 
@@ -724,28 +724,13 @@ class group_of_faces:
             if (len(self.faces[i])==4 and
                 self.faces[i][3]!=self.mat):
                 two_mats=True
-            if (len(self.faces[i])==7 and
-                self.faces[i][6]!=self.mat):
-                two_mats=True
             if (i>0 and len(self.faces[i])==4 and
                 len(self.faces[i-1])==4 and
                 self.faces[i][3]!=self.faces[i-1][3]):
                 two_mats=True
-            if (i>0 and len(self.faces[i])==7 and
-                len(self.faces[i-1])==7 and
-                self.faces[i][6]!=self.faces[i-1][6]):
-                two_mats=True
-            if (i>0 and len(self.faces[i])==7 and
-                len(self.faces[i-1])==4 and
-                self.faces[i][6]!=self.faces[i-1][3]):
-                two_mats=True
-            if (i>0 and len(self.faces[i])==4 and
-                len(self.faces[i-1])==7 and
-                self.faces[i][3]!=self.faces[i-1][6]):
-                two_mats=True
 
         # If there are not two distinct materials, there's nothing to do
-        #print('two_mats',two_mats)
+        print('group_of_faces::sort_by_mat(): two_mats',two_mats)
         if two_mats==False:
             return
 
@@ -761,7 +746,7 @@ class group_of_faces:
             # This is true if self.mat has been added to 'mat_list'
             base_name_added=False
             for i in range(0,len(self.faces)):
-                if len(self.faces[i])==3 or len(self.faces[i])==6:
+                if len(self.faces[i])==3:
                     if base_name_added==False:
                         mat_list.append(self.mat)
                         base_name_added=True
@@ -777,34 +762,25 @@ class group_of_faces:
         # mat_list
         face_copies=[False for i in range(0,len(self.faces))]
         for i in range(0,len(self.faces)):
-            if len(self.faces[i])==4 or len(self.faces[i])==7:
-                if len(self.faces[i])==4:
-                    mat_name=self.faces[i][3]
-                else:
-                    mat_name=self.faces[i][6]
+            if len(self.faces[i])==4:
+                mat_name=self.faces[i][3]
                 if mat_name not in mat_list:
-                    print('Adding faces for',mat_name)
+                    print('group_of_faces::sort_by_mat():',
+                          'At index',i,'adding faces for',mat_name)
                     mat_list.append(mat_name)
                     # If it's not found, then add the current face,
                     # and loop over the remaining faces which match
                     faces2.append(self.faces[i])
                     face_copies[i]=True
                     for j in range(i+1,len(self.faces)):
-                        if (len(self.faces[j])==4 and
-                            self.faces[j][3]==mat_name and
-                            face_copies[j]==False):
-                            faces2.append(self.faces[j])
-                            face_copies[j]=True
-                        if (len(self.faces[j])==7 and
-                            self.faces[j][6]==mat_name and
-                            face_copies[j]==False):
+                        if self.faces[j][3]==mat_name:
                             faces2.append(self.faces[j])
                             face_copies[j]=True
 
         if len(self.faces)!=len(faces2):
-            print('sort_by_name():',len(self.faces),len(faces2))
+            print('sort_by_mat():',len(self.faces),len(faces2))
             raise SyntaxError('The lists of faces do not match up in '+
-                              'sort_by_name().')
+                              'sort_by_mat().')
                  
         self.faces=faces2
         return
@@ -924,11 +900,89 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
         face.append([5,7,6,end_mat])
         face.append([6,7,8,end_mat])
         
-    return vert,face,text_uv,m
+    # Rearrange for GLTF. to compute normals, we use the cross
+    # products.
 
+    norms=[[1.0,0.0,0.0],
+           [-1.0,0.0,0.0],
+           [0.0,1.0,0.0],
+           [0.0,-1.0,0.0],
+           [0.0,0.0,1.0],
+           [0.0,0.0,-1.0]]
+        
+    vert2=[]
+    txts=[]
+    norms2=[]
+    
+    for i in range(0,len(face)):
+
+        # Add the vertices to the new vertex array
+        vert2.append(vert[face[i][0]-1])
+        vert2.append(vert[face[i][1]-1])
+        vert2.append(vert[face[i][2]-1])
+
+        # Compute the norm
+        p1=vert[face[i][0]-1]
+        p2=vert[face[i][1]-1]
+        p3=vert[face[i][2]-1]
+        v1=[1]*3
+        v2=[1]*3
+        for j in range(0,3):
+            v1[j]=p2[j]-p1[j]
+            v2[j]=p3[j]-p2[j]
+        norm=cross(v1,v2,norm=True)
+        for k in range(0,3):
+            norms2.append([norm[0],norm[1],norm[2]])
+
+        if len(face[i])>=7:
+            # Texture coordinates in the case of a image
+            txts.append([text_uv[face[i][3]-1][0],
+                         text_uv[face[i][3]-1][1]])
+            txts.append([text_uv[face[i][4]-1][0],
+                         text_uv[face[i][4]-1][1]])
+            txts.append([text_uv[face[i][5]-1][0],
+                         text_uv[face[i][5]-1][1]])
+            face[i]=[i*3,i*3+1,i*3+2,face[i][6]]
+        else:
+            # Default texture coordinates for no image
+            txts.append([text_uv[3][0],
+                         text_uv[3][1]])
+            txts.append([text_uv[0][0],
+                         text_uv[0][1]])
+            txts.append([text_uv[1][0],
+                         text_uv[1][1]])
+            face[i]=[i*3,i*3+1,i*3+2,face[i][3]]
+
+    # Print out results
+    if False:
+        for ki in range(0,len(vert2),3):
+            print('%d [%d,%d,%d] mat: %s' % (int(ki/3),face[int(ki/3)][0],
+                                             face[int(ki/3)][1],
+                                             face[int(ki/3)][2],
+                                             face[int(ki/3)][3]))
+            print(('0 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki][0],vert2[ki][1],
+                                             vert2[ki][2],txts[ki][0],
+                                             txts[ki][1],norms2[ki][0],
+                                             norms2[ki][1],norms2[ki][2]))
+            print(('1 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+1][0],vert2[ki+1][1],
+                                             vert2[ki+1][2],txts[ki+1][0],
+                                             txts[ki+1][1],norms2[ki+1][0],
+                                             norms2[ki+1][1],norms2[ki+1][2]))
+            print(('2 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+2][0],vert2[ki+2][1],
+                                             vert2[ki+2][2],txts[ki+2][0],
+                                             txts[ki+2][1],norms2[ki+2][0],
+                                             norms2[ki+2][1],norms2[ki+2][2]))
+            print('')
+            
+        quit()
+
+    return vert2,face,txts,norms2,m
+            
 class threed_objects:
-    """
-    A set of three-dimensional objects
+    """A set of three-dimensional objects
     """
     vert_list: list[list[float]]=[]
     """
@@ -967,14 +1021,16 @@ class threed_objects:
         
         if len(texcoords)>0 and len(texcoords)!=len(lv):
             raise ValueError('List of texture coordinates has size',
-                             len(texcoords),
+                             slen(texcoords),
                              'and list of vertices is of size',len(lv))
-        
+
         # Find the first empty vertex index
         len_lv=len(self.vert_list)
+        len_lvt=len(self.vt_list)
+        len_lvn=len(self.vn_list)
 
         # Add all of the vertices
-        print('threed_object::add_object(): Add vertices.')
+        print('threed_object::add_object(): add vertices.')
         for i in range(0,len(lv)):
             self.vert_list.append(lv[i])
 
@@ -982,17 +1038,25 @@ class threed_objects:
             # Add the vertex normals
             print('threed_object::add_object(): Add vertex normals.')
             for i in range(0,len(normals)):
-                self.vn_list.append(lv[i])
-
+                self.vn_list.append(normals[i])
+    
         if len(texcoords)>0:
             # Add the texture coordinates
             print('threed_object::add_object(): Add vertex texcoords.')
             for i in range(0,len(texcoords)):
-                self.vn_list.append(lv[i])
+                self.vt_list.append(texcoords[i])
 
         # Iterate over each face
-        print('Adjust faces for group',gf.name,'and check.')
+        print('threed_object::add_object():',
+              'Adjust faces for group',gf.name,'and check.')
+        
         for i in range(0,len(gf.faces)):
+
+            # Check to make sure we don't have OBJ indices in
+            # GLTF mode
+            if len(gf.faces[i])>4:
+                raise ValueError('Face '+str(i)+' has more than 4 '+
+                                 'elements.')
             
             # Adjust the faces to refer to the correct vertices
             for j in range(0,3):
@@ -1001,23 +1065,14 @@ class threed_objects:
             # Check if there is an undefined material in this face
             if len(gf.faces[i])==4:
                 mat_found=False
+                mat_tmp=gf.faces[i][3]
                 for k in range(0,len(self.mat_list)):
-                    if self.mat_list[k].name==gf.faces[i][3]:
+                    if self.mat_list[k].name==mat_tmp:
                         mat_found=True
                 if mat_found==False:
                     raise ValueError('Face '+str(i)+' refers to a '+
-                                     'material '+str(gf.faces[i][3])+
-                                     ' which is not in the list of '+
-                                     'materials.')
-            if len(gf.faces[i])==7:
-                mat_found=False
-                for k in range(0,len(self.mat_list)):
-                    if self.mat_list[k].name==gf.faces[i][6]:
-                        mat_found=True
-                if mat_found==False:
-                    raise ValueError('Face '+str(i)+' refers to a '+
-                                     'material '+str(gf.faces[i][6])+
-                                     ' which is not in the list of '+
+                                     'material "'+mat_tmp+
+                                     '" which is not in the list of '+
                                      'materials.')
                     
         # Check if there is an undefined material in the
@@ -1035,7 +1090,8 @@ class threed_objects:
 
         # Sort the group of vertices by material for output later
         #for i in range(0,len(self.gf_list)):
-        print('Sort group named',gf.name,'by material.')
+        print('threed_object::add_object(): Sort group named',
+              gf.name,'by material.')
         gf.sort_by_mat()
                 
         # Add the group of faces to the list
@@ -1208,460 +1264,320 @@ class threed_objects:
         gltf_file=prefix+'.gltf'
         bin_file=prefix+'.bin'
 
-        old_version=False
+        nodes_list=[]
+            
+        for k in range(0,len(self.gf_list)):
+            nodes_list.append(k)
+                
+        jdat={"asset": {"generator": "o2sclpy v"+version,
+                        "version": "2.0"},
+              "scene": 0,
+              "scenes": [{ "name": "Scene",
+                           "nodes": nodes_list
+                          }]
+              }
+            
+        nodes_list=[]
+        for k in range(0,len(self.gf_list)):
+            nodes_list.append({"mesh" : k,
+                               "name" : self.gf_list[k].name})
+            #"rotation" : [0,0,0,0]})
+        jdat["nodes"]=nodes_list
+    
+        normals=False
+        if len(self.vn_list)==len(self.vert_list):
+            normals=True
+        texcoords=False
+        if len(self.vt_list)==len(self.vert_list):
+            texcoords=True
+    
+        mesh_list=[]
+        acc_list=[]
+        buf_list=[]
+        mat_json=[]
+        txt_list=[]
+        img_list=[]
+            
+        #curr_mat=self.gf_list[0].mat
+    
+        f2=open(bin_file,'wb')
+            
+        # Add each set of faces as a group
+        acc_index=0
+        offset=0
+        texture_index=0
+    
+        for i in range(0,len(self.gf_list)):
+                
+            att={}
+            face_bin=[]
+            norm_bin=[]
+            txts_bin=[]
+            vert_bin=[]
+            vert_map = [-1] * len(self.vert_list)
+            prim_list=[]
+            mat_index=-1
+                
+            for j in range(0,len(self.gf_list[i].faces)):
 
-        if old_version:
+                print('j:',j)
+                
+                # Determine the material for this face
+                mat1=''
+                lf1=len(self.gf_list[i].faces[j])
+                if lf1==4:
+                    mat1=self.gf_list[i].faces[j][lf1-1]
+                #print(i,j,'mat1:',mat1)
+                    
+                # Map the first vertex
+                ix=self.gf_list[i].faces[j][0]
+                if vert_map[ix]==-1:
+                    # Converting the vertices to "float()"
+                    # helps ensure single precision and then
+                    # validators don't complain that max and
+                    # min are wrong.
+                    vert_bin.append(float(self.vert_list[ix][0]))
+                    vert_bin.append(float(self.vert_list[ix][1]))
+                    vert_bin.append(float(self.vert_list[ix][2]))
+                    if normals:
+                        norm_bin.append(float(self.vn_list[ix][0]))
+                        norm_bin.append(float(self.vn_list[ix][1]))
+                        norm_bin.append(float(self.vn_list[ix][2]))
+                    if texcoords:
+                        txts_bin.append(float(self.vt_list[ix][0]))
+                        txts_bin.append(float(self.vt_list[ix][1]))
+                    vert_map[ix]=int(len(vert_bin)/3)
+                    # We have to subtract one here because
+                    # the point has already been added to 'vert_bin'
+                    face_bin.append(int(len(vert_bin)/3)-1)
+                else:
+                    face_bin.append(vert_map[ix])
+                # Map the second vertex
+                ix=self.gf_list[i].faces[j][1]
+                if vert_map[ix]==-1:
+                    vert_bin.append(float(self.vert_list[ix][0]))
+                    vert_bin.append(float(self.vert_list[ix][1]))
+                    vert_bin.append(float(self.vert_list[ix][2]))
+                    if normals:
+                        norm_bin.append(float(self.vn_list[ix][0]))
+                        norm_bin.append(float(self.vn_list[ix][1]))
+                        norm_bin.append(float(self.vn_list[ix][2]))
+                    if texcoords:
+                        txts_bin.append(float(self.vt_list[ix][0]))
+                        txts_bin.append(float(self.vt_list[ix][1]))
+                    vert_map[ix]=int(len(vert_bin)/3)
+                    # We have to subtract one here because
+                    # the point has already been added to 'vert_bin'
+                    face_bin.append(int(len(vert_bin)/3)-1)
+                else:
+                    face_bin.append(vert_map[ix])
+                # Map the third vertex
+                ix=self.gf_list[i].faces[j][2]
+                if vert_map[ix]==-1:
+                    vert_bin.append(float(self.vert_list[ix][0]))
+                    vert_bin.append(float(self.vert_list[ix][1]))
+                    vert_bin.append(float(self.vert_list[ix][2]))
+                    if normals:
+                        norm_bin.append(float(self.vn_list[ix][0]))
+                        norm_bin.append(float(self.vn_list[ix][1]))
+                        norm_bin.append(float(self.vn_list[ix][2]))
+                    if texcoords:
+                        txts_bin.append(float(self.vt_list[ix][0]))
+                        txts_bin.append(float(self.vt_list[ix][1]))
+                    vert_map[ix]=int(len(vert_bin)/3)
+                    # We have to subtract one here because
+                    # the point has already been added to 'vert_bin'
+                    face_bin.append(int(len(vert_bin)/3)-1)
+                else:
+                    face_bin.append(vert_map[ix])
+
+                # Determine if the next face is composed of a
+                # different material, if so, set mat2 and
+                # flip next_face_different_mat to True
+                next_face_different_mat=False
+                if j<len(self.gf_list[i].faces)-1:
+                    mat2=''
+                    lf2=len(self.gf_list[i].faces[j+1])
+                    if lf2==4:
+                        mat2=self.gf_list[i].faces[j+1][lf2-1]
+                    if mat1!=mat2:
+                        next_face_different_mat=True
+
+                # If we're starting a new material, add that
+                # material to the json list
+                if ((j==0 or next_face_different_mat==True) and
+                    mat1!=''):
+
+                    if j==0:
+                        mat2=mat1
+                        mat_index=0
+                        print('mat_index 0')
+                            
+                    print('Adding mat',mat2)
+                        
+                    mat_found=False
+                    for ik in range(0,len(self.mat_list)):
+                        if (mat_found==False and
+                            self.mat_list[ik].name==mat2):
+                            this_mat=self.mat_list[ik]
+                            mat_found=True
+                    if mat_found==False:
+                        print('Could not find mat ',mat2)
+                        quit()
+
+                    if this_mat.txt!='':
+                        mat_json.append({"doubleSided": True,
+                                         "name": mat2,
+                                         "pbrMetallicRoughness": {
+                                             "baseColorTexture": {
+                                                 "index":
+                                                 texture_index
+                                                 },
+                                             "metallicFactor": 0
+                                         }
+                                         })
+                        txt_list.append({"source": texture_index})
+                        img_list.append({"mimeType": "image/png",
+                                         "name": mat2,
+                                         "uri": this_mat.txt})
+                        texture_index=texture_index+1
+                    else:
+                        mat_json.append({"doubleSided": True,
+                                         "name": mat2,
+                                         "pbrMetallicRoughness": {
+                                             "baseColorFactor": [
+                                                 this_mat.Ka[0],
+                                                 this_mat.Ka[1],
+                                                 this_mat.Ka[2],
+                                                 1],
+                                             "metallicFactor": 0
+                                         }
+                                         })
+                        
+                # If we're at the end, or we're switching materials,
+                # then add the primitive to the mesh and update
+                # the binary data file accordingly
+                if (j==len(self.gf_list[i].faces)-1 or
+                    next_face_different_mat==True):
+
+                    dat1=pack('<'+'f'*len(vert_bin),*vert_bin)
+                    f2.write(dat1)
+                    if normals:
+                        dat3=pack('<'+'f'*len(norm_bin),*norm_bin)
+                        f2.write(dat3)
+                    if texcoords:
+                        dat4=pack('<'+'f'*len(txts_bin),*txts_bin)
+                        f2.write(dat4)
+                    dat2=pack('<'+'h'*len(face_bin),*face_bin)
+                    f2.write(dat2)
         
-            nodes_list=[]
-            loop_end=len(self.gf_list)
-            
-            for k in range(0,loop_end):
-                nodes_list.append(k)
-                
-            #               "extensionsUsed": ["KHR_materials_specular",
-            #                                  "KHR_materials_ior"],
-                
-            jdat={"asset": {"generator": "O2sclpy v"+version, "version": "2.0"},
-                   "scene": 0,
-                   "scenes": [{ "name": "Scene",
-                                "nodes": nodes_list
-                               }]
-                  }
-            
-            nodes_list=[]
-            for k in range(0,loop_end):
-                nodes_list.append({"mesh" : k,
-                                   "name" : self.gf_list[k].name})
-                #"rotation" : [0,0,0,0]})
-            jdat["nodes"]=nodes_list
-    
-            normals=False
-            if len(self.vn_list)==len(self.vert_list):
-                normals=True
-            texcoords=False
-            if len(self.vt_list)==len(self.vert_list):
-                texcoords=True
-    
-            mesh_list=[]
-            acc_list=[]
-            buf_list=[]
-            
-            #curr_mat=self.gf_list[0].mat
-    
-            f2=open(bin_file,'wb')
-            
-            # Add each set of faces as a group
-            acc_index=0
-            offset=0
-    
-            for i in range(0,loop_end):
-                
-                att={}
-    
-                face_bin=[]
-                vert_bin=[]
-                vert_map = [-1] * len(self.vert_list)
-                for j in range(0,len(self.gf_list[i].faces)):
-                    # Map the first vertex
-                    ix=self.gf_list[i].faces[j][0]-1
-                    if vert_map[ix]==-1:
-                        vert_bin.append(float(self.vert_list[ix][0]))
-                        vert_bin.append(float(self.vert_list[ix][1]))
-                        vert_bin.append(float(self.vert_list[ix][2]))
-                        vert_map[ix]=int(len(vert_bin)/3)-1
-                        face_bin.append(int(len(vert_bin)/3)-1)
-                    else:
-                        face_bin.append(vert_map[ix])
-                    # Map the second vertex
-                    ix=self.gf_list[i].faces[j][1]-1
-                    if vert_map[ix]==-1:
-                        vert_bin.append(float(self.vert_list[ix][0]))
-                        vert_bin.append(float(self.vert_list[ix][1]))
-                        vert_bin.append(float(self.vert_list[ix][2]))
-                        vert_map[ix]=int(len(vert_bin)/3)-1
-                        face_bin.append(int(len(vert_bin)/3)-1)
-                    else:
-                        face_bin.append(vert_map[ix])
-                    # Map the third vertex
-                    ix=self.gf_list[i].faces[j][2]-1
-                    if vert_map[ix]==-1:
-                        vert_bin.append(float(self.vert_list[ix][0]))
-                        vert_bin.append(float(self.vert_list[ix][1]))
-                        vert_bin.append(float(self.vert_list[ix][2]))
-                        vert_map[ix]=int(len(vert_bin)/3)-1
-                        face_bin.append(int(len(vert_bin)/3)-1)
-                    else:
-                        face_bin.append(vert_map[ix])
-    
-                dat1=pack('<'+'f'*len(vert_bin),*vert_bin)
-                dat2=pack('<'+'h'*len(face_bin),*face_bin)
-                f2.write(dat1)
-                f2.write(dat2)
-    
-                max_v=[0,0,0]
-                min_v=[0,0,0]
-                for ii in range(0,len(vert_bin),3):
-                    for jj in range(0,3):
-                        if ii==0 or vert_bin[ii+jj]<min_v[jj]:
-                            min_v[jj]=vert_bin[ii+jj]
-                        if ii==0 or vert_bin[ii+jj]>max_v[jj]:
-                            max_v[jj]=vert_bin[ii+jj]
-                            print(ii,jj,max_v[jj])
-                if i>=5:
-                    print('vert_bin:',vert_bin)
-                
-                # 5120 is signed byte
-                # 5121 is unsigned byte
-                # 5122 is signed short
-                # 5123 is unsigned short
-                # 5125 is unsigned int
-                # 5126 is signed float
-                
-                acc_list.append({"bufferView": acc_index,
-                                 "componentType": 5126,
-                                 "count": int(len(vert_bin)/3),
-                                 "max": max_v,
-                                 "min": min_v,
-                                 "type": "VEC3"})
-                att["POSITION"]=acc_index
-                acc_index=acc_index+1
-                if normals:
+                    max_v=[0,0,0]
+                    min_v=[0,0,0]
+                    for ii in range(0,len(vert_bin),3):
+                        for jj in range(0,3):
+                            if ii==0 or vert_bin[ii+jj]<min_v[jj]:
+                                min_v[jj]=vert_bin[ii+jj]
+                            if ii==0 or vert_bin[ii+jj]>max_v[jj]:
+                                max_v[jj]=vert_bin[ii+jj]
+                    
+                    # 5120 is signed byte
+                    # 5121 is unsigned byte
+                    # 5122 is signed short
+                    # 5123 is unsigned short
+                    # 5125 is unsigned int
+                    # 5126 is signed float
+                    
                     acc_list.append({"bufferView": acc_index,
                                      "componentType": 5126,
                                      "count": int(len(vert_bin)/3),
+                                     "max": max_v,
+                                     "min": min_v,
                                      "type": "VEC3"})
-                    att["NORMAL"]=acc_index
+                    att["POSITION"]=acc_index
                     acc_index=acc_index+1
-                if texcoords:
-                    acc_list.append({"bufferView": acc_index,
-                                     "componentType": 5126,
-                                     "count": int(len(vert_bin)/2),
-                                     "type": "VEC2"})
-                    att["TEXCOORD_0"]=acc_index
-                    acc_index=acc_index+1
-                acc_list.append({"bufferView": acc_index,
-                                 "componentType": 5123,
-                                 "count": int(len(face_bin)/1),
-                                 "type": "SCALAR"})
-                mesh_list.append({"name": self.gf_list[i].name,
-                                  "primitives": [{
-                                      "attributes": att,
-                                      "indices": acc_index}]})
-                acc_index=acc_index+1
-    
-                # 34962 is "ARRAY_BUFFER"
-                # 34963 is "ELEMENT_ARRAY_BUFFER"
-                
-                buf_list.append({"buffer": 0,
-                                 "byteLength": 4*len(vert_bin),
-                                 "byteOffset": offset,
-                                 "target": 34962})
-                offset+=4*len(vert_bin)
-                if normals:
-                    buf_list.append({"buffer": 0,
-                                     "byteLength": 4*len(vert_bin),
-                                     "byteOffset": offset,
-                                     "target": 34962})
-                    offset+=4*len(vert_bin)
-                if texcoords:
-                    buf_list.append({"buffer": 0,
-                                     "byteLength": 4*len(vert_bin),
-                                     "byteOffset": offset,
-                                     "target": 34962})
-                    offset+=4*len(vert_bin)
-                buf_list.append({"buffer": 0,
-                                 "byteLength": 2*len(face_bin),
-                                 "byteOffset": offset,
-                                 "target": 34963})
-                offset+=2*len(face_bin)
-                print('len(face_bin):',self.gf_list[i].name,len(face_bin))
-                print('min,max:',min_v,max_v)
-                print('')
-            #quit()
-    
-            jdat["meshes"]=mesh_list
-            jdat["accessors"]=acc_list
-            jdat["bufferViews"]=buf_list
-            jdat["buffers"]=[{"byteLength": offset,
-                              "uri": prefix+'.bin'}]
-
-        else:
-
-            # here, old_version is false
-            
-            nodes_list=[]
-            
-            for k in range(0,len(self.gf_list)):
-                nodes_list.append(k)
-                
-            jdat={"asset": {"generator": "o2sclpy v"+version,
-                            "version": "2.0"},
-                  "scene": 0,
-                  "scenes": [{ "name": "Scene",
-                               "nodes": nodes_list
-                              }]
-                  }
-            
-            nodes_list=[]
-            for k in range(0,len(self.gf_list)):
-                nodes_list.append({"mesh" : k,
-                                   "name" : self.gf_list[k].name})
-                #"rotation" : [0,0,0,0]})
-            jdat["nodes"]=nodes_list
-    
-            normals=False
-            if len(self.vn_list)==len(self.vert_list):
-                normals=True
-            texcoords=False
-            if len(self.vt_list)==len(self.vert_list):
-                texcoords=True
-    
-            mesh_list=[]
-            acc_list=[]
-            buf_list=[]
-            mat_json=[]
-            txt_list=[]
-            img_list=[]
-            
-            #curr_mat=self.gf_list[0].mat
-    
-            f2=open(bin_file,'wb')
-            
-            # Add each set of faces as a group
-            acc_index=0
-            offset=0
-            texture_index=0
-    
-            for i in range(0,len(self.gf_list)):
-                
-                att={}
-                face_bin=[]
-                vert_bin=[]
-                vert_map = [-1] * len(self.vert_list)
-                prim_list=[]
-                
-                for j in range(0,len(self.gf_list[i].faces)):
-
-                    # Determine the material for this face
-                    mat1=''
-                    lf1=len(self.gf_list[i].faces[j])
-                    if lf1==4 or lf1==7 or lf1==10:
-                        mat1=self.gf_list[i].faces[j][lf1-1]
-                    #print(i,j,'mat1:',mat1)
-                    
-                    # Map the first vertex
-                    ix=self.gf_list[i].faces[j][0]-1
-                    if vert_map[ix]==-1:
-                        # Converting the vertices to "float()"
-                        # helps ensure single precision and then
-                        # validators don't complain that max and
-                        # min are wrong.
-                        vert_bin.append(float(self.vert_list[ix][0]))
-                        vert_bin.append(float(self.vert_list[ix][1]))
-                        vert_bin.append(float(self.vert_list[ix][2]))
-                        vert_map[ix]=int(len(vert_bin)/3)-1
-                        face_bin.append(int(len(vert_bin)/3)-1)
-                    else:
-                        face_bin.append(vert_map[ix])
-                    # Map the second vertex
-                    ix=self.gf_list[i].faces[j][1]-1
-                    if vert_map[ix]==-1:
-                        vert_bin.append(float(self.vert_list[ix][0]))
-                        vert_bin.append(float(self.vert_list[ix][1]))
-                        vert_bin.append(float(self.vert_list[ix][2]))
-                        vert_map[ix]=int(len(vert_bin)/3)-1
-                        face_bin.append(int(len(vert_bin)/3)-1)
-                    else:
-                        face_bin.append(vert_map[ix])
-                    # Map the third vertex
-                    ix=self.gf_list[i].faces[j][2]-1
-                    if vert_map[ix]==-1:
-                        vert_bin.append(float(self.vert_list[ix][0]))
-                        vert_bin.append(float(self.vert_list[ix][1]))
-                        vert_bin.append(float(self.vert_list[ix][2]))
-                        vert_map[ix]=int(len(vert_bin)/3)-1
-                        face_bin.append(int(len(vert_bin)/3)-1)
-                    else:
-                        face_bin.append(vert_map[ix])
-
-                    # Determine if the next face is composed of a
-                    # different material, if so, set mat2 and
-                    # flip next_face_different_mat to True
-                    next_face_different_mat=False
-                    if j<len(self.gf_list[i].faces)-1:
-                        mat2=''
-                        lf2=len(self.gf_list[i].faces[j+1])
-                        if lf2==4 or lf2==7 or lf2==10:
-                            mat2=self.gf_list[i].faces[j+1][lf2-1]
-                        if mat1!=mat2:
-                            next_face_different_mat=True
-
-                    # If we're starting a new material, add that
-                    # material to the json list
-                    mat_index=-1
-                    if ((j==0 or next_face_different_mat==True) and
-                        mat1!=''):
-
-                        if j==0:
-                            mat2=mat1
-                            
-                        print('Adding mat',mat2)
-                        
-                        mat_found=False
-                        for ik in range(0,len(self.mat_list)):
-                            if (mat_found==False and
-                                self.mat_list[ik].name==mat2):
-                                this_mat=self.mat_list[ik]
-                                mat_found=True
-                        if mat_found==False:
-                            print('Could not find mat ',mat2)
-                            quit()
-
-                        if this_mat.txt!='':
-                            mat_json.append({"doubleSided": True,
-                                             "name": mat2,
-                                             "pbrMetallicRoughness": {
-                                                 "baseColorTexture": {
-                                                     "index":
-                                                     texture_index
-                                                     },
-                                                 "metallicFactor": 0
-                                             }
-                                             })
-                            txt_list.append({"sampler": 0,
-                                             "source": texture_index})
-                            img_list.append({"mimeType": "image/png",
-                                             "name": mat2,
-                                             "uri": this_mat.txt})
-                            texture_index=texture_index+1
-                        else:
-                            mat_json.append({"doubleSided": True,
-                                             "name": mat2,
-                                             "pbrMetallicRoughness": {
-                                                 "baseColorFactor": [
-                                                     this_mat.Ka[0],
-                                                     this_mat.Ka[1],
-                                                     this_mat.Ka[2],
-                                                     1.0],
-                                                 "metallicFactor": 0
-                                             }
-                                             })
-                        mat_index=len(mat_json)-1
-                        
-                    # If we're at the end, or we're switching materials,
-                    # then add the primitive to the mesh and update
-                    # the binary data file accordingly
-                    if (j==len(self.gf_list[i].faces)-1 or
-                        next_face_different_mat==True):
-    
-                        dat1=pack('<'+'f'*len(vert_bin),*vert_bin)
-                        dat2=pack('<'+'h'*len(face_bin),*face_bin)
-                        f2.write(dat1)
-                        f2.write(dat2)
-            
-                        max_v=[0,0,0]
-                        min_v=[0,0,0]
-                        for ii in range(0,len(vert_bin),3):
-                            for jj in range(0,3):
-                                if ii==0 or vert_bin[ii+jj]<min_v[jj]:
-                                    min_v[jj]=vert_bin[ii+jj]
-                                if ii==0 or vert_bin[ii+jj]>max_v[jj]:
-                                    max_v[jj]=vert_bin[ii+jj]
-                        
-                        # 5120 is signed byte
-                        # 5121 is unsigned byte
-                        # 5122 is signed short
-                        # 5123 is unsigned short
-                        # 5125 is unsigned int
-                        # 5126 is signed float
-                        
+                    if normals:
                         acc_list.append({"bufferView": acc_index,
                                          "componentType": 5126,
                                          "count": int(len(vert_bin)/3),
-                                         "max": max_v,
-                                         "min": min_v,
                                          "type": "VEC3"})
-                        att["POSITION"]=acc_index
+                        att["NORMAL"]=acc_index
                         acc_index=acc_index+1
-                        if normals:
-                            acc_list.append({"bufferView": acc_index,
-                                             "componentType": 5126,
-                                             "count": int(len(vert_bin)/3),
-                                             "type": "VEC3"})
-                            att["NORMAL"]=acc_index
-                            acc_index=acc_index+1
-                        if texcoords:
-                            acc_list.append({"bufferView": acc_index,
-                                             "componentType": 5126,
-                                             "count": int(len(vert_bin)/2),
-                                             "type": "VEC2"})
-                            att["TEXCOORD_0"]=acc_index
-                            acc_index=acc_index+1
+                    if texcoords:
                         acc_list.append({"bufferView": acc_index,
-                                         "componentType": 5123,
-                                         "count": int(len(face_bin)/1),
-                                         "type": "SCALAR"})
-                        if mat_index==-1:
-                            prim_list.append({"attributes": att,
-                                              "indices": acc_index})
-                        else:
-                            prim_list.append({"attributes": att,
-                                              "indices": acc_index,
-                                              "material": mat_index})
-                        if j==len(self.gf_list[i].faces)-1:
-                            mesh_list.append({"name": self.gf_list[i].name,
-                                              "primitives": prim_list})
-                            
+                                         "componentType": 5126,
+                                         "count": int(len(vert_bin)/3),
+                                         "type": "VEC2"})
+                        att["TEXCOORD_0"]=acc_index
                         acc_index=acc_index+1
-            
-                        # 34962 is "ARRAY_BUFFER"
-                        # 34963 is "ELEMENT_ARRAY_BUFFER"
+                    acc_list.append({"bufferView": acc_index,
+                                     "componentType": 5123,
+                                     "count": int(len(face_bin)/1),
+                                     "type": "SCALAR"})
+                    if mat1=='':
+                        prim_list.append({"attributes": att,
+                                          "indices": acc_index})
+                    else:
+                        prim_list.append({"attributes": att,
+                                          "indices": acc_index,
+                                          "material": mat_index})
+                    if j==len(self.gf_list[i].faces)-1:
+                        mesh_list.append({"name": self.gf_list[i].name,
+                                          "primitives": prim_list})
                         
+                    acc_index=acc_index+1
+        
+                    # 34962 is "ARRAY_BUFFER"
+                    # 34963 is "ELEMENT_ARRAY_BUFFER"
+                    
+                    buf_list.append({"buffer": 0,
+                                     "byteLength": 4*len(vert_bin),
+                                     "byteOffset": offset,
+                                     "target": 34962})
+                    offset+=4*len(vert_bin)
+                    if normals:
                         buf_list.append({"buffer": 0,
-                                         "byteLength": 4*len(vert_bin),
+                                         "byteLength": 4*len(norm_bin),
                                          "byteOffset": offset,
                                          "target": 34962})
-                        offset+=4*len(vert_bin)
-                        if normals:
-                            buf_list.append({"buffer": 0,
-                                             "byteLength": 4*len(vert_bin),
-                                             "byteOffset": offset,
-                                             "target": 34962})
-                            offset+=4*len(vert_bin)
-                        if texcoords:
-                            buf_list.append({"buffer": 0,
-                                             "byteLength": 4*len(vert_bin),
-                                             "byteOffset": offset,
-                                             "target": 34962})
-                            offset+=4*len(vert_bin)
+                        offset+=4*len(norm_bin)
+                    if texcoords:
                         buf_list.append({"buffer": 0,
-                                         "byteLength": 2*len(face_bin),
+                                         "byteLength": 4*len(txts_bin),
                                          "byteOffset": offset,
-                                         "target": 34963})
-                        offset+=2*len(face_bin)
-                        
-                        print('len(face_bin):',self.gf_list[i].name,
-                              len(face_bin))
-                        print('min,max:',min_v,max_v)
-                        print('')
+                                         "target": 34962})
+                        offset+=4*len(txts_bin)
+                    buf_list.append({"buffer": 0,
+                                     "byteLength": 2*len(face_bin),
+                                     "byteOffset": offset,
+                                     "target": 34963})
+                    offset+=2*len(face_bin)
+                    print('offset:',offset)
 
-                        # Reset the primitive objects so that
-                        # we can start a new one
-                        att={}
-                        face_bin=[]
-                        vert_bin=[]
-                        vert_map = [-1] * len(self.vert_list)
+                    if mat1!='':
+                        mat_index=mat_index+1
+                    print('len(face_bin):',self.gf_list[i].name,
+                          len(face_bin))
+                    print('min,max:',min_v,max_v)
+                    print('')
+                    
+                    # Reset the primitive objects so that
+                    # we can start a new one
+                    att={}
+                    face_bin=[]
+                    vert_bin=[]
+                    vert_map = [-1] * len(self.vert_list)
 
-            # Add the top-level data to the json object
-            jdat["meshes"]=mesh_list
+        # Add the top-level data to the json object
+        jdat["meshes"]=mesh_list
+        if len(mat_json)>0:
             jdat["materials"]=mat_json
-            jdat["accessors"]=acc_list
-            jdat["bufferViews"]=buf_list
-            jdat["buffers"]=[{"byteLength": offset,
-                              "uri": prefix+'.bin'}]
-            if len(txt_list)>0:
-                jdat["textures"]=txt_list
-                jdat["images"]=img_list
+        jdat["accessors"]=acc_list
+        jdat["bufferViews"]=buf_list
+        jdat["buffers"]=[{"byteLength": offset,
+                          "uri": prefix+'.bin'}]
+        if len(txt_list)>0:
+            jdat["textures"]=txt_list
+            jdat["images"]=img_list
 
         # write the json file
         f=open(gltf_file,'w',encoding='utf-8')
@@ -1689,8 +1605,6 @@ class td_plot_base(yt_plot_base):
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
         amt=acol_manager(self.link2,amp)
 
-        print('here',cmap,'x',mat_name)
-        
         slice_name=''
         slice=args[0]
 
@@ -1763,7 +1677,7 @@ class td_plot_base(yt_plot_base):
         den_ml=[]
         
          # Vertex index for faces
-        k=1
+        k=0
         for i in range(0,nxt):
             for j in range(0,nyt):
                 arr=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
@@ -1810,8 +1724,8 @@ class td_plot_base(yt_plot_base):
             print('td_den_plot(): adding',len(den_face),'faces.')
         if colors==True:
             self.to.add_object_mat_list(den_vert,
-                                   group_of_faces('plot',den_face),
-                                   den_ml)
+                                        group_of_faces('plot',den_face),
+                                        den_ml)
             for i in range(0,len(self.to.mat_list)):
                 print('to.mat_list',i,self.to.mat_list[i].name)
         else:
@@ -1854,7 +1768,8 @@ class td_plot_base(yt_plot_base):
                 print('td_arrow() creating group named',name,'with material',
                       mat+'.')
             self.to.add_object(arr_vert,
-                               group_of_faces(name,arr_face,mat))
+                               group_of_faces(name,arr_face,mat),
+                               normals=arr_norm)
         else:
             if self.verbose>2:
                 print('td_arrow() creating group named',name,'with material',
@@ -1862,7 +1777,8 @@ class td_plot_base(yt_plot_base):
             if not self.to.is_mat(mat.name):
                 self.to.add_mat(mat)
             self.to.add_object(arr_vert,
-                               group_of_faces(name,arr_face,mat.name))
+                               group_of_faces(name,arr_face,mat.name),
+                               normals=arr_norm)
 
         return
 
@@ -1874,6 +1790,14 @@ class td_plot_base(yt_plot_base):
         ``tex_label``.
         """
 
+        white_found=False
+        for i in range(0,len(self.to.mat_list)):
+            if self.to.mat_list[i].name=='white':
+                white_found=True
+        if white_found==False:
+            white=material('white',[1,1,1])
+            self.to.add_mat(white)
+        
         if ldir=='x':
             
             if png_file=='':
@@ -1886,19 +1810,21 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_axis_label(): png_file:',png_file,'mat_name:',
                       mat_name,'group_name:',group_name)
-                
-            x_v,x_f,x_t,x_m=latex_prism(0.5,-offset-height/2.0,
-                                        -offset+height/2.0,0.5,
-                                        -offset+height/2.0,-offset-height/2.0,
-                                        tex_label,png_file,mat_name,
-                                        dir=ldir)
-            
+
+            x_v,x_f,x_t,x_n,x_m=latex_prism(0.5,-offset-height/2.0,
+                                            -offset+height/2.0,0.5,
+                                            -offset+height/2.0,
+                                            -offset-height/2.0,
+                                            tex_label,png_file,mat_name,
+                                            dir=ldir)
+
             self.to.add_mat(x_m)
-            self.to.add_object(x_v,group_of_faces(group_name,x_f))
+            self.to.add_object(x_v,group_of_faces(group_name,x_f),
+                               normals=x_n,texcoords=x_t)
             if len(self.to.vt_list)==0:
                 for i in range(0,len(x_t)):
                     self.to.vt_list.append(x_t[i])
-                    
+
         elif ldir=='y':
             
             if png_file=='':
@@ -1912,14 +1838,16 @@ class td_plot_base(yt_plot_base):
                 print('td_axis_label(): png_file:',png_file,'mat_name:',
                       mat_name,'group_name:',group_name)
                 
-            y_v,y_f,y_t,y_m=latex_prism(-offset-height/2.0,0.5,
-                                        -offset+height/2.0,-offset+height/2.0,
-                                        0.5,-offset-height/2.0,
-                                        tex_label,png_file,mat_name,
-                                        dir=ldir)
+            y_v,y_f,y_t,y_n,y_m=latex_prism(-offset-height/2.0,0.5,
+                                            -offset+height/2.0,
+                                            -offset+height/2.0,
+                                            0.5,-offset-height/2.0,
+                                            tex_label,png_file,mat_name,
+                                            dir=ldir)
             
             self.to.add_mat(y_m)
-            self.to.add_object(y_v,group_of_faces(group_name,y_f))
+            self.to.add_object(y_v,group_of_faces(group_name,y_f),
+                               normals=y_n,texcoords=y_t)
             if len(self.to.vt_list)==0:
                 for i in range(0,len(y_t)):
                     self.to.vt_list.append(y_t[i])
@@ -1937,14 +1865,16 @@ class td_plot_base(yt_plot_base):
                 print('td_axis_label(): png_file:',png_file,'mat_name:',
                       mat_name,'group_name:',group_name)
                 
-            z_v,z_f,z_t,z_m=latex_prism(-offset-height/2.0,-offset+height/2.0,
-                                        0.5,-offset+height/2.0,
-                                        -offset-height/2.0,0.5,
-                                        tex_label,png_file,mat_name,
-                                        dir=ldir)
+            z_v,z_f,z_t,z_n,z_m=latex_prism(-offset-height/2.0,
+                                            -offset+height/2.0,
+                                            0.5,-offset+height/2.0,
+                                            -offset-height/2.0,0.5,
+                                            tex_label,png_file,mat_name,
+                                            dir=ldir)
             
             self.to.add_mat(z_m)
-            self.to.add_object(z_v,group_of_faces(group_name,z_f))
+            self.to.add_object(z_v,group_of_faces(group_name,z_f),
+                               normals=z_n,texcoords=z_t)
             if len(self.to.vt_list)==0:
                 for i in range(0,len(z_t)):
                     self.to.vt_list.append(z_t[i])
@@ -6647,8 +6577,8 @@ class o2graph_plotter(td_plot_base):
                         self.td_arrow(0,0,0,0,1,0,'y_axis')
                         self.td_arrow(0,0,0,0,0,1,'z_axis')
                         self.td_axis_label('x',strlist[ix+1])
-                        self.td_axis_label('y',strlist[ix+2])
-                        self.td_axis_label('z',strlist[ix+3])
+                        #self.td_axis_label('y',strlist[ix+2])
+                        #self.td_axis_label('z',strlist[ix+3])
                     else:
                         print('Not enough arguments for td-axis.')
                         
