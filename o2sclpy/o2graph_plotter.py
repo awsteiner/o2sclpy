@@ -852,10 +852,10 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
     vert.append([x1,y2,z2])
     vert.append([x2,y2,z2])
     
-    text_uv.append([0.0,0.0])
     text_uv.append([0.0,float(h)/float(h_new)])
+    text_uv.append([0.0,0.0])
+    text_uv.append([float(w)/float(w_new),float(h)/float(h_new)])
     text_uv.append([float(w)/float(w_new),0.0])
-    text_uv.append([1.0,float(h)/float(h_new)])
 
     if dir=='x':
         
@@ -966,7 +966,7 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
             face[i]=[i*3,i*3+1,i*3+2,face[i][3]]
 
     # Print out results
-    if False:
+    if True:
         for ki in range(0,len(vert2),3):
             print('%d [%d,%d,%d] mat: %s' % (int(ki/3),face[int(ki/3)][0],
                                              face[int(ki/3)][1],
@@ -989,7 +989,7 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
                                              norms2[ki+2][1],norms2[ki+2][2]))
             print('')
             
-        quit()
+        #quit()
 
     return vert2,face,txts,norms2,m
             
@@ -1268,15 +1268,49 @@ class threed_objects:
         txt_list=[]
         img_list=[]
             
-        #curr_mat=self.gf_list[0].mat
-    
         f2=open(bin_file,'wb')
             
+        texture_map=[-1]*len(self.mat_list)
+        texture_index=0
+        
+        for i in range(0,len(self.mat_list)):
+
+            this_mat=self.mat_list[i]
+
+            if this_mat.txt!='':
+                mat_json.append({"doubleSided": True,
+                                 "name": this_mat.name,
+                                 "pbrMetallicRoughness": {
+                                     "baseColorTexture": {
+                                         "index":
+                                         texture_index
+                                         },
+                                     "metallicFactor": 0
+                                 }
+                                 })
+                txt_list.append({"source": texture_index})
+                img_list.append({"mimeType": "image/png",
+                                 "name": this_mat.name,
+                                 "uri": this_mat.txt})
+                texture_map[i]=texture_index
+                texture_index=texture_index+1
+            else:
+                mat_json.append({"doubleSided": True,
+                                 "name": this_mat.name,
+                                 "pbrMetallicRoughness": {
+                                     "baseColorFactor": [
+                                         this_mat.Ka[0],
+                                         this_mat.Ka[1],
+                                         this_mat.Ka[2],
+                                         1],
+                                     "metallicFactor": 0
+                                 }
+                                 })
+        
         # Add each set of faces as a group
         acc_index=0
         offset=0
-        texture_index=0
-    
+
         for i in range(0,len(self.gf_list)):
                 
             normals=False
@@ -1299,9 +1333,23 @@ class threed_objects:
 
                 # Determine the material for this face
                 mat1=''
+                mat_index=-1
+                
                 lf1=len(self.gf_list[i].faces[j])
                 if lf1==4:
                     mat1=self.gf_list[i].faces[j][lf1-1]
+
+                    mat_found=False
+                    for ik in range(0,len(self.mat_list)):
+                        if (mat_found==False and
+                            self.mat_list[ik].name==mat1):
+                            mat_index=ik
+                            mat_found=True
+                    if mat_found==False:
+                        print('Could not find mat "'+mat2+
+                              '" in mat_list.')
+                        quit()
+                    
                 #print(i,j,'mat1:',mat1)
                     
                 # Map the first vertex
@@ -1318,7 +1366,7 @@ class threed_objects:
                         norm_bin.append(float(self.gf_list[i].vn_list[ix][0]))
                         norm_bin.append(float(self.gf_list[i].vn_list[ix][1]))
                         norm_bin.append(float(self.gf_list[i].vn_list[ix][2]))
-                    if texcoords:
+                    if texcoords and self.mat_list[mat_index].txt!='':
                         txts_bin.append(float(self.gf_list[i].vt_list[ix][0]))
                         txts_bin.append(float(self.gf_list[i].vt_list[ix][1]))
                     vert_map[ix]=int(len(vert_bin)/3)
@@ -1337,7 +1385,7 @@ class threed_objects:
                         norm_bin.append(float(self.gf_list[i].vn_list[ix][0]))
                         norm_bin.append(float(self.gf_list[i].vn_list[ix][1]))
                         norm_bin.append(float(self.gf_list[i].vn_list[ix][2]))
-                    if texcoords:
+                    if texcoords and self.mat_list[mat_index].txt!='':
                         txts_bin.append(float(self.gf_list[i].vt_list[ix][0]))
                         txts_bin.append(float(self.gf_list[i].vt_list[ix][1]))
                     vert_map[ix]=int(len(vert_bin)/3)
@@ -1356,7 +1404,7 @@ class threed_objects:
                         norm_bin.append(float(self.gf_list[i].vn_list[ix][0]))
                         norm_bin.append(float(self.gf_list[i].vn_list[ix][1]))
                         norm_bin.append(float(self.gf_list[i].vn_list[ix][2]))
-                    if texcoords:
+                    if texcoords and self.mat_list[mat_index].txt!='':
                         txts_bin.append(float(self.gf_list[i].vt_list[ix][0]))
                         txts_bin.append(float(self.gf_list[i].vt_list[ix][1]))
                     vert_map[ix]=int(len(vert_bin)/3)
@@ -1378,57 +1426,6 @@ class threed_objects:
                     if mat1!=mat2:
                         next_face_different_mat=True
 
-                # If we're starting a new material, add that
-                # material to the json list
-                if ((j==0 or next_face_different_mat==True) and
-                    mat1!=''):
-
-                    if j==0:
-                        mat2=mat1
-                        mat_index=0
-                        print('mat_index 0')
-                            
-                    print('Adding mat',mat2)
-                        
-                    mat_found=False
-                    for ik in range(0,len(self.mat_list)):
-                        if (mat_found==False and
-                            self.mat_list[ik].name==mat2):
-                            this_mat=self.mat_list[ik]
-                            mat_found=True
-                    if mat_found==False:
-                        print('Could not find mat ',mat2)
-                        quit()
-
-                    if this_mat.txt!='':
-                        mat_json.append({"doubleSided": True,
-                                         "name": mat2,
-                                         "pbrMetallicRoughness": {
-                                             "baseColorTexture": {
-                                                 "index":
-                                                 texture_index
-                                                 },
-                                             "metallicFactor": 0
-                                         }
-                                         })
-                        txt_list.append({"source": texture_index})
-                        img_list.append({"mimeType": "image/png",
-                                         "name": mat2,
-                                         "uri": this_mat.txt})
-                        texture_index=texture_index+1
-                    else:
-                        mat_json.append({"doubleSided": True,
-                                         "name": mat2,
-                                         "pbrMetallicRoughness": {
-                                             "baseColorFactor": [
-                                                 this_mat.Ka[0],
-                                                 this_mat.Ka[1],
-                                                 this_mat.Ka[2],
-                                                 1],
-                                             "metallicFactor": 0
-                                         }
-                                         })
-                        
                 # If we're at the end, or we're switching materials,
                 # then add the primitive to the mesh and update
                 # the binary data file accordingly
@@ -1440,7 +1437,10 @@ class threed_objects:
                     if normals:
                         dat3=pack('<'+'f'*len(norm_bin),*norm_bin)
                         f2.write(dat3)
-                    if texcoords:
+                    # If the object provides texture coordinates, but
+                    # there's no texture, then there's no need to
+                    # output them
+                    if texcoords and self.mat_list[mat_index].txt!='':
                         dat4=pack('<'+'f'*len(txts_bin),*txts_bin)
                         f2.write(dat4)
                     dat2=pack('<'+'h'*len(face_bin),*face_bin)
@@ -1477,7 +1477,10 @@ class threed_objects:
                                          "type": "VEC3"})
                         att["NORMAL"]=acc_index
                         acc_index=acc_index+1
-                    if texcoords:
+                    # If the object provides texture coordinates, but
+                    # there's no texture, then there's no need to
+                    # output them
+                    if texcoords and self.mat_list[mat_index].txt!='':
                         acc_list.append({"bufferView": acc_index,
                                          "componentType": 5126,
                                          "count": int(len(vert_bin)/3),
@@ -1515,7 +1518,10 @@ class threed_objects:
                                          "byteOffset": offset,
                                          "target": 34962})
                         offset+=4*len(norm_bin)
-                    if texcoords:
+                    # If the object provides texture coordinates, but
+                    # there's no texture, then there's no need to
+                    # output them
+                    if texcoords and self.mat_list[mat_index].txt!='':
                         buf_list.append({"buffer": 0,
                                          "byteLength": 4*len(txts_bin),
                                          "byteOffset": offset,
@@ -1528,8 +1534,6 @@ class threed_objects:
                     offset+=2*len(face_bin)
                     print('offset:',offset)
 
-                    if mat1!='':
-                        mat_index=mat_index+1
                     print('len(face_bin):',self.gf_list[i].name,
                           len(face_bin))
                     print('min,max:',min_v,max_v)
@@ -1801,10 +1805,7 @@ class td_plot_base(yt_plot_base):
             gf.vert_list=x_v
             gf.vn_list=x_n
             gf.vt_list=x_t
-            self.to.add_object(x_v,gf)
-            if len(self.to.vt_list)==0:
-                for i in range(0,len(x_t)):
-                    self.to.vt_list.append(x_t[i])
+            self.to.add_object(gf)
 
         elif ldir=='y':
             
@@ -1831,12 +1832,8 @@ class td_plot_base(yt_plot_base):
             gf.vert_list=y_v
             gf.vn_list=y_n
             gf.vt_list=y_t
-            self.to.add_object(y_v,gf)
+            self.to.add_object(gf)
 
-            if len(self.to.vt_list)==0:
-                for i in range(0,len(y_t)):
-                    self.to.vt_list.append(y_t[i])
-                    
         elif ldir=='z':
             
             if png_file=='':
@@ -1862,10 +1859,7 @@ class td_plot_base(yt_plot_base):
             gf.vert_list=z_v
             gf.vn_list=z_n
             gf.vt_list=z_t
-            self.to.add_object(z_v,gf)
-            if len(self.to.vt_list)==0:
-                for i in range(0,len(z_t)):
-                    self.to.vt_list.append(z_t[i])
+            self.to.add_object(gf)
 
         else:
             if type(ldir)==str:
@@ -6562,11 +6556,11 @@ class o2graph_plotter(td_plot_base):
 
                     if ix_next-ix>=4:
                         self.td_arrow(0,0,0,1,0,0,'x_axis')
-                        #self.td_arrow(0,0,0,0,1,0,'y_axis')
-                        #self.td_arrow(0,0,0,0,0,1,'z_axis')
-                        #self.td_axis_label('x',strlist[ix+1])
-                        #self.td_axis_label('y',strlist[ix+2])
-                        #self.td_axis_label('z',strlist[ix+3])
+                        self.td_arrow(0,0,0,0,1,0,'y_axis')
+                        self.td_arrow(0,0,0,0,0,1,'z_axis')
+                        self.td_axis_label('x',strlist[ix+1])
+                        self.td_axis_label('y',strlist[ix+2])
+                        self.td_axis_label('z',strlist[ix+3])
                     else:
                         print('Not enough arguments for td-axis.')
                         
