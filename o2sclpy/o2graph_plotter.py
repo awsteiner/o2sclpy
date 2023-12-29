@@ -1698,13 +1698,41 @@ class td_plot_base(yt_plot_base):
                         den_face.append(arr3)
                         
                 k=k+1
+
+        # Convert to GLTF
                 
+        vert2=[]
+        norms2=[]
+        
+        for i in range(0,len(den_face)):
+    
+            # Add the vertices to the new vertex array
+            vert2.append(den_vert[den_face[i][0]-1])
+            vert2.append(den_vert[den_face[i][1]-1])
+            vert2.append(den_vert[den_face[i][2]-1])
+    
+            # Compute the norm
+            p1=den_vert[den_face[i][0]-1]
+            p2=den_vert[den_face[i][1]-1]
+            p3=den_vert[den_face[i][2]-1]
+            v1=[1]*3
+            v2=[1]*3
+            for j in range(0,3):
+                v1[j]=p2[j]-p1[j]
+                v2[j]=p3[j]-p2[j]
+            norm=cross(v1,v2,norm=True)
+            for k in range(0,3):
+                norms2.append([norm[0],norm[1],norm[2]])
+    
+            den_face[i]=[i*3,i*3+1,i*3+2,den_face[i][3]]
+    
         if self.verbose>2:
             print('td_den_plot(): adding',len(den_face),'faces.')
         if colors==True:
-            self.to.add_object_mat_list(den_vert,
-                                        group_of_faces('plot',den_face),
-                                        den_ml)
+            gf=group_of_faces('plot',den_face)
+            gf.vert_list=vert2
+            gf.vn_list=norms2
+            self.to.add_object_mat_list(gf,den_ml)
             for i in range(0,len(self.to.mat_list)):
                 print('to.mat_list',i,self.to.mat_list[i].name)
         else:
@@ -1718,10 +1746,10 @@ class td_plot_base(yt_plot_base):
                     print('Material '+mat_name+' not found in td-den-plot.')
                     return
             
-                self.to.add_object_mat(den_vert,
-                                       group_of_faces('plot',den_face,
-                                                      'white'),
-                                       white)
+            gf=group_of_faces('plot',den_face)
+            gf.vert_list=vert2
+            gf.vn_list=norms2
+            self.to.add_object_mat(gf,white)
 
         return
         
