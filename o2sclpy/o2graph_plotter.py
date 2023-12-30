@@ -1655,7 +1655,7 @@ class td_plot_base(yt_plot_base):
         # Materials for the density plot
         den_ml=[]
         
-         # Vertex index for faces
+        # Vertex index for faces
         k=0
         for i in range(0,nxt):
             for j in range(0,nyt):
@@ -1685,9 +1685,9 @@ class td_plot_base(yt_plot_base):
                                     den_ml.append(cmap_mats[ell])
                                     ell=len(cmap_mats)
                          # Add the two triangles 
-                        arr2=[k,k+nyt,k+1,cmap_name]
+                        arr2=[k+1,k+nyt+1,k+2,cmap_name]
                         den_face.append(arr2)
-                        arr3=[k+nyt,k+1+nyt,k+1,cmap_name]
+                        arr3=[k+1+nyt,k+2,k+2+nyt,cmap_name]
                         den_face.append(arr3)
                         
                     else:
@@ -1699,13 +1699,18 @@ class td_plot_base(yt_plot_base):
                         
                 k=k+1
 
+        #for k in range(0,41):
+        #print(k,den_vert[k])
+                
         # Convert to GLTF
                 
         vert2=[]
         norms2=[]
         
         for i in range(0,len(den_face)):
-    
+
+            #print('old faces:',den_face[i])
+            
             # Add the vertices to the new vertex array
             vert2.append(den_vert[den_face[i][0]-1])
             vert2.append(den_vert[den_face[i][1]-1])
@@ -1725,7 +1730,13 @@ class td_plot_base(yt_plot_base):
                 norms2.append([norm[0],norm[1],norm[2]])
     
             den_face[i]=[i*3,i*3+1,i*3+2,den_face[i][3]]
-    
+
+            #print('new faces:',den_face[i])
+            #print('face:',den_face[i])
+            #print('verts:',vert2[den_face[i][0]],
+            #      vert2[den_face[i][1]],vert2[den_face[i][2]])
+            #temp=input('Press a key to continue. ')
+
         if self.verbose>2:
             print('td_den_plot(): adding',len(den_face),'faces.')
         if colors==True:
