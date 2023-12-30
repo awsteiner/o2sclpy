@@ -37,7 +37,7 @@ from o2sclpy.doc_data import acol_help_topics, version
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot, cross
-from o2sclpy.utils import is_number, arrow, icosahedron
+from o2sclpy.utils import is_number, arrow, icosphere
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import string_equal_dash, latex_to_png
 from o2sclpy.utils import force_string, remove_spaces
@@ -1761,6 +1761,115 @@ class td_plot_base(yt_plot_base):
             gf.vert_list=vert2
             gf.vn_list=norms2
             self.to.add_object_mat(gf,white)
+
+        return
+        
+    def td_scatter(self,o2scl,amp,args)
+        """
+        Desc
+        """
+        curr_type=o2scl_get_type(o2scl,amp,self.link2)
+        amt=acol_manager(self.link2,amp)
+
+        kwstring=''
+        if curr_type==b'table':
+            col_x=args[0]
+            col_y=args[1]
+            col_z=args[2]
+            col_r=''
+            col_g=''
+            col_b=''
+            if len(args)==4:
+                kwstring=args[3]
+            elif len(args)>4:
+                col_r=args[3]
+                col_g=args[4]
+                col_b=args[5]
+                if len(args)>=7:
+                    kwstring=args[6]
+        else:
+            print("Command 'td-scatter' not supported for type",
+                  curr_type,".")
+            return
+
+        table=amt.get_table_obj()
+        n=table.get_nlines()
+        cx=table[col_x][0:n]
+        cy=table[col_y][0:n]
+        cz=table[col_z][0:n]
+        
+        if self.xset==False:
+            self.xlo=numpy.min(cx)
+            self.xhi=numpy.max(cx)
+            if self.verbose>2:
+                print('td_scatter(): x limits not set, so setting to',
+                      self.xlo,',',self.xhi)
+        if self.yset==False:
+            self.ylo=numpy.min(cy)
+            self.yhi=numpy.max(cy)
+            if self.verbose>2:
+                print('td_scatter(): y limits not set, so setting to',
+                      self.ylo,',',self.yhi)
+        if self.zset==False:
+            self.zlo=numpy.min(cz)
+            self.zhi=numpy.max(cz)
+            if self.verbose>2:
+                print('td_scatter(): z limits not set, so setting to',
+                      self.zlo,',',self.zhi)
+        
+        # If true, then a color map has been specified and we need
+        # to add materials
+        colors=False
+        if col_r!='' and col_g!='' and col_b!='':
+            cr=table[col_r]
+            cg=table[col_g]
+            cb=table[col_b]
+            colors=True
+        
+        gf=group_of_faces('scatter')
+        
+        for i in range(0,n):
+            xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
+            ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
+            znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
+            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,0.04)
+            lv=len(gf.vert_list)
+            for k in range(0,len(vtmp)):
+                gf.vert_list.append(vtmp[k])
+            for k in range(0,len(ntmp)):
+                gf.vn_list.append(ntmp[k])
+            for k in range(0,len(ftmp)):
+                ftmp[k][0]=ftmp[k][0]+lv
+                ftmp[k][1]=ftmp[k][1]+lv
+                ftmp[k][2]=ftmp[k][2]+lv
+                gf.faces.append(ftmp[k])
+                
+        # Convert to GLTF
+                
+        vert2=[]
+        norms2=[]
+        
+        for i in range(0,len(gf.faces)):
+
+            #print('old faces:',den_face[i])
+            
+            # Add the vertices to the new vertex array
+            vert2.append(gf.vert_list[gf.faces[i][0]-1])
+            vert2.append(gf.vert_list[gf.faces[i][1]-1])
+            vert2.append(gf.vert_list[gf.faces[i][2]-1])
+    
+            norm2.append(gf.vn_list[gf.faces[i][0]-1])
+            norm2.append(gf.vn_list[gf.faces[i][1]-1])
+            norm2.append(gf.vn_list[gf.faces[i][2]-1])
+
+        if self.to.is_mat('white')==False:
+            white=material(mat_name,[1,1,1])
+            self.to.add_mat(white)
+            
+        gf.vert_list=vert2
+        gf.vn_list=norms2
+        gf.mat='white'
+        self.to.add_object(gf)
 
         return
         

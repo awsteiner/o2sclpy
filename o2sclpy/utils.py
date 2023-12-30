@@ -60,6 +60,14 @@ def norm3(x):
     x[2]=x[2]/mag
     return x
 
+def renorm(x,r):
+    """Return a renormalized version of x"""
+    mag=numpy.sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])
+    x[0]=r*x[0]/mag
+    x[1]=r*x[1]/mag
+    x[2]=r*x[2]/mag
+    return x
+
 def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
           head_width=3):
     
@@ -235,92 +243,97 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
             
     return vert2,norms2,face2
 
-def icosahedron(x,y,z,r):
-    """Construct the vertices and faces of an icosahedron centered at
+def icosphere(x,y,z,r,n_subdiv=0):
+    """Construct the vertices and faces of an icosphere centered at
     (x,y,z) with radius r
+
+    I got this from [1]. The initial 
 
     This function returns a set of three lists, the first is the
     vertices, the second are the vertex normals, and the third are the
     faces. The normal vectors always point outwards.
+
+    [1] https://danielsieger.com/blog/2021/03/27/generating-spheres.html
     """
     phi=(1.0+numpy.sqrt(5.0))*0.5
     b=r/phi;
+    fact=numpy.sqrt(phi)/(5**0.25)
     
     vert=[]
     vn=[]
+
+    # Start with an icosahedron with each vertex at radius r
     
-    tmp=[0,b,-r]
+    tmp=[0,b,-r]*fact
+    print(r,norm3(tmp))
+    quit()
+    
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[0,b,-r]
+    tmp=[0,b,-r]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[b,r,0]
+    tmp=[b,r,0]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[-b,r,0]
+    tmp=[-b,r,0]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[0,b,r]
+    tmp=[0,b,r]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[0,-b,r]
+    tmp=[0,-b,r]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[-r,0,b]
+    tmp=[-r,0,b]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[0,-b,-r]
+    tmp=[0,-b,-r]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[r,0,-b]
+    tmp=[r,0,-b]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[r,0,b]
+    tmp=[r,0,b]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[-r,0,-b]
+    tmp=[-r,0,-b]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[b,-r,0]
+    tmp=[b,-r,0]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[-b,-r,0]
+    tmp=[-b,-r,0]*fact
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
-
-    # Shift the origin to the user-specified coordinates
-    for i in range(0,len(vert)):
-        vert[i][0]=vert[i][0]+x
-        vert[i][1]=vert[i][1]+y
-        vert[i][2]=vert[i][2]+z
 
     # Enumerate the faces
+    
     face=[]
     face.append([3,2,1])
     face.append([2,3,4])
@@ -343,7 +356,84 @@ def icosahedron(x,y,z,r):
     face.append([6,12,5])
     face.append([11,9,5])
 
-    return vert,vn,face
+    # Subdivide if requested
+    
+    for k in range(0,n_subdiv):
+        face_new=[]
+        for i in range(0,len(face)):
+            i1=face[i][0]
+            i2=face[i][1]
+            i3=face[i][2]
+
+            v12=(vert[i1-1]+vert[i2-1])/2
+            v12=renorm(v12,r)
+            face.append(v12)
+            i12=len(face)
+            v13=(vert[i1-1]+vert[i3-1])/2
+            v13=renorm(v13,r)
+            face.append(v13)
+            i13=len(face)
+            v23=(vert[i2-1]+vert[i3-1])/2
+            v23=renorm(v12,r)
+            face.append(v23)
+            i23=len(face)
+
+            face_new.append([i1,i12,i13])
+            face_new.append([i12,i2,i23])
+            face_new.append([i12,i23,i13])
+            face_new.append([i3,i13,i23])
+            
+        face=face_new
+    
+    # Shift the origin to the user-specified coordinates
+    for i in range(0,len(vert)):
+        vert[i][0]=vert[i][0]+x
+        vert[i][1]=vert[i][1]+y
+        vert[i][2]=vert[i][2]+z
+
+    # Rearrange for GLTF
+            
+    vert2=[]
+    norms2=[]
+    face2=[]
+
+    for i in range(0,len(face)):
+
+        # Add the vertices to the new vertex array
+        vert2.append(vert[face[i][0]-1])
+        vert2.append(vert[face[i][1]-1])
+        vert2.append(vert[face[i][2]-1])
+
+        norms2.append(vn[face[i][0]-1])
+        norms2.append(vn[face[i][1]-1])
+        norms2.append(vn[face[i][2]-1])
+
+        face2.append([i*3,i*3+1,i*3+2])
+
+    # Print out results
+    if False:
+        for ki in range(0,len(vert2),3):
+            print('%d [%d,%d,%d]' % (int(ki/3),face2[int(ki/3)][0],
+                                             face2[int(ki/3)][1],
+                                             face2[int(ki/3)][2]))
+            print(('0 [%7.6e,%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki][0],vert2[ki][1],
+                                             vert2[ki][2],norms2[ki][0],
+                                             norms2[ki][1],norms2[ki][2]))
+            print(('1 [%7.6e,%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+1][0],vert2[ki+1][1],
+                                             vert2[ki+1][2],norms2[ki+1][0],
+                                             norms2[ki+1][1],norms2[ki+1][2]))
+            print(('2 [%7.6e,%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+2][0],vert2[ki+2][1],
+                                             vert2[ki+2][2],norms2[ki+2][0],
+                                             norms2[ki+2][1],norms2[ki+2][2]))
+            print('')
+
+        print(len(vert2),len(norms2),len(face2))
+        #quit()
+            
+    return vert2,norms2,face2
     
 def cpp_test(x):
     """
