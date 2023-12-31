@@ -1257,10 +1257,13 @@ class threed_objects:
         nodes_list=[]
         for k in range(0,len(self.gf_list)):
             nodes_list.append({"mesh" : k,
-                               "name" : self.gf_list[k].name})
-            #"rotation" : [0,0,0,0]})
+                               "name" : self.gf_list[k].name,
+                               "rotation": [
+                                   0.7071068286895752,0,0,-0.7071068286895752
+                               ]
+                               })
         jdat["nodes"]=nodes_list
-    
+
         mesh_list=[]
         acc_list=[]
         buf_list=[]
@@ -1764,7 +1767,7 @@ class td_plot_base(yt_plot_base):
 
         return
         
-    def td_scatter(self,o2scl,amp,args)
+    def td_scatter(self,o2scl,amp,args):
         """
         Desc
         """
