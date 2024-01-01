@@ -2306,6 +2306,63 @@ class o2graph_plotter(td_plot_base):
         
         return
         
+    def bl_yaw_mp4(self,n_frames: int, mp4_file: str):
+
+        if len(args)<2:
+            print('Not enough arguments.')
+            return
+        n_frames=args[0]
+        mp4_file=args[1]
+
+        import tempfile
+        
+        f=tempfile.NamedTemporaryFile(suffix='.gltf',delete=False)
+        gltf_file_name=f.name
+        print('Writing GLTF to',gltf_file_name)
+
+        self.to.write_gltf(gltf_file_name)
+        
+        f2=tempfile.NamedTemporaryFile(suffix='.py',delete=False)
+        py_file_name=f2.name
+        print('Writing Python script to',py_file_name)
+
+        orig_script=os.path.dirname(o2sclpy.__file__)+'/bl_gltf_yaw.py')
+        
+        print('Original script at:',orig_script)
+
+        rep_list={'BG_COLOR': '(0,0,0,0)',
+                  'LIGHT_DIST': '5.8',
+                  'LIGHT_ENERGY': '800',
+                  'GLTF_PATH': gltf_file_name,
+                  'N_FRAMES': 40,
+                  'CAM_DIST': 5}
+        print('Making replacements:',rep_list)
+
+        forig=file.open(orig_script,'r')
+        lines=forig.readlines()
+        frep=file.open(py_file_name,'w')
+        for line in lines:
+            line.replace('BG_COLOR',rep_list['BG_COLOR'])
+            line.replace('LIGHT_DIST',rep_list['LIGHT_DIST'])
+            line.replace('LIGHT_ENERGY',rep_list['LIGHT_ENERGY'])
+            line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
+            line.replace('N_FRAMES',rep_list['N_FRAMES'])
+            line.replace('CAM_DIST',rep_list['CAM_DIST'])
+            frep.write(line)
+        forig.close()
+        frep.close()
+            
+        cmd=('/Applications/Blender.app/Contents/MacOS/Blender -b -P '+
+             py_file_name)
+        print('Executing:',cmd)
+        os.system(cmd)
+
+        print('Creating mp4')
+        mp4(['/tmp/bl_gltf_yaw_%03d.png',mp4_file],
+            vf='eq=brightness=0.5')
+            
+        return
+        
     def den_plot_o2graph(self,o2scl,amp,link,args):
         """Documentation for o2graph command ``den-plot``:
 
@@ -6729,6 +6786,19 @@ class o2graph_plotter(td_plot_base):
                                          **string_to_dict(strlist[ix+2]))
                     else:
                         print('Not enough arguments for td-den-plot.')
+
+                elif cmd_name=='bl-yaw-mp4':
+
+                    if self.verbose>2:
+                        print('Process td-den-plot.')
+                        print('args:',strlist[ix:ix_next])
+
+                    print('here0',ix_next-ix,strlist[ix+2])
+                    if ix_next-ix>=3:
+                        self.bl_yaw_mp4(int(strlist[ix+1]),
+                                        strlist[ix+2])
+                    else:
+                        print('Not enough arguments for bl-yaw-mp4.')
 
                 elif cmd_name=='yt-axis':
 
