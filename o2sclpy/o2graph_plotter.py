@@ -224,6 +224,7 @@ param_list=[
     ["logx","If true, use a logarithmic x-axis (default False)."],
     ["logy","If true, use a logarithmic y-axis (default False)."],
     ["logz","If true, use a logarithmic z-axis (default False)."],
+    ["td_wdir",""],
     ["usetex","If true, use LaTeX for text rendering (default True)."],
     ["verbose","Verbosity parameter (default 1)."],
     ["xhi","Upper limit for x-axis (function if starts with '(')."],
@@ -1228,7 +1229,7 @@ class threed_objects:
                         
         return
         
-    def write_gltf(self, prefix: str):
+    def write_gltf(self, wdir: str, prefix: str):
         """Write all objects to an '.gltf' file, creating a '.bin' file
         """
 
@@ -1238,8 +1239,8 @@ class threed_objects:
         # Remove suffix if it is present
         if prefix[-5:]=='.gltf':
             prefix=prefix[:-5]
-        gltf_file=prefix+'.gltf'
-        bin_file=prefix+'.bin'
+        gltf_file=wdir+"/"+prefix+'.gltf'
+        bin_file=wdir+"/"+prefix+'.bin'
         
         nodes_list=[]
             
@@ -1578,6 +1579,7 @@ class td_plot_base(yt_plot_base):
     def __init__(self):
         super().__init__()
         self.to=threed_objects()
+        self.td_wdir='tdir'
         return
 
     def td_den_plot(self,o2scl,amp,args,cmap='',mat_name='white'):
@@ -1948,7 +1950,8 @@ class td_plot_base(yt_plot_base):
                                             -offset+height/2.0,0.5,
                                             -offset+height/2.0,
                                             -offset-height/2.0,
-                                            tex_label,png_file,mat_name,
+                                            tex_label,
+                                            png_file,mat_name,
                                             dir=ldir)
 
             self.to.add_mat(x_m)
@@ -1975,7 +1978,8 @@ class td_plot_base(yt_plot_base):
                                             -offset+height/2.0,
                                             -offset+height/2.0,
                                             0.5,-offset-height/2.0,
-                                            tex_label,png_file,mat_name,
+                                            tex_label,
+                                            png_file,mat_name,
                                             dir=ldir)
             
             self.to.add_mat(y_m)
@@ -2002,7 +2006,8 @@ class td_plot_base(yt_plot_base):
                                             -offset+height/2.0,
                                             0.5,-offset+height/2.0,
                                             -offset-height/2.0,0.5,
-                                            tex_label,png_file,mat_name,
+                                            tex_label,
+                                            png_file,mat_name,
                                             dir=ldir)
             
             self.to.add_mat(z_m)
@@ -2306,18 +2311,16 @@ class o2graph_plotter(td_plot_base):
         
         return
         
-    def bl_yaw_mp4(self,n_frames: int, mp4_file: str):
+    def bl_yaw_mp4(self, n_frames: int, mp4_file: str):
 
         import tempfile
         
-        f=tempfile.NamedTemporaryFile(suffix='.gltf',delete=False)
-        gltf_file_name=f.name
+        gltf_file_name='o2sclpy.gltf'
         print('Writing GLTF to',gltf_file_name)
 
-        self.to.write_gltf(gltf_file_name)
+        self.to.write_gltf(self.td_wdir,gltf_file_name)
         
-        f2=tempfile.NamedTemporaryFile(suffix='.py',delete=False)
-        py_file_name=f2.name
+        py_file_name=self.td_wdir+'/o2sclpy.py'
         print('Writing Python script to',py_file_name)
 
         orig_script=('/usr/local/lib/python3.11/site-packages/'+
@@ -2329,7 +2332,7 @@ class o2graph_plotter(td_plot_base):
                   'LIGHT_DIST': '5.8',
                   'LIGHT_ENERGY': '800',
                   'GLTF_PATH': gltf_file_name,
-                  'N_FRAMES': '40',
+                  'N_FRAMES': '200',
                   'CAM_DIST': '5'}
         print('Making replacements:',rep_list)
 
@@ -2347,14 +2350,14 @@ class o2graph_plotter(td_plot_base):
         forig.close()
         frep.close()
             
-        cmd=('/Applications/Blender.app/Contents/MacOS/Blender -b -P '+
-             py_file_name)
+        cmd=('cd '+self.td_wdir+' && /Applications/Blender.app'+
+             '/Contents/MacOS/Blender -b -P o2sclpy.py')
         print('Executing:',cmd)
         os.system(cmd)
 
         print('Creating mp4')
-        self.mp4(['/tmp/bl_gltf_yaw_%03d.png',mp4_file],
-            vf='eq=contrast=2')
+        self.mp4([self.td_wdir+'/bl_gltf_yaw_%03d.png',mp4_file],
+            vf='eq=contrast=1')
             
         return
         
@@ -2616,7 +2619,7 @@ class o2graph_plotter(td_plot_base):
 
         if self.verbose>2:
             print('Writing gltf to file',prefix)
-        self.to.write_gltf(prefix)
+        self.to.write_gltf('.',prefix)
 
         return
     

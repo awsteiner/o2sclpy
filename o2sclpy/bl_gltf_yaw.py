@@ -64,8 +64,6 @@ light5.location=(0.5,0.5,LIGHT_DIST+0.5)
 # Import GLTF file
 bpy.ops.import_scene.gltf(filepath='GLTF_PATH')
 
-output_path=scene.render.filepath
-
 # Iterate through the dict, set the locations and render
 for i in range(0,N_FRAMES):
     
@@ -76,16 +74,10 @@ for i in range(0,N_FRAMES):
     # Set the camera location
     camera.location=[x+0.5,y+0.5,0.5]
     camera.rotation_euler=[numpy.pi/2.0,0,numpy.pi/2.0+ang]
-    print([x,y,0.5])
-    print([numpy.pi/2.0,0,ang+numpy.pi/2.0])
 
     # Assemble the path
-    scene.render.filepath=os.path.join(output_path,
-                                       ('bl_gltf_yaw_%03d.png' % i))
+    scene.render.filepath='bl_gltf_yaw_%03d.png' % i
     
     # Perform the render
     bpy.ops.render.render(write_still=True)
-
-# Reset the output path to "/tmp/"
-scene.render.filepath=output_path
 
