@@ -2308,12 +2308,6 @@ class o2graph_plotter(td_plot_base):
         
     def bl_yaw_mp4(self,n_frames: int, mp4_file: str):
 
-        if len(args)<2:
-            print('Not enough arguments.')
-            return
-        n_frames=args[0]
-        mp4_file=args[1]
-
         import tempfile
         
         f=tempfile.NamedTemporaryFile(suffix='.gltf',delete=False)
@@ -2326,7 +2320,8 @@ class o2graph_plotter(td_plot_base):
         py_file_name=f2.name
         print('Writing Python script to',py_file_name)
 
-        orig_script=os.path.dirname(o2sclpy.__file__)+'/bl_gltf_yaw.py')
+        orig_script=('/usr/local/lib/python3.11/site-packages/'+
+                     'o2sclpy/bl_gltf_yaw.py')
         
         print('Original script at:',orig_script)
 
@@ -2334,20 +2329,20 @@ class o2graph_plotter(td_plot_base):
                   'LIGHT_DIST': '5.8',
                   'LIGHT_ENERGY': '800',
                   'GLTF_PATH': gltf_file_name,
-                  'N_FRAMES': 40,
-                  'CAM_DIST': 5}
+                  'N_FRAMES': '40',
+                  'CAM_DIST': '5'}
         print('Making replacements:',rep_list)
 
-        forig=file.open(orig_script,'r')
+        forig=open(orig_script,'r')
         lines=forig.readlines()
-        frep=file.open(py_file_name,'w')
+        frep=open(py_file_name,'w')
         for line in lines:
-            line.replace('BG_COLOR',rep_list['BG_COLOR'])
-            line.replace('LIGHT_DIST',rep_list['LIGHT_DIST'])
-            line.replace('LIGHT_ENERGY',rep_list['LIGHT_ENERGY'])
-            line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
-            line.replace('N_FRAMES',rep_list['N_FRAMES'])
-            line.replace('CAM_DIST',rep_list['CAM_DIST'])
+            line=line.replace('BG_COLOR',rep_list['BG_COLOR'])
+            line=line.replace('LIGHT_DIST',rep_list['LIGHT_DIST'])
+            line=line.replace('LIGHT_ENERGY',rep_list['LIGHT_ENERGY'])
+            line=line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
+            line=line.replace('N_FRAMES',rep_list['N_FRAMES'])
+            line=line.replace('CAM_DIST',rep_list['CAM_DIST'])
             frep.write(line)
         forig.close()
         frep.close()
@@ -2358,8 +2353,8 @@ class o2graph_plotter(td_plot_base):
         os.system(cmd)
 
         print('Creating mp4')
-        mp4(['/tmp/bl_gltf_yaw_%03d.png',mp4_file],
-            vf='eq=brightness=0.5')
+        self.mp4(['/tmp/bl_gltf_yaw_%03d.png',mp4_file],
+            vf='eq=contrast=2')
             
         return
         

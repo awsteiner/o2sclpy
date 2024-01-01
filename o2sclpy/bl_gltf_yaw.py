@@ -15,7 +15,7 @@ scene=bpy.context.scene
 # Delete default objects
 for o in scene.objects:
     o.select_set(True)
-    print('Deleting default object named"'+o.name+'".')
+    print('Deleting default object named "'+o.name+'".')
     bpy.ops.object.delete()
 
 # Set world background to black
@@ -62,7 +62,7 @@ bpy.context.collection.objects.link(light5)
 light5.location=(0.5,0.5,LIGHT_DIST+0.5)
 
 # Import GLTF file
-bpy.ops.import_scene.gltf(filepath=GLTF_PATH)
+bpy.ops.import_scene.gltf(filepath='GLTF_PATH')
 
 output_path=scene.render.filepath
 
