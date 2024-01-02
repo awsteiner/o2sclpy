@@ -264,70 +264,67 @@ def icosphere(x,y,z,r,n_subdiv=0):
 
     # Start with an icosahedron with each vertex at radius r
     
-    tmp=[0,b,-r]*fact
-    print(r,norm3(tmp))
-    quit()
-    
+    tmp=[0,b*fact,-r*fact]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[0,b,-r]*fact
+    tmp=[0,b*fact,-r*fact]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[b,r,0]*fact
+    tmp=[b*fact,r*fact,0]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[-b,r,0]*fact
+    tmp=[-b*fact,r*fact,0]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[0,b,r]*fact
+    tmp=[0,b*fact,r*fact]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[0,-b,r]*fact
+    tmp=[0,-b*fact,r*fact]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[-r,0,b]*fact
+    tmp=[-r*fact,0,b*fact]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[0,-b,-r]*fact
+    tmp=[0,-b*fact,-r*fact]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[r,0,-b]*fact
+    tmp=[r*fact,0,-b*fact]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[r,0,b]*fact
+    tmp=[r*fact,0,b*fact]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[-r,0,-b]*fact
+    tmp=[-r*fact,0,-b*fact]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[b,-r,0]*fact
+    tmp=[b*fact,-r*fact,0]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
 
-    tmp=[-b,-r,0]*fact
+    tmp=[-b*fact,-r*fact,0]
     vert.append(tmp)
     tmp=norm3(tmp)
     vn.append(tmp)
@@ -514,7 +511,8 @@ def force_string(obj):
         return obj.decode('utf-8')
     return obj
 
-def latex_to_png(tex: str, png_file: str, power_two=False):
+def latex_to_png(tex: str, png_file: str, verbose: int = 1,
+                 power_two: bool = False):
     """
     A simple routine to convert a LaTeX string to a png image.
 
@@ -529,25 +527,36 @@ def latex_to_png(tex: str, png_file: str, power_two=False):
     This function works, but is not necessarily optimal.
     """
     import tempfile
+
+    # Create the LaTeX file
     f=tempfile.NamedTemporaryFile(suffix='.tex',delete=False)
     tex_file_name=f.name
-    print('Opened temporary file named ',tex_file_name)
+    print('Opened temporary file named',tex_file_name)
     f.write(force_bytes('\\documentclass[crop,border=0.5pt,'+
                         'convert={outext=.png}]{standalone}\n'))
     f.write(force_bytes('\\begin{document}\n'))
     f.write(force_bytes(tex+'\n'))
     f.write(force_bytes('\\end{document}\n'))
     f.close()
+
+    # Create a file to store the output
+    f2=tempfile.NamedTemporaryFile(suffix='.out',delete=False)
+    out_file_name=f2.name
+    f2.close()
+    
     loc=tex_file_name.rfind('/')
     tdir=tex_file_name[0:loc+1]
     tfile=tex_file_name[loc+1:]
-    cmd1='cd '+tdir+' && pdflatex --shell-escape '+tfile
-    print('Running',cmd1)
+    cmd1=('cd '+tdir+' && pdflatex --shell-escape '+tfile+' > '+
+          out_file_name+' 2>&1')
+    if verbose>0:
+        print('latex_to_prism(): Running first shell command',cmd1)
     os.system(cmd1)
     cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file+' && convert '+
           png_file+' -background white -flatten '+
-          png_file)
-    print('Running',cmd2)
+          png_file+' > '+out_file_name+' 2>&1')
+    if verbose>0:
+        print('latex_to_prism(): Running second shell command',cmd2)
     os.system(cmd2)
     from PIL import Image
     img=Image.open(png_file)
@@ -556,11 +565,11 @@ def latex_to_png(tex: str, png_file: str, power_two=False):
         h=img.height
         w_new=2**(int(numpy.log2(w-1))+1)
         h_new=2**(int(numpy.log2(h-1))+1)
-        print(w,h,w_new,h_new)
         cmd3=('convert '+png_file+' -background white '+
               '-extent '+str(w_new)+'x'+str(h_new)+' '+
-              png_file)
-        print('Running',cmd3)
+              png_file+' > '+out_file_name)
+        if verbose>0:
+            print('latex_to_prism(): Running third shell command',cmd3)
         os.system(cmd3)
         return img.width,img.height,w_new,h_new
     return img.width,img.height

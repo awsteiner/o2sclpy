@@ -658,7 +658,7 @@ class material:
         self.txt=txt
         return
     
-class group_of_faces:
+class mesh_object:
     """
     A group of (triangular) faces
 
@@ -716,7 +716,7 @@ class group_of_faces:
         self.mat=mat
         return
 
-    def sort_by_mat(self):
+    def sort_by_mat(self, verbose : int = 0):
         """Sort the faces by material name, ensuring that the group and
         material commands do not have to be issued for each face.
 
@@ -727,7 +727,8 @@ class group_of_faces:
         for i in range(0,len(self.faces)):
             if len(self.faces[i])==4 or len(self.faces[i])==7:
                 found_four=True
-        print('group_of_faces::sort_by_mat(): found_four',found_four)
+        if verbose>0:
+            print('mesh_object::sort_by_mat(): found_four',found_four)
         if found_four==False:
             return
 
@@ -743,7 +744,8 @@ class group_of_faces:
                 two_mats=True
 
         # If there are not two distinct materials, there's nothing to do
-        print('group_of_faces::sort_by_mat(): two_mats',two_mats)
+        if verbose>0:
+            print('mesh_object::sort_by_mat(): two_mats',two_mats)
         if two_mats==False:
             return
 
@@ -778,8 +780,9 @@ class group_of_faces:
             if len(self.faces[i])==4:
                 mat_name=self.faces[i][3]
                 if mat_name not in mat_list:
-                    print('group_of_faces::sort_by_mat():',
-                          'At index',i,'adding faces for',mat_name)
+                    if verbose>0:
+                        print('mesh_object::sort_by_mat():',
+                              'At index',i,'adding faces for',mat_name)
                     mat_list.append(mat_name)
                     # If it's not found, then add the current face,
                     # and loop over the remaining faces which match
@@ -791,14 +794,15 @@ class group_of_faces:
                             face_copies[j]=True
 
         if len(self.faces)!=len(faces2):
-            print('sort_by_mat():',len(self.faces),len(faces2))
+            if verbose>0:
+                print('sort_by_mat():',len(self.faces),len(faces2))
             raise SyntaxError('The lists of faces do not match up in '+
                               'sort_by_mat().')
                  
         self.faces=faces2
         return
 
-def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
+def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
                 dir='x',end_mat='white'):
     """
     Create a rectangular prism with textures from a png created by a
@@ -815,7 +819,8 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
     outside the prism. 
     """
 
-    w,h,w_new,h_new=latex_to_png(latex,png_file,power_two=True)
+    w,h,w_new,h_new=latex_to_png(latex,wdir+'/'+png_file,power_two=True)
+                                 
     face=[]
     vert=[]
     facet=[]
@@ -967,7 +972,7 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,png_file,mat_name,
             face[i]=[i*3,i*3+1,i*3+2,face[i][3]]
 
     # Print out results
-    if True:
+    if False:
         for ki in range(0,len(vert2),3):
             print('%d [%d,%d,%d] mat: %s' % (int(ki/3),face[int(ki/3)][0],
                                              face[int(ki/3)][1],
@@ -998,7 +1003,7 @@ class threed_objects:
     """A set of three-dimensional objects
     """
     
-    gf_list: list[group_of_faces]=[]
+    gf_list: list[mesh_object]=[]
     """
     List of groups of faces
     """
@@ -1007,7 +1012,7 @@ class threed_objects:
     List of materials
     """
 
-    def add_object(self, gf: group_of_faces):
+    def add_object(self, gf: mesh_object, verbose : int = 0):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices.
 
@@ -1032,8 +1037,9 @@ class threed_objects:
         len_lvn=len(gf.vn_list)
 
         # Iterate over each face
-        print('threed_object::add_object():',
-              'Adjust faces for group',gf.name,'and check.')
+        if verbose>0:
+            print('threed_object::add_object():',
+                  'Adjust faces for group',gf.name,'and check.')
         
         for i in range(0,len(gf.faces)):
 
@@ -1057,7 +1063,7 @@ class threed_objects:
                                      'materials.')
                     
         # Check if there is an undefined material in the
-        # group_of_faces data member 'mat'
+        # mesh_object data member 'mat'
         if gf.mat!='':
             mat_found=False
             for k in range(0,len(self.mat_list)):
@@ -1069,8 +1075,9 @@ class threed_objects:
                                  'materials.')
 
         # Sort the group of vertices by material for output later
-        print('threed_object::add_object(): Sort group named',
-              gf.name,'by material.')
+        if verbose>0:
+            print('threed_object::add_object(): Sort group named',
+                  gf.name,'by material.')
         gf.sort_by_mat()
                 
         # Add the group of faces to the list
@@ -1088,7 +1095,7 @@ class threed_objects:
             self.mat_list.append(m)
         return
     
-    def add_object_mat(self, gf: group_of_faces, m: material):
+    def add_object_mat(self, gf: mesh_object, m: material):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices, and 'm', the material
         for all of the faces.
@@ -1108,7 +1115,7 @@ class threed_objects:
                 return True
         return False
     
-    def add_object_mat_list(self, gf: group_of_faces, lm: list[material]):
+    def add_object_mat_list(self, gf: mesh_object, lm: list[material]):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices, and 'm', the material
         for all of the faces.
@@ -1229,7 +1236,7 @@ class threed_objects:
                         
         return
         
-    def write_gltf(self, wdir: str, prefix: str):
+    def write_gltf(self, wdir: str, prefix: str, verbose: int = 0):
         """Write all objects to an '.gltf' file, creating a '.bin' file
         """
 
@@ -1536,12 +1543,13 @@ class threed_objects:
                                      "byteOffset": offset,
                                      "target": 34963})
                     offset+=2*len(face_bin)
-                    print('offset:',offset)
+                    if verbose>1:
+                        print('offset:',offset)
 
-                    print('len(face_bin):',self.gf_list[i].name,
-                          len(face_bin))
-                    print('min,max:',min_v,max_v)
-                    print('')
+                        print('len(face_bin):',self.gf_list[i].name,
+                              len(face_bin))
+                        print('min,max:',min_v,max_v)
+                        print('')
                     
                     # Reset the primitive objects so that
                     # we can start a new one
@@ -1579,7 +1587,7 @@ class td_plot_base(yt_plot_base):
     def __init__(self):
         super().__init__()
         self.to=threed_objects()
-        self.td_wdir='tdir'
+        self.td_wdir='.'
         return
 
     def td_den_plot(self,o2scl,amp,args,cmap='',mat_name='white'):
@@ -1745,7 +1753,7 @@ class td_plot_base(yt_plot_base):
         if self.verbose>2:
             print('td_den_plot(): adding',len(den_face),'faces.')
         if colors==True:
-            gf=group_of_faces('plot',den_face)
+            gf=mesh_object('plot',den_face)
             gf.vert_list=vert2
             gf.vn_list=norms2
             self.to.add_object_mat_list(gf,den_ml)
@@ -1762,7 +1770,7 @@ class td_plot_base(yt_plot_base):
                     print('Material '+mat_name+' not found in td-den-plot.')
                     return
             
-            gf=group_of_faces('plot',den_face)
+            gf=mesh_object('plot',den_face)
             gf.vert_list=vert2
             gf.vn_list=norms2
             self.to.add_object_mat(gf,white)
@@ -1830,8 +1838,8 @@ class td_plot_base(yt_plot_base):
             cg=table[col_g]
             cb=table[col_b]
             colors=True
-        
-        gf=group_of_faces('scatter')
+
+        gf=mesh_object('scatter',[])
         
         for i in range(0,n):
             xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
@@ -1848,7 +1856,7 @@ class td_plot_base(yt_plot_base):
                 ftmp[k][1]=ftmp[k][1]+lv
                 ftmp[k][2]=ftmp[k][2]+lv
                 gf.faces.append(ftmp[k])
-                
+        
         # Convert to GLTF
                 
         vert2=[]
@@ -1863,12 +1871,12 @@ class td_plot_base(yt_plot_base):
             vert2.append(gf.vert_list[gf.faces[i][1]-1])
             vert2.append(gf.vert_list[gf.faces[i][2]-1])
     
-            norm2.append(gf.vn_list[gf.faces[i][0]-1])
-            norm2.append(gf.vn_list[gf.faces[i][1]-1])
-            norm2.append(gf.vn_list[gf.faces[i][2]-1])
+            norms2.append(gf.vn_list[gf.faces[i][0]-1])
+            norms2.append(gf.vn_list[gf.faces[i][1]-1])
+            norms2.append(gf.vn_list[gf.faces[i][2]-1])
 
         if self.to.is_mat('white')==False:
-            white=material(mat_name,[1,1,1])
+            white=material('white',[1,1,1])
             self.to.add_mat(white)
             
         gf.vert_list=vert2
@@ -1897,20 +1905,20 @@ class td_plot_base(yt_plot_base):
                     print('No material named',mat,'in td-arrow')
                     return
             if self.verbose>2:
-                print('td_arrow() creating group named',name,'with material',
+                print('td_arrow(): creating group named',name,'with material',
                       mat+'.')
-            gf=group_of_faces(name,arr_face,mat)
+            gf=mesh_object(name,arr_face,mat)
             gf.vert_list=arr_vert
             gf.vn_list=arr_norm
             self.to.add_object(gf)
                                
         else:
             if self.verbose>2:
-                print('td_arrow() creating group named',name,'with material',
+                print('td_arrow(): creating group named',name,'with material',
                       mat.name+'.')
             if not self.to.is_mat(mat.name):
                 self.to.add_mat(mat)
-            gf=group_of_faces(name,arr_face,mat.name)
+            gf=mesh_object(name,arr_face,mat.name)
             gf.vert_list=arr_vert
             gf.vn_list=arr_norm
             self.to.add_object(gf)
@@ -1951,11 +1959,11 @@ class td_plot_base(yt_plot_base):
                                             -offset+height/2.0,
                                             -offset-height/2.0,
                                             tex_label,
-                                            png_file,mat_name,
+                                            self.td_wdir,png_file,mat_name,
                                             dir=ldir)
 
             self.to.add_mat(x_m)
-            gf=group_of_faces(group_name,x_f)
+            gf=mesh_object(group_name,x_f)
             gf.vert_list=x_v
             gf.vn_list=x_n
             gf.vt_list=x_t
@@ -1979,11 +1987,11 @@ class td_plot_base(yt_plot_base):
                                             -offset+height/2.0,
                                             0.5,-offset-height/2.0,
                                             tex_label,
-                                            png_file,mat_name,
+                                            self.td_wdir,png_file,mat_name,
                                             dir=ldir)
             
             self.to.add_mat(y_m)
-            gf=group_of_faces(group_name,y_f)
+            gf=mesh_object(group_name,y_f)
             gf.vert_list=y_v
             gf.vn_list=y_n
             gf.vt_list=y_t
@@ -2007,11 +2015,11 @@ class td_plot_base(yt_plot_base):
                                             0.5,-offset+height/2.0,
                                             -offset-height/2.0,0.5,
                                             tex_label,
-                                            png_file,mat_name,
+                                            self.td_wdir,png_file,mat_name,
                                             dir=ldir)
             
             self.to.add_mat(z_m)
-            gf=group_of_faces(group_name,z_f)
+            gf=mesh_object(group_name,z_f)
             gf.vert_list=z_v
             gf.vn_list=z_n
             gf.vt_list=z_t
@@ -2124,7 +2132,7 @@ class o2graph_plotter(td_plot_base):
             if args[0]==line[0]:
                 match=True
                 if self.verbose>2:
-                    print('Parameter',args[0],'is o2graph parameter.')
+                    print('Parameter',args[0],'is an o2graph parameter.')
                 
         for line in yt_param_list:
             if args[0]==line[0]:
@@ -2133,9 +2141,12 @@ class o2graph_plotter(td_plot_base):
                     print('Parameter',args[0],'is a yt parameter.')
 
         # If it's an o2graph or yt parameter, then call the parent
-        # set() function
+        # set() function or set the variable
         if match==True:
-            self.set(args[0],args[1])
+            if args[0]=='td_wdir':
+                self.td_wdir=args[1]
+            else:
+                self.set(args[0],args[1])
 
         # If we're modifying the verbose parameter, then make sure
         # both the o2graph and the acol version match. Otherwise, if
@@ -2618,8 +2629,8 @@ class o2graph_plotter(td_plot_base):
             kwstring=args[1]
 
         if self.verbose>2:
-            print('Writing gltf to file',prefix)
-        self.to.write_gltf('.',prefix)
+            print('Writing gltf to dir,file',self.td_wdir,prefix)
+        self.to.write_gltf(self.td_wdir,prefix)
 
         return
     
@@ -6417,7 +6428,8 @@ class o2graph_plotter(td_plot_base):
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
                     else:
-                        self.set_wrapper(o2scl,amp,self.link2,strlist[ix+1:ix_next])
+                        self.set_wrapper(o2scl,amp,self.link2,
+                                         strlist[ix+1:ix_next])
                         
                 elif cmd_name=='ell-max':
 
@@ -6776,7 +6788,6 @@ class o2graph_plotter(td_plot_base):
                         print('Process td-den-plot.')
                         print('args:',strlist[ix:ix_next])
 
-                    print('here0',ix_next-ix,strlist[ix+2])
                     if ix_next-ix==2:
                         self.td_den_plot(o2scl,amp,[strlist[ix+1]])
                     elif ix_next-ix>=3:
@@ -6784,6 +6795,37 @@ class o2graph_plotter(td_plot_base):
                                          **string_to_dict(strlist[ix+2]))
                     else:
                         print('Not enough arguments for td-den-plot.')
+
+                elif cmd_name=='td-scatter':
+
+                    if self.verbose>2:
+                        print('Process td-scatter.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix==4:
+                        self.td_scatter(o2scl,amp,[strlist[ix+1],
+                                                   strlist[ix+2],
+                                                   strlist[ix+3]])
+                    elif ix_next-ix==5:
+                        self.td_scatter(o2scl,amp,
+                                        [strlist[ix+1],strlist[ix+2],
+                                         strlist[ix+3]],
+                                         **string_to_dict(strlist[ix+4]))
+                    elif ix_next-ix==7:
+                        self.td_scatter(o2scl,amp,[strlist[ix+1],
+                                                   strlist[ix+2],
+                                                   strlist[ix+3],
+                                                   strlist[ix+4],
+                                                   strlist[ix+5],
+                                                   strlist[ix+6]])
+                    elif ix_next-ix>=8:
+                        self.td_scatter(o2scl,amp,
+                                        [strlist[ix+1],strlist[ix+2],
+                                         strlist[ix+3],strlist[ix+4],
+                                         strlist[ix+5],strlist[ix+6]],
+                                         **string_to_dict(strlist[ix+7]))
+                    else:
+                        print('Not enough arguments for td-scatter.')
 
                 elif cmd_name=='bl-yaw-mp4':
 
@@ -6966,7 +7008,6 @@ class o2graph_plotter(td_plot_base):
                         print('Process gltf.')
                         print('args:',strlist[ix:ix_next])
 
-                    print('going to gltf_o2graph.')
                     self.gltf_o2graph(o2scl,amp,self.link2,
                                               strlist[ix+1:ix_next])
                 
