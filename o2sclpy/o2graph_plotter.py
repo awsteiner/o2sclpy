@@ -632,15 +632,15 @@ class material:
     """
     The name of the visualization
     """
-    Ka: list[float]
+    Ka=0
     """
     The ambient color
     """
-    Kd: list[float]
+    Kd=0
     """
     The diffuse color
     """
-    Ks: list[float]
+    Ks=0
     """
     The specular color
     """
@@ -653,7 +653,7 @@ class material:
     The texture filename, including extension
     """
 
-    def __init__(self, name: str, Ka: list[float]=[1,1,1], txt: str=''):
+    def __init__(self, name: str, Ka=[1,1,1], txt: str=''):
         """Create a new material with color in ``Ka`` and texture file in
         ``txt``.
         """
@@ -676,19 +676,19 @@ class mesh_object:
     * faces plus texture coordinates
     * faces plus texture coordinates plus material
     """
-    vert_list: list[list[float]]=[]
+    vert_list=[]
     """
     List of vertices
     """
-    vn_list: list[list[float]]=[]
+    vn_list=[]
     """
     List of vertex normals
     """
-    vt_list: list[list[float]]=[]
+    vt_list=[]
     """
     List of texture coordinates
     """
-    faces: list[list[int | str]]
+    faces=[]
     """
     The list of faces
     """
@@ -712,7 +712,7 @@ class mesh_object:
     material, then the ``sort_by_mat()`` function will 
     """
 
-    def __init__(self, name: str, faces: list[list[int | str]],
+    def __init__(self, name: str, faces,
                  mat: str = ''):
         """
         Create a group given the specfied list of faces, name, and 
@@ -1009,11 +1009,11 @@ class threed_objects:
     """A set of three-dimensional objects
     """
     
-    mesh_list: list[mesh_object]=[]
+    mesh_list=[]
     """
     List of groups of faces
     """
-    mat_list: list[material]=[]
+    mat_list=[]
     """
     List of materials
     """
@@ -1132,7 +1132,7 @@ class threed_objects:
                 return True
         return False
     
-    def add_object_mat_list(self, gf: mesh_object, lm: list[material]):
+    def add_object_mat_list(self, gf: mesh_object, lm):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices, and 'm', the material
         for all of the faces.
@@ -1904,7 +1904,7 @@ class td_plot_base(yt_plot_base):
         return
         
     def td_arrow(self,x1,y1,z1,x2,y2,z2,name,
-                 mat : str | material = 'white'):
+                 mat='white'):
         """Documentation for o2graph command ``td-arrow``:
 
         Plot an axis in a 3d visualization
