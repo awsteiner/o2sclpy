@@ -19,7 +19,6 @@
 #  
 #  -------------------------------------------------------------------
 #
-import h5py
 from o2sclpy.utils import get_str_array
 
 class hdf5_reader:
@@ -45,6 +44,9 @@ class hdf5_reader:
     Current filename
     """
 
+    def __init__(self):
+        import h5py
+    
     def is_object_type(self,name,obj):
         """
         This is an internal function not intended for use by the end-user.
