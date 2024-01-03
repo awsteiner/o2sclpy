@@ -36,6 +36,402 @@ import numpy
 #import ctypes
 #from ctypes.util import find_library
 
+def cross(x,y,norm=False):
+    """Return the cross product between two vectors
+
+    If ``norm`` is ``True``, then normalize the cross product
+    afterwards.
+    """
+    cross=[x[1]*y[2]-x[2]*y[1],x[2]*y[0]-x[0]*y[2],
+           x[0]*y[1]-y[0]*x[1]]
+    if norm:
+        cross_norm=numpy.sqrt(cross[0]*cross[0]+cross[1]*cross[1]+
+                              cross[2]*cross[2])
+        cross[0]=cross[0]/cross_norm
+        cross[1]=cross[1]/cross_norm
+        cross[2]=cross[2]/cross_norm
+    return cross
+
+def norm3(x):
+    """Return a normalized version of x"""
+    mag=numpy.sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])
+    x[0]=x[0]/mag
+    x[1]=x[1]/mag
+    x[2]=x[2]/mag
+    return x
+
+def renorm(x,r):
+    """Return a renormalized version of x"""
+    mag=numpy.sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])
+    x[0]=r*x[0]/mag
+    x[1]=r*x[1]/mag
+    x[2]=r*x[2]/mag
+    return x
+
+def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
+          head_width=3):
+    
+    """Create a set of vertices and triangular faces for an
+    arrow.
+
+    The tail a cylinder with radius r beginning at (x1,y1,z1) and the
+    head is a cone with radius 2r with a point at (x2,y2,z2). The
+    variable tail_ratio specifies the length of the cylinder divided
+    by the distance between point 1 and point 2. The argument n_theta
+    specifies the number of vertices in the azimuthal direction.
+    If r is zero or negative, then it is set to the length of the
+    arrow divided by 80.
+
+    This function returns a set of three lists, the first is the
+    vertices (a list of size n_theta times nine), the second is the
+    vertex normals (a list of size n_theta times nine), and the third
+    are the faces a list of size n_theta times three). The normal
+    vectors always point out away from the axis, except for the single
+    vertex at the head of the arrow, which points in the direction of
+    the arrow.
+
+    """
+
+    # The length of the arrow
+    arrow_len=numpy.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)
+
+    if r<=0:
+        r=arrow_len/80
+    
+    # The end point of the tail (and the starting point of the head)
+    tail_end=[x1+(x2-x1)*tail_ratio,y1+(y2-y1)*tail_ratio,
+              z1+(z2-z1)*tail_ratio]
+    
+    vert=[]
+    vn=[]
+    face=[]
+
+    # Construct an arbitrary vector not along the arrow's axis
+    arb=[1,0,0]
+    if y1==y2 and z1==z2:
+        arb=[0,1,0]
+
+    # Take the transverse component
+    arb=[arb[0]-arb[0]*(x2-x1),
+         arb[1]-arb[1]*(y2-y1),
+         arb[2]-arb[2]*(z2-z1)]
+
+    # Renormalize to the correct length
+    arb_norm=numpy.sqrt(arb[0]*arb[0]+arb[1]*arb[1]+arb[2]*arb[2])
+    arb[0]=arb[0]/arb_norm*r
+    arb[1]=arb[1]/arb_norm*r
+    arb[2]=arb[2]/arb_norm*r
+
+    # The cross product of the arrow's axis with arb
+    cross=[(y2-y1)*arb[2]-(z2-z1)*arb[1],
+           (z2-z1)*arb[0]-(x2-x1)*arb[2],
+           (x2-x1)*arb[1]-(y2-y1)*arb[0]]
+    cross_norm=numpy.sqrt(cross[0]*cross[0]+cross[1]*cross[1]+
+                          cross[2]*cross[2])
+    for j in range(0,3):
+        cross[j]=cross[j]/cross_norm*r
+
+    # Handle the tail
+    for i in range(0,n_theta):
+        theta=float(i)*numpy.pi*2/float(n_theta)
+        vert.append([x1+arb[0]*numpy.cos(theta)+
+                     cross[0]*numpy.sin(theta),
+                     y1+arb[1]*numpy.cos(theta)+
+                     cross[1]*numpy.sin(theta),
+                     z1+arb[2]*numpy.cos(theta)+
+                     cross[2]*numpy.sin(theta)])
+        ntmp=norm3([arb[0]*numpy.cos(theta)+
+                    cross[0]*numpy.sin(theta),
+                    arb[1]*numpy.cos(theta)+
+                    cross[1]*numpy.sin(theta),
+                    arb[2]*numpy.cos(theta)+
+                    cross[2]*numpy.sin(theta)])
+        vn.append(ntmp)
+        vert.append([tail_end[0]+arb[0]*numpy.cos(theta)+
+                     cross[0]*numpy.sin(theta),
+                     tail_end[1]+arb[1]*numpy.cos(theta)+
+                     cross[1]*numpy.sin(theta),
+                     tail_end[2]+arb[2]*numpy.cos(theta)+
+                     cross[2]*numpy.sin(theta)])
+        ntmp=norm3([arb[0]*numpy.cos(theta)+
+                   cross[0]*numpy.sin(theta),
+                   arb[1]*numpy.cos(theta)+
+                   cross[1]*numpy.sin(theta),
+                   arb[2]*numpy.cos(theta)+
+                   cross[2]*numpy.sin(theta)])
+        vn.append(ntmp)
+        if i!=n_theta-1:
+            face.append([2*i+1,2*i+3,2*i+2])
+            face.append([2*i+2,2*i+3,2*i+4])
+        else:
+            face.append([2*i+2,2*i+1,1])
+            face.append([2,2*i+2,1])
+
+    # Handle the head
+    vert.append([x2,y2,z2])
+    tmp=norm3([x2-x1,y2-y1,z2-z1])
+    vn.append(tmp)
+    
+    point_index=len(vert)
+    
+#    for j in range(0,3):
+#        cross[j]=cross[j]/cross_norm*r*2.0
+        
+    for i in range(0,n_theta):
+        theta=float(i)*numpy.pi*2/float(n_theta)
+        vert.append([tail_end[0]+head_width*arb[0]*numpy.cos(theta)+
+                     head_width*cross[0]*numpy.sin(theta),
+                     tail_end[1]+head_width*arb[1]*numpy.cos(theta)+
+                     head_width*cross[1]*numpy.sin(theta),
+                     tail_end[2]+head_width*arb[2]*numpy.cos(theta)+
+                     head_width*cross[2]*numpy.sin(theta)])
+        ntmp=norm3([head_width*arb[0]*numpy.cos(theta)+
+                    head_width*cross[0]*numpy.sin(theta),
+                    head_width*arb[1]*numpy.cos(theta)+
+                    head_width*cross[1]*numpy.sin(theta),
+                    head_width*arb[2]*numpy.cos(theta)+
+                    head_width*cross[2]*numpy.sin(theta)])
+        vn.append(ntmp)
+        if i==n_theta-1:
+            face.append([point_index+i+1,point_index+1,
+                         point_index])
+        else:
+            face.append([point_index+i+1,point_index+i+2,
+                         point_index])
+
+    # Rearrange for GLTF
+            
+    vert2=[]
+    norms2=[]
+    face2=[]
+
+    for i in range(0,len(face)):
+
+        # Add the vertices to the new vertex array
+        vert2.append(vert[face[i][0]-1])
+        vert2.append(vert[face[i][1]-1])
+        vert2.append(vert[face[i][2]-1])
+
+        norms2.append(vn[face[i][0]-1])
+        norms2.append(vn[face[i][1]-1])
+        norms2.append(vn[face[i][2]-1])
+
+        face2.append([i*3,i*3+1,i*3+2])
+
+    # Print out results
+    if False:
+        for ki in range(0,len(vert2),3):
+            print('%d [%d,%d,%d]' % (int(ki/3),face2[int(ki/3)][0],
+                                             face2[int(ki/3)][1],
+                                             face2[int(ki/3)][2]))
+            print(('0 [%7.6e,%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki][0],vert2[ki][1],
+                                             vert2[ki][2],norms2[ki][0],
+                                             norms2[ki][1],norms2[ki][2]))
+            print(('1 [%7.6e,%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+1][0],vert2[ki+1][1],
+                                             vert2[ki+1][2],norms2[ki+1][0],
+                                             norms2[ki+1][1],norms2[ki+1][2]))
+            print(('2 [%7.6e,%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+2][0],vert2[ki+2][1],
+                                             vert2[ki+2][2],norms2[ki+2][0],
+                                             norms2[ki+2][1],norms2[ki+2][2]))
+            print('')
+
+        print(len(vert2),len(norms2),len(face2))
+        #quit()
+            
+    return vert2,norms2,face2
+
+def icosphere(x,y,z,r,n_subdiv=0):
+    """Construct the vertices and faces of an icosphere centered at
+    (x,y,z) with radius r
+
+    I got this from [1]. The initial 
+
+    This function returns a set of three lists, the first is the
+    vertices, the second are the vertex normals, and the third are the
+    faces. The normal vectors always point outwards.
+
+    [1] https://danielsieger.com/blog/2021/03/27/generating-spheres.html
+    """
+    phi=(1.0+numpy.sqrt(5.0))*0.5
+    b=r/phi;
+    fact=numpy.sqrt(phi)/(5**0.25)
+    
+    vert=[]
+    vn=[]
+
+    # Start with an icosahedron with each vertex at radius r
+    
+    tmp=[0,b*fact,-r*fact]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[0,b*fact,-r*fact]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[b*fact,r*fact,0]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[-b*fact,r*fact,0]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[0,b*fact,r*fact]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[0,-b*fact,r*fact]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[-r*fact,0,b*fact]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[0,-b*fact,-r*fact]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[r*fact,0,-b*fact]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[r*fact,0,b*fact]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[-r*fact,0,-b*fact]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[b*fact,-r*fact,0]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    tmp=[-b*fact,-r*fact,0]
+    vert.append(tmp)
+    tmp=norm3(tmp)
+    vn.append(tmp)
+
+    # Enumerate the faces
+    
+    face=[]
+    face.append([3,2,1])
+    face.append([2,3,4])
+    face.append([6,5,4])
+    face.append([5,9,4])
+    face.append([8,7,1])
+    face.append([7,10,1])
+    face.append([12,11,5])
+    face.append([11,12,7])
+    face.append([10,6,3])
+    face.append([6,10,12])
+    face.append([9,8,2])
+    face.append([8,9,11])
+    face.append([3,6,4])
+    face.append([9,2,4])
+    face.append([10,3,1])
+    face.append([2,8,1])
+    face.append([12,10,7])
+    face.append([8,11,7])
+    face.append([6,12,5])
+    face.append([11,9,5])
+
+    # Subdivide if requested
+    
+    for k in range(0,n_subdiv):
+        face_new=[]
+        for i in range(0,len(face)):
+            i1=face[i][0]
+            i2=face[i][1]
+            i3=face[i][2]
+
+            v12=(vert[i1-1]+vert[i2-1])/2
+            v12=renorm(v12,r)
+            face.append(v12)
+            i12=len(face)
+            v13=(vert[i1-1]+vert[i3-1])/2
+            v13=renorm(v13,r)
+            face.append(v13)
+            i13=len(face)
+            v23=(vert[i2-1]+vert[i3-1])/2
+            v23=renorm(v12,r)
+            face.append(v23)
+            i23=len(face)
+
+            face_new.append([i1,i12,i13])
+            face_new.append([i12,i2,i23])
+            face_new.append([i12,i23,i13])
+            face_new.append([i3,i13,i23])
+            
+        face=face_new
+    
+    # Shift the origin to the user-specified coordinates
+    for i in range(0,len(vert)):
+        vert[i][0]=vert[i][0]+x
+        vert[i][1]=vert[i][1]+y
+        vert[i][2]=vert[i][2]+z
+
+    # Rearrange for GLTF
+            
+    vert2=[]
+    norms2=[]
+    face2=[]
+
+    for i in range(0,len(face)):
+
+        # Add the vertices to the new vertex array
+        vert2.append(vert[face[i][0]-1])
+        vert2.append(vert[face[i][1]-1])
+        vert2.append(vert[face[i][2]-1])
+
+        norms2.append(vn[face[i][0]-1])
+        norms2.append(vn[face[i][1]-1])
+        norms2.append(vn[face[i][2]-1])
+
+        face2.append([i*3,i*3+1,i*3+2])
+
+    # Print out results
+    if False:
+        for ki in range(0,len(vert2),3):
+            print('%d [%d,%d,%d]' % (int(ki/3),face2[int(ki/3)][0],
+                                             face2[int(ki/3)][1],
+                                             face2[int(ki/3)][2]))
+            print(('0 [%7.6e,%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki][0],vert2[ki][1],
+                                             vert2[ki][2],norms2[ki][0],
+                                             norms2[ki][1],norms2[ki][2]))
+            print(('1 [%7.6e,%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+1][0],vert2[ki+1][1],
+                                             vert2[ki+1][2],norms2[ki+1][0],
+                                             norms2[ki+1][1],norms2[ki+1][2]))
+            print(('2 [%7.6e,%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+2][0],vert2[ki+2][1],
+                                             vert2[ki+2][2],norms2[ki+2][0],
+                                             norms2[ki+2][1],norms2[ki+2][2]))
+            print('')
+
+        print(len(vert2),len(norms2),len(face2))
+        #quit()
+            
+    return vert2,norms2,face2
+    
 def cpp_test(x):
     """
     Desc
@@ -115,6 +511,69 @@ def force_string(obj):
         return obj.decode('utf-8')
     return obj
 
+def latex_to_png(tex: str, png_file: str, verbose: int = 1,
+                 power_two: bool = False):
+    """
+    A simple routine to convert a LaTeX string to a png image.
+
+    Math mode is not assumed, so equations need to be surrounded
+    by dollar signs. A temporary file is created, and then that
+    file is processed by ``pdflatex`` and then the output is
+    renamed to the filename specified by the user with ``mv``. 
+    Finally, imagemagick ``convert`` is used to flatten the image.
+    Pillow is used to obtain the image width and height, and 
+    those values are returned. 
+
+    This function works, but is not necessarily optimal.
+    """
+    import tempfile
+
+    # Create the LaTeX file
+    f=tempfile.NamedTemporaryFile(suffix='.tex',delete=False)
+    tex_file_name=f.name
+    print('Opened temporary file named',tex_file_name)
+    f.write(force_bytes('\\documentclass[crop,border=0.5pt,'+
+                        'convert={outext=.png}]{standalone}\n'))
+    f.write(force_bytes('\\begin{document}\n'))
+    f.write(force_bytes(tex+'\n'))
+    f.write(force_bytes('\\end{document}\n'))
+    f.close()
+
+    # Create a file to store the output
+    f2=tempfile.NamedTemporaryFile(suffix='.out',delete=False)
+    out_file_name=f2.name
+    f2.close()
+    
+    loc=tex_file_name.rfind('/')
+    tdir=tex_file_name[0:loc+1]
+    tfile=tex_file_name[loc+1:]
+    cmd1=('cd '+tdir+' && pdflatex --shell-escape '+tfile+' > '+
+          out_file_name+' 2>&1')
+    if verbose>0:
+        print('latex_to_prism(): Running first shell command',cmd1)
+    os.system(cmd1)
+    cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file+' && convert '+
+          png_file+' -background white -flatten '+
+          png_file+' > '+out_file_name+' 2>&1')
+    if verbose>0:
+        print('latex_to_prism(): Running second shell command',cmd2)
+    os.system(cmd2)
+    from PIL import Image
+    img=Image.open(png_file)
+    if power_two:
+        w=img.width
+        h=img.height
+        w_new=2**(int(numpy.log2(w-1))+1)
+        h_new=2**(int(numpy.log2(h-1))+1)
+        cmd3=('convert '+png_file+' -background white '+
+              '-extent '+str(w_new)+'x'+str(h_new)+' '+
+              png_file+' > '+out_file_name)
+        if verbose>0:
+            print('latex_to_prism(): Running third shell command',cmd3)
+        os.system(cmd3)
+        return img.width,img.height,w_new,h_new
+    return img.width,img.height
+
 def default_plot(left_margin=0.14,bottom_margin=0.12,
                  right_margin=0.04,top_margin=0.04,fontsize=16,
                  fig_size_x=6.0,fig_size_y=6.0,ticks_in=False,
@@ -178,7 +637,7 @@ def default_plot(left_margin=0.14,bottom_margin=0.12,
     
 def get_str_array(dset):
     """
-    Extract a string array from O\ :sub:`2`\ scl HDF5 dataset ``dset``
+    Extract a string array from O2scl HDF5 dataset ``dset``
     as a python list
 
     This function is in ``utils.py``.

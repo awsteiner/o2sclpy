@@ -163,10 +163,38 @@ class yt_plot_base(plot_base):
 
     def yt_line(self,point1,point2,color=[1.0,1.0,1.0,0.5],
                 coords='user',keyname='o2sclpy_line'):
-        """
-        Plot a line in a yt volume visualization.
-        """
+        """Documentation for o2graph command ``yt-line``:
 
+        Plot a line in a yt volume visualization.
+
+        Command-line arguments: ``x1 y1 z1 x2 y2 z2 [kwargs]``
+
+        Plot a line between point (x1,y1,z1) and (x2,y2,z2) in a yt
+        visualization. Possible kwargs are color=[1.0,1.0,1.0,0.5]
+        coords='user' and keyname='o2sclpy_line'. The possible values
+        for coords are 'user', which refers the user-specified
+        coordinate system, and 'internal', which is always between
+        (0,0,0) and (1,1,1). See ``o2graph -help colors``
+        for information on the color kwarg.
+
+        If the x, y, and z limits have not yet been set, then this
+        command uses the line coordinates to set them. If the x
+        coordinates of the endpoints are equal to x0 and the x limits
+        have not yet been set, then the x limits are x0-1 and x0+1.
+        Similarly for the y and z coordinates. If a yt scene has noet
+        yet been created, then an empty volume and scene will be
+        created.
+
+        o2graph -set xlo 0 -set xhi 2 -set ylo 0 -set yhi 2 \
+        -set zhi 0 -set zhi 2 \
+        -yt-line 0.2 1.0 0.0 1.0 1.0 2.0 color=#FF0000 \
+        -yt-line 1.0 1.0 2.0 1.8 1.0 0.0 "color=(0,0,1)" \
+        -yt-line 0.6 1.0 1.0 1.4 1.0 1.0 "color=xkcd:rose" \
+        -set yt_sigma_clip 1 \
+        -yt-path yaw 100 1.0 \
+        -yt-render "/tmp/ytl_*.png" mov_fname=yt_line.mp4
+        """
+        
         from yt.visualization.volume_rendering.api \
             import LineSource
 
@@ -178,7 +206,10 @@ class yt_plot_base(plot_base):
         z2=point2[2]
         
         if self.xset==False:
-            if x1<x2:
+            if x1==x2:
+                self.xlo=x1-1
+                self.xhi=x2+1
+            elif x1<x2:
                 self.xlo=x1
                 self.xhi=x2
             else:
@@ -187,7 +218,10 @@ class yt_plot_base(plot_base):
             print('Set xlimits to',self.xlo,self.xhi)
             self.xset=True
         if self.yset==False:
-            if y1<y2:
+            if y1==y2:
+                self.ylo=y1-1
+                self.yhi=y2+1
+            elif y1<y2:
                 self.ylo=y1
                 self.yhi=y2
             else:
@@ -196,7 +230,10 @@ class yt_plot_base(plot_base):
             print('Set ylimits to',self.ylo,self.yhi)
             self.yset=True
         if self.zset==False:
-            if z1<z2:
+            if z1==z2:
+                self.zlo=z1-1
+                self.zhi=z2+1
+            elif z1<z2:
                 self.zlo=z1
                 self.zhi=z2
             else:
@@ -227,12 +264,7 @@ class yt_plot_base(plot_base):
         colt2=[colt[0],colt[1],colt[2],colt[3]]
         colors=[colt2]
         
-        vertices=numpy.array([[[(x1-self.xlo)/(self.xhi-self.xlo),
-                                (y1-self.ylo)/(self.yhi-self.ylo),
-                                (z1-self.zlo)/(self.zhi-self.zlo)],
-                               [(x2-self.xlo)/(self.xhi-self.xlo),
-                                (y2-self.ylo)/(self.yhi-self.ylo),
-                                (z2-self.zlo)/(self.zhi-self.zlo)]]])
+        vertices=numpy.array([[[x1,y1,z1],[x2,y2,z2]]])
         colors=numpy.array([colt2])
         ls=LineSource(vertices,colors)
         print('o2graph:yt-line: Adding line source.')
@@ -240,6 +272,64 @@ class yt_plot_base(plot_base):
         self.yt_scene.add_source(ls,keyname=kname)
 
         # End of function plot_base::yt_line()
+        return
+        
+    def yt_point(self,point1,rad,color=[1.0,1.0,1.0,0.5],
+                coords='user',keyname='o2sclpy_point'):
+        """
+        Plot a point in a yt volume visualization.
+        """
+
+        from yt.visualization.volume_rendering.api \
+            import PointSource
+
+        x1=point1[0]
+        y1=point1[1]
+        z1=point1[2]
+        
+        if self.xset==False:
+            self.xlo=x1-1
+            self.xhi=x1+1
+            print('Set xlimits to',self.xlo,self.xhi)
+            self.xset=True
+        if self.yset==False:
+            self.ylo=y1-1
+            self.yhi=y1+1
+            print('Set ylimits to',self.ylo,self.yhi)
+            self.yset=True
+        if self.zset==False:
+            self.zlo=z1-1
+            self.zhi=z1+1
+            print('Set zlimits to',self.zlo,self.zhi)
+            self.zset=True
+        
+        icnt=0
+        if self.yt_scene!=0:
+            for key, value in self.yt_scene.sources.items():
+                icnt=icnt+1
+        if icnt==0:
+            self.yt_def_vol()
+
+        # Coordinate transformation
+        if coords!='internal':
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+
+        # Convert color to [r,g,b,a] for yt
+        from matplotlib.colors import to_rgba
+        colt=to_rgba(color)
+        colors=numpy.array([[colt[0],colt[1],colt[2],colt[3]]])
+        
+        point_array=numpy.array([[(x1-self.xlo)/(self.xhi-self.xlo),
+                                  (y1-self.ylo)/(self.yhi-self.ylo),
+                                  (z1-self.zlo)/(self.zhi-self.zlo)]])
+        ps=PointSource(point_array,colors,radii=int(rad))
+        print('o2graph:yt-point: Adding point source.')
+        kname=self.yt_unique_keyname(keyname)
+        self.yt_scene.add_source(ps,keyname=kname)
+
+        # End of function plot_base::yt_point()
         return
         
     def yt_arrow(self,point1,point2,color=[1.0,1.0,1.0,0.5],n_lines=40,
@@ -679,7 +769,8 @@ class yt_plot_base(plot_base):
         return
     
     def yt_text_to_points(self,veco,vecx,vecy,text,dpi=100,font=30,
-                          textcolor=(1,1,1,0.5),show=False,filename=''):
+                          textcolor=(1,1,1,0.5),show=False,filename='',
+                          facecolor=(0,0,0)):
         """
         Take three 3D vectors 'veco' (origin), 'vecx' (x direction) and
         'vecy' (y direction), and a string of text ('text'), and
@@ -711,8 +802,8 @@ class yt_plot_base(plot_base):
         plot.rc('text',usetex=True)
         fig=plot.figure(1,figsize=(6.4,4.8),dpi=dpi)
         axes=plot.axes([0,0,1,1])
-        fig.set_facecolor((0,0,0))
-        axes.set_facecolor((0,0,0))
+        fig.set_facecolor(facecolor)
+        axes.set_facecolor(facecolor)
 
         from matplotlib.colors import to_rgba
         alpha=to_rgba(textcolor)[3]
@@ -729,13 +820,18 @@ class yt_plot_base(plot_base):
             plot.show()
             
         X=numpy.array(fig.canvas.renderer._renderer)
+        #print("shapex:",numpy.shape(X))
         Y=[]
         Y2=[]
 
         # Note that the array is flipped, so ymax is obtained
         # from the width and xmax is obtained from the height
-        ymax=int(fig.get_dpi()*fig.get_figwidth())
-        xmax=int(fig.get_dpi()*fig.get_figheight())
+        #ymax=int(fig.get_dpi()*fig.get_figwidth())
+        #xmax=int(fig.get_dpi()*fig.get_figheight())
+        
+        xmax=numpy.shape(X)[0]
+        ymax=numpy.shape(X)[1]
+        #print('xmax,ymax',xmax,ymax)
         
         for i in range(0,xmax):
             for j in range(0,ymax):
@@ -906,6 +1002,8 @@ class yt_plot_base(plot_base):
         from yt.visualization.volume_rendering.api \
             import create_volume_source
 
+        yt.set_log_level("warning")
+        
         if self.verbose>0:
             print('No volume object, adding yt volume.')
             

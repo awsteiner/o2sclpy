@@ -1,0 +1,16 @@
+o2graph -set xlo 0 -set xhi 2 -set ylo 0 -set yhi 2 \
+-set zhi 0 -set zhi 2 \
+-yt-line 0.2 1.0 0.0 1.0 1.0 2.0 color=#FF0000 \
+-yt-line 1.0 1.0 2.0 1.8 1.0 0.0 "color=(0,0,1)" \
+-yt-line 0.6 1.0 1.0 1.4 1.0 1.0 "color=xkcd:rose" \
+-set yt_sigma_clip 1 \
+-yt-path yaw 10 1.0 \
+-yt-render "/tmp/ytl_*.png" mov_fname=temp.mp4
+#
+o2graph -set xlo 0 -set xhi 2 -set ylo 0 -set yhi 2 \
+-set zhi 0 -set zhi 2 \
+-yt-line 0.2 1.0 0.0 1.0 1.0 2.0 color=#FF0000 \
+-yt-line 1.0 1.0 2.0 1.8 1.0 0.0 "color=(0,0,1)" \
+-yt-line 0.6 1.0 1.0 1.4 1.0 1.0 "color=xkcd:rose" \
+-set yt_sigma_clip 1 \
+-yt-render temp.png

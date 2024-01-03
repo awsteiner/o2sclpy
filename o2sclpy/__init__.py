@@ -96,7 +96,7 @@ class todo_list:
                 sources?)
     """
 
-    def empty_class():
+    def empty_class(x):
         print(' ')
 
 

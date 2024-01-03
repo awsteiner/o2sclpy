@@ -33,13 +33,13 @@ import textwrap
 import code 
 
 from o2sclpy.doc_data import cmaps, new_cmaps, extra_types
-from o2sclpy.doc_data import acol_help_topics
+from o2sclpy.doc_data import acol_help_topics, version
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
-from o2sclpy.utils import force_bytes, default_plot
-from o2sclpy.utils import is_number
+from o2sclpy.utils import force_bytes, default_plot, cross
+from o2sclpy.utils import is_number, arrow, icosphere
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
-from o2sclpy.utils import string_equal_dash
+from o2sclpy.utils import string_equal_dash, latex_to_png
 from o2sclpy.utils import force_string, remove_spaces
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
@@ -50,6 +50,7 @@ from o2sclpy.doc_data import version
 from o2sclpy.hdf import *
 from o2sclpy.base import *
 from o2sclpy.kde import *
+from yt.visualization._commons import get_canvas
 
 base_list=[
     ["addcbar",plot_base.addcbar.__doc__],
@@ -94,6 +95,8 @@ base_list=[
     ["line",plot_base.line.__doc__],
     ["modax",plot_base.modax.__doc__],
     ["mp4",0],
+    ["obj",0],
+    ["gltf",0],
     ["o2scl-addl-libs",
      "Specify a list of list of additional libraries to load."],
     ["o2scl-cpp-lib",
@@ -121,7 +124,7 @@ base_list=[
      "Adjust the spacing for subplots after using the 'subplots' "+
      "command. All arguments are keyword arguments. The kwargs "+
      "for 'subadj' are left, right, bottom, top, "+
-     "wspace, and hspace. This just a wrapper to the "+
+     "wspace, and hspace. This command is a wrapper to the "+
      "pyplot.subplots_adjust() function. Note that, unlike the "+
      "margin settings for the fig_dict parameter, the values "+
      "'right' and 'top' are defined relative to the lower-left "+
@@ -129,6 +132,18 @@ base_list=[
      "subplots_adjust() function requires right>left and "+
      "top>bottom."],
     ["subplots",plot_base.subplots.__doc__],
+    ["td-axis","Documentation for td-axis\n\n"+
+     "Create a 3D axis label (experimental).\n\n"+
+     "<x label> <y label> <z label> [kwargs]\n\n"+
+     "Full desc."],
+    ["td-arrow","Documentation for td-arrow\n\n"+
+     "Create a 3D arrow (experimental).\n\n"+
+     "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]\n\n"+
+     "Full desc."],
+    ["td-den-plot","Documentation for td-den-plot\n\n"+
+     "Create a 3D density plot (experimental).\n\n"+
+     "<x label> <y label> <z label> [kwargs]\n\n"+
+     "Full desc."],
     ["text",plot_base.text.__doc__],
     ["textbox",plot_base.textbox.__doc__],
     ["ttext",plot_base.ttext.__doc__],
@@ -181,6 +196,7 @@ extra_list=[
     ["tensor_grid","den-plot-anim",0],
     ["tensor_grid","yt-add-vol",0],
     ["vector<contour_line>","plot",0],
+    ["vec_vec_double","plot",0],
 ]
 
 param_list=[
@@ -208,6 +224,7 @@ param_list=[
     ["logx","If true, use a logarithmic x-axis (default False)."],
     ["logy","If true, use a logarithmic y-axis (default False)."],
     ["logz","If true, use a logarithmic z-axis (default False)."],
+    ["td_wdir",""],
     ["usetex","If true, use LaTeX for text rendering (default True)."],
     ["verbose","Verbosity parameter (default 1)."],
     ["xhi","Upper limit for x-axis (function if starts with '(')."],
@@ -360,7 +377,7 @@ def doc_replacements(s,ter,amp,link,script=False):
 def o2scl_get_type(o2scl,amp,link):
     """
     Get the type of the current object stored in the acol_manager
-    pointer
+    pointer and return as a bytes object.
     """
 
     amt=acol_manager(link,amp)
@@ -445,7 +462,7 @@ def reformat_python_docs(cmd,doc_str,amp,link,
                 if last_pgh_colons:
                     long_help=doc_replacements(reflist2[j].replace('\n',' '),
                                                ter,amp,link,script=True)
-                    tmplist=long_help.split(' \ ')
+                    tmplist=long_help.split(' \\ ')
                 else:
                     long_help=doc_replacements(reflist2[j].replace('\n',' '),
                                                ter,amp,link)
@@ -560,15 +577,31 @@ def reformat_python_docs_type(curr_type,cmd,doc_str,amp,link,
     if len(reflist3)>2:
         print('')
         print('Long description:')
+        last_pgh_colons=False
         for j in range(2,len(reflist3)):
             if len(reflist3[j])>0:
-                long_help=doc_replacements(reflist3[j].replace('\n',' '),
-                                           ter,amp,link)
-                tmplist=wrap_line(long_help,ncols-1)
-                if j!=3:
+                if last_pgh_colons:
+                    long_help=doc_replacements(reflist3[j].replace('\n',' '),
+                                               ter,amp,link,script=True)
+                    tmplist=long_help.split(' \ ')
+                else:
+                    long_help=doc_replacements(reflist3[j].replace('\n',' '),
+                                               ter,amp,link)
+                    tmplist=wrap_line(long_help,ncols-1)
+                if j!=2:
                     print('')
                 for k in range(0,len(tmplist)):
-                    print(tmplist[k])
+                    if last_pgh_colons:
+                        if k!=len(tmplist)-1:
+                            print(' ',tmplist[k],'\\')
+                        else:
+                            print(' ',tmplist[k])
+                    else:
+                        print(tmplist[k])
+                if long_help[-2:]=='::':
+                    last_pgh_colons=True
+                else:
+                    last_pgh_colons=False
                     
     return
 
@@ -584,7 +617,1425 @@ def table_get_column(o2scl,amp,link,name,return_pointer=False):
 
     return col
 
-class o2graph_plotter(yt_plot_base):
+class material:
+    """
+    A simple material for a 3-d visualization
+    """
+    name: str
+    """
+    The name of the visualization
+    """
+    Ka: list[float]
+    """
+    The ambient color
+    """
+    Kd: list[float]
+    """
+    The diffuse color
+    """
+    Ks: list[float]
+    """
+    The specular color
+    """
+    Ns: float
+    """
+    The specular exponent
+    """
+    txt: str
+    """
+    The texture filename, including extension
+    """
+
+    def __init__(self, name: str, Ka: list[float]=[1,1,1], txt: str=''):
+        """Create a new material with color in ``Ka`` and texture file in
+        ``txt``.
+        """
+        self.name=name
+        self.Ka=Ka
+        self.Kd=Ka
+        self.Ks=[0,0,0]
+        self.Ns=0
+        self.txt=txt
+        return
+    
+class mesh_object:
+    """
+    A group of (triangular) faces
+
+    Right now, the faces either have 3, 4, 6, or 7 elements, corresponding
+    to the cases
+    * faces
+    * faces plus material
+    * faces plus texture coordinates
+    * faces plus texture coordinates plus material
+    """
+    vert_list: list[list[float]]=[]
+    """
+    List of vertices
+    """
+    vn_list: list[list[float]]=[]
+    """
+    List of vertex normals
+    """
+    vt_list: list[list[float]]=[]
+    """
+    List of texture coordinates
+    """
+    faces: list[list[int | str]]
+    """
+    The list of faces
+    """
+    name: str=''
+    """
+    The name of the group.
+
+    This string is used for the ``g `` commands in ``obj`` files. It 
+    may be empty, in which case no ``g `` command is given. 
+    """
+    mat: str=''
+    """The name of the material (blank for none, or for different material for
+    each face)
+
+    Note that this string might be nonempty even when some of the
+    faces explicitly specify a material. In this case, this string
+    specifies the default material to be used for those faces which do
+    not specify their own material.
+
+    If this string is non-empty, but all of the faces specify a 
+    material, then the ``sort_by_mat()`` function will 
+    """
+
+    def __init__(self, name: str, faces: list[list[int | str]],
+                 mat: str = ''):
+        """
+        Create a group given the specfied list of faces, name, and 
+        material.
+        """
+        self.name=name
+        self.faces=faces
+        self.mat=mat
+        return
+
+    def sort_by_mat(self, verbose : int = 0):
+        """Sort the faces by material name, ensuring that the group and
+        material commands do not have to be issued for each face.
+
+        """
+
+        # If no materials are specified in faces, there is nothing to do
+        found_four=False
+        for i in range(0,len(self.faces)):
+            if len(self.faces[i])==4 or len(self.faces[i])==7:
+                found_four=True
+        if verbose>0:
+            print('mesh_object::sort_by_mat(): found_four',found_four)
+        if found_four==False:
+            return
+
+        # Find if there at least two distinct materials 
+        two_mats=False
+        for i in range(0,len(self.faces)):
+            if (len(self.faces[i])==4 and
+                self.faces[i][3]!=self.mat):
+                two_mats=True
+            if (i>0 and len(self.faces[i])==4 and
+                len(self.faces[i-1])==4 and
+                self.faces[i][3]!=self.faces[i-1][3]):
+                two_mats=True
+
+        # If there are not two distinct materials, there's nothing to do
+        if verbose>0:
+            print('mesh_object::sort_by_mat(): two_mats',two_mats)
+        if two_mats==False:
+            return
+
+        # Reorganize faces by material name
+        mat_list=[]
+        faces2=[]
+
+        # First, if a global material is specified, add all faces
+        # which don't have a material and assume that they'll use the
+        # global material.
+        if self.mat!='':
+
+            # This is true if self.mat has been added to 'mat_list'
+            base_name_added=False
+            for i in range(0,len(self.faces)):
+                if len(self.faces[i])==3:
+                    if base_name_added==False:
+                        mat_list.append(self.mat)
+                        base_name_added=True
+                    faces2.append(self.faces[i])
+                    
+            if base_name_added==False:
+                raise ValueError('In function sort_by_mat(): '+
+                                 '  A material named '+self.mat+
+                                 ' was specified in "mat", but no face '+
+                                 'uses that material.')
+
+        # Now go through the list and find faces not already added to
+        # mat_list
+        face_copies=[False for i in range(0,len(self.faces))]
+        for i in range(0,len(self.faces)):
+            if len(self.faces[i])==4:
+                mat_name=self.faces[i][3]
+                if mat_name not in mat_list:
+                    if verbose>0:
+                        print('mesh_object::sort_by_mat():',
+                              'At index',i,'adding faces for',mat_name)
+                    mat_list.append(mat_name)
+                    # If it's not found, then add the current face,
+                    # and loop over the remaining faces which match
+                    faces2.append(self.faces[i])
+                    face_copies[i]=True
+                    for j in range(i+1,len(self.faces)):
+                        if self.faces[j][3]==mat_name:
+                            faces2.append(self.faces[j])
+                            face_copies[j]=True
+
+        if len(self.faces)!=len(faces2):
+            if verbose>0:
+                print('sort_by_mat():',len(self.faces),len(faces2))
+            raise SyntaxError('The lists of faces do not match up in '+
+                              'sort_by_mat().')
+                 
+        self.faces=faces2
+        return
+
+def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
+                dir='x',end_mat='white'):
+    """
+    Create a rectangular prism with textures from a png created by a
+    LaTeX string on four sides.
+
+    This function returns four objects: the vertices, the faces,
+    the texture uv coordinates, and the material object
+
+    The variable dir is either 'x', 'y', or 'z', depending
+    on the orientation of the prism. For the 'x' direction,
+    the xy and xz faces have textures from the LaTeX object,
+    and the yz faces are set to the end material specified
+    in ``end_mat``. The normal vectors for all six faces point
+    outside the prism. 
+    """
+
+    w,h,w_new,h_new=latex_to_png(latex,wdir+'/'+png_file,power_two=True)
+                                 
+    face=[]
+    vert=[]
+    facet=[]
+    text_uv=[]
+
+    if dir=='x':
+        xcent=(x1+x2)/2.0
+        height=abs(y2-y1)
+        width=w_new/h_new*height
+        x1=xcent-width/2.0
+        x2=xcent+width/2.0
+    elif dir=='y':
+        ycent=(y1+y2)/2.0
+        height=abs(z2-z1)
+        width=w_new/h_new*height
+        y1=ycent-width/2.0
+        y2=ycent+width/2.0
+    else:
+        zcent=(z1+z2)/2.0
+        height=abs(x2-x1)
+        width=w_new/h_new*height
+        z1=zcent-width/2.0
+        z2=zcent+width/2.0
+        print(x1,y1,z1,x2,y2,z2)
+
+    m=material(mat_name,txt=png_file)
+
+    # Add the 8 vertices
+    vert.append([x1,y1,z1])
+    vert.append([x2,y1,z1])
+    vert.append([x1,y2,z1])
+    vert.append([x2,y2,z1])
+    vert.append([x1,y1,z2])
+    vert.append([x2,y1,z2])
+    vert.append([x1,y2,z2])
+    vert.append([x2,y2,z2])
+    
+    text_uv.append([0.0,float(h)/float(h_new)])
+    text_uv.append([0.0,0.0])
+    text_uv.append([float(w)/float(w_new),float(h)/float(h_new)])
+    text_uv.append([float(w)/float(w_new),0.0])
+
+    if dir=='x':
+        
+        # The four sides with labels
+        face.append([1,5,2,2,1,4,mat_name])
+        face.append([2,5,6,4,1,3,mat_name])
+        face.append([8,7,4,4,2,3,mat_name])
+        face.append([4,7,3,3,2,1,mat_name])
+        face.append([1,2,3,1,3,2,mat_name])
+        face.append([3,2,4,2,3,4,mat_name])
+        face.append([5,7,6,2,1,4,mat_name])
+        face.append([6,7,8,4,1,3,mat_name])
+        
+        # The two sides without labels
+        face.append([2,6,4,end_mat])
+        face.append([4,6,8,end_mat])
+        face.append([1,3,5,end_mat])
+        face.append([5,3,7,end_mat])
+        
+    elif dir=='y':
+        
+        # The four sides with labels
+        face.append([3,1,4,4,2,3,mat_name])
+        face.append([4,1,2,3,2,1,mat_name])
+        face.append([6,5,8,2,1,4,mat_name])
+        face.append([8,5,7,4,1,3,mat_name])
+        face.append([4,2,8,4,2,3,mat_name])
+        face.append([8,2,6,3,2,1,mat_name])
+        face.append([5,1,7,2,1,4,mat_name])
+        face.append([7,1,3,4,1,3,mat_name])
+        
+        # The two sides without labels
+        face.append([3,4,7,end_mat])
+        face.append([7,4,8,end_mat])
+        face.append([1,5,2,end_mat])
+        face.append([2,5,6,end_mat])
+        
+    else:
+        
+        # The four sides with labels
+        face.append([4,8,3,1,3,2,mat_name])
+        face.append([3,8,7,2,3,4,mat_name])
+        face.append([2,1,6,2,1,4,mat_name])
+        face.append([6,1,5,4,1,3,mat_name])
+        
+        face.append([8,4,6,4,2,3,mat_name])
+        face.append([6,4,2,3,2,1,mat_name])
+        face.append([1,3,5,2,1,4,mat_name])
+        face.append([5,3,7,4,1,3,mat_name])
+        
+        # The two sides without labels
+        face.append([1,2,3,end_mat])
+        face.append([3,2,4,end_mat])
+        face.append([5,7,6,end_mat])
+        face.append([6,7,8,end_mat])
+        
+    # Rearrange for GLTF. to compute normals, we use the cross
+    # products.
+
+    norms=[[1.0,0.0,0.0],
+           [-1.0,0.0,0.0],
+           [0.0,1.0,0.0],
+           [0.0,-1.0,0.0],
+           [0.0,0.0,1.0],
+           [0.0,0.0,-1.0]]
+        
+    vert2=[]
+    txts=[]
+    norms2=[]
+    
+    for i in range(0,len(face)):
+
+        # Add the vertices to the new vertex array
+        vert2.append(vert[face[i][0]-1])
+        vert2.append(vert[face[i][1]-1])
+        vert2.append(vert[face[i][2]-1])
+
+        # Compute the norm
+        p1=vert[face[i][0]-1]
+        p2=vert[face[i][1]-1]
+        p3=vert[face[i][2]-1]
+        v1=[1]*3
+        v2=[1]*3
+        for j in range(0,3):
+            v1[j]=p2[j]-p1[j]
+            v2[j]=p3[j]-p2[j]
+        norm=cross(v1,v2,norm=True)
+        for k in range(0,3):
+            norms2.append([norm[0],norm[1],norm[2]])
+
+        if len(face[i])>=7:
+            # Texture coordinates in the case of a image
+            txts.append([text_uv[face[i][3]-1][0],
+                         text_uv[face[i][3]-1][1]])
+            txts.append([text_uv[face[i][4]-1][0],
+                         text_uv[face[i][4]-1][1]])
+            txts.append([text_uv[face[i][5]-1][0],
+                         text_uv[face[i][5]-1][1]])
+            face[i]=[i*3,i*3+1,i*3+2,face[i][6]]
+        else:
+            # Default texture coordinates for no image
+            txts.append([text_uv[3][0],
+                         text_uv[3][1]])
+            txts.append([text_uv[0][0],
+                         text_uv[0][1]])
+            txts.append([text_uv[1][0],
+                         text_uv[1][1]])
+            face[i]=[i*3,i*3+1,i*3+2,face[i][3]]
+
+    # Print out results
+    if False:
+        for ki in range(0,len(vert2),3):
+            print('%d [%d,%d,%d] mat: %s' % (int(ki/3),face[int(ki/3)][0],
+                                             face[int(ki/3)][1],
+                                             face[int(ki/3)][2],
+                                             face[int(ki/3)][3]))
+            print(('0 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki][0],vert2[ki][1],
+                                             vert2[ki][2],txts[ki][0],
+                                             txts[ki][1],norms2[ki][0],
+                                             norms2[ki][1],norms2[ki][2]))
+            print(('1 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+1][0],vert2[ki+1][1],
+                                             vert2[ki+1][2],txts[ki+1][0],
+                                             txts[ki+1][1],norms2[ki+1][0],
+                                             norms2[ki+1][1],norms2[ki+1][2]))
+            print(('2 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+2][0],vert2[ki+2][1],
+                                             vert2[ki+2][2],txts[ki+2][0],
+                                             txts[ki+2][1],norms2[ki+2][0],
+                                             norms2[ki+2][1],norms2[ki+2][2]))
+            print('')
+            
+        #quit()
+
+    return vert2,face,txts,norms2,m
+            
+class threed_objects:
+    """A set of three-dimensional objects
+    """
+    
+    gf_list: list[mesh_object]=[]
+    """
+    List of groups of faces
+    """
+    mat_list: list[material]=[]
+    """
+    List of materials
+    """
+
+    def add_object(self, gf: mesh_object, verbose : int = 0):
+        """Add an object given 'lv', a list of vertices, and 'gf', a group of
+        triangular faces among those vertices.
+
+        Optionally, also specify the vertex normals in ``normals``.
+        """
+        #normals : list[list[float]] = [],
+        #texcoords : list[list[float]] = []):
+
+        if len(gf.vn_list)>0 and len(gf.vn_list)!=len(gf.vert_list):
+            raise ValueError('List of normals has size',len(normals),
+                             'and list of vertices is of size',len(lv))
+        
+        if len(gf.vt_list)>0 and len(gf.vt_list)!=len(gf.vert_list):
+            raise ValueError('List of texture coordinates has size',
+                             len(gf.vt_list),
+                             'and list of vertices is of size',
+                             len(gf.vert_list))
+
+        # Find the first empty vertex index
+        len_lv=len(gf.vert_list)
+        len_lvt=len(gf.vt_list)
+        len_lvn=len(gf.vn_list)
+
+        # Iterate over each face
+        if verbose>0:
+            print('threed_object::add_object():',
+                  'Adjust faces for group',gf.name,'and check.')
+        
+        for i in range(0,len(gf.faces)):
+
+            # Check to make sure we don't have OBJ indices in
+            # GLTF mode
+            if len(gf.faces[i])>4:
+                raise ValueError('Face '+str(i)+' has more than 4 '+
+                                 'elements.')
+            
+            # Check if there is an undefined material in this face
+            if len(gf.faces[i])==4:
+                mat_found=False
+                mat_tmp=gf.faces[i][3]
+                for k in range(0,len(self.mat_list)):
+                    if self.mat_list[k].name==mat_tmp:
+                        mat_found=True
+                if mat_found==False:
+                    raise ValueError('Face '+str(i)+' refers to a '+
+                                     'material "'+mat_tmp+
+                                     '" which is not in the list of '+
+                                     'materials.')
+                    
+        # Check if there is an undefined material in the
+        # mesh_object data member 'mat'
+        if gf.mat!='':
+            mat_found=False
+            for k in range(0,len(self.mat_list)):
+                if self.mat_list[k].name==gf.mat:
+                    mat_found=True
+            if mat_found==False:
+                raise ValueError('The group of faces names a material '+
+                                 gf.mat+' which is not in the list of '+
+                                 'materials.')
+
+        # Sort the group of vertices by material for output later
+        if verbose>0:
+            print('threed_object::add_object(): Sort group named',
+                  gf.name,'by material.')
+        gf.sort_by_mat()
+                
+        # Add the group of faces to the list
+        self.gf_list.append(gf)
+        
+        return
+
+    def add_mat(self, m: material):
+        # Add the material if not found
+        mat_found=False
+        for i in range(0,len(self.mat_list)):
+            if self.mat_list[i].name==m.name:
+                mat_found=True
+        if mat_found==False:
+            self.mat_list.append(m)
+        return
+    
+    def add_object_mat(self, gf: mesh_object, m: material):
+        """Add an object given 'lv', a list of vertices, and 'gf', a group of
+        triangular faces among those vertices, and 'm', the material
+        for all of the faces.
+
+        """
+        self.add_mat(m)
+        if gf.mat=='':
+            gf.mat=m.name
+        self.add_object(gf)
+        return
+
+    def is_mat(self, m: str):
+        """Return true if a a material named ``m`` has been added
+        """
+        for i in range(0,len(self.mat_list)):
+            if self.mat_list[i].name==m:
+                return True
+        return False
+    
+    def add_object_mat_list(self, gf: mesh_object, lm: list[material]):
+        """Add an object given 'lv', a list of vertices, and 'gf', a group of
+        triangular faces among those vertices, and 'm', the material
+        for all of the faces.
+        """
+        
+        for k in range(0,len(lm)):
+            self.add_mat(lm[k])
+        self.add_object(gf)
+        return
+
+    def write_obj_old(self, prefix: str):
+        """Write all objects to an '.obj' file, creating a '.mtl' file if
+        necessary
+
+        (This function doesn't work anymore.)
+        """
+        quit()
+
+        # Remove suffix if it is present
+        if prefix[-4:]=='.obj':
+            prefix=prefix[:-4]
+        obj_file=prefix+'.obj'
+        mtl_file=prefix+'.mtl'
+        
+        f=open(obj_file,'w')
+        if len(self.mat_list)>0:
+            f.write('mtllib '+mtl_file+'\n')
+
+        # Add vertices
+        for k in range(0,len(self.vert_list)):
+            f.write('v '+
+                    ('%7.6e' % self.vert_list[k][0])+' '+
+                    ('%7.6e' % self.vert_list[k][1])+' '+
+                    ('%7.6e' % self.vert_list[k][2])+'\n')
+
+        # Add vertices
+        for k in range(0,len(self.vt_list)):
+            print(k,self.vt_list[k])
+            f.write('vt '+
+                    ('%7.6e' % self.vt_list[k][0])+' '+
+                    ('%7.6e' % self.vt_list[k][1])+'\n')
+
+        # Add each set of faces as a group
+        for i in range(0,len(self.gf_list)):
+            if self.gf_list[i].name!='':
+                f.write('g '+self.gf_list[i].name+'\n')
+            # If the base material is used, output that first
+            if (self.gf_list[i].mat!='' and
+                len(self.gf_list[i].faces[0])==3):
+                f.write('usemtl '+self.gf_list[i].mat+'\n')
+            if (self.gf_list[i].mat!='' and
+                len(self.gf_list[i].faces[0])==6):
+                f.write('usemtl '+self.gf_list[i].mat+'\n')
+            for k in range(0,len(self.gf_list[i].faces)):
+                # Take care of the cases when we need to change materials
+                if k==0 and len(self.gf_list[i].faces[k])==4:
+                    f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
+                elif k==0 and len(self.gf_list[i].faces[k])==7:
+                    f.write('usemtl '+self.gf_list[i].faces[k][6]+'\n')
+                elif (len(self.gf_list[i].faces[k-1])==3 and 
+                      len(self.gf_list[i].faces[k])==4):
+                    f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
+                elif (len(self.gf_list[i].faces[k-1])==3 and 
+                      len(self.gf_list[i].faces[k])==7):
+                    f.write('usemtl '+self.gf_list[i].faces[k][6]+'\n')
+                elif (len(self.gf_list[i].faces[k-1])==4 and 
+                    len(self.gf_list[i].faces[k])>=4 and
+                    self.gf_list[i].faces[k-1][3]!=
+                    self.gf_list[i].faces[k][3]):
+                    f.write('usemtl '+self.gf_list[i].faces[k][3]+'\n')
+                if len(self.gf_list[i].faces[k])>=6:
+                    # Write the face with vertex texture indices
+                    f.write('f '+
+                            ('%i' % self.gf_list[i].faces[k][0])+'/'+
+                            ('%i' % self.gf_list[i].faces[k][3])+' '+
+                            ('%i' % self.gf_list[i].faces[k][1])+'/'+
+                            ('%i' % self.gf_list[i].faces[k][4])+' '+
+                            ('%i' % self.gf_list[i].faces[k][2])+'/'+
+                            ('%i' % self.gf_list[i].faces[k][5])+'\n')
+                    # Check that the texture index
+                    # refers to a valid texture coordinate
+                    for j in range(3,6):
+                        if self.gf_list[i].faces[k][j]-1>=len(self.vt_list):
+                            print('Problem with vertex',j,'of face',k+1,
+                                  'in group',i)
+                else:
+                    # Write the face
+                    f.write('f '+
+                            ('%i' % self.gf_list[i].faces[k][0])+' '+
+                            ('%i' % self.gf_list[i].faces[k][1])+' '+
+                            ('%i' % self.gf_list[i].faces[k][2])+'\n')
+                # Check that the face refers to a valid vertex
+                for j in range(0,3):
+                    if self.gf_list[i].faces[k][j]-1>=len(self.vert_list):
+                        print('Problem with vertex',j,'of face',k+1,
+                              'in group',i)
+        f.close()
+
+        # Create the materials file
+        if len(self.mat_list)>0:
+            f=open(mtl_file,'w')
+            for i in range(0,len(self.mat_list)):
+                f.write('newmtl '+self.mat_list[i].name+'\n')
+                f.write('Ka '+str(self.mat_list[i].Ka[0])+' '+
+                        str(self.mat_list[i].Ka[1])+' '+
+                        str(self.mat_list[i].Ka[2])+'\n')
+                f.write('Kd '+str(self.mat_list[i].Kd[0])+' '+
+                        str(self.mat_list[i].Kd[1])+' '+
+                        str(self.mat_list[i].Kd[2])+'\n')
+                f.write('Ks '+str(self.mat_list[i].Ks[0])+' '+
+                        str(self.mat_list[i].Kd[1])+' '+
+                        str(self.mat_list[i].Kd[2])+'\n')
+                f.write('Ns '+str(self.mat_list[i].Ns)+'\n')
+                if self.mat_list[i].txt!='':
+                    f.write('map_Ka '+self.mat_list[i].txt+'\n')
+                    f.write('map_Kd '+self.mat_list[i].txt+'\n')
+            f.close()
+                        
+        return
+        
+    def write_gltf(self, wdir: str, prefix: str, verbose: int = 0):
+        """Write all objects to an '.gltf' file, creating a '.bin' file
+        """
+
+        import json
+        from struct import pack
+        
+        # Remove suffix if it is present
+        if prefix[-5:]=='.gltf':
+            prefix=prefix[:-5]
+        gltf_file=wdir+"/"+prefix+'.gltf'
+        bin_file=wdir+"/"+prefix+'.bin'
+        
+        nodes_list=[]
+            
+        for k in range(0,len(self.gf_list)):
+            nodes_list.append(k)
+                
+        jdat={"asset": {"generator": "o2sclpy v"+version,
+                        "version": "2.0"},
+              "scene": 0,
+              "scenes": [{ "name": "Scene",
+                           "nodes": nodes_list
+                          }]
+              }
+            
+        nodes_list=[]
+        for k in range(0,len(self.gf_list)):
+            nodes_list.append({"mesh" : k,
+                               "name" : self.gf_list[k].name,
+                               "rotation": [
+                                   0.7071068286895752,0,0,-0.7071068286895752
+                               ]
+                               })
+        jdat["nodes"]=nodes_list
+
+        mesh_list=[]
+        acc_list=[]
+        buf_list=[]
+        mat_json=[]
+        txt_list=[]
+        img_list=[]
+            
+        f2=open(bin_file,'wb')
+            
+        texture_map=[-1]*len(self.mat_list)
+        texture_index=0
+        
+        for i in range(0,len(self.mat_list)):
+
+            this_mat=self.mat_list[i]
+
+            if this_mat.txt!='':
+                mat_json.append({"doubleSided": True,
+                                 "name": this_mat.name,
+                                 "pbrMetallicRoughness": {
+                                     "baseColorTexture": {
+                                         "index":
+                                         texture_index
+                                         },
+                                     "metallicFactor": 0
+                                 }
+                                 })
+                txt_list.append({"source": texture_index})
+                img_list.append({"mimeType": "image/png",
+                                 "name": this_mat.name,
+                                 "uri": this_mat.txt})
+                texture_map[i]=texture_index
+                texture_index=texture_index+1
+            else:
+                mat_json.append({"doubleSided": True,
+                                 "name": this_mat.name,
+                                 "pbrMetallicRoughness": {
+                                     "baseColorFactor": [
+                                         this_mat.Ka[0],
+                                         this_mat.Ka[1],
+                                         this_mat.Ka[2],
+                                         1],
+                                     "metallicFactor": 0
+                                 }
+                                 })
+        
+        # Add each set of faces as a group
+        acc_index=0
+        offset=0
+
+        for i in range(0,len(self.gf_list)):
+                
+            normals=False
+            if len(self.gf_list[i].vn_list)==len(self.gf_list[i].vert_list):
+                normals=True
+            texcoords=False
+            if len(self.gf_list[i].vt_list)==len(self.gf_list[i].vert_list):
+                texcoords=True
+    
+            att={}
+            face_bin=[]
+            norm_bin=[]
+            txts_bin=[]
+            vert_bin=[]
+            vert_map = [-1] * len(self.gf_list[i].vert_list)
+            prim_list=[]
+            mat_index=-1
+                
+            for j in range(0,len(self.gf_list[i].faces)):
+
+                # Determine the material for this face
+                mat1=''
+                mat_index=-1
+                
+                lf1=len(self.gf_list[i].faces[j])
+                if lf1==4:
+                    mat1=self.gf_list[i].faces[j][lf1-1]
+
+                    mat_found=False
+                    for ik in range(0,len(self.mat_list)):
+                        if (mat_found==False and
+                            self.mat_list[ik].name==mat1):
+                            mat_index=ik
+                            mat_found=True
+                    if mat_found==False:
+                        print('Could not find mat "'+mat2+
+                              '" in mat_list.')
+                        quit()
+                    
+                #print(i,j,'mat1:',mat1)
+                    
+                # Map the first vertex
+                ix=self.gf_list[i].faces[j][0]
+                if vert_map[ix]==-1:
+                    # Converting the vertices to "float()"
+                    # helps ensure single precision and then
+                    # validators don't complain that max and
+                    # min are wrong.
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][0]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][1]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][2]))
+                    if normals:
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][0]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][1]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][2]))
+                    if texcoords and self.mat_list[mat_index].txt!='':
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][0]))
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][1]))
+                    vert_map[ix]=int(len(vert_bin)/3)
+                    # We have to subtract one here because
+                    # the point has already been added to 'vert_bin'
+                    face_bin.append(int(len(vert_bin)/3)-1)
+                else:
+                    face_bin.append(vert_map[ix])
+                # Map the second vertex
+                ix=self.gf_list[i].faces[j][1]
+                if vert_map[ix]==-1:
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][0]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][1]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][2]))
+                    if normals:
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][0]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][1]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][2]))
+                    if texcoords and self.mat_list[mat_index].txt!='':
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][0]))
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][1]))
+                    vert_map[ix]=int(len(vert_bin)/3)
+                    # We have to subtract one here because
+                    # the point has already been added to 'vert_bin'
+                    face_bin.append(int(len(vert_bin)/3)-1)
+                else:
+                    face_bin.append(vert_map[ix])
+                # Map the third vertex
+                ix=self.gf_list[i].faces[j][2]
+                if vert_map[ix]==-1:
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][0]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][1]))
+                    vert_bin.append(float(self.gf_list[i].vert_list[ix][2]))
+                    if normals:
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][0]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][1]))
+                        norm_bin.append(float(self.gf_list[i].vn_list[ix][2]))
+                    if texcoords and self.mat_list[mat_index].txt!='':
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][0]))
+                        txts_bin.append(float(self.gf_list[i].vt_list[ix][1]))
+                    vert_map[ix]=int(len(vert_bin)/3)
+                    # We have to subtract one here because
+                    # the point has already been added to 'vert_bin'
+                    face_bin.append(int(len(vert_bin)/3)-1)
+                else:
+                    face_bin.append(vert_map[ix])
+
+                # Determine if the next face is composed of a
+                # different material, if so, set mat2 and
+                # flip next_face_different_mat to True
+                next_face_different_mat=False
+                if j<len(self.gf_list[i].faces)-1:
+                    mat2=''
+                    lf2=len(self.gf_list[i].faces[j+1])
+                    if lf2==4:
+                        mat2=self.gf_list[i].faces[j+1][lf2-1]
+                    if mat1!=mat2:
+                        next_face_different_mat=True
+
+                # If we're at the end, or we're switching materials,
+                # then add the primitive to the mesh and update
+                # the binary data file accordingly
+                if (j==len(self.gf_list[i].faces)-1 or
+                    next_face_different_mat==True):
+
+                    dat1=pack('<'+'f'*len(vert_bin),*vert_bin)
+                    f2.write(dat1)
+                    if normals:
+                        dat3=pack('<'+'f'*len(norm_bin),*norm_bin)
+                        f2.write(dat3)
+                    # If the object provides texture coordinates, but
+                    # there's no texture, then there's no need to
+                    # output them
+                    if texcoords and self.mat_list[mat_index].txt!='':
+                        dat4=pack('<'+'f'*len(txts_bin),*txts_bin)
+                        f2.write(dat4)
+                    dat2=pack('<'+'h'*len(face_bin),*face_bin)
+                    f2.write(dat2)
+        
+                    max_v=[0,0,0]
+                    min_v=[0,0,0]
+                    for ii in range(0,len(vert_bin),3):
+                        for jj in range(0,3):
+                            if ii==0 or vert_bin[ii+jj]<min_v[jj]:
+                                min_v[jj]=vert_bin[ii+jj]
+                            if ii==0 or vert_bin[ii+jj]>max_v[jj]:
+                                max_v[jj]=vert_bin[ii+jj]
+                    
+                    # 5120 is signed byte
+                    # 5121 is unsigned byte
+                    # 5122 is signed short
+                    # 5123 is unsigned short
+                    # 5125 is unsigned int
+                    # 5126 is signed float
+                    
+                    acc_list.append({"bufferView": acc_index,
+                                     "componentType": 5126,
+                                     "count": int(len(vert_bin)/3),
+                                     "max": max_v,
+                                     "min": min_v,
+                                     "type": "VEC3"})
+                    att["POSITION"]=acc_index
+                    acc_index=acc_index+1
+                    if normals:
+                        acc_list.append({"bufferView": acc_index,
+                                         "componentType": 5126,
+                                         "count": int(len(vert_bin)/3),
+                                         "type": "VEC3"})
+                        att["NORMAL"]=acc_index
+                        acc_index=acc_index+1
+                    # If the object provides texture coordinates, but
+                    # there's no texture, then there's no need to
+                    # output them
+                    if texcoords and self.mat_list[mat_index].txt!='':
+                        acc_list.append({"bufferView": acc_index,
+                                         "componentType": 5126,
+                                         "count": int(len(vert_bin)/3),
+                                         "type": "VEC2"})
+                        att["TEXCOORD_0"]=acc_index
+                        acc_index=acc_index+1
+                    acc_list.append({"bufferView": acc_index,
+                                     "componentType": 5123,
+                                     "count": int(len(face_bin)/1),
+                                     "type": "SCALAR"})
+                    if mat1=='':
+                        prim_list.append({"attributes": att,
+                                          "indices": acc_index})
+                    else:
+                        prim_list.append({"attributes": att,
+                                          "indices": acc_index,
+                                          "material": mat_index})
+                    if j==len(self.gf_list[i].faces)-1:
+                        mesh_list.append({"name": self.gf_list[i].name,
+                                          "primitives": prim_list})
+                        
+                    acc_index=acc_index+1
+        
+                    # 34962 is "ARRAY_BUFFER"
+                    # 34963 is "ELEMENT_ARRAY_BUFFER"
+                    
+                    buf_list.append({"buffer": 0,
+                                     "byteLength": 4*len(vert_bin),
+                                     "byteOffset": offset,
+                                     "target": 34962})
+                    offset+=4*len(vert_bin)
+                    if normals:
+                        buf_list.append({"buffer": 0,
+                                         "byteLength": 4*len(norm_bin),
+                                         "byteOffset": offset,
+                                         "target": 34962})
+                        offset+=4*len(norm_bin)
+                    # If the object provides texture coordinates, but
+                    # there's no texture, then there's no need to
+                    # output them
+                    if texcoords and self.mat_list[mat_index].txt!='':
+                        buf_list.append({"buffer": 0,
+                                         "byteLength": 4*len(txts_bin),
+                                         "byteOffset": offset,
+                                         "target": 34962})
+                        offset+=4*len(txts_bin)
+                    buf_list.append({"buffer": 0,
+                                     "byteLength": 2*len(face_bin),
+                                     "byteOffset": offset,
+                                     "target": 34963})
+                    offset+=2*len(face_bin)
+                    if verbose>1:
+                        print('offset:',offset)
+
+                        print('len(face_bin):',self.gf_list[i].name,
+                              len(face_bin))
+                        print('min,max:',min_v,max_v)
+                        print('')
+                    
+                    # Reset the primitive objects so that
+                    # we can start a new one
+                    att={}
+                    face_bin=[]
+                    vert_bin=[]
+                    vert_map = [-1] * len(self.gf_list[i].vert_list)
+
+        # Add the top-level data to the json object
+        jdat["meshes"]=mesh_list
+        if len(mat_json)>0:
+            jdat["materials"]=mat_json
+        jdat["accessors"]=acc_list
+        jdat["bufferViews"]=buf_list
+        jdat["buffers"]=[{"byteLength": offset,
+                          "uri": prefix+'.bin'}]
+        if len(txt_list)>0:
+            jdat["textures"]=txt_list
+            jdat["images"]=img_list
+
+        # write the json file
+        f=open(gltf_file,'w',encoding='utf-8')
+        json.dump(jdat,f,ensure_ascii=False,indent=2)
+        f.close()
+
+        f2.close()
+            
+        return
+        
+class td_plot_base(yt_plot_base):
+    """
+    A class for managing plots of three-dimensional data
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.to=threed_objects()
+        self.td_wdir='.'
+        return
+
+    def td_den_plot(self,o2scl,amp,args,cmap='',mat_name='white'):
+        """
+        Desc
+        """
+        curr_type=o2scl_get_type(o2scl,amp,self.link2)
+        amt=acol_manager(self.link2,amp)
+
+        slice_name=''
+        slice=args[0]
+
+        if curr_type==b'table3d':
+            slice_name=args[0]
+            if len(args)>=2:
+                kwstring=args[1]
+        else:
+            print("Command 'td-den-plot' not supported for type",
+                  curr_type,".")
+            return
+
+        table3d=amt.get_table3d_obj()
+        nxt=table3d.get_nx()
+        nyt=table3d.get_ny()
+        sl=table3d.get_slice(slice).to_numpy()
+        xgrid=[table3d.get_grid_x(i) for i in range(0,nxt)]
+        ygrid=[table3d.get_grid_y(i) for i in range(0,nyt)]
+        
+        if self.xset==False:
+            self.xlo=numpy.min(xgrid)
+            self.xhi=numpy.max(xgrid)
+            if self.verbose>2:
+                print('td_den_plot(): x limits not set, so setting to',
+                      self.xlo,',',self.xhi)
+        if self.yset==False:
+            self.ylo=numpy.min(ygrid)
+            self.yhi=numpy.max(ygrid)
+            if self.verbose>2:
+                print('td_den_plot(): y limits not set, so setting to',
+                      self.ylo,',',self.yhi)
+        if self.zset==False:
+            self.zlo=numpy.min(sl)
+            self.zhi=numpy.max(sl)
+            if self.verbose>2:
+                print('td_den_plot(): z limits not set, so setting to',
+                      self.zlo,',',self.zhi)
+        
+        # If true, then a color map has been specified and we need
+        # to add materials
+        colors=False
+        
+        # The list of 256 materials defined by the color map
+        # (not all will be needed for the 3d object
+        cmap_mats=[]
+        
+        if cmap!='':
+            
+            import matplotlib.cm as cm
+            from matplotlib.colors import Normalize
+            import matplotlib.pyplot as plot
+            
+            color_map=cm.get_cmap(cmap)
+            norm=plot.Normalize(0,255)
+            
+            for i in range(0,256):
+                rgb=color_map(norm(float(i)))[:3]
+                cmap_mats.append(material('cmap_'+str(i),[rgb[0],rgb[1],
+                                                       rgb[2]]))
+                
+            colors=True
+            if self.verbose>2:
+                print('td_den_plot(): Using colors from cmap',cmap)
+            
+        # Vertices for the density plot
+        den_vert=[]
+        # Faces for the density plot
+        den_face=[]
+        # Materials for the density plot
+        den_ml=[]
+        
+        # Vertex index for faces
+        k=0
+        for i in range(0,nxt):
+            for j in range(0,nyt):
+                arr=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
+                     (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
+                     (sl[i,j]-self.zlo)/(self.zhi-self.zlo)]
+                den_vert.append(arr)
+                if i<nxt-1 and j<nyt-1:
+                    if colors==True:
+                        # Construct the colormap index
+                        cmap_ix=int(arr[2]*256)
+                        if cmap_ix>255:
+                            cmap_ix=255
+                        cmap_name='cmap_'+str(cmap_ix)
+                        # See if the corresponding material is already
+                        # in the list named 'den_ml'
+                        mat_found=False
+                        for ell in range(0,len(den_ml)):
+                            if den_ml[ell].name==cmap_name:
+                                mat_found=True
+                        # If it was not found, find it in the list
+                        # named 'cmap_mats'
+                        if mat_found==False:
+                            for ell in range(0,len(cmap_mats)):
+                                if cmap_mats[ell].name==cmap_name:
+                                    print('Adding material',cmap_name)
+                                    den_ml.append(cmap_mats[ell])
+                                    ell=len(cmap_mats)
+                         # Add the two triangles 
+                        arr2=[k+1,k+nyt+1,k+2,cmap_name]
+                        den_face.append(arr2)
+                        arr3=[k+1+nyt,k+2,k+2+nyt,cmap_name]
+                        den_face.append(arr3)
+                        
+                    else:
+                        
+                        arr2=[k,k+nyt,k+1]
+                        den_face.append(arr2)
+                        arr3=[k+nyt,k+1+nyt,k+1]
+                        den_face.append(arr3)
+                        
+                k=k+1
+
+        #for k in range(0,41):
+        #print(k,den_vert[k])
+                
+        # Convert to GLTF
+                
+        vert2=[]
+        norms2=[]
+        
+        for i in range(0,len(den_face)):
+
+            #print('old faces:',den_face[i])
+            
+            # Add the vertices to the new vertex array
+            vert2.append(den_vert[den_face[i][0]-1])
+            vert2.append(den_vert[den_face[i][1]-1])
+            vert2.append(den_vert[den_face[i][2]-1])
+    
+            # Compute the norm
+            p1=den_vert[den_face[i][0]-1]
+            p2=den_vert[den_face[i][1]-1]
+            p3=den_vert[den_face[i][2]-1]
+            v1=[1]*3
+            v2=[1]*3
+            for j in range(0,3):
+                v1[j]=p2[j]-p1[j]
+                v2[j]=p3[j]-p2[j]
+            norm=cross(v1,v2,norm=True)
+            for k in range(0,3):
+                norms2.append([norm[0],norm[1],norm[2]])
+    
+            den_face[i]=[i*3,i*3+1,i*3+2,den_face[i][3]]
+
+            #print('new faces:',den_face[i])
+            #print('face:',den_face[i])
+            #print('verts:',vert2[den_face[i][0]],
+            #      vert2[den_face[i][1]],vert2[den_face[i][2]])
+            #temp=input('Press a key to continue. ')
+
+        if self.verbose>2:
+            print('td_den_plot(): adding',len(den_face),'faces.')
+        if colors==True:
+            gf=mesh_object('plot',den_face)
+            gf.vert_list=vert2
+            gf.vn_list=norms2
+            self.to.add_object_mat_list(gf,den_ml)
+            for i in range(0,len(self.to.mat_list)):
+                print('to.mat_list',i,self.to.mat_list[i].name)
+        else:
+            
+            if self.to.is_mat(mat_name)==False:
+                
+                if mat_name=='white':
+                    white=material(mat_name,[1,1,1])
+                    self.to.add_mat(white)
+                else:
+                    print('Material '+mat_name+' not found in td-den-plot.')
+                    return
+            
+            gf=mesh_object('plot',den_face)
+            gf.vert_list=vert2
+            gf.vn_list=norms2
+            self.to.add_object_mat(gf,white)
+
+        return
+        
+    def td_scatter(self,o2scl,amp,args):
+        """
+        Desc
+        """
+        curr_type=o2scl_get_type(o2scl,amp,self.link2)
+        amt=acol_manager(self.link2,amp)
+
+        kwstring=''
+        if curr_type==b'table':
+            col_x=args[0]
+            col_y=args[1]
+            col_z=args[2]
+            col_r=''
+            col_g=''
+            col_b=''
+            if len(args)==4:
+                kwstring=args[3]
+            elif len(args)>4:
+                col_r=args[3]
+                col_g=args[4]
+                col_b=args[5]
+                if len(args)>=7:
+                    kwstring=args[6]
+        else:
+            print("Command 'td-scatter' not supported for type",
+                  curr_type,".")
+            return
+
+        table=amt.get_table_obj()
+        n=table.get_nlines()
+        cx=table[col_x][0:n]
+        cy=table[col_y][0:n]
+        cz=table[col_z][0:n]
+        
+        if self.xset==False:
+            self.xlo=numpy.min(cx)
+            self.xhi=numpy.max(cx)
+            if self.verbose>2:
+                print('td_scatter(): x limits not set, so setting to',
+                      self.xlo,',',self.xhi)
+        if self.yset==False:
+            self.ylo=numpy.min(cy)
+            self.yhi=numpy.max(cy)
+            if self.verbose>2:
+                print('td_scatter(): y limits not set, so setting to',
+                      self.ylo,',',self.yhi)
+        if self.zset==False:
+            self.zlo=numpy.min(cz)
+            self.zhi=numpy.max(cz)
+            if self.verbose>2:
+                print('td_scatter(): z limits not set, so setting to',
+                      self.zlo,',',self.zhi)
+        
+        # If true, then a color map has been specified and we need
+        # to add materials
+        colors=False
+        if col_r!='' and col_g!='' and col_b!='':
+            cr=table[col_r]
+            cg=table[col_g]
+            cb=table[col_b]
+            colors=True
+
+        gf=mesh_object('scatter',[])
+        
+        for i in range(0,n):
+            xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
+            ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
+            znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
+            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,0.04)
+            lv=len(gf.vert_list)
+            for k in range(0,len(vtmp)):
+                gf.vert_list.append(vtmp[k])
+            for k in range(0,len(ntmp)):
+                gf.vn_list.append(ntmp[k])
+            for k in range(0,len(ftmp)):
+                ftmp[k][0]=ftmp[k][0]+lv
+                ftmp[k][1]=ftmp[k][1]+lv
+                ftmp[k][2]=ftmp[k][2]+lv
+                gf.faces.append(ftmp[k])
+        
+        # Convert to GLTF
+                
+        vert2=[]
+        norms2=[]
+        
+        for i in range(0,len(gf.faces)):
+
+            #print('old faces:',den_face[i])
+            
+            # Add the vertices to the new vertex array
+            vert2.append(gf.vert_list[gf.faces[i][0]-1])
+            vert2.append(gf.vert_list[gf.faces[i][1]-1])
+            vert2.append(gf.vert_list[gf.faces[i][2]-1])
+    
+            norms2.append(gf.vn_list[gf.faces[i][0]-1])
+            norms2.append(gf.vn_list[gf.faces[i][1]-1])
+            norms2.append(gf.vn_list[gf.faces[i][2]-1])
+
+        if self.to.is_mat('white')==False:
+            white=material('white',[1,1,1])
+            self.to.add_mat(white)
+            
+        gf.vert_list=vert2
+        gf.vn_list=norms2
+        gf.mat='white'
+        self.to.add_object(gf)
+
+        return
+        
+    def td_arrow(self,x1,y1,z1,x2,y2,z2,name,
+                 mat : str | material = 'white'):
+        """Documentation for o2graph command ``td-arrow``:
+
+        Plot an axis in a 3d visualization
+
+        Command-line arguments: ``x1 y1 z1 x2 y2 z2 group_name [kwargs]``
+        """
+        arr_vert,arr_norm,arr_face=arrow(x1,y1,z1,x2,y2,z2)
+
+        if type(mat)==str:
+            if not self.to.is_mat(mat):
+                if mat=='white':
+                    white=material('white',[1,1,1])
+                    self.to.add_mat(white)
+                else:
+                    print('No material named',mat,'in td-arrow')
+                    return
+            if self.verbose>2:
+                print('td_arrow(): creating group named',name,'with material',
+                      mat+'.')
+            gf=mesh_object(name,arr_face,mat)
+            gf.vert_list=arr_vert
+            gf.vn_list=arr_norm
+            self.to.add_object(gf)
+                               
+        else:
+            if self.verbose>2:
+                print('td_arrow(): creating group named',name,'with material',
+                      mat.name+'.')
+            if not self.to.is_mat(mat.name):
+                self.to.add_mat(mat)
+            gf=mesh_object(name,arr_face,mat.name)
+            gf.vert_list=arr_vert
+            gf.vn_list=arr_norm
+            self.to.add_object(gf)
+
+        return
+
+    def td_axis_label(self, ldir : str, tex_label : str,
+                      mat_name : str = '', png_file : str = '',
+                      group_name : str = '', offset : float = 0.1,
+                      height : float = 0.1):
+        """Create an axis label in the direction ``ldir`` with label
+        ``tex_label``.
+        """
+
+        white_found=False
+        for i in range(0,len(self.to.mat_list)):
+            if self.to.mat_list[i].name=='white':
+                white_found=True
+        if white_found==False:
+            white=material('white',[1,1,1])
+            self.to.add_mat(white)
+        
+        if ldir=='x':
+            
+            if png_file=='':
+                png_file='xtitle.png'
+            if mat_name=='':
+                mat_name='mat_xtitle'
+            if group_name=='':
+                group_name='x_title'
+
+            if self.verbose>2:
+                print('td_axis_label(): png_file:',png_file,'mat_name:',
+                      mat_name,'group_name:',group_name)
+
+            x_v,x_f,x_t,x_n,x_m=latex_prism(0.5,-offset-height/2.0,
+                                            -offset+height/2.0,0.5,
+                                            -offset+height/2.0,
+                                            -offset-height/2.0,
+                                            tex_label,
+                                            self.td_wdir,png_file,mat_name,
+                                            dir=ldir)
+
+            self.to.add_mat(x_m)
+            gf=mesh_object(group_name,x_f)
+            gf.vert_list=x_v
+            gf.vn_list=x_n
+            gf.vt_list=x_t
+            self.to.add_object(gf)
+
+        elif ldir=='y':
+            
+            if png_file=='':
+                png_file='ytitle.png'
+            if mat_name=='':
+                mat_name='mat_ytitle'
+            if group_name=='':
+                group_name='y_title'
+                
+            if self.verbose>2:
+                print('td_axis_label(): png_file:',png_file,'mat_name:',
+                      mat_name,'group_name:',group_name)
+                
+            y_v,y_f,y_t,y_n,y_m=latex_prism(-offset-height/2.0,0.5,
+                                            -offset+height/2.0,
+                                            -offset+height/2.0,
+                                            0.5,-offset-height/2.0,
+                                            tex_label,
+                                            self.td_wdir,png_file,mat_name,
+                                            dir=ldir)
+            
+            self.to.add_mat(y_m)
+            gf=mesh_object(group_name,y_f)
+            gf.vert_list=y_v
+            gf.vn_list=y_n
+            gf.vt_list=y_t
+            self.to.add_object(gf)
+
+        elif ldir=='z':
+            
+            if png_file=='':
+                png_file='ztitle.png'
+            if mat_name=='':
+                mat_name='mat_ztitle'
+            if group_name=='':
+                group_name='z_title'
+                
+            if self.verbose>2:
+                print('td_axis_label(): png_file:',png_file,'mat_name:',
+                      mat_name,'group_name:',group_name)
+                
+            z_v,z_f,z_t,z_n,z_m=latex_prism(-offset-height/2.0,
+                                            -offset+height/2.0,
+                                            0.5,-offset+height/2.0,
+                                            -offset-height/2.0,0.5,
+                                            tex_label,
+                                            self.td_wdir,png_file,mat_name,
+                                            dir=ldir)
+            
+            self.to.add_mat(z_m)
+            gf=mesh_object(group_name,z_f)
+            gf.vert_list=z_v
+            gf.vn_list=z_n
+            gf.vt_list=z_t
+            self.to.add_object(gf)
+
+        else:
+            if type(ldir)==str:
+                raise ValueError('Direction '+ldir+' is not one of "x", "y",'+
+                                 ' or "z" in function td_axis_label().')
+            else:
+                raise ValueError('Direction is not one of "x", "y",'+
+                                 ' or "z" in function td_axis_label().')
+            
+        return
+    
+class o2graph_plotter(td_plot_base):
     """
     A plotting class for the o2graph script. This class is a child of the
     :py:class:`o2sclpy.plot_base` class.
@@ -621,6 +2072,10 @@ class o2graph_plotter(yt_plot_base):
                 line[1]=o2graph_plotter.yt_text.__doc__
             elif line[0]=="mp4":
                 line[1]=o2graph_plotter.mp4.__doc__
+            elif line[0]=="obj":
+                line[1]=o2graph_plotter.obj_o2graph.__doc__
+            elif line[0]=="gltf":
+                line[1]=o2graph_plotter.gltf_o2graph.__doc__
             elif line[0]=="kde-plot":
                 line[1]=o2graph_plotter.kde_plot.__doc__
             elif line[0]=="kde-2d-plot":
@@ -677,7 +2132,7 @@ class o2graph_plotter(yt_plot_base):
             if args[0]==line[0]:
                 match=True
                 if self.verbose>2:
-                    print('Parameter',args[0],'is o2graph parameter.')
+                    print('Parameter',args[0],'is an o2graph parameter.')
                 
         for line in yt_param_list:
             if args[0]==line[0]:
@@ -686,9 +2141,12 @@ class o2graph_plotter(yt_plot_base):
                     print('Parameter',args[0],'is a yt parameter.')
 
         # If it's an o2graph or yt parameter, then call the parent
-        # set() function
+        # set() function or set the variable
         if match==True:
-            self.set(args[0],args[1])
+            if args[0]=='td_wdir':
+                self.td_wdir=args[1]
+            else:
+                self.set(args[0],args[1])
 
         # If we're modifying the verbose parameter, then make sure
         # both the o2graph and the acol version match. Otherwise, if
@@ -819,35 +2277,99 @@ class o2graph_plotter(yt_plot_base):
         
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
         amt=acol_manager(self.link2,amp)
-        print('here')
+        print('Command to-kde is not yet finished.')
         quit()
         #if curr_type==b'table':
         #else:
 
-    def mp4(self,args):
-        """
-        Documentation for o2graph command ``mp4``:
+    def mp4(self,args,loop=False,vf=''):
+        """Documentation for o2graph command ``mp4``:
 
         Create an mp4 file from a series of images.
 
         Command-line arguments: ``<pattern> <output>``
 
-        Typical patterns are "prefix%02dsuffix" and outputs
-        are "out.mp4"
+        Typical patterns are "prefix%02dsuffix" and outputs are
+        "out.mp4". If the "mp4" suffix is omitted, it is automatically
+        added.
+
+        Typical video filter is e.g. vf='eq=brightness=0.5:contrast=10'.
         """
         if len(args)<2:
-            print('Command mpg needs more arguments.')
+            print('Command mp4 needs more arguments.')
             return
         pattern=args[0]
         output=args[1]
         if output[-4:]!='.mp4':
             output=output+'.mp4'
+
+        # -y means overwrite output without asking
+        # -r 10 means set the framerate to 10 frames per second
+        # -vcodec sets the video codec
+        # -pix_fmt sets the pixel format
+            
         cmd=('ffmpeg -y -r 10 -f image2 -i '+pattern+
-             ' -vcodec libx264 '+
-             '-crf 25 -pix_fmt yuv420p '+output)
-        print('Executing ',cmd)
+             ' -vcodec libx264')
+        if vf!='':
+            cmd=cmd+' -vf '+vf
+        if loop==True:
+            cmd=cmd+' -stream_loop -1'
+            
+        cmd=cmd+' -crf 25 -pix_fmt yuv420p '+output
+        
+        print('o2graph_plottter::mp4(): Executing "'+cmd+'".')
         os.system(cmd)
         
+        return
+        
+    def bl_yaw_mp4(self, n_frames: int, mp4_file: str):
+
+        import tempfile
+        
+        gltf_file_name='o2sclpy.gltf'
+        print('Writing GLTF to',gltf_file_name)
+
+        self.to.write_gltf(self.td_wdir,gltf_file_name)
+        
+        py_file_name=self.td_wdir+'/o2sclpy.py'
+        print('Writing Python script to',py_file_name)
+
+        orig_script=('/usr/local/lib/python3.11/site-packages/'+
+                     'o2sclpy/bl_gltf_yaw.py')
+        
+        print('Original script at:',orig_script)
+
+        rep_list={'BG_COLOR': '(0,0,0,0)',
+                  'LIGHT_DIST': '5.8',
+                  'LIGHT_ENERGY': '800',
+                  'GLTF_PATH': gltf_file_name,
+                  'N_FRAMES': '200',
+                  'CAM_DIST': '5'}
+        print('Making replacements:',rep_list)
+
+        forig=open(orig_script,'r')
+        lines=forig.readlines()
+        frep=open(py_file_name,'w')
+        for line in lines:
+            line=line.replace('BG_COLOR',rep_list['BG_COLOR'])
+            line=line.replace('LIGHT_DIST',rep_list['LIGHT_DIST'])
+            line=line.replace('LIGHT_ENERGY',rep_list['LIGHT_ENERGY'])
+            line=line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
+            line=line.replace('N_FRAMES',rep_list['N_FRAMES'])
+            line=line.replace('CAM_DIST',rep_list['CAM_DIST'])
+            frep.write(line)
+        forig.close()
+        frep.close()
+            
+        cmd=('cd '+self.td_wdir+' && /Applications/Blender.app'+
+             '/Contents/MacOS/Blender -b -P o2sclpy.py')
+        print('Executing:',cmd)
+        os.system(cmd)
+
+        print('Creating mp4')
+        self.mp4([self.td_wdir+'/bl_gltf_yaw_%03d.png',mp4_file],
+            vf='eq=contrast=1')
+            
         return
         
     def den_plot_o2graph(self,o2scl,amp,link,args):
@@ -1071,7 +2593,10 @@ class o2graph_plotter(yt_plot_base):
 
         Create a density plot from the three specified slices. This
         command uses imshow(). To directly create a .png file with no
-        axes, use make-png instead.
+        axes, use make-png instead. For example::
+
+            o2graph -create table3d x "grid:0,1,0.01" y "grid:0,1,0.01" \\
+            r "x" -function "y" g -function 0 b -den-plot-rgb r g b -show
         """
 
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
@@ -1089,9 +2614,37 @@ class o2graph_plotter(yt_plot_base):
         if len(args)>=4:
             kwstring=args[3]
 
-        dctt=string_to_dict(kwstring)
-        self.den_plot(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
-                      **dctt)
+        dctt=string_to_dict2(kwstring,list_of_bools=['renorm'])
+        self.den_plot_rgb(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
+                          **dctt)
+
+        return
+
+    def gltf_o2graph(self,o2scl,amp,link,args):
+        """
+        """
+
+        prefix=args[0]
+        if len(args)>=2:
+            kwstring=args[1]
+
+        if self.verbose>2:
+            print('Writing gltf to dir,file',self.td_wdir,prefix)
+        self.to.write_gltf(self.td_wdir,prefix)
+
+        return
+    
+    def obj_o2graph(self,o2scl,amp,link,args):
+        """Produce an obj file
+        """
+
+        prefix=args[0]
+        if len(args)>=2:
+            kwstring=args[1]
+
+        if self.verbose>2:
+            print('Writing obj to file',prefix)
+        self.to.write_obj(prefix)
 
         return
 
@@ -1232,7 +2785,7 @@ class o2graph_plotter(yt_plot_base):
                   curr_type,".")
             return
         
-        # End of function o2graph_plotter::plot_o2graph()
+        # End of function o2graph_plotter::kde_plot()
         return
 
     def kde_2d_plot(self,o2scl,amp,args,link):
@@ -1306,7 +2859,7 @@ class o2graph_plotter(yt_plot_base):
                   curr_type,".")
             return
         
-        # End of function o2graph_plotter::plot_o2graph()
+        # End of function o2graph_plotter::kde_2d_plot()
         return
 
     def plot_o2graph(self,o2scl,amp,args,link):
@@ -1322,10 +2875,12 @@ class o2graph_plotter(yt_plot_base):
         column <x>. Some useful kwargs are color (c), dashes,
         linestyle (ls), linewidth (lw), marker, markeredgecolor (mec),
         markeredgewidth (mew), markerfacecolor (mfc),
-        markerfacecoloralt (mfcalt), markersize (ms). For example:
-        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
-        lw=0,marker='+' -show\". This command uses the matplotlib
-        plot() function, see
+        markerfacecoloralt (mfcalt), markersize (ms). For example::
+
+            o2graph -create table x grid:0,10,0.2 -function "sin(x)" y \\
+            -plot x y "lw=0,marker=+" -show 
+
+        This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1342,10 +2897,12 @@ class o2graph_plotter(yt_plot_base):
         Some useful kwargs are color (c), dashes, linestyle
         (ls), linewidth (lw), marker, markeredgecolor (mec),
         markeredgewidth (mew), markerfacecolor (mfc),
-        markerfacecoloralt (mfcalt), markersize (ms). For example:
-        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
-        lw=0,marker='+' -show\". This command uses the matplotlib
-        plot() function, see
+        markerfacecoloralt (mfcalt), markersize (ms). For example::
+        
+            o2graph -create vec_vec_double grid:0,10,0.2 "func:51:sin(i)" \\
+            -plot 0 1 "lw=0,marker=+" -show
+
+        This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1361,9 +2918,13 @@ class o2graph_plotter(yt_plot_base):
         three object types) are color (c), dashes, linestyle (ls),
         linewidth (lw), marker, markeredgecolor (mec), markeredgewidth
         (mew), markerfacecolor (mfc), markerfacecoloralt (mfcalt),
-        markersize (ms). For example: \"o2graph -create x 0 10 0.2
-        -function sin(x) y -plot x y lw=0,marker='+' -show\". This
-        command uses the matplotlib plot() function, see
+        markersize (ms). For example::
+
+            o2graph -create table x grid:0,10,0.01 \\
+            -function "abs(sin(x))" y -to-hist y 20 \\
+            -plot "lw=0,marker=+" -show
+
+        This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1378,10 +2939,13 @@ class o2graph_plotter(yt_plot_base):
         for all three object types) are color (c), dashes, linestyle
         (ls), linewidth (lw), marker, markeredgecolor (mec),
         markeredgewidth (mew), markerfacecolor (mfc),
-        markerfacecoloralt (mfcalt), markersize (ms). For example:
-        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
-        lw=0,marker='+' -show\". This command uses the matplotlib
-        plot() function, see
+        markerfacecoloralt (mfcalt), markersize (ms). For example::
+        
+            o2graph -create table3d x grid:0,1,0.02 y grid:0,1,0.02 z \\
+            "(exp(-(x-0.2)^2/0.1)+exp(-(x-0.9)^2/0.1))*exp(-(y-0.4)^2/0.1)" \\
+            -contours 0.5 z -plot "lw=2" -show 
+
+        This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1396,10 +2960,8 @@ class o2graph_plotter(yt_plot_base):
         for all three object types) are color (c), dashes, linestyle
         (ls), linewidth (lw), marker, markeredgecolor (mec),
         markeredgewidth (mew), markerfacecolor (mfc),
-        markerfacecoloralt (mfcalt), markersize (ms). For example:
-        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
-        lw=0,marker='+' -show\". This command uses the matplotlib
-        plot() function, see
+        markerfacecoloralt (mfcalt), markersize (ms). This command
+        uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
@@ -1426,14 +2988,18 @@ class o2graph_plotter(yt_plot_base):
             
             amt=acol_manager(self.link2,amp)
             vvd=amt.get_vvdouble_obj()
-            
-            if len(args)<2 or args[1]=='none':
+
+            if len(args)<2:
                 self.plot([vvd,int(args[0])])
             elif len(args)<3:
                 self.plot([vvd,int(args[0]),int(args[1])])
             else:
-                self.plot([vvd,int(args[0]),int(args[1])],
-                          **string_to_dict(args[2]))
+                if args[1]=='none':
+                    self.plot([vvd,int(args[0])],
+                              **string_to_dict(args[2]))
+                else:
+                    self.plot([vvd,int(args[0]),int(args[1])],
+                              **string_to_dict(args[2]))
 
             failed=False
 
@@ -2667,8 +4233,10 @@ class o2graph_plotter(yt_plot_base):
                       '%7.6e %7.6e %7.6e %7.6e %7.6e %7.6e' % (
                           self.xlo,self.xhi,
                           self.ylo,self.yhi,self.zlo,self.zhi))
-            
+
             arr=numpy.ctypeslib.as_array(data,shape=(nx,ny,nz))
+            arr3=arr.reshape((nx,ny,nz))
+            
             self.yt_volume_data.append(numpy.copy(arr))
             # Rescale to the internal coordinate system
             bbox=numpy.array([[(gridx[0]-self.xlo)/(self.xhi-self.xlo),
@@ -2678,16 +4246,16 @@ class o2graph_plotter(yt_plot_base):
                               [(gridz[0]-self.zlo)/(self.zhi-self.zlo),
                                (gridz[nz-1]-self.zlo)/(self.zhi-self.zlo)]])
             self.yt_volume_bbox.append(numpy.copy(bbox))
-            arr2=self.yt_volume_data[len(self.yt_volume_data)-1]
             bbox2=self.yt_volume_bbox[len(self.yt_volume_bbox)-1]
 
             func=yt.load_uniform_grid
-            self.yt_data_sources.append(func(dict(density=arr2),
-                                             arr2.shape,bbox=bbox2))
+            self.yt_data_sources.append(func(dict(density=arr3),
+                                             (nx,ny,nz),bbox=bbox2))
             ds=self.yt_data_sources[len(self.yt_data_sources)-1]
 
-            self.yt_vols.append(create_volume_source(ds,field=('gas',
-                                                               'density')))
+            cvs=create_volume_source
+            self.yt_vols.append(cvs(ds,field=('gas','density')))
+                                              
             vol=self.yt_vols[len(self.yt_vols)-1]
             vol.log_field=False
 
@@ -3078,23 +4646,13 @@ class o2graph_plotter(yt_plot_base):
             suffix='.png'
             mov_fname=args[3]
             if n_frames>=1000:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%04d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%04d'+suffix,mov_fname])
             elif n_frames>=100:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%03d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%03d'+suffix,mov_fname])
             elif n_frames>=10:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%02d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%02d'+suffix,mov_fname])
             else:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%01d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
-            print('ffmpeg command:',cmd)
-            os.system(cmd)
+                self.mp4([prefix+'%01d'+suffix,mov_fname])
 
             # End of "if curr_type==b'tensor_grid':"
                 
@@ -3147,7 +4705,8 @@ class o2graph_plotter(yt_plot_base):
                      curr_type==force_bytes(line[0])) and
                     cmd==line[1]):
                     match=True
-                    reformat_python_docs_type(curr_type,cmd,line[2],amp,self.link2)
+                    reformat_python_docs_type(curr_type,cmd,line[2],amp,
+                                              self.link2)
 
         # Handle the case of an o2graph command from the
         # extra list without a matching type
@@ -3157,7 +4716,8 @@ class o2graph_plotter(yt_plot_base):
                     match=True
                     print('\n'+str_line)
                     #print('here2')
-                    reformat_python_docs_type(line[0],cmd,line[2],amp,self.link2)
+                    reformat_python_docs_type(line[0],cmd,line[2],amp,
+                                              self.link2)
                     
         # If we haven't matched yet, check for get/set parameters
         if match==False:
@@ -4127,10 +5687,9 @@ class o2graph_plotter(yt_plot_base):
         
         if len(self.yt_ann)==0:
             
-            # No animation and no annotation, so just call
-            # scene.save()
+            # No annotation, so just call scene.save()
             print('o2graph:yt_save_annotate: Calling yt_scene.save()',
-                  'with filename',fname)
+                  'with filename',fname,self.yt_sigma_clip)
             self.yt_scene.save(fname,sigma_clip=self.yt_sigma_clip)
             
         else:
@@ -4155,8 +5714,8 @@ class o2graph_plotter(yt_plot_base):
             self.canvas_flag=False
             #axt.axes.text(0.1,0.9,'test',color='w',transform=tf,
             #fontsize=self.font*1.25)
-            from yt.visualization._mpl_imports import FigureCanvasAgg
-            canvast=FigureCanvasAgg(self.yt_scene._render_figure)
+            canvast=get_canvas(self.yt_scene._render_figure,
+                               fname)
             self.yt_scene._render_figure.canvas=canvast
             #self.yt_scene._render_figure.tight_layout(pad=0.0)
             plot.subplots_adjust(left=0.0,bottom=0.0,
@@ -4440,10 +5999,14 @@ class o2graph_plotter(yt_plot_base):
                         
                         i_frame=i_frame+1
                         
-                        print(self.yt_camera)
-                        print('normal_vector:',self.yt_camera.normal_vector)
-                        print('north_vector:',self.yt_camera.north_vector)
-                        print('origin:',self.yt_camera.lens.origin)
+                        if self.verbose>=2:
+                            print(self.yt_camera)
+                            print('normal_vector:',
+                                  self.yt_camera.normal_vector)
+                            print('north_vector:',
+                                  self.yt_camera.north_vector)
+                            print('origin:',
+                                  self.yt_camera.lens.origin)
 
                         # We can't use the yt yaw() function because
                         # it modifies the camera properties in an
@@ -4477,10 +6040,11 @@ class o2graph_plotter(yt_plot_base):
                         self.yt_camera.width=[wid[0],wid[1],wid[2]]
                         self.yt_camera.switch_orientation()
                             
-                        print('Camera width [%0.6e,%0.6e,%0.6e]' %
-                              (self.yt_camera.width[0],
-                               self.yt_camera.width[1],
-                               self.yt_camera.width[2]))
+                        if self.verbose>=2:
+                            print('Camera width [%0.6e,%0.6e,%0.6e]' %
+                                  (self.yt_camera.width[0],
+                                   self.yt_camera.width[1],
+                                   self.yt_camera.width[2]))
                             
                         # Update text objects
                         self.yt_update_text()
@@ -4751,27 +6315,13 @@ class o2graph_plotter(yt_plot_base):
             # file if it already exists
             
             if n_frames>=1000:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%04d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%04d'+suffix,mov_fname],loop=loop)
             elif n_frames>=100:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%03d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%03d'+suffix,mov_fname],loop=loop)
             elif n_frames>=10:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%02d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
+                self.mp4([prefix+'%02d'+suffix,mov_fname],loop=loop)
             else:
-                cmd=('ffmpeg -y -r 10 -f image2 -i '+
-                     prefix+'%01d'+suffix+' -vcodec libx264 '+
-                     '-crf 25 -pix_fmt yuv420p '+mov_fname)
-
-            if loop==True:
-                cmd=cmd+' -stream_loop -1'
-                
-            print('ffmpeg command:',cmd)
-            os.system(cmd)
+                self.mp4([prefix+'%01d'+suffix,mov_fname],loop=loop)
 
             # End of else for 'if len(self.yt_path)==0:'
             
@@ -4878,7 +6428,8 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<3:
                         print('Not enough parameters for set option.')
                     else:
-                        self.set_wrapper(o2scl,amp,self.link2,strlist[ix+1:ix_next])
+                        self.set_wrapper(o2scl,amp,self.link2,
+                                         strlist[ix+1:ix_next])
                         
                 elif cmd_name=='ell-max':
 
@@ -4965,7 +6516,8 @@ class o2graph_plotter(yt_plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for yt-scatter.')
                     else:
-                        self.yt_scatter(o2scl,amp,self.link2,strlist[ix+1:ix_next])
+                        self.yt_scatter(o2scl,amp,
+                                        self.link2,strlist[ix+1:ix_next])
                                                     
                 elif cmd_name=='yt-path':
 
@@ -5080,6 +6632,28 @@ class o2graph_plotter(yt_plot_base):
                         z2=float(eval(strlist[ix+6]))
                         self.yt_line([x1,y1,z1],[x2,y2,z2])
                                                     
+                elif cmd_name=='yt-point':
+
+                    if self.verbose>2:
+                        print('Process yt-point.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<5:
+                        print('Not enough parameters for yt-point.')
+                    elif ix_next-ix>5:
+                        x1=float(eval(strlist[ix+1]))
+                        y1=float(eval(strlist[ix+2]))
+                        z1=float(eval(strlist[ix+3]))
+                        rad=float(eval(strlist[ix+4]))
+                        self.yt_point([x1,y1,z1],rad,
+                                      **string_to_dict(strlist[ix+5]))
+                    else:
+                        x1=float(eval(strlist[ix+1]))
+                        y1=float(eval(strlist[ix+2]))
+                        z1=float(eval(strlist[ix+3]))
+                        rad=float(eval(strlist[ix+4]))
+                        self.yt_point([x1,y1,z1],rad)
+                                                    
                 elif cmd_name=='yt-box':
 
                     if self.verbose>2:
@@ -5174,7 +6748,98 @@ class o2graph_plotter(yt_plot_base):
                             icnt=icnt+1
                         if icnt==0:
                             print('No yt sources.')
-                    
+
+                elif cmd_name=='td-arrow':
+
+                    if self.verbose>2:
+                        print('Process td-arrow.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix>=8:
+                        self.td_arrow(float(strlist[ix+1]),
+                                      float(strlist[ix+2]),
+                                      float(strlist[ix+3]),
+                                      float(strlist[ix+4]),
+                                      float(strlist[ix+5]),
+                                      float(strlist[ix+6]),
+                                      strlist[ix+7])
+                    else:
+                        print('Not enough arguments for td-arrow.')
+
+                elif cmd_name=='td-axis':
+
+                    if self.verbose>2:
+                        print('Process td-axis.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix>=4:
+                        self.td_arrow(0,0,0,1,0,0,'x_axis')
+                        self.td_arrow(0,0,0,0,1,0,'y_axis')
+                        self.td_arrow(0,0,0,0,0,1,'z_axis')
+                        self.td_axis_label('x',strlist[ix+1])
+                        self.td_axis_label('y',strlist[ix+2])
+                        self.td_axis_label('z',strlist[ix+3])
+                    else:
+                        print('Not enough arguments for td-axis.')
+                        
+                elif cmd_name=='td-den-plot':
+
+                    if self.verbose>2:
+                        print('Process td-den-plot.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix==2:
+                        self.td_den_plot(o2scl,amp,[strlist[ix+1]])
+                    elif ix_next-ix>=3:
+                        self.td_den_plot(o2scl,amp,[strlist[ix+1]],
+                                         **string_to_dict(strlist[ix+2]))
+                    else:
+                        print('Not enough arguments for td-den-plot.')
+
+                elif cmd_name=='td-scatter':
+
+                    if self.verbose>2:
+                        print('Process td-scatter.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix==4:
+                        self.td_scatter(o2scl,amp,[strlist[ix+1],
+                                                   strlist[ix+2],
+                                                   strlist[ix+3]])
+                    elif ix_next-ix==5:
+                        self.td_scatter(o2scl,amp,
+                                        [strlist[ix+1],strlist[ix+2],
+                                         strlist[ix+3]],
+                                         **string_to_dict(strlist[ix+4]))
+                    elif ix_next-ix==7:
+                        self.td_scatter(o2scl,amp,[strlist[ix+1],
+                                                   strlist[ix+2],
+                                                   strlist[ix+3],
+                                                   strlist[ix+4],
+                                                   strlist[ix+5],
+                                                   strlist[ix+6]])
+                    elif ix_next-ix>=8:
+                        self.td_scatter(o2scl,amp,
+                                        [strlist[ix+1],strlist[ix+2],
+                                         strlist[ix+3],strlist[ix+4],
+                                         strlist[ix+5],strlist[ix+6]],
+                                         **string_to_dict(strlist[ix+7]))
+                    else:
+                        print('Not enough arguments for td-scatter.')
+
+                elif cmd_name=='bl-yaw-mp4':
+
+                    if self.verbose>2:
+                        print('Process td-den-plot.')
+                        print('args:',strlist[ix:ix_next])
+
+                    print('here0',ix_next-ix,strlist[ix+2])
+                    if ix_next-ix>=3:
+                        self.bl_yaw_mp4(int(strlist[ix+1]),
+                                        strlist[ix+2])
+                    else:
+                        print('Not enough arguments for bl-yaw-mp4.')
+
                 elif cmd_name=='yt-axis':
 
                     if self.verbose>2:
@@ -5222,7 +6887,8 @@ class o2graph_plotter(yt_plot_base):
                         print('Process plot.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.plot_o2graph(o2scl,amp,strlist[ix+1:ix_next],self.link2)
+                    self.plot_o2graph(o2scl,amp,strlist[ix+1:ix_next],
+                                      self.link2)
 
                 elif cmd_name=='plot-color':
                     
@@ -5324,6 +6990,25 @@ class o2graph_plotter(yt_plot_base):
                         print('args:',strlist[ix:ix_next])
 
                     self.den_plot_rgb_o2graph(o2scl,amp,self.link2,
+                                              strlist[ix+1:ix_next])
+                
+                elif cmd_name=='obj':
+
+                    if self.verbose>2:
+                        print('Process obj.')
+                        print('args:',strlist[ix:ix_next])
+
+                    print('going to obj_o2graph.')
+                    self.obj_o2graph(o2scl,amp,self.link2,
+                                              strlist[ix+1:ix_next])
+                
+                elif cmd_name=='gltf':
+
+                    if self.verbose>2:
+                        print('Process gltf.')
+                        print('args:',strlist[ix:ix_next])
+
+                    self.gltf_o2graph(o2scl,amp,self.link2,
                                               strlist[ix+1:ix_next])
                 
                 elif cmd_name=='den-plot-anim':

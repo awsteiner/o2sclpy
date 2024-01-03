@@ -171,17 +171,21 @@ class plot_base:
     """
     Link to the O2scl library DLL
     """
+    usetex=True
+    """
+    If true, then use LaTeX for text objects (default True)
+    """
     
     def __init__(self):
-        """
-        Desc
+        """The plot_base init method, which only calls
+        plot_base::new_cmaps().
         """
         self.new_cmaps()
     
     def colors(self,args=[]):
         """Documentation for o2graph command ``colors``:
 
-        Show color information
+        Show color information.
 
         Command-line arguments: ``list`` or ``plot [filename]`` or 
         ``near <color> [filename]`` or ``xkcd``.
@@ -209,6 +213,15 @@ class plot_base:
         Finally, if the "xkcd" argument is given, then all 
         949 xkcd colors are listed along with their HTML
         hexadecimal RBG values.
+
+        Color arguments in o2graph supports the (r,g,b) format, the
+        [r,g,b,a] format, the HTML format, the grayscale single-value
+        format, and the XKCD colors. For (r,g,b) colors, parentheses
+        must be used, and the r, g, and b numbers should be from 0.0
+        to 1.0. For [r,g,b,a] colors, square brackets must be used and
+        the r, g, b, and a numbers should be from 0.0 to 1.0. The HTML
+        format is #RRGGBB where RR, GG, and BB are two-digit
+        hexadecimal values.
         """
 
         if len(args)>=1 and args[0]=='list':
@@ -458,8 +471,11 @@ class plot_base:
         return
         
     def new_cmaps(self):
-        """
-        Add a few new colormaps
+        """Add a few new colormaps. This function is called by
+        plot_base::__init__().
+
+        This function adds the colormaps 'jet2' 'pastel2', 'reds2',
+        'greens2', and 'blues2'.
         """
 
         import matplotlib.pyplot as plot
@@ -565,8 +581,9 @@ class plot_base:
         return
 
     def set(self,name,value):
-        """
-        Set the value of parameter named ``name`` to value ``value``
+        """Set the value of parameter named ``name`` to value ``value``. The
+        documentation for the o2graph command ``set`` is given in
+        O₂scl.
         """
         
         import matplotlib.pyplot as plot
@@ -701,8 +718,8 @@ class plot_base:
         return
 
     def get(self,name):
-        """
-        Output the value of parameter named ``name``
+        """Output the value of parameter named ``name``. The documentation
+        for the o2graph command ``get`` is given in O₂scl.
         """
         if name=='colbar':
             print('The value of colbar is',self.colbar,'.')
@@ -756,19 +773,19 @@ class plot_base:
         return
 
     def xlimits(self,xlo,xhi):
-        """
-        Documentation for o2graph command ``xlimits``:
+        """Documentation for o2graph command ``xlimits``:
 
         Set the x-axis limits
 
         Command-line arguments: ``<x low> <x high>``
 
-        The xlimits command sets ``xlo`` and ``xhi`` to the specified limits
-        and sets ``xset`` to True. If a plotting canvas is currently open,
-        then the x-limits on the current axis are modified. Future
-        plots are also plot with the specified x-limits. If <low> and
-        <high> are identical then ``xset`` is set to False and the x
-        limits are automatically set by matplotlib.
+        The xlimits command sets ``xlo`` and ``xhi`` to the specified
+        limits and sets ``xset`` to True. If a plotting canvas is
+        currently open, then the x-limits on the current axis are
+        modified. Future plots are also plot with the specified
+        x-limits. If <low> and <high> are identical then ``xset`` is
+        set to False and the x limits are automatically set by
+        matplotlib.
         """
         if xlo==xhi:
             self.xset=False
@@ -828,10 +845,8 @@ class plot_base:
         Command-line arguments: ``<z low> <z high>``
 
         The ``zlimits`` command sets ``zlo`` and ``zhi`` to the
-        specified limits and sets ``zset`` to True. 
-        If <low> and <high> are identical then ``zset`` is set
-        to False.
-
+        specified limits and sets ``zset`` to True. If <low> and
+        <high> are identical then ``zset`` is set to False.
         """
         if zlo==zhi:
             self.zset=False
@@ -857,8 +872,8 @@ class plot_base:
         markerfacecolor (mfc), markerfacecoloralt (mfcalt), markersize
         (ms). For example::
 
-            o2graph -line 0.05 0.05 0.95 0.95 lw=0,marker='+' \\
-            -show
+            o2graph -line 0.05 0.05 0.95 0.95 \\
+            lw=2,marker='+',ms=10,c=xkcd:'light purple' -show
 
         """
         if self.verbose>2:
@@ -894,29 +909,29 @@ class plot_base:
         and connectionstyle attributes should be listed along with
         other arrowprops attributes. Examples for arrowprops are::
 
-            * arrowstyle=->,connectionstyle=arc3
-            * arrowstyle=-|>,connectionstyle=arc,fc=red,ec=blue
+            * arrowstyle=->,connectionstyle=arc3 \\
+            * arrowstyle=-|>,connectionstyle=arc,fc=red,ec=blue \\
             * arrowstyle=-|>,connectionstyle=arc,head_length=4.0,
-              head_width=1.0
+              head_width=1.0 \\
             * arrowstyle=->,connectionstyle=arc3,head_length=4.0,
-              head_width=1.0,rad=-0.1 
+              head_width=1.0,rad=-0.1 \\
             * arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,
-              head_width=1.0,rad=-0.1
+              head_width=1.0,rad=-0.1 \\
         
         Summary for arrowstyle argument (angleB is renamed to 
         as_angleB)::
 
-            Name    Attributes
-            -       None
-            ->      head_length=0.4,head_width=0.2
-            -[      widthB=1.0,lengthB=0.2,as_angleB=None
-            |-      widthA=1.0,widthB=1.0
-            -|      head_length=0.4,head_width=0.2
-            <-      head_length=0.4,head_width=0.2
-            <|      head_length=0.4,head_width=0.2
-            fancy   head_length=0.4,head_width=0.4,tail_width=0.4
-            simple  head_length=0.5,head_width=0.5,tail_width=0.2
-            wedge   tail_width=0.3,shrink_factor=0.5
+            Name    Attributes \\
+            -       None \\
+            ->      head_length=0.4,head_width=0.2 \\
+            -[      widthB=1.0,lengthB=0.2,as_angleB=None \\
+            |-      widthA=1.0,widthB=1.0 \\
+            -|      head_length=0.4,head_width=0.2 \\
+            <-      head_length=0.4,head_width=0.2 \\
+            <|      head_length=0.4,head_width=0.2 \\
+            fancy   head_length=0.4,head_width=0.4,tail_width=0.4 \\
+            simple  head_length=0.5,head_width=0.5,tail_width=0.2 \\
+            wedge   tail_width=0.3,shrink_factor=0.5 \\
         
         (note that fancy, simple or wedge require arc3 or angle3 connection 
         styles)
@@ -924,15 +939,27 @@ class plot_base:
         Summary for connectionstyle argument (angleB is renamed to 
         cs_angleB)::
 
-            Name    Attributes
-            * angle   angleA=90,cs_angleB=0,rad=0.0
-            * angle3  angleA=90,cs_angleB=0
-            * arc     angleA=0,cs_angleB=0,armA=None,armB=None,rad=0.0
-            * arc3    rad=0.0
-            * bar     armA=0.0,armB=0.0,fraction=0.3,angle=None
+            Name    Attributes \\
+            * angle   angleA=90,cs_angleB=0,rad=0.0 \\
+            * angle3  angleA=90,cs_angleB=0 \\
+            * arc     angleA=0,cs_angleB=0,armA=None,armB=None,rad=0.0 \\
+            * arc3    rad=0.0 \\
+            * bar     armA=0.0,armB=0.0,fraction=0.3,angle=None \\
 
         See https://matplotlib.org/2.0.2/users/annotations.html for more.
+        For example::
 
+            o2graph -xlimits 0 1 -ylimits 0 1.2 \\
+            -arrow 0.2 0.2 0.8 0.2 \\
+            arrowstyle='->',connectionstyle=arc3 \\
+            -arrow 0.2 0.4 0.8 0.4 \\
+            arrowstyle='-|>',connectionstyle=arc,fc=red,ec=blue \\
+            -arrow 0.2 0.6 0.8 0.6 \\
+            arrowstyle='-|>',connectionstyle=arc,head_length=4.0,head_width=1.0 \\
+            -arrow 0.2 0.8 0.8 0.8 \\
+            arrowstyle='->',connectionstyle=arc3,head_length=4.0,head_width=1.0,rad=-0.1 \\
+            -arrow 0.2 1.0 0.8 1.0 arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,head_width=1.0,rad=-0.1 \\
+            -show
         """
         if self.verbose>2:
             print('Arrow',x1,y1,x2,y1,arrowprops)
@@ -953,14 +980,33 @@ class plot_base:
         return
 
     def point(self,xval,yval,**kwargs):
-        """
-        Documentation for o2graph command ``point``:
+        """Documentation for o2graph command ``point``:
 
         Plot a single point.
 
-        Command-line arguments: ``<x> <y> [kwargs]``
+        Command-line arguments: ``<x> <y> <kwargs>``
 
-        Plot a single point.
+        Plot a single point. Some useful kwargs are color, marker,
+        markeredgecolor (mec), markeredgewidth (mew), and markersize
+        (ms). Note that the 'marker' keyword argument to specify the
+        marker type must be specified. For example::
+
+            o2graph -xlimits 0 1 -ylimits 0 1 -point 0.5 0.5 \\
+            marker='o',ms=10,c='xkcd:sea green',mec=blue,mew=2 -show
+
+        or::
+
+            o2graph -xlimits 0 1 -ylimits 0 1 -point 0.5 0.5 \\
+            marker='$\int_0^{\infty}x^2~dx$',ms=300,c=green,mec=red -show
+
+        To list the marker types, use::
+
+            o2graph -help markers
+
+        or::
+
+            o2graph -help markers-plot
+
         """
         if self.verbose>2:
             print('point',xval,yval,kwargs)
@@ -988,17 +1034,17 @@ class plot_base:
         Command-line arguments: ``<x> <y> [<x err> <yerr>] or 
         [<x lo> <x hi> <y lo> <y hi>]``
 
-        Some useful kwargs for the ``error-point`` command are:
+        Some useful kwargs for the ``error-point`` command are::
         
-        keyword    description                      default value
-        ecolor     error bar color                   None
-        capsize    cap size in points                None
-        barsabove  plot error bars on top of point   False
-        lolims     y value is lower limit            False
-        uplims     y value is upper limit            False
-        xlolims    x value is lower limit            False
-        xuplims    x value is upper limit            False
-        errorevery draw error bars on subset of data 1
+        keyword    description                       default value \\
+        ecolor     error bar color                   None \\
+        capsize    cap size in points                None \\
+        barsabove  plot error bars on top of point   False \\
+        lolims     y value is lower limit            False \\
+        uplims     y value is upper limit            False \\
+        xlolims    x value is lower limit            False \\
+        xuplims    x value is upper limit            False \\
+        errorevery draw error bars on subset of data 1 \\
         capthick   thickness of error bar cap        None
 
         See also ``errorbar`` for for plotting columns from a table object
@@ -1069,8 +1115,7 @@ class plot_base:
         return
 
     def rect(self,x1,y1,x2,y2,angle=0,**kwargs):
-        """
-        Documentation for o2graph command ``rect``:
+        """Documentation for o2graph command ``rect``:
 
         Plot a rectangle.
 
@@ -1080,8 +1125,19 @@ class plot_base:
         <angle>. By default, the rectangle has no border, but the
         linewidth ('lw') and edgecolor kwargs can be used to specify
         one if desired. Some useful kwargs are alpha, color, edgecolor
-        (ec), facecolor (fc), fill, hatch, linestyle (ls), linewidth
-        (lw).
+        (ec), facecolor (fc), fill, hatch ('/', '\\', '|', '-', '+',
+        'x', 'o', 'O', '.', '*'), linestyle (ls), linewidth (lw). In
+        order to specify keyword arguments, an angle must be also
+        specified.
+
+        For example::
+
+            o2graph -xlimits 0 0.8 -ylimits 0 0.6 \\
+            -text 0.55 0.35 "blah" -rect 0.2 0.2 0.5 0.5 \\
+            -rect 0.3 0.3 0.7 0.4 0 \\
+            fc=green,alpha=0.5,ls=-.,ec='xkcd:burnt orange',lw=2,hatch='///' \\
+            -show
+
         """
         import matplotlib.patches as patches
 
@@ -1127,7 +1183,11 @@ class plot_base:
         ellipse has no border, but the linewidth ('lw') and edgecolor
         kwargs can be used to specify one if desired. Some useful
         kwargs are alpha, color, edgecolor (ec), facecolor (fc), fill,
-        hatch, linestyle (ls), linewidth (lw).
+        hatch, linestyle (ls), linewidth (lw). For example::
+
+            o2graph -ellipse 0.5 0.5 0.8 0.2 45 \\
+            fc='#ccccff',ec=black,lw=2,hatch='|||',ls=':' -show
+        
         """
         import matplotlib.patches as patches
 
@@ -1434,9 +1494,9 @@ class plot_base:
 
     def save(self,filename):
         """
-        Save plot to file named ``filename``. If the verbose parameter is
-        greater than zero, then this function prints the filename to
-        the screen.
+        Save plot to file named ``filename``, using the extension to set
+        the file type. If the verbose parameter is greater than zero,
+        then this function prints the filename to the screen.
         """
         
         import matplotlib.pyplot as plot
@@ -1456,16 +1516,19 @@ class plot_base:
 
         The ``text`` command plots text in the data coordinates
         defined by the current axes with the font size determined by
-        the value of the parameter 'font'. LaTeX is used for text
+        the value of the parameter ``font``. LaTeX is used for text
         rendering by default, but this setting can be changed using,
-        e.g. '-set usetex 0'. Some useful kwargs are fontfamily,
-        fontstyle, fontsize, color, backgroundcolor, rotation,
-        horizontalalignment (ha), and verticalalignment (va). Note
-        that you must disable LaTeX rendering to change fontfamily or
-        fontstyle.
+        e.g. '-set usetex 0'. Some useful kwargs are fontfamily
+        ('serif', 'sans-serif', 'cursive', 'fantasy', 'monospace'),
+        fontstyle ('normal', 'italic', 'oblique'), fontsize, color,
+        backgroundcolor, rotation, horizontalalignment (ha), and
+        verticalalignment (va). Note that you must disable LaTeX
+        rendering to change fontfamily or fontstyle.
 
         If <x> or <y> are strings, then they are passed through the
-        ``eval()`` function and converted to floating-point numbers.
+        ``eval()`` function and converted to floating-point numbers. A
+        figure and axes are created using
+        :py:func:`o2sclpy.plot_base.canvas()`, if necessary.
         """
         if self.canvas_flag==False:
             self.canvas()
@@ -1496,6 +1559,14 @@ class plot_base:
         if isinstance(ty,str):
             ty=float(eval(ty))
 
+        import matplotlib.pyplot as plot
+        if self.usetex==False or self.usetex==0:
+            print('false')
+            plot.rc('text',usetex=False)
+        else:
+            print('true')
+            plot.rc('text',usetex=True)
+        
         self.axes.text(tx,ty,textstr,**kwargs)
         
         # End of function plot_base::text()
@@ -1521,7 +1592,6 @@ class plot_base:
         '-', '+', 'x', 'o', 'O', '.', '*'}), linestyle (ls), and
         linewidth (lw). The keyword arguments are for the text
         properties, and follow those of the text command.
-
         """
         if self.canvas_flag==False:
             self.canvas()
@@ -1566,9 +1636,9 @@ class plot_base:
 
         Command-line arguments: ``<x> <y> <text> [kwargs]``
 
-        The ttext command plots text in the window coordinates
+        The ``ttext`` command plots text in the window coordinates
         [typically (0,0) to (1,1)] with the font size determined by
-        the value of the parameter font. LaTeX is used for text
+        the value of the parameter ``font``. LaTeX is used for text
         rendering by default, but this setting can be changed using,
         e.g. '-set usetex 0'. Some useful kwargs are fontfamily,
         fontstyle, fontsize, color, backgroundcolor, rotation,
@@ -1577,14 +1647,10 @@ class plot_base:
         you must disable LaTeX rendering to change fontfamily or
         fontstyle.
 
-        Plot text in the native coordinate system using a transAxes
-        transformation. This function uses the class font size and and
-        centering in the horizontal and vertical directions by
-        default. A figure and axes are created using
-        :py:func:`o2sclpy.plot_base.canvas()`, if they have not been
-        created already. If ``tx`` and ``ty`` are strings, then they
-        are passed through the ``eval()`` function and converted to
-        floating-point numbers.
+        If <x> or <y> are strings, then they are passed through the
+        ``eval()`` function and converted to floating-point numbers. A
+        figure and axes are created using
+        :py:func:`o2sclpy.plot_base.canvas()`, if necessary.
 
         """
         if self.canvas_flag==False:
@@ -1760,20 +1826,28 @@ class plot_base:
         return
 
     def inset(self,left,bottom,width,height,**kwargs):
-        """
-        Documentation for o2graph command ``inset``:
+        """Documentation for o2graph command ``inset``:
         
         Add a new set of axes
         
         Command-line arguments: ``<left> <bottom> <width> <height>
         [kwargs]``
 
-        This command creates a new set of axes, adds the new axes
-        to the list of axes, and sets the new axes as the current.
-        The axes object is named 'inset0' for the first inset, then
-        'inset1', and so on.
-        """
+        This command creates a new set of axes, adds the new axes to
+        the list of axes, and sets the new axes as the current. The
+        values <left>, <bottom>, <width>, and <height> refer to a
+        normalized coordinate system where the lower-left hand corner
+        of the figure is (0,0) and the upper-right hand corner is
+        (1,1). The axes object is named 'inset0' for the first inset,
+        then 'inset1', and so on. For example::
 
+            o2graph -inset 0.5 0.2 0.4 0.4 -selax main \\
+            -line 100 100 900 900 -selax inset0 \\
+            -line 0.1 0.9 0.9 0.1 -show
+        """
+        if self.canvas_flag==False:
+            self.canvas()
+            
         # Create a unique axes label i.e. inset0
         ifound=9
         for i in range(0,8):
@@ -1801,28 +1875,31 @@ class plot_base:
 
         Command-line arguments: ``[kwargs]``
 
-        alpha            float>0      alpha value for region inside axes 
-        labelsize        float>0      font size for labels 
-        x_loc            b,t,tb       placement of x-axis (bottom, top, or both)
-        x_major_loc      float>0      linear increment for x-axis major ticks 
-        x_minor_loc      float>0      linear increment for x-axis minor ticks 
-        x_minor_tick_dir in,out,inout direction of x-axis minor ticks 
-        x_minor_tick_len float>0      length of x-axis minor ticks 
-        x_minor_tick_wid float>0      width of x-axis minor ticks 
-        x_tick_dir       in,out,inout direction of x-axis major ticks 
-        x_tick_len       float>0      length of x-axis major ticks 
-        x_tick_wid       float>0      width of x-axis major ticks 
-        x_visible        T/F          set x-axis visible or invisible 
-        y_loc            l,r,lr       placement of y-axis (left, right, or both)
-        y_major_loc      float>0      linear increment for x-axis major ticks 
-        y_minor_loc      float>0      linear increment for x-axis minor ticks 
-        y_minor_tick_dir in,out,inout direction of y-axis minor ticks 
-        y_minor_tick_len float>0      length of y-axis minor ticks 
-        y_minor_tick_wid float>0      width of y-axis minor ticks 
-        y_tick_dir       in,out,inout direction of y-axis major ticks 
-        y_tick_len       float>0      length of y-axis major ticks 
-        y_tick_wid       float>0      width of y-axis major ticks 
-        y_visible        T/F          set y-axis visible or invisible
+        The axis properties which can be modified are::
+
+        Property         Values       Description \\
+        alpha            float>0      alpha value for region inside axes \\
+        labelsize        float>0      font size for labels \\
+        x_loc            b,t,tb       placement of x-axis (bottom, top, or both) \\
+        x_major_loc      float>0      linear increment for x-axis major ticks  \\
+        x_minor_loc      float>0      linear increment for x-axis minor ticks  \\
+        x_minor_tick_dir in,out,inout direction of x-axis minor ticks  \\
+        x_minor_tick_len float>0      length of x-axis minor ticks  \\
+        x_minor_tick_wid float>0      width of x-axis minor ticks  \\
+        x_tick_dir       in,out,inout direction of x-axis major ticks  \\
+        x_tick_len       float>0      length of x-axis major ticks  \\
+        x_tick_wid       float>0      width of x-axis major ticks  \\
+        x_visible        T/F          set x-axis visible or invisible  \\
+        y_loc            l,r,lr       placement of y-axis (left, right, or both) \\
+        y_major_loc      float>0      linear increment for x-axis major ticks  \\
+        y_minor_loc      float>0      linear increment for x-axis minor ticks  \\
+        y_minor_tick_dir in,out,inout direction of y-axis minor ticks  \\
+        y_minor_tick_len float>0      length of y-axis minor ticks  \\
+        y_minor_tick_wid float>0      width of y-axis minor ticks  \\
+        y_tick_dir       in,out,inout direction of y-axis major ticks  \\
+        y_tick_len       float>0      length of y-axis major ticks  \\
+        y_tick_wid       float>0      width of y-axis major ticks  \\
+        y_visible        T/F          set y-axis visible or invisible \\
         """
 
         import matplotlib.pyplot as plot
@@ -1926,7 +2003,7 @@ class plot_base:
     
     def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):
         """Documentation for o2graph command ``addcbar``:
-
+        
         Add a color bar.
         
         Command-line arguments: ``<left> <bottom> <width> <height>
@@ -1934,13 +2011,14 @@ class plot_base:
 
         Add a new colorbar or a colorbar from the most recently
         created image at the location specified by ``left``,
-        ``bottom``, ``width`` and ``height``. If the image keyword is
-        'last', then the last density plot (e.g. from command
-        ``den-plot``) or two-dimensional histogram plot (e.g. from
-        command ``hist2d-plot``) is used. If the image keyword is
-        'new', then a colormap must be specified using the 'cmap'
-        keyword and the color map is used to create the colorbar.
-
+        ``bottom``, ``width`` and ``height``. This command has a
+        keyword ``image`` which specifies the image which the colorbar
+        should refer to. If the image keyword is 'last', then the last
+        density plot (e.g. from command ``den-plot``) or
+        two-dimensional histogram plot (e.g. from command
+        ``hist2d-plot``) is used. If the image keyword is 'new', then
+        a colormap must be specified using the 'cmap' keyword and the
+        color map is used to create the colorbar.
         """
 
         import matplotlib.pyplot as plot
@@ -1984,17 +2062,16 @@ class plot_base:
         return
 
     def canvas(self):
-        """
-        Documentation for o2graph command ``canvas``:
+        """Documentation for o2graph command ``canvas``:
 
         Create a plotting canvas.
 
         Command-line arguments: (No arguments.)
 
-        Create an empty plotting canvas. For example 'o2graph
-        -canvas -show'. Typically, 'o2graph' creates
-        the canvas automatically so explicitly using this command
-        is unnecessary.
+        Create an empty plotting canvas. For example 'o2graph -canvas
+        -show'. Typically, 'o2graph' creates the canvas automatically
+        when the first object is plotted so explicitly using this
+        command is unnecessary.
 
         This function creates a default figure using default_plot()
         and axis object using the xtitle and ytitle for the
@@ -2058,8 +2135,11 @@ class plot_base:
         column index 1]`` or ``[vec_vec_double, column index1, column
         index 2]``. Otherwise, ``args[0]`` and ``args[1]`` are
         interpreted as arrays to be directly sent to the
-        ``matplotlib.pyplot.plot()`` function.
+        matplotlib.pyplot.plot() function.
 
+        The documentation for the o2graph ``plot`` command is 
+        in the docstring for
+        :py:func:`o2sclpy.o2graph_plotter.plot_o2graph()`.
         """
 
         if len(args)<2:
@@ -2098,19 +2178,19 @@ class plot_base:
 
             if len(args)>2:
                 vvd=args[0]
-                n1=len(vvd[args[1]])
-                n2=len(vvd[args[2]])
+                n1=len(vvd[int(args[1])])
+                n2=len(vvd[int(args[2])])
                 if n1<n2:
-                    xv=vvd[args[1]][0:n1]
-                    yv=vvd[args[2]][0:n1]
+                    xv=vvd[int(args[1])][0:n1]
+                    yv=vvd[int(args[2])][0:n1]
                 else:
-                    xv=vvd[args[1]][0:n2]
-                    yv=vvd[args[2]][0:n2]
+                    xv=vvd[int(args[1])][0:n2]
+                    yv=vvd[int(args[2])][0:n2]
             else:
                 vvd=args[0]
-                n1=len(vvd[args[1]])
+                n1=len(vvd[int(args[1])])
                 xv=[i for i in range(0,n1)]
-                yv=vvd[args[1]]
+                yv=vvd[int(args[1])]
 
         else:
 
@@ -2143,12 +2223,15 @@ class plot_base:
         return
 
     def den_plot(self,args,**kwargs):
-        """
-        Create a density plot from a matrix, a slice of a table3d object,
+        """Create a density plot from a matrix, a slice of a table3d object,
         or a hist_2d object.
 
         The argument list ``args`` can be of the form ``[numpy
         matrix]`` or ``[table3d,slice name]`` or ``[hist_2d]``.
+
+        The documentation for the o2graph ``den-plot`` command is in
+        the docstring for
+        :py:func:`o2sclpy.o2graph_plotter.den_plot_o2graph()`.
         """
         
         if len(args)<1:
@@ -2161,6 +2244,7 @@ class plot_base:
         else:
             pcm=False
 
+        # If necessary, import cmyt for the cmyt colormaps
         if 'cmap' in kwargs and kwargs['cmap'][0:5]=='cmyt.':
             import cmyt
             
@@ -2387,8 +2471,7 @@ class plot_base:
     
     def den_plot_rgb(self,table3d,slice_r,slice_g,slice_b,
                      make_png='',renorm=False,**kwargs):
-        """
-        Density plot from a ``table3d`` object using three slices
+        """Density plot from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
 
         If make_png is non-empty, then a .png is created, with no
@@ -2398,6 +2481,10 @@ class plot_base:
         is 0 and the maximum is 255. Otherwise, the data is 
         set to 0 if it is less than 0 and set to 255 when it is
         greater than 255. 
+
+        The documentation for the o2graph ``den-plot-rgb`` command is
+        in the docstring for
+        :py:func:`o2sclpy.o2graph_plotter.den_plot_rgb_o2graph()`.
         """
 
         nxt=table3d.get_nx()
@@ -2476,7 +2563,7 @@ class plot_base:
                         if sl_all[j,i,2]>max_val:
                             max_val=sl_all[j,i,2]
 
-                print('o2graph::make-png(): Minimum is',
+                print('o2graph::den_plot_rgb (make-png)(): Minimum is',
                       min_val,'maximum is',max_val,'.')
                         
                 for i in range(0,nxt):
@@ -2513,6 +2600,37 @@ class plot_base:
                 raise
             return
         
+        if renorm:
+            min_val=sl_all[0,0,0]
+            max_val=sl_all[0,0,0]
+            
+            for i in range(0,nxt):
+                for j in range(0,nyt):
+                    if sl_all[j,i,0]<min_val:
+                        min_val=sl_all[j,i,0]
+                    if sl_all[j,i,1]<min_val:
+                        min_val=sl_all[j,i,1]
+                    if sl_all[j,i,2]<min_val:
+                        min_val=sl_all[j,i,2]
+                    if sl_all[j,i,0]>max_val:
+                        max_val=sl_all[j,i,0]
+                    if sl_all[j,i,1]>max_val:
+                        max_val=sl_all[j,i,1]
+                    if sl_all[j,i,2]>max_val:
+                        max_val=sl_all[j,i,2]
+
+            print('o2graph::den_plot_rgb(): Minimum is',
+                  min_val,'maximum is',max_val,'.')
+                        
+            for i in range(0,nxt):
+                for j in range(0,nyt):
+                    sl_all[j,i,0]=((sl_all[j,i,0]-min_val)/
+                                   (max_val-min_val))
+                    sl_all[j,i,1]=((sl_all[j,i,1]-min_val)/
+                                   (max_val-min_val))
+                    sl_all[j,i,2]=((sl_all[j,i,2]-min_val)/
+                                   (max_val-min_val))
+                    
         if self.canvas_flag==False:
             self.canvas()
 
@@ -2567,9 +2685,12 @@ class plot_base:
         return
 
     def make_png(self,table3d,slice_r,slice_g,slice_b,fname,**kwargs):
-        """
-        Create png from a ``table3d`` object using three slices
+        """Create png from a ``table3d`` object using three slices
         to specify the red, green, and blue values.
+
+        The documentation for the o2graph ``make-png`` command is in
+        the docstring for
+        :py:func:`o2sclpy.o2graph_plotter.make_png_o2graph()`.
         """
         
         nxt=table3d.get_nx()
