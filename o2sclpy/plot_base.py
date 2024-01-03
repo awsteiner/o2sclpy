@@ -722,39 +722,39 @@ class plot_base:
         for the o2graph command ``get`` is given in O₂scl.
         """
         if name=='colbar':
-            print('The value of colbar is',self.colbar,'.')
+            print('The value of colbar is'+str(self.colbar)+'.')
         if name=='logx':
-            print('The value of logx is',self.logx,'.')
+            print('The value of logx is'+str(self.logx)+'.')
         if name=='logy':
-            print('The value of logy is',self.logy,'.')
+            print('The value of logy is'+str(self.logy)+'.')
         if name=='logz':
-            print('The value of logz is',self.logz,'.')
+            print('The value of logz is'+str(self.logz)+'.')
         if name=='verbose':
-            print('The value of verbose is',self.verbose,'.')
+            print('The value of verbose is'+str(self.verbose)+'.')
         if name=='xhi':
-            print('The value of xhi is',self.xhi,'.')
+            print('The value of xhi is'+str(self.xhi)+'.')
         if name=='xlo':
-            print('The value of xlo is',self.xlo,'.')
+            print('The value of xlo is'+str(self.xlo)+'.')
         if name=='xset':
-            print('The value of xset is',self.xset,'.')
+            print('The value of xset is'+str(self.xset)+'.')
         if name=='yhi':
-            print('The value of yhi is',self.yhi,'.')
+            print('The value of yhi is'+str(self.yhi)+'.')
         if name=='ylo':
-            print('The value of ylo is',self.ylo,'.')
+            print('The value of ylo is'+str(self.ylo)+'.')
         if name=='yset':
-            print('The value of yset is',self.yset,'.')
+            print('The value of yset is'+str(self.yset)+'.')
         if name=='zhi':
-            print('The value of zhi is',self.zhi,'.')
+            print('The value of zhi is'+str(self.zhi)+'.')
         if name=='zlo':
-            print('The value of zlo is',self.zlo,'.')
+            print('The value of zlo is'+str(self.zlo)+'.')
         if name=='zset':
-            print('The value of zset is',self.zset,'.')
+            print('The value of zset is'+str(self.zset)+'.')
         if name=='fig_dict':
-            print('The value of fig_dict is',self.fig_dict,'.')
+            print('The value of fig_dict is'+str(self.fig_dict)+'.')
         if name=='yt_axis':
-            print('The value of yt_axis is',self.yt_axis,'.')
+            print('The value of yt_axis is'+str(self.yt_axis)+'.')
         if name=='yt_axis_color':
-            print('The value of yt_axis_color is',self.yt_axis_color,'.')
+            print('The value of yt_axis_color is'+str(self.yt_axis_color)+'.')
         if name=='yt_axis_labels_flat':
             print('The value of yt_axis_labels_flat is',
                   self.yt_axis_labels_flat,'.')
@@ -762,13 +762,13 @@ class plot_base:
             print('The value of yt_axis_resolution is',
                   self.yt_axis_resolution,'.')
         if name=='yt_focus':
-            print('The value of yt_focus is',self.yt_focus,'.')
+            print('The value of yt_focus is'+str(self.yt_focus)+'.')
         if name=='yt_sigma_clip':
-            print('The value of yt_sigma_clip is',self.yt_sigma_clip,'.')
+            print('The value of yt_sigma_clip is'+str(self.yt_sigma_clip)+'.')
         if name=='yt_position':
-            print('The value of yt_position is',self.yt_position,'.')
+            print('The value of yt_position is'+str(self.yt_position)+'.')
         if name=='yt_path':
-            print('The value of yt_path is',self.yt_path,'.')
+            print('The value of yt_path is'+str(self.yt_path)+'.')
         # End of function plot_base::get()
         return
 
@@ -1036,16 +1036,16 @@ class plot_base:
 
         Some useful kwargs for the ``error-point`` command are::
         
-        keyword    description                       default value \\
-        ecolor     error bar color                   None \\
-        capsize    cap size in points                None \\
-        barsabove  plot error bars on top of point   False \\
-        lolims     y value is lower limit            False \\
-        uplims     y value is upper limit            False \\
-        xlolims    x value is lower limit            False \\
-        xuplims    x value is upper limit            False \\
-        errorevery draw error bars on subset of data 1 \\
-        capthick   thickness of error bar cap        None
+            keyword    description                       default value \\
+            ecolor     error bar color                   None \\
+            capsize    cap size in points                None \\
+            barsabove  plot error bars on top of point   False \\
+            lolims     y value is lower limit            False \\
+            uplims     y value is upper limit            False \\
+            xlolims    x value is lower limit            False \\
+            xuplims    x value is upper limit            False \\
+            errorevery draw error bars on subset of data 1 \\
+            capthick   thickness of error bar cap        None
 
         See also ``errorbar`` for for plotting columns from a table object
 
@@ -1877,29 +1877,30 @@ class plot_base:
 
         The axis properties which can be modified are::
 
-        Property         Values       Description \\
-        alpha            float>0      alpha value for region inside axes \\
-        labelsize        float>0      font size for labels \\
-        x_loc            b,t,tb       placement of x-axis (bottom, top, or both) \\
-        x_major_loc      float>0      linear increment for x-axis major ticks  \\
-        x_minor_loc      float>0      linear increment for x-axis minor ticks  \\
-        x_minor_tick_dir in,out,inout direction of x-axis minor ticks  \\
-        x_minor_tick_len float>0      length of x-axis minor ticks  \\
-        x_minor_tick_wid float>0      width of x-axis minor ticks  \\
-        x_tick_dir       in,out,inout direction of x-axis major ticks  \\
-        x_tick_len       float>0      length of x-axis major ticks  \\
-        x_tick_wid       float>0      width of x-axis major ticks  \\
-        x_visible        T/F          set x-axis visible or invisible  \\
-        y_loc            l,r,lr       placement of y-axis (left, right, or both) \\
-        y_major_loc      float>0      linear increment for x-axis major ticks  \\
-        y_minor_loc      float>0      linear increment for x-axis minor ticks  \\
-        y_minor_tick_dir in,out,inout direction of y-axis minor ticks  \\
-        y_minor_tick_len float>0      length of y-axis minor ticks  \\
-        y_minor_tick_wid float>0      width of y-axis minor ticks  \\
-        y_tick_dir       in,out,inout direction of y-axis major ticks  \\
-        y_tick_len       float>0      length of y-axis major ticks  \\
-        y_tick_wid       float>0      width of y-axis major ticks  \\
-        y_visible        T/F          set y-axis visible or invisible \\
+            Property         Values       Description \\
+            alpha            float>0      alpha value for region inside axes \\
+            labelsize        float>0      font size for labels \\
+            x_loc            b,t,tb       placement of x-axis (bottom, top, or both) \\
+            x_major_loc      float>0      linear increment for x-axis major ticks \\
+            x_minor_loc      float>0      linear increment for x-axis minor ticks \\
+            x_minor_tick_dir in,out,inout direction of x-axis minor ticks \\
+            x_minor_tick_len float>0      length of x-axis minor ticks \\
+            x_minor_tick_wid float>0      width of x-axis minor ticks \\
+            x_tick_dir       in,out,inout direction of x-axis major ticks \\
+            x_tick_len       float>0      length of x-axis major ticks \\
+            x_tick_wid       float>0      width of x-axis major ticks \\
+            x_visible        T/F          set x-axis visible or invisible \\
+            y_loc            l,r,lr       placement of y-axis (left, right, or both) \\
+            y_major_loc      float>0      linear increment for x-axis major ticks \\
+            y_minor_loc      float>0      linear increment for x-axis minor ticks \\
+            y_minor_tick_dir in,out,inout direction of y-axis minor ticks \\
+            y_minor_tick_len float>0      length of y-axis minor ticks \\
+            y_minor_tick_wid float>0      width of y-axis minor ticks \\
+            y_tick_dir       in,out,inout direction of y-axis major ticks \\
+            y_tick_len       float>0      length of y-axis major ticks \\
+            y_tick_wid       float>0      width of y-axis major ticks \\
+            y_visible        T/F          set y-axis visible or invisible \\
+
         """
 
         import matplotlib.pyplot as plot

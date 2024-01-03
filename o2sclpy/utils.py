@@ -58,7 +58,7 @@ def norm3(x):
     x[0]=x[0]/mag
     x[1]=x[1]/mag
     x[2]=x[2]/mag
-    return x
+    return
 
 def renorm(x,r):
     """Return a renormalized version of x"""
@@ -66,7 +66,7 @@ def renorm(x,r):
     x[0]=r*x[0]/mag
     x[1]=r*x[1]/mag
     x[2]=r*x[2]/mag
-    return x
+    return
 
 def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
           head_width=3):
@@ -140,12 +140,13 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
                      cross[1]*numpy.sin(theta),
                      z1+arb[2]*numpy.cos(theta)+
                      cross[2]*numpy.sin(theta)])
-        ntmp=norm3([arb[0]*numpy.cos(theta)+
+        ntmp=[arb[0]*numpy.cos(theta)+
                     cross[0]*numpy.sin(theta),
                     arb[1]*numpy.cos(theta)+
                     cross[1]*numpy.sin(theta),
                     arb[2]*numpy.cos(theta)+
-                    cross[2]*numpy.sin(theta)])
+                    cross[2]*numpy.sin(theta)]
+        norm3(ntmp)
         vn.append(ntmp)
         vert.append([tail_end[0]+arb[0]*numpy.cos(theta)+
                      cross[0]*numpy.sin(theta),
@@ -153,12 +154,13 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
                      cross[1]*numpy.sin(theta),
                      tail_end[2]+arb[2]*numpy.cos(theta)+
                      cross[2]*numpy.sin(theta)])
-        ntmp=norm3([arb[0]*numpy.cos(theta)+
+        ntmp=[arb[0]*numpy.cos(theta)+
                    cross[0]*numpy.sin(theta),
                    arb[1]*numpy.cos(theta)+
                    cross[1]*numpy.sin(theta),
                    arb[2]*numpy.cos(theta)+
-                   cross[2]*numpy.sin(theta)])
+                   cross[2]*numpy.sin(theta)]
+        norm3(ntmp)
         vn.append(ntmp)
         if i!=n_theta-1:
             face.append([2*i+1,2*i+3,2*i+2])
@@ -185,12 +187,13 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
                      head_width*cross[1]*numpy.sin(theta),
                      tail_end[2]+head_width*arb[2]*numpy.cos(theta)+
                      head_width*cross[2]*numpy.sin(theta)])
-        ntmp=norm3([head_width*arb[0]*numpy.cos(theta)+
+        ntmp=[head_width*arb[0]*numpy.cos(theta)+
                     head_width*cross[0]*numpy.sin(theta),
                     head_width*arb[1]*numpy.cos(theta)+
                     head_width*cross[1]*numpy.sin(theta),
                     head_width*arb[2]*numpy.cos(theta)+
-                    head_width*cross[2]*numpy.sin(theta)])
+                    head_width*cross[2]*numpy.sin(theta)]
+        norm3(ntmp)
         vn.append(ntmp)
         if i==n_theta-1:
             face.append([point_index+i+1,point_index+1,
@@ -247,7 +250,7 @@ def icosphere(x,y,z,r,n_subdiv=0):
     """Construct the vertices and faces of an icosphere centered at
     (x,y,z) with radius r
 
-    I got this from [1]. The initial 
+    I got this from [1].
 
     This function returns a set of three lists, the first is the
     vertices, the second are the vertex normals, and the third are the
@@ -255,6 +258,8 @@ def icosphere(x,y,z,r,n_subdiv=0):
 
     [1] https://danielsieger.com/blog/2021/03/27/generating-spheres.html
     """
+    import copy
+    
     phi=(1.0+numpy.sqrt(5.0))*0.5
     b=r/phi;
     fact=numpy.sqrt(phi)/(5**0.25)
@@ -262,72 +267,94 @@ def icosphere(x,y,z,r,n_subdiv=0):
     vert=[]
     vn=[]
 
-    # Start with an icosahedron with each vertex at radius r
+    # Start with an icosahedron with each vertex at radius r We use
+    # deep copy to ensure the vertexes and normals occupy different
+    # memory locations. The vertices, normals and faces are stored
+    # here in an '.obj' like format, and then we convert to '.gltf'
+    # below.
     
     tmp=[0,b*fact,-r*fact]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[0,b*fact,-r*fact]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[b*fact,r*fact,0]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[-b*fact,r*fact,0]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[0,b*fact,r*fact]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[0,-b*fact,r*fact]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[-r*fact,0,b*fact]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[0,-b*fact,-r*fact]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[r*fact,0,-b*fact]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[r*fact,0,b*fact]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[-r*fact,0,-b*fact]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[b*fact,-r*fact,0]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
 
     tmp=[-b*fact,-r*fact,0]
     vert.append(tmp)
-    tmp=norm3(tmp)
-    vn.append(tmp)
+    tmp2=copy.deepcopy(tmp)
+    norm3(tmp2)
+    vn.append(tmp2)
+
+    if False:
+        for k in range(0,len(vn)):
+            print('k',vn[k])
+        print('')
 
     # Enumerate the faces
     
@@ -363,15 +390,15 @@ def icosphere(x,y,z,r,n_subdiv=0):
             i3=face[i][2]
 
             v12=(vert[i1-1]+vert[i2-1])/2
-            v12=renorm(v12,r)
+            renorm(v12,r)
             face.append(v12)
             i12=len(face)
             v13=(vert[i1-1]+vert[i3-1])/2
-            v13=renorm(v13,r)
+            renorm(v13,r)
             face.append(v13)
             i13=len(face)
             v23=(vert[i2-1]+vert[i3-1])/2
-            v23=renorm(v12,r)
+            renorm(v12,r)
             face.append(v23)
             i23=len(face)
 
@@ -394,6 +421,11 @@ def icosphere(x,y,z,r,n_subdiv=0):
     norms2=[]
     face2=[]
 
+    if False:
+        for k in range(0,len(vn)):
+            print('k',vn[k])
+        print('')
+
     for i in range(0,len(face)):
 
         # Add the vertices to the new vertex array
@@ -407,6 +439,10 @@ def icosphere(x,y,z,r,n_subdiv=0):
 
         face2.append([i*3,i*3+1,i*3+2])
 
+    if False:
+        for k in range(0,len(norms2)):
+            print('k',norms2[k])
+    
     # Print out results
     if False:
         for ki in range(0,len(vert2),3):
@@ -428,7 +464,7 @@ def icosphere(x,y,z,r,n_subdiv=0):
             print('')
 
         print(len(vert2),len(norms2),len(face2))
-        #quit()
+        quit()
             
     return vert2,norms2,face2
     
@@ -438,7 +474,7 @@ def cpp_test(x):
     """
     return x*numpy.pi
 
-def remove_spaces(string):
+def remove_spaces(string : str):
     """
     Remove spaces at the beginning specified string and return the 
     result.
@@ -449,7 +485,7 @@ def remove_spaces(string):
         string=string[1:]
     return string
 
-def string_to_color(str_in):
+def string_to_color(str_in : str):
     """
     Convert a string to a color, either ``(r,g,b)`` to an RGB color
     or ``[r,g,b,a]`` to an RGBA color.
@@ -467,7 +503,7 @@ def string_to_color(str_in):
     
     return str_in
 
-def if_yt_then_Agg(backend,argv):
+def if_yt_then_Agg(backend : str, argv):
     """
     Determine if yt commands are present, and if found, then automatically
     convert to the Agg backend.
@@ -483,7 +519,7 @@ def if_yt_then_Agg(backend,argv):
             backend='Agg'
     return backend
 
-def is_number(s):
+def is_number(s: str):
     """
     Return true if 's' is likely a number
     """
@@ -528,6 +564,9 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 1,
     """
     import tempfile
 
+    if verbose>0:
+        print('latex_to_png(): Converting',tex,'to png file',png_file+'.')
+
     # Create the LaTeX file
     f=tempfile.NamedTemporaryFile(suffix='.tex',delete=False)
     tex_file_name=f.name
@@ -549,14 +588,14 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 1,
     tfile=tex_file_name[loc+1:]
     cmd1=('cd '+tdir+' && pdflatex --shell-escape '+tfile+' > '+
           out_file_name+' 2>&1')
-    if verbose>0:
-        print('latex_to_prism(): Running first shell command',cmd1)
+    if verbose>1:
+        print('latex_to_png(): Running first shell command',cmd1)
     os.system(cmd1)
     cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file+' && convert '+
           png_file+' -background white -flatten '+
           png_file+' > '+out_file_name+' 2>&1')
-    if verbose>0:
-        print('latex_to_prism(): Running second shell command',cmd2)
+    if verbose>1:
+        print('latex_to_png(): Running second shell command',cmd2)
     os.system(cmd2)
     from PIL import Image
     img=Image.open(png_file)
@@ -567,9 +606,9 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 1,
         h_new=2**(int(numpy.log2(h-1))+1)
         cmd3=('convert '+png_file+' -background white '+
               '-extent '+str(w_new)+'x'+str(h_new)+' '+
-              png_file+' > '+out_file_name)
-        if verbose>0:
-            print('latex_to_prism(): Running third shell command',cmd3)
+              png_file+' > '+out_file_name+' 2>&1')
+        if verbose>1:
+            print('latex_to_png(): Running third shell command',cmd3)
         os.system(cmd3)
         return img.width,img.height,w_new,h_new
     return img.width,img.height
@@ -1194,7 +1233,7 @@ class terminal_py:
         return (force_string(amt.get_param_color())+strt+
                 force_string(amt.get_default_color()))
 
-def length_without_colors(strt):
+def length_without_colors(strt : str):
     """
     Compute the length of strt, ignoring characters which correspond
     to VT100 formatting sequences
@@ -1243,7 +1282,7 @@ def length_without_colors(strt):
         index=index+1
     return count
             
-def wrap_line(line,ncols=79):
+def wrap_line(line : str, ncols=79):
     """
     From a string 'line', create a list of strings which adds return
     characters in order to attempt to ensure each line is less than
@@ -1294,7 +1333,10 @@ def wrap_line(line,ncols=79):
                 
     return list
             
-def string_equal_dash(str1,str2):
+def string_equal_dash(str1 : str, str2 : str):
+    """
+    Desc
+    """
     b1=force_bytes(str1)
     b2=force_bytes(str2)
     for i in range(0,len(b1)):
@@ -1307,7 +1349,10 @@ def string_equal_dash(str1,str2):
         return True
     return False
 
-def screenify_py(tlist,ncols=79):
+def screenify_py(tlist, ncols : int = 79):
+    """
+    Desc
+    """
     maxlen=0
     for i in range(0,len(tlist)):
         if length_without_colors(tlist[i])>maxlen:

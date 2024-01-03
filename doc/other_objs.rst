@@ -16,6 +16,22 @@ Other O₂sclpy functions
 .. autofunction:: o2sclpy.string_to_dict
 .. autofunction:: o2sclpy.parse_arguments
 .. autofunction:: o2sclpy.force_bytes
+.. autofunction:: o2sclpy.cross
+.. autofunction:: o2sclpy.norm3
+.. autofunction:: o2sclpy.renorm
+.. autofunction:: o2sclpy.arrow
+.. autofunction:: o2sclpy.icosphere
+.. autofunction:: o2sclpy.remove_spaces
+.. autofunction:: o2sclpy.string_to_color
+.. autofunction:: o2sclpy.if_yt_then_Agg
+.. autofunction:: o2sclpy.is_number
+.. autofunction:: o2sclpy.force_string
+.. autofunction:: o2sclpy.latex_to_png
+.. autofunction:: o2sclpy.string_to_dict2
+.. autofunction:: o2sclpy.length_without_colors
+.. autofunction:: o2sclpy.wrap_line
+.. autofunction:: o2sclpy.string_equal_dash
+.. autofunction:: o2sclpy.screenify_py
 
 Other O₂sclpy variables
 -----------------------
