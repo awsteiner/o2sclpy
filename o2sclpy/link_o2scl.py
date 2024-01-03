@@ -59,12 +59,12 @@ class linker:
     Backend specification from command-line
     """
 
-    o2scl_addl_libs: list[str] = []
+    o2scl_addl_libs = []
     """
     Additional library list from command-line or environment variables
     """
 
-    o2scl_addl: list[str] = []
+    o2scl_addl = []
     """
     List of additional library objects
     """
