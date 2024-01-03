@@ -23,9 +23,7 @@ The most recent release version of O₂sclpy can be installed with e.g.
    want to use the pip package manager or ``python3 setup.py install`` to
    do a direct installation.
 
-O₂sclpy requires python3 packages `requests
-<https://pypi.org/project/requests/>`_, `h5py
-<https://www.h5py.org/>`_, `numpy <https://www.numpy.org>`_, and
+O₂sclpy requires python3 packages `numpy <https://www.numpy.org>`_, and
 `matplotlib <https://matplotlib.org>`_. O₂sclpy also assumes LaTeX is
 installed on your system.
 

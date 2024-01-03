@@ -13,7 +13,7 @@ setuptools.setup(name='o2sclpy',
                  url='https://neutronstars.utk.edu/code/o2sclpy',
                  license='GPLv3',
                  packages=['o2sclpy'],
-                 install_requires=['h5py','numpy','matplotlib>=3.1','requests'],
+                 install_requires=['numpy','matplotlib>=3.1'],
                  zip_safe=False,scripts=['bin/o2graph'],
                  classifiers=[
                      'Development Status :: 4 - Beta',
