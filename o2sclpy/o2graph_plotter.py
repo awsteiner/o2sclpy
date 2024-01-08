@@ -1868,7 +1868,7 @@ class td_plot_base(yt_plot_base):
             xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
             ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
             znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
-            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,0.04,n_subdiv=1)
+            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,0.04,n_subdiv=0)
             lv=len(gf.vert_list)
             for k in range(0,len(vtmp)):
                 gf.vert_list.append(vtmp[k])
