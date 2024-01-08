@@ -1,5 +1,8 @@
-o2graph -create table x grid:0,1,0.01 -function "x+0.1*sin(1.0e6*x)" y
+o2graph -set td_wdir data \
+-create table x grid:0,1,0.01 -function "x+0.1*sin(1.0e6*x)" y \
 -function "x+y+0.1*sin(1.0e6*y)" z \
--td-scatter x y z "cmap=viridis" -td-axis "\$$R~(\mathrm{km})$$" \
-"\$$M~(\mathrm{M}_{\odot})$$" "Probability" \
+-index -select-rows "N<2" \
+-output \
+-td-scatter x y z -td-axis "$ R~(\mathrm{km}) $" \
+"$ M~(\mathrm{M}_{\odot}) $" "Probability" \
 -gltf scatter.gltf

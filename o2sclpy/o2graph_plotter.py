@@ -1045,7 +1045,7 @@ class threed_objects:
 
         # Check that normals are normalized
         for i in range(0,len_lvn):
-            print(i,mesh.vn_list[i])
+            #print(i,mesh.vn_list[i])
             mag=numpy.sqrt(mesh.vn_list[i][0]*mesh.vn_list[i][0]+
                            mesh.vn_list[i][1]*mesh.vn_list[i][1]+
                            mesh.vn_list[i][2]*mesh.vn_list[i][2])
@@ -1831,22 +1831,28 @@ class td_plot_base(yt_plot_base):
         if self.xset==False:
             self.xlo=numpy.min(cx)
             self.xhi=numpy.max(cx)
+            if self.xlo==self.xhi:
+                self.xhi=self.xhi+1
             if self.verbose>2:
                 print('td_scatter(): x limits not set, so setting to',
                       self.xlo,',',self.xhi)
         if self.yset==False:
             self.ylo=numpy.min(cy)
             self.yhi=numpy.max(cy)
+            if self.ylo==self.yhi:
+                self.yhi=self.yhi+1
             if self.verbose>2:
                 print('td_scatter(): y limits not set, so setting to',
                       self.ylo,',',self.yhi)
         if self.zset==False:
             self.zlo=numpy.min(cz)
             self.zhi=numpy.max(cz)
+            if self.zlo==self.zhi:
+                self.zhi=self.zhi+1
             if self.verbose>2:
                 print('td_scatter(): z limits not set, so setting to',
                       self.zlo,',',self.zhi)
-        
+
         # If true, then a color map has been specified and we need
         # to add materials
         colors=False
@@ -1862,7 +1868,7 @@ class td_plot_base(yt_plot_base):
             xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
             ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
             znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
-            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,0.04)
+            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,0.04,n_subdiv=1)
             lv=len(gf.vert_list)
             for k in range(0,len(vtmp)):
                 gf.vert_list.append(vtmp[k])
@@ -1884,14 +1890,40 @@ class td_plot_base(yt_plot_base):
             #print('old faces:',den_face[i])
             
             # Add the vertices to the new vertex array
-            vert2.append(gf.vert_list[gf.faces[i][0]-1])
-            vert2.append(gf.vert_list[gf.faces[i][1]-1])
-            vert2.append(gf.vert_list[gf.faces[i][2]-1])
+            vert2.append(gf.vert_list[gf.faces[i][0]])
+            vert2.append(gf.vert_list[gf.faces[i][1]])
+            vert2.append(gf.vert_list[gf.faces[i][2]])
     
-            norms2.append(gf.vn_list[gf.faces[i][0]-1])
-            norms2.append(gf.vn_list[gf.faces[i][1]-1])
-            norms2.append(gf.vn_list[gf.faces[i][2]-1])
+            norms2.append(gf.vn_list[gf.faces[i][0]])
+            norms2.append(gf.vn_list[gf.faces[i][1]])
+            norms2.append(gf.vn_list[gf.faces[i][2]])
 
+        if False:
+            print('td_scatter:')
+            for ki in range(0,len(gf.faces)):
+                print('%d [%d,%d,%d]' % (ki,gf.faces[ki][0],
+                                         gf.faces[ki][1],
+                                         gf.faces[ki][2]))
+                print(('0 [%7.6e,%7.6e,%7.6e] '+
+                       '[%7.6e,%7.6e,%7.6e]') %
+                      (vert2[gf.faces[ki][0]][0],vert2[gf.faces[ki][0]][1],
+                       vert2[gf.faces[ki][0]][2],norms2[gf.faces[ki][0]][0],
+                       norms2[gf.faces[ki][0]][1],norms2[gf.faces[ki][0]][2]))
+                print(('1 [%7.6e,%7.6e,%7.6e] '+
+                       '[%7.6e,%7.6e,%7.6e]') %
+                      (vert2[gf.faces[ki][1]][0],vert2[gf.faces[ki][1]][1],
+                       vert2[gf.faces[ki][1]][2],norms2[gf.faces[ki][1]][0],
+                       norms2[gf.faces[ki][1]][1],norms2[gf.faces[ki][1]][2]))
+                print(('2 [%7.6e,%7.6e,%7.6e] '+
+                       '[%7.6e,%7.6e,%7.6e]') %
+                      (vert2[gf.faces[ki][2]][0],vert2[gf.faces[ki][2]][1],
+                       vert2[gf.faces[ki][2]][2],norms2[gf.faces[ki][2]][0],
+                       norms2[gf.faces[ki][2]][1],norms2[gf.faces[ki][2]][2]))
+                print('')
+    
+            print(len(vert2),len(norms2),len(gf.faces))
+            quit()
+        
         if self.to.is_mat('white')==False:
             white=material('white',[1,1,1])
             self.to.add_mat(white)
@@ -1927,11 +1959,7 @@ class td_plot_base(yt_plot_base):
             gf=mesh_object(name,arr_face,mat)
             gf.vert_list=arr_vert
             gf.vn_list=arr_norm
-            print('1',len(gf.vert_list),len(gf.vn_list))
-            for ik in range(0,len(gf.vert_list)):
-                print(ik,gf.vert_list[ik],gf.vn_list[ik])
             self.to.add_object(gf)
-            print('2')
                                
         else:
             if self.verbose>2:
@@ -1942,9 +1970,7 @@ class td_plot_base(yt_plot_base):
             gf=mesh_object(name,arr_face,mat.name)
             gf.vert_list=arr_vert
             gf.vn_list=arr_norm
-            print('3')
             self.to.add_object(gf)
-            print('4')
 
         return
 

@@ -91,7 +91,7 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
     the arrow.
 
     """
-
+    
     # The length of the arrow
     arrow_len=numpy.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)
 
@@ -171,8 +171,9 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
 
     # Handle the head
     vert.append([x2,y2,z2])
-    tmp=norm3([x2-x1,y2-y1,z2-z1])
-    vn.append(tmp)
+    ntmp=[x2-x1,y2-y1,z2-z1]
+    norm3(ntmp)
+    vn.append(ntmp)
     
     point_index=len(vert)
     
@@ -202,6 +203,19 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
             face.append([point_index+i+1,point_index+i+2,
                          point_index])
 
+    if False:
+        print('vert:',len(vert))
+        for ki in range(0,len(vert)):
+            print('vert %d [%7.6e,%7.6e,%7.6e]' % (ki,vert[ki][0],vert[ki][1],
+                                     vert[ki][2]))
+        print('vn:',len(vn))
+        for ki in range(0,len(vn)):
+            print('vn %d [%7.6e,%7.6e,%7.6e]' % (ki,vn[ki][0],vn[ki][1],
+                                     vn[ki][2]))
+        print('face:')
+        for ki in range(0,len(face)):
+            print('face %d [%d,%d,%d]' % (ki,face[ki][0],face[ki][1],
+                                     face[ki][2]))
     # Rearrange for GLTF
             
     vert2=[]
@@ -272,79 +286,85 @@ def icosphere(x,y,z,r,n_subdiv=0):
     # memory locations. The vertices, normals and faces are stored
     # here in an '.obj' like format, and then we convert to '.gltf'
     # below.
-    
+
+    # 1
     tmp=[0,b*fact,-r*fact]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
-    tmp=[0,b*fact,-r*fact]
-    vert.append(tmp)
-    tmp2=copy.deepcopy(tmp)
-    norm3(tmp2)
-    vn.append(tmp2)
-
+    # 2
     tmp=[b*fact,r*fact,0]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
+    # 3
     tmp=[-b*fact,r*fact,0]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
+    # 4
     tmp=[0,b*fact,r*fact]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
+    # 5
     tmp=[0,-b*fact,r*fact]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
+    # 6
     tmp=[-r*fact,0,b*fact]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
+    # 7
     tmp=[0,-b*fact,-r*fact]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
+    # 8
     tmp=[r*fact,0,-b*fact]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
+    # 9
     tmp=[r*fact,0,b*fact]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
+    # 10
     tmp=[-r*fact,0,-b*fact]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
+    # 11
     tmp=[b*fact,-r*fact,0]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
     norm3(tmp2)
     vn.append(tmp2)
 
+    # 12
     tmp=[-b*fact,-r*fact,0]
     vert.append(tmp)
     tmp2=copy.deepcopy(tmp)
@@ -364,16 +384,19 @@ def icosphere(x,y,z,r,n_subdiv=0):
     face.append([6,5,4])
     face.append([5,9,4])
     face.append([8,7,1])
+    
     face.append([7,10,1])
     face.append([12,11,5])
     face.append([11,12,7])
     face.append([10,6,3])
     face.append([6,10,12])
+    
     face.append([9,8,2])
     face.append([8,9,11])
     face.append([3,6,4])
     face.append([9,2,4])
     face.append([10,3,1])
+    
     face.append([2,8,1])
     face.append([12,10,7])
     face.append([8,11,7])
@@ -389,18 +412,20 @@ def icosphere(x,y,z,r,n_subdiv=0):
             i2=face[i][1]
             i3=face[i][2]
 
-            v12=(vert[i1-1]+vert[i2-1])/2
+            v12=[(vert[i1-1][k]+vert[i2-1][k])/2 for k in range(0,3)]
             renorm(v12,r)
             face.append(v12)
-            i12=len(face)
-            v13=(vert[i1-1]+vert[i3-1])/2
+            i12=len(vert)
+            v13=[(vert[i1-1][k]+vert[i3-1][k])/2 for k in range(0,3)]
             renorm(v13,r)
             face.append(v13)
-            i13=len(face)
-            v23=(vert[i2-1]+vert[i3-1])/2
+            i13=len(vert)
+            v23=[(vert[i2-1][k]+vert[i3-1][k])/2 for k in range(0,3)]
             renorm(v12,r)
             face.append(v23)
-            i23=len(face)
+            i23=len(vert)
+            #print(len(face),i12,i13,i23)
+            #quit()
 
             face_new.append([i1,i12,i13])
             face_new.append([i12,i2,i23])
@@ -428,6 +453,8 @@ def icosphere(x,y,z,r,n_subdiv=0):
 
     for i in range(0,len(face)):
 
+        print(i,face[i][0],face[i][1],face[i][2])
+        
         # Add the vertices to the new vertex array
         vert2.append(vert[face[i][0]-1])
         vert2.append(vert[face[i][1]-1])
@@ -444,11 +471,12 @@ def icosphere(x,y,z,r,n_subdiv=0):
             print('k',norms2[k])
     
     # Print out results
-    if False:
+    if True:
+        print('x,y,z,r:',x,y,z,r)
         for ki in range(0,len(vert2),3):
             print('%d [%d,%d,%d]' % (int(ki/3),face2[int(ki/3)][0],
-                                             face2[int(ki/3)][1],
-                                             face2[int(ki/3)][2]))
+                                     face2[int(ki/3)][1],
+                                     face2[int(ki/3)][2]))
             print(('0 [%7.6e,%7.6e,%7.6e] '+
                    '[%7.6e,%7.6e,%7.6e]') % (vert2[ki][0],vert2[ki][1],
                                              vert2[ki][2],norms2[ki][0],
@@ -461,11 +489,23 @@ def icosphere(x,y,z,r,n_subdiv=0):
                    '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+2][0],vert2[ki+2][1],
                                              vert2[ki+2][2],norms2[ki+2][0],
                                              norms2[ki+2][1],norms2[ki+2][2]))
+            xtmp=[vert2[ki][0],vert2[ki][1],vert2[ki][2]]
+            ytmp=[vert2[ki+1][0],vert2[ki+1][1],vert2[ki+1][2]]
+            ztmp=[vert2[ki+2][0],vert2[ki+2][1],vert2[ki+2][2]]
+            print('d1 %7.6e' % (numpy.sqrt((xtmp[0]-ytmp[0])**2+
+                                           (xtmp[1]-ytmp[1])**2+
+                                           (xtmp[2]-ytmp[2])**2)))
+            print('d2 %7.6e' % (numpy.sqrt((ztmp[0]-ytmp[0])**2+
+                                           (ztmp[1]-ytmp[1])**2+
+                                           (ztmp[2]-ytmp[2])**2)))
+            print('d3 %7.6e' % (numpy.sqrt((xtmp[0]-ztmp[0])**2+
+                                           (xtmp[1]-ztmp[1])**2+
+                                           (xtmp[2]-ztmp[2])**2)))
             print('')
 
         print(len(vert2),len(norms2),len(face2))
         quit()
-            
+        
     return vert2,norms2,face2
     
 def cpp_test(x):
