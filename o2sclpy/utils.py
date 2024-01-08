@@ -416,57 +416,54 @@ def icosphere(x,y,z,r,n_subdiv=0):
 
     # Subdivide if requested
 
-    if n_subdiv>0:
-        for k in range(0,n_subdiv):
-            face_new=[]
-            for i in range(0,len(face)):
-                i1=face[i][0]
-                i2=face[i][1]
-                i3=face[i][2]
+    for k in range(0,n_subdiv):
+        
+        face_new=[]
+        
+        for i in range(0,len(face)):
+            i1=face[i][0]
+            i2=face[i][1]
+            i3=face[i][2]
     
-                v12=[(vert[i1-1][k]+vert[i2-1][k])/2 for k in range(0,3)]
-                renorm(v12,r)
-                vert.append(v12)
-                i12=len(vert)
+            v12=[(vert[i1-1][k]+vert[i2-1][k])/2 for k in range(0,3)]
+            renorm(v12,r)
+            vert.append(v12)
+            i12=len(vert)
     
-                tmp1=copy.deepcopy(v12)
-                norm3(tmp1)
-                vn.append(tmp1)
+            tmp1=copy.deepcopy(v12)
+            norm3(tmp1)
+            vn.append(tmp1)
                 
-                v13=[(vert[i1-1][k]+vert[i3-1][k])/2 for k in range(0,3)]
-                renorm(v13,r)
-                vert.append(v13)
-                i13=len(vert)
+            v13=[(vert[i1-1][k]+vert[i3-1][k])/2 for k in range(0,3)]
+            renorm(v13,r)
+            vert.append(v13)
+            i13=len(vert)
     
-                tmp2=copy.deepcopy(v13)
-                norm3(tmp2)
-                vn.append(tmp2)
+            tmp2=copy.deepcopy(v13)
+            norm3(tmp2)
+            vn.append(tmp2)
                 
-                v23=[(vert[i2-1][k]+vert[i3-1][k])/2 for k in range(0,3)]
-                renorm(v23,r)
-                vert.append(v23)
-                i23=len(vert)
+            v23=[(vert[i2-1][k]+vert[i3-1][k])/2 for k in range(0,3)]
+            renorm(v23,r)
+            vert.append(v23)
+            i23=len(vert)
     
-                tmp3=copy.deepcopy(v23)
-                norm3(tmp3)
-                vn.append(tmp3)
+            tmp3=copy.deepcopy(v23)
+            norm3(tmp3)
+            vn.append(tmp3)
     
-                if False:
-                    print(len(vert),len(face),i12,i13,i23)
-                    print(vert[i1-1],vert[i2-1],vert[i3-1])
-                    print(v12,v13,v23)
-                    quit()
+            if False:
+                print(len(vert),len(face),i12,i13,i23)
+                print(vert[i1-1],vert[i2-1],vert[i3-1])
+                print(v12,v13,v23)
+                quit()
     
-                face_new.append([i1,i12,i13])
-                face_new.append([i12,i2,i23])
-                face_new.append([i12,i23,i13])
-                face_new.append([i3,i13,i23])
+            face_new.append([i1,i12,i13])
+            face_new.append([i12,i2,i23])
+            face_new.append([i12,i23,i13])
+            face_new.append([i3,i13,i23])
 
-        # AWS, 1/8/23: I'm not sure if this deepcopy stuff is necessary
-        facex=copy.deepcopy(face_new)
-    else:
-        # AWS, 1/8/23: I'm not sure if this deepcopy stuff is necessary
-        facex=copy.deepcopy(face)
+        face=face_new
     
     # Shift the origin to the user-specified coordinates
     for i in range(0,len(vert)):
@@ -485,18 +482,18 @@ def icosphere(x,y,z,r,n_subdiv=0):
             print('k',vn[k])
         print('')
 
-    for i in range(0,len(facex)):
+    for i in range(0,len(face)):
 
         #print(i,face[i][0],face[i][1],face[i][2])
         
         # Add the vertices to the new vertex array
-        vert2.append(vert[facex[i][0]-1])
-        vert2.append(vert[facex[i][1]-1])
-        vert2.append(vert[facex[i][2]-1])
+        vert2.append(vert[face[i][0]-1])
+        vert2.append(vert[face[i][1]-1])
+        vert2.append(vert[face[i][2]-1])
 
-        norms2.append(vn[facex[i][0]-1])
-        norms2.append(vn[facex[i][1]-1])
-        norms2.append(vn[facex[i][2]-1])
+        norms2.append(vn[face[i][0]-1])
+        norms2.append(vn[face[i][1]-1])
+        norms2.append(vn[face[i][2]-1])
 
         face2.append([i*3,i*3+1,i*3+2])
 

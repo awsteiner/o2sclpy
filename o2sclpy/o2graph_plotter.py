@@ -1794,14 +1794,13 @@ class td_plot_base(yt_plot_base):
 
         return
         
-    def td_scatter(self,o2scl,amp,args):
+    def td_scatter(self,o2scl,amp,args,n_subdiv=0):
         """
         Desc
         """
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
         amt=acol_manager(self.link2,amp)
 
-        kwstring=''
         if curr_type==b'table':
             col_x=args[0]
             col_y=args[1]
@@ -1809,19 +1808,15 @@ class td_plot_base(yt_plot_base):
             col_r=''
             col_g=''
             col_b=''
-            if len(args)==4:
-                kwstring=args[3]
-            elif len(args)>4:
+            if len(args)>4:
                 col_r=args[3]
                 col_g=args[4]
                 col_b=args[5]
-                if len(args)>=7:
-                    kwstring=args[6]
         else:
             print("Command 'td-scatter' not supported for type",
                   curr_type,".")
             return
-
+        
         table=amt.get_table_obj()
         n=table.get_nlines()
         cx=table[col_x][0:n]
@@ -1868,7 +1863,7 @@ class td_plot_base(yt_plot_base):
             xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
             ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
             znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
-            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,0.04,n_subdiv=0)
+            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,0.04,n_subdiv=n_subdiv)
             lv=len(gf.vert_list)
             for k in range(0,len(vtmp)):
                 gf.vert_list.append(vtmp[k])
@@ -6855,7 +6850,8 @@ class o2graph_plotter(td_plot_base):
                         self.td_scatter(o2scl,amp,
                                         [strlist[ix+1],strlist[ix+2],
                                          strlist[ix+3]],
-                                         **string_to_dict(strlist[ix+4]))
+                                         **string_to_dict2(strlist[ix+4],
+                                                           list_of_ints=['n_subdiv']))
                     elif ix_next-ix==7:
                         self.td_scatter(o2scl,amp,[strlist[ix+1],
                                                    strlist[ix+2],
@@ -6868,7 +6864,8 @@ class o2graph_plotter(td_plot_base):
                                         [strlist[ix+1],strlist[ix+2],
                                          strlist[ix+3],strlist[ix+4],
                                          strlist[ix+5],strlist[ix+6]],
-                                         **string_to_dict(strlist[ix+7]))
+                                         **string_to_dict2(strlist[ix+7],
+                                                           list_of_ints=['n_subdiv']))
                     else:
                         print('Not enough arguments for td-scatter.')
 
