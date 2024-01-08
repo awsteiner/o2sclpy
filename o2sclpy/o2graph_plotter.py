@@ -1794,13 +1794,14 @@ class td_plot_base(yt_plot_base):
 
         return
         
-    def td_scatter(self,o2scl,amp,args,n_subdiv=0):
+    def td_scatter(self,o2scl,amp,args,n_subdiv=0,r=0.04):
         """
         Desc
         """
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
         amt=acol_manager(self.link2,amp)
 
+        colors=False
         if curr_type==b'table':
             col_x=args[0]
             col_y=args[1]
@@ -1812,6 +1813,7 @@ class td_plot_base(yt_plot_base):
                 col_r=args[3]
                 col_g=args[4]
                 col_b=args[5]
+                colors=True
         else:
             print("Command 'td-scatter' not supported for type",
                   curr_type,".")
@@ -1848,6 +1850,17 @@ class td_plot_base(yt_plot_base):
                 print('td_scatter(): z limits not set, so setting to',
                       self.zlo,',',self.zhi)
 
+        if colors==True:
+            cr=table[col_r][0:n]
+            cg=table[col_g][0:n]
+            cb=table[col_b][0:n]
+            rlo=numpy.min(cr)
+            rhi=numpy.max(cr)
+            glo=numpy.min(cg)
+            ghi=numpy.max(cg)
+            blo=numpy.min(cb)
+            bhi=numpy.max(cb)
+
         # If true, then a color map has been specified and we need
         # to add materials
         colors=False
@@ -1857,24 +1870,49 @@ class td_plot_base(yt_plot_base):
             cb=table[col_b]
             colors=True
 
-        gf=mesh_object('scatter',[])
-        
-        for i in range(0,n):
-            xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
-            ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
-            znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
-            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,0.04,n_subdiv=n_subdiv)
-            lv=len(gf.vert_list)
-            for k in range(0,len(vtmp)):
-                gf.vert_list.append(vtmp[k])
-            for k in range(0,len(ntmp)):
-                gf.vn_list.append(ntmp[k])
-            for k in range(0,len(ftmp)):
-                ftmp[k][0]=ftmp[k][0]+lv
-                ftmp[k][1]=ftmp[k][1]+lv
-                ftmp[k][2]=ftmp[k][2]+lv
-                gf.faces.append(ftmp[k])
-        
+        if colors==False:
+            gf=mesh_object('scatter',[])
+            
+            for i in range(0,n):
+                xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
+                ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
+                znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
+                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
+                lv=len(gf.vert_list)
+                for k in range(0,len(vtmp)):
+                    gf.vert_list.append(vtmp[k])
+                for k in range(0,len(ntmp)):
+                    gf.vn_list.append(ntmp[k])
+                for k in range(0,len(ftmp)):
+                    ftmp[k][0]=ftmp[k][0]+lv
+                    ftmp[k][1]=ftmp[k][1]+lv
+                    ftmp[k][2]=ftmp[k][2]+lv
+                    gf.faces.append(ftmp[k])
+                    
+        else:
+
+            gf=mesh_object('scatter',[])
+            
+            for i in range(0,n):
+                
+                xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
+                ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
+                znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
+                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
+                lv=len(gf.vert_list)
+                for k in range(0,len(vtmp)):
+                    gf.vert_list.append(vtmp[k])
+                for k in range(0,len(ntmp)):
+                    gf.vn_list.append(ntmp[k])
+                for k in range(0,len(ftmp)):
+                    gf.faces[k]=[gf.faces[k][0],gf.faces[k][1],
+                                 gf.faces[k][2],'mat_point_'+str(i)]
+                
+                mat=material('mat_point_'+str(i),[(cr[i]-rlo)/(rhi-rlo),
+                                                  (cg[i]-glo)/(ghi-glo),
+                                                  (cb[i]-blo)/(bhi-blo)])
+                self.to.add_mat(mat)
+            
         # Convert to GLTF
                 
         vert2=[]
@@ -1882,13 +1920,12 @@ class td_plot_base(yt_plot_base):
         
         for i in range(0,len(gf.faces)):
 
-            #print('old faces:',den_face[i])
-            
             # Add the vertices to the new vertex array
             vert2.append(gf.vert_list[gf.faces[i][0]])
             vert2.append(gf.vert_list[gf.faces[i][1]])
             vert2.append(gf.vert_list[gf.faces[i][2]])
     
+            # Add the normals to the new normal array
             norms2.append(gf.vn_list[gf.faces[i][0]])
             norms2.append(gf.vn_list[gf.faces[i][1]])
             norms2.append(gf.vn_list[gf.faces[i][2]])
