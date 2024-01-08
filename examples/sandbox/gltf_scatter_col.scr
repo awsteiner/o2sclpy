@@ -4,4 +4,4 @@ o2graph -set td_wdir data \
 -index -select-rows "N<10" \
 -td-scatter x y z x y z -td-axis "$ R~(\mathrm{km}) $" \
 "$ M~(\mathrm{M}_{\odot}) $" "Probability" \
--gltf scatter.gltf
+-gltf scatter_col.gltf
