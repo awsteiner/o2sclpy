@@ -43,6 +43,26 @@ def compare_images(name,diff=200):
     assert rms<diff, name
     return
 
+def compare_files(name1,name2):
+
+    f=open(name1)
+    f2=open(name2)
+
+    with open(name1) as f:
+        lines1=f.readlines()
+    with open(name2) as f2:
+        lines2=f2.readlines()
+    for i in range(0,name1):
+        if len(lines2)<i:
+            print('Files have different lengths,',len(lines1),
+                  len(lines2),'.')
+            assert len(lines1)==len(lines2)
+        elif lines1[i]!=lines2[i]:
+            print('Difference detected at line ',i,'.')
+            print(' 1:',line1)
+            print(' 2:',line2)
+            assert line1==line2
+
 def test_colors_near():
     ret=os.system('cd examples; ./colors_near.scr')
     assert ret==0
@@ -144,6 +164,13 @@ def test_yt_scatter():
     compare_images('yt_scatter',diff=400)
     return
 
+def test_gltf_den_plot():
+    ret=os.system('cd examples; ./gltf_den_plot.scr')
+    assert ret==0
+    compare_files('examples/data/den_plot.gltf',
+                  'doc/static/gltf/den_plot.gltf')
+    return
+
 # We comment this one out because its time consuming
 #def test_yt_tg_multvol():
 #    ret=os.system('cd examples; ./yt_tg_multvol.scr')
@@ -168,4 +195,5 @@ if __name__ == '__main__':
     test_table_scatter()
     test_table3d_den_plot()
     test_yt_scatter()
+    test_gltf_den_plot()
     print('All tests passed.')
