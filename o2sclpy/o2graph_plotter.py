@@ -904,7 +904,7 @@ class o2graph_plotter(td_plot_base):
         import tempfile
         
         gltf_file_name='o2sclpy.gltf'
-        print('Writing GLTF to',gltf_file_name)
+        print('Writing GLTF to',self.td_wdir+'/'+gltf_file_name)
 
         self.to.write_gltf(self.td_wdir,gltf_file_name)
         
@@ -920,7 +920,7 @@ class o2graph_plotter(td_plot_base):
                   'LIGHT_DIST': '5.8',
                   'LIGHT_ENERGY': '800',
                   'GLTF_PATH': gltf_file_name,
-                  'N_FRAMES': '200',
+                  'N_FRAMES': str(n_frames),
                   'CAM_DIST': '5'}
         print('Making replacements:',rep_list)
 
@@ -5369,7 +5369,7 @@ class o2graph_plotter(td_plot_base):
                         self.td_den_plot(o2scl,amp,[strlist[ix+1]])
                     elif ix_next-ix>=3:
                         self.td_den_plot(o2scl,amp,[strlist[ix+1]],
-                                         **string_to_dict(strlist[ix+2]))
+                                         **string_to_dict2(strlist[ix+2]))
                     else:
                         print('Not enough arguments for td-den-plot.')
 
@@ -5387,8 +5387,9 @@ class o2graph_plotter(td_plot_base):
                         self.td_scatter(o2scl,amp,
                                         [strlist[ix+1],strlist[ix+2],
                                          strlist[ix+3]],
-                                         **string_to_dict2(strlist[ix+4],
-                                                           list_of_ints=['n_subdiv']))
+                                        **string_to_dict2(strlist[ix+4],
+                                                          list_of_ints=
+                                                          ['n_subdiv']))
                     elif ix_next-ix==7:
                         self.td_scatter(o2scl,amp,[strlist[ix+1],
                                                    strlist[ix+2],
@@ -5402,7 +5403,8 @@ class o2graph_plotter(td_plot_base):
                                          strlist[ix+3],strlist[ix+4],
                                          strlist[ix+5],strlist[ix+6]],
                                          **string_to_dict2(strlist[ix+7],
-                                                           list_of_ints=['n_subdiv']))
+                                                           list_of_ints=
+                                                           ['n_subdiv']))
                     else:
                         print('Not enough arguments for td-scatter.')
 

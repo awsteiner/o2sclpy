@@ -1127,8 +1127,8 @@ class td_plot_base(yt_plot_base):
             
             for i in range(0,256):
                 rgb=color_map(norm(float(i)))[:3]
-                cmap_mats.append(material('cmap_'+str(i),[rgb[0],rgb[1],
-                                                       rgb[2]]))
+                cmap_mats.append(material('cmap_'+str(i),
+                                          [rgb[0],rgb[1],rgb[2]]))
                 
             colors=True
             if self.verbose>2:
