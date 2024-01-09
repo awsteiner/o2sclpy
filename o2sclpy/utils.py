@@ -27,15 +27,6 @@ import os
 # For numpy.bytes_
 import numpy
 
-# To test between Linux/OSX using system()
-# AWS, 2/20/23, apparently no longer used
-#import platform
-
-# For CDLL loading
-# AWS, 2/20/23, apparently no longer used
-#import ctypes
-#from ctypes.util import find_library
-
 def cross(x,y,norm=False):
     """Return the cross product between two vectors
 

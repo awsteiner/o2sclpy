@@ -32,6 +32,9 @@ import textwrap
 # For code.interact() in 'python' command
 import code 
 
+# For system type detection
+import platform
+
 from o2sclpy.doc_data import cmaps, new_cmaps, extra_types
 from o2sclpy.doc_data import acol_help_topics, version
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
@@ -899,7 +902,12 @@ class o2graph_plotter(td_plot_base):
         
         return
         
-    def bl_yaw_mp4(self, n_frames: int, mp4_file: str):
+    def bl_yaw_mp4(self, n_frames: int, mp4_file: str,
+                   blender_cmd: str = '', o2sclpy_dir: str = '',
+                   vf: str = '', cam_dist: float = 5.0,
+                   light_energy : float = 800,
+                   light_dist : float = 5.8,
+                   bg_color : str = ''):
 
         import tempfile
         
@@ -911,17 +919,24 @@ class o2graph_plotter(td_plot_base):
         py_file_name=self.td_wdir+'/o2sclpy.py'
         print('Writing Python script to',py_file_name)
 
-        orig_script=('/usr/local/lib/python3.11/site-packages/'+
-                     'o2sclpy/bl_gltf_yaw.py')
+        # Try to find o2sclpy by finding the numpy directory
+        if o2sclpy_dir=='':
+            o2sclpy_dir=numpy.__path__[0][:-5]+'o2sclpy/'
+            print('Setting o2sclpy_dir to:',o2sclpy_dir)
+            
+        orig_script=(o2sclpy_dir+'bl_gltf_yaw.py')
         
         print('Original script at:',orig_script)
 
-        rep_list={'BG_COLOR': '(0,0,0,0)',
-                  'LIGHT_DIST': '5.8',
-                  'LIGHT_ENERGY': '800',
+        if bg_color=='':
+            bg_color='(0,0,0,0)'
+            
+        rep_list={'BG_COLOR': bg_color,
+                  'LIGHT_DIST': str(light_dist),
+                  'LIGHT_ENERGY': str(light_energy),
                   'GLTF_PATH': gltf_file_name,
                   'N_FRAMES': str(n_frames),
-                  'CAM_DIST': '5'}
+                  'CAM_DIST': str(cam_dist)}
         print('Making replacements:',rep_list)
 
         forig=open(orig_script,'r')
@@ -937,16 +952,33 @@ class o2graph_plotter(td_plot_base):
             frep.write(line)
         forig.close()
         frep.close()
-            
-        cmd=('cd '+self.td_wdir+' && /Applications/Blender.app'+
-             '/Contents/MacOS/Blender -b -P o2sclpy.py')
+
+        if blender_cmd=='':
+            if os.environ['O2GRAPH_BLENDER_CMD'] is None:
+                if platform.system()=='Darwin':
+                    blender_cmd=('/Applications/Blender.app'+
+                                 '/Contents/MacOS/Blender')
+                    print('Blender command not specified, presuming MacOS',
+                          'default')
+                    print(' ',blender_cmd,'.')
+                else:
+                    blender_cmd='/usr/bin/blender'
+                    print('Blender command not specified, presuming Linux',
+                          'default')
+                    print(' ',blender_cmd,'.')
+            else:
+                blender_cmd=os.environ['O2GRAPH_BLENDER_CMD']
+        
+        cmd=('cd '+self.td_wdir+' && '+blender_cmd+' -b -P o2sclpy.py')
         print('Executing:',cmd)
         os.system(cmd)
 
         print('Creating mp4')
         self.mp4([self.td_wdir+'/bl_gltf_yaw_%03d.png',mp4_file],
-            vf='eq=contrast=1')
-            
+                 vf=vf)
+
+        #vf='eq=contrast=1')
+        
         return
         
     def den_plot_o2graph(self,o2scl,amp,link,args):
