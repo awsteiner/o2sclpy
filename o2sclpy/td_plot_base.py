@@ -1214,8 +1214,11 @@ class td_plot_base(yt_plot_base):
             norm=cross(v1,v2,norm=True)
             for k in range(0,3):
                 norms2.append([norm[0],norm[1],norm[2]])
-                
-            den_face[i]=[i*3,i*3+1,i*3+2,den_face[i][3]]
+
+            if colors==True:
+                den_face[i]=[i*3,i*3+1,i*3+2,den_face[i][3]]
+            else:
+                den_face[i]=[i*3,i*3+1,i*3+2]
 
             #print('new faces:',den_face[i])
             #print('face:',den_face[i])

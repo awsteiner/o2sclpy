@@ -1453,7 +1453,7 @@ class o2graph_plotter(td_plot_base):
             for i in range(0,201):
                 x1a.append(x1p)
                 x1p=x1p+(x1_max-x1_min)/200.0
-            z=numpy.zeros((200,200))
+            z=numpy.zeros((201,201))
             for i in range(0,201):
                 for j in range(0,201):
                     z[i,j]=k.pdf([x0a[i],x1a[j]])
