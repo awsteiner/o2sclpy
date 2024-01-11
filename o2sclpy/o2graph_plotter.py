@@ -101,7 +101,6 @@ base_list=[
     ["line",plot_base.line.__doc__],
     ["modax",plot_base.modax.__doc__],
     ["mp4",0],
-#    ["obj",0],
     ["o2scl-addl-libs",
      "Specify a list of list of additional libraries to load."],
     ["o2scl-cpp-lib",
@@ -877,7 +876,9 @@ class o2graph_plotter(td_plot_base):
         "out.mp4". If the "mp4" suffix is omitted, it is automatically
         added.
 
-        Typical video filter is e.g. vf='eq=brightness=0.5:contrast=10'.
+        A typical video filter is e.g. vf='eq=brightness=0.5:contrast=10'.
+
+        This command requires the installation of ``ffmpeg``. 
         """
         if len(args)<2:
             print('Command mp4 needs more arguments.')
@@ -912,6 +913,11 @@ class o2graph_plotter(td_plot_base):
                    light_energy : float = 800,
                    light_dist : float = 5.8,
                    bg_color : str = ''):
+        """
+        
+        This command requires the Blender python package,
+        ``bpy`` and the installation of ``ffmpeg``. 
+        """
 
         import tempfile
         
@@ -1842,8 +1848,7 @@ class o2graph_plotter(td_plot_base):
         return
                                  
     def plot_color(self,o2scl,amp,link,args):
-        """
-        Documentation for o2graph command ``plot-color``:
+        """Documentation for o2graph command ``plot-color``:
 
         For objects of type ``table``:
 
@@ -1856,13 +1861,18 @@ class o2graph_plotter(td_plot_base):
         Some useful kwargs are color (c), dashes,
         linestyle (ls), linewidth (lw), marker, markeredgecolor (mec),
         markeredgewidth (mew), markerfacecolor (mfc),
-        markerfacecoloralt (mfcalt), markersize (ms). For example:
-        \"o2graph -create x 0 10 0.2 -function sin(x) y -plot x y
-        lw=0,marker='+' -show\". This command uses the matplotlib
-        plot() function, see
+        markerfacecoloralt (mfcalt), markersize (ms). For example::
+
+            o2graph -create x 0 10 0.2 -function sin(x) y -plot x y \\
+            lw=0,marker='+' -show
+
+        This command uses the matplotlib plot() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
         for information and keyword arguments. This command does not
         yet support the matplotlib format parameter.
+
+        If a cmyt colormap is used, then the ``cmyt`` Python package is
+        required.
         """
         
         if len(args)<4:
@@ -3099,6 +3109,7 @@ class o2graph_plotter(td_plot_base):
 
         Experimental.
 
+        This command requires the installation of ``ffmpeg``. 
         """
 
         import matplotlib.pyplot as plot
@@ -4638,6 +4649,8 @@ class o2graph_plotter(td_plot_base):
         The keyword argument ``mov_fname`` specifies the output
         movie file (if an animation is specified with ``yt-path``).
         If empty, the filename ``o2graph.mp4`` is used. 
+
+        This command requires the installation of ``ffmpeg``. 
         """
 
         if self.yt_scene==0:

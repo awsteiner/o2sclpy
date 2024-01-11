@@ -28,15 +28,13 @@ List of command-line options which do not require a current object:
   -filelist        List objects in a HDF5 file. 
   -generic         Read an object from a generic text file. 
   -get             Get the value of a parameter.
-  -gltf            
+  -gltf            Produce a GLTF file with the current set of 3D objects.
   -h5-copy         Copy an O₂scl-generated HDF5 file. 
   -help            Show help information.
   -image           Plot a png file in a matplotlib window.
   -inset           Add a new set of axes
   -interactive     Toggle interactive mode. 
   -internal        Output current object in the internal HDF5 format. 
-  -kde-2d-plot     For objects of type ``table``:
-  -kde-plot        For objects of type ``table``:
   -license         Show license information.
   -line            Plot a line from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
   -modax           Modify current axes properties.
@@ -66,6 +64,7 @@ List of command-line options which do not require a current object:
   -td-arrow        Create a 3D arrow (experimental).
   -td-axis         Create a 3D axis label (experimental).
   -td-den-plot     Create a 3D density plot (experimental).
+  -td-scatter      Create a 3D scatter plot (experimental).
   -text            Plot text in the data coordinates.
   -textbox         Plot a box with text.
   -ttext           Plot text in window coordinates [(0,0) to (1,1)].

@@ -33,3 +33,9 @@ additional information about your system in order to perform the
 dynamic loading properly. See :ref:`Linking with O₂scl <link2>` for
 more details.
 
+Some O₂sclpy classes and ``o2graph`` commands require other Python
+packages, including ``scipy``, ``scikit-learn``, ``tensorflow``,
+``yt``, ``cmyt``, ``Pillow``, ``h5py``, and ``bpy`` (from Blender).
+Classes or functions which generate movies, like the ``o2graph``
+command ``mp4``, require the installation of ``ffmpeg``.
+

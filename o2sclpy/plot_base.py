@@ -2233,6 +2233,9 @@ class plot_base:
         The documentation for the o2graph ``den-plot`` command is in
         the docstring for
         :py:func:`o2sclpy.o2graph_plotter.den_plot_o2graph()`.
+
+        If a cmyt colormap is used, then the ``cmyt`` Python package is
+        required.
         """
         
         if len(args)<1:
@@ -2486,6 +2489,9 @@ class plot_base:
         The documentation for the o2graph ``den-plot-rgb`` command is
         in the docstring for
         :py:func:`o2sclpy.o2graph_plotter.den_plot_rgb_o2graph()`.
+
+        If the make_png keyword argument is specified, then ``Pillow``
+        Python package is required.
         """
 
         nxt=table3d.get_nx()
@@ -2692,6 +2698,9 @@ class plot_base:
         The documentation for the o2graph ``make-png`` command is in
         the docstring for
         :py:func:`o2sclpy.o2graph_plotter.make_png_o2graph()`.
+
+        This command requires the ``Pillow`` Python package.
+
         """
         
         nxt=table3d.get_nx()

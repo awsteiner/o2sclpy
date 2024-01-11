@@ -152,6 +152,14 @@ Colormap and transparency example
 .. image:: static/figures/cmap_den_plot.png
    :width: 70%
 	   
+KDE plot example
+----------------
+
+.. include:: ../examples/kde_plot.scr
+   :literal:
+.. image:: static/figures/kde_plot.png
+   :width: 70%
+	   
 Internal structure
 ------------------
 
