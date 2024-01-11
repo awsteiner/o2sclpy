@@ -153,7 +153,7 @@ class interpm_sklearn_gp:
             if self.verbose>1:
                 print('interpm_sklearn_gp::eval(): type(yp),v,yp:',
                       type(yp),v,yp)
-            return numpy.ascontiguousarray(yp)
+            return numpy.ascontiguousarray(yp)[0]
         if self.verbose>1:
             print('interpm_sklearn_gp::eval(): type(yp[0]),v,yp[0]:',
                   type(yp[0]),v,yp[0])
@@ -170,8 +170,8 @@ class interpm_sklearn_gp:
             if self.verbose>1:
                 print('interpm_sklearn_gp::eval(): type(yp),v,yp:',
                       type(yp),v,yp)
-            return (numpy.ascontiguousarray(yp),
-                    numpy.ascontiguousarray(std))
+            return (numpy.ascontiguousarray(yp)[0],
+                    numpy.ascontiguousarray(std)[0])
         if self.verbose>1:
             print('interpm_sklearn_gp::eval(): type(yp[0]),v,yp[0]:',
                   type(yp[0]),v,yp[0])
