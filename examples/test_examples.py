@@ -52,7 +52,7 @@ def compare_files(name1,name2):
         lines1=f.readlines()
     with open(name2) as f2:
         lines2=f2.readlines()
-    for i in range(0,name1):
+    for i in range(0,len(name1)):
         if len(lines2)<i:
             print('Files have different lengths,',len(lines1),
                   len(lines2),'.')
@@ -111,6 +111,12 @@ def test_table_plot():
     ret=os.system('cd examples; ./table_plot.scr')
     assert ret==0
     compare_images('table_plot')
+    return
+
+def test_kde_plot():
+    ret=os.system('cd examples; ./kde_plot.scr')
+    assert ret==0
+    compare_images('kde_plot')
     return
 
 def test_table_plot_color():
@@ -187,6 +193,7 @@ if __name__ == '__main__':
     test_subplots2()
     test_subplots3()
     test_table_plot()
+    test_kde_plot()
     test_table_plot_color()
     test_table_plotv()
     test_table_rplot()
