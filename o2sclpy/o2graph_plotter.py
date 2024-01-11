@@ -5484,7 +5484,7 @@ class o2graph_plotter(td_plot_base):
                                            png_file=prefix+'ytitle.png')
                         self.td_axis_label('z',strlist[ix+3],
                                            png_file=prefix+'ztitle.png')
-                    if ix_next-ix>=4:
+                    elif ix_next-ix>=4:
                         self.td_arrow(0,0,0,1,0,0,'x_axis')
                         self.td_arrow(0,0,0,0,1,0,'y_axis')
                         self.td_arrow(0,0,0,0,0,1,'z_axis')
