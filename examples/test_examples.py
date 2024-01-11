@@ -59,9 +59,9 @@ def compare_files(name1,name2):
             assert len(lines1)==len(lines2)
         elif lines1[i]!=lines2[i]:
             print('Difference detected at line ',i,'.')
-            print(' 1:',line1)
-            print(' 2:',line2)
-            assert line1==line2
+            print(' 1:',lines1[i])
+            print(' 2:',lines2[i])
+            assert lines1[i]==lines2[i]
 
 def test_colors_near():
     ret=os.system('cd examples; ./colors_near.scr')
@@ -173,7 +173,7 @@ def test_yt_scatter():
 def test_gltf_den_plot():
     ret=os.system('cd examples; ./gltf_den_plot.scr')
     assert ret==0
-    compare_files('examples/data/den_plot.gltf',
+    compare_files('examples/gltf/den_plot.gltf',
                   'doc/static/gltf/den_plot.gltf')
     return
 

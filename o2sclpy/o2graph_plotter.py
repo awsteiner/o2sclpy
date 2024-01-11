@@ -139,7 +139,7 @@ base_list=[
     ["subplots",plot_base.subplots.__doc__],
     ["td-axis","Documentation for td-axis\n\n"+
      "Create a 3D axis label (experimental).\n\n"+
-     "<x label> <y label> <z label> [kwargs]\n\n"+
+     "<x label> <y label> <z label> [png file prefix]\n\n"+
      "Full desc."],
     ["td-arrow","Documentation for td-arrow\n\n"+
      "Create a 3D arrow (experimental).\n\n"+
@@ -5473,6 +5473,17 @@ class o2graph_plotter(td_plot_base):
                         print('Process td-axis.')
                         print('args:',strlist[ix:ix_next])
 
+                    if ix_next-ix>=5:
+                        prefix=strlist[ix+4]
+                        self.td_arrow(0,0,0,1,0,0,'x_axis')
+                        self.td_arrow(0,0,0,0,1,0,'y_axis')
+                        self.td_arrow(0,0,0,0,0,1,'z_axis')
+                        self.td_axis_label('x',strlist[ix+1],
+                                           png_file=prefix+'xtitle.png')
+                        self.td_axis_label('y',strlist[ix+2],
+                                           png_file=prefix+'ytitle.png')
+                        self.td_axis_label('z',strlist[ix+3],
+                                           png_file=prefix+'ztitle.png')
                     if ix_next-ix>=4:
                         self.td_arrow(0,0,0,1,0,0,'x_axis')
                         self.td_arrow(0,0,0,0,1,0,'y_axis')
