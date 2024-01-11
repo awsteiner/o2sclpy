@@ -98,8 +98,6 @@ base_list=[
      "This command reads a png file, fills a plotting canvas "+
      "and then calls matplotlib.pyplot.show()."],
     ["inset",plot_base.inset.__doc__],
-    ["kde-plot",0],
-    ["kde-2d-plot",0],
     ["line",plot_base.line.__doc__],
     ["modax",plot_base.modax.__doc__],
     ["mp4",0],
@@ -191,6 +189,8 @@ extra_list=[
     ["table","hist2d-plot",0],
     ["table","plot",0],
     ["table","to-kde",0],
+    ["table","kde-plot",0],
+    ["table","kde-2d-plot",0],
     ["table","plot1",0],
     ["table","plot-color",0],
     ["table","rplot",0],
@@ -294,7 +294,7 @@ List of yt parameters for o2sclpy
 A list of 2-element entries, name and description
 """
 
-def doc_replacements(s,ter,amp,link,script=False):
+def doc_replacements(s,ter,amp,link,script=False,verbose=0):
     """
     Make some replacements from RST formatting to the terminal screen.
 
@@ -307,6 +307,10 @@ def doc_replacements(s,ter,amp,link,script=False):
         s=(force_string(amt.get_exec_color())+s+
            force_string(amt.get_default_color()))
         return s
+
+    if verbose>2:
+        print('Function doc_replacements():')
+        print(' s=',s)
     
     # Replace commands in base_list
     for i in range(0,len(base_list)):
@@ -656,27 +660,25 @@ class o2graph_plotter(td_plot_base):
                 line[1]=o2graph_plotter.yt_text.__doc__
             elif line[0]=="mp4":
                 line[1]=o2graph_plotter.mp4.__doc__
-            elif line[0]=="kde-plot":
-                line[1]=o2graph_plotter.kde_plot.__doc__
-            elif line[0]=="kde-2d-plot":
-                line[1]=o2graph_plotter.kde_2d_plot.__doc__
             elif line[0]=="yt-tf":
                 line[1]=o2graph_plotter.yt_tf_func.__doc__
         for line in extra_list:
-            if line[1]=="to-kde":
-                line[2]=o2graph_plotter.to_kde.__doc__
             if line[1]=="den-plot":
                 line[2]=o2graph_plotter.den_plot_o2graph.__doc__
-            if line[1]=="den-plot-rgb":
+            elif line[1]=="den-plot-rgb":
                 line[2]=o2graph_plotter.den_plot_rgb_o2graph.__doc__
-            if line[1]=="den-plot-anim":
+            elif line[1]=="den-plot-anim":
                 line[2]=o2graph_plotter.den_plot_anim.__doc__
-            if line[1]=="errorbar":
+            elif line[1]=="errorbar":
                 line[2]=o2graph_plotter.errorbar.__doc__
             elif line[1]=="hist-plot":
                 line[2]=o2graph_plotter.hist_plot.__doc__
             elif line[1]=="hist2d-plot":
                 line[2]=o2graph_plotter.hist2d_plot.__doc__
+            elif line[1]=="kde-plot":
+                line[2]=o2graph_plotter.kde_plot.__doc__
+            elif line[1]=="kde-2d-plot":
+                line[2]=o2graph_plotter.kde_2d_plot.__doc__
             elif line[1]=="plot":
                 line[2]=o2graph_plotter.plot_o2graph.__doc__
             elif line[1]=="plot1":
@@ -687,6 +689,8 @@ class o2graph_plotter(td_plot_base):
                 line[2]=o2graph_plotter.rplot.__doc__
             elif line[1]=="scatter":
                 line[2]=o2graph_plotter.scatter.__doc__
+            elif line[1]=="to-kde":
+                line[2]=o2graph_plotter.to_kde.__doc__
             elif line[1]=="yt-add-vol":
                 line[2]=o2graph_plotter.yt_add_vol.__doc__
             elif line[1]=="yt-anim":
@@ -1307,11 +1311,24 @@ class o2graph_plotter(td_plot_base):
 
         Command-line arguments: ``<column> [plot kwargs] [kde kwargs]``
 
-        Useful plot kwargs are all the usual plotting kwargs, plus
-        x_min=0, x_max=0, y_mult=1, and n_points=201.
+        This command takes the column of the table, computes a
+        one-dimensional KDE, and then uses that KDE to fill two
+        vectors, an x and y vector to plot the data. Useful plot
+        kwargs are all the usual plotting kwargs, plus x_min=0,
+        x_max=0, y_mult=1, and n_points=201. If x_max is less than
+        x_min then the limits on the x vector are either taken from
+        the parameters ``xlo`` and ``xhi`` if they are set, or 
+        otherwise computed from the minimum and maximum of the data.
+        Otherwise, if x_max is smaller than x_min, then those 
+        values are used as the limits for the KDE (which need not
+        correspond to ``xlo`` and ``xhi``). The number of points
+        between x_min and x_max is determined by the n_points parameter. 
+        The y vector is multiplied by y_mult before plotting. 
+        
 
         Useful KDE kwargs are kernel='gaussian', metric='euclidean',
         transform='unit', and bandwidth='none'.
+
         """
         curr_type=o2scl_get_type(o2scl,amp,link)
 
@@ -1344,6 +1361,11 @@ class o2graph_plotter(td_plot_base):
                 y_mult=dct_plot.pop('y_mult',1)
                 n_points=dct_plot.pop('n_points',201)
 
+            if n_points<2:
+                print('o2graph_plotter::kde_plot():',
+                      'Value n_points too small, fixing to 2.'),
+                n_points=2
+
             # If x_min and x_max are not set, then determine them,
             # either from the plot limits or from the minimum
             # and maximum of the data
@@ -1360,7 +1382,12 @@ class o2graph_plotter(td_plot_base):
                 else:
                     x_min=self.xlo
                     x_max=self.xhi
-            print('x_min,x_max,n_points,y_mult:',x_min,x_max,n_points,y_mult)
+
+            if self.verbose>0:
+                print('o2graph_plotter::kde_plot():'),
+                print(('  x_min,x_max,n_points,y_mult: '+
+                       '%7.6e %7.6e %d %7.6e') % (x_min,x_max,n_points,
+                                                  y_mult))
 
             # Use sklearn and a reasonable guess for the bandwidth,
             # between 1.0e-2 and 1.0e+2. Note that the KDE is
@@ -1404,9 +1431,27 @@ class o2graph_plotter(td_plot_base):
 
         Plot a KDE of two columns
 
-        Command-line arguments: ``<column x> <column y> [options]``
+        Command-line arguments: ``<column x> <column y> [plot kwargs]
+        [kde kwargs]``
 
-        Desc.
+        This command converts the two columns to a matrix and two
+        vectors which define the x and y grids. Useful plot kwargs are
+        all the usual plotting kwargs, plus x_min=0, x_max=0, y_min=0,
+        y_max=0, z_mult=1, and n_points=201. Similar to the command
+        ``kde-plot``, if x_max is less than x_min then the limits on
+        the x grid are either taken from the parameters ``xlo`` and
+        ``xhi`` if they are set, or otherwise computed from the
+        minimum and maximum of the specified x column. Otherwise, if
+        x_max is smaller than x_min, then those values are used as the
+        limits for the KDE (which need not correspond to ``xlo`` and
+        ``xhi``). The same holds for y_min, y_max, and the y grid. The
+        number of points between x_min and x_max and between y_min and
+        y_max is determined by the n_points parameter. The z vector is
+        multiplied by y_mult before plotting.
+
+        Useful KDE kwargs are kernel='gaussian', metric='euclidean',
+        transform='unit', and bandwidth='none'.
+
         """
         curr_type=o2scl_get_type(o2scl,amp,link)
 
@@ -1421,47 +1466,94 @@ class o2graph_plotter(td_plot_base):
                 x[i,0]=tab.get(args[0],i)
                 x[i,1]=tab.get(args[1],i)
 
-            x0_min=x[0,0]
-            x0_max=x[0,0]
-            x1_min=x[0,1]
-            x1_max=x[0,1]
-            for i in range(1,tab.get_nlines()):
-                if x[i,0]<x0_min:
-                    x0_min=x[i,0]
-                if x[i,0]>x0_max:
-                    x0_max=x[i,0]
-                if x[i,1]<x1_min:
-                    x1_min=x[i,1]
-                if x[i,1]>x1_max:
-                    x1_max=x[i,1]
-                
+            # Set defaults
+            x_min=0
+            x_max=0
+            y_min=0
+            y_max=1
+            n_points=201
+            z_mult=1
+            
+            # Convert kwargs to string so we can extract
+            # n_points, x_min, and x_max
+            dct_plot={}
+            if len(args)>=3:
+                dct_plot=string_to_dict2(args[2],
+                                         list_of_ints=['n_points'],
+                                         list_of_floats=['x_min','x_max',
+                                                         'y_min','y_max',
+                                                         'z_mult'])
+                x_min=dct_plot.pop('x_min',0)
+                x_max=dct_plot.pop('x_max',0)
+                y_min=dct_plot.pop('y_min',0)
+                y_max=dct_plot.pop('y_max',0)
+                z_mult=dct_plot.pop('z_mult',1)
+                n_points=dct_plot.pop('n_points',201)
+
+            # If x_min and x_max are not set, then determine them,
+            # either from the plot limits or from the minimum
+            # and maximum of the data 
+            if x_min>=x_max:
+                if self.xset==False:
+                    # Determine min and max of data
+                    x_min=x[0,0]
+                    x_max=x[0,0]
+                    for i in range(1,tab.get_nlines()):
+                        if x[i,0]<x_min:
+                            x_min=x[i,0]
+                        if x[i,0]>x_max:
+                            x_max=x[i,0]
+                else:
+                    x_min=self.xlo
+                    x_max=self.xhi
+
+            if y_min>=y_max:
+                if self.yset==False:
+                    # Determine min and max of data
+                    y_min=x[0,1]
+                    y_max=x[0,1]
+                    for i in range(1,tab.get_nlines()):
+                        if x[i,1]<y_min:
+                            y_min=x[i,1]
+                        if x[i,1]>y_max:
+                            y_max=x[i,1]
+                else:
+                    y_min=self.ylo
+                    y_max=self.yhi
+                    
+            if self.verbose>0:
+                print('o2graph_plotter::kde_2d_plot():'),
+                print(('  x_min,x_max,y_min,y_max,n_points,z_mult: '+
+                       '%7.6e %7.6e\n  %7.6e %7.6e %d %7.6e') %
+                      (x_min,x_max,y_min,y_max,n_points,z_mult))
+
             k=kde_sklearn()
             bw_array=[10**(float(i)/4.0-2.0) for i in range(0,17)]
 
-            if len(args)>2:
-                k.set_data_str(x,bw_array,args[1])
+            if len(args)>4:
+                k.set_data_str(x,bw_array,args[3])
             else:
                 k.set_data_str(x,bw_array,'')
 
             x0a=[]
-            x0p=x0_min
-            for i in range(0,201):
+            x0p=x_min
+            for i in range(0,n_points):
                 x0a.append(x0p)
-                x0p=x0p+(x0_max-x0_min)/200.0
+                x0p=x0p+(x_max-x_min)/float(n_points-1)
             x1a=[]
-            x1p=x1_min
-            for i in range(0,201):
+            x1p=x_min
+            for i in range(0,n_points):
                 x1a.append(x1p)
-                x1p=x1p+(x1_max-x1_min)/200.0
-            z=numpy.zeros((201,201))
-            for i in range(0,201):
-                for j in range(0,201):
-                    z[i,j]=k.pdf([x0a[i],x1a[j]])
+                x1p=x1p+(y_max-y_min)/float(n_points-1)
+            z=numpy.zeros((n_points,n_points))
+            for i in range(0,n_points):
+                for j in range(0,n_points):
+                    z[i,j]=k.pdf([x0a[i],x1a[j]])*z_mult
 
             if len(args)<3:
                 self.den_plot([x0a,x1a,z])
             else:
-                self.den_plot([x0a,x1a,z],**string_to_dict(args[2]))
+                self.den_plot([x0a,x1a,z],**dct_plot)
                 
         else:
             print("Command 'kde-2d-plot' not supported for type",
