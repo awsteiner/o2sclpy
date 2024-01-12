@@ -850,13 +850,17 @@ class o2graph_plotter(td_plot_base):
 
         For objects of type ``table``:
 
-        Convert columns in a table to a KDE
+        Convert columns in a table to a KDE (unfinished)
 
         Command-line arguments: ``<options or 'none'> 
         <column 1> [column 2] ...``
 
         Desc.
         """
+
+        # Note that this command is more complicated because acol uses
+        # Python to compute the KDE and thus the o2graph version has
+        # to be different to bypass the C++ stage.
         
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
         amt=acol_manager(self.link2,amp)
