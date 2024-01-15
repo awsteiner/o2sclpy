@@ -11,7 +11,7 @@
 #  
 #  O2sclpy is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  MERCHANTABILITY or FITNESS FORA PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #  
 #  You should have received a copy of the GNU General Public License
@@ -1138,6 +1138,8 @@ class td_plot_base(yt_plot_base):
         den_vert=[]
         # Faces for the density plot
         den_face=[]
+        # Normals for the density plot
+        den_norm=[]
         # Materials for the density plot
         den_ml=[]
         
@@ -1149,6 +1151,49 @@ class td_plot_base(yt_plot_base):
                      (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
                      (sl[i,j]-self.zlo)/(self.zhi-self.zlo)]
                 den_vert.append(arr)
+                if i<nxt-1 and j<nyt-1:
+                    arr1=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i,j]-self.zlo)/(self.zhi-self.zlo)]
+                    arr2=[(xgrid[i+1]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i+1,j]-self.zlo)/(self.zhi-self.zlo)]
+                    arr3=[(xgrid[i+1]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j+1]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i+1,j+1]-self.zlo)/(self.zhi-self.zlo)]
+                elif i<nxt-1:
+                    arr1=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j-1]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i,j-1]-self.zlo)/(self.zhi-self.zlo)]
+                    arr2=[(xgrid[i+1]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j-1]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i+1,j-1]-self.zlo)/(self.zhi-self.zlo)]
+                    arr3=[(xgrid[i+1]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i+1,j]-self.zlo)/(self.zhi-self.zlo)]
+                elif j<nyt-1:
+                    arr1=[(xgrid[i-1]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i-1,j]-self.zlo)/(self.zhi-self.zlo)]
+                    arr2=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i,j]-self.zlo)/(self.zhi-self.zlo)]
+                    arr3=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j+1]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i,j+1]-self.zlo)/(self.zhi-self.zlo)]
+                else:
+                    arr1=[(xgrid[i-1]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j-1]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i-1,j-1]-self.zlo)/(self.zhi-self.zlo)]
+                    arr2=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j-1]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i,j-1]-self.zlo)/(self.zhi-self.zlo)]
+                    arr3=[(xgrid[i]-self.xlo)/(self.xhi-self.xlo),
+                          (ygrid[j]-self.ylo)/(self.yhi-self.ylo),
+                          (sl[i,j]-self.zlo)/(self.zhi-self.zlo)]
+                diff12=[arr2[kk]-arr1[kk] for kk in range(0,3)]
+                diff23=[arr3[kk]-arr2[kk] for kk in range(0,3)]
+                den_norm.append(cross(diff12,diff23,True))
                 if i<nxt-1 and j<nyt-1:
                     if colors==True:
                         # Construct the colormap index
@@ -1201,19 +1246,24 @@ class td_plot_base(yt_plot_base):
             vert2.append(den_vert[den_face[i][0]-1])
             vert2.append(den_vert[den_face[i][1]-1])
             vert2.append(den_vert[den_face[i][2]-1])
-    
-            # Compute the norm
-            p1=den_vert[den_face[i][0]-1]
-            p2=den_vert[den_face[i][1]-1]
-            p3=den_vert[den_face[i][2]-1]
-            v1=[1]*3
-            v2=[1]*3
-            for j in range(0,3):
-                v1[j]=p2[j]-p1[j]
-                v2[j]=p3[j]-p2[j]
-            norm=cross(v1,v2,norm=True)
-            for k in range(0,3):
-                norms2.append([norm[0],norm[1],norm[2]])
+
+            if False:
+                # Compute the norm
+                p1=den_vert[den_face[i][0]-1]
+                p2=den_vert[den_face[i][1]-1]
+                p3=den_vert[den_face[i][2]-1]
+                v1=[1]*3
+                v2=[1]*3
+                for j in range(0,3):
+                    v1[j]=p2[j]-p1[j]
+                    v2[j]=p3[j]-p2[j]
+                norm=cross(v1,v2,norm=True)
+                for k in range(0,3):
+                    norms2.append([norm[0],norm[1],norm[2]])
+            else:
+                norms2.append(den_norm[den_face[i][0]-1])
+                norms2.append(den_norm[den_face[i][1]-1])
+                norms2.append(den_norm[den_face[i][2]-1])
 
             if colors==True:
                 den_face[i]=[i*3,i*3+1,i*3+2,den_face[i][3]]
