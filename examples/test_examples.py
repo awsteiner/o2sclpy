@@ -184,6 +184,13 @@ def test_gltf_den_plot_col():
                   'doc/static/gltf/den_plot_col.gltf')
     return
 
+def test_gltf_scatter():
+    ret=os.system('cd examples; ./gltf_scatter.scr')
+    assert ret==0
+    compare_files('examples/gltf/scatter.gltf',
+                  'doc/static/gltf/scatter.gltf')
+    return
+
 # We comment this one out because its time consuming
 #def test_yt_tg_multvol():
 #    ret=os.system('cd examples; ./yt_tg_multvol.scr')
