@@ -5540,7 +5540,9 @@ class o2graph_plotter(td_plot_base):
                                          strlist[ix+3]],
                                         **string_to_dict2(strlist[ix+4],
                                                           list_of_ints=
-                                                          ['n_subdiv']))
+                                                          ['n_subdiv'],
+                                                          list_of_floats=
+                                                          ['r']))
                     elif ix_next-ix==7:
                         self.td_scatter(o2scl,amp,[strlist[ix+1],
                                                    strlist[ix+2],
@@ -5555,7 +5557,9 @@ class o2graph_plotter(td_plot_base):
                                          strlist[ix+5],strlist[ix+6]],
                                          **string_to_dict2(strlist[ix+7],
                                                            list_of_ints=
-                                                           ['n_subdiv']))
+                                                           ['n_subdiv'],
+                                                           list_of_floats=
+                                                           ['r']))
                     else:
                         print('Not enough arguments for td-scatter.')
 
