@@ -779,7 +779,11 @@ class threed_objects:
             if (len(self.mesh_list[i].vt_list)==
                 len(self.mesh_list[i].vert_list)):
                 texcoords=True
-    
+
+            long_ints=False
+            if len(self.mesh_list[i].vert_list)>=32768:
+                long_ints=True
+                
             att={}
             face_bin=[]
             norm_bin=[]
@@ -916,6 +920,9 @@ class threed_objects:
                 if (j==len(self.mesh_list[i].faces)-1 or
                     next_face_different_mat==True):
 
+                    # 'f' is float, 'H' is unsigned short, and 'I' is
+                    # unsigned int
+                    
                     dat1=pack('<'+'f'*len(vert_bin),*vert_bin)
                     f2.write(dat1)
                     if normals:
@@ -927,8 +934,13 @@ class threed_objects:
                     if texcoords and self.mat_list[mat_index].txt!='':
                         dat4=pack('<'+'f'*len(txts_bin),*txts_bin)
                         f2.write(dat4)
-                    dat2=pack('<'+'h'*len(face_bin),*face_bin)
-                    f2.write(dat2)
+
+                    if long_ints==True:
+                        dat2=pack('<'+'I'*len(face_bin),*face_bin)
+                        f2.write(dat2)
+                    else:
+                        dat2=pack('<'+'H'*len(face_bin),*face_bin)
+                        f2.write(dat2)
         
                     max_v=[0,0,0]
                     min_v=[0,0,0]
@@ -971,10 +983,16 @@ class threed_objects:
                                          "type": "VEC2"})
                         att["TEXCOORD_0"]=acc_index
                         acc_index=acc_index+1
-                    acc_list.append({"bufferView": acc_index,
-                                     "componentType": 5123,
-                                     "count": int(len(face_bin)/1),
-                                     "type": "SCALAR"})
+                    if long_ints:
+                        acc_list.append({"bufferView": acc_index,
+                                         "componentType": 5125,
+                                         "count": int(len(face_bin)/1),
+                                         "type": "SCALAR"})
+                    else:
+                        acc_list.append({"bufferView": acc_index,
+                                         "componentType": 5123,
+                                         "count": int(len(face_bin)/1),
+                                         "type": "SCALAR"})
                     if mat1=='':
                         prim_list.append({"attributes": att,
                                           "indices": acc_index})
@@ -1011,11 +1029,18 @@ class threed_objects:
                                          "byteOffset": offset,
                                          "target": 34962})
                         offset+=4*len(txts_bin)
-                    buf_list.append({"buffer": 0,
-                                     "byteLength": 2*len(face_bin),
-                                     "byteOffset": offset,
-                                     "target": 34963})
-                    offset+=2*len(face_bin)
+                    if long_ints==True:
+                        buf_list.append({"buffer": 0,
+                                         "byteLength": 4*len(face_bin),
+                                         "byteOffset": offset,
+                                         "target": 34963})
+                        offset+=4*len(face_bin)
+                    else:
+                        buf_list.append({"buffer": 0,
+                                         "byteLength": 2*len(face_bin),
+                                         "byteOffset": offset,
+                                         "target": 34963})
+                        offset+=2*len(face_bin)
                     if verbose>1:
                         print('offset:',offset)
 
