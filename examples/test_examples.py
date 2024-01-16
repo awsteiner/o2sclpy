@@ -191,6 +191,13 @@ def test_gltf_scatter():
                   'doc/static/gltf/scatter.gltf')
     return
 
+def test_gltf_scatter_col():
+    ret=os.system('cd examples; ./gltf_scatter_col.scr')
+    assert ret==0
+    compare_files('examples/gltf/scatter_col.gltf',
+                  'doc/static/gltf/scatter_col.gltf')
+    return
+
 # We comment this one out because its time consuming
 #def test_yt_tg_multvol():
 #    ret=os.system('cd examples; ./yt_tg_multvol.scr')
@@ -217,4 +224,7 @@ if __name__ == '__main__':
     test_table3d_den_plot()
     test_yt_scatter()
     test_gltf_den_plot()
+    test_gltf_den_plot_col()
+    test_gltf_scatter()
+    test_gltf_scatter_col()
     print('All tests passed.')
