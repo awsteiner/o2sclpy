@@ -1063,9 +1063,12 @@ class td_plot_base(yt_plot_base):
         self.td_wdir='.'
         return
 
-    def td_den_plot(self,o2scl,amp,args,cmap='',mat_name='white'):
-        """
-        Desc
+    def td_den_plot(self,o2scl,amp,args,cmap='',mat_name='white',
+                    normals=False):
+        """Note that normals are typically not specified, because the
+        density plot presumes flat shading. Blender, for example, uses
+        smooth shading for GLTF files when normals are specified, and
+        this can complicate the density plot.
         """
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
         amt=acol_manager(self.link2,amp)
@@ -1281,7 +1284,8 @@ class td_plot_base(yt_plot_base):
         if colors==True:
             gf=mesh_object('plot',den_face)
             gf.vert_list=vert2
-            gf.vn_list=norms2
+            if normals:
+                gf.vn_list=norms2
             self.to.add_object_mat_list(gf,den_ml)
             #for i in range(0,len(self.to.mat_list)):
                 #print('to.mat_list',i,self.to.mat_list[i].name)
@@ -1298,7 +1302,8 @@ class td_plot_base(yt_plot_base):
             
             gf=mesh_object('plot',den_face)
             gf.vert_list=vert2
-            gf.vn_list=norms2
+            if normals:
+                gf.vn_list=norms2
             self.to.add_object_mat(gf,white)
 
         return

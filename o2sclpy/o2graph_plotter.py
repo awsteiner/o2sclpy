@@ -1461,7 +1461,6 @@ class o2graph_plotter(td_plot_base):
 
         Useful KDE kwargs are kernel='gaussian', metric='euclidean',
         transform='unit', and bandwidth='none'.
-
         """
         curr_type=o2scl_get_type(o2scl,amp,link)
 
@@ -5705,7 +5704,7 @@ class o2graph_plotter(td_plot_base):
                         print('args:',strlist[ix:ix_next])
 
                     self.kde_2d_plot(o2scl,amp,strlist[ix+1:ix_next],
-                                  self.link2)
+                                     self.link2)
                 
                 elif cmd_name=='to-kde':
                     
