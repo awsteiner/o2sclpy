@@ -92,15 +92,14 @@ class material:
     
 class mesh_object:
     """
-    A group of (triangular) faces
+    A mesh
 
-    Right now, the faces either have 3, 4, 6, or 7 elements, corresponding
-    to the cases
+    Right now, the faces either have 3 or 4 elements, depending on 
+    whether the face has its own material
     * faces
     * faces plus material
-    * faces plus texture coordinates
-    * faces plus texture coordinates plus material
     """
+    
     vert_list=[]
     """
     List of vertices
@@ -117,14 +116,14 @@ class mesh_object:
     """
     The list of faces
     """
-    name: str=''
+    name: str = ''
     """
     The name of the group.
 
     This string is used for the ``g `` commands in ``obj`` files. It 
     may be empty, in which case no ``g `` command is given. 
     """
-    mat: str=''
+    mat: str = ''
     """The name of the material (blank for none, or for different material for
     each face)
 
@@ -136,15 +135,20 @@ class mesh_object:
     If this string is non-empty, but all of the faces specify a 
     material, then the ``sort_by_mat()`` function will 
     """
+    obj_type: str = 'triangle'
+    """
+    Either 'triangle', 'line', or 'point'
+    """
 
     def __init__(self, name: str, faces,
-                 mat: str = ''):
+                 mat: str = '', obj_type: str = 'triangle'):
         """
         Create a group given the specfied list of faces, name, and 
         material.
         """
         self.name=name
         self.faces=faces
+        self.obj_type=obj_type
         self.mat=mat
         return
 
@@ -450,8 +454,6 @@ class threed_objects:
         Optionally, also specify the vertex normals in ``normals``.
 
         """
-        #normals : list[list[float]] = [],
-        #texcoords : list[list[float]] = []):
 
         if len(mesh.vn_list)>0 and len(mesh.vn_list)!=len(mesh.vert_list):
             raise ValueError('List of normals has size',len(normals),
@@ -470,7 +472,6 @@ class threed_objects:
 
         # Check that normals are normalized
         for i in range(0,len_lvn):
-            #print(i,mesh.vn_list[i])
             mag=numpy.sqrt(mesh.vn_list[i][0]*mesh.vn_list[i][0]+
                            mesh.vn_list[i][1]*mesh.vn_list[i][1]+
                            mesh.vn_list[i][2]*mesh.vn_list[i][2])
@@ -1507,7 +1508,195 @@ class td_plot_base(yt_plot_base):
         self.to.add_object(gf)
 
         return
+
+    def td_icos(self,o2scl,amp,args,n_subdiv=0,r=0.04):
+        """
+        Desc
+        """
+        curr_type=o2scl_get_type(o2scl,amp,self.link2)
+        amt=acol_manager(self.link2,amp)
+
+        colors=False
+        val_x=float(args[0])
+        val_y=float(args[1])
+        val_z=float(args[2])
+        val_r=''
+        val_g=''
+        val_b=''
+        if len(args)>4:
+            val_r=float(args[3])
+            val_g=float(args[4])
+            val_b=float(args[5])
+            colors=True
+        if self.xset==False:
+            if val_x<0:
+                self.xlo=val_x*2
+                self.xhi=0
+            elif val_x==0:
+                self.xlo=-1
+                self.xhi=+1
+            else:
+                self.xlo=0
+                self.xhi=val_x*2
+            if self.verbose>2:
+                print('td_icos(): x limits not set, so setting to',
+                      self.xlo,',',self.xhi)
+        if self.yset==False:
+            if val_y<0:
+                self.ylo=val_y*2
+                self.yhi=0
+            elif val_y==0:
+                self.ylo=-1
+                self.yhi=+1
+            else:
+                self.ylo=0
+                self.yhi=val_y*2
+            if self.verbose>2:
+                print('td_icos(): y limits not set, so setting to',
+                      self.ylo,',',self.yhi)
+        if self.zset==False:
+            if val_z<0:
+                self.zlo=val_z*2
+                self.zhi=0
+            elif val_z==0:
+                self.zlo=-1
+                self.zhi=+1
+            else:
+                self.zlo=0
+                self.zhi=val_z*2
+            if self.verbose>2:
+                print('td_icos(): z limits not set, so setting to',
+                      self.zlo,',',self.zhi)
+
+        if colors==False:
+
+            gf=mesh_object('icos',[])
+            
+            xnew=(val_x[i]-self.xlo)/(self.xhi-self.xlo)
+            ynew=(val_y[i]-self.ylo)/(self.yhi-self.ylo)
+            znew=(val_z[i]-self.zlo)/(self.zhi-self.zlo)
+            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
+            for k in range(0,len(vtmp)):
+                gf.vert_list.append(vtmp[k])
+            for k in range(0,len(ntmp)):
+                gf.vn_list.append(ntmp[k])
+            for k in range(0,len(ftmp)):
+                ftmp[k][0]=ftmp[k][0]
+                ftmp[k][1]=ftmp[k][1]
+                ftmp[k][2]=ftmp[k][2]
+                gf.faces.append(ftmp[k])
+                    
+        else:
+
+            gf=mesh_object('icos',[])
+            
+            xnew=(val_x[i]-self.xlo)/(self.xhi-self.xlo)
+            ynew=(val_y[i]-self.ylo)/(self.yhi-self.ylo)
+            znew=(val_z[i]-self.zlo)/(self.zhi-self.zlo)
+            
+            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
+            lv=len(gf.vert_list)
+            for k in range(0,len(vtmp)):
+                gf.vert_list.append(vtmp[k])
+            for k in range(0,len(ntmp)):
+                gf.vn_list.append(ntmp[k])
+            for k in range(0,len(ftmp)):
+                gf.faces.append([ftmp[k][0]+lv,ftmp[k][1]+lv,
+                                 ftmp[k][2]+lv,'mat_point_'+str(i)])
+                
+                mat=material('mat_point_'+str(i),[cr[i],cg[i],cb[i]])
+                self.to.add_mat(mat)
+            
+        # Convert to GLTF
+                
+        vert2=[]
+        norms2=[]
         
+        for i in range(0,len(gf.faces)):
+
+            # Add the vertices to the new vertex array
+            vert2.append(gf.vert_list[gf.faces[i][0]])
+            vert2.append(gf.vert_list[gf.faces[i][1]])
+            vert2.append(gf.vert_list[gf.faces[i][2]])
+    
+            # Add the normals to the new normal array
+            norms2.append(gf.vn_list[gf.faces[i][0]])
+            norms2.append(gf.vn_list[gf.faces[i][1]])
+            norms2.append(gf.vn_list[gf.faces[i][2]])
+
+        if False:
+            print('td_icos:')
+            for ki in range(0,len(gf.faces)):
+                print('%d [%d,%d,%d]' % (ki,gf.faces[ki][0],
+                                         gf.faces[ki][1],
+                                         gf.faces[ki][2]))
+                print(('0 [%7.6e,%7.6e,%7.6e] '+
+                       '[%7.6e,%7.6e,%7.6e]') %
+                      (vert2[gf.faces[ki][0]][0],vert2[gf.faces[ki][0]][1],
+                       vert2[gf.faces[ki][0]][2],norms2[gf.faces[ki][0]][0],
+                       norms2[gf.faces[ki][0]][1],norms2[gf.faces[ki][0]][2]))
+                print(('1 [%7.6e,%7.6e,%7.6e] '+
+                       '[%7.6e,%7.6e,%7.6e]') %
+                      (vert2[gf.faces[ki][1]][0],vert2[gf.faces[ki][1]][1],
+                       vert2[gf.faces[ki][1]][2],norms2[gf.faces[ki][1]][0],
+                       norms2[gf.faces[ki][1]][1],norms2[gf.faces[ki][1]][2]))
+                print(('2 [%7.6e,%7.6e,%7.6e] '+
+                       '[%7.6e,%7.6e,%7.6e]') %
+                      (vert2[gf.faces[ki][2]][0],vert2[gf.faces[ki][2]][1],
+                       vert2[gf.faces[ki][2]][2],norms2[gf.faces[ki][2]][0],
+                       norms2[gf.faces[ki][2]][1],norms2[gf.faces[ki][2]][2]))
+                print('')
+    
+            print(len(vert2),len(norms2),len(gf.faces))
+            quit()
+        
+        if self.to.is_mat('white')==False:
+            white=material('white',[1,1,1])
+            self.to.add_mat(white)
+            
+        gf.vert_list=vert2
+        gf.vn_list=norms2
+        if colors==False:
+            gf.mat='white'
+        self.to.add_object(gf)
+
+        return
+
+    def td_line(self,x1,y1,z1,x2,y2,z2,name,mat='white'):
+                
+        """
+        Desc
+        """
+        line_vert=[[x1,y1,z1],[x2,y2,z2]]
+    
+        if type(mat)==str:
+            if not self.to.is_mat(mat):
+                if mat=='white':
+                    white=material('white',[1,1,1])
+                    self.to.add_mat(white)
+                else:
+                    print('No material named',mat,'in td-line')
+                    return
+            if self.verbose>2:
+                print('td_line(): creating group named',name,'with material',
+                      mat+'.')
+            gf=mesh_object(name,arr_face,mat=mat,obj_type='line')
+            gf.vert_list=line_vert
+            self.to.add_object(gf)
+                               
+        else:
+            
+            if self.verbose>2:
+                print('td_line(): creating group named',name,'with material',
+                      mat.name+'.')
+            if not self.to.is_mat(mat.name):
+                self.to.add_mat(mat)
+            gf=mesh_object(name,arr_face,mat=mat.name,obj_type='line')
+            gf.vert_list=line_vert
+            self.to.add_object(gf)
+            
+        return
+    
     def td_arrow(self,x1,y1,z1,x2,y2,z2,name,
                  mat='white'):
         """Documentation for o2graph command ``td-arrow``:
