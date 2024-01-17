@@ -57,37 +57,40 @@ class material:
     """
     The name of the visualization
     """
-    Ka=0
+    base_color=[1,1,1]
     """
-    The ambient color
+    The base color factor
     """
-    Kd=0
+    metal: float = 0.0
     """
-    The diffuse color
+    The metalness
     """
-    Ks=0
+    rough: float = 1.0
     """
-    The specular color
+    The roughness (should default be 0 or 1?)
     """
-    Ns: float
+    ds: bool = True
     """
-    The specular exponent
+    If true, the material is double-sided
     """
     txt: str
     """
     The texture filename, including extension
     """
+    alpha_cut: float = 0.5
+    #alphaMode is set to MASK the alphaCutoff 
 
-    def __init__(self, name: str, Ka=[1,1,1], txt: str=''):
-        """Create a new material with color in ``Ka`` and texture file in
-        ``txt``.
+    def __init__(self, name: str, base_color=[1,1,1], txt: str='',
+                 metal: float = 0.0, rough: float=1.0):
+        """Create a new material with color in ``base_color`` and texture file
+        in ``txt``.
+
         """
         self.name=name
-        self.Ka=Ka
-        self.Kd=Ka
-        self.Ks=[0,0,0]
-        self.Ns=0
+        self.base_color=base_color
         self.txt=txt
+        self.metal=metal
+        self.rough=rough
         return
     
 class mesh_object:
@@ -569,116 +572,6 @@ class threed_objects:
         self.add_object(gf)
         return
 
-    def write_obj_old(self, prefix: str):
-        """Write all objects to an '.obj' file, creating a '.mtl' file if
-        necessary
-
-        (This function doesn't work anymore.)
-        """
-        quit()
-
-        # Remove suffix if it is present
-        if prefix[-4:]=='.obj':
-            prefix=prefix[:-4]
-        obj_file=prefix+'.obj'
-        mtl_file=prefix+'.mtl'
-        
-        f=open(obj_file,'w')
-        if len(self.mat_list)>0:
-            f.write('mtllib '+mtl_file+'\n')
-
-        # Add vertices
-        for k in range(0,len(self.vert_list)):
-            f.write('v '+
-                    ('%7.6e' % self.vert_list[k][0])+' '+
-                    ('%7.6e' % self.vert_list[k][1])+' '+
-                    ('%7.6e' % self.vert_list[k][2])+'\n')
-
-        # Add vertices
-        for k in range(0,len(self.vt_list)):
-            print(k,self.vt_list[k])
-            f.write('vt '+
-                    ('%7.6e' % self.vt_list[k][0])+' '+
-                    ('%7.6e' % self.vt_list[k][1])+'\n')
-
-        # Add each set of faces as a group
-        for i in range(0,len(self.mesh_list)):
-            if self.mesh_list[i].name!='':
-                f.write('g '+self.mesh_list[i].name+'\n')
-            # If the base material is used, output that first
-            if (self.mesh_list[i].mat!='' and
-                len(self.mesh_list[i].faces[0])==3):
-                f.write('usemtl '+self.mesh_list[i].mat+'\n')
-            if (self.mesh_list[i].mat!='' and
-                len(self.mesh_list[i].faces[0])==6):
-                f.write('usemtl '+self.mesh_list[i].mat+'\n')
-            for k in range(0,len(self.mesh_list[i].faces)):
-                # Take care of the cases when we need to change materials
-                if k==0 and len(self.mesh_list[i].faces[k])==4:
-                    f.write('usemtl '+self.mesh_list[i].faces[k][3]+'\n')
-                elif k==0 and len(self.mesh_list[i].faces[k])==7:
-                    f.write('usemtl '+self.mesh_list[i].faces[k][6]+'\n')
-                elif (len(self.mesh_list[i].faces[k-1])==3 and 
-                      len(self.mesh_list[i].faces[k])==4):
-                    f.write('usemtl '+self.mesh_list[i].faces[k][3]+'\n')
-                elif (len(self.mesh_list[i].faces[k-1])==3 and 
-                      len(self.mesh_list[i].faces[k])==7):
-                    f.write('usemtl '+self.mesh_list[i].faces[k][6]+'\n')
-                elif (len(self.mesh_list[i].faces[k-1])==4 and 
-                    len(self.mesh_list[i].faces[k])>=4 and
-                    self.mesh_list[i].faces[k-1][3]!=
-                    self.mesh_list[i].faces[k][3]):
-                    f.write('usemtl '+self.mesh_list[i].faces[k][3]+'\n')
-                if len(self.mesh_list[i].faces[k])>=6:
-                    # Write the face with vertex texture indices
-                    f.write('f '+
-                            ('%i' % self.mesh_list[i].faces[k][0])+'/'+
-                            ('%i' % self.mesh_list[i].faces[k][3])+' '+
-                            ('%i' % self.mesh_list[i].faces[k][1])+'/'+
-                            ('%i' % self.mesh_list[i].faces[k][4])+' '+
-                            ('%i' % self.mesh_list[i].faces[k][2])+'/'+
-                            ('%i' % self.mesh_list[i].faces[k][5])+'\n')
-                    # Check that the texture index
-                    # refers to a valid texture coordinate
-                    for j in range(3,6):
-                        if self.mesh_list[i].faces[k][j]-1>=len(self.vt_list):
-                            print('Problem with vertex',j,'of face',k+1,
-                                  'in group',i)
-                else:
-                    # Write the face
-                    f.write('f '+
-                            ('%i' % self.mesh_list[i].faces[k][0])+' '+
-                            ('%i' % self.mesh_list[i].faces[k][1])+' '+
-                            ('%i' % self.mesh_list[i].faces[k][2])+'\n')
-                # Check that the face refers to a valid vertex
-                for j in range(0,3):
-                    if self.mesh_list[i].faces[k][j]-1>=len(self.vert_list):
-                        print('Problem with vertex',j,'of face',k+1,
-                              'in group',i)
-        f.close()
-
-        # Create the materials file
-        if len(self.mat_list)>0:
-            f=open(mtl_file,'w')
-            for i in range(0,len(self.mat_list)):
-                f.write('newmtl '+self.mat_list[i].name+'\n')
-                f.write('Ka '+str(self.mat_list[i].Ka[0])+' '+
-                        str(self.mat_list[i].Ka[1])+' '+
-                        str(self.mat_list[i].Ka[2])+'\n')
-                f.write('Kd '+str(self.mat_list[i].Kd[0])+' '+
-                        str(self.mat_list[i].Kd[1])+' '+
-                        str(self.mat_list[i].Kd[2])+'\n')
-                f.write('Ks '+str(self.mat_list[i].Ks[0])+' '+
-                        str(self.mat_list[i].Kd[1])+' '+
-                        str(self.mat_list[i].Kd[2])+'\n')
-                f.write('Ns '+str(self.mat_list[i].Ns)+'\n')
-                if self.mat_list[i].txt!='':
-                    f.write('map_Ka '+self.mat_list[i].txt+'\n')
-                    f.write('map_Kd '+self.mat_list[i].txt+'\n')
-            f.close()
-                        
-        return
-        
     def write_gltf(self, wdir: str, prefix: str, verbose: int = 0,
                    rotate_zup: bool = True):
         """Write all objects to an '.gltf' file, creating a '.bin' file
@@ -744,7 +637,8 @@ class threed_objects:
                                          "index":
                                          texture_index
                                          },
-                                     "metallicFactor": 0
+                                     "metallicFactor": this_mat.metal,
+                                     "roughnessFactor": this_mat.rough,
                                  }
                                  })
                 txt_list.append({"source": texture_index})
@@ -758,11 +652,12 @@ class threed_objects:
                                  "name": this_mat.name,
                                  "pbrMetallicRoughness": {
                                      "baseColorFactor": [
-                                         this_mat.Ka[0],
-                                         this_mat.Ka[1],
-                                         this_mat.Ka[2],
+                                         this_mat.base_color[0],
+                                         this_mat.base_color[1],
+                                         this_mat.base_color[2],
                                          1],
-                                     "metallicFactor": 0
+                                     "metallicFactor": this_mat.metal,
+                                     "roughnessFactor": this_mat.rough
                                  }
                                  })
         
@@ -1334,7 +1229,8 @@ class td_plot_base(yt_plot_base):
 
         return
         
-    def td_scatter(self,o2scl,amp,args,n_subdiv=0,r=0.04):
+    def td_scatter(self,o2scl,amp,args,n_subdiv: int = 0, r: float = 0.04,
+                   metal: str = '',rough: str = ''):
         """
         Desc
         """
@@ -1451,7 +1347,8 @@ class td_plot_base(yt_plot_base):
                 
                 mat=material('mat_point_'+str(i),[(cr[i]-rlo)/(rhi-rlo),
                                                   (cg[i]-glo)/(ghi-glo),
-                                                  (cb[i]-blo)/(bhi-blo)])
+                                                  (cb[i]-blo)/(bhi-blo)],
+                             metal=float(metal),rough=float(rough))
                 self.to.add_mat(mat)
             
         # Convert to GLTF
@@ -1498,7 +1395,8 @@ class td_plot_base(yt_plot_base):
             quit()
         
         if self.to.is_mat('white')==False:
-            white=material('white',[1,1,1])
+            white=material('white',[1,1,1],metal=float(metal),
+                           rough=float(rough))
             self.to.add_mat(white)
             
         gf.vert_list=vert2

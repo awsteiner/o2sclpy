@@ -1,4 +1,4 @@
-.# BG_COLOR
+# BG_COLOR
 # LIGHT_DIST
 # LIGHT_ENERGY
 # GLTF_PATH
@@ -11,6 +11,9 @@ import numpy
 
 # Scene variable
 scene=bpy.context.scene
+
+#scene.render.resolution_x = mn
+#scene.render.resolution_y = mx
 
 # Delete default objects
 for o in scene.objects:
@@ -25,6 +28,8 @@ scene.world.node_tree.nodes["Background"].inputs[0].default_value=BG_COLOR
 camera_data=bpy.data.cameras.new(name='camera')
 camera=bpy.data.objects.new('camera',camera_data)
 scene.collection.objects.link(camera)
+# 'PANO', 'PERSP' and 'ORTHO'
+#camera.type='ORTHO'
 camera.rotation_mode='XYZ'
 
 # Set the camera object as the active camera
