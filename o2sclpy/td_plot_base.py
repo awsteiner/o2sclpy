@@ -1572,9 +1572,9 @@ class td_plot_base(yt_plot_base):
 
             gf=mesh_object('icos',[])
             
-            xnew=(val_x[i]-self.xlo)/(self.xhi-self.xlo)
-            ynew=(val_y[i]-self.ylo)/(self.yhi-self.ylo)
-            znew=(val_z[i]-self.zlo)/(self.zhi-self.zlo)
+            xnew=(val_x-self.xlo)/(self.xhi-self.xlo)
+            ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
+            znew=(val_z-self.zlo)/(self.zhi-self.zlo)
             vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
             for k in range(0,len(vtmp)):
                 gf.vert_list.append(vtmp[k])
@@ -1590,9 +1590,9 @@ class td_plot_base(yt_plot_base):
 
             gf=mesh_object('icos',[])
             
-            xnew=(val_x[i]-self.xlo)/(self.xhi-self.xlo)
-            ynew=(val_y[i]-self.ylo)/(self.yhi-self.ylo)
-            znew=(val_z[i]-self.zlo)/(self.zhi-self.zlo)
+            xnew=(val_x-self.xlo)/(self.xhi-self.xlo)
+            ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
+            znew=(val_z-self.zlo)/(self.zhi-self.zlo)
             
             vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
             lv=len(gf.vert_list)

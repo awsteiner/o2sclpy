@@ -150,7 +150,11 @@ base_list=[
      "Full desc."],
     ["td-scatter","Documentation for td-scatter\n\n"+
      "Create a 3D scatter plot (experimental).\n\n"+
-     "<x column> <y column> <z column> [kwargs]\n\n"+
+     "<x column> <y column> <z column> [r column] [g column] "+
+     "[b column] [kwargs]\n\nFull desc."],
+    ["td-icos","Documentation for td-icos\n\n"+
+     "Create an icosphere at a point (experimental).\n\n"+
+     "<x> <y> <z> [r g b] [kwargs]\n\n"+
      "Full desc."],
     ["text",plot_base.text.__doc__],
     ["textbox",plot_base.textbox.__doc__],
@@ -5562,6 +5566,45 @@ class o2graph_plotter(td_plot_base):
                                                            ['r']))
                     else:
                         print('Not enough arguments for td-scatter.')
+
+                elif cmd_name=='td-icos':
+
+                    if self.verbose>2:
+                        print('Process td-icos.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix==4:
+                        self.td_icos(o2scl,amp,[strlist[ix+1],
+                                                strlist[ix+2],
+                                                strlist[ix+3]])
+                    elif ix_next-ix==5:
+                        self.td_icos(o2scl,amp,
+                                     [strlist[ix+1],strlist[ix+2],
+                                      strlist[ix+3]],
+                                     **string_to_dict2(strlist[ix+4],
+                                                       list_of_ints=
+                                                       ['n_subdiv'],
+                                                       list_of_floats=
+                                                       ['r']))
+                    elif ix_next-ix==7:
+                        self.td_icos(o2scl,amp,[strlist[ix+1],
+                                                strlist[ix+2],
+                                                strlist[ix+3],
+                                                strlist[ix+4],
+                                                strlist[ix+5],
+                                                strlist[ix+6]])
+                    elif ix_next-ix>=8:
+                        self.td_icos(o2scl,amp,
+                                     [strlist[ix+1],strlist[ix+2],
+                                      strlist[ix+3],strlist[ix+4],
+                                      strlist[ix+5],strlist[ix+6]],
+                                     **string_to_dict2(strlist[ix+7],
+                                                       list_of_ints=
+                                                       ['n_subdiv'],
+                                                       list_of_floats=
+                                                       ['r']))
+                    else:
+                        print('Not enough arguments for td-icos.')
 
                 elif cmd_name=='bl-yaw-mp4':
 
