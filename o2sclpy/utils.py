@@ -610,7 +610,7 @@ def force_string(obj):
     return obj
 
 def latex_to_png(tex: str, png_file: str, verbose: int = 1,
-                 power_two: bool = False):
+                 power_two: bool = False, flatten: bool = True):
     """
     A simple routine to convert a LaTeX string to a png image.
 
@@ -653,12 +653,20 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 1,
     if verbose>1:
         print('latex_to_png(): Running first shell command',cmd1)
     os.system(cmd1)
-    cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file+' && convert '+
-          png_file+' -background white -flatten '+
-          png_file+' > '+out_file_name+' 2>&1')
-    if verbose>1:
-        print('latex_to_png(): Running second shell command',cmd2)
-    os.system(cmd2)
+    if flatten==True:
+        cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file+' && convert '+
+              png_file+' -background white -flatten '+
+              png_file+' > '+out_file_name+' 2>&1')
+        if verbose>1:
+            print('latex_to_png(): Running second shell command ',
+                  '(flatten)\n ',cmd2)
+            os.system(cmd2)
+    else:
+        cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file)
+        if verbose>1:
+            print('latex_to_png(): Running second shell command',
+                  '(transparent)\n ',cmd2)
+            os.system(cmd2)
     from PIL import Image
     img=Image.open(png_file)
     if power_two:

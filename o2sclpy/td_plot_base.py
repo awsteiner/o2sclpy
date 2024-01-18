@@ -77,8 +77,6 @@ class material:
     """
     The texture filename, including extension
     """
-    alpha_cut: float = 0.5
-    #alphaMode is set to MASK the alphaCutoff 
 
     def __init__(self, name: str, base_color=[1,1,1], txt: str='',
                  metal: float = 0.0, rough: float=1.0):
@@ -679,7 +677,8 @@ class threed_objects:
             long_ints=False
             if len(self.mesh_list[i].vert_list)>=32768:
                 long_ints=True
-                
+                print('long ints here')
+
             att={}
             face_bin=[]
             norm_bin=[]
@@ -694,7 +693,7 @@ class threed_objects:
                 # Determine the material for this face
                 mat1=''
                 mat_index=-1
-                
+
                 lf1=len(self.mesh_list[i].faces[j])
                 if lf1==4:
                     mat1=self.mesh_list[i].faces[j][lf1-1]
@@ -1237,7 +1236,10 @@ class td_plot_base(yt_plot_base):
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
         amt=acol_manager(self.link2,amp)
 
+        # If true, then a color map has been specified and we need
+        # to add materials for each face
         colors=False
+        
         if curr_type==b'table':
             col_x=args[0]
             col_y=args[1]
@@ -1245,6 +1247,8 @@ class td_plot_base(yt_plot_base):
             col_r=''
             col_g=''
             col_b=''
+            col_m=''
+            col_ro=''
             if len(args)>4:
                 col_r=args[3]
                 col_g=args[4]
@@ -1254,6 +1258,14 @@ class td_plot_base(yt_plot_base):
             print("Command 'td-scatter' not supported for type",
                   curr_type,".")
             return
+
+        if metal[0:4]=='col:':
+            col_m=metal[4:]
+            print('Setting metalness to value from column',col_m)
+            
+        if rough[0:4]=='col:':
+            col_ro=rough[4:]
+            print('Setting roughness to value from column',col_ro)
         
         table=amt.get_table_obj()
         n=table.get_nlines()
@@ -1296,16 +1308,15 @@ class td_plot_base(yt_plot_base):
             ghi=numpy.max(cg)
             blo=numpy.min(cb)
             bhi=numpy.max(cb)
-
-        # If true, then a color map has been specified and we need
-        # to add materials
-        colors=False
-        if col_r!='' and col_g!='' and col_b!='':
-            cr=table[col_r]
-            cg=table[col_g]
-            cb=table[col_b]
-            colors=True
-
+            if col_m!='':
+                cm=table[col_m][0:n]
+                mlo=numpy.min(cm)
+                mhi=numpy.max(cm)
+            if col_ro!='':
+                cro=table[col_ro][0:n]
+                rolo=numpy.min(cro)
+                rohi=numpy.max(cro)
+            
         if colors==False:
 
             gf=mesh_object('scatter',[])
@@ -1344,11 +1355,24 @@ class td_plot_base(yt_plot_base):
                 for k in range(0,len(ftmp)):
                     gf.faces.append([ftmp[k][0]+lv,ftmp[k][1]+lv,
                                      ftmp[k][2]+lv,'mat_point_'+str(i)])
-                
+
+                if metal=='':
+                    metal_float=0.0
+                elif col_m=='':
+                    metal_float=float(metal)
+                else:
+                    metal_float=(cm[i]-mlo)/(mhi-mlo)
+                if rough=='':
+                    rough_float=1.0
+                elif col_ro=='':
+                    rough_float=float(rough)
+                else:
+                    rough_float=(cro[i]-rolo)/(rohi-rolo)
+
                 mat=material('mat_point_'+str(i),[(cr[i]-rlo)/(rhi-rlo),
                                                   (cg[i]-glo)/(ghi-glo),
                                                   (cb[i]-blo)/(bhi-blo)],
-                             metal=float(metal),rough=float(rough))
+                             metal=metal_float,rough=rough_float)
                 self.to.add_mat(mat)
             
         # Convert to GLTF
