@@ -743,9 +743,6 @@ class threed_objects:
                     # min are wrong.
                     v0=float(self.mesh_list[i].vert_list[ix][0])
                     vert_bin.append(v0)
-                    #if (self.mesh_list[i].name=='icos1' or
-                    #self.mesh_list[i].name=='icos2'):
-                    #print(i,j,ix,len(self.mesh_list[i].vert_list),v0)
                     v1=float(self.mesh_list[i].vert_list[ix][1])
                     vert_bin.append(v1)
                     v2=float(self.mesh_list[i].vert_list[ix][2])
@@ -1521,14 +1518,11 @@ class td_plot_base(yt_plot_base):
         if colors==False:
 
             gf=mesh_object(uname,[])
-            print('xx',len(gf.vert_list))
             
             xnew=(val_x-self.xlo)/(self.xhi-self.xlo)
             ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
             znew=(val_z-self.zlo)/(self.zhi-self.zlo)
             vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
-            
-            print('xxx',len(gf.vert_list))
             
             for k in range(0,len(vtmp)):
                 gf.vert_list.append(vtmp[k])
@@ -1603,8 +1597,6 @@ class td_plot_base(yt_plot_base):
                 print('')
     
             print(len(vert2),len(norms2),len(gf.faces))
-            #if uname=='icos2':
-            #quit()
         
         if self.to.is_mat('white')==False:
             white=material('white',[1,1,1])

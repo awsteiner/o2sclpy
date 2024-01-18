@@ -655,13 +655,13 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 1,
         if verbose>1:
             print('latex_to_png(): Running second shell command ',
                   '(flatten)\n ',cmd2)
-            os.system(cmd2)
+        os.system(cmd2)
     else:
         cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file)
         if verbose>1:
             print('latex_to_png(): Running second shell command',
                   '(transparent)\n ',cmd2)
-            os.system(cmd2)
+        os.system(cmd2)
     from PIL import Image
     img=Image.open(png_file)
     if power_two:
