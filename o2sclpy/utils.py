@@ -373,11 +373,6 @@ def icosphere(x,y,z,r,n_subdiv=0):
     norm3(tmp2)
     vn.append(tmp2)
 
-    if False:
-        for k in range(0,len(vn)):
-            print('k',vn[k])
-        print('')
-
     # Enumerate the faces
     
     face=[]
@@ -526,7 +521,7 @@ def icosphere(x,y,z,r,n_subdiv=0):
             print('')
 
         print(len(vert2),len(norms2),len(face2))
-        quit()
+        #quit()
         
     return vert2,norms2,face2
     

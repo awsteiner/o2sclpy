@@ -151,6 +151,11 @@ class mesh_object:
         self.faces=faces
         self.obj_type=obj_type
         self.mat=mat
+        # AWS, 1/18/24, I have found that these need to be initialized
+        # to empty even though they are specified above.
+        self.vert_list=[]
+        self.vn_list=[]
+        self.vt_list=[]
         return
 
     def sort_by_mat(self, verbose : int = 0):
@@ -448,6 +453,24 @@ class threed_objects:
     List of materials
     """
 
+    def make_unique_name(self, prefix : str):
+        """
+        Desc
+        """
+        for i in range(1,100):
+            found=False
+            name=prefix+str(i)
+            for j in range(0,len(self.mesh_list)):
+                if self.mesh_list[j].name==name:
+                    found=True
+            if found==False:
+                return name
+        raise ValueError('In function threed_objects::'+
+                         'make_unique_name(): Could not make unique '+
+                         'name with prefix '+prefix+'.')
+        return
+        
+    
     def add_object(self, mesh: mesh_object, verbose : int = 0):
         """Add an object given 'lv', a list of vertices, and 'mesh', a mesh
         of triangular faces among those vertices.
@@ -720,6 +743,9 @@ class threed_objects:
                     # min are wrong.
                     v0=float(self.mesh_list[i].vert_list[ix][0])
                     vert_bin.append(v0)
+                    #if (self.mesh_list[i].name=='icos1' or
+                    #self.mesh_list[i].name=='icos2'):
+                    #print(i,j,ix,len(self.mesh_list[i].vert_list),v0)
                     v1=float(self.mesh_list[i].vert_list[ix][1])
                     vert_bin.append(v1)
                     v2=float(self.mesh_list[i].vert_list[ix][2])
@@ -1490,16 +1516,23 @@ class td_plot_base(yt_plot_base):
                 print('td_icos(): z limits not set, so setting to',
                       self.zlo,',',self.zhi)
 
+        uname=self.to.make_unique_name('icos')
+                
         if colors==False:
 
-            gf=mesh_object('icos',[])
+            gf=mesh_object(uname,[])
+            print('xx',len(gf.vert_list))
             
             xnew=(val_x-self.xlo)/(self.xhi-self.xlo)
             ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
             znew=(val_z-self.zlo)/(self.zhi-self.zlo)
             vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
+            
+            print('xxx',len(gf.vert_list))
+            
             for k in range(0,len(vtmp)):
                 gf.vert_list.append(vtmp[k])
+                #print('m',len(gf.vert_list),vtmp[k])
             for k in range(0,len(ntmp)):
                 gf.vn_list.append(ntmp[k])
             for k in range(0,len(ftmp)):
@@ -1510,7 +1543,7 @@ class td_plot_base(yt_plot_base):
                     
         else:
 
-            gf=mesh_object('icos',[])
+            gf=mesh_object(uname,[])
             
             xnew=(val_x-self.xlo)/(self.xhi-self.xlo)
             ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
@@ -1570,14 +1603,15 @@ class td_plot_base(yt_plot_base):
                 print('')
     
             print(len(vert2),len(norms2),len(gf.faces))
-            quit()
+            #if uname=='icos2':
+            #quit()
         
         if self.to.is_mat('white')==False:
             white=material('white',[1,1,1])
             self.to.add_mat(white)
             
         gf.vert_list=vert2
-        gf.vn_list=norms2
+        #gf.vn_list=norms2
         if colors==False:
             gf.mat='white'
         self.to.add_object(gf)
