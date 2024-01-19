@@ -732,8 +732,6 @@ class threed_objects:
                               '" in mat_list.')
                         quit()
                     
-                #print(i,j,'mat1:',mat1)
-                    
                 # Map the first vertex
                 ix=self.mesh_list[i].faces[j][0]
                 if vert_map[ix]==-1:

@@ -972,7 +972,7 @@ class o2graph_plotter(td_plot_base):
         frep.close()
 
         if blender_cmd=='':
-            if os.environ['O2GRAPH_BLENDER_CMD'] is None:
+            if not 'O2GRAPH_BLENDER_CMD' in os.environ:
                 if platform.system()=='Darwin':
                     blender_cmd=('/Applications/Blender.app'+
                                  '/Contents/MacOS/Blender')
