@@ -1440,8 +1440,7 @@ class td_plot_base(yt_plot_base):
             quit()
         
         if self.to.is_mat('white')==False:
-            white=material('white',[1,1,1],metal=float(metal),
-                           rough=float(rough))
+            white=material('white',[1,1,1])
             self.to.add_mat(white)
             
         gf.vert_list=vert2

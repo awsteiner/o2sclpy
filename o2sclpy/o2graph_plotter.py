@@ -999,6 +999,90 @@ class o2graph_plotter(td_plot_base):
         
         return
         
+    def bl_six_mp4(self, n_frames: int, mp4_file: str,
+                   blender_cmd: str = '', o2sclpy_dir: str = '',
+                   vf: str = '', cam_dist: float = 5.0,
+                   light_energy : float = 800,
+                   light_dist : float = 5.8,
+                   bg_color : str = ''):
+        """
+        
+        This command requires the Blender python package,
+        ``bpy`` and the installation of ``ffmpeg``. 
+        """
+
+        import tempfile
+        
+        gltf_file_name='o2sclpy.gltf'
+        print('Writing GLTF to',self.td_wdir+'/'+gltf_file_name)
+
+        self.to.write_gltf(self.td_wdir,gltf_file_name)
+        
+        py_file_name=self.td_wdir+'/o2sclpy.py'
+        print('Writing Python script to',py_file_name)
+
+        # Try to find o2sclpy by finding the numpy directory
+        if o2sclpy_dir=='':
+            o2sclpy_dir=numpy.__path__[0][:-5]+'o2sclpy/'
+            print('Setting o2sclpy_dir to:',o2sclpy_dir)
+            
+        orig_script=(o2sclpy_dir+'bl_gltf_six.py')
+        
+        print('Original script at:',orig_script)
+
+        if bg_color=='':
+            bg_color='(0,0,0,0)'
+            
+        rep_list={'BG_COLOR': bg_color,
+                  'LIGHT_DIST': str(light_dist),
+                  'LIGHT_ENERGY': str(light_energy),
+                  'GLTF_PATH': gltf_file_name,
+                  'N_FRAMES': str(n_frames),
+                  'CAM_DIST': str(cam_dist)}
+        print('Making replacements:',rep_list)
+
+        forig=open(orig_script,'r')
+        lines=forig.readlines()
+        frep=open(py_file_name,'w')
+        for line in lines:
+            line=line.replace('BG_COLOR',rep_list['BG_COLOR'])
+            line=line.replace('LIGHT_DIST',rep_list['LIGHT_DIST'])
+            line=line.replace('LIGHT_ENERGY',rep_list['LIGHT_ENERGY'])
+            line=line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
+            line=line.replace('N_FRAMES',rep_list['N_FRAMES'])
+            line=line.replace('CAM_DIST',rep_list['CAM_DIST'])
+            frep.write(line)
+        forig.close()
+        frep.close()
+
+        if blender_cmd=='':
+            if not 'O2GRAPH_BLENDER_CMD' in os.environ:
+                if platform.system()=='Darwin':
+                    blender_cmd=('/Applications/Blender.app'+
+                                 '/Contents/MacOS/Blender')
+                    print('Blender command not specified, presuming MacOS',
+                          'default')
+                    print(' ',blender_cmd,'.')
+                else:
+                    blender_cmd='/usr/bin/blender'
+                    print('Blender command not specified, presuming Linux',
+                          'default')
+                    print(' ',blender_cmd,'.')
+            else:
+                blender_cmd=os.environ['O2GRAPH_BLENDER_CMD']
+        
+        cmd=('cd '+self.td_wdir+' && '+blender_cmd+' -b -P o2sclpy.py')
+        print('Executing:',cmd)
+        os.system(cmd)
+
+        print('Creating mp4')
+        self.mp4([self.td_wdir+'/bl_gltf_six_%03d.png',mp4_file],
+                 vf=vf)
+
+        #vf='eq=contrast=1')
+        
+        return
+        
     def den_plot_o2graph(self,o2scl,amp,link,args):
         """Documentation for o2graph command ``den-plot``:
 
@@ -5618,6 +5702,19 @@ class o2graph_plotter(td_plot_base):
                                         strlist[ix+2])
                     else:
                         print('Not enough arguments for bl-yaw-mp4.')
+
+                elif cmd_name=='bl-six-mp4':
+
+                    if self.verbose>2:
+                        print('Process td-den-plot.')
+                        print('args:',strlist[ix:ix_next])
+
+                    print('here0',ix_next-ix,strlist[ix+2])
+                    if ix_next-ix>=3:
+                        self.bl_six_mp4(int(strlist[ix+1]),
+                                        strlist[ix+2])
+                    else:
+                        print('Not enough arguments for bl-six-mp4.')
 
                 elif cmd_name=='yt-axis':
 

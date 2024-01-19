@@ -184,6 +184,13 @@ def test_gltf_den_plot_col():
                   'doc/static/gltf/den_plot_col.gltf')
     return
 
+# This doesn't have a 'test_' prefix so that we can make
+# it optional 
+def bl_den_plot_yaw():
+    ret=os.system('cd examples; ./bl_den_plot_yaw.scr')
+    assert ret==0
+    return
+
 def test_gltf_scatter():
     ret=os.system('cd examples; ./gltf_scatter.scr')
     assert ret==0
@@ -227,4 +234,6 @@ if __name__ == '__main__':
     test_gltf_den_plot_col()
     test_gltf_scatter()
     test_gltf_scatter_col()
+    if 'O2GRAPH_BLENDER_CMD' in os.environ:
+        bl_den_plot_yaw()
     print('All tests passed.')
