@@ -144,6 +144,10 @@ base_list=[
      "Create a 3D arrow (experimental).\n\n"+
      "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]\n\n"+
      "Full desc."],
+    ["td-mat","Documentation for td-arrow\n\n"+
+     "Create a 3D material (experimental).\n\n"+
+     "<name> <r> <g> <b> [kwargs]\n\n"+
+     "Full desc."],
     ["td-den-plot","Documentation for td-den-plot\n\n"+
      "Create a 3D density plot (experimental).\n\n"+
      "<x label> <y label> <z label> [kwargs]\n\n"+
@@ -920,11 +924,13 @@ class o2graph_plotter(td_plot_base):
                    vf: str = '', cam_dist: float = 5.0,
                    light_energy : float = 800,
                    light_dist : float = 5.8,
-                   bg_color : str = ''):
+                   bg_color : str = '', cam_type : str = '',
+                   res=(0,0), blend_file : str = ''):
         """
-        
-        This command requires the Blender python package,
-        ``bpy`` and the installation of ``ffmpeg``. 
+        This command requires Blender, the associated python package,
+        ``bpy``, and the installation of ``ffmpeg``. 
+
+        vf='eq=contrast=1')
         """
 
         import tempfile
@@ -954,7 +960,11 @@ class o2graph_plotter(td_plot_base):
                   'LIGHT_ENERGY': str(light_energy),
                   'GLTF_PATH': gltf_file_name,
                   'N_FRAMES': str(n_frames),
-                  'CAM_DIST': str(cam_dist)}
+                  'CAM_DIST': str(cam_dist),
+                  'RES_X': str(res[0]),
+                  'RES_Y': str(res[1]),
+                  'BLEND_FILE': str(blend_file),
+                  'CAM_TYPE': str(cam_type)}
         print('Making replacements:',rep_list)
 
         forig=open(orig_script,'r')
@@ -967,6 +977,10 @@ class o2graph_plotter(td_plot_base):
             line=line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
             line=line.replace('N_FRAMES',rep_list['N_FRAMES'])
             line=line.replace('CAM_DIST',rep_list['CAM_DIST'])
+            line=line.replace('RES_X',rep_list['RES_X'])
+            line=line.replace('RES_Y',rep_list['RES_Y'])
+            line=line.replace('BLEND_FILE',rep_list['BLEND_FILE'])
+            line=line.replace('CAM_TYPE',rep_list['CAM_TYPE'])
             frep.write(line)
         forig.close()
         frep.close()
@@ -995,8 +1009,6 @@ class o2graph_plotter(td_plot_base):
         self.mp4([self.td_wdir+'/bl_gltf_yaw_%03d.png',mp4_file],
                  vf=vf)
 
-        #vf='eq=contrast=1')
-        
         return
         
     def bl_six_mp4(self, n_frames: int, mp4_file: str,
@@ -1004,7 +1016,8 @@ class o2graph_plotter(td_plot_base):
                    vf: str = '', cam_dist: float = 5.0,
                    light_energy : float = 800,
                    light_dist : float = 5.8,
-                   bg_color : str = ''):
+                   bg_color : str = '', cam_type : str = '',
+                   res=(0,0), blend_file : str = ''):
         """
         
         This command requires the Blender python package,
@@ -1038,7 +1051,11 @@ class o2graph_plotter(td_plot_base):
                   'LIGHT_ENERGY': str(light_energy),
                   'GLTF_PATH': gltf_file_name,
                   'N_FRAMES': str(n_frames),
-                  'CAM_DIST': str(cam_dist)}
+                  'CAM_DIST': str(cam_dist),
+                  'RES_X': str(res[0]),
+                  'RES_Y': str(res[1]),
+                  'BLEND_FILE': str(blend_file),
+                  'CAM_TYPE': str(cam_type)}
         print('Making replacements:',rep_list)
 
         forig=open(orig_script,'r')
@@ -1051,6 +1068,10 @@ class o2graph_plotter(td_plot_base):
             line=line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
             line=line.replace('N_FRAMES',rep_list['N_FRAMES'])
             line=line.replace('CAM_DIST',rep_list['CAM_DIST'])
+            line=line.replace('RES_X',rep_list['RES_X'])
+            line=line.replace('RES_Y',rep_list['RES_Y'])
+            line=line.replace('BLEND_FILE',rep_list['BLEND_FILE'])
+            line=line.replace('CAM_TYPE',rep_list['CAM_TYPE'])
             frep.write(line)
         forig.close()
         frep.close()
@@ -5560,7 +5581,16 @@ class o2graph_plotter(td_plot_base):
                         print('Process td-arrow.')
                         print('args:',strlist[ix:ix_next])
 
-                    if ix_next-ix>=8:
+                    if ix_next-ix>=9:
+                        self.td_arrow(float(strlist[ix+1]),
+                                      float(strlist[ix+2]),
+                                      float(strlist[ix+3]),
+                                      float(strlist[ix+4]),
+                                      float(strlist[ix+5]),
+                                      float(strlist[ix+6]),
+                                      strlist[ix+7],
+                                      mat=strlist[ix+8])
+                    elif ix_next-ix>=8:
                         self.td_arrow(float(strlist[ix+1]),
                                       float(strlist[ix+2]),
                                       float(strlist[ix+3]),
@@ -5689,6 +5719,32 @@ class o2graph_plotter(td_plot_base):
                                                        ['r']))
                     else:
                         print('Not enough arguments for td-icos.')
+
+                elif cmd_name=='td-mat':
+
+                    if self.verbose>2:
+                        print('Process td-mat.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix==5:
+                        self.td_mat(o2scl,amp,
+                                    strlist[ix+1],
+                                    float(strlist[ix+2]),
+                                    float(strlist[ix+3]],
+                                    float(strlist[ix+4]))
+                    elif ix_next-ix>=6:
+                        self.td_mat(o2scl,amp,
+                                    strlist[ix+1],
+                                    float(strlist[ix+2]),
+                                    float(strlist[ix+3]],
+                                    float(strlist[ix+4]),
+                                    **string_to_dict2(strlist[ix+5],
+                                                      list_of_bools=
+                                                      ['ds'],
+                                                      list_of_floats=
+                                                      ['metal,rough,alpha']))
+                    else:
+                        print('Not enough arguments for td-mat.')
 
                 elif cmd_name=='bl-yaw-mp4':
 

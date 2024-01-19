@@ -4,6 +4,10 @@
 # GLTF_PATH
 # N_FRAMES
 # CAM_DIST
+# RES_X
+# RES_Y
+# BLEND_FILE
+# CAMERA_TYPE
 
 import bpy
 import os.path
@@ -12,8 +16,8 @@ import numpy
 # Scene variable
 scene=bpy.context.scene
 
-#scene.render.resolution_x = mn
-#scene.render.resolution_y = mx
+scene.render.resolution_x=RES_X
+scene.render.resolution_y=RES_Y
 
 # Delete default objects
 for o in scene.objects:
@@ -26,10 +30,11 @@ scene.world.node_tree.nodes["Background"].inputs[0].default_value=BG_COLOR
 
 # Create camera
 camera_data=bpy.data.cameras.new(name='camera')
+if CAMERA_TYPE!='':
+    # 'PANO', 'PERSP' and 'ORTHO'
+    camera_data.type=CAMERA_TYPE
 camera=bpy.data.objects.new('camera',camera_data)
 scene.collection.objects.link(camera)
-# 'PANO', 'PERSP' and 'ORTHO'
-#camera.type='ORTHO'
 camera.rotation_mode='XYZ'
 
 # Set the camera object as the active camera
@@ -71,7 +76,7 @@ bpy.ops.import_scene.gltf(filepath='GLTF_PATH')
 
 # Iterate through the dict, set the locations and render
 for i in range(0,N_FRAMES):
-    
+
     ang=numpy.pi*2.0/N_FRAMES*i
     x=CAM_DIST*numpy.cos(ang)
     y=CAM_DIST*numpy.sin(ang)
@@ -80,6 +85,10 @@ for i in range(0,N_FRAMES):
     camera.location=[x+0.5,y+0.5,0.5]
     camera.rotation_euler=[numpy.pi/2.0,0,numpy.pi/2.0+ang]
 
+    if i==0 and BLEND_FILE!='':
+        # Save a blend file
+        bpy.ops.wm.save_as_mainfile(filepath=BLEND_FILE)
+    
     # Assemble the path
     scene.render.filepath='bl_gltf_yaw_%03d.png' % i
     

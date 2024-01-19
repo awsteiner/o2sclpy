@@ -79,7 +79,7 @@ class material:
     """
 
     def __init__(self, name: str, base_color=[1,1,1], txt: str='',
-                 metal: float = 0.0, rough: float=1.0):
+                 metal: float = 0.0, rough: float=1.0, ds: bool=True):
         """Create a new material with color in ``base_color`` and texture file
         in ``txt``.
 
@@ -89,6 +89,7 @@ class material:
         self.txt=txt
         self.metal=metal
         self.rough=rough
+        self.ds=ds
         return
     
 class mesh_object:
@@ -1640,6 +1641,21 @@ class td_plot_base(yt_plot_base):
             gf.vert_list=line_vert
             self.to.add_object(gf)
             
+        return
+
+    def td_mat(self, name: str, r: float, g: float, b: float,
+               alpha: float=1, metal: float=0, rough: float=1,
+               ds: bool=True, txt: str=''):
+        """
+        Desc
+        """
+
+        if self.to.is_mat(name):
+            raise ValueError('Already a material with the name '+
+                             name+' in td_mat().')
+        mat=material(name,[r,g,b,alpha],txt=txt,metal=metal,rough=rough,
+                     ds=ds)
+        self.to.add_mat(mat)
         return
     
     def td_arrow(self,x1,y1,z1,x2,y2,z2,name,

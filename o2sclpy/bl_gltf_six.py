@@ -3,7 +3,12 @@
 # LIGHT_ENERGY
 # GLTF_PATH
 # N_FRAMES
+# N_SIT
 # CAM_DIST
+# RES_X
+# RES_Y
+# BLEND_FILE
+# CAMERA_TYPE
 
 import bpy
 import os.path
@@ -12,10 +17,8 @@ import numpy
 # Scene variable
 scene=bpy.context.scene
 
-scene.render.resolution_x=1024
-scene.render.resolution_y=1024
-#print(scene.render.resolution_x,
-#      scene.render.resolution_y)
+scene.render.resolution_x=RES_X
+scene.render.resolution_y=RES_Y
 
 # Delete default objects
 for o in scene.objects:
@@ -28,9 +31,11 @@ scene.world.node_tree.nodes["Background"].inputs[0].default_value=BG_COLOR
 
 # Create camera
 camera_data=bpy.data.cameras.new(name='camera')
-# 'PANO', 'PERSP' and 'ORTHO'
-#print(camera_data.type)
-camera_data.type='ORTHO'
+if CAMERA_TYPE!='':
+    # 'PANO', 'PERSP' and 'ORTHO'
+    camera_data.type=CAMERA_TYPE
+else:
+    camera_data.type='ORTHO'
 camera_data.ortho_scale=2.0
 camera=bpy.data.objects.new('camera',camera_data)
 scene.collection.objects.link(camera)
@@ -100,12 +105,77 @@ camx=[[0.5,0.5,CAM_DIST+0.5],
       [0.5,-CAM_DIST+0.5,0.5],
       [-CAM_DIST+0.5,0.5,0.5]]
 
+# Spherical r, theta (azimuth), phi coordinates
+sphx=[[CAM_DIST,numpy.pi/2.0,0],
+      [CAM_DIST,0,3.0*numpy.pi/2.0],
+      [CAM_DIST,0,0.0]]
+
+for k in range(0,3):
+    rt=sphx[k][0]
+    thetat=sph[k][1]
+    phit=sph[k][2]
+    xt=rt*numpy.cos(thetat)*numpy.sin(phit)
+    yt=rt*numpy.sin(thetat)*numpy.sin(phit)
+    zt=rt*numpy.cos(phit)
+    print(camx[k][0],xt+0.5)
+    print(camx[k][1],yt+0.5)
+    print(camx[k][2],zt+0.5)
+
 rotx=[[0,0,0],
       [numpy.pi/2.0,numpy.pi*3.0/2.0,numpy.pi],
       [numpy.pi/2.0,0,numpy.pi/2.0],
       [0,numpy.pi,numpy.pi*3.0/2.0],
       [numpy.pi/2.0,0,0],
       [numpy.pi/2.0,numpy.pi*3.0/2.0,numpy.pi*3.0/2.0]]
+
+for i in range(0,6):
+
+    for j in range(0,N_SIT):
+
+        camx2.append(camx[i])
+        rotx2.append(rotx[i])
+
+        print(i,j,camx[i][0],rotx[i][0])
+
+    half_wid=(float(N_FRAMES)-1)/2.0
+    a0=1.0/(1.0+numpy.exp(half_wid))
+    a1=1.0/(1.0+numpy.exp(-half_wid))
+    
+    for j in range(0,N_FRAMES):
+
+        dj=float(j)/(float(N_FRAMES)-1)
+        a=1.0/(1.0+numpy.exp(-dj+half_wid))
+        
+        if i<5:
+            cam_temp_x=(camx[i][0]+(a-a0)*(a1-a0)*
+                        camx[i+1][0])
+            cam_temp_y=(camx[i][1]+(a-a0)*(a1-a0)*
+                        camx[i+1][1])
+            cam_temp_z=(camx[i][2]+(a-a0)*(a1-a0)*
+                        camx[i+1][2])
+            rot_temp_x=(rotx[i][0]+(a-a0)*(a1-a0)*
+                        rotx[i+1][0])
+            rot_temp_y=(rotx[i][1]+(a-a0)*(a1-a0)*
+                        rotx[i+1][1])
+            rot_temp_z=(rotx[i][2]+(a-a0)*(a1-a0)*
+                        rotx[i+1][2])
+        else:
+            cam_temp_x=(camx[i][0]+(a-a0)*(a1-a0)*
+                        camx[0][0])
+            cam_temp_y=(camx[i][1]+(a-a0)*(a1-a0)*
+                        camx[0][1])
+            cam_temp_z=(camx[i][2]+(a-a0)*(a1-a0)*
+                        camx[0][2])
+            rot_temp_x=(rotx[i][0]+(a-a0)*(a1-a0)*
+                        rotx[0][0])
+            rot_temp_y=(rotx[i][1]+(a-a0)*(a1-a0)*
+                        rotx[0][1])
+            rot_temp_z=(rotx[i][2]+(a-a0)*(a1-a0)*
+                        rotx[0][2])
+        print(i,j,a0,dj,a1,cam_temp_x,rot_temp_x)
+            
+        camx2.append([cam_temp_x,cam_temp_y,cam_temp_z])
+        rotx2.append([rot_temp_x,rot_temp_y,rot_temp_z])
 
 # Iterate through the dict, set the locations and render
 for i in range(0,6):
@@ -114,6 +184,10 @@ for i in range(0,6):
     camera.location=camx[i]
     camera.rotation_euler=rotx[i]
 
+    if i==0 and BLEND_FILE!='':
+        # Save a blend file
+        bpy.ops.wm.save_as_mainfile(filepath=BLEND_FILE)
+        
     # Assemble the path
     scene.render.filepath='bl_gltf_six_%01d.png' % i
     
