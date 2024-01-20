@@ -964,7 +964,10 @@ class threed_objects:
 
                         print('len(face_bin):',self.mesh_list[i].name,
                               len(face_bin))
-                        print('min,max:',min_v,max_v)
+                        print(('min,max: [%7.6e,%7.6e,%7.6e] '+
+                              '[%7.6e,%7.6e,%7.6e]') %
+                              (min_v[0],min_v[1],min_v[2],
+                               max_v[0],max_v[1],max_v[2]))
                         print('')
                     
                     # Reset the primitive objects so that
@@ -975,22 +978,36 @@ class threed_objects:
                     vert_map = [-1] * len(self.mesh_list[i].vert_list)
 
         # Add the top-level data to the json object
+        if verbose>2:
+            print('Converting mesh list:')
         jdat["meshes"]=mesh_list
+        if verbose>2:
+            print('Converting materials:')
         if len(mat_json)>0:
             jdat["materials"]=mat_json
+        if verbose>2:
+            print('Converting accessors:')
         jdat["accessors"]=acc_list
+        if verbose>2:
+            print('Converting buffers:')
         jdat["bufferViews"]=buf_list
         jdat["buffers"]=[{"byteLength": offset,
                           "uri": prefix+'.bin'}]
+        if verbose>2:
+            print('Converting textures:')
         if len(txt_list)>0:
             jdat["textures"]=txt_list
             jdat["images"]=img_list
 
         # write the json file
+        if verbose>2:
+            print('Writing JSON:')
         f=open(gltf_file,'w',encoding='utf-8')
         json.dump(jdat,f,ensure_ascii=False,indent=2)
         f.close()
 
+        if verbose>2:
+            print('Closing .bin file:')
         f2.close()
             
         return
@@ -1687,6 +1704,7 @@ class td_plot_base(yt_plot_base):
         if self.to.is_mat(name):
             raise ValueError('Already a material with the name '+
                              name+' in td_mat().')
+        print('m:',name)
         mat=material(name,[r,g,b,alpha],txt=txt,metal=metal,rough=rough,
                      ds=ds)
         self.to.add_mat(mat)
@@ -1814,20 +1832,20 @@ class td_plot_base(yt_plot_base):
             if png_file=='':
                 png_file='xtitle.png'
             if tex_mat_name=='':
-                mat_name='mat_xtitle'
+                tex_mat_name='mat_xtitle'
             if group_name=='':
                 group_name='x_title'
 
             if self.verbose>2:
-                print('td_axis_label(): png_file:',png_file,'mat_name:',
-                      mat_name,'group_name:',group_name)
+                print('td_axis_label(): png_file:',png_file,'tex_mat_name:',
+                      tex_mat_name,'group_name:',group_name)
 
             x_v,x_f,x_t,x_n,x_m=latex_prism(0.5,-offset-height/2.0,
                                             -offset+height/2.0,0.5,
                                             -offset+height/2.0,
                                             -offset-height/2.0,
                                             tex_label,
-                                            self.td_wdir,png_file,mat_name,
+                                            self.td_wdir,png_file,tex_mat_name,
                                             dir=ldir,end_mat=end_mat_name,
                                             flatten=flatten)
 
@@ -1842,21 +1860,21 @@ class td_plot_base(yt_plot_base):
             
             if png_file=='':
                 png_file='ytitle.png'
-            if mat_name=='':
-                mat_name='mat_ytitle'
+            if tex_mat_name=='':
+                tex_mat_name='mat_ytitle'
             if group_name=='':
                 group_name='y_title'
                 
             if self.verbose>2:
-                print('td_axis_label(): png_file:',png_file,'mat_name:',
-                      mat_name,'group_name:',group_name)
+                print('td_axis_label(): png_file:',png_file,'tex_mat_name:',
+                      tex_mat_name,'group_name:',group_name)
                 
             y_v,y_f,y_t,y_n,y_m=latex_prism(-offset-height/2.0,0.5,
                                             -offset+height/2.0,
                                             -offset+height/2.0,
                                             0.5,-offset-height/2.0,
                                             tex_label,
-                                            self.td_wdir,png_file,mat_name,
+                                            self.td_wdir,png_file,tex_mat_name,
                                             dir=ldir,end_mat=end_mat_name,
                                             flatten=flatten)
             
@@ -1871,21 +1889,21 @@ class td_plot_base(yt_plot_base):
             
             if png_file=='':
                 png_file='ztitle.png'
-            if mat_name=='':
-                mat_name='mat_ztitle'
+            if tex_mat_name=='':
+                tex_mat_name='mat_ztitle'
             if group_name=='':
                 group_name='z_title'
                 
             if self.verbose>2:
-                print('td_axis_label(): png_file:',png_file,'mat_name:',
-                      mat_name,'group_name:',group_name)
+                print('td_axis_label(): png_file:',png_file,'tex_mat_name:',
+                      tex_mat_name,'group_name:',group_name)
                 
             z_v,z_f,z_t,z_n,z_m=latex_prism(-offset-height/2.0,
                                             -offset+height/2.0,
                                             0.5,-offset+height/2.0,
                                             -offset-height/2.0,0.5,
                                             tex_label,
-                                            self.td_wdir,png_file,mat_name,
+                                            self.td_wdir,png_file,tex_mat_name,
                                             dir=ldir,end_mat=end_mat_name,
                                             flatten=flatten)
             

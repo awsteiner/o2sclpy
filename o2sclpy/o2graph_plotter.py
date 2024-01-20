@@ -1351,33 +1351,24 @@ class o2graph_plotter(td_plot_base):
         return
 
     def gltf_o2graph(self,o2scl,amp,link,args):
-        """
-        """
+        """Documentation for o2graph command ``gltf``:
 
+        Write a GLTF file from 3D objects (experimental)
+
+        Command-line arguments: ``<prefix> [kwargs]``
+
+        Write a GLTF file from 3D objects.
+        """
         prefix=args[0]
         if len(args)>=2:
             kwstring=args[1]
 
         if self.verbose>2:
             print('Writing gltf to dir,file',self.td_wdir,prefix)
-        self.to.write_gltf(self.td_wdir,prefix)
+        self.to.write_gltf(self.td_wdir,prefix,verbose=self.verbose)
 
         return
     
-    def obj_o2graph(self,o2scl,amp,link,args):
-        """Produce an obj file
-        """
-
-        prefix=args[0]
-        if len(args)>=2:
-            kwstring=args[1]
-
-        if self.verbose>2:
-            print('Writing obj to file',prefix)
-        self.to.write_obj(prefix)
-
-        return
-
     def make_png_o2graph(self,o2scl,amp,link,args):
         """
         Documentation for o2graph command ``make-png``:
@@ -5743,14 +5734,12 @@ class o2graph_plotter(td_plot_base):
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix==5:
-                        self.td_mat(o2scl,amp,
-                                    strlist[ix+1],
+                        self.td_mat(strlist[ix+1],
                                     float(strlist[ix+2]),
                                     float(strlist[ix+3]),
                                     float(strlist[ix+4]))
                     elif ix_next-ix>=6:
-                        self.td_mat(o2scl,amp,
-                                    strlist[ix+1],
+                        self.td_mat(strlist[ix+1],
                                     float(strlist[ix+2]),
                                     float(strlist[ix+3]),
                                     float(strlist[ix+4]),
@@ -5939,16 +5928,6 @@ class o2graph_plotter(td_plot_base):
 
                     self.den_plot_rgb_o2graph(o2scl,amp,self.link2,
                                               strlist[ix+1:ix_next])
-                
-                # elif cmd_name=='obj':
-
-                #     if self.verbose>2:
-                #         print('Process obj.')
-                #         print('args:',strlist[ix:ix_next])
-
-                #     print('going to obj_o2graph.')
-                #     self.obj_o2graph(o2scl,amp,self.link2,
-                #                               strlist[ix+1:ix_next])
                 
                 elif cmd_name=='gltf':
 
