@@ -137,21 +137,22 @@ base_list=[
      "top>bottom."],
     ["subplots",plot_base.subplots.__doc__],
     ["td-axis","Documentation for td-axis\n\n"+
-     "Create a 3D axis label (experimental).\n\n"+
+     "Create a 3D axis (experimental).\n\n"+
      "<x label> <y label> <z label> [png file prefix]\n\n"+
-     "Full desc."],
-    ["td-arrow","Documentation for td-arrow\n\n"+
-     "Create a 3D arrow (experimental).\n\n"+
-     "<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]\n\n"+
-     "Full desc."],
-    ["td-mat","Documentation for td-arrow\n\n"+
-     "Create a 3D material (experimental).\n\n"+
-     "<name> <r> <g> <b> [kwargs]\n\n"+
-     "Full desc."],
-    ["td-den-plot","Documentation for td-den-plot\n\n"+
-     "Create a 3D density plot (experimental).\n\n"+
-     "<x label> <y label> <z label> [kwargs]\n\n"+
-     "Full desc."],
+     "This command creates a default axis with three arrows "+
+     "and three axis labels using LaTeX to convert mathematical "+
+     "expressions to texture images. The textures are named "+
+     "[prefix/]xtitle.png, [prefix/]ytitle.png, and "+
+     "[prefix/]ztitle.png. The mesh objects for the arrows are "+
+     "named x_axis, y_axis, and z_axis, respectively. The "+
+     "coordinate system is always right-handed."],
+    ["td-axis-label","Documentation for td-axis-label\n\n"+
+     "Create a 3D axis label (experimental).\n\n"+
+     "<dir> <label> [kwargs]\n\n"+
+     "Desc."],
+    ["td-arrow",td_plot_base.td_arrow.__doc__],
+    ["td-mat",td_plot_base.td_mat.__doc__],
+    ["td-den-plot",td_plot_base.td_den_plot.__doc__],
     ["td-scatter","Documentation for td-scatter\n\n"+
      "Create a 3D scatter plot (experimental).\n\n"+
      "<x column> <y column> <z column> [r column] [g column] "+
@@ -5730,13 +5731,13 @@ class o2graph_plotter(td_plot_base):
                         self.td_mat(o2scl,amp,
                                     strlist[ix+1],
                                     float(strlist[ix+2]),
-                                    float(strlist[ix+3]],
+                                    float(strlist[ix+3]),
                                     float(strlist[ix+4]))
                     elif ix_next-ix>=6:
                         self.td_mat(o2scl,amp,
                                     strlist[ix+1],
                                     float(strlist[ix+2]),
-                                    float(strlist[ix+3]],
+                                    float(strlist[ix+3]),
                                     float(strlist[ix+4]),
                                     **string_to_dict2(strlist[ix+5],
                                                       list_of_bools=

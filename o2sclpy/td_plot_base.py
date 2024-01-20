@@ -1007,7 +1007,12 @@ class td_plot_base(yt_plot_base):
 
     def td_den_plot(self,o2scl,amp,args,cmap='',mat_name='white',
                     normals=False):
-        """Note that normals are typically not specified, because the
+        """Documentation for td-den-plot
+
+        Create a 3D density plot (experimental).
+        ``<x label> <y label> <z label> [kwargs]``
+
+        Note that normals are typically not specified, because the
         density plot presumes flat shading. Blender, for example, uses
         smooth shading for GLTF files when normals are specified, and
         this can complicate the density plot.
@@ -1646,8 +1651,13 @@ class td_plot_base(yt_plot_base):
     def td_mat(self, name: str, r: float, g: float, b: float,
                alpha: float=1, metal: float=0, rough: float=1,
                ds: bool=True, txt: str=''):
-        """
-        Desc
+        """Documentation for o2graph command ``td-mat``:
+
+        Create a 3d material
+
+        Command-line arguments: ``<name> <r> <g> <b> [kwargs]``
+
+        Create a new material with the specified properties. 
         """
 
         if self.to.is_mat(name):
@@ -1658,17 +1668,34 @@ class td_plot_base(yt_plot_base):
         self.to.add_mat(mat)
         return
     
-    def td_arrow(self,x1,y1,z1,x2,y2,z2,name,
-                 mat='white'):
+    def td_arrow(self,x1,y1,z1,x2,y2,z2,name='arrow',
+                 mat='white',r=0,tail_ratio=0.9,n_theta=20,
+                 head_width=3):
         """Documentation for o2graph command ``td-arrow``:
 
-        Plot an axis in a 3d visualization
+        Plot an arrow in a 3d visualization
 
-        Command-line arguments: ``x1 y1 z1 x2 y2 z2 group_name [kwargs]``
+        Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> 
+        [kwargs]``
+
+        This command plots and arrow (a combination of a cylinder for
+        the body of the arrow and a cone for the head) from point
+        (x1,y1,z1) to point (x2,y2,z2). The fraction of the length of
+        the cylinder to the distance between the user-specified points
+        is given in ``tail_ratio`` and defaults to 0.9. The value
+        ``r`` is the radius of the cylinder, and the base of the code
+        has a radius of twice ``r``. If the user-specified value of
+        ``r`` is zero or negative, then the default value is used (the
+        length of the arrow divided by 80). The argument ``n_theta``
+        specifies the number of vertices in the azimuthal direction.
+        The total number of faces is always three times ``n_theta``.
         """
+        uname=self.to.make_unique_name(name)
+        
         arr_vert,arr_norm,arr_face=arrow(x1,y1,z1,x2,y2,z2)
 
         if type(mat)==str:
+            
             if not self.to.is_mat(mat):
                 if mat=='white':
                     white=material('white',[1,1,1])
@@ -1677,20 +1704,21 @@ class td_plot_base(yt_plot_base):
                     print('No material named',mat,'in td-arrow')
                     return
             if self.verbose>2:
-                print('td_arrow(): creating group named',name,'with material',
+                print('td_arrow(): creating group named',uname,'with material',
                       mat+'.')
-            gf=mesh_object(name,arr_face,mat)
+            gf=mesh_object(uname,arr_face,mat)
             gf.vert_list=arr_vert
             gf.vn_list=arr_norm
             self.to.add_object(gf)
-                               
+            
         else:
+            
             if self.verbose>2:
-                print('td_arrow(): creating group named',name,'with material',
+                print('td_arrow(): creating group named',uname,'with material',
                       mat.name+'.')
             if not self.to.is_mat(mat.name):
                 self.to.add_mat(mat)
-            gf=mesh_object(name,arr_face,mat.name)
+            gf=mesh_object(uname,arr_face,mat.name)
             gf.vert_list=arr_vert
             gf.vn_list=arr_norm
             self.to.add_object(gf)
@@ -1698,26 +1726,46 @@ class td_plot_base(yt_plot_base):
         return
 
     def td_axis_label(self, ldir : str, tex_label : str,
-                      mat_name : str = '', png_file : str = '',
-                      group_name : str = '', offset : float = 0.1,
-                      height : float = 0.1):
+                      tex_mat_name : str = '', end_mat_name: str = 'white',
+                      png_file : str = '', group_name : str = '',
+                      offset : float = 0.1, height : float = 0.1):
         """Create an axis label in the direction ``ldir`` with label
         ``tex_label``.
+
+        Direction, ``ldir``, must be either ``x``, ``y``, or ``z``.
+        The LaTeX image from ``tex_label`` will be stored in file
+        named ``png_file``. A new material will be created from the
+        LaTeX image, named ``tex_mat_name`` and added to the material
+        list before the corresponding mesh is added. If
+        ``tex_mat_name`` is empty, then ``mat_xtitle``,
+        ``mat_ytitle``, or ``mat_ztitle`` will be used, depending on
+        the direction. If ``group_name`` is empty, then ``x_title``,
+        ``y_title``, or ``z_title`` will be used, depending on the
+        direction.
+        
+        The material named ``end_mat_name`` will be used for the two
+        faces which do not have labels. If ``end_mat_name`` is the
+        default, ``white``, then a default white material will be
+        created for that purpose. Otherwise, it is presumed the user
+        has already added the material.
+
+        The number ``offset`` is the offset of the label from the
+        x-axis, in the internal coordinate system. The number
+        ``height`` is used for the height dimension of the faces with
+        the LaTeX image, and the width is computed automatically from
+        the aspect ratio of the LaTeX output.
         """
 
-        white_found=False
-        for i in range(0,len(self.to.mat_list)):
-            if self.to.mat_list[i].name=='white':
-                white_found=True
-        if white_found==False:
-            white=material('white',[1,1,1])
-            self.to.add_mat(white)
+        if end_mat_name=='white':
+            if self.to.is_mat('white')==False:
+                white=material('white',[1,1,1])
+                self.to.add_mat(white)
         
         if ldir=='x':
             
             if png_file=='':
                 png_file='xtitle.png'
-            if mat_name=='':
+            if tex_mat_name=='':
                 mat_name='mat_xtitle'
             if group_name=='':
                 group_name='x_title'
@@ -1732,7 +1780,7 @@ class td_plot_base(yt_plot_base):
                                             -offset-height/2.0,
                                             tex_label,
                                             self.td_wdir,png_file,mat_name,
-                                            dir=ldir)
+                                            dir=ldir,end_mat=end_mat_name)
 
             self.to.add_mat(x_m)
             gf=mesh_object(group_name,x_f)
@@ -1760,7 +1808,7 @@ class td_plot_base(yt_plot_base):
                                             0.5,-offset-height/2.0,
                                             tex_label,
                                             self.td_wdir,png_file,mat_name,
-                                            dir=ldir)
+                                            dir=ldir,end_mat=end_mat_name)
             
             self.to.add_mat(y_m)
             gf=mesh_object(group_name,y_f)
@@ -1788,7 +1836,7 @@ class td_plot_base(yt_plot_base):
                                             -offset-height/2.0,0.5,
                                             tex_label,
                                             self.td_wdir,png_file,mat_name,
-                                            dir=ldir)
+                                            dir=ldir,end_mat=end_mat_name)
             
             self.to.add_mat(z_m)
             gf=mesh_object(group_name,z_f)
