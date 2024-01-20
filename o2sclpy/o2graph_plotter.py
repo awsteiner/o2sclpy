@@ -146,10 +146,7 @@ base_list=[
      "[prefix/]ztitle.png. The mesh objects for the arrows are "+
      "named x_axis, y_axis, and z_axis, respectively. The "+
      "coordinate system is always right-handed."],
-    ["td-axis-label","Documentation for td-axis-label\n\n"+
-     "Create a 3D axis label (experimental).\n\n"+
-     "<dir> <label> [kwargs]\n\n"+
-     "Desc."],
+    ["td-axis-label",td_plot_base.td_axis_label.__doc__],
     ["td-arrow",td_plot_base.td_arrow.__doc__],
     ["td-mat",td_plot_base.td_mat.__doc__],
     ["td-den-plot",td_plot_base.td_den_plot.__doc__],
@@ -5601,6 +5598,24 @@ class o2graph_plotter(td_plot_base):
                                       strlist[ix+7])
                     else:
                         print('Not enough arguments for td-arrow.')
+
+                elif cmd_name=='td-axis-label':
+
+                    if self.verbose>2:
+                        print('Process td-axis-label.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix>=4:
+                        self.td_axis_label(strlist[ix+1],
+                                           strlist[ix+2],
+                                           **string_to_dict2
+                                           (strlist[ix+3],
+                                            list_of_bools=['flatten']))
+                    elif ix_next-ix>=3:
+                        self.td_axis_label(strlist[ix+1],
+                                           strlist[ix+2])
+                    else:
+                        print('Not enough arguments for td-axis-label.')
 
                 elif cmd_name=='td-axis':
 

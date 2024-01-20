@@ -246,7 +246,7 @@ class mesh_object:
         return
 
 def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
-                dir='x',end_mat='white'):
+                dir='x',end_mat='white',flatten=True):
     """
     Create a rectangular prism with textures from a png created by a
     LaTeX string on four sides.
@@ -262,7 +262,8 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
     outside the prism. 
     """
 
-    w,h,w_new,h_new=latex_to_png(latex,wdir+'/'+png_file,power_two=True)
+    w,h,w_new,h_new=latex_to_png(latex,wdir+'/'+png_file,
+                                 power_two=True,flatten=flatten)
                                  
     face=[]
     vert=[]
@@ -455,10 +456,10 @@ class threed_objects:
     """
 
     def make_unique_name(self, prefix : str):
+        """Using the specified ``prefix``, create a unique name for a mesh
+        object by adding an integer suffix from 1 to 100.
         """
-        Desc
-        """
-        for i in range(1,100):
+        for i in range(1,101):
             found=False
             name=prefix+str(i)
             for j in range(0,len(self.mesh_list)):
@@ -1007,10 +1008,11 @@ class td_plot_base(yt_plot_base):
 
     def td_den_plot(self,o2scl,amp,args,cmap='',mat_name='white',
                     normals=False):
-        """Documentation for td-den-plot
+        """Documentation for o2graph command ``td-den-plot``:
 
         Create a 3D density plot (experimental).
-        ``<x label> <y label> <z label> [kwargs]``
+
+        Command-line arguments: ``<x label> <y label> <z label> [kwargs]``
 
         Note that normals are typically not specified, because the
         density plot presumes flat shading. Blender, for example, uses
@@ -1613,11 +1615,33 @@ class td_plot_base(yt_plot_base):
 
         return
 
-    def td_line(self,x1,y1,z1,x2,y2,z2,name,mat='white'):
-                
+    def td_line(self,x1,y1,z1,x2,y2,z2,name='line',mat='white',
+                coords='user'):
+        """Documentation for o2graph command ``td-line``:
+
+        Plot a line in a 3d visualization (experimental)
+
+        Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> 
+        [kwargs]``
+
+        By default, the line
+        coordinates are specified in the internal coordinate system.
+        If the keyword argument ``coords`` is ``user``, then the
+        coordinates are in the user coordinate system.
         """
-        Desc
-        """
+        uname=self.to.make_unique_name(name)
+        
+        if coords=='user':
+            if self.xset==False or self.yset==False or self.zset==False:
+                raise ValueError("User coordinates not set in"+
+                                 " 'td-arrow'.")
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+            x2=(x2-self.xlo)/(self.xhi-self.xlo)
+            y2=(y2-self.ylo)/(self.yhi-self.ylo)
+            z2=(z2-self.zlo)/(self.zhi-self.zlo)
+            
         line_vert=[[x1,y1,z1],[x2,y2,z2]]
     
         if type(mat)==str:
@@ -1631,18 +1655,18 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_line(): creating group named',name,'with material',
                       mat+'.')
-            gf=mesh_object(name,arr_face,mat=mat,obj_type='line')
+            gf=mesh_object(uname,arr_face,mat=mat,obj_type='line')
             gf.vert_list=line_vert
             self.to.add_object(gf)
                                
         else:
             
             if self.verbose>2:
-                print('td_line(): creating group named',name,'with material',
+                print('td_line(): creating group named',uname,'with material',
                       mat.name+'.')
             if not self.to.is_mat(mat.name):
                 self.to.add_mat(mat)
-            gf=mesh_object(name,arr_face,mat=mat.name,obj_type='line')
+            gf=mesh_object(uname,arr_face,mat=mat.name,obj_type='line')
             gf.vert_list=line_vert
             self.to.add_object(gf)
             
@@ -1653,7 +1677,7 @@ class td_plot_base(yt_plot_base):
                ds: bool=True, txt: str=''):
         """Documentation for o2graph command ``td-mat``:
 
-        Create a 3d material
+        Create a 3d material (experimental)
 
         Command-line arguments: ``<name> <r> <g> <b> [kwargs]``
 
@@ -1670,17 +1694,22 @@ class td_plot_base(yt_plot_base):
     
     def td_arrow(self,x1,y1,z1,x2,y2,z2,name='arrow',
                  mat='white',r=0,tail_ratio=0.9,n_theta=20,
-                 head_width=3):
+                 head_width=3,coords='internal'):
         """Documentation for o2graph command ``td-arrow``:
 
-        Plot an arrow in a 3d visualization
+        Plot an arrow in a 3d visualization (experimental)
 
         Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> 
         [kwargs]``
 
         This command plots and arrow (a combination of a cylinder for
         the body of the arrow and a cone for the head) from point
-        (x1,y1,z1) to point (x2,y2,z2). The fraction of the length of
+        (x1,y1,z1) to point (x2,y2,z2). By default, the arrow
+        coordinates are specified in the internal coordinate system.
+        If the keyword argument ``coords`` is ``user``, then the
+        coordinates are in the user coordinate system.
+
+        The fraction of the length of
         the cylinder to the distance between the user-specified points
         is given in ``tail_ratio`` and defaults to 0.9. The value
         ``r`` is the radius of the cylinder, and the base of the code
@@ -1691,6 +1720,17 @@ class td_plot_base(yt_plot_base):
         The total number of faces is always three times ``n_theta``.
         """
         uname=self.to.make_unique_name(name)
+
+        if coords=='user':
+            if self.xset==False or self.yset==False or self.zset==False:
+                raise ValueError("User coordinates not set in"+
+                                 " 'td-arrow'.")
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+            x2=(x2-self.xlo)/(self.xhi-self.xlo)
+            y2=(y2-self.ylo)/(self.yhi-self.ylo)
+            z2=(z2-self.zlo)/(self.zhi-self.zlo)
         
         arr_vert,arr_norm,arr_face=arrow(x1,y1,z1,x2,y2,z2)
 
@@ -1704,8 +1744,9 @@ class td_plot_base(yt_plot_base):
                     print('No material named',mat,'in td-arrow')
                     return
             if self.verbose>2:
-                print('td_arrow(): creating group named',uname,'with material',
-                      mat+'.')
+                print('td_arrow(): creating group named',uname,
+                      'with material',mat+'.')
+                
             gf=mesh_object(uname,arr_face,mat)
             gf.vert_list=arr_vert
             gf.vn_list=arr_norm
@@ -1714,8 +1755,8 @@ class td_plot_base(yt_plot_base):
         else:
             
             if self.verbose>2:
-                print('td_arrow(): creating group named',uname,'with material',
-                      mat.name+'.')
+                print('td_arrow(): creating group named',uname,
+                      'with material',mat.name+'.')
             if not self.to.is_mat(mat.name):
                 self.to.add_mat(mat)
             gf=mesh_object(uname,arr_face,mat.name)
@@ -1728,8 +1769,15 @@ class td_plot_base(yt_plot_base):
     def td_axis_label(self, ldir : str, tex_label : str,
                       tex_mat_name : str = '', end_mat_name: str = 'white',
                       png_file : str = '', group_name : str = '',
-                      offset : float = 0.1, height : float = 0.1):
-        """Create an axis label in the direction ``ldir`` with label
+                      offset : float = 0.1, height : float = 0.1,
+                      flatten : bool = True):
+        """Documentation for o2graph command ``td-arrow``:
+
+        Create an axis label in a 3d visualization (experimental).
+
+        Command-line arguments: ``<ldir> <tex_label> [kwargs]``
+
+        Create an axis label in the direction ``ldir`` with label
         ``tex_label``.
 
         Direction, ``ldir``, must be either ``x``, ``y``, or ``z``.
@@ -1780,7 +1828,8 @@ class td_plot_base(yt_plot_base):
                                             -offset-height/2.0,
                                             tex_label,
                                             self.td_wdir,png_file,mat_name,
-                                            dir=ldir,end_mat=end_mat_name)
+                                            dir=ldir,end_mat=end_mat_name,
+                                            flatten=flatten)
 
             self.to.add_mat(x_m)
             gf=mesh_object(group_name,x_f)
@@ -1808,7 +1857,8 @@ class td_plot_base(yt_plot_base):
                                             0.5,-offset-height/2.0,
                                             tex_label,
                                             self.td_wdir,png_file,mat_name,
-                                            dir=ldir,end_mat=end_mat_name)
+                                            dir=ldir,end_mat=end_mat_name,
+                                            flatten=flatten)
             
             self.to.add_mat(y_m)
             gf=mesh_object(group_name,y_f)
@@ -1836,7 +1886,8 @@ class td_plot_base(yt_plot_base):
                                             -offset-height/2.0,0.5,
                                             tex_label,
                                             self.td_wdir,png_file,mat_name,
-                                            dir=ldir,end_mat=end_mat_name)
+                                            dir=ldir,end_mat=end_mat_name,
+                                            flatten=flatten)
             
             self.to.add_mat(z_m)
             gf=mesh_object(group_name,z_f)
