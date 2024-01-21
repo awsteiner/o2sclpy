@@ -112,8 +112,8 @@ sphx=[[CAM_DIST,numpy.pi/2.0,0],
 
 for k in range(0,3):
     rt=sphx[k][0]
-    thetat=sph[k][1]
-    phit=sph[k][2]
+    thetat=sphx[k][1]
+    phit=sphx[k][2]
     xt=rt*numpy.cos(thetat)*numpy.sin(phit)
     yt=rt*numpy.sin(thetat)*numpy.sin(phit)
     zt=rt*numpy.cos(phit)

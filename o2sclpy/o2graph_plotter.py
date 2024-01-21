@@ -5597,11 +5597,16 @@ class o2graph_plotter(td_plot_base):
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix>=4:
+                        print('jj',string_to_dict2
+                              (strlist[ix+3],
+                               list_of_bools=['flatten'],
+                               list_of_floats=['rough','metal']))
                         self.td_axis_label(strlist[ix+1],
                                            strlist[ix+2],
                                            **string_to_dict2
                                            (strlist[ix+3],
-                                            list_of_bools=['flatten']))
+                                            list_of_bools=['flatten'],
+                                            list_of_floats=['rough','metal']))
                     elif ix_next-ix>=3:
                         self.td_axis_label(strlist[ix+1],
                                            strlist[ix+2])
@@ -5747,7 +5752,8 @@ class o2graph_plotter(td_plot_base):
                                                       list_of_bools=
                                                       ['ds'],
                                                       list_of_floats=
-                                                      ['metal,rough,alpha']))
+                                                      ['metal','rough',
+                                                       'alpha']))
                     else:
                         print('Not enough arguments for td-mat.')
 

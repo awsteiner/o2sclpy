@@ -678,7 +678,8 @@ class threed_objects:
                                          this_mat.base_color[0],
                                          this_mat.base_color[1],
                                          this_mat.base_color[2],
-                                         1],
+                                         this_mat.base_color[3]
+                                     ],
                                      "metallicFactor": this_mat.metal,
                                      "roughnessFactor": this_mat.rough
                                  }
@@ -1704,7 +1705,6 @@ class td_plot_base(yt_plot_base):
         if self.to.is_mat(name):
             raise ValueError('Already a material with the name '+
                              name+' in td_mat().')
-        print('m:',name)
         mat=material(name,[r,g,b,alpha],txt=txt,metal=metal,rough=rough,
                      ds=ds)
         self.to.add_mat(mat)
@@ -1831,6 +1831,8 @@ class td_plot_base(yt_plot_base):
             
             if png_file=='':
                 png_file='xtitle.png'
+            if png_file[-4:0]!='.png':
+                png_file=png_file+'.png'
             if tex_mat_name=='':
                 tex_mat_name='mat_xtitle'
             if group_name=='':
@@ -1838,7 +1840,8 @@ class td_plot_base(yt_plot_base):
 
             if self.verbose>2:
                 print('td_axis_label(): png_file:',png_file,'tex_mat_name:',
-                      tex_mat_name,'group_name:',group_name)
+                      tex_mat_name,'group_name:',group_name,'flatten:',
+                      flatten,type(flatten))
 
             x_v,x_f,x_t,x_n,x_m=latex_prism(0.5,-offset-height/2.0,
                                             -offset+height/2.0,0.5,
@@ -1860,6 +1863,8 @@ class td_plot_base(yt_plot_base):
             
             if png_file=='':
                 png_file='ytitle.png'
+            if png_file[-4:0]!='.png':
+                png_file=png_file+'.png'
             if tex_mat_name=='':
                 tex_mat_name='mat_ytitle'
             if group_name=='':
@@ -1868,7 +1873,7 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_axis_label(): png_file:',png_file,'tex_mat_name:',
                       tex_mat_name,'group_name:',group_name)
-                
+
             y_v,y_f,y_t,y_n,y_m=latex_prism(-offset-height/2.0,0.5,
                                             -offset+height/2.0,
                                             -offset+height/2.0,
@@ -1889,6 +1894,8 @@ class td_plot_base(yt_plot_base):
             
             if png_file=='':
                 png_file='ztitle.png'
+            if png_file[-4:0]!='.png':
+                png_file=png_file+'.png'
             if tex_mat_name=='':
                 tex_mat_name='mat_ztitle'
             if group_name=='':

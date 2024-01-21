@@ -604,7 +604,7 @@ def force_string(obj):
         return obj.decode('utf-8')
     return obj
 
-def latex_to_png(tex: str, png_file: str, verbose: int = 1,
+def latex_to_png(tex: str, png_file: str, verbose: int = 3,
                  power_two: bool = False, flatten: bool = True):
     """
     A simple routine to convert a LaTeX string to a png image.
@@ -653,7 +653,7 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 1,
               png_file+' -background white -flatten '+
               png_file+' > '+out_file_name+' 2>&1')
         if verbose>1:
-            print('latex_to_png(): Running second shell command ',
+            print('latex_to_png(): Running second shell command',
                   '(flatten)\n ',cmd2)
         os.system(cmd2)
     else:
@@ -669,9 +669,14 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 1,
         h=img.height
         w_new=2**(int(numpy.log2(w-1))+1)
         h_new=2**(int(numpy.log2(h-1))+1)
-        cmd3=('convert '+png_file+' -background white '+
-              '-extent '+str(w_new)+'x'+str(h_new)+' '+
-              png_file+' > '+out_file_name+' 2>&1')
+        if flatten==True:
+            cmd3=('convert '+png_file+' -background white '+
+                  '-extent '+str(w_new)+'x'+str(h_new)+' '+
+                  png_file+' > '+out_file_name+' 2>&1')
+        else:
+            cmd3=('convert '+png_file+' -background None '+
+                  '-extent '+str(w_new)+'x'+str(h_new)+' '+
+                  png_file+' > '+out_file_name+' 2>&1')
         if verbose>1:
             print('latex_to_png(): Running third shell command',cmd3)
         os.system(cmd3)
@@ -876,7 +881,10 @@ def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[]):
         if arr2[0] in list_of_floats:
             arr2[1]=float(arr2[1])
         if arr2[0] in list_of_bools:
-            arr2[1]=bool(arr2[1])
+            if arr2[1].lower() in ['true', '1', 't', 'y', 'yes']:
+                arr2[1]=True
+            else:
+                arr2[1]=False
                     
         dct[arr2[0]]=arr2[1]
 

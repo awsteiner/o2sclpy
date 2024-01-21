@@ -1,4 +1,5 @@
 o2graph -set td_wdir gltf -set xlo 0 -set xhi 1 -set ylo 0 -set yhi 1 \
 -set zlo 0 -set zhi 1 \
--td-mat red 1.0 0.4 0.4 -set verbose 3 \
--td-axis-label x "$ x^2 $" flatten=False -gltf mat.gltf
+-td-mat red 1.0 0.4 0.4 metal=1,alpha=0.2 -set verbose 3 \
+-td-axis-label x "$ x^2 $" \
+png_file=mat_xtitle,end_mat_name=red -gltf mat.gltf
