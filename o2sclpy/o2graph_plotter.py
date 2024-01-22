@@ -1577,7 +1577,7 @@ class o2graph_plotter(td_plot_base):
             x_min=0
             x_max=0
             y_min=0
-            y_max=1
+            y_max=0
             n_points=201
             z_mult=1
             
@@ -1648,7 +1648,7 @@ class o2graph_plotter(td_plot_base):
                 x0a.append(x0p)
                 x0p=x0p+(x_max-x_min)/float(n_points-1)
             x1a=[]
-            x1p=x_min
+            x1p=y_min
             for i in range(0,n_points):
                 x1a.append(x1p)
                 x1p=x1p+(y_max-y_min)/float(n_points-1)
