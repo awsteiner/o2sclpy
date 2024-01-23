@@ -671,19 +671,33 @@ class threed_objects:
                 texture_map[i]=texture_index
                 texture_index=texture_index+1
             else:
-                mat_json.append({"doubleSided": True,
-                                 "name": this_mat.name,
-                                 "pbrMetallicRoughness": {
-                                     "baseColorFactor": [
-                                         this_mat.base_color[0],
-                                         this_mat.base_color[1],
-                                         this_mat.base_color[2],
-                                         this_mat.base_color[3]
-                                     ],
-                                     "metallicFactor": this_mat.metal,
-                                     "roughnessFactor": this_mat.rough
-                                 }
-                                 })
+                if len(this_mat.base_color)>=4:
+                    mat_json.append({"doubleSided": True,
+                                     "name": this_mat.name,
+                                     "pbrMetallicRoughness": {
+                                         "baseColorFactor": [
+                                             this_mat.base_color[0],
+                                             this_mat.base_color[1],
+                                             this_mat.base_color[2],
+                                             this_mat.base_color[3]
+                                         ],
+                                         "metallicFactor": this_mat.metal,
+                                         "roughnessFactor": this_mat.rough
+                                     }
+                                     })
+                else:
+                    mat_json.append({"doubleSided": True,
+                                     "name": this_mat.name,
+                                     "pbrMetallicRoughness": {
+                                         "baseColorFactor": [
+                                             this_mat.base_color[0],
+                                             this_mat.base_color[1],
+                                             this_mat.base_color[2],1
+                                         ],
+                                         "metallicFactor": this_mat.metal,
+                                         "roughnessFactor": this_mat.rough
+                                     }
+                                     })
         
         # Add each set of faces as a group
         acc_index=0
