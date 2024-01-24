@@ -27,6 +27,24 @@ import os
 # For numpy.bytes_
 import numpy
 
+def get_azi_angle(v):
+    x=v[0]
+    y=v[1]
+    z=v[2]
+    phi=numpy.arctan2(y,x)
+    return phi
+
+def shift_phi(v,phi_new):
+    x=v[0]
+    y=v[1]
+    z=v[2]
+    r=numpy.sqrt(x*x+y*y+z*z)
+    theta=numpy.cos(z/r)
+    v[0]=r*numpy.cos(phi_new)*numpy.sin(theta)
+    v[1]=r*numpy.sin(phi_new)*numpy.sin(theta)
+    v[2]=r*numpy.cos(theta)
+    return
+
 def cross(x,y,norm=False):
     """Return the cross product between two vectors
 
@@ -262,7 +280,7 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
             
     return vert2,norms2,face2
 
-def icosphere(x,y,z,r,n_subdiv=0):
+def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
     """Construct the vertices and faces of an icosphere centered at
     (x,y,z) with radius r
 
@@ -450,7 +468,66 @@ def icosphere(x,y,z,r,n_subdiv=0):
             face_new.append([i3,i13,i23])
 
         face=face_new
-    
+
+    # If requested, make an azimuthal cutout
+    if phi_cut[0]!=phi_cut[1]:
+        if phi_cut[0]<0 or phi_cut[1]<0:
+            raise ValueError('Phi cut values cannot be negative.')
+        if phi_cut[0]>numpy.pi*2.0 or phi_cut[1]>numpy.pi*2.0:
+            raise ValueError('Phi cut values cannot be larger than 2 pi.')
+        if phi_cut[0]>phi_cut[1]:
+            temp=phi_cut[0]
+            phi_cut[0]=phi_cut[1]
+            phi_cut[1]=temp
+        phi_mid=(phi_cut[0]+phi_cut[1])/2
+
+        # Delete faces which are only in the cutoff region.
+        # This algorithm is 
+        
+        found=True
+        while found==True:
+            found=False
+            iface=0
+            while iface<len(face) and found==False:
+                count_low=0
+                count_high=0
+                j=0
+                while j<3 and found==False:
+                    phi=get_azi_angle(vert[face[iface][j]-1])
+                    if (phi<0.0):
+                        phi=phi+numpy.pi*2.0
+                    if phi<=phi_mid and phi>phi_cut[0]:
+                        count_low=count_low+1
+                    if phi>phi_mid and phi<phi_cut[1]:
+                        count_high=count_high+1
+                    if count_low>0 and count_high>0:
+                        del face[iface]
+                        found=True
+                    j=j+1
+                iface=iface+1
+
+        # First pass, determine if we need to shift vertex
+        # up or down in phi
+        vert_flags=[0]*len(vert)
+        for ivert in range(0,len(vert)):
+            phi=get_azi_angle(vert[ivert])
+            if (phi<0.0):
+                phi=phi+numpy.pi*2.0
+            if phi<=phi_mid and phi>phi_cut[0]:
+                if vert_flags[ivert]!=0:
+                    #print('Subtracting from',vert_flags[ivert])
+                vert_flags[ivert]=vert_flags[ivert]-1
+            if phi>phi_mid and phi<phi_cut[1]:
+                if vert_flags[ivert]!=0:
+                    #print('Adding to',vert_flags[ivert])
+                vert_flags[ivert]=vert_flags[ivert]+1
+
+        for ivert in range(0,len(vert)):
+            if vert_flags[ivert]==1:
+                shift_phi(vert[ivert],phi_cut[1])
+            elif vert_flags[ivert]==1:
+                shift_phi(vert[ivert],phi_cut[0])
+        
     # Shift the origin to the user-specified coordinates
     for i in range(0,len(vert)):
         vert[i][0]=vert[i][0]+x

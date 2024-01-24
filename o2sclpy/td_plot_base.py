@@ -1491,9 +1491,17 @@ class td_plot_base(yt_plot_base):
 
         return
 
-    def td_icos(self,o2scl,amp,args,n_subdiv=0,r=0.04):
-        """
-        Desc
+    def td_icos(self,o2scl,amp,args,n_subdiv=0,r=0.04,phi_cut=''):
+        """Documentation for o2graph command ``td-icos``:
+
+        Create a 3D icosphere (experimental).
+
+        Command-line arguments: ``<x> <y> <z> <r> <g> <b> [kwargs]``
+
+        Note that normals are typically not specified, because the
+        density plot presumes flat shading. Blender, for example, uses
+        smooth shading for GLTF files when normals are specified, and
+        this can complicate the density plot.
         """
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
         amt=acol_manager(self.link2,amp)
@@ -1559,7 +1567,13 @@ class td_plot_base(yt_plot_base):
             xnew=(val_x-self.xlo)/(self.xhi-self.xlo)
             ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
             znew=(val_z-self.zlo)/(self.zhi-self.zlo)
-            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
+            if phi_cut=='':
+                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,
+                                         r,n_subdiv=n_subdiv)
+            else:
+                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,
+                                         r,n_subdiv=n_subdiv,
+                                         phi_cut=phi_cut)
             
             for k in range(0,len(vtmp)):
                 gf.vert_list.append(vtmp[k])
@@ -1580,7 +1594,13 @@ class td_plot_base(yt_plot_base):
             ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
             znew=(val_z-self.zlo)/(self.zhi-self.zlo)
             
-            vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
+            if phi_cut=='':
+                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,
+                                         r,n_subdiv=n_subdiv)
+            else:
+                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,
+                                         r,n_subdiv=n_subdiv,
+                                         phi_cut=phi_cut)
             lv=len(gf.vert_list)
             for k in range(0,len(vtmp)):
                 gf.vert_list.append(vtmp[k])
