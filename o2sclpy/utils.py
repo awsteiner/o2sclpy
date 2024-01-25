@@ -34,7 +34,7 @@ def get_azi_angle(v):
     phi=numpy.arctan2(y,x)
     return phi
 
-def shift_phi(v,phi_new):
+def change_phi(v,phi_new):
     x=v[0]
     y=v[1]
     z=v[2]
@@ -471,6 +471,7 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
 
     # If requested, make an azimuthal cutout
     if phi_cut[0]!=phi_cut[1]:
+        
         if phi_cut[0]<0 or phi_cut[1]<0:
             raise ValueError('Phi cut values cannot be negative.')
         if phi_cut[0]>numpy.pi*2.0 or phi_cut[1]>numpy.pi*2.0:
@@ -514,19 +515,19 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
             if (phi<0.0):
                 phi=phi+numpy.pi*2.0
             if phi<=phi_mid and phi>phi_cut[0]:
-                if vert_flags[ivert]!=0:
-                    #print('Subtracting from',vert_flags[ivert])
+                #if vert_flags[ivert]!=0:
+                #print('Subtracting from',vert_flags[ivert])
                 vert_flags[ivert]=vert_flags[ivert]-1
             if phi>phi_mid and phi<phi_cut[1]:
-                if vert_flags[ivert]!=0:
-                    #print('Adding to',vert_flags[ivert])
+                #if vert_flags[ivert]!=0:
+                #print('Adding to',vert_flags[ivert])
                 vert_flags[ivert]=vert_flags[ivert]+1
 
         for ivert in range(0,len(vert)):
             if vert_flags[ivert]==1:
-                shift_phi(vert[ivert],phi_cut[1])
+                change_phi(vert[ivert],phi_cut[1])
             elif vert_flags[ivert]==1:
-                shift_phi(vert[ivert],phi_cut[0])
+                change_phi(vert[ivert],phi_cut[0])
         
     # Shift the origin to the user-specified coordinates
     for i in range(0,len(vert)):

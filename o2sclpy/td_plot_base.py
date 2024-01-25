@@ -137,13 +137,13 @@ class mesh_object:
     If this string is non-empty, but all of the faces specify a 
     material, then the ``sort_by_mat()`` function will 
     """
-    obj_type: str = 'triangle'
+    obj_type: str = 'triangles'
     """
-    Either 'triangle', 'line', or 'point'
+    Either 'triangles', 'lines', or 'points'
     """
 
     def __init__(self, name: str, faces,
-                 mat: str = '', obj_type: str = 'triangle'):
+                 mat: str = '', obj_type: str = 'triangles'):
         """
         Create a group given the specfied list of faces, name, and 
         material.
@@ -371,6 +371,130 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
            [0.0,0.0,1.0],
            [0.0,0.0,-1.0]]
         
+    vert2=[]
+    txts=[]
+    norms2=[]
+    
+    for i in range(0,len(face)):
+
+        # Add the vertices to the new vertex array
+        vert2.append(vert[face[i][0]-1])
+        vert2.append(vert[face[i][1]-1])
+        vert2.append(vert[face[i][2]-1])
+
+        # Compute the norm
+        p1=vert[face[i][0]-1]
+        p2=vert[face[i][1]-1]
+        p3=vert[face[i][2]-1]
+        v1=[1]*3
+        v2=[1]*3
+        for j in range(0,3):
+            v1[j]=p2[j]-p1[j]
+            v2[j]=p3[j]-p2[j]
+        norm=cross(v1,v2,norm=True)
+        for k in range(0,3):
+            norms2.append([norm[0],norm[1],norm[2]])
+
+        if len(face[i])>=7:
+            # Texture coordinates in the case of a image
+            txts.append([text_uv[face[i][3]-1][0],
+                         text_uv[face[i][3]-1][1]])
+            txts.append([text_uv[face[i][4]-1][0],
+                         text_uv[face[i][4]-1][1]])
+            txts.append([text_uv[face[i][5]-1][0],
+                         text_uv[face[i][5]-1][1]])
+            face[i]=[i*3,i*3+1,i*3+2,face[i][6]]
+        else:
+            # Default texture coordinates for no image
+            txts.append([text_uv[3][0],
+                         text_uv[3][1]])
+            txts.append([text_uv[0][0],
+                         text_uv[0][1]])
+            txts.append([text_uv[1][0],
+                         text_uv[1][1]])
+            face[i]=[i*3,i*3+1,i*3+2,face[i][3]]
+
+    # Print out results
+    if False:
+        for ki in range(0,len(vert2),3):
+            print('%d [%d,%d,%d] mat: %s' % (int(ki/3),face[int(ki/3)][0],
+                                             face[int(ki/3)][1],
+                                             face[int(ki/3)][2],
+                                             face[int(ki/3)][3]))
+            print(('0 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki][0],vert2[ki][1],
+                                             vert2[ki][2],txts[ki][0],
+                                             txts[ki][1],norms2[ki][0],
+                                             norms2[ki][1],norms2[ki][2]))
+            print(('1 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+1][0],vert2[ki+1][1],
+                                             vert2[ki+1][2],txts[ki+1][0],
+                                             txts[ki+1][1],norms2[ki+1][0],
+                                             norms2[ki+1][1],norms2[ki+1][2]))
+            print(('2 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
+                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+2][0],vert2[ki+2][1],
+                                             vert2[ki+2][2],txts[ki+2][0],
+                                             txts[ki+2][1],norms2[ki+2][0],
+                                             norms2[ki+2][1],norms2[ki+2][2]))
+            print('')
+            
+        #quit()
+
+    return vert2,face,txts,norms2,m
+            
+def latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,wdir,png_file,
+                    mat_name,flatten=True):
+                    
+    """
+    Desc
+    """
+
+    w,h,w_new,h_new=latex_to_png(latex,wdir+'/'+png_file,
+                                 power_two=True,flatten=flatten)
+                                 
+    # Construct the fourth vertex, fixing the rectangle in a plane
+    x4=(x2-x1)+x3
+    y4=(y2-y1)+y3
+    z4=(z2-z1)+z3
+
+    # Adjust the distance between 1->2 and 3->4 from the LaTeX
+    height=dist3(x1,x3)
+    width=w_new/h_new*height
+    old_dist=dist3(x1,x2)
+    x2=(x2-x1)*width/old_dist+x1
+    y2=(y2-y1)*width/old_dist+y1
+    z2=(z2-z1)*width/old_dist+z1
+    x4=(x4-x3)*width/old_dist+x3
+    y4=(y4-y3)*width/old_dist+y3
+    z4=(z4-z3)*width/old_dist+z3
+    
+    # Create the LaTeX material
+    m=material(mat_name,txt=png_file)
+    
+    face=[]
+    vert=[]
+    facet=[]
+    text_uv=[]
+    
+    # Add the 4 vertices
+    vert.append([x1,y1,z1])
+    vert.append([x2,y2,z2])
+    vert.append([x3,y3,z3])
+    vert.append([x4,y4,z4])
+    
+    # Append the four texture coordinates
+    text_uv.append([0.0,float(h)/float(h_new)])
+    text_uv.append([0.0,0.0])
+    text_uv.append([float(w)/float(w_new),float(h)/float(h_new)])
+    text_uv.append([float(w)/float(w_new),0.0])
+    
+    # The four sides with labels
+    face.append([1,2,3,1,3,2,mat_name])
+    face.append([3,2,4,2,3,4,mat_name])
+    
+    # Rearrange for GLTF. to compute normals, we use the cross
+    # products.
+
     vert2=[]
     txts=[]
     norms2=[]
@@ -926,13 +1050,38 @@ class threed_objects:
                                          "componentType": 5123,
                                          "count": int(len(face_bin)/1),
                                          "type": "SCALAR"})
-                    if mat1=='':
-                        prim_list.append({"attributes": att,
-                                          "indices": acc_index})
+                    if self.mesh_list[i].obj_type=='triangles':
+                        if mat1=='':
+                            prim_list.append({"attributes": att,
+                                              "indices": acc_index})
+                        else:
+                            prim_list.append({"attributes": att,
+                                              "indices": acc_index,
+                                              "material": mat_index})
                     else:
-                        prim_list.append({"attributes": att,
-                                          "indices": acc_index,
-                                          "material": mat_index})
+                        
+                        #0 POINTS
+                        #1 LINES
+                        #2 LINE_LOOP
+                        #3 LINE_STRIP
+                        #4 TRIANGLES
+                        #5 TRIANGLE_STRIP
+                        #6 TRIANGLE_FAN
+
+                        mode_num=4
+                        if self.mesh_list[i].obj_type=='lines':
+                            mode_num=1
+                        elif self.mesh_list[i].obj_type=='points':
+                            mode_num=0
+                        if mat1=='':
+                            prim_list.append({"attributes": att,
+                                              "indices": acc_index,
+                                              "mode": mode_num})
+                        else:
+                            prim_list.append({"attributes": att,
+                                              "indices": acc_index,
+                                              "material": mat_index,
+                                              "mode": mode_num})
                     if j==len(self.mesh_list[i].faces)-1:
                         mesh_list.append({"name": self.mesh_list[i].name,
                                           "primitives": prim_list})
@@ -1682,7 +1831,7 @@ class td_plot_base(yt_plot_base):
         coordinates are in the user coordinate system.
         """
         uname=self.to.make_unique_name(name)
-        
+
         if coords=='user':
             if self.xset==False or self.yset==False or self.zset==False:
                 raise ValueError("User coordinates not set in"+
@@ -1707,7 +1856,7 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_line(): creating group named',name,'with material',
                       mat+'.')
-            gf=mesh_object(uname,arr_face,mat=mat,obj_type='line')
+            gf=mesh_object(uname,arr_face,mat=mat,obj_type='lines')
             gf.vert_list=line_vert
             self.to.add_object(gf)
                                
@@ -1724,6 +1873,63 @@ class td_plot_base(yt_plot_base):
             
         return
 
+    def td_grid(self,n,name='grid',mat='white',auto_labels=False):
+        """
+        Desc.
+        """
+        if n<2:
+            raise ValueError('Cannot have n<2 in td_grid.')
+        
+        uname=self.to.make_unique_name(name)
+
+        for i in range(0,n):
+            xi=float(i)/(float(n)-1.0)
+            for j in range(0,n):
+                yj=float(j)/(float(n)-1.0)
+                td_line(xi,yj,0,xi,yj,1,mat=mat)
+        for i in range(0,n):
+            xi=float(i)/(float(n)-1.0)
+            for k in range(0,n):
+                zk=float(k)/(float(n)-1.0)
+                td_line(xi,0,zk,xi,1,zk,mat=mat)
+        for j in range(0,n):
+            yj=float(j)/(float(n)-1.0)
+            for k in range(0,n):
+                zk=float(k)/(float(n)-1.0)
+                td_line(xi,0,zk,xi,1,zk,mat=mat)
+
+        #def latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,wdir,png_file,
+        #mat_name,flatten=True):
+
+        """
+        if labels:
+            for i in range(0,n):
+                xi=float(i)/(float(n)-1.0)
+                for j in range(0,n):
+                    yj=float(j)/(float(n)-1.0)
+                    latex_rectangle(xi-0.01,yj,0.01,
+                                    xi-0.06,yj,0.01,
+                                    xi-0.06,yj,0.11,'',mat=mat)
+            for i in range(0,n):
+                xi=float(i)/(float(n)-1.0)
+                for k in range(0,n):
+                    zk=float(k)/(float(n)-1.0)
+                    td_line(xi,0,zk,xi,1,zk,mat=mat)
+                    latex_rectangle(xi,0.01,zk-0.01,
+                                    xi,0.01,zk-0.06,
+                                    xi,0.11,zk-0.06,mat=mat)
+            for j in range(0,n):
+                yj=float(j)/(float(n)-1.0)
+                for k in range(0,n):
+                    zk=float(k)/(float(n)-1.0)
+                    td_line(xi,0,zk,xi,1,zk,mat=mat)
+                    latex_rectangle(xi,0.01,zk-0.01,
+                                    xi,0.01,zk-0.06,
+                                    xi,0.11,zk-0.06,mat=mat)
+        """
+            
+        return
+    
     def td_mat(self, name: str, r: float, g: float, b: float,
                alpha: float=1, metal: float=0, rough: float=1,
                ds: bool=True, txt: str=''):
@@ -1865,8 +2071,6 @@ class td_plot_base(yt_plot_base):
             
             if png_file=='':
                 png_file='xtitle.png'
-            if png_file[-4:0]!='.png':
-                png_file=png_file+'.png'
             if tex_mat_name=='':
                 tex_mat_name='mat_xtitle'
             if group_name=='':
@@ -1897,8 +2101,6 @@ class td_plot_base(yt_plot_base):
             
             if png_file=='':
                 png_file='ytitle.png'
-            if png_file[-4:0]!='.png':
-                png_file=png_file+'.png'
             if tex_mat_name=='':
                 tex_mat_name='mat_ytitle'
             if group_name=='':
@@ -1928,8 +2130,6 @@ class td_plot_base(yt_plot_base):
             
             if png_file=='':
                 png_file='ztitle.png'
-            if png_file[-4:0]!='.png':
-                png_file=png_file+'.png'
             if tex_mat_name=='':
                 tex_mat_name='mat_ztitle'
             if group_name=='':
