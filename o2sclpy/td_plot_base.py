@@ -739,7 +739,9 @@ class threed_objects:
             nodes_list.append(k)
                 
         jdat={"asset": {"generator": "o2sclpy v"+version,
-                        "version": "2.0"},
+                        "version": "2.0",
+                        "copyright":
+                        "Copyright (C) 2023-2024, Andrew W. Steiner", },
               "scene": 0,
               "scenes": [{ "name": "Scene",
                            "nodes": nodes_list
@@ -1535,7 +1537,8 @@ class td_plot_base(yt_plot_base):
                 xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
                 ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
                 znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
-                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
+                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,r,
+                                              n_subdiv=n_subdiv)
                 lv=len(gf.vert_list)
                 for k in range(0,len(vtmp)):
                     gf.vert_list.append(vtmp[k])
@@ -1556,7 +1559,8 @@ class td_plot_base(yt_plot_base):
                 xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
                 ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
                 znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
-                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,r,n_subdiv=n_subdiv)
+                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,r,
+                                              n_subdiv=n_subdiv)
                 lv=len(gf.vert_list)
                 for k in range(0,len(vtmp)):
                     gf.vert_list.append(vtmp[k])
@@ -1717,12 +1721,12 @@ class td_plot_base(yt_plot_base):
             ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
             znew=(val_z-self.zlo)/(self.zhi-self.zlo)
             if phi_cut=='':
-                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,
-                                         r,n_subdiv=n_subdiv)
+                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,
+                                              r,n_subdiv=n_subdiv)
             else:
-                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,
-                                         r,n_subdiv=n_subdiv,
-                                         phi_cut=phi_cut)
+                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,
+                                              r,n_subdiv=n_subdiv,
+                                              phi_cut=phi_cut)
             
             for k in range(0,len(vtmp)):
                 gf.vert_list.append(vtmp[k])
@@ -1744,12 +1748,12 @@ class td_plot_base(yt_plot_base):
             znew=(val_z-self.zlo)/(self.zhi-self.zlo)
             
             if phi_cut=='':
-                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,
-                                         r,n_subdiv=n_subdiv)
+                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,
+                                              r,n_subdiv=n_subdiv)
             else:
-                vtmp,ntmp,ftmp=icosphere(xnew,ynew,znew,
-                                         r,n_subdiv=n_subdiv,
-                                         phi_cut=phi_cut)
+                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,
+                                              r,n_subdiv=n_subdiv,
+                                              phi_cut=phi_cut)
             lv=len(gf.vert_list)
             for k in range(0,len(vtmp)):
                 gf.vert_list.append(vtmp[k])
@@ -1803,7 +1807,7 @@ class td_plot_base(yt_plot_base):
                 print('')
     
             print(len(vert2),len(norms2),len(gf.faces))
-        
+
         if self.to.is_mat('white')==False:
             white=material('white',[1,1,1])
             self.to.add_mat(white)

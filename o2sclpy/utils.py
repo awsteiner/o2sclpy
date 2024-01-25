@@ -31,6 +31,7 @@ def get_azi_angle(v):
     x=v[0]
     y=v[1]
     z=v[2]
+    # arctan2 returns a number in [-pi,pi]
     phi=numpy.arctan2(y,x)
     return phi
 
@@ -39,11 +40,24 @@ def change_phi(v,phi_new):
     y=v[1]
     z=v[2]
     r=numpy.sqrt(x*x+y*y+z*z)
-    theta=numpy.cos(z/r)
+    # arccos is always [0,pi]
+    theta=numpy.arccos(z/r)
     v[0]=r*numpy.cos(phi_new)*numpy.sin(theta)
     v[1]=r*numpy.sin(phi_new)*numpy.sin(theta)
     v[2]=r*numpy.cos(theta)
     return
+
+def rect_to_spher(v):
+    x=v[0]
+    y=v[1]
+    z=v[2]
+    r=numpy.sqrt(x*x+y*y+z*z)
+    # arccos is always [0,pi]
+    theta=numpy.arccos(z/r)
+    # arctan2 returns a number in [-pi,pi]
+    phi=numpy.arctan2(y,x)
+    return [r,phi,theta]
+    
 
 def cross(x,y,norm=False):
     """Return the cross product between two vectors
@@ -284,7 +298,7 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
     """Construct the vertices and faces of an icosphere centered at
     (x,y,z) with radius r
 
-    I got this from [1].
+    This function is based on material from [1].
 
     This function returns a set of three lists, the first is the
     vertices, the second are the vertex normals, and the third are the
@@ -528,7 +542,13 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
                 change_phi(vert[ivert],phi_cut[1])
             elif vert_flags[ivert]==1:
                 change_phi(vert[ivert],phi_cut[0])
-        
+
+    # Create texture coordinates
+    texcoord=[]
+    for i in range(0,len(vert)):
+        tc=rect_to_spher(vert[i])
+        texcoord.append([tc[0],tc[1]])
+                
     # Shift the origin to the user-specified coordinates
     for i in range(0,len(vert)):
         vert[i][0]=vert[i][0]+x
@@ -540,6 +560,7 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
     vert2=[]
     norms2=[]
     face2=[]
+    texcoord2=[]
 
     if False:
         for k in range(0,len(vn)):
@@ -561,6 +582,11 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
 
         face2.append([i*3,i*3+1,i*3+2])
 
+        # Add the vertices to the new vertex array
+        texcoord2.append(texcoord[face[i][0]-1])
+        texcoord2.append(texcoord[face[i][1]-1])
+        texcoord2.append(texcoord[face[i][2]-1])
+        
     if False:
         for k in range(0,len(norms2)):
             print('k',norms2[k])
@@ -601,7 +627,7 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
         print(len(vert2),len(norms2),len(face2))
         #quit()
         
-    return vert2,norms2,face2
+    return vert2,norms2,face2,texcoord2
     
 def cpp_test(x):
     """
