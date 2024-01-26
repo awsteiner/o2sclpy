@@ -708,6 +708,56 @@ def force_string(obj):
         return obj.decode('utf-8')
     return obj
 
+def png_power_two(png_input: str, png_output: str,
+                  flatten: bool = True, verbose: int = 0):
+    """
+    Read a PNG image from ``png_input``, resize it to ensure the width
+    and height are both a power of two, and store the resulting file
+    in ``png_output`` (which may be the same as the input file). 
+
+    This function returns a tuple of four numbers, the width and
+    height of the original image, and the width and height
+    of the new image. 
+
+    This function uses Pillow to determine the original width and
+    height and then a system call to Imagemagick to perform the
+    resizing (it's probably better to use Pillow to do both, and
+    that will be fixed in the future). 
+
+    If verbose is greater than 1, then the system call is printed
+    to stdout.
+    """
+    
+    from PIL import Image
+    img=Image.open(png_file)
+    
+    w=img.width
+    h=img.height
+    w_new=2**(int(numpy.log2(w-1))+1)
+    h_new=2**(int(numpy.log2(h-1))+1)
+    print('png_power_two():',w,h,w_new,h_new)
+
+    # If these are all equal, there is nothing to do
+    if w_new==w and h_new==h and png_input==png_output:
+        pring('png_power_two(): skipping.')
+        return
+    
+    if flatten==True:
+        cmd=('convert '+png_file+' -background white '+
+              '-extent '+str(w_new)+'x'+str(h_new)+' '+
+              png_file+' > '+out_file_name+' 2>&1')
+    else:
+        cmd=('convert '+png_file+' -background None '+
+              '-extent '+str(w_new)+'x'+str(h_new)+' '+
+              png_file+' > '+out_file_name+' 2>&1')
+        
+    if verbose>1:
+        print('png_power_two(): Running shell command',cmd)
+        
+    os.system(cmd)
+    
+    return img.width,img.height,w_new,h_new
+
 def latex_to_png(tex: str, png_file: str, verbose: int = 3,
                  power_two: bool = False, flatten: bool = True):
     """

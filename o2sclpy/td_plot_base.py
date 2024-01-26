@@ -69,17 +69,26 @@ class material:
     """
     The roughness (should default be 0 or 1?)
     """
-    ds: bool = True
+    ds: bool = False
     """
-    If true, the material is double-sided
+    If true, the material is double-sided (default True)
     """
-    txt: str
+    txt: str = ''
     """
     The texture filename, including extension
     """
+    alpha_mode: str = 'opaque'
+    """
+    The alpha mode, either 'opaque', 'mask', or 'blend'.
+    """
+    alpha_cutoff: float = 0.5
+    """
+    The alpha cutoff, default is 0.5.
+    """
 
     def __init__(self, name: str, base_color=[1,1,1], txt: str='',
-                 metal: float = 0.0, rough: float=1.0, ds: bool=True):
+                 metal: float = 0.0, rough: float=1.0, ds: bool=True,
+                 alpha_mode : str = 'opaque', alpha_cutoff: float = 0.5):
         """Create a new material with color in ``base_color`` and texture file
         in ``txt``.
 
@@ -90,6 +99,20 @@ class material:
         self.metal=metal
         self.rough=rough
         self.ds=ds
+        self.alpha_mode=alpha_mode
+        self.alpha_cutoff=alpha_cutoff
+        return
+
+    def txt_power_two(flatten: bool = True, verbose: int = 0):
+        """
+        Add a texture to the material and fix the width and
+        height to be a power of two
+        """
+        if self.txt=='':
+            raise ValueError('No texture specified.')
+        png_power_two(self.txt,self.txt,flatten=flatten,
+                      verbose=verbose)
+        self.txt=png_output
         return
     
 class mesh_object:
@@ -679,7 +702,8 @@ class threed_objects:
         return
 
     def add_mat(self, m: material):
-        # Add the material if not found
+        """
+        """
         mat_found=False
         for i in range(0,len(self.mat_list)):
             if self.mat_list[i].name==m.name:
@@ -778,52 +802,48 @@ class threed_objects:
 
             this_mat=self.mat_list[i]
 
+            # Construct a Python dictory for the material JSON
+            json_dict={"name": this_mat.name}
+            
             if this_mat.txt!='':
-                mat_json.append({"doubleSided": True,
-                                 "name": this_mat.name,
-                                 "pbrMetallicRoughness": {
-                                     "baseColorTexture": {
-                                         "index":
-                                         texture_index
-                                         },
-                                     "metallicFactor": this_mat.metal,
-                                     "roughnessFactor": this_mat.rough,
-                                 }
-                                 })
+                json_dict["pbrMetallicRoughness"]={
+                    "baseColorTexture": {
+                        "index":
+                        texture_index
+                    }}
                 txt_list.append({"source": texture_index})
                 img_list.append({"mimeType": "image/png",
                                  "name": this_mat.name,
                                  "uri": this_mat.txt})
                 texture_map[i]=texture_index
                 texture_index=texture_index+1
+            elif len(this_mat.base_color)>=4:
+                json_dict["pbrMetallicRoughness"]={
+                    "baseColorFactor": [
+                        this_mat.base_color[0],
+                        this_mat.base_color[1],
+                        this_mat.base_color[2],
+                        this_mat.base_color[3]]
+                }
             else:
-                if len(this_mat.base_color)>=4:
-                    mat_json.append({"doubleSided": True,
-                                     "name": this_mat.name,
-                                     "pbrMetallicRoughness": {
-                                         "baseColorFactor": [
-                                             this_mat.base_color[0],
-                                             this_mat.base_color[1],
-                                             this_mat.base_color[2],
-                                             this_mat.base_color[3]
-                                         ],
-                                         "metallicFactor": this_mat.metal,
-                                         "roughnessFactor": this_mat.rough
-                                     }
-                                     })
-                else:
-                    mat_json.append({"doubleSided": True,
-                                     "name": this_mat.name,
-                                     "pbrMetallicRoughness": {
-                                         "baseColorFactor": [
-                                             this_mat.base_color[0],
-                                             this_mat.base_color[1],
-                                             this_mat.base_color[2],1
-                                         ],
-                                         "metallicFactor": this_mat.metal,
-                                         "roughnessFactor": this_mat.rough
-                                     }
-                                     })
+                json_dict["pbrMetallicRoughness"]={
+                    "baseColorFactor": [
+                        this_mat.base_color[0],
+                        this_mat.base_color[1],
+                        this_mat.base_color[2],1.0]
+                }
+            json_dict["doubleSided"]=this_mat.ds
+            if this_mat.metal!=0.0:
+                json_dict["metallicFactor"]=this_mat.metal
+            if this_mat.rough!=1.0:
+                json_dict["roughnessFactor"]=this_mat.rough
+            if this_mat.alpha_mode!='opaque':
+                json_dict["alphaMode"]=this_mat.alpha_mode.upper()
+            if this_mat.alpha_cutoff!=0.5:
+                json_dict["alphaCutoff"]=this_mat.alpha_cutoff
+
+            # Add this material JSON to the full material list
+            mat_json.append(json_dict)
         
         # Add each set of faces as a group
         acc_index=0
@@ -853,7 +873,24 @@ class threed_objects:
             vert_map = [-1] * len(self.mesh_list[i].vert_list)
             prim_list=[]
             mat_index=-1
-                
+
+            if False:
+                for j in range(0,len(self.mesh_list[i].vert_list)):
+                    for kk in range(0,3):
+                        v0=float(self.mesh_list[i].vert_list[j][kk])
+                        vert_bin.append(v0)
+
+                for j in range(0,len(self.mesh_list[i].vn_list)):
+                    for kk in range(0,3):
+                        v0=float(self.mesh_list[i].vn_list[j][kk])
+                        norm_bin.append(v0)
+
+                if texcoords and self.mat_list[mat_index].txt!='':
+                    for j in range(0,len(self.mesh_list[i].vt_list)):
+                        for kk in range(0,2):
+                            v0=float(self.mesh_list[i].vt_list[j][kk])
+                            txts_bin.append(v0)
+                        
             for j in range(0,len(self.mesh_list[i].faces)):
 
                 # Determine the material for this face
@@ -871,95 +908,99 @@ class threed_objects:
                             mat_index=ik
                             mat_found=True
                     if mat_found==False:
-                        print('Could not find mat "'+mat2+
-                              '" in mat_list.')
-                        quit()
-                    
-                # Map the first vertex
-                ix=self.mesh_list[i].faces[j][0]
-                if vert_map[ix]==-1:
-                    # Converting the vertices to "float()"
-                    # helps ensure single precision and then
-                    # validators don't complain that max and
-                    # min are wrong.
-                    v0=float(self.mesh_list[i].vert_list[ix][0])
-                    vert_bin.append(v0)
-                    v1=float(self.mesh_list[i].vert_list[ix][1])
-                    vert_bin.append(v1)
-                    v2=float(self.mesh_list[i].vert_list[ix][2])
-                    vert_bin.append(v2)
-                    if normals:
-                        v3=float(self.mesh_list[i].vn_list[ix][0])
-                        norm_bin.append(v3)
-                        v4=float(self.mesh_list[i].vn_list[ix][1])
-                        norm_bin.append(v4)
-                        v5=float(self.mesh_list[i].vn_list[ix][2])
-                        norm_bin.append(v5)
-                    if texcoords and self.mat_list[mat_index].txt!='':
-                        v6=float(self.mesh_list[i].vt_list[ix][0])
-                        txts_bin.append(v6)
-                        v7=float(self.mesh_list[i].vt_list[ix][1])
-                        txts_bin.append(v7)
-                    vert_map[ix]=int(len(vert_bin)/3)
-                    # We have to subtract one here because
-                    # the point has already been added to 'vert_bin'
-                    face_bin.append(int(len(vert_bin)/3)-1)
+                        raise ValueError('write_gltf(): '+
+                                         'Could not find mat '+mat2+
+                                         ' in mat_list.')
+
+                if False:
+                    for kk in range(0,3):
+                        face_bin.append(self.mesh_list[i].faces[j][kk])
                 else:
-                    face_bin.append(vert_map[ix])
-                # Map the second vertex
-                ix=self.mesh_list[i].faces[j][1]
-                if vert_map[ix]==-1:
-                    v8=float(self.mesh_list[i].vert_list[ix][0])
-                    vert_bin.append(v8)
-                    v9=float(self.mesh_list[i].vert_list[ix][1])
-                    vert_bin.append(v9)
-                    v10=float(self.mesh_list[i].vert_list[ix][2])
-                    vert_bin.append(v10)
-                    if normals:
-                        v11=float(self.mesh_list[i].vn_list[ix][0])
-                        norm_bin.append(v11)
-                        v12=float(self.mesh_list[i].vn_list[ix][1])
-                        norm_bin.append(v12)
-                        v13=float(self.mesh_list[i].vn_list[ix][2])
-                        norm_bin.append(v13)
-                    if texcoords and self.mat_list[mat_index].txt!='':
-                        v14=float(self.mesh_list[i].vt_list[ix][0])
-                        txts_bin.append(v14)
-                        v15=float(self.mesh_list[i].vt_list[ix][1])
-                        txts_bin.append(v15)
-                    vert_map[ix]=int(len(vert_bin)/3)
-                    # We have to subtract one here because
-                    # the point has already been added to 'vert_bin'
-                    face_bin.append(int(len(vert_bin)/3)-1)
-                else:
-                    face_bin.append(vert_map[ix])
-                # Map the third vertex
-                ix=self.mesh_list[i].faces[j][2]
-                if vert_map[ix]==-1:
-                    v16=float(self.mesh_list[i].vert_list[ix][0])
-                    vert_bin.append(v16)
-                    v17=float(self.mesh_list[i].vert_list[ix][1])
-                    vert_bin.append(v17)
-                    v18=float(self.mesh_list[i].vert_list[ix][2])
-                    vert_bin.append(v18)
-                    if normals:
-                        v19=float(self.mesh_list[i].vn_list[ix][0])
-                        norm_bin.append(v19)
-                        v20=float(self.mesh_list[i].vn_list[ix][1])
-                        norm_bin.append(v20)
-                        v21=float(self.mesh_list[i].vn_list[ix][2])
-                        norm_bin.append(v21)
-                    if texcoords and self.mat_list[mat_index].txt!='':
-                        v22=float(self.mesh_list[i].vt_list[ix][0])
-                        txts_bin.append(v22)
-                        v23=float(self.mesh_list[i].vt_list[ix][1])
-                        txts_bin.append(v23)
-                    vert_map[ix]=int(len(vert_bin)/3)
-                    # We have to subtract one here because
-                    # the point has already been added to 'vert_bin'
-                    face_bin.append(int(len(vert_bin)/3)-1)
-                else:
-                    face_bin.append(vert_map[ix])
+                    # Map the first vertex
+                    ix=self.mesh_list[i].faces[j][0]
+                    if vert_map[ix]==-1:
+                        # Converting the vertices to "float()"
+                        # helps ensure single precision and then
+                        # validators don't complain that max and
+                        # min are wrong.
+                        v0=float(self.mesh_list[i].vert_list[ix][0])
+                        vert_bin.append(v0)
+                        v1=float(self.mesh_list[i].vert_list[ix][1])
+                        vert_bin.append(v1)
+                        v2=float(self.mesh_list[i].vert_list[ix][2])
+                        vert_bin.append(v2)
+                        if normals:
+                            v3=float(self.mesh_list[i].vn_list[ix][0])
+                            norm_bin.append(v3)
+                            v4=float(self.mesh_list[i].vn_list[ix][1])
+                            norm_bin.append(v4)
+                            v5=float(self.mesh_list[i].vn_list[ix][2])
+                            norm_bin.append(v5)
+                        if texcoords and self.mat_list[mat_index].txt!='':
+                            v6=float(self.mesh_list[i].vt_list[ix][0])
+                            txts_bin.append(v6)
+                            v7=float(self.mesh_list[i].vt_list[ix][1])
+                            txts_bin.append(v7)
+                        vert_map[ix]=int(len(vert_bin)/3)
+                        # We have to subtract one here because
+                        # the point has already been added to 'vert_bin'
+                        face_bin.append(int(len(vert_bin)/3)-1)
+                    else:
+                        face_bin.append(vert_map[ix])
+                    # Map the second vertex
+                    ix=self.mesh_list[i].faces[j][1]
+                    if vert_map[ix]==-1:
+                        v8=float(self.mesh_list[i].vert_list[ix][0])
+                        vert_bin.append(v8)
+                        v9=float(self.mesh_list[i].vert_list[ix][1])
+                        vert_bin.append(v9)
+                        v10=float(self.mesh_list[i].vert_list[ix][2])
+                        vert_bin.append(v10)
+                        if normals:
+                            v11=float(self.mesh_list[i].vn_list[ix][0])
+                            norm_bin.append(v11)
+                            v12=float(self.mesh_list[i].vn_list[ix][1])
+                            norm_bin.append(v12)
+                            v13=float(self.mesh_list[i].vn_list[ix][2])
+                            norm_bin.append(v13)
+                        if texcoords and self.mat_list[mat_index].txt!='':
+                            v14=float(self.mesh_list[i].vt_list[ix][0])
+                            txts_bin.append(v14)
+                            v15=float(self.mesh_list[i].vt_list[ix][1])
+                            txts_bin.append(v15)
+                        vert_map[ix]=int(len(vert_bin)/3)
+                        # We have to subtract one here because
+                        # the point has already been added to 'vert_bin'
+                        face_bin.append(int(len(vert_bin)/3)-1)
+                    else:
+                        face_bin.append(vert_map[ix])
+                    # Map the third vertex
+                    ix=self.mesh_list[i].faces[j][2]
+                    if vert_map[ix]==-1:
+                        v16=float(self.mesh_list[i].vert_list[ix][0])
+                        vert_bin.append(v16)
+                        v17=float(self.mesh_list[i].vert_list[ix][1])
+                        vert_bin.append(v17)
+                        v18=float(self.mesh_list[i].vert_list[ix][2])
+                        vert_bin.append(v18)
+                        if normals:
+                            v19=float(self.mesh_list[i].vn_list[ix][0])
+                            norm_bin.append(v19)
+                            v20=float(self.mesh_list[i].vn_list[ix][1])
+                            norm_bin.append(v20)
+                            v21=float(self.mesh_list[i].vn_list[ix][2])
+                            norm_bin.append(v21)
+                        if texcoords and self.mat_list[mat_index].txt!='':
+                            v22=float(self.mesh_list[i].vt_list[ix][0])
+                            txts_bin.append(v22)
+                            v23=float(self.mesh_list[i].vt_list[ix][1])
+                            txts_bin.append(v23)
+                        vert_map[ix]=int(len(vert_bin)/3)
+                        # We have to subtract one here because
+                        # the point has already been added to 'vert_bin'
+                        face_bin.append(int(len(vert_bin)/3)-1)
+                    else:
+                        face_bin.append(vert_map[ix])
 
                 # Determine if the next face is composed of a
                 # different material, if so, set mat2 and
@@ -1025,23 +1066,26 @@ class threed_objects:
                                      "type": "VEC3"})
                     att["POSITION"]=acc_index
                     acc_index=acc_index+1
+                    
                     if normals:
                         acc_list.append({"bufferView": acc_index,
                                          "componentType": 5126,
-                                         "count": int(len(vert_bin)/3),
+                                         "count": int(len(norm_bin)/3),
                                          "type": "VEC3"})
                         att["NORMAL"]=acc_index
                         acc_index=acc_index+1
+                        
                     # If the object provides texture coordinates, but
                     # there's no texture, then there's no need to
                     # output them
                     if texcoords and self.mat_list[mat_index].txt!='':
                         acc_list.append({"bufferView": acc_index,
                                          "componentType": 5126,
-                                         "count": int(len(vert_bin)/3),
+                                         "count": int(len(txts_bin)/2),
                                          "type": "VEC2"})
                         att["TEXCOORD_0"]=acc_index
                         acc_index=acc_index+1
+                        
                     if long_ints:
                         acc_list.append({"bufferView": acc_index,
                                          "componentType": 5125,
@@ -1141,6 +1185,7 @@ class threed_objects:
                     att={}
                     face_bin=[]
                     vert_bin=[]
+                    norm_bin=[]
                     vert_map = [-1] * len(self.mesh_list[i].vert_list)
 
         # Add the top-level data to the json object
@@ -1951,6 +1996,7 @@ class td_plot_base(yt_plot_base):
                              name+' in td_mat().')
         mat=material(name,[r,g,b,alpha],txt=txt,metal=metal,rough=rough,
                      ds=ds)
+        mat.txt_power_two()
         self.to.add_mat(mat)
         return
     
