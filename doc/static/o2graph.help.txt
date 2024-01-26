@@ -61,12 +61,12 @@ List of command-line options which do not require a current object:
   -slack           Send a slack message. 
   -subadj          Adjust spacing of subplots
   -subplots        Create subplots.
-  -td-arrow        Plot an arrow in a 3d visualization
+  -td-arrow        Plot an arrow in a 3d visualization (experimental)
   -td-axis         Create a 3D axis (experimental).
-  -td-axis-label   Create a 3D axis label (experimental).
+  -td-axis-label   Create an axis label in a 3d visualization (experimental).
   -td-den-plot     Create a 3D density plot (experimental).
   -td-icos         Create an icosphere at a point (experimental).
-  -td-mat          Create a 3D material (experimental).
+  -td-mat          Create a 3d material (experimental)
   -td-scatter      Create a 3D scatter plot (experimental).
   -text            Plot text in the data coordinates.
   -textbox         Plot a box with text.

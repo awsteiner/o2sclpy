@@ -29,7 +29,7 @@ from o2sclpy.doc_data import acol_help_topics, version
 from o2sclpy.doc_data import o2graph_help_topics, acol_types
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot, cross
-from o2sclpy.utils import is_number, arrow, icosphere
+from o2sclpy.utils import is_number, arrow, icosphere, png_power_two
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import string_equal_dash, latex_to_png
 from o2sclpy.utils import force_string, remove_spaces
@@ -89,8 +89,16 @@ class material:
     def __init__(self, name: str, base_color=[1,1,1], txt: str='',
                  metal: float = 0.0, rough: float=1.0, ds: bool=True,
                  alpha_mode : str = 'opaque', alpha_cutoff: float = 0.5):
-        """Create a new material with color in ``base_color`` and texture file
-        in ``txt``.
+        """Create a new material with name ``name``.
+
+        The keyword arguments are as follows:
+        - material color ("baseColorFactor") in ``base_color``,
+        - texture file in ``txt``,
+        - metalness in ``metal``,
+        - roughness in ``rough``,
+        - double-sided flag in ``ds``,
+        - ``alpha_mode``, and
+        - ``alpha_cutoff``.
 
         """
         self.name=name
@@ -104,9 +112,8 @@ class material:
         return
 
     def txt_power_two(flatten: bool = True, verbose: int = 0):
-        """
-        Add a texture to the material and fix the width and
-        height to be a power of two
+        """Add a texture to the material and fix the width and height to be a
+        power of two.
         """
         if self.txt=='':
             raise ValueError('No texture specified.')

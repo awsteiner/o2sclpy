@@ -37,7 +37,6 @@ from o2sclpy.part import *
 from o2sclpy.nuclei import *
 from o2sclpy.eos import *
 from o2sclpy.hdf import *
-from o2sclpy.hdf_add import *
 from o2sclpy.other import *
 from o2sclpy.cap_cout import *
 from o2sclpy.interpm import *

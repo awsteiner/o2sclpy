@@ -28,6 +28,10 @@ import os
 import numpy
 
 def get_azi_angle(v):
+    """
+    Return the azimuthal angle in :math:`[0,\pi]` for a three-element
+    vector in Cartesian coordinates.
+    """
     x=v[0]
     y=v[1]
     z=v[2]
@@ -36,6 +40,10 @@ def get_azi_angle(v):
     return phi
 
 def change_phi(v,phi_new):
+    """
+    Modify the azimuthal angle of a Cartesian vector, effectively rotating
+    it around the z axis.
+    """
     x=v[0]
     y=v[1]
     z=v[2]
@@ -44,10 +52,17 @@ def change_phi(v,phi_new):
     theta=numpy.arccos(z/r)
     v[0]=r*numpy.cos(phi_new)*numpy.sin(theta)
     v[1]=r*numpy.sin(phi_new)*numpy.sin(theta)
-    v[2]=r*numpy.cos(theta)
+    # We don't need to change v[2] because it is unchanged by the rotation
     return
 
 def rect_to_spher(v):
+    """
+    Convert a three-element Cartesian vector to spherical coordinates 
+    and return a three-element vector containing the radius, the azimuthal
+    angle, and the polar angle (in that order). The azimuthal angle is 
+    always in the range :math:`[-\pi,\pi]` and the polar angle is 
+    always in the range :math:`[0,\pi]`.
+    """
     x=v[0]
     y=v[1]
     z=v[2]
@@ -62,8 +77,8 @@ def rect_to_spher(v):
 def cross(x,y,norm=False):
     """Return the cross product between two vectors
 
-    If ``norm`` is ``True``, then normalize the cross product
-    afterwards.
+    If ``norm`` is ``True``, then normalize the cross product to 
+    unity before returning it.
     """
     cross=[x[1]*y[2]-x[2]*y[1],x[2]*y[0]-x[0]*y[2],
            x[0]*y[1]-y[0]*x[1]]
@@ -76,7 +91,7 @@ def cross(x,y,norm=False):
     return cross
 
 def norm3(x):
-    """Return a normalized version of x"""
+    """Normalize the three-element Cartesian vector ``x``."""
     mag=numpy.sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])
     x[0]=x[0]/mag
     x[1]=x[1]/mag
@@ -84,18 +99,20 @@ def norm3(x):
     return
 
 def mag3(x):
-    """Return a normalized version of x"""
+    """Return the length of a three-element Cartesian vector ``x``."""
     mag=numpy.sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])
     return mag
 
 def dist3(x,y):
-    """Return a normalized version of x"""
+    """Return the length of the vector representing the difference
+    of two three-element Cartesian vectors, ``x``, and ``y``."""
     mag=numpy.sqrt((x[0]-y[0])*(x[0]-y[0])+(x[1]-y[1])*(x[1]-y[1])+
                    (x[2]-y[2])*(x[2]-y[2]))
     return mag
 
 def renorm(x,r):
-    """Return a renormalized version of x"""
+    """Take the three-element Cartesian vector ``x``, and rescale it
+    to ensure that its length is equal to ``r``."""
     mag=numpy.sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])
     x[0]=r*x[0]/mag
     x[1]=r*x[1]/mag
@@ -104,7 +121,6 @@ def renorm(x,r):
 
 def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
           head_width=3):
-    
     """Create a set of vertices and triangular faces for an
     arrow.
 
