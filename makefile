@@ -83,7 +83,10 @@ testq:
 		examples/test_examples.py -s -v
 
 mypy:
-	 mypy o2sclpy --ignore-missing-imports
+	 mypy o2sclpy --ignore-missing-imports \
+		--exclude "o2sclpy/bl_gltf_six.py" \
+		--exclude "o2sclpy/bl_gltf_yaw.py" \
+		--exclude "o2sclpy/bl_gltf_import.py" 
 
 ifeq ($(MACHINE),isospin)
 PIP3_CMD = sudo pip3

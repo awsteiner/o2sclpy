@@ -22,8 +22,6 @@ Particle classes
 * :ref:`Class part_deriv`
 * :ref:`Class fermion_deriv`
 * :ref:`Class deriv_thermo_base`
-* :ref:`Class fermion_deriv_rel`
-* :ref:`Class fermion_deriv_nr`
 * :ref:`Class classical_deriv_thermo`
 * :ref:`Class fermion_mag_zerot`
 
@@ -207,28 +205,6 @@ Class deriv_thermo_base
 -----------------------
 
 .. autoclass:: o2sclpy.deriv_thermo_base
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
-Class fermion_deriv_rel
------------------------
-
-.. autoclass:: o2sclpy.fermion_deriv_rel
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
-Class fermion_deriv_nr
-----------------------
-
-.. autoclass:: o2sclpy.fermion_deriv_nr
         :members:
         :undoc-members:
 

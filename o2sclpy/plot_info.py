@@ -113,7 +113,7 @@ def markers_plot(fname=''):
            [9,"9",'right shifted caret'],
            [10,"10",'up shifted caret'],
            [11,"11",'down shifted caret'],
-           ['$x^2$',"\$x^2\$",'math example']]
+           ['$x^2$',"\\$x^2\\$",'math example']]
     nmark=len(mlist)
     ncols=2
     nrows=(nmark+(nmark%2))/ncols
@@ -142,7 +142,7 @@ def markers_plot(fname=''):
             plot.rc('text',usetex=True)
             axes.text((col_ctr+0.37)/(ncols),
                       float(nrows-row_ctr)/(nrows+1),
-                      entry[2].replace('_','\_'),
+                      entry[2].replace('_','\\_'),
                       va='center',ha='left',fontsize=16)
         row_ctr=row_ctr+1
         if row_ctr>=nrows:
@@ -599,7 +599,8 @@ def colors_plot(fname='',dpi=10):
                             
     fig.subplots_adjust(left=0,right=1,top=1,bottom=0,
                         hspace=0,wspace=0)
-    axes.text(X*0.5,(Y+header)*0.965,r'$ \mathrm{O}_{2}\mathrm{sclpy~colors~summary} $',
+    axes.text(X*0.5,(Y+header)*0.965,
+              r'$ \mathrm{O}_{2}\mathrm{sclpy~colors~summary} $',
               fontsize=16,ha='center')
 
     if fname!='':

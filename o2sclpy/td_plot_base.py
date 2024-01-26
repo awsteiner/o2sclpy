@@ -111,7 +111,7 @@ class material:
         self.alpha_cutoff=alpha_cutoff
         return
 
-    def txt_power_two(flatten: bool = True, verbose: int = 0):
+    def txt_power_two(self, flatten: bool = True, verbose: int = 0):
         """Add a texture to the material and fix the width and height to be a
         power of two.
         """
@@ -119,7 +119,6 @@ class material:
             raise ValueError('No texture specified.')
         png_power_two(self.txt,self.txt,flatten=flatten,
                       verbose=verbose)
-        self.txt=png_output
         return
     
 class mesh_object:
@@ -636,8 +635,9 @@ class threed_objects:
         """
 
         if len(mesh.vn_list)>0 and len(mesh.vn_list)!=len(mesh.vert_list):
-            raise ValueError('List of normals has size',len(normals),
-                             'and list of vertices is of size',len(lv))
+            raise ValueError('List of normals has size',len(mesh.vn_list),
+                             'and list of vertices is of size',
+                             len(mesh.vert_list))
         
         if len(mesh.vt_list)>0 and len(mesh.vt_list)!=len(mesh.vert_list):
             raise ValueError('List of texture coordinates has size',

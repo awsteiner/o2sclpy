@@ -29,7 +29,7 @@ from o2sclpy.part import *
 
 class nucleus(part):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucleus``,
+    Python interface for O2scl class ``nucleus``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucleus.html .
     """
@@ -181,7 +181,7 @@ class nucleus(part):
 
 class nucmass_info:
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_info``,
+    Python interface for O2scl class ``nucmass_info``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_info.html .
     """
@@ -336,7 +336,7 @@ class nucmass_info:
 
 class nucmass:
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass``,
+    Python interface for O2scl class ``nucmass``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass.html .
     """
@@ -668,7 +668,7 @@ class nucmass:
 
 class nucmass_table(nucmass):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_table``,
+    Python interface for O2scl class ``nucmass_table``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_table.html .
     """
@@ -781,7 +781,7 @@ class nucmass_table(nucmass):
 
 class nucmass_fit_base(nucmass):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_fit_base``,
+    Python interface for O2scl class ``nucmass_fit_base``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_fit_base.html .
     """
@@ -854,7 +854,7 @@ class nucmass_fit_base(nucmass):
 
 class nucmass_semi_empirical(nucmass_fit_base):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_semi_empirical``,
+    Python interface for O2scl class ``nucmass_semi_empirical``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_semi_empirical.html .
     """
@@ -1032,7 +1032,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
 
 class nucmass_ame(nucmass_table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_ame``,
+    Python interface for O2scl class ``nucmass_ame``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_ame.html .
     """
@@ -1084,7 +1084,7 @@ class nucmass_ame(nucmass_table):
 
 class nucmass_dz_table(nucmass_table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_table``,
+    Python interface for O2scl class ``nucmass_dz_table``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dz_table.html .
     """
@@ -1136,7 +1136,7 @@ class nucmass_dz_table(nucmass_table):
 
 class nucmass_dz_fit(nucmass_fit_base):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_fit``,
+    Python interface for O2scl class ``nucmass_dz_fit``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dz_fit.html .
     """
@@ -1188,7 +1188,7 @@ class nucmass_dz_fit(nucmass_fit_base):
 
 class nucmass_dz_fit_33(nucmass_fit_base):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_dz_fit_33``,
+    Python interface for O2scl class ``nucmass_dz_fit_33``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dz_fit_33.html .
     """
@@ -1240,7 +1240,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
 
 class nucmass_frdm(nucmass_fit_base):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_frdm``,
+    Python interface for O2scl class ``nucmass_frdm``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_frdm.html .
     """
@@ -1812,7 +1812,7 @@ class nucmass_frdm(nucmass_fit_base):
 
 class nucmass_mnmsk(nucmass_table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_mnmsk``,
+    Python interface for O2scl class ``nucmass_mnmsk``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_mnmsk.html .
     """
@@ -1864,7 +1864,7 @@ class nucmass_mnmsk(nucmass_table):
 
 class nucmass_mnmsk_exp(nucmass_mnmsk):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_mnmsk_exp``,
+    Python interface for O2scl class ``nucmass_mnmsk_exp``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_mnmsk_exp.html .
     """
@@ -1916,7 +1916,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
 
 class nucmass_gen(nucmass_table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_gen``,
+    Python interface for O2scl class ``nucmass_gen``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_gen.html .
     """
@@ -1968,7 +1968,7 @@ class nucmass_gen(nucmass_table):
 
 class nucmass_dglg(nucmass_table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_dglg``,
+    Python interface for O2scl class ``nucmass_dglg``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dglg.html .
     """
@@ -2020,7 +2020,7 @@ class nucmass_dglg(nucmass_table):
 
 class nucmass_hfb(nucmass_table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_hfb``,
+    Python interface for O2scl class ``nucmass_hfb``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_hfb.html .
     """
@@ -2072,7 +2072,7 @@ class nucmass_hfb(nucmass_table):
 
 class nucmass_hfb_sp(nucmass_table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_hfb_sp``,
+    Python interface for O2scl class ``nucmass_hfb_sp``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_hfb_sp.html .
     """
@@ -2124,7 +2124,7 @@ class nucmass_hfb_sp(nucmass_table):
 
 class nucmass_ktuy(nucmass_table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_ktuy``,
+    Python interface for O2scl class ``nucmass_ktuy``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_ktuy.html .
     """
@@ -2176,7 +2176,7 @@ class nucmass_ktuy(nucmass_table):
 
 class nucmass_sdnp(nucmass_table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_sdnp``,
+    Python interface for O2scl class ``nucmass_sdnp``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_sdnp.html .
     """
@@ -2228,7 +2228,7 @@ class nucmass_sdnp(nucmass_table):
 
 class nucmass_wlw(nucmass_table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``nucmass_wlw``,
+    Python interface for O2scl class ``nucmass_wlw``,
     See
     https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_wlw.html .
     """

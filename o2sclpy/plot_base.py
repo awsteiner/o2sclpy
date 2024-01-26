@@ -997,7 +997,7 @@ class plot_base:
         or::
 
             o2graph -xlimits 0 1 -ylimits 0 1 -point 0.5 0.5 \\
-            marker='$\int_0^{\infty}x^2~dx$',ms=300,c=green,mec=red -show
+            marker='$\\int_0^{\\infty}x^2~dx$',ms=300,c=green,mec=red -show
 
         To list the marker types, use::
 

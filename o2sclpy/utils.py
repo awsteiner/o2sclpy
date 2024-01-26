@@ -29,7 +29,7 @@ import numpy
 
 def get_azi_angle(v):
     """
-    Return the azimuthal angle in :math:`[0,\pi]` for a three-element
+    Return the azimuthal angle in :math:`[0,\\pi]` for a three-element
     vector in Cartesian coordinates.
     """
     x=v[0]
@@ -60,8 +60,8 @@ def rect_to_spher(v):
     Convert a three-element Cartesian vector to spherical coordinates 
     and return a three-element vector containing the radius, the azimuthal
     angle, and the polar angle (in that order). The azimuthal angle is 
-    always in the range :math:`[-\pi,\pi]` and the polar angle is 
-    always in the range :math:`[0,\pi]`.
+    always in the range :math:`[-\\pi,\\pi]` and the polar angle is 
+    always in the range :math:`[0,\\pi]`.
     """
     x=v[0]
     y=v[1]
@@ -745,7 +745,7 @@ def png_power_two(png_input: str, png_output: str,
     """
     
     from PIL import Image
-    img=Image.open(png_file)
+    img=Image.open(png_input)
     
     w=img.width
     h=img.height
@@ -755,17 +755,22 @@ def png_power_two(png_input: str, png_output: str,
 
     # If these are all equal, there is nothing to do
     if w_new==w and h_new==h and png_input==png_output:
-        pring('png_power_two(): skipping.')
+        print('png_power_two(): skipping.')
         return
     
+    # Create a file to store the output
+    f2=tempfile.NamedTemporaryFile(suffix='.out',delete=False)
+    out_file_name=f2.name
+    f2.close()
+    
     if flatten==True:
-        cmd=('convert '+png_file+' -background white '+
+        cmd=('convert '+png_input+' -background white '+
               '-extent '+str(w_new)+'x'+str(h_new)+' '+
-              png_file+' > '+out_file_name+' 2>&1')
+              png_output+' > '+out_file_name+' 2>&1')
     else:
-        cmd=('convert '+png_file+' -background None '+
+        cmd=('convert '+png_input+' -background None '+
               '-extent '+str(w_new)+'x'+str(h_new)+' '+
-              png_file+' > '+out_file_name+' 2>&1')
+              png_output+' > '+out_file_name+' 2>&1')
         
     if verbose>1:
         print('png_power_two(): Running shell command',cmd)

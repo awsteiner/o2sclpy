@@ -1,6 +1,6 @@
 .. _base:
 
-Base classes from O\ :sub:`2`\ scl
+Base classes from O2scl
 ==================================
 
 :ref:`O2sclpy <o2sclpy>`

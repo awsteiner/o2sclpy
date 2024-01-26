@@ -288,7 +288,7 @@ class linker:
 
 def build_o2scl(verbose=1,release=True):
     """
-    This function attempts to automatically build O\ :sub:`2`\ scl using 
+    This function attempts to automatically build O2scl using 
     homebrew on OSX and snap on Linux.
 
     This function is in ``link_o2scl.py``.

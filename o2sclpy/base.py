@@ -1871,7 +1871,7 @@ class lib_settings_class:
 
 class table:
     """
-    Python interface for O\ :sub:`2`\ scl class ``table``,
+    Python interface for O2scl class ``table``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/table.html .
     """
@@ -2729,7 +2729,7 @@ class table:
 
 class table_units(table):
     """
-    Python interface for O\ :sub:`2`\ scl class ``table_units``,
+    Python interface for O2scl class ``table_units``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/table_units.html .
     """
@@ -2860,7 +2860,7 @@ class table_units(table):
 
 class uniform_grid:
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid``,
+    Python interface for O2scl class ``uniform_grid``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid.html .
     """
@@ -3009,7 +3009,7 @@ class uniform_grid:
 
 class uniform_grid_end(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end``,
+    Python interface for O2scl class ``uniform_grid_end``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end.html .
     """
@@ -3075,7 +3075,7 @@ class uniform_grid_end(uniform_grid):
 
 class uniform_grid_width(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_width``,
+    Python interface for O2scl class ``uniform_grid_width``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_width.html .
     """
@@ -3141,7 +3141,7 @@ class uniform_grid_width(uniform_grid):
 
 class uniform_grid_end_width(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_end_width``,
+    Python interface for O2scl class ``uniform_grid_end_width``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end_width.html .
     """
@@ -3207,7 +3207,7 @@ class uniform_grid_end_width(uniform_grid):
 
 class uniform_grid_log_end(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end``,
+    Python interface for O2scl class ``uniform_grid_log_end``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_end.html .
     """
@@ -3273,7 +3273,7 @@ class uniform_grid_log_end(uniform_grid):
 
 class uniform_grid_log_width(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_width``,
+    Python interface for O2scl class ``uniform_grid_log_width``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_width.html .
     """
@@ -3339,7 +3339,7 @@ class uniform_grid_log_width(uniform_grid):
 
 class uniform_grid_log_end_width(uniform_grid):
     """
-    Python interface for O\ :sub:`2`\ scl class ``uniform_grid_log_end_width``,
+    Python interface for O2scl class ``uniform_grid_log_end_width``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_end_width.html .
     """
@@ -4886,7 +4886,7 @@ class ix_gridw:
 
 class tensor:
     """
-    Python interface for O\ :sub:`2`\ scl class ``tensor``,
+    Python interface for O2scl class ``tensor``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/tensor.html .
     """
@@ -5305,7 +5305,7 @@ class tensor:
 
 class tensor_int:
     """
-    Python interface for O\ :sub:`2`\ scl class ``tensor``,
+    Python interface for O2scl class ``tensor``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/tensor.html .
     """
@@ -5702,7 +5702,7 @@ class tensor_int:
 
 class tensor_size_t:
     """
-    Python interface for O\ :sub:`2`\ scl class ``tensor``,
+    Python interface for O2scl class ``tensor``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/tensor.html .
     """
@@ -6076,7 +6076,7 @@ class tensor_size_t:
 
 class tensor_grid(tensor):
     """
-    Python interface for O\ :sub:`2`\ scl class ``tensor_grid``,
+    Python interface for O2scl class ``tensor_grid``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/tensor_grid.html .
     """
@@ -7124,7 +7124,7 @@ class convert_units_der_unit:
 
 class convert_units:
     """
-    Python interface for O\ :sub:`2`\ scl class ``convert_units``,
+    Python interface for O2scl class ``convert_units``,
     see
     https://neutronstars.utk.edu/code/o2scl/html/class/convert_units.html .
     """

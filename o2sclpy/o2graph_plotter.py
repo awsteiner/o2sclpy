@@ -594,7 +594,7 @@ def reformat_python_docs_type(curr_type,cmd,doc_str,amp,link,
                 if last_pgh_colons:
                     long_help=doc_replacements(reflist3[j].replace('\n',' '),
                                                ter,amp,link,script=True)
-                    tmplist=long_help.split(' \ ')
+                    tmplist=long_help.split(' \\ ')
                 else:
                     long_help=doc_replacements(reflist3[j].replace('\n',' '),
                                                ter,amp,link)
