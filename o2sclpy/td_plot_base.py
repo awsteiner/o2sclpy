@@ -2087,6 +2087,70 @@ class td_plot_base(yt_plot_base):
 
         return
 
+    def td_latex_rect(self,x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,
+                      name='latex_rect',png_file='latex_rect',
+                      mat='white',flatten=True):
+        """Documentation for o2graph command ``td-latex-rect``:
+
+        Plot a rectangle from a LaTeX string (experimental)
+
+        Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> 
+        <x3> <y3> <z3> <latex> [kwargs]``
+        """
+        uname=self.to.make_unique_name(name)
+
+        if coords=='user':
+            if self.xset==False or self.yset==False or self.zset==False:
+                raise ValueError("User coordinates not set in"+
+                                 " 'td-arrow'.")
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+            x2=(x2-self.xlo)/(self.xhi-self.xlo)
+            y2=(y2-self.ylo)/(self.yhi-self.ylo)
+            z2=(z2-self.zlo)/(self.zhi-self.zlo)
+            x3=(x3-self.xlo)/(self.xhi-self.xlo)
+            y3=(y3-self.ylo)/(self.yhi-self.ylo)
+            z3=(z3-self.zlo)/(self.zhi-self.zlo)
+
+        (lr_vert,lr_face,lr_txts,
+         lr_norm,lr_m)=latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,
+                                       self.td_wdir,png_file=png_file,
+                                       mat_name=mat,flatten=flatten)
+                                       
+
+        if type(mat)==str:
+            
+            if not self.to.is_mat(mat):
+                if mat=='white':
+                    white=material('white',[1,1,1])
+                    self.to.add_mat(white)
+                else:
+                    print('No material named',mat,'in td-latex_rect')
+                    return
+            if self.verbose>2:
+                print('td_latex_rect(): creating group named',uname,
+                      'with material',mat+'.')
+                
+            gf=mesh_object(uname,lr_face,mat)
+            gf.vert_list=lr_vert
+            gf.vn_list=lr_norm
+            self.to.add_object(gf)
+            
+        else:
+            
+            if self.verbose>2:
+                print('td_latex_rect(): creating group named',uname,
+                      'with material',mat.name+'.')
+            if not self.to.is_mat(mat.name):
+                self.to.add_mat(mat)
+            gf=mesh_object(uname,lr_face,mat.name)
+            gf.vert_list=lr_vert
+            gf.vn_list=lr_norm
+            self.to.add_object(gf)
+
+        return
+
     def td_axis_label(self, ldir : str, tex_label : str,
                       tex_mat_name : str = '', end_mat_name: str = 'white',
                       png_file : str = '', group_name : str = '',

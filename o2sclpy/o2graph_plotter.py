@@ -148,16 +148,14 @@ base_list=[
      "coordinate system is always right-handed."],
     ["td-axis-label",td_plot_base.td_axis_label.__doc__],
     ["td-arrow",td_plot_base.td_arrow.__doc__],
-    ["td-mat",td_plot_base.td_mat.__doc__],
     ["td-den-plot",td_plot_base.td_den_plot.__doc__],
+    ["td-icos",td_plot_base.td_icos.__doc__],
+    ["td-latex-rect",td_plot_base.td_latex_rect.__doc__],
+    ["td-mat",td_plot_base.td_mat.__doc__],
     ["td-scatter","Documentation for td-scatter\n\n"+
      "Create a 3D scatter plot (experimental).\n\n"+
      "<x column> <y column> <z column> [r column] [g column] "+
      "[b column] [kwargs]\n\nFull desc."],
-    ["td-icos","Documentation for td-icos\n\n"+
-     "Create an icosphere at a point (experimental).\n\n"+
-     "<x> <y> <z> [r g b] [kwargs]\n\n"+
-     "Full desc."],
     ["text",plot_base.text.__doc__],
     ["textbox",plot_base.textbox.__doc__],
     ["ttext",plot_base.ttext.__doc__],
@@ -5731,6 +5729,40 @@ class o2graph_plotter(td_plot_base):
                                                        ['r']))
                     else:
                         print('Not enough arguments for td-icos.')
+
+                elif cmd_name=='td-latex-rect':
+
+                    if self.verbose>2:
+                        print('Process td-latex-rect.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix==11:
+                        self.td_latex_rect(float(strlist[ix+1]),
+                                           float(strlist[ix+2]),
+                                           float(strlist[ix+3]),
+                                           float(strlist[ix+4]),
+                                           float(strlist[ix+5]),
+                                           float(strlist[ix+6]),
+                                           float(strlist[ix+7]),
+                                           float(strlist[ix+8]),
+                                           float(strlist[ix+9]),
+                                           strlist[ix+10])
+                    elif ix_next-ix>=12:
+                        self.td_latex_rect(float(strlist[ix+1]),
+                                           float(strlist[ix+2]),
+                                           float(strlist[ix+3]),
+                                           float(strlist[ix+4]),
+                                           float(strlist[ix+5]),
+                                           float(strlist[ix+6]),
+                                           float(strlist[ix+7]),
+                                           float(strlist[ix+8]),
+                                           float(strlist[ix+9]),
+                                           strlist[ix+10],
+                                           **string_to_dict2(strlist[ix+11],
+                                                             list_of_bools=
+                                                             ['flatten']))
+                    else:
+                        print('Not enough arguments for td-latex-rect.')
 
                 elif cmd_name=='td-mat':
 
