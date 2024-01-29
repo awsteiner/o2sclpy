@@ -148,14 +148,17 @@ class interpm_sklearn_gp:
         """
         yp=self.gp.predict([v])
         if self.outformat=='list':
+            if self.verbose>1:
+                print('interpm_sklearn_gp::eval(): list mode type(yp),v,yp:',
+                      type(yp),v,yp)
             return yp[0].tolist()
         if yp.ndim==1:
             if self.verbose>1:
-                print('interpm_sklearn_gp::eval(): type(yp),v,yp:',
+                print('interpm_sklearn_gp::eval(): ndim=1 mode type(yp),v,yp:',
                       type(yp),v,yp)
-            return numpy.ascontiguousarray(yp)[0]
+            return numpy.ascontiguousarray(yp)
         if self.verbose>1:
-            print('interpm_sklearn_gp::eval(): type(yp[0]),v,yp[0]:',
+            print('interpm_sklearn_gp::eval(): array mode type(yp[0]),v,yp[0]:',
                   type(yp[0]),v,yp[0])
         return numpy.ascontiguousarray(yp[0])
 
@@ -168,12 +171,12 @@ class interpm_sklearn_gp:
             return yp[0].tolist(),std[0].tolist()
         if yp.ndim==1:
             if self.verbose>1:
-                print('interpm_sklearn_gp::eval(): type(yp),v,yp:',
+                print('interpm_sklearn_gp::eval_unc(): type(yp),v,yp:',
                       type(yp),v,yp)
-            return (numpy.ascontiguousarray(yp)[0],
-                    numpy.ascontiguousarray(std)[0])
+            return (numpy.ascontiguousarray(yp),
+                    numpy.ascontiguousarray(std))
         if self.verbose>1:
-            print('interpm_sklearn_gp::eval(): type(yp[0]),v,yp[0]:',
+            print('interpm_sklearn_gp::eval_unc(): type(yp[0]),v,yp[0]:',
                   type(yp[0]),v,yp[0])
         return (numpy.ascontiguousarray(yp[0]),
                 numpy.ascontiguousarray(std[0]))

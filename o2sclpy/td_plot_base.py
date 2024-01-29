@@ -859,13 +859,19 @@ class threed_objects:
         for i in range(0,len(self.mesh_list)):
                 
             normals=False
-            if (len(self.mesh_list[i].vn_list)==
-                len(self.mesh_list[i].vert_list)):
+            if len(self.mesh_list[i].vn_list)>0:
                 normals=True
+                if (len(self.mesh_list[i].vert_list)!=
+                    len(self.mesh_list[i].vn_list)):
+                   print('Problem with normals.')
+                   quit()
             texcoords=False
-            if (len(self.mesh_list[i].vt_list)==
-                len(self.mesh_list[i].vert_list)):
+            if len(self.mesh_list[i].vt_list)>0:
                 texcoords=True
+                if (len(self.mesh_list[i].vert_list)!=
+                    len(self.mesh_list[i].vt_list)):
+                   print('Problem with normals.')
+                   quit()
 
             long_ints=False
             if len(self.mesh_list[i].vert_list)>=32768:
