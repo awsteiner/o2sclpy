@@ -780,7 +780,7 @@ def png_power_two(png_input: str, png_output: str,
     return img.width,img.height,w_new,h_new
 
 def latex_to_png(tex: str, png_file: str, verbose: int = 3,
-                 power_two: bool = False, flatten: bool = True,
+                 power_two: bool = False, flatten: str = '',
                  packages = []):
     """
     A simple routine to convert a LaTeX string to a png image.
@@ -826,9 +826,9 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 3,
     if verbose>1:
         print('latex_to_png(): Running first shell command',cmd1)
     os.system(cmd1)
-    if flatten==True:
+    if flatten!='':
         cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file+' && convert '+
-              png_file+' -background white -flatten '+
+              png_file+' -background '+flatten+' -flatten '+
               png_file+' > '+out_file_name+' 2>&1')
         if verbose>1:
             print('latex_to_png(): Running second shell command',
@@ -847,8 +847,8 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 3,
         h=img.height
         w_new=2**(int(numpy.log2(w-1))+1)
         h_new=2**(int(numpy.log2(h-1))+1)
-        if flatten==True:
-            cmd3=('convert '+png_file+' -background white '+
+        if flatten!='':
+            cmd3=('convert '+png_file+' -background '+flatten+' '+
                   '-extent '+str(w_new)+'x'+str(h_new)+' '+
                   png_file+' > '+out_file_name+' 2>&1')
         else:

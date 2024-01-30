@@ -121,7 +121,7 @@ class material:
         self.alpha_cutoff=alpha_cutoff
         return
 
-    def txt_power_two(self, flatten: bool = True, verbose: int = 0):
+    def txt_power_two(self, flatten: str = '', verbose: int = 0):
         """Add a texture to the material and fix the width and height to be a
         power of two.
         """
@@ -277,7 +277,7 @@ class mesh_object:
         return
 
 def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
-                dir='x',end_mat='white',flatten=True):
+                dir='x',end_mat='white',flatten=''):
     """
     Create a rectangular prism with textures from a png created by a
     LaTeX string on four sides.
@@ -474,7 +474,7 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
     return vert2,face,txts,norms2,m
             
 def latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,wdir,png_file,
-                    mat_name,flatten=False,packages=[]):
+                    mat_name,flatten='',packages=[]):
     """Create a rectangle based on a lower-left corner at [x1,y1,z1],
     lower right corner at [x2,y2,z2], and an upper-left corner at
     [x3,y3,z3] from LaTeX string in ``latex``. The LaTeX png
@@ -483,9 +483,10 @@ def latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,wdir,png_file,
     png.
 
     The LaTeX texture is stored in a file named ``png_file`` and a new
-    material is created named ``mat_name``. If ``flatten`` is true,
-    then the LaTeX image is flattened and converted to a white
-    background.
+    material is created named ``mat_name``. If a ``flatten`` color
+    is specified,
+    then the LaTeX image is flattened and the specified color is used
+    for the background.
     """
 
     w,h,w_new,h_new=latex_to_png(latex,wdir+'/'+png_file,
@@ -2122,7 +2123,7 @@ class td_plot_base(yt_plot_base):
         return
 
     def td_latex_rect(self,x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,
-                      name='latex_rect',flatten=False,packages=''):
+                      name='latex_rect',flatten='',packages=''):
         """Documentation for o2graph command ``td-latex-rect``:
 
         Plot a rectangle from a LaTeX string (experimental)
@@ -2149,9 +2150,11 @@ class td_plot_base(yt_plot_base):
 
         mat_name='mat_'+uname
 
+        print('__HERE__',packages)
         pack_split=[]
-        if packages=='':
+        if packages!='':
             pack_split=packages.split(',')
+        print('__HERE__',pack_split)
         
         (lr_vert,lr_face,lr_txts,
          lr_norm,lr_m)=latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,
@@ -2175,7 +2178,7 @@ class td_plot_base(yt_plot_base):
                       tex_mat_name : str = '', end_mat_name: str = 'white',
                       png_file : str = '', group_name : str = '',
                       offset : float = 0.1, height : float = 0.1,
-                      flatten : bool = True):
+                      flatten : str = ''):
         """Documentation for o2graph command ``td-axis-label``:
 
         Create an axis label in a 3d visualization (experimental).

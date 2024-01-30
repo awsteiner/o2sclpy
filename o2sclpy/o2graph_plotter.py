@@ -952,7 +952,7 @@ class o2graph_plotter(td_plot_base):
             bg_color='(0,0,0,0)'
             
         if cam_type=='':
-            cam_type='ORTHO'
+            cam_type='PERSP'
             
         rep_list={'BG_COLOR': bg_color,
                   'LIGHT_DIST': str(light_dist),
@@ -1113,10 +1113,7 @@ class o2graph_plotter(td_plot_base):
                   light_dist : float = 5.8,
                   bg_color : str = '', cam_type : str = '',
                   res=(0,0), blend_file : str = ''):
-        """
-        
-        This command requires the Blender python package,
-        ``bpy`` and the installation of ``ffmpeg``. 
+        """This command requires the Blender python package, ``bpy``.
         """
 
         gltf_file_name=gltf_path
@@ -1138,7 +1135,7 @@ class o2graph_plotter(td_plot_base):
             bg_color='(0,0,0,0)'
 
         if cam_type=='':
-            cam_type='ORTHO'
+            cam_type='PERSP'
             
         rep_list={'BG_COLOR': bg_color,
                   'LIGHT_DIST': str(light_dist),
@@ -5681,13 +5678,11 @@ class o2graph_plotter(td_plot_base):
                     if ix_next-ix>=4:
                         print('jj',string_to_dict2
                               (strlist[ix+3],
-                               list_of_bools=['flatten'],
                                list_of_floats=['rough','metal']))
                         self.td_axis_label(strlist[ix+1],
                                            strlist[ix+2],
                                            **string_to_dict2
                                            (strlist[ix+3],
-                                            list_of_bools=['flatten'],
                                             list_of_floats=['rough','metal']))
                     elif ix_next-ix>=3:
                         self.td_axis_label(strlist[ix+1],
@@ -5842,9 +5837,7 @@ class o2graph_plotter(td_plot_base):
                                            float(strlist[ix+8]),
                                            float(strlist[ix+9]),
                                            strlist[ix+10],
-                                           **string_to_dict2(strlist[ix+11],
-                                                             list_of_bools=
-                                                             ['flatten']))
+                                           **string_to_dict2(strlist[ix+11]))
                     else:
                         print('Not enough arguments for td-latex-rect.')
 

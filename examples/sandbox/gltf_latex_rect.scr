@@ -1,6 +1,5 @@
 o2graph -set td_wdir gltf -set xlo 0 -set xhi 1 -set ylo 0 -set yhi 1 \
 -set zlo 0 -set zhi 1 -set verbose 3 \
--td-latex-rect 0.1 0.1 0.1 0.4 0.4 0.1 0.1 0.1 0.2 \
-"$ {\color{white} \int x^2~dx } $" \
-flatten=False,packages=xcolor -gltf latex_rect -bl-import \
-/Users/awsteiner2/wcs/o2sclpy/examples/sandbox/gltf/latex_rect.gltf
+-td-latex-rect 0.1 0.1 0.1 0.9 0.9 0.1 0.1 0.1 0.9 \
+"$ \int x^2~{\color{white} dx } $" \
+packages=xcolor -gltf latex_rect -bl-import latex_rect.gltf
