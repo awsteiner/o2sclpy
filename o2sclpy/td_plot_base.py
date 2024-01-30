@@ -474,7 +474,7 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
     return vert2,face,txts,norms2,m
             
 def latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,wdir,png_file,
-                    mat_name,flatten=False):
+                    mat_name,flatten=False,packages=[]):
     """Create a rectangle based on a lower-left corner at [x1,y1,z1],
     lower right corner at [x2,y2,z2], and an upper-left corner at
     [x3,y3,z3] from LaTeX string in ``latex``. The LaTeX png
@@ -489,7 +489,8 @@ def latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,wdir,png_file,
     """
 
     w,h,w_new,h_new=latex_to_png(latex,wdir+'/'+png_file,
-                                 power_two=True,flatten=flatten)
+                                 power_two=True,flatten=flatten,
+                                 packages=packages)
                                  
     # Adjust the distance between 1->2 and 3->4 from the LaTeX
     old_height=dist3([x1,y1,z1],[x3,y3,z3])
@@ -2121,7 +2122,7 @@ class td_plot_base(yt_plot_base):
         return
 
     def td_latex_rect(self,x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,
-                      name='latex_rect',flatten=False):
+                      name='latex_rect',flatten=False,packages=''):
         """Documentation for o2graph command ``td-latex-rect``:
 
         Plot a rectangle from a LaTeX string (experimental)
@@ -2147,11 +2148,16 @@ class td_plot_base(yt_plot_base):
             z3=(z3-self.zlo)/(self.zhi-self.zlo)
 
         mat_name='mat_'+uname
+
+        pack_split=[]
+        if packages=='':
+            pack_split=packages.split(',')
         
         (lr_vert,lr_face,lr_txts,
          lr_norm,lr_m)=latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,
                                        self.td_wdir,png_file=uname+'.png',
-                                       mat_name=mat_name,flatten=flatten)
+                                       mat_name=mat_name,flatten=flatten,
+                                       packages=pack_split)
 
         if self.verbose>2:
             print('td_latex_rect(): creating group named',uname,

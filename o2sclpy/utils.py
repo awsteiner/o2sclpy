@@ -780,7 +780,8 @@ def png_power_two(png_input: str, png_output: str,
     return img.width,img.height,w_new,h_new
 
 def latex_to_png(tex: str, png_file: str, verbose: int = 3,
-                 power_two: bool = False, flatten: bool = True):
+                 power_two: bool = False, flatten: bool = True,
+                 packages = []):
     """
     A simple routine to convert a LaTeX string to a png image.
 
@@ -805,6 +806,8 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 3,
     print('Opened temporary file named',tex_file_name)
     f.write(force_bytes('\\documentclass[crop,border=0.5pt,'+
                         'convert={outext=.png}]{standalone}\n'))
+    for i in range(0,len(packages)):
+        f.write(force_bytes('\\usepackage{'+packages[i]+'}\n'))
     f.write(force_bytes('\\begin{document}\n'))
     f.write(force_bytes(tex+'\n'))
     f.write(force_bytes('\\end{document}\n'))
