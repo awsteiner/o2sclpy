@@ -31,9 +31,8 @@ scene.world.node_tree.nodes["Background"].inputs[0].default_value=BG_COLOR
 
 # Create camera
 camera_data=bpy.data.cameras.new(name='camera')
-if CAMERA_TYPE!='':
-    # 'PANO', 'PERSP' and 'ORTHO'
-    camera_data.type=CAMERA_TYPE
+# 'PANO', 'PERSP' and 'ORTHO'
+camera_data.type='CAMERA_TYPE'
 else:
     camera_data.type='ORTHO'
 camera_data.ortho_scale=2.0

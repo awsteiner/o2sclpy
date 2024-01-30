@@ -13,6 +13,9 @@ Reference for Python objects
    class_ml
    class_o2graph_plotter
    class_plot_base
+   class_material
+   class_mesh_object
+   class_threed_objects
    class_td_plot_base
    class_yt_plot_base
    other_objs

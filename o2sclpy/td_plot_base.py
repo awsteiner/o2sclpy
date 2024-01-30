@@ -32,7 +32,7 @@ from o2sclpy.utils import force_bytes, default_plot, cross
 from o2sclpy.utils import is_number, arrow, icosphere, png_power_two
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import string_equal_dash, latex_to_png
-from o2sclpy.utils import force_string, remove_spaces
+from o2sclpy.utils import force_string, remove_spaces, dist3
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
 from o2sclpy.doc_data import version
@@ -50,26 +50,36 @@ def o2scl_get_type(o2scl,amp,link):
     return amt.get_type()
 
 class material:
-    """
-    A simple material for a 3-d visualization
+    """A simple GLTF-like material class
+    
+    Note that: the baseColorTexture is supposed to be stored in the
+    sRGB colorspace and subject to hardware sRGB decoding, but the
+    baseColorFactor has no hardware decoder and therefore is specified
+    as linear values directly.
     """
     name: str
     """
-    The name of the visualization
+    The name of the material
     """
-    base_color=[1,1,1]
+    base_color=[1.0,1.0,1.0]
     """
-    The base color factor
+    The base color factor (either 3 or 4 floating point numbers)
+
+    These quantities are stored in ``pbrMetallicRoughness:baseColorFactor``.
     """
     metal: float = 0.0
     """
     The metalness
+
+    This quantity is stored in ``pbrMetallicRoughness:metallicFactor``.
     """
     rough: float = 1.0
     """
     The roughness (should default be 0 or 1?)
+
+    This quantity is stored in ``pbrMetallicRoughness:roughnessFactor``.
     """
-    ds: bool = False
+    ds: bool = True
     """
     If true, the material is double-sided (default True)
     """
@@ -122,13 +132,7 @@ class material:
         return
     
 class mesh_object:
-    """
-    A mesh
-
-    Right now, the faces either have 3 or 4 elements, depending on 
-    whether the face has its own material
-    * faces
-    * faces plus material
+    """A mesh object for a GLTF file.
     """
     
     vert_list=[]
@@ -149,11 +153,9 @@ class mesh_object:
     """
     name: str = ''
     """
-    The name of the group.
-
-    This string is used for the ``g `` commands in ``obj`` files. It 
-    may be empty, in which case no ``g `` command is given. 
+    The name of the mesh object
     """
+    
     mat: str = ''
     """The name of the material (blank for none, or for different material for
     each face)
@@ -472,33 +474,60 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
     return vert2,face,txts,norms2,m
             
 def latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,wdir,png_file,
-                    mat_name,flatten=True):
-                    
-    """
-    Desc
+                    mat_name,flatten=False):
+    """Create a rectangle based on a lower-left corner at [x1,y1,z1],
+    lower right corner at [x2,y2,z2], and an upper-left corner at
+    [x3,y3,z3] from LaTeX string in ``latex``. The LaTeX png
+    is rescaled downwards to fit inside the rectange, and the 
+    coordinates of the rectangle are modified to match the LaTeX 
+    png.
+
+    The LaTeX texture is stored in a file named ``png_file`` and a new
+    material is created named ``mat_name``. If ``flatten`` is true,
+    then the LaTeX image is flattened and converted to a white
+    background.
     """
 
     w,h,w_new,h_new=latex_to_png(latex,wdir+'/'+png_file,
                                  power_two=True,flatten=flatten)
                                  
+    # Adjust the distance between 1->2 and 3->4 from the LaTeX
+    old_height=dist3([x1,y1,z1],[x3,y3,z3])
+    old_width=dist3([x1,y1,z1],[x2,y2,z2])
+    
+    if float(w_new)/float(h_new)>old_width/old_height:
+        
+        # The LaTeX image is wider, so set the new width to
+        # the old width and then fix the height to match
+        new_width=old_width
+        new_height=float(h_new)*old_width/float(w_new)
+        
+        x3=(x3-x1)*new_height/old_height+x1
+        y3=(y3-y1)*new_height/old_height+y1
+        z3=(z3-z1)*new_height/old_height+z1
+    
+    else:
+        
+        # The LaTeX image is taller, so set the new height to
+        # the old height and then fix the width to match
+        new_height=old_height
+        new_width=float(w_new)*old_height/float(h_new)
+        
+        x2=(x2-x1)*new_width/old_width+x1
+        y2=(y2-y1)*new_width/old_width+y1
+        z2=(z2-z1)*new_width/old_width+z1
+    
     # Construct the fourth vertex, fixing the rectangle in a plane
     x4=(x2-x1)+x3
     y4=(y2-y1)+y3
     z4=(z2-z1)+z3
-
-    # Adjust the distance between 1->2 and 3->4 from the LaTeX
-    height=dist3(x1,x3)
-    width=w_new/h_new*height
-    old_dist=dist3(x1,x2)
-    x2=(x2-x1)*width/old_dist+x1
-    y2=(y2-y1)*width/old_dist+y1
-    z2=(z2-z1)*width/old_dist+z1
-    x4=(x4-x3)*width/old_dist+x3
-    y4=(y4-y3)*width/old_dist+y3
-    z4=(z4-z3)*width/old_dist+z3
+    print('x1,y1,z1',x1,y1,z1)
+    print('x2,y2,z2',x2,y2,z2)
+    print('x3,y3,z3',x3,y3,z3)
+    print('x4,y4,z4',x4,y4,z4)
     
     # Create the LaTeX material
-    m=material(mat_name,txt=png_file)
+    m=material(mat_name,txt=png_file,alpha_mode='blend')
     
     face=[]
     vert=[]
@@ -2006,11 +2035,14 @@ class td_plot_base(yt_plot_base):
 
         if self.to.is_mat(name):
             raise ValueError('Already a material with the name '+
-                             name+' in td_mat().')
+                             name+' in td_plot_base::td_mat().')
         mat=material(name,[r,g,b,alpha],txt=txt,metal=metal,rough=rough,
                      ds=ds)
-        mat.txt_power_two()
+        if txt!='':
+            mat.txt_power_two()
         self.to.add_mat(mat)
+        if self.verbose>0:
+            print('td_plot_base::td_mat(): Added material named',mat.name+'.')
         return
     
     def td_arrow(self,x1,y1,z1,x2,y2,z2,name='arrow',
@@ -2045,7 +2077,7 @@ class td_plot_base(yt_plot_base):
         if coords=='user':
             if self.xset==False or self.yset==False or self.zset==False:
                 raise ValueError("User coordinates not set in"+
-                                 " 'td-arrow'.")
+                                 " td_plot_base::td-arrow().")
             x1=(x1-self.xlo)/(self.xhi-self.xlo)
             y1=(y1-self.ylo)/(self.yhi-self.ylo)
             z1=(z1-self.zlo)/(self.zhi-self.zlo)
@@ -2062,10 +2094,11 @@ class td_plot_base(yt_plot_base):
                     white=material('white',[1,1,1])
                     self.to.add_mat(white)
                 else:
-                    print('No material named',mat,'in td-arrow')
+                    print('No material named',mat,
+                          'in td_plot_base::td_arrow().')
                     return
             if self.verbose>2:
-                print('td_arrow(): creating group named',uname,
+                print('td_plot_base::td_arrow(): creating group named',uname,
                       'with material',mat+'.')
                 
             gf=mesh_object(uname,arr_face,mat)
@@ -2076,8 +2109,8 @@ class td_plot_base(yt_plot_base):
         else:
             
             if self.verbose>2:
-                print('td_arrow(): creating group named',uname,
-                      'with material',mat.name+'.')
+                print('td_plot_base::td_arrow(): creating group named',
+                      uname,'with material',mat.name+'.')
             if not self.to.is_mat(mat.name):
                 self.to.add_mat(mat)
             gf=mesh_object(uname,arr_face,mat.name)
@@ -2088,8 +2121,7 @@ class td_plot_base(yt_plot_base):
         return
 
     def td_latex_rect(self,x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,
-                      name='latex_rect',png_file='latex_rect',
-                      mat='white',flatten=True):
+                      name='latex_rect',flatten=False):
         """Documentation for o2graph command ``td-latex-rect``:
 
         Plot a rectangle from a LaTeX string (experimental)
@@ -2099,10 +2131,11 @@ class td_plot_base(yt_plot_base):
         """
         uname=self.to.make_unique_name(name)
 
+        coords='internal'
         if coords=='user':
             if self.xset==False or self.yset==False or self.zset==False:
                 raise ValueError("User coordinates not set in"+
-                                 " 'td-arrow'.")
+                                 " td_plot_base::td_latex_rect().")
             x1=(x1-self.xlo)/(self.xhi-self.xlo)
             y1=(y1-self.ylo)/(self.yhi-self.ylo)
             z1=(z1-self.zlo)/(self.zhi-self.zlo)
@@ -2113,41 +2146,22 @@ class td_plot_base(yt_plot_base):
             y3=(y3-self.ylo)/(self.yhi-self.ylo)
             z3=(z3-self.zlo)/(self.zhi-self.zlo)
 
+        mat_name='mat_'+uname
+        
         (lr_vert,lr_face,lr_txts,
          lr_norm,lr_m)=latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,
-                                       self.td_wdir,png_file=png_file,
-                                       mat_name=mat,flatten=flatten)
-                                       
+                                       self.td_wdir,png_file=uname+'.png',
+                                       mat_name=mat_name,flatten=flatten)
 
-        if type(mat)==str:
-            
-            if not self.to.is_mat(mat):
-                if mat=='white':
-                    white=material('white',[1,1,1])
-                    self.to.add_mat(white)
-                else:
-                    print('No material named',mat,'in td-latex_rect')
-                    return
-            if self.verbose>2:
-                print('td_latex_rect(): creating group named',uname,
-                      'with material',mat+'.')
-                
-            gf=mesh_object(uname,lr_face,mat)
-            gf.vert_list=lr_vert
-            gf.vn_list=lr_norm
-            self.to.add_object(gf)
-            
-        else:
-            
-            if self.verbose>2:
-                print('td_latex_rect(): creating group named',uname,
-                      'with material',mat.name+'.')
-            if not self.to.is_mat(mat.name):
-                self.to.add_mat(mat)
-            gf=mesh_object(uname,lr_face,mat.name)
-            gf.vert_list=lr_vert
-            gf.vn_list=lr_norm
-            self.to.add_object(gf)
+        if self.verbose>2:
+            print('td_latex_rect(): creating group named',uname,
+                  'with material',mat_name+'.')
+        self.to.add_mat(lr_m)
+        gf=mesh_object(uname,lr_face,mat_name)
+        gf.vert_list=lr_vert
+        gf.vn_list=lr_norm
+        gf.vt_list=lr_txts
+        self.to.add_object(gf)
 
         return
 
@@ -2156,7 +2170,7 @@ class td_plot_base(yt_plot_base):
                       png_file : str = '', group_name : str = '',
                       offset : float = 0.1, height : float = 0.1,
                       flatten : bool = True):
-        """Documentation for o2graph command ``td-arrow``:
+        """Documentation for o2graph command ``td-axis-label``:
 
         Create an axis label in a 3d visualization (experimental).
 
