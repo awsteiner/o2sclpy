@@ -1,6 +1,7 @@
 o2graph -set td_wdir gltf -set xlo 0 -set xhi 5 -set ylo 0 -set yhi 2 \
 -set zlo 0 -set zhi 2 -td-icos 4 1 1 n_subdiv=3 \
--td-icos 1 1 1 -td-icos 2 1 1 n_subdiv=1 -td-icos 3 1 1 n_subdiv=2 \
+-td-icos 1 1 1 -td-icos 2 1 1 n_subdiv=1 -td-icos 3 1 1 \
+"n_subdiv=2,txt=Blue_Marble_tiny.png" \
 -td-axis "$ R~(\mathrm{km}) $" \
 "$ M~(\mathrm{M}_{\odot}) $" "Probability" icos_ \
 -gltf icos.gltf

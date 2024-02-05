@@ -1733,12 +1733,13 @@ class td_plot_base(yt_plot_base):
 
         return
 
-    def td_icos(self,o2scl,amp,args,n_subdiv=0,r=0.04,phi_cut=''):
+    def td_icos(self,o2scl,amp,args,n_subdiv=0,r=0.04,phi_cut='',
+                txt=''):
         """Documentation for o2graph command ``td-icos``:
 
         Create a 3D icosphere (experimental).
 
-        Command-line arguments: ``<x> <y> <z> <r> <g> <b> [kwargs]``
+        Command-line arguments: ``<x> <y> <z> [r g b] [kwargs]``
 
         Note that normals are typically not specified, because the
         density plot presumes flat shading. Blender, for example, uses
@@ -1822,6 +1823,9 @@ class td_plot_base(yt_plot_base):
                 #print('m',len(gf.vert_list),vtmp[k])
             for k in range(0,len(ntmp)):
                 gf.vn_list.append(ntmp[k])
+            if txt!='':
+                for k in range(0,len(ttmp)):
+                    gf.vt_list.append(ttmp[k])
             for k in range(0,len(ftmp)):
                 ftmp[k][0]=ftmp[k][0]
                 ftmp[k][1]=ftmp[k][1]
@@ -1848,6 +1852,9 @@ class td_plot_base(yt_plot_base):
                 gf.vert_list.append(vtmp[k])
             for k in range(0,len(ntmp)):
                 gf.vn_list.append(ntmp[k])
+            if txt!='':
+                for k in range(0,len(ttmp)):
+                    gf.vt_list.append(ttmp[k])
             for k in range(0,len(ftmp)):
                 gf.faces.append([ftmp[k][0]+lv,ftmp[k][1]+lv,
                                  ftmp[k][2]+lv,'mat_point_'+str(i)])
@@ -1859,6 +1866,8 @@ class td_plot_base(yt_plot_base):
                 
         vert2=[]
         norms2=[]
+        txt2=[]
+        print('txt',txt,len(gf.vt_list),len(ttmp))
         
         for i in range(0,len(gf.faces)):
 
@@ -1871,6 +1880,12 @@ class td_plot_base(yt_plot_base):
             norms2.append(gf.vn_list[gf.faces[i][0]])
             norms2.append(gf.vn_list[gf.faces[i][1]])
             norms2.append(gf.vn_list[gf.faces[i][2]])
+
+            if txt!='':
+                # Add the textures to the new texture coordinate array
+                txt2.append(gf.vt_list[gf.faces[i][0]])
+                txt2.append(gf.vt_list[gf.faces[i][1]])
+                txt2.append(gf.vt_list[gf.faces[i][2]])
 
         if False:
             print('td_icos:')
@@ -1897,14 +1912,24 @@ class td_plot_base(yt_plot_base):
     
             print(len(vert2),len(norms2),len(gf.faces))
 
-        if self.to.is_mat('white')==False:
-            white=material('white',[1,1,1])
-            self.to.add_mat(white)
+        if txt!='':
+            mat=material('mat_'+uname,[1,1,1],txt=txt)
+            self.to.add_mat(mat)
+        else:
+            if self.to.is_mat('white')==False:
+                white=material('white',[1,1,1])
+                self.to.add_mat(white)
             
         gf.vert_list=vert2
+        if txt!='':
+            gf.vt_list=txt2
         #gf.vn_list=norms2
-        if colors==False:
-            gf.mat='white'
+        if txt!='':
+            gf.mat='mat_'+uname
+        else:
+            if colors==False:
+                gf.mat='white'
+                
         self.to.add_object(gf)
 
         return
@@ -2178,7 +2203,7 @@ class td_plot_base(yt_plot_base):
                       tex_mat_name : str = '', end_mat_name: str = 'white',
                       png_file : str = '', group_name : str = '',
                       offset : float = 0.1, height : float = 0.1,
-                      flatten : str = ''):
+                      flatten : str = 'white'):
         """Documentation for o2graph command ``td-axis-label``:
 
         Create an axis label in a 3d visualization (experimental).
