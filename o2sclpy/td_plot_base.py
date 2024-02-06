@@ -129,16 +129,18 @@ class material:
         self.alpha_cutoff=alpha_cutoff
         return
 
-    def txt_power_two(self, flatten: str = '', verbose: int = 0):
+    def txt_power_two(self, wdir: str = '', flatten: str = '',
+                      verbose: int = 0):
         """Add a texture to the material and fix the width and height to be a
         power of two.
         """
         if self.txt=='':
             raise ValueError('No texture specified.')
-        w,h,w_new,h_new=png_power_two(self.txt,self.td_wdir+'/'+self.txt,
+        w,h,w_new,h_new=png_power_two(self.txt,wdir+'/'+self.txt,
                                       flatten=flatten,verbose=verbose)
-        self.txt_frac_w=float(w_new)/float(w)
-        self.txt_frac_h=float(h_new)/float(h)
+        self.txt_frac_w=float(w)/float(w_new)
+        self.txt_frac_h=float(h)/float(h_new)
+        print('txt_power_two:',self.txt_frac_w,self.txt_frac_h)
         return
     
 class mesh_object:
@@ -1763,7 +1765,8 @@ class td_plot_base(yt_plot_base):
         smooth shading for GLTF files when normals are specified, and
         this can complicate the density plot.
         """
-
+        import copy
+        
         if mat=='':
             if self.to.is_mat('white')==False:
                 m=material('white',[1,1,1])
@@ -1840,7 +1843,10 @@ class td_plot_base(yt_plot_base):
             gf.vn_list.append(ntmp[k])
         if m.txt!='':
             for k in range(0,len(ttmp)):
-                gf.vt_list.append(ttmp[k])
+                txtx=copy.deepcopy(ttmp[k])
+                txtx[0]=txtx[0]*m.txt_frac_w
+                txtx[1]=txtx[1]*m.txt_frac_h
+                gf.vt_list.append(txtx)
         for k in range(0,len(ftmp)):
             ftmp[k][0]=ftmp[k][0]
             ftmp[k][1]=ftmp[k][1]
@@ -1902,7 +1908,7 @@ class td_plot_base(yt_plot_base):
             gf.vt_list=txt2
         if mat!='':
             gf.mat=m.name
-        #gf.vn_list=norms2
+        gf.vn_list=norms2
                 
         self.to.add_object(gf)
 
@@ -2040,7 +2046,7 @@ class td_plot_base(yt_plot_base):
         mat=material(name,[r,g,b,alpha],txt=txt,metal=metal,rough=rough,
                      ds=ds)
         if txt!='':
-            mat.txt_power_two()
+            mat.txt_power_two(wdir=self.td_wdir)
         self.to.add_mat(mat)
         if self.verbose>0:
             print('td_plot_base::td_mat(): Added material named',mat.name+'.')
