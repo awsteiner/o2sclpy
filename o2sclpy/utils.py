@@ -563,8 +563,8 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
     texcoord=[]
     for i in range(0,len(vert)):
         tc=rect_to_spher(vert[i])
-        texcoord.append([tc[0],tc[1]])
-                
+        texcoord.append([tc[1]/numpy.pi/2.0+0.5,tc[2]/numpy.pi])
+
     # Shift the origin to the user-specified coordinates
     for i in range(0,len(vert)):
         vert[i][0]=vert[i][0]+x
@@ -743,8 +743,10 @@ def png_power_two(png_input: str, png_output: str,
     If verbose is greater than 1, then the system call is printed
     to stdout.
     """
-    
+
+    import tempfile
     from PIL import Image
+    
     img=Image.open(png_input)
     
     w=img.width

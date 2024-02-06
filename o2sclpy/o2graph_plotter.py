@@ -5777,31 +5777,12 @@ class o2graph_plotter(td_plot_base):
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix==4:
-                        self.td_icos(o2scl,amp,[strlist[ix+1],
-                                                strlist[ix+2],
-                                                strlist[ix+3]])
-                    elif ix_next-ix==5:
-                        self.td_icos(o2scl,amp,
-                                     [strlist[ix+1],strlist[ix+2],
+                        self.td_icos([strlist[ix+1],strlist[ix+2],
+                                      strlist[ix+3]])
+                    elif ix_next-ix>=5:
+                        self.td_icos([strlist[ix+1],strlist[ix+2],
                                       strlist[ix+3]],
                                      **string_to_dict2(strlist[ix+4],
-                                                       list_of_ints=
-                                                       ['n_subdiv'],
-                                                       list_of_floats=
-                                                       ['r']))
-                    elif ix_next-ix==7:
-                        self.td_icos(o2scl,amp,[strlist[ix+1],
-                                                strlist[ix+2],
-                                                strlist[ix+3],
-                                                strlist[ix+4],
-                                                strlist[ix+5],
-                                                strlist[ix+6]])
-                    elif ix_next-ix>=8:
-                        self.td_icos(o2scl,amp,
-                                     [strlist[ix+1],strlist[ix+2],
-                                      strlist[ix+3],strlist[ix+4],
-                                      strlist[ix+5],strlist[ix+6]],
-                                     **string_to_dict2(strlist[ix+7],
                                                        list_of_ints=
                                                        ['n_subdiv'],
                                                        list_of_floats=

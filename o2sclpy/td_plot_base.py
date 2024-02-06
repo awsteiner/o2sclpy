@@ -87,6 +87,14 @@ class material:
     """
     The texture filename, including extension
     """
+    txt_frac_w: float = 1.0
+    """ 
+    The fractional part of the texture width which is usable
+    """
+    txt_frac_h: float = 1.0
+    """ 
+    The fractional part of the texture height which is usable
+    """
     alpha_mode: str = 'opaque'
     """
     The alpha mode, either 'opaque', 'mask', or 'blend'.
@@ -127,8 +135,10 @@ class material:
         """
         if self.txt=='':
             raise ValueError('No texture specified.')
-        png_power_two(self.txt,self.txt,flatten=flatten,
-                      verbose=verbose)
+        w,h,w_new,h_new=png_power_two(self.txt,self.td_wdir+'/'+self.txt,
+                                      flatten=flatten,verbose=verbose)
+        self.txt_frac_w=float(w_new)/float(w)
+        self.txt_frac_h=float(h_new)/float(h)
         return
     
 class mesh_object:
@@ -750,6 +760,14 @@ class threed_objects:
             self.mat_list.append(m)
         return
     
+    def get_mat(self, mat_name: str):
+        """
+        """
+        for i in range(0,len(self.mat_list)):
+            if self.mat_list[i].name==mat_name:
+                return self.mat_list[i]
+        raise ValueError("No mat named "+mat_name)
+    
     def add_object_mat(self, gf: mesh_object, m: material):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
         triangular faces among those vertices, and 'm', the material
@@ -769,6 +787,14 @@ class threed_objects:
             if self.mat_list[i].name==m:
                 return True
         return False
+    
+    def get_mat_index(self, m: str):
+        """Return true if a a material named ``m`` has been added
+        """
+        for i in range(0,len(self.mat_list)):
+            if self.mat_list[i].name==m:
+                return i
+        raise ValueError("No mat named "+m)
     
     def add_object_mat_list(self, gf: mesh_object, lm):
         """Add an object given 'lv', a list of vertices, and 'gf', a group of
@@ -841,14 +867,12 @@ class threed_objects:
             this_mat=self.mat_list[i]
 
             # Construct a Python dictory for the material JSON
-            json_dict={"name": this_mat.name}
-            
+            mat_dict={"name": this_mat.name}
+
+            pbr_dict={}
             if this_mat.txt!='':
-                json_dict["pbrMetallicRoughness"]={
-                    "baseColorTexture": {
-                        "index":
-                        texture_index
-                    }}
+                pbr_dict["baseColorTexture"]={"index":
+                                              texture_index}
                 txt_list.append({"source": texture_index})
                 img_list.append({"mimeType": "image/png",
                                  "name": this_mat.name,
@@ -856,32 +880,29 @@ class threed_objects:
                 texture_map[i]=texture_index
                 texture_index=texture_index+1
             elif len(this_mat.base_color)>=4:
-                json_dict["pbrMetallicRoughness"]={
-                    "baseColorFactor": [
+                pbr_dict["baseColorFactor"]=[
                         this_mat.base_color[0],
                         this_mat.base_color[1],
                         this_mat.base_color[2],
                         this_mat.base_color[3]]
-                }
             else:
-                json_dict["pbrMetallicRoughness"]={
-                    "baseColorFactor": [
+                pbr_dict["baseColorFactor"]=[
                         this_mat.base_color[0],
                         this_mat.base_color[1],
                         this_mat.base_color[2],1.0]
-                }
-            json_dict["doubleSided"]=this_mat.ds
             if this_mat.metal!=0.0:
-                json_dict["metallicFactor"]=this_mat.metal
+                pbr_dict["metallicFactor"]=this_mat.metal
             if this_mat.rough!=1.0:
-                json_dict["roughnessFactor"]=this_mat.rough
+                pbr_dict["roughnessFactor"]=this_mat.rough
+            mat_dict["pbrMetallicRoughness"]=pbr_dict
+            mat_dict["doubleSided"]=this_mat.ds
             if this_mat.alpha_mode!='opaque':
-                json_dict["alphaMode"]=this_mat.alpha_mode.upper()
+                mat_dict["alphaMode"]=this_mat.alpha_mode.upper()
             if this_mat.alpha_cutoff!=0.5:
-                json_dict["alphaCutoff"]=this_mat.alpha_cutoff
+                mat_dict["alphaCutoff"]=this_mat.alpha_cutoff
 
             # Add this material JSON to the full material list
-            mat_json.append(json_dict)
+            mat_json.append(mat_dict)
         
         # Add each set of faces as a group
         acc_index=0
@@ -901,13 +922,14 @@ class threed_objects:
                 texcoords=True
                 if (len(self.mesh_list[i].vert_list)!=
                     len(self.mesh_list[i].vt_list)):
-                   print('Problem with normals.')
+                   print('Problem with texcoords.')
                    quit()
 
             long_ints=False
             if len(self.mesh_list[i].vert_list)>=32768:
                 long_ints=True
-                print('long ints here')
+                print('Function write_gltf() using long integers',
+                      'for mesh',self.mesh_list[i].name+'.')
 
             att={}
             face_bin=[]
@@ -916,7 +938,6 @@ class threed_objects:
             vert_bin=[]
             vert_map = [-1] * len(self.mesh_list[i].vert_list)
             prim_list=[]
-            mat_index=-1
 
             if False:
                 for j in range(0,len(self.mesh_list[i].vert_list)):
@@ -944,17 +965,11 @@ class threed_objects:
                 lf1=len(self.mesh_list[i].faces[j])
                 if lf1==4:
                     mat1=self.mesh_list[i].faces[j][lf1-1]
-
-                    mat_found=False
-                    for ik in range(0,len(self.mat_list)):
-                        if (mat_found==False and
-                            self.mat_list[ik].name==mat1):
-                            mat_index=ik
-                            mat_found=True
-                    if mat_found==False:
-                        raise ValueError('write_gltf(): '+
-                                         'Could not find mat '+mat2+
-                                         ' in mat_list.')
+                    mat_index=self.get_mat_index(mat1)
+                else:
+                    mat1=self.mesh_list[i].mat
+                    if mat1!='':
+                        mat_index=self.get_mat_index(mat1)
 
                 if False:
                     for kk in range(0,3):
@@ -985,6 +1000,7 @@ class threed_objects:
                             txts_bin.append(v6)
                             v7=float(self.mesh_list[i].vt_list[ix][1])
                             txts_bin.append(v7)
+                            #print(self.mesh_list[i].name,'texcoords1',v6,v7)
                         vert_map[ix]=int(len(vert_bin)/3)
                         # We have to subtract one here because
                         # the point has already been added to 'vert_bin'
@@ -1012,6 +1028,7 @@ class threed_objects:
                             txts_bin.append(v14)
                             v15=float(self.mesh_list[i].vt_list[ix][1])
                             txts_bin.append(v15)
+                            #print(self.mesh_list[i].name,'texcoords2',v14,v15)
                         vert_map[ix]=int(len(vert_bin)/3)
                         # We have to subtract one here because
                         # the point has already been added to 'vert_bin'
@@ -1039,6 +1056,7 @@ class threed_objects:
                             txts_bin.append(v22)
                             v23=float(self.mesh_list[i].vt_list[ix][1])
                             txts_bin.append(v23)
+                            #print(self.mesh_list[i].name,'texcoords3',v22,v23)
                         vert_map[ix]=int(len(vert_bin)/3)
                         # We have to subtract one here because
                         # the point has already been added to 'vert_bin'
@@ -1055,8 +1073,8 @@ class threed_objects:
                     lf2=len(self.mesh_list[i].faces[j+1])
                     if lf2==4:
                         mat2=self.mesh_list[i].faces[j+1][lf2-1]
-                    if mat1!=mat2:
-                        next_face_different_mat=True
+                        if mat1!=mat2:
+                            next_face_different_mat=True
 
                 # If we're at the end, or we're switching materials,
                 # then add the primitive to the mesh and update
@@ -1733,34 +1751,33 @@ class td_plot_base(yt_plot_base):
 
         return
 
-    def td_icos(self,o2scl,amp,args,n_subdiv=0,r=0.04,phi_cut='',
-                txt=''):
+    def td_icos(self,args,n_subdiv=0,r=0.04,phi_cut='',mat=''):
         """Documentation for o2graph command ``td-icos``:
 
         Create a 3D icosphere (experimental).
 
-        Command-line arguments: ``<x> <y> <z> [r g b] [kwargs]``
+        Command-line arguments: ``<x> <y> <z> [kwargs]``
 
         Note that normals are typically not specified, because the
         density plot presumes flat shading. Blender, for example, uses
         smooth shading for GLTF files when normals are specified, and
         this can complicate the density plot.
         """
-        curr_type=o2scl_get_type(o2scl,amp,self.link2)
-        amt=acol_manager(self.link2,amp)
 
-        colors=False
+        if mat=='':
+            if self.to.is_mat('white')==False:
+                m=material('white',[1,1,1])
+                self.to.add_mat(m)
+            else:
+                m=self.to.get_mat('white')
+        else:
+            if self.to.is_mat(mat)==False:
+                raise ValueError("No mat named "+mat+" in td_icos().")
+            m=self.to.get_mat(mat)
+            
         val_x=float(args[0])
         val_y=float(args[1])
         val_z=float(args[2])
-        val_r=''
-        val_g=''
-        val_b=''
-        if len(args)>4:
-            val_r=float(args[3])
-            val_g=float(args[4])
-            val_b=float(args[5])
-            colors=True
         if self.xset==False:
             if val_x<0:
                 self.xlo=val_x*2
@@ -1803,71 +1820,39 @@ class td_plot_base(yt_plot_base):
 
         uname=self.to.make_unique_name('icos')
                 
-        if colors==False:
-
-            gf=mesh_object(uname,[])
+        gf=mesh_object(uname,[],mat=mat)
             
-            xnew=(val_x-self.xlo)/(self.xhi-self.xlo)
-            ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
-            znew=(val_z-self.zlo)/(self.zhi-self.zlo)
-            if phi_cut=='':
-                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,
-                                              r,n_subdiv=n_subdiv)
-            else:
-                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,
-                                              r,n_subdiv=n_subdiv,
-                                              phi_cut=phi_cut)
-            
-            for k in range(0,len(vtmp)):
-                gf.vert_list.append(vtmp[k])
-                #print('m',len(gf.vert_list),vtmp[k])
-            for k in range(0,len(ntmp)):
-                gf.vn_list.append(ntmp[k])
-            if txt!='':
-                for k in range(0,len(ttmp)):
-                    gf.vt_list.append(ttmp[k])
-            for k in range(0,len(ftmp)):
-                ftmp[k][0]=ftmp[k][0]
-                ftmp[k][1]=ftmp[k][1]
-                ftmp[k][2]=ftmp[k][2]
-                gf.faces.append(ftmp[k])
-                    
+        xnew=(val_x-self.xlo)/(self.xhi-self.xlo)
+        ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
+        znew=(val_z-self.zlo)/(self.zhi-self.zlo)
+        if phi_cut=='':
+            vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,
+                                          r,n_subdiv=n_subdiv)
         else:
-
-            gf=mesh_object(uname,[])
+            vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,
+                                          r,n_subdiv=n_subdiv,
+                                          phi_cut=phi_cut)
             
-            xnew=(val_x-self.xlo)/(self.xhi-self.xlo)
-            ynew=(val_y-self.ylo)/(self.yhi-self.ylo)
-            znew=(val_z-self.zlo)/(self.zhi-self.zlo)
-            
-            if phi_cut=='':
-                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,
-                                              r,n_subdiv=n_subdiv)
-            else:
-                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,
-                                              r,n_subdiv=n_subdiv,
-                                              phi_cut=phi_cut)
-            lv=len(gf.vert_list)
-            for k in range(0,len(vtmp)):
-                gf.vert_list.append(vtmp[k])
-            for k in range(0,len(ntmp)):
-                gf.vn_list.append(ntmp[k])
-            if txt!='':
-                for k in range(0,len(ttmp)):
-                    gf.vt_list.append(ttmp[k])
-            for k in range(0,len(ftmp)):
-                gf.faces.append([ftmp[k][0]+lv,ftmp[k][1]+lv,
-                                 ftmp[k][2]+lv,'mat_point_'+str(i)])
-                
-                mat=material('mat_point_'+str(i),[cr[i],cg[i],cb[i]])
-                self.to.add_mat(mat)
-            
+        for k in range(0,len(vtmp)):
+            gf.vert_list.append(vtmp[k])
+            #print('m',len(gf.vert_list),vtmp[k])
+        for k in range(0,len(ntmp)):
+            gf.vn_list.append(ntmp[k])
+        if m.txt!='':
+            for k in range(0,len(ttmp)):
+                gf.vt_list.append(ttmp[k])
+        for k in range(0,len(ftmp)):
+            ftmp[k][0]=ftmp[k][0]
+            ftmp[k][1]=ftmp[k][1]
+            ftmp[k][2]=ftmp[k][2]
+            gf.faces.append(ftmp[k])
+                    
         # Convert to GLTF
                 
         vert2=[]
         norms2=[]
         txt2=[]
-        print('txt',txt,len(gf.vt_list),len(ttmp))
+        #print('txt',txt,len(gf.vt_list),len(ttmp))
         
         for i in range(0,len(gf.faces)):
 
@@ -1881,7 +1866,7 @@ class td_plot_base(yt_plot_base):
             norms2.append(gf.vn_list[gf.faces[i][1]])
             norms2.append(gf.vn_list[gf.faces[i][2]])
 
-            if txt!='':
+            if m.txt!='':
                 # Add the textures to the new texture coordinate array
                 txt2.append(gf.vt_list[gf.faces[i][0]])
                 txt2.append(gf.vt_list[gf.faces[i][1]])
@@ -1912,23 +1897,12 @@ class td_plot_base(yt_plot_base):
     
             print(len(vert2),len(norms2),len(gf.faces))
 
-        if txt!='':
-            mat=material('mat_'+uname,[1,1,1],txt=txt)
-            self.to.add_mat(mat)
-        else:
-            if self.to.is_mat('white')==False:
-                white=material('white',[1,1,1])
-                self.to.add_mat(white)
-            
         gf.vert_list=vert2
-        if txt!='':
+        if m.txt!='':
             gf.vt_list=txt2
+        if mat!='':
+            gf.mat=m.name
         #gf.vn_list=norms2
-        if txt!='':
-            gf.mat='mat_'+uname
-        else:
-            if colors==False:
-                gf.mat='white'
                 
         self.to.add_object(gf)
 
