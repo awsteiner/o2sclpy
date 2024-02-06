@@ -2030,7 +2030,8 @@ class td_plot_base(yt_plot_base):
     
     def td_mat(self, name: str, r: float, g: float, b: float,
                alpha: float=1, metal: float=0, rough: float=1,
-               ds: bool=True, txt: str=''):
+               ds: bool=True, txt: str='',
+               alpha_mode : str = 'opaque', alpha_cutoff: float = 0.5):
         """Documentation for o2graph command ``td-mat``:
 
         Create a 3d material (experimental)
@@ -2044,7 +2045,7 @@ class td_plot_base(yt_plot_base):
             raise ValueError('Already a material with the name '+
                              name+' in td_plot_base::td_mat().')
         mat=material(name,[r,g,b,alpha],txt=txt,metal=metal,rough=rough,
-                     ds=ds)
+                     ds=ds,alpha_mode=alpha_mode,alpha_cutoff=alpha_cutoff)
         if txt!='':
             mat.txt_power_two(wdir=self.td_wdir)
         self.to.add_mat(mat)

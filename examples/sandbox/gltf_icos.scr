@@ -1,12 +1,12 @@
 o2graph -set td_wdir gltf -set xlo 0 -set xhi 5 -set ylo 0 -set yhi 2 \
 -set zlo 0 -set zhi 2 \
 -td-mat m1 1.0 0.4 0.4 \
--td-icos 1 1 1 mat=m1 \
+-td-icos 1 1 1 "mat=m1,r=0.1" \
 -td-mat m2 0.4 1.0 0.4 metal=1 \
--td-icos 2 1 1 n_subdiv=1,mat=m2 \
--td-mat m3 0.4 0.4 1.0 metal=1,alpha=0.2 \
--td-icos 3 1 1 "n_subdiv=2,mat=m3" \
+-td-icos 2 1.1 1 "n_subdiv=1,mat=m2,r=0.1" \
+-td-mat m3 0.4 0.4 1.0 metal=1,alpha=0.4,alpha_mode=blend \
+-td-icos 3 1.2 1 "n_subdiv=2,mat=m3,r=0.1" \
 -td-mat m4 1.0 1.0 1.0 "txt=Blue_Marble_tiny.png" \
--td-icos 0 0 0 "n_subdiv=3,mat=m4" \
+-td-icos 0 0 0 "n_subdiv=3,mat=m4,r=0.1" \
 -td-axis "$ R~(\mathrm{km}) $" "$ M~(\mathrm{M}_{\odot}) $" \
 "Probability" icos_ -gltf icos.gltf
