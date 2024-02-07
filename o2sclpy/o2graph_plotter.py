@@ -5843,7 +5843,8 @@ class o2graph_plotter(td_plot_base):
                                                       ['ds'],
                                                       list_of_floats=
                                                       ['metal','rough',
-                                                       'alpha']))
+                                                       'alpha','efr',
+                                                       'efg','efb']))
                     else:
                         print('Not enough arguments for td-mat.')
 

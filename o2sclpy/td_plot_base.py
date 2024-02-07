@@ -103,10 +103,16 @@ class material:
     """
     The alpha cutoff, default is 0.5.
     """
+    emi_factor=[0.0,0.0,0.0]
+    """
+    The emissive factor
+    """
+    
 
     def __init__(self, name: str, base_color=[1,1,1], txt: str='',
                  metal: float = 0.0, rough: float=1.0, ds: bool=True,
-                 alpha_mode : str = 'opaque', alpha_cutoff: float = 0.5):
+                 alpha_mode : str = 'opaque', alpha_cutoff: float = 0.5,
+                 emi_factor=[0.0,0.0,0.0]):
         """Create a new material with name ``name``.
 
         The keyword arguments are as follows:
@@ -127,6 +133,7 @@ class material:
         self.ds=ds
         self.alpha_mode=alpha_mode
         self.alpha_cutoff=alpha_cutoff
+        self.emi_factor=emi_factor
         return
 
     def txt_power_two(self, wdir: str = '', flatten: str = '',
@@ -897,11 +904,16 @@ class threed_objects:
             if this_mat.rough!=1.0:
                 pbr_dict["roughnessFactor"]=this_mat.rough
             mat_dict["pbrMetallicRoughness"]=pbr_dict
+            
             mat_dict["doubleSided"]=this_mat.ds
             if this_mat.alpha_mode!='opaque':
                 mat_dict["alphaMode"]=this_mat.alpha_mode.upper()
             if this_mat.alpha_cutoff!=0.5:
                 mat_dict["alphaCutoff"]=this_mat.alpha_cutoff
+            if (this_mat.emi_factor[0]>0.0 or
+                this_mat.emi_factor[1]>0.0 or
+                this_mat.emi_factor[2]>0.0):
+                mat_dict["emissiveFactor"]=this_mat.emi_factor
 
             # Add this material JSON to the full material list
             mat_json.append(mat_dict)
@@ -2031,7 +2043,8 @@ class td_plot_base(yt_plot_base):
     def td_mat(self, name: str, r: float, g: float, b: float,
                alpha: float=1, metal: float=0, rough: float=1,
                ds: bool=True, txt: str='',
-               alpha_mode : str = 'opaque', alpha_cutoff: float = 0.5):
+               alpha_mode : str = 'opaque', alpha_cutoff: float = 0.5,
+               efr: float = 0.0, efg: float = 0.0, efb: float = 0.0):
         """Documentation for o2graph command ``td-mat``:
 
         Create a 3d material (experimental)
@@ -2044,8 +2057,13 @@ class td_plot_base(yt_plot_base):
         if self.to.is_mat(name):
             raise ValueError('Already a material with the name '+
                              name+' in td_plot_base::td_mat().')
+        if efr>0.0 or efg>0.0 or efb>0.0:
+            emi_factor=[efr,efg,efb]
+        else:
+            emi_factor=[0.0,0.0,0.0]
         mat=material(name,[r,g,b,alpha],txt=txt,metal=metal,rough=rough,
-                     ds=ds,alpha_mode=alpha_mode,alpha_cutoff=alpha_cutoff)
+                     ds=ds,alpha_mode=alpha_mode,alpha_cutoff=alpha_cutoff,
+                     emi_factor=emi_factor)
         if txt!='':
             mat.txt_power_two(wdir=self.td_wdir)
         self.to.add_mat(mat)
