@@ -21,7 +21,7 @@
 #
 import sys
 
-# For os.getenv()
+# For os.getenv() and os.path.exists()
 import os
 
 # For numpy.bytes_
@@ -724,88 +724,102 @@ def force_string(obj):
         return obj.decode('utf-8')
     return obj
 
-def png_power_two(png_input: str, png_output: str,
-                  flatten: bool = True, verbose: int = 0):
-    """
-    Read a PNG image from ``png_input``, resize it to ensure the width
+def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
+                  verbose: int = 0):
+    """Read a PNG image from ``png_input``, resize it to ensure the width
     and height are both a power of two, and store the resulting file
-    in ``png_output`` (which may be the same as the input file). 
+    in ``png_output``.
 
     This function returns a tuple of four numbers, the width and
     height of the original image, and the width and height
     of the new image. 
 
     This function uses Pillow to determine the original width and
-    height and then a system call to Imagemagick to perform the
-    resizing (it's probably better to use Pillow to do both, and
-    that will be fixed in the future). 
+    height and perform the resizing. If the width and height are
+    already a power of two, then the file is simply copied, unless the
+    input and output filenames are the same, in which case this
+    function does nothing. If the input and output filenames are the
+    same, and the width and height are not a power of two, then this
+    function will throw an exception to help prevent the user from
+    inadvertently overwriting the original file.
 
-    If verbose is greater than 1, then the system call is printed
-    to stdout.
+    The default background color is transparent.
+
+    If verbose is greater than 0, then the system call is printed to
+    stdout.
+
     """
 
     import tempfile
     from PIL import Image
     
+    if verbose>0:
+        print('png_power_two(): png_input, png_output:',
+              png_input,png_output)
+        
+    if os.path.isfile(png_input)==False:
+        raise ValueError('In function png_power_two(): String '+
+                         png_input+' does not appear to refer to a file.')
+
     img=Image.open(png_input)
     
     w=img.width
     h=img.height
     w_new=2**(int(numpy.log2(w-1))+1)
     h_new=2**(int(numpy.log2(h-1))+1)
-    print('png_power_two():',w,h,w_new,h_new)
+    if verbose>0:
+        print('png_power_two(): w, h, w_new, h_new:',w,h,w_new,h_new)
 
     # If these are all equal, there is nothing to do
-    if w_new==w and h_new==h and png_input==png_output:
-        print('png_power_two(): skipping.')
-        return
-    
-    # Create a file to store the output
-    f2=tempfile.NamedTemporaryFile(suffix='.out',delete=False)
-    out_file_name=f2.name
-    f2.close()
-    
-    if flatten==True:
-        cmd=('convert '+png_input+' -background white '+
-              '-extent '+str(w_new)+'x'+str(h_new)+' '+
-              png_output+' > '+out_file_name+' 2>&1')
-    else:
-        cmd=('convert '+png_input+' -background None '+
-              '-extent '+str(w_new)+'x'+str(h_new)+' '+
-              png_output+' > '+out_file_name+' 2>&1')
+    if w_new==w and h_new==h:
+
+        # No resizing required and the files are the same
+        if png_input==png_output:
+            if verbose>0:
+                print('png_power_two(): Skipping.')
+            return
         
-    if verbose>1:
-        print('png_power_two(): Running shell command',cmd)
-        
-    os.system(cmd)
+        # No resizing required, so just copy
+        cmdm1='cp '+png_input+' '+png_output
+        if verbose>1:
+            print('png_power_two(): Running shell command to copy:',cmdm1)
+        os.system(cmdm1)
+
+    if png_input==png_output:
+        raise ValueError('In function png_power_two(): Resizing '+
+                         'appears to be required, but the input and ouput '+
+                         'filenames are the same.')
+
+    # Use Pillow to resize the image, giving new pixes the color
+    # specified in bgcolor
+    img_new=Image.new(img.mode,(w_new,h_new),
+                      ('rgba('+str(bgcolor[0])+','+str(bgcolor[1])+','+
+                       str(bgcolor[2])+','+str(bgcolor[3])+')'))
+    img_new.paste(img,(0,0))
+    img_new.save(png_output)
     
     return img.width,img.height,w_new,h_new
 
 def latex_to_png(tex: str, png_file: str, verbose: int = 3,
-                 power_two: bool = False, flatten: str = '',
                  packages = []):
-    """
-    A simple routine to convert a LaTeX string to a png image.
+    """A simple routine to convert a LaTeX string to a png image.
 
-    Math mode is not assumed, so equations need to be surrounded
-    by dollar signs. A temporary file is created, and then that
-    file is processed by ``pdflatex`` and then the output is
-    renamed to the filename specified by the user with ``mv``. 
-    Finally, imagemagick ``convert`` is used to flatten the image.
-    Pillow is used to obtain the image width and height, and 
-    those values are returned. 
-
-    This function works, but is not necessarily optimal.
+    Math mode is not assumed, so equations may need to be surrounded
+    by dollar signs. A temporary file is created, and then that file
+    is processed by ``pdflatex`` and then the output is renamed to the
+    filename specified by the user with ``mv``. 
     """
     import tempfile
 
-    if verbose>0:
-        print('latex_to_png(): Converting',tex,'to png file',png_file+'.')
+    if verbose>1:
+        print('latex_to_png(): Converting',tex,
+              '\n  to png file',png_file)
 
     # Create the LaTeX file
     f=tempfile.NamedTemporaryFile(suffix='.tex',delete=False)
     tex_file_name=f.name
-    print('Opened temporary file named',tex_file_name)
+
+    # Fill the LaTeX file with the correct source code
     f.write(force_bytes('\\documentclass[crop,border=0.5pt,'+
                         'convert={outext=.png}]{standalone}\n'))
     for i in range(0,len(packages)):
@@ -815,53 +829,26 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 3,
     f.write(force_bytes('\\end{document}\n'))
     f.close()
 
-    # Create a file to store the output
+    # Create a file to store the pdflatex output
     f2=tempfile.NamedTemporaryFile(suffix='.out',delete=False)
     out_file_name=f2.name
     f2.close()
     
-    loc=tex_file_name.rfind('/')
-    tdir=tex_file_name[0:loc+1]
-    tfile=tex_file_name[loc+1:]
+    tdir=os.path.dirname(tex_file_name)
+    tfile=os.path.basename(tex_file_name)
+    
     cmd1=('cd '+tdir+' && pdflatex --shell-escape '+tfile+' > '+
           out_file_name+' 2>&1')
     if verbose>1:
-        print('latex_to_png(): Running first shell command',cmd1)
+        print('latex_to_png(): Running first shell command:\n  ',cmd1)
     os.system(cmd1)
-    if flatten!='':
-        cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file+' && convert '+
-              png_file+' -background '+flatten+' -flatten '+
-              png_file+' > '+out_file_name+' 2>&1')
-        if verbose>1:
-            print('latex_to_png(): Running second shell command',
-                  '(flatten)\n ',cmd2)
-        os.system(cmd2)
-    else:
-        cmd2=('mv '+tex_file_name[:-4]+'.png '+png_file)
-        if verbose>1:
-            print('latex_to_png(): Running second shell command',
-                  '(transparent)\n ',cmd2)
-        os.system(cmd2)
-    from PIL import Image
-    img=Image.open(png_file)
-    if power_two:
-        w=img.width
-        h=img.height
-        w_new=2**(int(numpy.log2(w-1))+1)
-        h_new=2**(int(numpy.log2(h-1))+1)
-        if flatten!='':
-            cmd3=('convert '+png_file+' -background '+flatten+' '+
-                  '-extent '+str(w_new)+'x'+str(h_new)+' '+
-                  png_file+' > '+out_file_name+' 2>&1')
-        else:
-            cmd3=('convert '+png_file+' -background None '+
-                  '-extent '+str(w_new)+'x'+str(h_new)+' '+
-                  png_file+' > '+out_file_name+' 2>&1')
-        if verbose>1:
-            print('latex_to_png(): Running third shell command',cmd3)
-        os.system(cmd3)
-        return img.width,img.height,w_new,h_new
-    return img.width,img.height
+
+    cmd2='mv '+tex_file_name[:-4]+'.png '+png_file
+    if verbose>1:
+        print('latex_to_png(): Running second shell command:\n  ',cmd2)
+    os.system(cmd2)
+
+    return
 
 def default_plot(left_margin=0.14,bottom_margin=0.12,
                  right_margin=0.04,top_margin=0.04,fontsize=16,

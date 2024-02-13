@@ -66,8 +66,8 @@ List of command-line options which do not require a current object:
   -td-axis-label   Create an axis label in a 3d visualization (experimental).
   -td-den-plot     Create a 3D density plot (experimental).
   -td-icos         Create a 3D icosphere (experimental).
-  -td-latex-rect   Plot a rectangle from a LaTeX string (experimental)
   -td-mat          Create a 3d material (experimental)
+  -td-rect         Plot a rectangle from a LaTeX string (experimental)
   -td-scatter      Create a 3D scatter plot (experimental).
   -text            Plot text in the data coordinates.
   -textbox         Plot a box with text.
