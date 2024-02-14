@@ -1,7 +1,8 @@
 o2graph -set td_wdir gltf -set xlo 0 -set xhi 1 -set ylo 0 -set yhi 1 \
 -set zlo 0 -set zhi 1 -set verbose 3 \
 -td-mat latex1 0 0 0 \
-"txt=latex:$ \int x^2~{\color{white} dx } $,packages=xcolor,alpha_mode=mask" \
--td-pgram 0.1 0.1 0.1 0.9 0.9 0.1 0.1 0.1 0.9 mat=latex1 \
+"txt=latex:$ \int x^2~{\color{white} dx } $,packages=xcolor,alpha_mode=blend,prefix=latex_rect_" \
+-td-pgram 0.1 0.1 0.1 0.9 0.9 0.1 0.1 0.1 0.9 mat=latex1,match_txt=True \
+-td-axis-label y "$ y^2 $" png_file=latex_rect_ytitle.png \
 -gltf latex_rect -bl-import latex_rect.gltf
-#-td-axis-label y "$ y^2 $" png_file=latex_rect_ytitle.png
+

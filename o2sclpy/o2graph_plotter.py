@@ -5814,7 +5814,8 @@ class o2graph_plotter(td_plot_base):
                                       float(strlist[ix+9]),
                                       **string_to_dict2(strlist[ix+10],
                                                         list_of_bools=
-                                                        ['force_rect']))
+                                                        ['force_rect',
+                                                         'match_txt']))
                     else:
                         print('Not enough arguments for td-pgram.')
 

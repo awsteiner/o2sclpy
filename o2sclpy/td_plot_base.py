@@ -57,10 +57,14 @@ class material:
     baseColorFactor has no hardware decoder and therefore is specified
     as linear values directly.
     """
+    
     name: str
     """
     The name of the material
     """
+    
+    # The GLTF properties
+    
     base_color=[1.0,1.0,1.0]
     """
     The base color factor (either 3 or 4 floating point numbers)
@@ -87,14 +91,6 @@ class material:
     """
     The texture filename, including extension
     """
-    txt_frac_w: float = 1.0
-    """ 
-    The fractional part of the texture width which is usable
-    """
-    txt_frac_h: float = 1.0
-    """ 
-    The fractional part of the texture height which is usable
-    """
     alpha_mode: str = 'opaque'
     """
     The alpha mode, either 'opaque', 'mask', or 'blend'.
@@ -108,10 +104,30 @@ class material:
     The emissive factor
     """
 
+    # These properties aren't explicitly used in the GLTF,
+    # but are useful when mapping textures to the mesh
+    
+    txt_frac_w: float = 1.0
+    """ 
+    The fractional part of the texture width which is usable
+    """
+    txt_frac_h: float = 1.0
+    """ 
+    The fractional part of the texture height which is usable
+    """
+    txt_w: int = 0
+    """
+    The width of the texture, in pixels (always a power of two)
+    """
+    txt_h: int = 0
+    """
+    The height of the texture, in pixels (always a power of two)
+    """
+
     def __init__(self, name: str, base_color=[1,1,1], txt: str='',
                  metal: float = 0.0, rough: float=1.0, ds: bool=True,
                  alpha_mode : str = 'opaque', alpha_cutoff: float = 0.5,
-                 emi_factor=[0.0,0.0,0.0]):
+                 emi_factor=[0.0,0.0,0.0], txt_w=0, txt_h=0):
         """Create a new material with name ``name``.
 
         The keyword arguments are as follows:
@@ -133,6 +149,10 @@ class material:
         self.alpha_mode=alpha_mode
         self.alpha_cutoff=alpha_cutoff
         self.emi_factor=emi_factor
+        self.txt_frac_w=1.0
+        self.txt_frac_h=1.0
+        self.txt_w=txt_w
+        self.txt_h=txt_h
         return
 
 class mesh_object:
@@ -281,7 +301,7 @@ class mesh_object:
         return
 
 def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
-                dir='x',end_mat='white',flatten=''):
+                dir='x',end_mat='white',flatten='',verbose=0):
     """
     Create a rectangular prism with textures from a png created by a
     LaTeX string on four sides.
@@ -296,8 +316,15 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
     in ``end_mat``. The normal vectors for all six faces point
     outside the prism. 
     """
+    import tempfile
+    
+    f=tempfile.NamedTemporaryFile(suffix='.png',delete=False)
+    temp_png_name=f.name
 
-    w,h,w_new,h_new=latex_to_png(latex,wdir+'/'+png_file)
+    latex_to_png(latex,temp_png_name,verbose=verbose)
+    w,h,w_new,h_new=png_power_two(temp_png_name,wdir+'/'+png_file,
+                                  verbose=verbose,
+                                  bgcolor=[255,255,255,255])
                                  
     face=[]
     vert=[]
@@ -324,6 +351,10 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
         z2=zcent+width/2.0
 
     m=material(mat_name,txt=png_file)
+    m.txt_frac_w=float(w)/float(w_new)
+    m.txt_frac_h=float(h)/float(h_new)
+    m.txt_w=w_new
+    m.txt_h=h_new
 
     # Add the 8 vertices
     vert.append([x1,y1,z1])
@@ -1153,7 +1184,7 @@ class threed_objects:
                             txts_bin.append(v6)
                             v7=float(self.mesh_list[i].vt_list[ix][1])
                             txts_bin.append(v7)
-                            print(self.mesh_list[i].name,'texcoords1',v6,v7)
+                            #print(self.mesh_list[i].name,'texcoords1',v6,v7)
                         vert_map[ix]=int(len(vert_bin)/3)
                         # We have to subtract one here because
                         # the point has already been added to 'vert_bin'
@@ -1181,7 +1212,7 @@ class threed_objects:
                             txts_bin.append(v14)
                             v15=float(self.mesh_list[i].vt_list[ix][1])
                             txts_bin.append(v15)
-                            print(self.mesh_list[i].name,'texcoords2',v14,v15)
+                            #print(self.mesh_list[i].name,'texcoords2',v14,v15)
                         vert_map[ix]=int(len(vert_bin)/3)
                         # We have to subtract one here because
                         # the point has already been added to 'vert_bin'
@@ -1209,7 +1240,7 @@ class threed_objects:
                             txts_bin.append(v22)
                             v23=float(self.mesh_list[i].vt_list[ix][1])
                             txts_bin.append(v23)
-                            print(self.mesh_list[i].name,'texcoords3',v22,v23)
+                            #print(self.mesh_list[i].name,'texcoords3',v22,v23)
                         vert_map[ix]=int(len(vert_bin)/3)
                         # We have to subtract one here because
                         # the point has already been added to 'vert_bin'
@@ -2202,7 +2233,7 @@ class td_plot_base(yt_plot_base):
                ds: bool=True, txt: str='',
                alpha_mode : str = 'opaque', alpha_cutoff: float = 0.5,
                efr: float = 0.0, efg: float = 0.0, efb: float = 0.0,
-               packages: str = ''):
+               packages: str = '', prefix: str = ''):
         """Documentation for o2graph command ``td-mat``:
 
         Create a 3d material (experimental)
@@ -2212,8 +2243,8 @@ class td_plot_base(yt_plot_base):
         Create a new material with the specified properties. 
 
         LaTeX textures are created in the working directory with
-        the name ``latex%d.png`` and then resized, if necessary,
-        to files named ``latexr%d.png``.
+        the name ``[prefix]latex%d.png`` and then resized, if necessary,
+        to files named ``[prefix]latexr%d.png``.
         """
         import os.path
         import tempfile
@@ -2227,9 +2258,11 @@ class td_plot_base(yt_plot_base):
             
         emi_factor=[efr,efg,efb]
 
-        # This array will serve as the values of `txt_frac_w` and
-        # `txt_frac_h` for the new material.
+        # These defaults will serve as the values of `txt_frac_w`,
+        # `txt_frac_h`, `txt_w`, and `txt_h` for the new material.
         txt_dim=(1.0,1.0)
+        w_new=0
+        h_new=0
             
         # First, if the texture is to be built from a LaTeX string,
         # then generate the associated png and replace the string
@@ -2240,7 +2273,7 @@ class td_plot_base(yt_plot_base):
         if txt[0:6]=='latex:':
             latex=txt[6:]
             self.latex_png_counter=self.latex_png_counter+1
-            tex_png_name=(self.td_wdir+'/latex'+
+            tex_png_name=(self.td_wdir+'/'+prefix+'latex'+
                           str(self.latex_png_counter)+'.png')
 
             pack_split=[]
@@ -2267,7 +2300,8 @@ class td_plot_base(yt_plot_base):
             if latex_png==True:
                 txt_dir=self.td_wdir
                 txt_base=os.path.basename(txt)
-                txt_out_base='latexr'+str(self.latex_png_counter)+'.png'
+                txt_out_base=(prefix+'latexr'+str(self.latex_png_counter)+
+                              '.png')
                 txt_out=self.td_wdir+'/'+txt_out_base
                 
             else:
@@ -2283,12 +2317,15 @@ class td_plot_base(yt_plot_base):
             
             txt_two_done=False
                 
-            if os.path.isfile(txt_out):
+            if False and os.path.isfile(txt_out):
+
+                # This section avoids overwriting textures and reuses
+                # those already in the working directory
                 from PIL import Image
                 img=Image.open(txt_out)
                 w=img.width
                 h=img.height
-                if self.verbose>0:
+                if self.verbose>1:
                     print('td_mat(): Found output file '+txt_out+', with',
                           'width',w,'and height',str(h)+'.')
                 w_new=2**(int(numpy.log2(w-1))+1)
@@ -2308,14 +2345,18 @@ class td_plot_base(yt_plot_base):
                                               verbose=self.verbose)
                 txt_dim=(float(w)/float(w_new),
                          float(h)/float(h_new))
-                print('td_mat(): txt_dim:',txt_dim)
+                if self.verbose>1:
+                    print('td_mat(): txt_dim:',txt_dim)
 
         mat=material(name,[r,g,b,alpha],txt=txt_out_base,metal=metal,
                      rough=rough,
                      ds=ds,alpha_mode=alpha_mode,alpha_cutoff=alpha_cutoff,
                      emi_factor=emi_factor)
+        
         mat.txt_frac_w=txt_dim[0]
         mat.txt_frac_h=txt_dim[1]
+        mat.txt_w=w_new
+        mat.txt_h=h_new
 
         self.to.add_mat(mat)
         
@@ -2400,7 +2441,8 @@ class td_plot_base(yt_plot_base):
         return
 
     def td_pgram(self,x1,y1,z1,x2,y2,z2,x3,y3,z3,
-                      name='pgram',mat='',force_rect=False):
+                 name='pgram',mat='',force_rect=False,
+                 match_txt=False):
         """Documentation for o2graph command ``td-pgram``:
 
         Plot a parallelogram in a 3D visualization (experimental)
@@ -2414,7 +2456,7 @@ class td_plot_base(yt_plot_base):
         if coords=='user':
             if self.xset==False or self.yset==False or self.zset==False:
                 raise ValueError("User coordinates not set in"+
-                                 " td_plot_base::td_rect().")
+                                 " td_plot_base::td_pgram().")
             x1=(x1-self.xlo)/(self.xhi-self.xlo)
             y1=(y1-self.ylo)/(self.yhi-self.ylo)
             z1=(z1-self.zlo)/(self.zhi-self.zlo)
@@ -2424,7 +2466,49 @@ class td_plot_base(yt_plot_base):
             x3=(x3-self.xlo)/(self.xhi-self.xlo)
             y3=(y3-self.ylo)/(self.yhi-self.ylo)
             z3=(z3-self.zlo)/(self.zhi-self.zlo)
+
+        # Get the material info
+        m=self.to.get_mat(mat)
+        
+        if match_txt:
+
+            if self.verbose>2:
+                print('td_pgram(): match_txt is True')
+                print('  p2,p3:',x2,y2,z2,x3,y3,z3)
+
+            # Adjust the distance between 1->2 and 3->4 from the LaTeX
+            old_height=dist3([x1,y1,z1],[x3,y3,z3])
+            old_width=dist3([x1,y1,z1],[x2,y2,z2])
+
+            w_img=m.txt_w*m.txt_frac_w
+            h_img=m.txt_h*m.txt_frac_h
             
+            if w_img/h_img>old_width/old_height:
+                
+                # The LaTeX image is wider, so set the new width to
+                # the old width and then fix the height to match
+                new_width=old_width
+                new_height=h_img*old_width/w_img
+                
+                x3=(x3-x1)*new_height/old_height+x1
+                y3=(y3-y1)*new_height/old_height+y1
+                z3=(z3-z1)*new_height/old_height+z1
+                
+            else:
+        
+                # The LaTeX image is taller, so set the new height to
+                # the old height and then fix the width to match
+                new_height=old_height
+                new_width=w_img*old_height/h_img
+                
+                x2=(x2-x1)*new_width/old_width+x1
+                y2=(y2-y1)*new_width/old_width+y1
+                z2=(z2-z1)*new_width/old_width+z1
+                
+            if self.verbose>2:
+                print('td_pgram(): match_txt is True')
+                print('  p2,p3 (post):',x2,y2,z2,x3,y3,z3)
+
         (pgram_vert,pgram_face,
          pgram_norm,pgram_txt)=parallelogram(x1,y1,z1,x2,y2,z2,x3,y3,z3,
                                              mat_name=mat,
@@ -2436,21 +2520,18 @@ class td_plot_base(yt_plot_base):
                   'with material',mat+'.')
             
         gf=mesh_object(uname,pgram_face,mat)
-
         gf.vert_list=pgram_vert
         gf.vn_list=pgram_norm
 
-        m=self.to.get_mat(mat)
         # If there is a texture, then add the texture coordinates
         if m.txt!='':
+
             import copy
             
             txt2=copy.deepcopy(pgram_txt)
-            print('pgram_txt:',pgram_txt)
             for i in range(0,len(pgram_txt)):
                 txt2[i][0]=pgram_txt[i][0]*m.txt_frac_w
                 txt2[i][1]=pgram_txt[i][1]*m.txt_frac_h
-            print('txt2:',txt2)
             gf.vt_list=txt2
             
         self.to.add_object(gf)

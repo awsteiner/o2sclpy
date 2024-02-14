@@ -741,19 +741,20 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
     function does nothing. If the input and output filenames are the
     same, and the width and height are not a power of two, then this
     function will throw an exception to help prevent the user from
-    inadvertently overwriting the original file.
+    inadvertently overwriting the original file. This function will
+    overwrite the output file when the input and output filenames
+    are different. 
 
-    The default background color is transparent.
+    The default background color is black.
 
-    If verbose is greater than 0, then the system call is printed to
+    If verbose is greater than 1, then several details are written to 
     stdout.
 
     """
-
     import tempfile
     from PIL import Image
     
-    if verbose>0:
+    if verbose>1:
         print('png_power_two(): png_input, png_output:',
               png_input,png_output)
         
@@ -767,7 +768,7 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
     h=img.height
     w_new=2**(int(numpy.log2(w-1))+1)
     h_new=2**(int(numpy.log2(h-1))+1)
-    if verbose>0:
+    if verbose>1:
         print('png_power_two(): w, h, w_new, h_new:',w,h,w_new,h_new)
 
     # If these are all equal, there is nothing to do
@@ -775,7 +776,7 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
 
         # No resizing required and the files are the same
         if png_input==png_output:
-            if verbose>0:
+            if verbose>1:
                 print('png_power_two(): Skipping.')
             return
         
@@ -792,15 +793,28 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
 
     # Use Pillow to resize the image, giving new pixes the color
     # specified in bgcolor
-    img_new=Image.new(img.mode,(w_new,h_new),
+    print('here',bgcolor)
+    img_new=Image.new('RGBA',(w_new,h_new),
                       ('rgba('+str(bgcolor[0])+','+str(bgcolor[1])+','+
                        str(bgcolor[2])+','+str(bgcolor[3])+')'))
     img_new.paste(img,(0,0))
+    if True:
+        dat=img_new.getdata()
+        count1=0
+        count2=0
+        for px in dat:
+            count1=count1+1
+            if px[3]==0:
+                count2=count2+1
+                px=(bgcolor[0],bgcolor[1],bgcolor[2],
+                    bgcolor[3])
+        print('count',count1,count2)
+        img_new.putdata(dat)
     img_new.save(png_output)
     
     return img.width,img.height,w_new,h_new
 
-def latex_to_png(tex: str, png_file: str, verbose: int = 3,
+def latex_to_png(tex: str, png_file: str, verbose: int = 0,
                  packages = []):
     """A simple routine to convert a LaTeX string to a png image.
 
