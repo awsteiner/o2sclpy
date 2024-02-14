@@ -181,8 +181,8 @@ class mesh_object:
     """
     
     mat: str = ''
-    """The name of the material (blank for none, or for different material for
-    each face)
+    """The name of the material (blank for none, or for different material
+    for each face)
 
     Note that this string might be nonempty even when some of the
     faces explicitly specify a material. In this case, this string
@@ -190,7 +190,7 @@ class mesh_object:
     not specify their own material.
 
     If this string is non-empty, but all of the faces specify a 
-    material, then the ``sort_by_mat()`` function will 
+    material, then the ``sort_by_mat()`` function will
     """
     obj_type: str = 'triangles'
     """
@@ -217,7 +217,6 @@ class mesh_object:
     def sort_by_mat(self, verbose : int = 0):
         """Sort the faces by material name, ensuring that the group and
         material commands do not have to be issued for each face.
-
         """
 
         # If no materials are specified in faces, there is nothing to do
@@ -301,7 +300,7 @@ class mesh_object:
         return
 
 def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
-                dir='x',end_mat='white',flatten='',verbose=0):
+                dir='x',end_mat='white',verbose=0):
     """
     Create a rectangular prism with textures from a png created by a
     LaTeX string on four sides.
@@ -324,7 +323,8 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
     latex_to_png(latex,temp_png_name,verbose=verbose)
     w,h,w_new,h_new=png_power_two(temp_png_name,wdir+'/'+png_file,
                                   verbose=verbose,
-                                  bgcolor=[255,255,255,255])
+                                  bgcolor=[255,255,255,255],
+                                  flatten=True)
                                  
     face=[]
     vert=[]
@@ -506,164 +506,11 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
         #quit()
 
     return vert2,face,txts,norms2,m
-            
-def latex_rectangle(x1,y1,z1,x2,y2,z2,x3,y3,z3,latex,wdir,png_file,
-                    mat_name,flatten='',packages=[]):
-    """Create a rectangle based on a lower-left corner at [x1,y1,z1],
-    lower right corner at [x2,y2,z2], and an upper-left corner at
-    [x3,y3,z3] from LaTeX string in ``latex``. The LaTeX png
-    is rescaled downwards to fit inside the rectange, and the 
-    coordinates of the rectangle are modified to match the LaTeX 
-    png.
-
-    The LaTeX texture is stored in a file named ``png_file`` and a new
-    material is created named ``mat_name``. If a ``flatten`` color
-    is specified,
-    then the LaTeX image is flattened and the specified color is used
-    for the background.
-    """
-
-    w,h,w_new,h_new=latex_to_png(latex,wdir+'/'+png_file,
-                                 power_two=True,flatten=flatten,
-                                 packages=packages)
-                                 
-    # Adjust the distance between 1->2 and 3->4 from the LaTeX
-    old_height=dist3([x1,y1,z1],[x3,y3,z3])
-    old_width=dist3([x1,y1,z1],[x2,y2,z2])
     
-    if float(w_new)/float(h_new)>old_width/old_height:
-        
-        # The LaTeX image is wider, so set the new width to
-        # the old width and then fix the height to match
-        new_width=old_width
-        new_height=float(h_new)*old_width/float(w_new)
-        
-        x3=(x3-x1)*new_height/old_height+x1
-        y3=(y3-y1)*new_height/old_height+y1
-        z3=(z3-z1)*new_height/old_height+z1
-    
-    else:
-        
-        # The LaTeX image is taller, so set the new height to
-        # the old height and then fix the width to match
-        new_height=old_height
-        new_width=float(w_new)*old_height/float(h_new)
-        
-        x2=(x2-x1)*new_width/old_width+x1
-        y2=(y2-y1)*new_width/old_width+y1
-        z2=(z2-z1)*new_width/old_width+z1
-    
-    # Construct the fourth vertex, fixing the rectangle in a plane
-    x4=(x2-x1)+x3
-    y4=(y2-y1)+y3
-    z4=(z2-z1)+z3
-    print('x1,y1,z1',x1,y1,z1)
-    print('x2,y2,z2',x2,y2,z2)
-    print('x3,y3,z3',x3,y3,z3)
-    print('x4,y4,z4',x4,y4,z4)
-    
-    # Create the LaTeX material
-    m=material(mat_name,txt=png_file,alpha_mode='blend')
-    
-    face=[]
-    vert=[]
-    facet=[]
-    text_uv=[]
-    
-    # Add the 4 vertices
-    vert.append([x1,y1,z1])
-    vert.append([x2,y2,z2])
-    vert.append([x3,y3,z3])
-    vert.append([x4,y4,z4])
-    
-    # Append the four texture coordinates
-    text_uv.append([0.0,float(h)/float(h_new)])
-    text_uv.append([0.0,0.0])
-    text_uv.append([float(w)/float(w_new),float(h)/float(h_new)])
-    text_uv.append([float(w)/float(w_new),0.0])
-    
-    # The four sides with labels
-    face.append([1,2,3,1,3,2,mat_name])
-    face.append([3,2,4,2,3,4,mat_name])
-    
-    # Rearrange for GLTF. to compute normals, we use the cross
-    # products.
-
-    vert2=[]
-    txts=[]
-    norms2=[]
-    
-    for i in range(0,len(face)):
-
-        # Add the vertices to the new vertex array
-        vert2.append(vert[face[i][0]-1])
-        vert2.append(vert[face[i][1]-1])
-        vert2.append(vert[face[i][2]-1])
-
-        # Compute the norm
-        p1=vert[face[i][0]-1]
-        p2=vert[face[i][1]-1]
-        p3=vert[face[i][2]-1]
-        v1=[1]*3
-        v2=[1]*3
-        for j in range(0,3):
-            v1[j]=p2[j]-p1[j]
-            v2[j]=p3[j]-p2[j]
-        norm=cross(v1,v2,norm=True)
-        for k in range(0,3):
-            norms2.append([norm[0],norm[1],norm[2]])
-
-        if len(face[i])>=7:
-            # Texture coordinates in the case of a image
-            txts.append([text_uv[face[i][3]-1][0],
-                         text_uv[face[i][3]-1][1]])
-            txts.append([text_uv[face[i][4]-1][0],
-                         text_uv[face[i][4]-1][1]])
-            txts.append([text_uv[face[i][5]-1][0],
-                         text_uv[face[i][5]-1][1]])
-            face[i]=[i*3,i*3+1,i*3+2,face[i][6]]
-        else:
-            # Default texture coordinates for no image
-            txts.append([text_uv[3][0],
-                         text_uv[3][1]])
-            txts.append([text_uv[0][0],
-                         text_uv[0][1]])
-            txts.append([text_uv[1][0],
-                         text_uv[1][1]])
-            face[i]=[i*3,i*3+1,i*3+2,face[i][3]]
-
-    # Print out results
-    if False:
-        for ki in range(0,len(vert2),3):
-            print('%d [%d,%d,%d] mat: %s' % (int(ki/3),face[int(ki/3)][0],
-                                             face[int(ki/3)][1],
-                                             face[int(ki/3)][2],
-                                             face[int(ki/3)][3]))
-            print(('0 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
-                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki][0],vert2[ki][1],
-                                             vert2[ki][2],txts[ki][0],
-                                             txts[ki][1],norms2[ki][0],
-                                             norms2[ki][1],norms2[ki][2]))
-            print(('1 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
-                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+1][0],vert2[ki+1][1],
-                                             vert2[ki+1][2],txts[ki+1][0],
-                                             txts[ki+1][1],norms2[ki+1][0],
-                                             norms2[ki+1][1],norms2[ki+1][2]))
-            print(('2 [%7.6e,%7.6e,%7.6e] [%7.6e,%7.6e] '+
-                   '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+2][0],vert2[ki+2][1],
-                                             vert2[ki+2][2],txts[ki+2][0],
-                                             txts[ki+2][1],norms2[ki+2][0],
-                                             norms2[ki+2][1],norms2[ki+2][2]))
-            print('')
-            
-        #quit()
-
-    return vert2,face,txts,norms2,m
-            
 def parallelogram(x1,y1,z1,x2,y2,z2,x3,y3,z3,mat_name='',verbose=0,
                   force_rect=False):
     """Create the vertices, faces, and norms for a 3d visualization of a
-    parallelogram. 
+    parallelogram.
 
     Points 1, 2, and 3 should be the lower-left corner, the
     lower-right corner, and the upper-left corner, respectively. These
@@ -2288,6 +2135,8 @@ class td_plot_base(yt_plot_base):
             txt=tex_png_name
             latex_png=True
 
+        txt_out_base=txt
+            
         if txt!='':
             
             # Process the texture:
@@ -2442,7 +2291,7 @@ class td_plot_base(yt_plot_base):
 
     def td_pgram(self,x1,y1,z1,x2,y2,z2,x3,y3,z3,
                  name='pgram',mat='',force_rect=False,
-                 match_txt=False):
+                 match_txt=False,coords='user'):
         """Documentation for o2graph command ``td-pgram``:
 
         Plot a parallelogram in a 3D visualization (experimental)
@@ -2452,7 +2301,6 @@ class td_plot_base(yt_plot_base):
         """
         uname=self.to.make_unique_name(name)
 
-        coords='internal'
         if coords=='user':
             if self.xset==False or self.yset==False or self.zset==False:
                 raise ValueError("User coordinates not set in"+
@@ -2601,8 +2449,7 @@ class td_plot_base(yt_plot_base):
                                             -offset-height/2.0,
                                             tex_label,
                                             self.td_wdir,png_file,tex_mat_name,
-                                            dir=ldir,end_mat=end_mat_name,
-                                            flatten=flatten)
+                                            dir=ldir,end_mat=end_mat_name)
 
             self.to.add_mat(x_m)
             gf=mesh_object(group_name,x_f)
@@ -2630,8 +2477,7 @@ class td_plot_base(yt_plot_base):
                                             0.5,-offset-height/2.0,
                                             tex_label,
                                             self.td_wdir,png_file,tex_mat_name,
-                                            dir=ldir,end_mat=end_mat_name,
-                                            flatten=flatten)
+                                            dir=ldir,end_mat=end_mat_name)
             
             self.to.add_mat(y_m)
             gf=mesh_object(group_name,y_f)
@@ -2659,8 +2505,7 @@ class td_plot_base(yt_plot_base):
                                             -offset-height/2.0,0.5,
                                             tex_label,
                                             self.td_wdir,png_file,tex_mat_name,
-                                            dir=ldir,end_mat=end_mat_name,
-                                            flatten=flatten)
+                                            dir=ldir,end_mat=end_mat_name)
             
             self.to.add_mat(z_m)
             gf=mesh_object(group_name,z_f)

@@ -725,7 +725,7 @@ def force_string(obj):
     return obj
 
 def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
-                  verbose: int = 0):
+                  verbose: int = 0, flatten: bool = False):
     """Read a PNG image from ``png_input``, resize it to ensure the width
     and height are both a power of two, and store the resulting file
     in ``png_output``.
@@ -749,7 +749,6 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
 
     If verbose is greater than 1, then several details are written to 
     stdout.
-
     """
     import tempfile
     from PIL import Image
@@ -793,23 +792,22 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
 
     # Use Pillow to resize the image, giving new pixes the color
     # specified in bgcolor
-    print('here',bgcolor)
     img_new=Image.new('RGBA',(w_new,h_new),
                       ('rgba('+str(bgcolor[0])+','+str(bgcolor[1])+','+
                        str(bgcolor[2])+','+str(bgcolor[3])+')'))
     img_new.paste(img,(0,0))
-    if True:
+    if flatten:
         dat=img_new.getdata()
-        count1=0
-        count2=0
+        dat_new=[]
         for px in dat:
-            count1=count1+1
+            # Convert transparent pixels to the specified background
+            # color
             if px[3]==0:
-                count2=count2+1
-                px=(bgcolor[0],bgcolor[1],bgcolor[2],
-                    bgcolor[3])
-        print('count',count1,count2)
-        img_new.putdata(dat)
+                dat_new.append((bgcolor[0],bgcolor[1],bgcolor[2],
+                                bgcolor[3]))
+            else:
+                dat_new.append(px)
+        img_new.putdata(dat_new)
     img_new.save(png_output)
     
     return img.width,img.height,w_new,h_new
@@ -822,6 +820,11 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 0,
     by dollar signs. A temporary file is created, and then that file
     is processed by ``pdflatex`` and then the output is renamed to the
     filename specified by the user with ``mv``. 
+
+    The standalone LaTeX package is used to make png, and the default
+    background is transparent, but the antialiasing used to render the
+    equations means that only white backgrounds work without creating
+    edge effects.
     """
     import tempfile
 
