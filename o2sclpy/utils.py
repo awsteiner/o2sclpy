@@ -323,7 +323,7 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
     [1] https://danielsieger.com/blog/2021/03/27/generating-spheres.html
     """
     import copy
-    
+
     phi=(1.0+numpy.sqrt(5.0))*0.5
     b=r/phi;
     fact=numpy.sqrt(phi)/(5**0.25)
@@ -610,6 +610,10 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
     # Print out results
     if False:
         print('x,y,z,r:',x,y,z,r)
+        print('index face[index][0,1,2]')
+        print('  0 vert norm')
+        print('  1 vert norm')
+        print('  2 vert norm')
         for ki in range(0,len(vert2),3):
             print('%d [%d,%d,%d]' % (int(ki/3),face2[int(ki/3)][0],
                                      face2[int(ki/3)][1],
@@ -626,18 +630,18 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
                    '[%7.6e,%7.6e,%7.6e]') % (vert2[ki+2][0],vert2[ki+2][1],
                                              vert2[ki+2][2],norms2[ki+2][0],
                                              norms2[ki+2][1],norms2[ki+2][2]))
-            xtmp=[vert2[ki][0],vert2[ki][1],vert2[ki][2]]
-            ytmp=[vert2[ki+1][0],vert2[ki+1][1],vert2[ki+1][2]]
-            ztmp=[vert2[ki+2][0],vert2[ki+2][1],vert2[ki+2][2]]
-            print('d1 %7.6e' % (numpy.sqrt((xtmp[0]-ytmp[0])**2+
-                                           (xtmp[1]-ytmp[1])**2+
-                                           (xtmp[2]-ytmp[2])**2)))
-            print('d2 %7.6e' % (numpy.sqrt((ztmp[0]-ytmp[0])**2+
-                                           (ztmp[1]-ytmp[1])**2+
-                                           (ztmp[2]-ytmp[2])**2)))
-            print('d3 %7.6e' % (numpy.sqrt((xtmp[0]-ztmp[0])**2+
-                                           (xtmp[1]-ztmp[1])**2+
-                                           (xtmp[2]-ztmp[2])**2)))
+            # xtmp=[vert2[ki][0],vert2[ki][1],vert2[ki][2]]
+            # ytmp=[vert2[ki+1][0],vert2[ki+1][1],vert2[ki+1][2]]
+            # ztmp=[vert2[ki+2][0],vert2[ki+2][1],vert2[ki+2][2]]
+            # print('d1 %7.6e' % (numpy.sqrt((xtmp[0]-ytmp[0])**2+
+            #                                (xtmp[1]-ytmp[1])**2+
+            #                                (xtmp[2]-ytmp[2])**2)))
+            # print('d2 %7.6e' % (numpy.sqrt((ztmp[0]-ytmp[0])**2+
+            #                                (ztmp[1]-ytmp[1])**2+
+            #                                (ztmp[2]-ytmp[2])**2)))
+            # print('d3 %7.6e' % (numpy.sqrt((xtmp[0]-ztmp[0])**2+
+            #                                (xtmp[1]-ztmp[1])**2+
+            #                                (xtmp[2]-ztmp[2])**2)))
             print('')
 
         print(len(vert2),len(norms2),len(face2))
@@ -725,7 +729,8 @@ def force_string(obj):
     return obj
 
 def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
-                  verbose: int = 0, flatten: bool = False):
+                  verbose: int = 0, flatten: bool = False,
+                  resize: bool = True):
     """Read a PNG image from ``png_input``, resize it to ensure the width
     and height are both a power of two, and store the resulting file
     in ``png_output``.
@@ -790,24 +795,27 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
                          'appears to be required, but the input and ouput '+
                          'filenames are the same.')
 
-    # Use Pillow to resize the image, giving new pixes the color
-    # specified in bgcolor
-    img_new=Image.new('RGBA',(w_new,h_new),
-                      ('rgba('+str(bgcolor[0])+','+str(bgcolor[1])+','+
-                       str(bgcolor[2])+','+str(bgcolor[3])+')'))
-    img_new.paste(img,(0,0))
-    if flatten:
-        dat=img_new.getdata()
-        dat_new=[]
-        for px in dat:
-            # Convert transparent pixels to the specified background
-            # color
-            if px[3]==0:
-                dat_new.append((bgcolor[0],bgcolor[1],bgcolor[2],
-                                bgcolor[3]))
-            else:
-                dat_new.append(px)
-        img_new.putdata(dat_new)
+    if resize:
+        img_new=img.resize((w_new,h_new))
+    else:
+        # Use Pillow to resize the image, giving new pixes the color
+        # specified in bgcolor
+        img_new=Image.new('RGBA',(w_new,h_new),
+                          ('rgba('+str(bgcolor[0])+','+str(bgcolor[1])+','+
+                           str(bgcolor[2])+','+str(bgcolor[3])+')'))
+        img_new.paste(img,(0,0))
+        if flatten:
+            dat=img_new.getdata()
+            dat_new=[]
+            for px in dat:
+                # Convert transparent pixels to the specified background
+                # color
+                if px[3]==0:
+                    dat_new.append((bgcolor[0],bgcolor[1],bgcolor[2],
+                                    bgcolor[3]))
+                else:
+                    dat_new.append(px)
+            img_new.putdata(dat_new)
     img_new.save(png_output)
     
     return img.width,img.height,w_new,h_new

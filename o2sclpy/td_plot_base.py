@@ -351,8 +351,10 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
         z2=zcent+width/2.0
 
     m=material(mat_name,txt=png_file)
-    m.txt_frac_w=float(w)/float(w_new)
-    m.txt_frac_h=float(h)/float(h_new)
+    #m.txt_frac_w=float(w)/float(w_new)
+    #m.txt_frac_h=float(h)/float(h_new)
+    m.txt_frac_w=1.0
+    m.txt_frac_h=1.0
     m.txt_w=w_new
     m.txt_h=h_new
 
@@ -2192,8 +2194,11 @@ class td_plot_base(yt_plot_base):
                 w,h,w_new,h_new=png_power_two(txt,txt_out,
                                               bgcolor=bgcolor,
                                               verbose=self.verbose)
-                txt_dim=(float(w)/float(w_new),
-                         float(h)/float(h_new))
+                if False:
+                    txt_dim=(float(w)/float(w_new),
+                             float(h)/float(h_new))
+                else:
+                    txt_dim=(1.0,1.0)
                 if self.verbose>1:
                     print('td_mat(): txt_dim:',txt_dim)
 
