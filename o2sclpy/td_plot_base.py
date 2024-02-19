@@ -324,7 +324,7 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
     w,h,w_new,h_new=png_power_two(temp_png_name,wdir+'/'+png_file,
                                   verbose=verbose,
                                   bgcolor=[255,255,255,255],
-                                  flatten=True)
+                                  flatten=True,resize=False)
                                  
     face=[]
     vert=[]
@@ -351,10 +351,8 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
         z2=zcent+width/2.0
 
     m=material(mat_name,txt=png_file)
-    #m.txt_frac_w=float(w)/float(w_new)
-    #m.txt_frac_h=float(h)/float(h_new)
-    m.txt_frac_w=1.0
-    m.txt_frac_h=1.0
+    m.txt_frac_w=float(w)/float(w_new)
+    m.txt_frac_h=float(h)/float(h_new)
     m.txt_w=w_new
     m.txt_h=h_new
 
@@ -367,11 +365,13 @@ def latex_prism(x1,y1,z1,x2,y2,z2,latex,wdir,png_file,mat_name,
     vert.append([x2,y1,z2])
     vert.append([x1,y2,z2])
     vert.append([x2,y2,z2])
-    
-    text_uv.append([0.0,float(h)/float(h_new)])
-    text_uv.append([0.0,0.0])
-    text_uv.append([float(w)/float(w_new),float(h)/float(h_new)])
-    text_uv.append([float(w)/float(w_new),0.0])
+
+    h_start=(1.0-m.txt_frac_h)/2.0
+    w_start=(1.0-m.txt_frac_w)/2.0
+    text_uv.append([w_start,m.txt_frac_h+h_start])
+    text_uv.append([w_start,h_start])
+    text_uv.append([m.txt_frac_w+w_start,m.txt_frac_h+h_start])
+    text_uv.append([m.txt_frac_w+w_start,h_start])
 
     if dir=='x':
         
@@ -2082,7 +2082,7 @@ class td_plot_base(yt_plot_base):
                ds: bool=True, txt: str='',
                alpha_mode : str = 'opaque', alpha_cutoff: float = 0.5,
                efr: float = 0.0, efg: float = 0.0, efb: float = 0.0,
-               packages: str = '', prefix: str = ''):
+               packages: str = '', prefix: str = '', resize: bool = True):
         """Documentation for o2graph command ``td-mat``:
 
         Create a 3d material (experimental)
@@ -2193,8 +2193,9 @@ class td_plot_base(yt_plot_base):
                          (int)(alpha*255)]
                 w,h,w_new,h_new=png_power_two(txt,txt_out,
                                               bgcolor=bgcolor,
-                                              verbose=self.verbose)
-                if False:
+                                              verbose=self.verbose,
+                                              resize=resize)
+                if resize==False:
                     txt_dim=(float(w)/float(w_new),
                              float(h)/float(h_new))
                 else:

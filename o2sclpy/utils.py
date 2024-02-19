@@ -736,8 +736,8 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
     in ``png_output``.
 
     This function returns a tuple of four numbers, the width and
-    height of the original image, and the width and height
-    of the new image. 
+    height of the original image (incremented by one if necessary to
+    make them even), and the width and height of the new image.
 
     This function uses Pillow to determine the original width and
     height and perform the resizing. If the width and height are
@@ -754,6 +754,7 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
 
     If verbose is greater than 1, then several details are written to 
     stdout.
+
     """
     import tempfile
     from PIL import Image
@@ -775,8 +776,11 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
     if verbose>1:
         print('png_power_two(): w, h, w_new, h_new:',w,h,w_new,h_new)
 
+    wadj=w+(w%2)
+    hadj=h+(h%2)
+        
     # If these are all equal, there is nothing to do
-    if w_new==w and h_new==h:
+    if w_new==w and h_new==h and odd==False:
 
         # No resizing required and the files are the same
         if png_input==png_output:
@@ -785,10 +789,10 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
             return
         
         # No resizing required, so just copy
-        cmdm1='cp '+png_input+' '+png_output
+        cmd='cp '+png_input+' '+png_output
         if verbose>1:
-            print('png_power_two(): Running shell command to copy:',cmdm1)
-        os.system(cmdm1)
+            print('png_power_two(): Running shell command to copy:',cmd)
+        os.system(cmd)
 
     if png_input==png_output:
         raise ValueError('In function png_power_two(): Resizing '+
@@ -796,14 +800,20 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
                          'filenames are the same.')
 
     if resize:
+        
         img_new=img.resize((w_new,h_new))
+        
     else:
+        
         # Use Pillow to resize the image, giving new pixes the color
         # specified in bgcolor
         img_new=Image.new('RGBA',(w_new,h_new),
                           ('rgba('+str(bgcolor[0])+','+str(bgcolor[1])+','+
                            str(bgcolor[2])+','+str(bgcolor[3])+')'))
-        img_new.paste(img,(0,0))
+
+        # Ensure the image is centered
+        img_new.paste(img,((w_new-w)/2,(h_new-h)/2))
+        
         if flatten:
             dat=img_new.getdata()
             dat_new=[]
@@ -816,9 +826,11 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
                 else:
                     dat_new.append(px)
             img_new.putdata(dat_new)
+
+    # Save the new image in the output PNG file
     img_new.save(png_output)
     
-    return img.width,img.height,w_new,h_new
+    return wadj,hadj,w_new,h_new
 
 def latex_to_png(tex: str, png_file: str, verbose: int = 0,
                  packages = []):
