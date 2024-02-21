@@ -812,7 +812,7 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
                            str(bgcolor[2])+','+str(bgcolor[3])+')'))
 
         # Ensure the image is centered
-        img_new.paste(img,((w_new-w)/2,(h_new-h)/2))
+        img_new.paste(img,(int((w_new-w)/2),int((h_new-h)/2)))
         
         if flatten:
             dat=img_new.getdata()
@@ -832,6 +832,35 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
     
     return wadj,hadj,w_new,h_new
 
+def cmap_to_png(cmap: str, png_file: str, verbose: int = 0):
+    """
+    Convert a cmap to a png file which is 2 pixels high and
+    256 pixels wide and store it in ``png_file``. 
+    """
+
+    from PIL import Image
+    import matplotlib.cm as cm
+    from matplotlib.colors import Normalize
+    import matplotlib.pyplot as plot
+    
+    img=Image.new('RGBA',(256,2))
+
+    color_map=cm.get_cmap(cmap)
+    norm=plot.Normalize(0,255)
+    
+    dat=[]
+    for i in range(0,512):
+
+        ifl=float(i%256)/255.0
+        rgb=color_map(ifl)[:3]
+        dat.append((int(255*rgb[0]),int(255*rgb[1]),
+                    int(255*rgb[2]),255))
+
+    img.putdata(dat)
+    img.save(png_file)
+            
+    return
+    
 def latex_to_png(tex: str, png_file: str, verbose: int = 0,
                  packages = []):
     """A simple routine to convert a LaTeX string to a png image.

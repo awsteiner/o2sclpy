@@ -31,7 +31,7 @@ from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot, cross
 from o2sclpy.utils import is_number, arrow, icosphere, png_power_two
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
-from o2sclpy.utils import string_equal_dash, latex_to_png
+from o2sclpy.utils import string_equal_dash, latex_to_png, cmap_to_png
 from o2sclpy.utils import force_string, remove_spaces, dist3
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
@@ -2118,8 +2118,20 @@ class td_plot_base(yt_plot_base):
         # ``txt`` with the png filename.
 
         latex_png=False
+        cmap_png=False
         
-        if txt[0:6]=='latex:':
+        if txt[0:5]=='cmap:':
+            
+            self.latex_png_counter=self.latex_png_counter+1
+            cmap_png_name=(self.td_wdir+'/'+prefix+'cmap'+
+                           str(self.latex_png_counter)+'.png')
+            cmap_to_png(txt[5:],cmap_png_name)
+            
+            txt=cmap_png_name
+            cmap_png=True
+            
+        elif txt[0:6]=='latex:':
+            
             latex=txt[6:]
             self.latex_png_counter=self.latex_png_counter+1
             tex_png_name=(self.td_wdir+'/'+prefix+'latex'+
