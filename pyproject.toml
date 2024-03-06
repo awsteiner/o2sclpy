@@ -26,8 +26,8 @@ cli = [
 ]
 
 [project.scripts]
-o2graph = "o2sclpy:o2graph"
+o2graph = "o2sclpy.o2graph:o2graph"
 
 [project.urls]
-Homepage = "https://github.com/awsteiner/o2sclpy"
+Homepage = "http://neutronstars.utk.edu/code/o2sclpy/"
 Issues = "https://github.com/awsteiner/o2sclpy/issues"
