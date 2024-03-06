@@ -1,0 +1,33 @@
+[project]
+name = "o2sclpy"
+version = "0.929a1"
+authors = [
+  { name="Andrew W. Steiner", email="awsteiner0@protonmail.com" },
+]
+description = "Python extensions for O2scl"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["numpy","matplotlib>=3.1"]
+classifiers = [
+   "Development Status :: 4 - Beta",
+   "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+   "Programming Language :: Python :: 3 :: Only",
+   "Topic :: Scientific/Engineering"
+]
+license = {file = "LICENSE"}
+keywords = ["o2scl"]
+
+[project.optional-dependencies]
+cli = [
+  "yt",
+  "scikit-learn",
+  "tensorflow",
+  "scipy"
+]
+
+[project.scripts]
+o2sclpy-o2g = "o2sclpy:o2g"
+
+[project.urls]
+Homepage = "https://github.com/awsteiner/o2sclpy"
+Issues = "https://github.com/awsteiner/o2sclpy/issues"
