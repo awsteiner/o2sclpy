@@ -23,9 +23,11 @@
 import sys
 import os
 
-def o2g():
+def o2graph():
 
     from o2sclpy.link_o2scl import linker
+
+    print('here',sys.argv)
     
     l=linker()
     backend=l.get_library_settings(sys.argv)
