@@ -2459,7 +2459,7 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_axis_label(): png_file:',png_file,'tex_mat_name:',
                       tex_mat_name,'group_name:',group_name,'flatten:',
-                      flatten,type(flatten))
+                      flatten,'type(flatten):',type(flatten))
 
             x_v,x_f,x_t,x_n,x_m=latex_prism(0.5,-offset-height/2.0,
                                             -offset+height/2.0,0.5,
@@ -2467,7 +2467,8 @@ class td_plot_base(yt_plot_base):
                                             -offset-height/2.0,
                                             tex_label,
                                             self.td_wdir,png_file,tex_mat_name,
-                                            dir=ldir,end_mat=end_mat_name)
+                                            dir=ldir,end_mat=end_mat_name,
+                                            verbose=self.verbose)
 
             self.to.add_mat(x_m)
             gf=mesh_object(group_name,x_f)
