@@ -309,8 +309,6 @@ class kde_scipy:
         using a string to specify the keyword arguments.
         """
 
-        print('Here in kde_scipy::set_data_str().')
-        
         try:
             dct=self.string_to_dict(options)
             if self.verbose>1:
