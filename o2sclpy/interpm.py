@@ -250,7 +250,7 @@ class interpm_tf_dnn:
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  activations=['relu','relu'],
                  batch_size=None,epochs=100,
-                 transform='default',test_size=0.0,evaluate=False,
+                 transform='none',test_size=0.0,evaluate=False,
                  hlayers=[8,8],loss='mean_squared_error'):
         """
         Set the input and output data to train the interpolator
@@ -286,13 +286,15 @@ class interpm_tf_dnn:
 
         from sklearn.preprocessing import QuantileTransformer
         from sklearn.preprocessing import MinMaxScaler
-        if self.transform!='none':
-            if activation=='tanh':
-                self.SS1=MinMaxScaler(feature_range=(-1,1))
-                self.SS2=MinMaxScaler(feature_range=(-1,1))
-            else:
-                self.SS1=QuantileTransformer()
-                self.SS2=QuantileTransformer()
+        if self.transform=='moto':
+            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            self.SS2=MinMaxScaler(feature_range=(-1,1))
+        
+            in_data_trans=self.SS1.fit_transform(in_data)
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform=='quant':
+            self.SS1=QuantileTransformer()
+            self.SS2=QuantileTransformer()
         
             in_data_trans=self.SS1.fit_transform(in_data)
             out_data_trans=self.SS2.fit_transform(out_data)
