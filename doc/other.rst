@@ -18,6 +18,8 @@ Other classes from O\ :sub:`2`\ scl
 * :ref:`Class contour_line`
 * :ref:`Class vector_contour_line`
 * :ref:`Class contour`
+* :ref:`Class prob_dens_func`
+* :ref:`Class prob_dens_gaussian`
 * :ref:`Class prob_dens_mdim`
 * :ref:`Class prob_dens_mdim_biv_gaussian`
 * :ref:`Class prob_dens_mdim_gaussian`
@@ -167,6 +169,29 @@ Class contour
 -------------
 
 .. autoclass:: o2sclpy.contour
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class prob_dens_func
+--------------------
+
+.. autoclass:: o2sclpy.prob_dens_func
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __getitem__
+
+Class prob_dens_gaussian
+------------------------
+
+.. autoclass:: o2sclpy.prob_dens_gaussian
         :members:
         :undoc-members:
 
