@@ -42,6 +42,7 @@ doc: .empty
 	cd examples; $(MAKE) tov.ipynb
 	cd examples; $(MAKE) unit_conv.ipynb
 	cd examples; $(MAKE) skyrme.ipynb
+	cd examples; $(MAKE) interpm.ipynb
 	cd examples; $(MAKE) nucmass.ipynb
 	cd examples; $(MAKE) SFHo_SFHx.ipynb
 	cd examples; $(MAKE) DSH.ipynb
@@ -60,6 +61,7 @@ test:
 		examples/table.py \
 		examples/unit_conv.py \
 		examples/skyrme.py \
+		examples/interpm.py \
 		examples/nucmass.py \
 		examples/SFHo_SFHx.py \
 		examples/DSH.py \
@@ -75,6 +77,7 @@ testq:
 		examples/table.py \
 		examples/unit_conv.py \
 		examples/skyrme.py \
+		examples/interpm.py \
 		examples/nucmass.py \
 		examples/SFHo_SFHx.py \
 		examples/DSH.py \

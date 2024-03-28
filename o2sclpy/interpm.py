@@ -146,6 +146,9 @@ class interpm_sklearn_gp:
         """
         Evaluate the GP at point ``v``.
         """
+
+        # AWS, 3/27/24: Keep in mind that o2scl::interpm_python.eval()
+        # expects the return type to be a numpy array. 
         yp=self.gp.predict([v])
         if self.outformat=='list':
             if self.verbose>1:
@@ -165,6 +168,10 @@ class interpm_sklearn_gp:
     def eval_unc(self,v):
         """
         Evaluate the GP and its uncertainty at point ``v``.
+
+        # AWS, 3/27/24: Keep in mind that
+        # o2scl::interpm_python.eval_unc() expects the return type to
+        # be a tuple of numpy arrays. 
         """
         yp,std=self.gp.predict([v],return_std=True)
         if self.outformat=='list':

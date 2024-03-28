@@ -48,13 +48,13 @@ def test_all():
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
         interp=im.eval(v)
-        print('exact,interp: %7.6e %7.6e' % (exact,interp))
-        assert numpy.allclose(exact,interp,rtol=1.0e-3)
+        print('exact,interp: %7.6e %7.6e' % (exact,interp[0]))
+        assert numpy.allclose(exact,interp[0],rtol=1.0e-3)
         
         interp2,std2=im.eval_unc(v)
-        print('exact,interp: %7.6e %7.6e %7.6e' % (exact,interp,std2))
-        assert numpy.allclose(exact,interp2,rtol=1.0e-4)
-        assert numpy.allclose(0,std2,atol=1.0e-4)
+        print('exact,interp: %7.6e %7.6e %7.6e' % (exact,interp[0],std2[0]))
+        assert numpy.allclose(exact,interp2[0],rtol=1.0e-4)
+        assert numpy.allclose(0,std2[0],atol=1.0e-4)
 
     if True:
         im2=o2sclpy.interpm_tf_dnn()

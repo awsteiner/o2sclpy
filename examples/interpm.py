@@ -5,9 +5,10 @@
 # +
 import o2sclpy
 import matplotlib.pyplot as plot
-import ctypes
+import random
 import numpy
 import sys
+from IPython.utils import io
 
 plots=True
 if 'pytest' in sys.modules:
@@ -32,20 +33,19 @@ for i in range(0,t3d.get_nx()):
         r=numpy.sqrt(x**2+y**2)+numpy.cos(x*4)-y
         t3d.set(i,j,"z",numpy.sin(r*5))
 
+# Make a density plot of the original data set:
+        
 if plots:
     pl=o2sclpy.plot_base()
-
-if plots:
     pl.canvas()
     pl.den_plot([t3d,"z"])
     pl.colbar=True
-    #pl.xtitle('radius (km)')
-    #pl.ytitle('gravitational mass (Msun)')
+    pl.xtitle('x')
+    pl.ytitle('y')
     plot.show()
 
 # Collect function values scattered across this plane:
 
-import random
 N=300
 x2=numpy.zeros((N,2))
 y2=numpy.zeros((N,1))
@@ -54,8 +54,13 @@ for i in range(0,N):
     x2[i,1]=random.random()*2.0
     y2[i,0]=t3d.interp(x2[i,0],x2[i,1],"z")
 
+# Create the Gaussian process interpolation object and train it with
+# the scattered function values
+    
 im=o2sclpy.interpm_sklearn_gp()
 im.set_data_str(x2,y2,'test_size=0.1')
+
+# Use the Gaussian process to fill the plane
 
 t3d.new_slice("gp")
 for i in range(0,t3d.get_nx()):
@@ -64,26 +69,38 @@ for i in range(0,t3d.get_nx()):
         y=t3d.get_grid_y(j)
         t3d.set(i,j,"gp",im.eval(numpy.array([x,y])))
 
+# Make a comparison plot
+        
 if plots:
     pl.canvas()
     pl.den_plot([t3d,"gp"])
     pl.colbar=True
     plot.show()
 
-# %%capture out1
+# Create the neural network interpolation object
+    
 im2=o2sclpy.interpm_tf_dnn()
-im2.set_data(x2,y2,verbose=1,epochs=2000,
-             transform='none',test_size=0.0,
-             activations=['relu','relu','relu','relu'],
-             hlayers=[256,128,64,16])
+print(' ')
 
-lines1=out1.stdout.split('\n')
+# Train the neural network, but capture the output
+
+with io.capture_output() as cap:
+    im2.set_data(x2,y2,verbose=1,epochs=2000,
+                 transform='none',test_size=0.0,
+                 activations=['relu','relu','relu','relu'],
+                 hlayers=[256,128,64,16])
+
+# Summarize the end of the training output
+    
+print('')
+lines1=cap.stdout.split('\n')
 for line in lines1[-10:]:
     print(line)
 
+# Use the neural network to fill the plane of data. This step takes a
+# few minutes.
+    
 # +
-from IPython.utils import io
-
 if t3d.is_slice("nn")[0]==False:
     t3d.new_slice("nn")
 t3d.set_slice_all("nn",0.0)
@@ -91,11 +108,13 @@ for i in range(0,t3d.get_nx()):
     for j in range(0,t3d.get_ny()):
         x=t3d.get_grid_x(i)
         y=t3d.get_grid_y(j)
-        with io.capture_output() as captured:
+        with io.capture_output() as cap:
             t3d.set(i,j,"nn",im2.eval(numpy.array([x,y])));
     if i%2==1:
         print('i:',i+1,'/',t3d.get_nx())
 # -
+
+# Make a comparison plot
 
 if plots:
     pl.canvas()
@@ -103,12 +122,18 @@ if plots:
     pl.colbar=True
     plot.show()
 
+# Now perform a quantitative comparison of the performance of the
+# Gaussian process and the neural network and compare them. This is
+# not a complete or "fair" comparison.
+    
 gpt=0
 nnt=0
 for i in range(0,t3d.get_nx()):
     for j in range(0,t3d.get_ny()):
         gpt=gpt+numpy.abs(t3d.get(i,j,"z")-t3d.get(i,j,"gp"))
         nnt=nnt+numpy.abs(t3d.get(i,j,"z")-t3d.get(i,j,"nn"))
+        
+print('')
 print('Gaussian proces:',gpt,'neural network:',nnt)
 
 
