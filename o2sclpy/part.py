@@ -438,7 +438,7 @@ class fermion(part):
     """
     Python interface for O2scl class ``fermion``,
     which is a typedef of ``fermion_tl<double>``. See
-    https://neutronstars.utk.edu/code/o2scl-dev/part/html/class/fermion_tl.html
+    https://awsteiner.org/code/o2scl-dev/part/html/class/fermion_tl.html
     .
     """
 
@@ -531,7 +531,7 @@ class quark(fermion):
     """
     Python interface for O2scl class ``quark``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/quark.html .
+    https://awsteiner.org/code/o2scl/html/class/quark.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1267,7 +1267,7 @@ class boson(part):
     """
     Python interface for O2scl class ``boson``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/boson.html .
+    https://awsteiner.org/code/o2scl/html/class/boson.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1339,7 +1339,7 @@ class boson_rel:
     """
     Python interface for O2scl class ``boson_rel``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/boson_rel.html .
+    https://awsteiner.org/code/o2scl/html/class/boson_rel.html .
     """
 
     _ptr=0
@@ -2309,7 +2309,7 @@ class fermion_mag_zerot:
     """
     Python interface for O2scl class ``fermion_mag_zerot``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/fermion_mag_zerot.html .
+    https://awsteiner.org/code/o2scl/html/class/fermion_mag_zerot.html .
     """
 
     _ptr=0

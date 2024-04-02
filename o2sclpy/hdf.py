@@ -32,7 +32,7 @@ class hdf_file:
     """
     Python interface for O2scl class ``hdf_file``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/hdf_file.html .
+    https://awsteiner.org/code/o2scl/html/class/hdf_file.html .
     """
 
     _ptr=0
@@ -763,7 +763,7 @@ class acol_manager:
     """
     Python interface for O2scl class ``acol_manager``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/acol_manager.html .
+    https://awsteiner.org/code/o2scl/html/class/acol_manager.html .
     """
 
     _ptr=0
@@ -1606,7 +1606,7 @@ class cloud_file:
     """
     Python interface for O2scl class ``cloud_file``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/cloud_file.html .
+    https://awsteiner.org/code/o2scl/html/class/cloud_file.html .
     """
 
     _ptr=0

@@ -31,7 +31,7 @@ class nucleus(part):
     """
     Python interface for O2scl class ``nucleus``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucleus.html .
+    https://awsteiner.org/code/o2scl/html/class/nucleus.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -183,7 +183,7 @@ class nucmass_info:
     """
     Python interface for O2scl class ``nucmass_info``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_info.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_info.html .
     """
 
     _ptr=0
@@ -338,7 +338,7 @@ class nucmass:
     """
     Python interface for O2scl class ``nucmass``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass.html .
     """
 
     _ptr=0
@@ -670,7 +670,7 @@ class nucmass_table(nucmass):
     """
     Python interface for O2scl class ``nucmass_table``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_table.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_table.html .
     """
 
     @abstractmethod
@@ -783,7 +783,7 @@ class nucmass_fit_base(nucmass):
     """
     Python interface for O2scl class ``nucmass_fit_base``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_fit_base.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_fit_base.html .
     """
 
     @abstractmethod
@@ -856,7 +856,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
     """
     Python interface for O2scl class ``nucmass_semi_empirical``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_semi_empirical.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_semi_empirical.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1034,7 +1034,7 @@ class nucmass_ame(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_ame``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_ame.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_ame.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1086,7 +1086,7 @@ class nucmass_dz_table(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_dz_table``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dz_table.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_dz_table.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1138,7 +1138,7 @@ class nucmass_dz_fit(nucmass_fit_base):
     """
     Python interface for O2scl class ``nucmass_dz_fit``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dz_fit.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_dz_fit.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1190,7 +1190,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
     """
     Python interface for O2scl class ``nucmass_dz_fit_33``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dz_fit_33.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_dz_fit_33.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1242,7 +1242,7 @@ class nucmass_frdm(nucmass_fit_base):
     """
     Python interface for O2scl class ``nucmass_frdm``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_frdm.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_frdm.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1814,7 +1814,7 @@ class nucmass_mnmsk(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_mnmsk``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_mnmsk.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_mnmsk.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1866,7 +1866,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
     """
     Python interface for O2scl class ``nucmass_mnmsk_exp``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_mnmsk_exp.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_mnmsk_exp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1918,7 +1918,7 @@ class nucmass_gen(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_gen``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_gen.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_gen.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1970,7 +1970,7 @@ class nucmass_dglg(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_dglg``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_dglg.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_dglg.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2022,7 +2022,7 @@ class nucmass_hfb(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_hfb``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_hfb.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_hfb.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2074,7 +2074,7 @@ class nucmass_hfb_sp(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_hfb_sp``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_hfb_sp.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_hfb_sp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2126,7 +2126,7 @@ class nucmass_ktuy(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_ktuy``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_ktuy.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_ktuy.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2178,7 +2178,7 @@ class nucmass_sdnp(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_sdnp``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_sdnp.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_sdnp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2230,7 +2230,7 @@ class nucmass_wlw(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_wlw``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucmass_wlw.html .
+    https://awsteiner.org/code/o2scl/html/class/nucmass_wlw.html .
     """
 
     def __init__(self,link,pointer=0):

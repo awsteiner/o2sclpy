@@ -32,7 +32,7 @@ class eos_base:
     """
     Python interface for O2scl class ``eos_base``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_base.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_base.html .
     """
 
     _ptr=0
@@ -108,7 +108,7 @@ class eos_leptons:
     """
     Python interface for O2scl class ``eos_leptons``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_leptons.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_leptons.html .
     """
 
     _ptr=0
@@ -505,7 +505,7 @@ class eos_had_base(eos_base):
     """
     Python interface for O2scl class ``eos_had_base``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_base.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_had_base.html .
     """
 
     @abstractmethod
@@ -1170,7 +1170,7 @@ class eos_had_eden_base(eos_had_base):
     """
     Python interface for O2scl class ``eos_had_eden_base``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_eden_base.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_had_eden_base.html .
     """
 
     @abstractmethod
@@ -1223,7 +1223,7 @@ class eos_had_pres_base(eos_had_base):
     """
     Python interface for O2scl class ``eos_had_pres_base``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_pres_base.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_had_pres_base.html .
     """
 
     @abstractmethod
@@ -1276,7 +1276,7 @@ class eos_had_temp_base(eos_had_base):
     """
     Python interface for O2scl class ``eos_had_temp_base``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_base.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_had_temp_base.html .
     """
 
     @abstractmethod
@@ -1359,7 +1359,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
     """
     Python interface for O2scl class ``eos_had_temp_eden_base``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_eden_base.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_had_temp_eden_base.html .
     """
 
     @abstractmethod
@@ -1412,7 +1412,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
     """
     Python interface for O2scl class ``eos_had_temp_pres_base``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_temp_pres_base.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_had_temp_pres_base.html .
     """
 
     @abstractmethod
@@ -1465,7 +1465,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
     """
     Python interface for O2scl class ``eos_had_skyrme``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_skyrme.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_had_skyrme.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1857,7 +1857,7 @@ class eos_had_apr(eos_had_temp_eden_base):
     """
     Python interface for O2scl class ``eos_had_apr``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_apr.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_had_apr.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -1949,7 +1949,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
     """
     Python interface for O2scl class ``eos_had_rmf``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_had_rmf.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_had_rmf.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2512,7 +2512,7 @@ class eos_quark(eos_base):
     """
     Python interface for O2scl class ``eos_quark``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_quark.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2564,7 +2564,7 @@ class eos_quark_bag(eos_quark):
     """
     Python interface for O2scl class ``eos_quark_bag``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark_bag.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_quark_bag.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2636,7 +2636,7 @@ class eos_quark_njl(eos_quark):
     """
     Python interface for O2scl class ``eos_quark_njl``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_quark_njl.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_quark_njl.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2808,7 +2808,7 @@ class eos_tov:
     """
     Python interface for O2scl class ``eos_tov``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_tov.html .
     """
 
     _ptr=0
@@ -2980,7 +2980,7 @@ class eos_tov_buchdahl(eos_tov):
     """
     Python interface for O2scl class ``eos_tov_buchdahl``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_buchdahl.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_tov_buchdahl.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3147,7 +3147,7 @@ class eos_tov_polytrope(eos_tov):
     """
     Python interface for O2scl class ``eos_tov_polytrope``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_polytrope.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_tov_polytrope.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3210,7 +3210,7 @@ class eos_tov_linear(eos_tov):
     """
     Python interface for O2scl class ``eos_tov_linear``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_linear.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_tov_linear.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3273,7 +3273,7 @@ class eos_tov_interp(eos_tov):
     """
     Python interface for O2scl class ``eos_tov_interp``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/eos_tov_interp.html .
+    https://awsteiner.org/code/o2scl/html/class/eos_tov_interp.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3496,7 +3496,7 @@ class tov_solve:
     """
     Python interface for O2scl class ``tov_solve``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/tov_solve.html .
+    https://awsteiner.org/code/o2scl/html/class/tov_solve.html .
     """
 
     _ptr=0
@@ -4198,7 +4198,7 @@ class tov_love:
     """
     Python interface for O2scl class ``tov_love``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/tov_love.html .
+    https://awsteiner.org/code/o2scl/html/class/tov_love.html .
     """
 
     _ptr=0
@@ -4444,7 +4444,7 @@ class nstar_cold:
     """
     Python interface for O2scl class ``nstar_cold``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nstar_cold.html .
+    https://awsteiner.org/code/o2scl/html/class/nstar_cold.html .
     """
 
     _ptr=0
@@ -4875,7 +4875,7 @@ class nucleus_rmf:
     """
     Python interface for O2scl class ``nucleus_rmf``.
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/nucleus_rmf.html .
+    https://awsteiner.org/code/o2scl/html/class/nucleus_rmf.html .
     """
 
     _ptr=0

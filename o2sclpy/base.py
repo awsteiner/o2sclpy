@@ -1619,7 +1619,7 @@ class lib_settings_class:
     """
     Python interface for O₂scl class ``lib_settings_class``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/lib_settings_class.html .
+    https://awsteiner.org/code/o2scl/html/class/lib_settings_class.html .
     
     """
 
@@ -1873,7 +1873,7 @@ class table:
     """
     Python interface for O2scl class ``table``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/table.html .
+    https://awsteiner.org/code/o2scl/html/class/table.html .
     """
 
     _ptr=0
@@ -2731,7 +2731,7 @@ class table_units(table):
     """
     Python interface for O2scl class ``table_units``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/table_units.html .
+    https://awsteiner.org/code/o2scl/html/class/table_units.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2862,7 +2862,7 @@ class uniform_grid:
     """
     Python interface for O2scl class ``uniform_grid``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid.html .
+    https://awsteiner.org/code/o2scl/html/class/uniform_grid.html .
     """
 
     _ptr=0
@@ -3011,7 +3011,7 @@ class uniform_grid_end(uniform_grid):
     """
     Python interface for O2scl class ``uniform_grid_end``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end.html .
+    https://awsteiner.org/code/o2scl/html/class/uniform_grid_end.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3077,7 +3077,7 @@ class uniform_grid_width(uniform_grid):
     """
     Python interface for O2scl class ``uniform_grid_width``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_width.html .
+    https://awsteiner.org/code/o2scl/html/class/uniform_grid_width.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3143,7 +3143,7 @@ class uniform_grid_end_width(uniform_grid):
     """
     Python interface for O2scl class ``uniform_grid_end_width``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_end_width.html .
+    https://awsteiner.org/code/o2scl/html/class/uniform_grid_end_width.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3209,7 +3209,7 @@ class uniform_grid_log_end(uniform_grid):
     """
     Python interface for O2scl class ``uniform_grid_log_end``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_end.html .
+    https://awsteiner.org/code/o2scl/html/class/uniform_grid_log_end.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3275,7 +3275,7 @@ class uniform_grid_log_width(uniform_grid):
     """
     Python interface for O2scl class ``uniform_grid_log_width``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_width.html .
+    https://awsteiner.org/code/o2scl/html/class/uniform_grid_log_width.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3341,7 +3341,7 @@ class uniform_grid_log_end_width(uniform_grid):
     """
     Python interface for O2scl class ``uniform_grid_log_end_width``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/uniform_grid_log_end_width.html .
+    https://awsteiner.org/code/o2scl/html/class/uniform_grid_log_end_width.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -3407,7 +3407,7 @@ class table3d:
     """
     Python interface for O₂scl class ``table3d``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/table3d.html .
+    https://awsteiner.org/code/o2scl/html/class/table3d.html .
     
     """
 
@@ -4043,7 +4043,7 @@ class index_spec:
     """
     Python interface for O₂scl class ``index_spec``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/index_spec.html .
+    https://awsteiner.org/code/o2scl/html/class/index_spec.html .
     
     """
 
@@ -4240,7 +4240,7 @@ class ix_index:
     """
     Python interface for O₂scl class ``ix_index``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/ix_index.html .
+    https://awsteiner.org/code/o2scl/html/class/ix_index.html .
     
     """
 
@@ -4312,7 +4312,7 @@ class ix_fixed:
     """
     Python interface for O₂scl class ``ix_fixed``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/ix_fixed.html .
+    https://awsteiner.org/code/o2scl/html/class/ix_fixed.html .
     
     """
 
@@ -4384,7 +4384,7 @@ class ix_sum:
     """
     Python interface for O₂scl class ``ix_sum``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/ix_sum.html .
+    https://awsteiner.org/code/o2scl/html/class/ix_sum.html .
     
     """
 
@@ -4456,7 +4456,7 @@ class ix_trace:
     """
     Python interface for O₂scl class ``ix_trace``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/ix_trace.html .
+    https://awsteiner.org/code/o2scl/html/class/ix_trace.html .
     
     """
 
@@ -4528,7 +4528,7 @@ class ix_reverse:
     """
     Python interface for O₂scl class ``ix_reverse``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/ix_reverse.html .
+    https://awsteiner.org/code/o2scl/html/class/ix_reverse.html .
     
     """
 
@@ -4600,7 +4600,7 @@ class ix_range:
     """
     Python interface for O₂scl class ``ix_range``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/ix_range.html .
+    https://awsteiner.org/code/o2scl/html/class/ix_range.html .
     
     """
 
@@ -4672,7 +4672,7 @@ class ix_interp:
     """
     Python interface for O₂scl class ``ix_interp``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/ix_interp.html .
+    https://awsteiner.org/code/o2scl/html/class/ix_interp.html .
     
     """
 
@@ -4744,7 +4744,7 @@ class ix_grid:
     """
     Python interface for O₂scl class ``ix_grid``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/ix_grid.html .
+    https://awsteiner.org/code/o2scl/html/class/ix_grid.html .
     
     """
 
@@ -4816,7 +4816,7 @@ class ix_gridw:
     """
     Python interface for O₂scl class ``ix_gridw``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/ix_gridw.html .
+    https://awsteiner.org/code/o2scl/html/class/ix_gridw.html .
     
     """
 
@@ -4888,7 +4888,7 @@ class tensor:
     """
     Python interface for O2scl class ``tensor``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/tensor.html .
+    https://awsteiner.org/code/o2scl/html/class/tensor.html .
     """
 
     _ptr=0
@@ -5307,7 +5307,7 @@ class tensor_int:
     """
     Python interface for O2scl class ``tensor``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/tensor.html .
+    https://awsteiner.org/code/o2scl/html/class/tensor.html .
     """
 
     _ptr=0
@@ -5704,7 +5704,7 @@ class tensor_size_t:
     """
     Python interface for O2scl class ``tensor``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/tensor.html .
+    https://awsteiner.org/code/o2scl/html/class/tensor.html .
     """
 
     _ptr=0
@@ -6078,7 +6078,7 @@ class tensor_grid(tensor):
     """
     Python interface for O2scl class ``tensor_grid``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/tensor_grid.html .
+    https://awsteiner.org/code/o2scl/html/class/tensor_grid.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -6464,7 +6464,7 @@ class find_constants_const_entry:
     """
     Python interface for O₂scl class ``find_constants<>::const_entry``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/find_constants<>::const_entry.html .
+    https://awsteiner.org/code/o2scl/html/class/find_constants<>::const_entry.html .
     
     """
 
@@ -6761,7 +6761,7 @@ class find_constants:
     """
     Python interface for O₂scl class ``find_constants<>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/find_constants<>.html .
+    https://awsteiner.org/code/o2scl/html/class/find_constants<>.html .
     
     """
 
@@ -6849,7 +6849,7 @@ class convert_units_der_unit:
     """
     Python interface for O₂scl class ``convert_units<>::der_unit``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/convert_units<>::der_unit.html .
+    https://awsteiner.org/code/o2scl/html/class/convert_units<>::der_unit.html .
     
     """
 
@@ -7126,7 +7126,7 @@ class convert_units:
     """
     Python interface for O2scl class ``convert_units``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/convert_units.html .
+    https://awsteiner.org/code/o2scl/html/class/convert_units.html .
     """
 
     _ptr=0
@@ -7409,7 +7409,7 @@ class columnify:
     """
     Python interface for O₂scl class ``columnify``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/columnify.html .
+    https://awsteiner.org/code/o2scl/html/class/columnify.html .
     
     """
 
@@ -7526,7 +7526,7 @@ class format_float:
     """
     Python interface for O₂scl class ``format_float``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/format_float.html .
+    https://awsteiner.org/code/o2scl/html/class/format_float.html .
     
     """
 
@@ -7674,7 +7674,7 @@ class interp_vec:
     """
     Python interface for O₂scl class ``interp_vec<std::vector<double>>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/interp_vec<std::vector<double>>.html .
+    https://awsteiner.org/code/o2scl/html/class/interp_vec<std::vector<double>>.html .
     
     """
 
@@ -7801,7 +7801,7 @@ class interp_krige_optim_rbf_noise:
     """
     Python interface for O₂scl class ``interp_krige_optim<std::vector<double>,std::vector<double>,covar_funct_rbf_noise>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/interp_krige_optim<std::vector<double>,std::vector<double>,covar_funct_rbf_noise>.html .
+    https://awsteiner.org/code/o2scl/html/class/interp_krige_optim<std::vector<double>,std::vector<double>,covar_funct_rbf_noise>.html .
     
     """
 
@@ -8011,7 +8011,7 @@ class terminal:
     """
     Python interface for O₂scl class ``terminal``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/terminal.html .
+    https://awsteiner.org/code/o2scl/html/class/terminal.html .
     
     """
 
@@ -8395,7 +8395,7 @@ class gen_test_number:
     """
     Python interface for O₂scl class ``gen_test_number<double>``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/gen_test_number<double>.html .
+    https://awsteiner.org/code/o2scl/html/class/gen_test_number<double>.html .
     
     """
 
@@ -8480,7 +8480,7 @@ class funct_string:
     """
     Python interface for O₂scl class ``funct_string``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/funct_string.html .
+    https://awsteiner.org/code/o2scl/html/class/funct_string.html .
     
     """
 
@@ -8577,7 +8577,7 @@ class comm_option_s:
     """
     Python interface for O₂scl class ``comm_option_s``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/comm_option_s.html .
+    https://awsteiner.org/code/o2scl/html/class/comm_option_s.html .
     
     """
 
@@ -8794,7 +8794,7 @@ class cmd_line_arg:
     """
     Python interface for O₂scl class ``cmd_line_arg``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/cmd_line_arg.html .
+    https://awsteiner.org/code/o2scl/html/class/cmd_line_arg.html .
     
     """
 
@@ -8931,7 +8931,7 @@ class cli:
     """
     Python interface for O₂scl class ``cli``,
     see
-    https://neutronstars.utk.edu/code/o2scl/html/class/cli.html .
+    https://awsteiner.org/code/o2scl/html/class/cli.html .
     
     """
 

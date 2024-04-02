@@ -31,7 +31,7 @@ class slack_messenger:
     """
     Python interface for O2scl class ``slack_messenger``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/slack_messenger.html .
+    https://awsteiner.org/code/o2scl/html/class/slack_messenger.html .
     """
 
     _ptr=0
@@ -274,7 +274,7 @@ class quadratic_real_coeff_gsl:
     """
     Python interface for O2scl class ``quadratic_real_coeff_gsl``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/quadratic_real_coeff_gsl.html .
+    https://awsteiner.org/code/o2scl/html/class/quadratic_real_coeff_gsl.html .
     """
 
     _ptr=0
@@ -362,7 +362,7 @@ class quadratic_real_coeff_gsl2:
     """
     Python interface for O2scl class ``quadratic_real_coeff_gsl2<>``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/quadratic_real_coeff_gsl2<>.html .
+    https://awsteiner.org/code/o2scl/html/class/quadratic_real_coeff_gsl2<>.html .
     """
 
     _ptr=0
@@ -450,7 +450,7 @@ class cubic_real_coeff_cern:
     """
     Python interface for O2scl class ``cubic_real_coeff_cern<>``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/cubic_real_coeff_cern<>.html .
+    https://awsteiner.org/code/o2scl/html/class/cubic_real_coeff_cern<>.html .
     """
 
     _ptr=0
@@ -542,7 +542,7 @@ class cubic_real_coeff_gsl:
     """
     Python interface for O2scl class ``cubic_real_coeff_gsl``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/cubic_real_coeff_gsl.html .
+    https://awsteiner.org/code/o2scl/html/class/cubic_real_coeff_gsl.html .
     """
 
     _ptr=0
@@ -634,7 +634,7 @@ class quartic_real_coeff_cern:
     """
     Python interface for O2scl class ``quartic_real_coeff_cern<>``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/quartic_real_coeff_cern<>.html .
+    https://awsteiner.org/code/o2scl/html/class/quartic_real_coeff_cern<>.html .
     """
 
     _ptr=0
@@ -730,7 +730,7 @@ class fermi_dirac_integ_gsl:
     """
     Python interface for O2scl class ``fermi_dirac_integ_gsl``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/fermi_dirac_integ_gsl.html .
+    https://awsteiner.org/code/o2scl/html/class/fermi_dirac_integ_gsl.html .
     """
 
     _ptr=0
@@ -846,7 +846,7 @@ class bessel_K_exp_integ_gsl:
     """
     Python interface for O2scl class ``bessel_K_exp_integ_gsl``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/bessel_K_exp_integ_gsl.html .
+    https://awsteiner.org/code/o2scl/html/class/bessel_K_exp_integ_gsl.html .
     """
 
     _ptr=0
@@ -938,7 +938,7 @@ class hist:
     """
     Python interface for O2scl class ``hist``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/hist.html .
+    https://awsteiner.org/code/o2scl/html/class/hist.html .
     """
 
     _ptr=0
@@ -1250,7 +1250,7 @@ class hist_2d:
     """
     Python interface for O2scl class ``hist_2d``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/hist_2d.html .
+    https://awsteiner.org/code/o2scl/html/class/hist_2d.html .
     """
 
     _ptr=0
@@ -1606,7 +1606,7 @@ class contour_line:
     """
     Python interface for O2scl class ``contour_line``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/contour_line.html .
+    https://awsteiner.org/code/o2scl/html/class/contour_line.html .
     """
 
     _ptr=0
@@ -1735,7 +1735,7 @@ class vector_contour_line:
     """
     Python interface for O2scl class ``std::vector<contour_line>``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/std::vector<contour_line>.html .
+    https://awsteiner.org/code/o2scl/html/class/std::vector<contour_line>.html .
     """
 
     _ptr=0
@@ -1843,7 +1843,7 @@ class contour:
     """
     Python interface for O2scl class ``contour``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/contour.html .
+    https://awsteiner.org/code/o2scl/html/class/contour.html .
     """
 
     _ptr=0
@@ -1992,7 +1992,7 @@ class prob_dens_func:
     """
     Python interface for O2scl class ``prob_dens_func``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_func.html .
+    https://awsteiner.org/code/o2scl/html/class/prob_dens_func.html .
     """
 
     _ptr=0
@@ -2115,7 +2115,7 @@ class prob_dens_gaussian(prob_dens_func):
     """
     Python interface for O2scl class ``prob_dens_gaussian``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_gaussian.html .
+    https://awsteiner.org/code/o2scl/html/class/prob_dens_gaussian.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2187,7 +2187,7 @@ class prob_dens_mdim:
     """
     Python interface for O2scl class ``prob_dens_mdim<std::vector<double>>``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim<std::vector<double>>.html .
+    https://awsteiner.org/code/o2scl/html/class/prob_dens_mdim<std::vector<double>>.html .
     """
 
     _ptr=0
@@ -2288,7 +2288,7 @@ class prob_dens_mdim_biv_gaussian(prob_dens_mdim):
     """
     Python interface for O2scl class ``prob_dens_mdim_biv_gaussian<std::vector<double>>``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_biv_gaussian<std::vector<double>>.html .
+    https://awsteiner.org/code/o2scl/html/class/prob_dens_mdim_biv_gaussian<std::vector<double>>.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2381,7 +2381,7 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
     """
     Python interface for O2scl class ``prob_dens_mdim_gaussian<>``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_gaussian<>.html .
+    https://awsteiner.org/code/o2scl/html/class/prob_dens_mdim_gaussian<>.html .
     """
 
     def __init__(self,link,pointer=0):
@@ -2445,7 +2445,7 @@ class hypercube:
     """
     Python interface for O2scl class ``prob_dens_mdim_amr<>::hypercube``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_amr<>::hypercube.html .
+    https://awsteiner.org/code/o2scl/html/class/prob_dens_mdim_amr<>::hypercube.html .
     """
 
     _ptr=0
@@ -2621,7 +2621,7 @@ class std_vector_hypercube:
     """
     Python interface for O2scl class ``std::vector<prob_dens_mdim_amr<>::hypercube>``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/std::vector<prob_dens_mdim_amr<>::hypercube>.html .
+    https://awsteiner.org/code/o2scl/html/class/std::vector<prob_dens_mdim_amr<>::hypercube>.html .
     """
 
     _ptr=0
@@ -2721,7 +2721,7 @@ class prob_dens_mdim_amr(prob_dens_mdim):
     """
     Python interface for O2scl class ``prob_dens_mdim_amr<>``,
     See
-    https://neutronstars.utk.edu/code/o2scl/html/class/prob_dens_mdim_amr<>.html .
+    https://awsteiner.org/code/o2scl/html/class/prob_dens_mdim_amr<>.html .
     """
 
     def __init__(self,link,pointer=0):

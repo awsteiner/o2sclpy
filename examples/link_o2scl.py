@@ -1,7 +1,7 @@
 # # O$_2$scl library linking example for O$_2$sclpy
 
 # See the O$_2$sclpy documentation at
-# https://neutronstars.utk.edu/code/o2sclpy for more information.
+# https://awsteiner.org/code/o2sclpy for more information.
 
 import sys
 print(sys.path)
@@ -19,7 +19,7 @@ if 'pytest' in sys.modules:
 # variables can be used to specify the location of various libraries
 # which need to be added. These values can also be set directly in the
 # linker class (and then they override the environment variables). See
-# http://neutronstars.utk.edu/code/o2sclpy/link_cpp.html#linking-with-o2scl
+# http://awsteiner.org/code/o2sclpy/link_cpp.html#linking-with-o2scl
 # for more detail. We set the verbose parameter to 1 to output more
 # information about which libraries are being linked.
 

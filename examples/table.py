@@ -1,7 +1,7 @@
 # # O$_2$scl table example for O$_2$sclpy
 
 # See the O$_2$sclpy documentation at
-# https://neutronstars.utk.edu/code/o2sclpy for more information.
+# https://awsteiner.org/code/o2sclpy for more information.
 
 # +
 import o2sclpy
@@ -18,7 +18,7 @@ if 'pytest' in sys.modules:
 link=o2sclpy.linker()
 link.link_o2scl()
 
-# Create an HDF5 file object and open the table in O$_2$scl's data file for the Akmal, Pandharipande, and Ravenhall equation of state. The `open()` function for the `hdf_file` class is documented [here](https://neutronstars.utk.edu/code/o2sclpy/hdf.html#o2sclpy.hdf_file.open).
+# Create an HDF5 file object and open the table in O$_2$scl's data file for the Akmal, Pandharipande, and Ravenhall equation of state. The `open()` function for the `hdf_file` class is documented [here](https://awsteiner.org/code/o2sclpy/hdf.html#o2sclpy.hdf_file.open).
 
 hf=o2sclpy.hdf_file(link)
 hf.open(link.o2scl_settings.get_data_dir()+b'apr98.o2')
