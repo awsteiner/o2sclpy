@@ -1,7 +1,7 @@
 # # DSH example for O$_2$sclpy
 
 # See the O$_2$sclpy documentation at
-# https://neutronstars.utk.edu/code/o2sclpy for more information.
+# https://awsteiner.org/code/o2sclpy for more information.
 
 # +
 import o2sclpy

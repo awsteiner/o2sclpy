@@ -32,7 +32,7 @@ open-doc: .empty
 	$(BROWSER) doc/build/html/index.html
 
 web-doc: .empty
-	$(BROWSER) "https://neutronstars.utk.edu/code/o2sclpy"
+	$(BROWSER) "https://awsteiner.org/code/o2sclpy"
 
 doc: .empty
 	cd doc/static; o2graph -h | grep -v "Set o2scl" | \
