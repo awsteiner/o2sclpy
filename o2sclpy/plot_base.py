@@ -2082,6 +2082,11 @@ class plot_base:
             print('Canvas',self.fig_dict)
 
         dct=string_to_dict(self.fig_dict)
+        if 'dpi' in dct.keys():
+            import matplotlib.pyplot as plot
+            plot.rcParams['figure.dpi']=dct['dpi']
+            del dct['dpi']
+            
         if 'fontsize' not in dct.keys():
             dct['fontsize']=self.font
         if self.editor:

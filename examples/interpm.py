@@ -15,6 +15,10 @@ if 'pytest' in sys.modules:
     plots=False
 # -
 
+import tensorflow as tf
+print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+quit()
+
 # Link the O$_2$scl library:
 
 link=o2sclpy.linker()
