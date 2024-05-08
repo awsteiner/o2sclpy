@@ -6,8 +6,8 @@ Installation and Requirements
 :ref:`O2sclpy <o2sclpy>`
 
 O₂sclpy requires an installation of the development version of O₂scl.
-The release version, O₂sclpy 0.928, requires the O₂scl v0.928 release
-from https://github.com/awsteiner/o2scl/releases/tag/v0.928 .
+The release version, O₂sclpy 0.929, requires the O₂scl v0.929 release
+from https://github.com/awsteiner/o2scl/releases/tag/v0.929 .
 
 .. and the
    development version, O₂sclpy 0.929a1, requires that the most recent

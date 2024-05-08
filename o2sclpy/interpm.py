@@ -263,7 +263,7 @@ class interpm_tf_dnn:
         Set the input and output data to train the interpolator
 
         some activation functions: 
-        relu [0,\infty]
+        relu [0,\\infty]
         sigmoid [0,1]
         tanh [-1,1]
 
