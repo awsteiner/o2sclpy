@@ -357,8 +357,9 @@ class interpm_tf_dnn:
         try:
             nl=len(hlayers)
             na=len(activations)
-            layers=[tf.keras.layers.Dense(hlayers[0],input_shape=(nd_in,),
-                                          activation=activations[0])]
+            inp=tf.keras.Input(shape=(nd_in,))
+            layers=[inp,tf.keras.layers.Dense(hlayers[0],
+                                              activation=activations[0])]
             if self.verbose>0:
                 print('Layer: dense',hlayers[0],nd_in,activations[0])
             for i in range(1,nl):
