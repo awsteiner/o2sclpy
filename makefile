@@ -64,7 +64,6 @@ test:
 		examples/interpm.py \
 		examples/nucmass.py \
 		examples/SFHo_SFHx.py \
-		examples/DSH.py \
 		examples/buchdahl.py \
 		examples/tov.py \
 		examples/test_examples.py \
@@ -80,7 +79,6 @@ testq:
 		examples/interpm.py \
 		examples/nucmass.py \
 		examples/SFHo_SFHx.py \
-		examples/DSH.py \
 		examples/buchdahl.py \
 		examples/tov.py \
 		examples/test_examples.py -s -v
