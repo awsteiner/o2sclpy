@@ -62,7 +62,7 @@ for i in range(1,tov_table.get_nlines()):
 # Initialize the plotting object:
     
 if plots:
-    pl=o2sclpy.plotter()
+    pl=o2sclpy.plot_base()
 
 # Plot the enclosed gravitational mass as a function of
 # radius for a 1.4 solar mass neutron star:

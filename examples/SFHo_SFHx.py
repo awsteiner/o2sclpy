@@ -125,7 +125,7 @@ for i in range(0,t3d.get_nx()):
 # a couple functions which make it easier. 
        
 if plots:
-    pl=o2sclpy.plotter()
+    pl=o2sclpy.plot_base()
     pl.colbar=True
     pl.xtitle(r'$ n_B~(\mathrm{fm}^{-3}) $')
     pl.ytitle(r'$ T~(\mathrm{MeV}) $')

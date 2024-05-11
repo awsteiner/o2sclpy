@@ -60,7 +60,7 @@ tg_A.copy_table3d_align_setxy(0,2,ix,t3d,'nB','T','A')
 # a couple functions which make it easier. 
        
 if plots:
-    pl=o2sclpy.plotter()
+    pl=o2sclpy.plot_base()
     pl.colbar=True
     pl.xtitle(r'$ n_B~(\mathrm{fm}^{-3}) $')
     pl.ytitle(r'$ T~(\mathrm{MeV}) $')
