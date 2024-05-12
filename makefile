@@ -1,7 +1,7 @@
 help:
 	@echo "This the O2sclpy root directory makefile. It is not intended"
-	@echo "for the end-user. Use 'python setup.py' for standard "
-	@echo "package setup and installation."
+	@echo "for the end-user. Use 'pip install' for standard "
+	@echo "installation."
 	@echo "-------------------------------------------------------------"
 	@echo "Developer targets:"
 	@echo "doc:       Make the documentation (requires sphinx & breathe)"
@@ -16,9 +16,8 @@ help:
 	@echo "           (to be run before 'make doc')"
 	@echo
 	@echo "-------------------------------------------------------------"
-	@echo "Notes: to upload to pypi run 'rm dist/*',"
-	@echo "'python3 setup.py sdist bdist_wheel'"
-	@echo "  and then 'twine upload dist/*'."
+	@echo "Notes: to upload to pypi run 'rm dist/*', 'python3 -m build',"
+	@echo "and then 'python3 -m twine upload dist/*'"
 
 BROWSER = 
 UNAME_S := $(shell uname -s)
