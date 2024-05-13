@@ -35,6 +35,9 @@ sphinx-help:
 sync-doc:
 	rsync -Cavzu build/html/* $(STATIC_DOC_DIR)/o2sclpy
 
+prerelease-sync-doc:
+	rsync -Cavzu build/html/* $(STATIC_DOC_DIR)/o2sclpy-dev
+
 test-sync:
 	rsync -Cavzun build/html/* $(STATIC_DOC_DIR)/o2sclpy
 

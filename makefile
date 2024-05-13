@@ -51,6 +51,9 @@ doc: .empty
 sync-doc:
 	cd doc; $(MAKE) sync-doc
 
+prerelease-sync-doc:
+	cd doc; $(MAKE) prerelease-sync-doc
+
 test-sync:
 	cd doc; $(MAKE) test-sync
 
