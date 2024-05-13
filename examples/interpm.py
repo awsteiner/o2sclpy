@@ -70,7 +70,7 @@ for i in range(0,t3d.get_nx()):
     for j in range(0,t3d.get_ny()):
         x=t3d.get_grid_x(i)
         y=t3d.get_grid_y(j)
-        t3d.set(i,j,"gp",im.eval(numpy.array([x,y])))
+        t3d.set(i,j,"gp",im.eval(numpy.array([x,y]))[0])
 
 # Make a comparison plot
         
@@ -112,7 +112,7 @@ for i in range(0,t3d.get_nx()):
         x=t3d.get_grid_x(i)
         y=t3d.get_grid_y(j)
         with io.capture_output() as cap:
-            t3d.set(i,j,"nn",im2.eval(numpy.array([x,y])));
+            t3d.set(i,j,"nn",im2.eval(numpy.array([x,y]))[0]);
     if i%2==1:
         print('i:',i+1,'/',t3d.get_nx())
 # -
