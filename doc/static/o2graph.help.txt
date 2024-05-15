@@ -1,5 +1,5 @@
 o2graph: A data viewing and processing program for O2scl.
-  Version: 0.929
+  Version: 0.930a1
  
 List of command-line options which do not require a current object:
 
@@ -8,6 +8,9 @@ List of command-line options which do not require a current object:
   -arrow           Plot an arrow.
   -autocorr        Compute autocorrelation coefficients. 
   -backend         Select the matplotlib backend to use.
+  -bl-import       Load a GLTF file into blender
+  -bl-six-mp4      View each axis of a set of 3D objects in a movie 
+  -bl-yaw-mp4      View 3D objects in a movie by rotating the camera
   -calc            Compute the value of a constant expression. 
   -canvas          Create a plotting canvas.
   -clear           Clear the current object. 
@@ -63,11 +66,11 @@ List of command-line options which do not require a current object:
   -subplots        Create subplots.
   -td-arrow        Plot an arrow in a 3d visualization (experimental)
   -td-axis         Create a 3D axis (experimental).
-  -td-axis-label   Create an axis label in a 3d visualization (experimental).
+  -td-axis-label   Create a 3D axis label (experimental).
   -td-den-plot     Create a 3D density plot (experimental).
   -td-icos         Create a 3D icosphere (experimental).
-  -td-mat          Create a 3d material (experimental)
-  -td-pgram        Plot a parallelogram in a 3D visualization (experimental)
+  -td-mat          Create a 3D material (experimental)
+  -td-pgram        Plot a 3D parallelogram (experimental)
   -td-scatter      Create a 3D scatter plot (experimental).
   -text            Plot text in the data coordinates.
   -textbox         Plot a box with text.
