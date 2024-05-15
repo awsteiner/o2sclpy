@@ -191,7 +191,7 @@ for i in range(0,6):
     camera.location=camx[i]
     camera.rotation_euler=rotx[i]
 
-    if i==0 and BLEND_FILE!='':
+    if i==0 and 'BLEND_FILE'!='':
         # Save a blend file
         bpy.ops.wm.save_as_mainfile(filepath=BLEND_FILE)
         

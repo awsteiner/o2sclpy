@@ -2085,7 +2085,7 @@ class td_plot_base(yt_plot_base):
                packages: str = '', prefix: str = '', resize: bool = True):
         """Documentation for o2graph command ``td-mat``:
 
-        Create a 3d material (experimental)
+        Create a 3D material (experimental)
 
         Command-line arguments: ``<name> <r> <g> <b> [kwargs]``
 
@@ -2312,7 +2312,7 @@ class td_plot_base(yt_plot_base):
                  match_txt=False,coords='user'):
         """Documentation for o2graph command ``td-pgram``:
 
-        Plot a parallelogram in a 3D visualization (experimental)
+        Plot a 3D parallelogram (experimental)
 
         Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> 
         <x3> <y3> <z3> [kwargs]``
@@ -2411,7 +2411,7 @@ class td_plot_base(yt_plot_base):
                       flatten : str = 'white'):
         """Documentation for o2graph command ``td-axis-label``:
 
-        Create an axis label in a 3d visualization (experimental).
+        Create a 3D axis label (experimental).
 
         Command-line arguments: ``<ldir> <tex_label> [kwargs]``
 

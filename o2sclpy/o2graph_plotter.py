@@ -70,6 +70,9 @@ base_list=[
       "be changed once, i.e. if the backend command is "+
       "invoked more than once, then only the last invocation "+
       "will have any effect.")],
+    ["bl-import",0],
+    ["bl-six-mp4",0],
+    ["bl-yaw-mp4",0],
     ["canvas",plot_base.canvas.__doc__],
     ["clf","Documentation for clf\n\n"+
      "Clear the current figure.\n\n"+
@@ -662,6 +665,12 @@ class o2graph_plotter(td_plot_base):
                 line[1]=o2graph_plotter.mp4.__doc__
             elif line[0]=="yt-tf":
                 line[1]=o2graph_plotter.yt_tf_func.__doc__
+            elif line[0]=="bl-import":
+                line[1]=o2graph_plotter.bl_import.__doc__
+            elif line[0]=="bl-six-mp4":
+                line[1]=o2graph_plotter.bl_six_mp4.__doc__
+            elif line[0]=="bl-yaw-mp4":
+                line[1]=o2graph_plotter.bl_yaw_mp4.__doc__
         for line in extra_list:
             if line[1]=="den-plot":
                 line[2]=o2graph_plotter.den_plot_o2graph.__doc__
@@ -920,10 +929,14 @@ class o2graph_plotter(td_plot_base):
                    bg_color : str = '', cam_type : str = '',
                    res=(0,0), blend_file : str = ''):
         """
+        Documentation for o2graph command ``bl-yaw-mp4``:
+
+        View 3D objects in a movie by rotating the camera
+
+        Command-line arguments: ``<n_frames> <kwargs>``
+
         This command requires Blender, the associated python package,
         ``bpy``, and the installation of ``ffmpeg``. 
-
-        vf='eq=contrast=1')
         """
 
         import tempfile
@@ -1015,9 +1028,14 @@ class o2graph_plotter(td_plot_base):
                    bg_color : str = '', cam_type : str = '',
                    res=(0,0), blend_file : str = ''):
         """
-        
-        This command requires the Blender python package,
-        ``bpy`` and the installation of ``ffmpeg``. 
+        Documentation for o2graph command ``bl-six-mp4``:
+
+        View each axis of a set of 3D objects in a movie 
+
+        Command-line arguments: ``<n_frames> <kwargs>``
+
+        This command requires Blender, the associated python package,
+        ``bpy``, and the installation of ``ffmpeg``. 
         """
 
         import tempfile
@@ -1110,7 +1128,14 @@ class o2graph_plotter(td_plot_base):
                   light_dist : float = 5.8,
                   bg_color : str = '', cam_type : str = '',
                   res=(0,0), blend_file : str = ''):
-        """This command requires the Blender python package, ``bpy``.
+        """
+        Documentation for o2graph command ``bl-import``:
+        
+        Load a GLTF file into blender
+
+        Command-line arguments: ``<gltf file>``
+
+        This command requires the Blender python package, ``bpy``.
         """
 
         gltf_file_name=gltf_path

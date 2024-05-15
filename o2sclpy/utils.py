@@ -1076,24 +1076,58 @@ def parse_arguments(argv,verbose=0):
             ix=ix_next
     return (list,unproc_list)
 
-def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[]):
+def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[],
+                    list_of_colors=[]):
     """
     Convert a string to a dictionary, converting strings to 
     values when necessary.
     """
         
     # First split into keyword = value pairs
-    arr=s.split(',')
+    arr_old=s.split(',')
     # Create empty dictionary
     dct={}
 
     if len(s)==0:
         return dct
+
+    # Go through the array and combine adjacent terms if they're
+    # part of a bracketed section
+    arr=[]
+    count=0
+    temps=''
+    for i in range(0,len(arr_old)):
+        for j in range(len(arr_old[i])):
+            if arr_old[i][j]=='[':
+                count=count+1
+            if arr_old[i][j]==']':
+                count=count-1
+        if len(temps)==0:
+            temps=arr_old[i]
+        else:
+            temps=temps+','+arr_old[i]            
+        if count==0:
+            arr.append(temps)
+            temps=''
+        #print('s',s,'arr_old[i]',arr_old[i],'count',
+        #count,'temps x'+temps+'x')
+    if len(temps)>0:
+        arr.append(temps)
+    #print('arr:',arr)
+    #quit()
         
     for i in range(0,len(arr)):
 
         # For each pair, split keyword and value.
         arr2=arr[i].split('=')
+        if len(arr2)<2:
+            print('Failed to find an assignment in string_to_dict2() ',
+                  'argument.')
+            print('  arr_old:',arr_old)
+            print('  arr:',arr)
+            print('  arr2:',arr2)
+            raise ValueError('Failed to find an assignment in ',
+                             'string_to_dict2() argument.')
         
         # Remove preceeding and trailing whitespace from the
         # keywords (not for the values)
@@ -1118,6 +1152,28 @@ def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[]):
                 arr2[1]=True
             else:
                 arr2[1]=False
+        if arr2[0] in list_of_colors:
+            #print('arr2[1]','x'+arr2[1]+'x',
+            #arr2[1].find('('),arr2[1].find('['))
+            if arr2[1].find('(')!=-1:
+                arr2[1]=arr2[1][1:len(arr2[1])-1]
+                arr3=arr2[1].split(',')
+                if False:
+                    print('arr_old:',arr_old)
+                    print('arr:',arr)
+                    print('arr2[1]:',arr2[1])
+                    print('arr2[0]',arr2[0],'(arr3:',arr3)
+                arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]))
+            elif arr2[1].find('[')!=-1:
+                arr2[1]=arr2[1][1:len(arr2[1])-1]
+                arr3=arr2[1].split(',')
+                if False:
+                    print('arr_old:',arr_old)
+                    print('arr:',arr)
+                    print('arr2[1]:',arr2[1])
+                    print('arr2[0]',arr2[0],'[arr3:',arr3)
+                arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]),
+                         float(arr3[3]))
                     
         dct[arr2[0]]=arr2[1]
 
@@ -1132,6 +1188,26 @@ def string_to_dict(s):
     This function is in ``utils.py``.
     """
 
+    # Slowly converting this to the new function
+    return string_to_dict2(s,list_of_floats=['zorder','lw','linewidth',
+                                             'elinewidth','alpha',
+                                             'fig_size_x','fig_size_y',
+                                             'left_margin','right_margin',
+                                             'top_margin','bottom_margin',
+                                             'left','right','top',
+                                             'bottom','wspace','hspace',
+                                             'font','scale','dpi',
+                                             'capsize','capthick',
+                                             'rotation','fontsize',
+                                             'labelsize'],
+                          list_of_bools=['sharex','lolims','reorient',
+                                         'uplims','xlolims','xuplims',
+                                         'sharey','squeeze','fill',
+                                         'ticks_in','rt_ticks',
+                                         'pcm'],
+                           list_of_ints=['shrinkA','shrinkB','bins'],
+                           list_of_colors=['color','textcolor'])
+    
     # First split into keyword = value pairs
     arr=s.split(',')
     # Create empty dictionary

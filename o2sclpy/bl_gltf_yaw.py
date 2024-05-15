@@ -89,9 +89,9 @@ for i in range(0,N_FRAMES):
     camera.location=[x+0.5,y+0.5,0.5]
     camera.rotation_euler=[numpy.pi/2.0,0,numpy.pi/2.0+ang]
 
-    if i==0 and BLEND_FILE!='':
+    if i==0 and 'BLEND_FILE'!='':
         # Save a blend file
-        bpy.ops.wm.save_as_mainfile(filepath=BLEND_FILE)
+        bpy.ops.wm.save_as_mainfile(filepath='BLEND_FILE')
     
     # Assemble the path
     scene.render.filepath='bl_gltf_yaw_%03d.png' % i
