@@ -927,7 +927,7 @@ class o2graph_plotter(td_plot_base):
                    light_energy : float = 800,
                    light_dist : float = 5.8,
                    bg_color : str = '', cam_type : str = '',
-                   res=(0,0), blend_file : str = ''):
+                   res=(1600,900), blend_file : str = ''):
         """
         Documentation for o2graph command ``bl-yaw-mp4``:
 
@@ -963,7 +963,12 @@ class o2graph_plotter(td_plot_base):
             
         if cam_type=='':
             cam_type='PERSP'
-            
+
+        if len(res)<2 or res[0]<2 or res[1]<2:
+            print('Value of res:',res)
+            raise ValueError('Resolution of image (',res,
+                             ') invalid in bl_yaw_mp4')
+        
         rep_list={'BG_COLOR': bg_color,
                   'LIGHT_DIST': str(light_dist),
                   'LIGHT_ENERGY': str(light_energy),
