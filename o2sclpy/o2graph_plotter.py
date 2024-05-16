@@ -769,6 +769,8 @@ class o2graph_plotter(td_plot_base):
         """
         """
 
+        print('wdocs_wrapper(): input :',args)
+
         # Call the acol 'wdocs' function
         vs=std_vector_string(self.link2)
         vs.resize(len(args)+1)
@@ -776,14 +778,16 @@ class o2graph_plotter(td_plot_base):
         for i in range(0,len(args)):
             vs[i+1]=force_bytes(args[i])
         if len(vs)==2:
-            vs.append(vs[1])
-            vs[1]='o2sclpy'
+            if vs[1]==b'dev':
+                vs[1]=b'o2sclpy-dev'
+            else:
+                vs.append(vs[1])
+                vs[1]=b'o2sclpy'
         elif len(vs)==1:
-            vs.append('o2sclpy')
+            vs.append(b'o2sclpy')
         elif len(vs)>2 and vs[1]=='dev':
-            vs[1]='o2sclpy-dev'
+            vs[1]=b'o2sclpy-dev'
 
-        print('wdocs_wrapper(): input :',args)
         strout='wdocs_wrapper(): output: '
         for i in range(0,len(vs)):
             strout=strout+force_string(vs[i])+' '
