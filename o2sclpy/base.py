@@ -283,6 +283,16 @@ class std_vector:
         func(self._ptr,i,value)
         return
 
+    def push_back(self,x):
+        """
+        | Parameters:
+        | *x*: ``double``
+        """
+        func=self._link.o2scl.o2scl_std_vector_double__push_back
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,x)
+        return
+
     def __len__(self):
         """
         Return the length of the vector
@@ -301,6 +311,13 @@ class std_vector:
         for i in range(0,self.size()):
             ret[i]=self.__getitem__(i)
         return ret
+    
+    def append(self,value):
+        """
+        Add an element to the end of the vector
+        """
+        self.push_back(value)
+        return
     
     def from_list(self,lst):
         """
@@ -687,6 +704,17 @@ class std_vector_string:
         ret=func(self._ptr)
         return ret
 
+    def push_back(self,x):
+        """
+        | Parameters:
+        | *x*: string
+        """
+        x_=ctypes.c_char_p(force_bytes(x))
+        func=self._link.o2scl.o2scl_std_vector_std_string__push_back
+        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
+        func(self._ptr,x_)
+        return
+
     def __getitem__(self,n):
         """
         | Parameters:
@@ -721,6 +749,13 @@ class std_vector_string:
         Returns: a Python int
         """
         return self.size()
+    
+    def append(self,value):
+        """
+        Add an element to the end of the vector
+        """
+        self.push_back(value)
+        return
     
     def set_list(self,ls):
         """

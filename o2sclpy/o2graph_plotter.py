@@ -765,6 +765,40 @@ class o2graph_plotter(td_plot_base):
         # End of function o2graph_plotter::set_wrapper()
         return
 
+    def wdocs_wrapper(self,o2scl,amp,link,args):
+        """
+        """
+
+        # Call the acol 'wdocs' function
+        vs=std_vector_string(self.link2)
+        vs.resize(len(args)+1)
+        vs[0]=b'-wdocs'
+        for i in range(0,len(args)):
+            vs[i+1]=force_bytes(args[i])
+        if len(vs)==2:
+            vs.append(vs[1])
+            vs[1]='o2sclpy'
+        elif len(vs)==1:
+            vs.append('o2sclpy')
+        elif len(vs)>2 and vs[1]=='dev':
+            vs[1]='o2sclpy-dev'
+
+        print('wdocs_wrapper(): input :',args)
+        strout='wdocs_wrapper(): output: '
+        for i in range(0,len(vs)):
+            strout=strout+force_string(vs[i])+' '
+        print(strout)
+        
+        amt=acol_manager(self.link2,amp)
+            
+        if self.verbose>2:
+            print('Calling acol set function for parameter '+args[0]+'.')
+            
+        amt.parse_vec_string(vs)
+
+        # End of function o2graph_plotter::set_wrapper()
+        return
+
     def get_wrapper(self,o2scl,amp,args):
         """
         Wrapper around :py:func:`o2sclpy.plot_base.get` which
@@ -927,13 +961,14 @@ class o2graph_plotter(td_plot_base):
                    light_energy : float = 800,
                    light_dist : float = 5.8,
                    bg_color : str = '', cam_type : str = '',
-                   res=(1600,900), blend_file : str = ''):
+                   res_x: int = 1600, res_y : int = 900,
+                   blend_file : str = ''):
         """
         Documentation for o2graph command ``bl-yaw-mp4``:
 
         View 3D objects in a movie by rotating the camera
 
-        Command-line arguments: ``<n_frames> <kwargs>``
+        Command-line arguments: ``<n_frames> <mp4 file> <kwargs>``
 
         This command requires Blender, the associated python package,
         ``bpy``, and the installation of ``ffmpeg``. 
@@ -975,8 +1010,8 @@ class o2graph_plotter(td_plot_base):
                   'GLTF_PATH': gltf_file_name,
                   'N_FRAMES': str(n_frames),
                   'CAM_DIST': str(cam_dist),
-                  'RES_X': str(res[0]),
-                  'RES_Y': str(res[1]),
+                  'RES_X': str(res_x),
+                  'RES_Y': str(res_y),
                   'BLEND_FILE': str(blend_file),
                   'CAMERA_TYPE': str(cam_type)}
         print('Making replacements:',rep_list)
@@ -1031,7 +1066,8 @@ class o2graph_plotter(td_plot_base):
                    light_energy : float = 800,
                    light_dist : float = 5.8,
                    bg_color : str = '', cam_type : str = '',
-                   res=(0,0), blend_file : str = ''):
+                   res_x: int = 1600, res_y : int = 900,
+                   blend_file : str = ''):
         """
         Documentation for o2graph command ``bl-six-mp4``:
 
@@ -1074,8 +1110,8 @@ class o2graph_plotter(td_plot_base):
                   'GLTF_PATH': gltf_file_name,
                   'N_FRAMES': str(n_frames),
                   'CAM_DIST': str(cam_dist),
-                  'RES_X': str(res[0]),
-                  'RES_Y': str(res[1]),
+                  'RES_X': str(res_x),
+                  'RES_Y': str(res_y),
                   'BLEND_FILE': str(blend_file),
                   'CAMERA_TYPE': str(cam_type)}
         print('Making replacements:',rep_list)
@@ -1132,7 +1168,7 @@ class o2graph_plotter(td_plot_base):
                   light_energy : float = 800,
                   light_dist : float = 5.8,
                   bg_color : str = '', cam_type : str = '',
-                  res=(0,0), blend_file : str = ''):
+                  blend_file : str = ''):
         """
         Documentation for o2graph command ``bl-import``:
         
@@ -5351,6 +5387,15 @@ class o2graph_plotter(td_plot_base):
                         self.set_wrapper(o2scl,amp,self.link2,
                                          strlist[ix+1:ix_next])
                         
+                elif cmd_name=='wdocs':
+
+                    if self.verbose>2:
+                        print('Process wdocs.')
+                        print('args:',strlist[ix:ix_next])
+                        
+                    self.wdocs_wrapper(o2scl,amp,self.link2,
+                                           strlist[ix+1:ix_next])
+                        
                 elif cmd_name=='ell-max':
 
                     if self.verbose>2:
@@ -5878,7 +5923,18 @@ class o2graph_plotter(td_plot_base):
                         print('Process bl-yaw-mp4.')
                         print('args:',strlist[ix:ix_next])
 
-                    if ix_next-ix>=3:
+                    if ix_next-ix>=4:
+                        self.bl_yaw_mp4(int(strlist[ix+1]),
+                                        strlist[ix+2],
+                                        **string_to_dict2(strlist[ix+3],
+                                                          list_of_floats=
+                                                          ['cam_dist',
+                                                           'light_energy',
+                                                           'light_dist'],
+                                                          list_of_ints=
+                                                          ['res_x',
+                                                           'res_y']))
+                    elif ix_next-ix>=3:
                         self.bl_yaw_mp4(int(strlist[ix+1]),
                                         strlist[ix+2])
                     else:
@@ -5901,6 +5957,17 @@ class o2graph_plotter(td_plot_base):
                         print('Process bl-six-mp4.')
                         print('args:',strlist[ix:ix_next])
 
+                    if ix_next-ix>=4:
+                        self.bl_six_mp4(int(strlist[ix+1]),
+                                        strlist[ix+2],
+                                        **string_to_dict2(strlist[ix+3],
+                                                          list_of_floats=
+                                                          ['cam_dist',
+                                                           'light_energy',
+                                                           'light_dist'],
+                                                          list_of_ints=
+                                                          ['res_x',
+                                                           'res_y']))
                     if ix_next-ix>=3:
                         self.bl_six_mp4(int(strlist[ix+1]),
                                         strlist[ix+2])
