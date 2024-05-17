@@ -1595,7 +1595,12 @@ class td_plot_base(yt_plot_base):
         Command-line arguments: ``<x column> <y column> <z column> 
         [r column] [g column] [b column] [kwargs]``
 
-        Full desc.
+        Create a scatter plot from columns of a table object. Useful
+        kwargs are ``n_subdiv=0``, the number of subdivisions of the
+        original icosahedron, ``r=0.04``, the radius of the icosphere
+        in the internal coordinate system, ``metal=''``, the column
+        which provides the metalness, ``rough=''``, the column which
+        describes the roughness.
         """
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
         amt=acol_manager(self.link2,amp)
@@ -1803,10 +1808,16 @@ class td_plot_base(yt_plot_base):
 
         Command-line arguments: ``<x> <y> <z> [kwargs]``
 
+        Plot an icosphere at the specified location. Useful kwargs are
+        ``n_subdiv=0``, the number of subdivisions of the original
+        icosahedron, ``r=0.04``, the radius of the icosphere in the
+        internal coordinate system, and ``mat=''``, the material to
+        use for the icosphere surface.
+
         Note that normals are typically not specified, because the
         density plot presumes flat shading. Blender, for example, uses
         smooth shading for GLTF files when normals are specified, and
-        this can complicate the density plot.
+        this can complicate the texture mapping.
         """
         import copy
         
@@ -1966,10 +1977,16 @@ class td_plot_base(yt_plot_base):
         Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> 
         [kwargs]``
 
-        By default, the line
-        coordinates are specified in the internal coordinate system.
-        If the keyword argument ``coords`` is ``user``, then the
-        coordinates are in the user coordinate system.
+        Plot a line between the specified coordinates. Useful kwargs
+        are ``name='line'``, the name of the GLTF group,
+        ``mat='white'``, the name of the material to use, and
+        ``coords='user'``, the coordinate system to use.
+        
+        By default, the line coordinates are specified in the internal
+        coordinate system. If the keyword argument ``coords`` is
+        ``user``, then the coordinates are in the user coordinate
+        system.
+
         """
         uname=self.to.make_unique_name(name)
 
@@ -2022,7 +2039,7 @@ class td_plot_base(yt_plot_base):
 
         Command-line arguments: ``[kwargs]``
 
-        Plot a grid of lines
+        Plot a grid of lines.
         """
         if n<2:
             raise ValueError('Cannot have n<2 in td_grid.')
@@ -2089,11 +2106,32 @@ class td_plot_base(yt_plot_base):
 
         Command-line arguments: ``<name> <r> <g> <b> [kwargs]``
 
-        Create a new material with the specified properties. 
+        Create a new material with the specified properties.
+        Useful kwargs are::
+        
+        * alpha: float=1 \\
+        * metal: float=0 \\
+        * rough: float=1 \\
+        * ds: bool=True (double-sided) \\
+        * txt: str='' (filename of the texture) \\
+        * alpha_mode : str = 'opaque' \\
+        * alpha_cutoff: float = 0.5 \\
+        * efr: float = 0.0 (emissive factor; red channel) \\
+        * efg: float = 0.0 (emissive factor; green channel) \\
+        * efb: float = 0.0 (emissive factor; blue channel) \\
+        * packages: str = '' \\
+        * prefix: str = '' \\
+        * resize: bool = True \\
 
+        If the texture filename begins with the characters 'cmap:', it
+        is constructed with a matplotlib colormap rather than from a
+        file. If it begins with 'latex:', then it is constructed from
+        a LaTeX expression.
+        
         LaTeX textures are created in the working directory with
         the name ``[prefix]latex%d.png`` and then resized, if necessary,
         to files named ``[prefix]latexr%d.png``.
+
         """
         import os.path
         import tempfile
