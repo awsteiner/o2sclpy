@@ -26,6 +26,13 @@ Other classes from O\ :sub:`2`\ scl
 * :ref:`Class hypercube`
 * :ref:`Class std_vector_hypercube`
 * :ref:`Class prob_dens_mdim_amr`
+* :ref:`Function vector_mean`
+* :ref:`Function vector_stddev`
+* :ref:`Function vector_lagk_autocorr`
+* :ref:`Function vector_autocorr_vector`
+* :ref:`Function vector_autocorr_vector_fftw`
+* :ref:`Function vector_autocorr_tau`
+* :ref:`Function vector_acor`
 
 Class slack_messenger
 ---------------------
@@ -267,4 +274,39 @@ Class prob_dens_mdim_amr
         .. automethod:: __init__
         .. automethod:: __del__
         .. automethod:: __copy__
+
+Function vector_mean
+--------------------
+
+.. autofunction:: o2sclpy.vector_mean(link,n,v)
+
+Function vector_stddev
+----------------------
+
+.. autofunction:: o2sclpy.vector_stddev(link,n,v)
+
+Function vector_lagk_autocorr
+-----------------------------
+
+.. autofunction:: o2sclpy.vector_lagk_autocorr(link,n,v,k)
+
+Function vector_autocorr_vector
+-------------------------------
+
+.. autofunction:: o2sclpy.vector_autocorr_vector(link,n,v,ac)
+
+Function vector_autocorr_vector_fftw
+------------------------------------
+
+.. autofunction:: o2sclpy.vector_autocorr_vector_fftw(link,v,ac,mean,stddev)
+
+Function vector_autocorr_tau
+----------------------------
+
+.. autofunction:: o2sclpy.vector_autocorr_tau(link,ac,ftom)
+
+Function vector_acor
+--------------------
+
+.. autofunction:: o2sclpy.vector_acor(link,n,v,mean,sigma,tau)
 

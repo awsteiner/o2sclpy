@@ -2935,3 +2935,102 @@ class prob_dens_mdim_amr(prob_dens_mdim):
         return ret
 
 
+def vector_mean(link,n,v):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *v*: :class:`vector<double>` object
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_vector_mean_std_vector_double__wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
+    ret=func(n,v._ptr)
+    return ret
+
+def vector_stddev(link,n,v):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *v*: :class:`vector<double>` object
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_vector_stddev_std_vector_double__wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
+    ret=func(n,v._ptr)
+    return ret
+
+def vector_lagk_autocorr(link,n,v,k):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *v*: :class:`vector<double>` object
+        | *k*: ``size_t``
+        | Returns: ``ctypes.c_double`` object
+    """
+    func=link.o2scl.o2scl_vector_lagk_autocorr_std_vector_double__wrapper
+    func.restype=ctypes.c_double
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t]
+    ret=func(n,v._ptr,k)
+    return ret
+
+def vector_autocorr_vector(link,n,v,ac):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *v*: :class:`vector<double>` object
+        | *ac*: :class:`vector<double>` object
+    """
+    func=link.o2scl.o2scl_vector_autocorr_vector_std_vector_double_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
+    func(n,v._ptr,ac._ptr)
+    return
+
+def vector_autocorr_vector_fftw(link,v,ac,mean,stddev):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *v*: :class:`vector<double>` object
+        | *ac*: :class:`vector<double>` object
+        | *mean*: ``double``
+        | *stddev*: ``double``
+    """
+    func=link.o2scl.o2scl_vector_autocorr_vector_fftw_std_vector_double_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+    func(v._ptr,ac._ptr,mean,stddev)
+    return
+
+def vector_autocorr_tau(link,ac,ftom):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *ac*: :class:`vector<double>` object
+        | *ftom*: :class:`vector<double>` object
+        | Returns: ``ctypes.c_size_t`` object
+    """
+    func=link.o2scl.o2scl_vector_autocorr_tau_std_vector_double_std_vector_double__wrapper
+    func.restype=ctypes.c_size_t
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+    ret=func(ac._ptr,ftom._ptr)
+    return ret
+
+def vector_acor(link,n,v,mean,sigma,tau):
+    """
+        | Parameters:
+        | *link* :class:`linker` object
+        | *n*: ``size_t``
+        | *v*: :class:`vector<double>` object
+        | *mean*: ``double``
+        | *sigma*: ``double``
+        | *tau*: ``double``
+    """
+    func=link.o2scl.o2scl_vector_acor_std_vector_double__wrapper
+    func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+    func(n,v._ptr,mean,sigma,tau._ptr)
+    return
+
