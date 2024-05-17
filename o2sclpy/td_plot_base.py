@@ -2237,7 +2237,7 @@ class td_plot_base(yt_plot_base):
                  head_width=3,coords='internal'):
         """Documentation for o2graph command ``td-arrow``:
 
-        Plot an arrow in a 3d visualization (experimental)
+        Create a 3D arrow (experimental)
 
         Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> 
         [kwargs]``

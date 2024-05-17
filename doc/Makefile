@@ -32,7 +32,7 @@ sphinx-help:
 %: Makefile
 	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-sync-doc:
+release-sync-doc:
 	rsync -Cavzu build/html/* $(STATIC_DOC_DIR)/o2sclpy
 
 prerelease-sync-doc:

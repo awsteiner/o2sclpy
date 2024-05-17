@@ -7,7 +7,8 @@ help:
 	@echo "doc:       Make the documentation (requires sphinx & breathe)"
 	@echo "test:      Test the library and output results to test.out"
 	@echo "testq:     Test the library and output results to the screen"
-	@echo "sync-doc:  Copies documentation to webserver"
+	@echo "release-sync-doc:  Copies documentation to webserver"
+	@echo "prerelease-sync-doc:  Copies documentation to webserver"
 	@echo "open-doc:  Open local documentation in browser"
 	@echo "web-doc:   Open web documentation in browser (after sync-doc)"
 	@echo "test-sync:"
@@ -48,8 +49,8 @@ doc: .empty
 	cd examples; $(MAKE) buchdahl.ipynb
 	cd doc; $(MAKE) html
 
-sync-doc:
-	cd doc; $(MAKE) sync-doc
+release-sync-doc:
+	cd doc; $(MAKE) release-sync-doc
 
 prerelease-sync-doc:
 	cd doc; $(MAKE) prerelease-sync-doc

@@ -49,5 +49,5 @@ yt multiple volume example
 
 .. raw:: html
 	 
-   <video width="512" height="512" controls><source src="https://awsteiner.org/code/o2sclpy/_static/yt_tg_multvol.mp4" type="video/mp4"></video>
+   <video width="512" height="512" controls><source src="https://awsteiner.org/code/o2sclpy-dev/_static/figures/yt_tg_multvol.mp4" type="video/mp4"></video>
 
