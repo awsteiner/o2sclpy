@@ -1,0 +1,13 @@
+# This example demonstrates the use of 'arrow'. 
+#
+o2graph -set verbose 3 -backend Agg -xlimits 0 1 -ylimits 0 1.2 \
+-arrow 0.2 0.2 0.8 0.2 \
+arrowstyle='->',connectionstyle=arc3 \
+-arrow 0.2 0.4 0.8 0.4 \
+arrowstyle='-|>',connectionstyle=arc,fc=red,ec=blue \
+-arrow 0.2 0.6 0.8 0.6 \
+arrowstyle='-|>',connectionstyle=arc,head_length=4.0,head_width=1.0 \
+-arrow 0.2 0.8 0.8 0.8 \
+arrowstyle='->',connectionstyle=arc3,head_length=4.0,head_width=1.0,rad=-0.1 \
+-arrow 0.2 1.0 0.8 1.0 arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,head_width=1.0,rad=-0.1 \
+-save figures/arrows.png

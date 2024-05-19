@@ -947,19 +947,6 @@ class plot_base:
             * bar     armA=0.0,armB=0.0,fraction=0.3,angle=None \\
 
         See https://matplotlib.org/2.0.2/users/annotations.html for more.
-        For example::
-
-            o2graph -xlimits 0 1 -ylimits 0 1.2 \\
-            -arrow 0.2 0.2 0.8 0.2 \\
-            arrowstyle='->',connectionstyle=arc3 \\
-            -arrow 0.2 0.4 0.8 0.4 \\
-            arrowstyle='-|>',connectionstyle=arc,fc=red,ec=blue \\
-            -arrow 0.2 0.6 0.8 0.6 \\
-            arrowstyle='-|>',connectionstyle=arc,head_length=4.0,head_width=1.0 \\
-            -arrow 0.2 0.8 0.8 0.8 \\
-            arrowstyle='->',connectionstyle=arc3,head_length=4.0,head_width=1.0,rad=-0.1 \\
-            -arrow 0.2 1.0 0.8 1.0 arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,head_width=1.0,rad=-0.1 \\
-            -show
         """
         if self.verbose>2:
             print('Arrow',x1,y1,x2,y1,arrowprops)
@@ -973,9 +960,52 @@ class plot_base:
             x2=float(eval(x2))
         if isinstance(y2,str):
             y2=float(eval(y2))
+
+        # Convert the arrow properties string to a dict
+        ap_dict=string_to_dict(arrowprops)
+
+        # The arrowstyle and connectionstyle arguments have to be a
+        # part the string argument of arrowstyle, so we have to reorganize
+        # these arguments from the dict and add them to the string.
+
+        # These are the arrowstyle arugments (except for angleB
+        # which has to be handled separately)
+        as_args=["head_width","head_length","tail_width",
+                 "shrink_factor","widthA","widthB",
+                 "lengthB"]
+
+        # Update the arrowstyle string
+        if "arrowstyle" in ap_dict:
+            for j in range(0,len(as_args)):
+                if as_args[j] in ap_dict:
+                    ap_dict["arrowstyle"]=(ap_dict["arrowstyle"]+
+                                           ','+as_args[j]+'='+
+                                           ap_dict.pop(as_args[j]))
+            if "as_angleB" in ap_dict:
+                ap_dict["arrowstyle"]=(ap_dict["arrowstyle"]+
+                                       ',angleB='+
+                                       ap_dict.pop("as_angleB"))
+
+        # These are the connectionstyle arugments (except for angleB
+        # which has to be handled separately)
+        cs_args=["angleA","armA","armB","rad","fraction",
+                 "angle"]
+            
+        # Update the connectionstyle string
+        if "connectionstyle" in ap_dict:
+            for j in range(0,len(cs_args)):
+                if cs_args[j] in ap_dict:
+                    ap_dict["connectionstyle"]=(ap_dict["connectionstyle"]+
+                                                ','+cs_args[j]+'='+
+                                                ap_dict.pop(cs_args[j]))
+            if "cs_angleB" in ap_dict:
+                ap_dict["connectionstyle"]=(ap_dict["connectionstyle"]+
+                                            ',angleB='+
+                                            ap_dict.pop("cs_angleB"))
+            
         self.axes.annotate("",xy=(x2,y2),xycoords='data',
                            xytext=(x1,y1),textcoords='data',
-                           arrowprops=string_to_dict(arrowprops))
+                           arrowprops=ap_dict)
         # End of function plot_base::arrow()
         return
 
