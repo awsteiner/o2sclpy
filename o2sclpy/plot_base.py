@@ -946,7 +946,7 @@ class plot_base:
             * arc3    rad=0.0 \\
             * bar     armA=0.0,armB=0.0,fraction=0.3,angle=None \\
 
-        See https://matplotlib.org/2.0.2/users/annotations.html for more.
+        See https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.annotate.html for more. 
         """
         if self.verbose>2:
             print('Arrow',x1,y1,x2,y1,arrowprops)
@@ -972,7 +972,7 @@ class plot_base:
         # which has to be handled separately)
         as_args=["head_width","head_length","tail_width",
                  "shrink_factor","widthA","widthB",
-                 "lengthB"]
+                 "lengthA","lengthB"]
 
         # Update the arrowstyle string
         if "arrowstyle" in ap_dict:
@@ -985,6 +985,7 @@ class plot_base:
                 ap_dict["arrowstyle"]=(ap_dict["arrowstyle"]+
                                        ',angleB='+
                                        ap_dict.pop("as_angleB"))
+            print('arrowstyle:',ap_dict["arrowstyle"])
 
         # These are the connectionstyle arugments (except for angleB
         # which has to be handled separately)
@@ -1002,6 +1003,7 @@ class plot_base:
                 ap_dict["connectionstyle"]=(ap_dict["connectionstyle"]+
                                             ',angleB='+
                                             ap_dict.pop("cs_angleB"))
+            print('connectionstyle:',ap_dict["connectionstyle"])
             
         self.axes.annotate("",xy=(x2,y2),xycoords='data',
                            xytext=(x1,y1),textcoords='data',

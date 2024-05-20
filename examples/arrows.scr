@@ -1,13 +1,22 @@
 # This example demonstrates the use of 'arrow'. 
 #
-o2graph -set verbose 3 -backend Agg -xlimits 0 1 -ylimits 0 1.2 \
+o2graph -backend Agg -xlimits 0 1 -ylimits 0 1.2 \
+-arrow 0.2 0.1 0.8 0.1 \
+width=5,headwidth=10,headlength=15,shrink=0.1 \
 -arrow 0.2 0.2 0.8 0.2 \
-arrowstyle='->',connectionstyle=arc3 \
+arrowstyle='->',connectionstyle=arc3,head_length=2.0,head_width=1.0,rad=0.1 \
+-arrow 0.2 0.3 0.8 0.3 \
+arrowstyle='->',connectionstyle=angle3,head_length=2.0,head_width=1.0,angleA=70,cs_angleB=170 \
 -arrow 0.2 0.4 0.8 0.4 \
-arrowstyle='-|>',connectionstyle=arc,fc=red,ec=blue \
+arrowstyle='-|>',connectionstyle=arc,fc=red,ec=blue,head_length=2.0,head_width=1.0 \
+-arrow 0.2 0.5 0.8 0.5 \
+arrowstyle='<|-|>',connectionstyle=arc,fc=red,ec=blue,head_length=2.0,head_width=1.0,lengthA=0.1,lengthB=0.3,angleA=20,as_angleB=20,widthA=20.0,widthB=4 \
 -arrow 0.2 0.6 0.8 0.6 \
-arrowstyle='-|>',connectionstyle=arc,head_length=4.0,head_width=1.0 \
+arrowstyle='|-|',widthA=2.0,as_angleB=20,connectionstyle=arc,angleA=70,cs_angleB=40,rad=0.1 \
 -arrow 0.2 0.8 0.8 0.8 \
 arrowstyle='->',connectionstyle=arc3,head_length=4.0,head_width=1.0,rad=-0.1 \
--arrow 0.2 1.0 0.8 1.0 arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,head_width=1.0,rad=-0.1 \
+-arrow 0.2 0.9 0.8 0.9 \
+"arrowstyle=fancy,connectionstyle=arc3,head_length=4.0,head_width=1.0,fc=(1,1,0),ec=[1,0,0,0.5],rad=-0.1" \
+-arrow 0.2 1.0 0.8 1.0 \
+arrowstyle=wedge,connectionstyle=arc3,tail_width=0.7,shrink_factor=0.1,rad=0.1 \
 -save figures/arrows.png

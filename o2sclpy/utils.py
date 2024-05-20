@@ -1115,8 +1115,10 @@ def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[],
         arr.append(temps)
     #print('arr:',arr)
     #quit()
-        
-    for i in range(0,len(arr)):
+
+    i=0
+    done=False
+    while done==False:
 
         # For each pair, split keyword and value.
         arr2=arr[i].split('=')
@@ -1126,6 +1128,7 @@ def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[],
             print('  arr_old:',arr_old)
             print('  arr:',arr)
             print('  arr2:',arr2)
+            quit()
             raise ValueError('Failed to find an assignment in ',
                              'string_to_dict2() argument.')
         
@@ -1153,29 +1156,40 @@ def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[],
             else:
                 arr2[1]=False
         if arr2[0] in list_of_colors:
-            #print('arr2[1]','x'+arr2[1]+'x',
-            #arr2[1].find('('),arr2[1].find('['))
             if arr2[1].find('(')!=-1:
-                arr2[1]=arr2[1][1:len(arr2[1])-1]
-                arr3=arr2[1].split(',')
+                if True:
+                    print('arr_old:',arr_old)
+                    print('arr2[0]:',arr2[0])
+                    print('arr2[1]:',arr2[1])
+                arr2[1]=(float(arr2[1][arr2[1].find('(')+1:]),
+                         float(arr[i+1]),
+                         float(arr[i+2][:arr[i+2].find(')')]))
+                i=i+2
                 if False:
                     print('arr_old:',arr_old)
                     print('arr:',arr)
                     print('arr2[1]:',arr2[1])
-                    print('arr2[0]',arr2[0],'(arr3:',arr3)
-                arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]))
             elif arr2[1].find('[')!=-1:
-                arr2[1]=arr2[1][1:len(arr2[1])-1]
-                arr3=arr2[1].split(',')
-                if False:
+                if True:
                     print('arr_old:',arr_old)
+                    print('arr2[0]:',arr2[0])
+                    print('arr2[1]:',arr2[1])
+                    print('part:',arr2[1][:])
+                arr2[1]=arr2[1][arr2[1].find('[')+1:
+                                 arr2[1].find(']')].split(',')
+                arr2[1]=[float(arr2[1][0]),
+                         float(arr2[1][1]),
+                         float(arr2[1][2]),
+                         float(arr2[1][3])]
+                if True:
                     print('arr:',arr)
                     print('arr2[1]:',arr2[1])
-                    print('arr2[0]',arr2[0],'[arr3:',arr3)
-                arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]),
-                         float(arr3[3]))
-                    
+
         dct[arr2[0]]=arr2[1]
+
+        i=i+1
+        if i>=len(arr):
+            done=True
 
     return dct
 
@@ -1199,14 +1213,20 @@ def string_to_dict(s):
                                              'font','scale','dpi',
                                              'capsize','capthick',
                                              'rotation','fontsize',
-                                             'labelsize'],
+                                             'labelsize','headlength',
+                                             'headwidth','width',
+                                             'shrink'],
                           list_of_bools=['sharex','lolims','reorient',
                                          'uplims','xlolims','xuplims',
                                          'sharey','squeeze','fill',
                                          'ticks_in','rt_ticks',
                                          'pcm'],
                            list_of_ints=['shrinkA','shrinkB','bins'],
-                           list_of_colors=['color','textcolor'])
+                           list_of_colors=['color','textcolor','edgecolor',
+                                           'facecolor','fc','ec',
+                                           'markerfacecolor','mfc',
+                                           'markeredgecolor','mec',
+                                           'markerfacecoloralt','mfcalt'])
     
     # First split into keyword = value pairs
     arr=s.split(',')
