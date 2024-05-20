@@ -33,8 +33,34 @@ automatically by the first yt-related command. All commands work on
 the user coordinate system by default, and then transform their
 arguments to :math:`[0,1]` when necessary.
 
-Blender example
----------------
+Scatter plots
+-------------
+
+.. include:: ../examples/gltf_scatter.scr
+   :literal:
+.. image:: static/figures/gltf/scatter.png
+   :width: 70%
+
+.. include:: ../examples/gltf_scatter_col.scr
+   :literal:
+.. image:: static/figures/gltf/scatter_col.png
+   :width: 70%
+
+Density plots
+-------------
+
+.. include:: ../examples/gltf_den_plot.scr
+   :literal:
+.. image:: static/figures/gltf/den_plot.png
+   :width: 70%
+
+.. include:: ../examples/gltf_den_plot_col.scr
+   :literal:
+.. image:: static/figures/gltf/den_plot_col.png
+   :width: 70%
+
+Density plot movie
+------------------
 
 .. include:: ../examples/bl_den_plot_yaw.scr
    :literal:
