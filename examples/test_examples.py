@@ -52,7 +52,7 @@ def compare_files(name1,name2):
         lines1=f.readlines()
     with open(name2) as f2:
         lines2=f2.readlines()
-    for i in range(0,len(name1)):
+    for i in range(0,len(lines1)):
         if len(lines2)<i:
             print('Files have different lengths,',len(lines1),
                   len(lines2),'.')
