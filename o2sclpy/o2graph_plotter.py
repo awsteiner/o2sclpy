@@ -917,24 +917,30 @@ class o2graph_plotter(td_plot_base):
         #if curr_type==b'table':
         #else:
 
-    def mp4(self,args,loop=False,vf=''):
+    def mp4(self,args,loop=False,vf='',fps=10):
         """Documentation for o2graph command ``mp4``:
 
         Create an mp4 file from a series of images.
 
-        Command-line arguments: ``<pattern> <output>``
+        Command-line arguments: ``<pattern> <output> [kwargs]``
 
         Typical patterns are "prefix%02dsuffix" and outputs are
         "out.mp4". If the "mp4" suffix is omitted, it is automatically
         added.
 
-        A typical video filter is e.g. vf='eq=brightness=0.5:contrast=10'.
+        Useful kwargs are loop=False, fps=10, and vf=''. The former
+        controls whether or not the ``-stream_loop -1`` is passed to
+        ffmpeg and the latter is the video filter to be applied with
+        ffmpeg's ``-vf`` flag. A typical video filter kwarg is e.g.
+        vf='eq=brightness=0.5:contrast=10'.
 
-        This command requires the installation of ``ffmpeg``. 
+        This command requires the installation of ``ffmpeg``.
+
         """
         if len(args)<2:
-            print('Command mp4 needs more arguments.')
-            return
+            print('Command mp4 requires two arguments.')
+            return 1
+        
         pattern=args[0]
         output=args[1]
         if output[-4:]!='.mp4':
@@ -945,7 +951,7 @@ class o2graph_plotter(td_plot_base):
         # -vcodec sets the video codec
         # -pix_fmt sets the pixel format
             
-        cmd=('ffmpeg -y -r 10 -f image2 -i '+pattern+
+        cmd=('ffmpeg -y -r '+str(fps)+' -f image2 -i '+pattern+
              ' -vcodec libx264')
         if vf!='':
             cmd=cmd+' -vf '+vf
@@ -957,7 +963,7 @@ class o2graph_plotter(td_plot_base):
         print('o2graph_plottter::mp4(): Executing "'+cmd+'".')
         os.system(cmd)
         
-        return
+        return 0
         
     def bl_yaw_mp4(self, n_frames: int, mp4_file: str,
                    blender_cmd: str = '', o2sclpy_dir: str = '',
@@ -975,7 +981,14 @@ class o2graph_plotter(td_plot_base):
         Command-line arguments: ``<n_frames> <mp4 file> <kwargs>``
 
         This command requires Blender, the associated python package,
-        ``bpy``, and the installation of ``ffmpeg``. 
+        ``bpy``, and the installation of ``ffmpeg``.
+
+        Useful kwargs are blender_cmd='', o2sclpy_dir='', vf='',
+        cam_dist=5.0, light_energy=800.0, light_dist=5.8, bg_color='',
+        cam_type='', res_x=1600, res_y=900, and blend_file=''.
+
+        The vf kwarg is forwarded to the ``mp4`` command to
+        generate the final video.
         """
 
         import tempfile
@@ -1081,6 +1094,13 @@ class o2graph_plotter(td_plot_base):
 
         This command requires Blender, the associated python package,
         ``bpy``, and the installation of ``ffmpeg``. 
+
+        Useful kwargs are blender_cmd='', o2sclpy_dir='', vf='',
+        cam_dist=5.0, light_energy=800.0, light_dist=5.8, bg_color='',
+        cam_type='', res_x=1600, res_y=900, and blend_file=''.
+
+        The vf kwarg is forwarded to the ``mp4`` command to
+        generate the final video.
         """
 
         import tempfile
@@ -1172,7 +1192,8 @@ class o2graph_plotter(td_plot_base):
                   light_energy : float = 800,
                   light_dist : float = 5.8,
                   bg_color : str = '', cam_type : str = '',
-                  blend_file : str = ''):
+                  res_x: int = 1600, res_y : int = 900,
+                  blend_file : str = '', output_png : str = ''):
         """
         Documentation for o2graph command ``bl-import``:
         
@@ -1208,6 +1229,9 @@ class o2graph_plotter(td_plot_base):
                   'LIGHT_DIST': str(light_dist),
                   'LIGHT_ENERGY': str(light_energy),
                   'GLTF_PATH': gltf_file_name,
+                  'RES_X': str(res_x),
+                  'RES_Y': str(res_y),
+                  'OUTPUT_PNG': output_png,
                   'CAM_DIST': str(cam_dist),
                   'CAMERA_TYPE': str(cam_type)}
         print('Making replacements:',rep_list)
@@ -1221,6 +1245,9 @@ class o2graph_plotter(td_plot_base):
             line=line.replace('LIGHT_ENERGY',rep_list['LIGHT_ENERGY'])
             line=line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
             line=line.replace('CAM_DIST',rep_list['CAM_DIST'])
+            line=line.replace('RES_X',rep_list['RES_X'])
+            line=line.replace('RES_Y',rep_list['RES_Y'])
+            line=line.replace('OUTPUT_PNG',rep_list['OUTPUT_PNG'])
             line=line.replace('CAMERA_TYPE',rep_list['CAMERA_TYPE'])
             frep.write(line)
         forig.close()
@@ -5950,7 +5977,17 @@ class o2graph_plotter(td_plot_base):
                         print('Process bl-import.')
                         print('args:',strlist[ix:ix_next])
 
-                    if ix_next-ix>=2:
+                    if ix_next-ix>=3:
+                        self.bl_import(strlist[ix+1],
+                                       **string_to_dict2(strlist[ix+2],
+                                                         list_of_floats=
+                                                         ['cam_dist',
+                                                          'light_energy',
+                                                          'light_dist'],
+                                                         list_of_ints=
+                                                         ['res_x',
+                                                          'res_y']))
+                    elif ix_next-ix>=2:
                         self.bl_import(strlist[ix+1])
                     else:
                         print('Not enough arguments for bl-import.')
@@ -6092,7 +6129,16 @@ class o2graph_plotter(td_plot_base):
                         print('Process mp4.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.mp4(strlist[ix+1:ix_next])
+                    if ix_next-ix<3:
+                        print('Not enough parameters for yt-render.')
+                    elif ix_next-ix<4:
+                        self.mp4(o2scl,amp,self.link2,[strlist[ix+1],
+                                                       strlist[ix+2]])
+                    else:
+                        self.mp4(o2scl,amp,self.link2,[strlist[ix+1],
+                                                       strlist[ix+2]],
+                                 string_to_dict2(strlist[ix+3:ix_next],
+                                                 list_of_bools=['loop']))
                 
                 elif cmd_name=='kde-plot':
                     

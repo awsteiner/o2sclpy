@@ -4,6 +4,9 @@
 # GLTF_PATH
 # CAM_DIST
 # CAMERA_TYPE
+# OUTPUT_PNG
+# RES_X
+# RES_Y
 
 import bpy
 import os.path
@@ -11,6 +14,9 @@ import numpy
 
 # Scene variable
 scene=bpy.context.scene
+
+scene.render.resolution_x=RES_X
+scene.render.resolution_y=RES_Y
 
 # Delete default objects
 for o in scene.objects:
@@ -96,4 +102,10 @@ bpy.ops.import_scene.gltf(filepath='GLTF_PATH')
 camera.location=[CAM_DIST+0.5,0.5,0.5]
 camera.rotation_euler=[numpy.pi/2.0,0,numpy.pi/2.0]
 
+if 'OUTPUT_PNG'!='':
+    scene.render.filepath='OUTPUT_PNG'
+    
+    # Perform the render
+    bpy.ops.render.render(write_still=True)
+    
 

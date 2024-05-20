@@ -38,12 +38,12 @@ Scatter plots
 
 .. include:: ../examples/gltf_scatter.scr
    :literal:
-.. image:: static/figures/gltf/scatter.png
+.. image:: static/gltf/scatter.png
    :width: 70%
 
 .. include:: ../examples/gltf_scatter_col.scr
    :literal:
-.. image:: static/figures/gltf/scatter_col.png
+.. image:: static/gltf/scatter_col.png
    :width: 70%
 
 Density plots
@@ -51,12 +51,12 @@ Density plots
 
 .. include:: ../examples/gltf_den_plot.scr
    :literal:
-.. image:: static/figures/gltf/den_plot.png
+.. image:: static/gltf/den_plot.png
    :width: 70%
 
 .. include:: ../examples/gltf_den_plot_col.scr
    :literal:
-.. image:: static/figures/gltf/den_plot_col.png
+.. image:: static/gltf/den_plot_col.png
    :width: 70%
 
 Density plot movie
