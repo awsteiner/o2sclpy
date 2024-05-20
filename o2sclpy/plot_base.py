@@ -1080,6 +1080,8 @@ class plot_base:
             capthick   thickness of error bar cap        None
 
         See also ``errorbar`` for for plotting columns from a table object
+        and the documentation at
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.errorbar.html
 
         """
         if err1=='None' or err1=='none':

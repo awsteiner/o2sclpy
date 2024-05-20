@@ -1081,6 +1081,8 @@ def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[],
     """
     Convert a string to a dictionary, converting strings to 
     values when necessary.
+
+    This function is in ``utils.py``.
     """
         
     # First split into keyword = value pairs

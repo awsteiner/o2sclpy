@@ -9,7 +9,7 @@ o2graph -backend Agg -xlimits 0 1 -ylimits 0 1 \
 -point 0.6 0.5 "marker=$\sqrt{x}$,ms=40,c=xkcd:sea green" \
 -point 0.8 0.5 "marker=$\sqrt{x}$,ms=30,c=xkcd:magenta" \
 -error-point 0.3 0.7 0.1 0.15 0.2 0.25 \
-"marker=o,ms=30,mfc=green,mec=red,ecolor=blue,capsize=10,capthick=2" \
+"marker=o,ms=30,mfc=green,mec=red,ecolor=blue,capsize=10,elinewidth=2" \
 -error-point 0.7 0.7 0.1 0.15 0.2 0.25 \
-"marker=o,ms=30,mfc=green,mec=red,ecolor=blue,capsize=10,capthick=2,lolims=True,xuplims=True" \
+"marker=o,ms=30,mfc=green,mec=red,ecolor=blue,capsize=10,capthick=2,lolims=True" \
 -save figures/obj_color.png

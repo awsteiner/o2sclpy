@@ -2530,27 +2530,27 @@ class o2graph_plotter(td_plot_base):
         either the x or y direction, just use 0 for <xerr> or <yerr>,
         respectively.
 
-        Some useful kwargs for the errorbar command are:
+        Some useful kwargs for the errorbar command are::
 
-        ========== ================================= =============
-        keyword    description                       default value
-        ========== ================================= =============
-        ecolor     error bar color                   None
-        elinewidth error bar line width              None
-        capsize    cap size in points                None
-        barsabove  plot error bars on top of points  False
-        lolims     y value is lower limit            False
-        uplims     y value is upper limit            False
-        xlolims    x value is lower limit            False
-        xuplims    x value is upper limit            False
-        errorevery draw error bars on subset of data 1
-        capthick   thickness of error bar cap        None
-        ========== ================================= =============
+        keyword    description                       default value \\
+        ---------- --------------------------------- ------------- \\
+        ecolor     error bar color                   None \\
+        elinewidth error bar line width              None \\
+        capsize    cap size in points                None \\
+        barsabove  plot error bars on top of points  False \\
+        lolims     y value is lower limit            False \\
+        uplims     y value is upper limit            False \\
+        xlolims    x value is lower limit            False \\
+        xuplims    x value is upper limit            False \\
+        errorevery draw error bars on subset of data 1 \\
+        capthick   thickness of error bar cap        None \\
 
         For error points with no lines use, e.g. lw=0,elinewidth=1.
         See also ``error-point`` for plotting a single point with
         errorbars.
 
+        See also
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.errorbar.html
         """
 
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
