@@ -1156,9 +1156,11 @@ def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[],
             else:
                 arr2[1]=False
         if arr2[0] in list_of_colors:
+            # Handle the case of a parenthesis, presumed to be
+            # (r,g,b)
             if arr2[1].find('(')!=-1:
-                if True:
-                    print('arr_old:',arr_old)
+                if False:
+                    print('()arr_old:',arr_old)
                     print('arr2[0]:',arr2[0])
                     print('arr2[1]:',arr2[1])
                 arr2[1]=(float(arr2[1][arr2[1].find('(')+1:]),
@@ -1166,24 +1168,22 @@ def string_to_dict2(s,list_of_ints=[],list_of_floats=[],list_of_bools=[],
                          float(arr[i+2][:arr[i+2].find(')')]))
                 i=i+2
                 if False:
-                    print('arr_old:',arr_old)
-                    print('arr:',arr)
-                    print('arr2[1]:',arr2[1])
+                    print('()arr2[1]:',type(arr2[1]),arr2[1])
+            # Handle the case of a square bracket, presumed to be
+            # [r,g,b,a]
             elif arr2[1].find('[')!=-1:
-                if True:
-                    print('arr_old:',arr_old)
+                if False:
+                    print('[]arr_old:',arr_old)
                     print('arr2[0]:',arr2[0])
                     print('arr2[1]:',arr2[1])
-                    print('part:',arr2[1][:])
                 arr2[1]=arr2[1][arr2[1].find('[')+1:
                                  arr2[1].find(']')].split(',')
                 arr2[1]=[float(arr2[1][0]),
                          float(arr2[1][1]),
                          float(arr2[1][2]),
                          float(arr2[1][3])]
-                if True:
-                    print('arr:',arr)
-                    print('arr2[1]:',arr2[1])
+                if False:
+                    print('[]arr2[1]:',type(arr2[1]),arr2[1])
 
         dct[arr2[0]]=arr2[1]
 
@@ -1222,306 +1222,12 @@ def string_to_dict(s):
                                          'ticks_in','rt_ticks',
                                          'pcm'],
                            list_of_ints=['shrinkA','shrinkB','bins'],
-                           list_of_colors=['color','textcolor','edgecolor',
-                                           'facecolor','fc','ec',
-                                           'markerfacecolor','mfc',
+                           list_of_colors=['color','c','textcolor',
+                                           'edgecolor','facecolor','fc',
+                                           'ec','markerfacecolor','mfc',
                                            'markeredgecolor','mec',
-                                           'markerfacecoloralt','mfcalt'])
-    
-    # First split into keyword = value pairs
-    arr=s.split(',')
-    # Create empty dictionary
-    dct={}
-    # If we need to skip arguments
-    skip=0
-
-    if len(s)==0:
-        return dct
-    
-    for i in range(0,len(arr)):
-
-        if skip>0:
-            skip=skip-1
-        else:
-            # For each pair, split keyword and value.
-            arr2=arr[i].split('=')
-
-            # Remove preceeding and trailing whitespace from the
-            # keywords (not for the values)
-            while arr2[0][0].isspace():
-                arr2[0]=arr2[0][1:]
-            while arr2[0][len(arr2[0])-1].isspace():
-                arr2[0]=arr2[0][:-1]
-
-            # Remove quotes if necessary
-            if len(arr2)>1 and len(arr2[1])>2:
-                if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-                if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-
-            # If one of the entries is arrowstyle, then combine
-            # it with the head_width, head_length, and tail_width
-            # options if they are present
-            if arr2[0]=='arrowstyle':
-                for j in range(0,len(arr)):
-                    if arr[j].split('=')[0]=='head_width':
-                        arr2[1]=arr2[1]+',head_width='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='head_length':
-                        arr2[1]=arr2[1]+',head_length='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='tail_width':
-                        arr2[1]=arr2[1]+',tail_width='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='shrink_factor':
-                        arr2[1]=arr2[1]+',shrink_factor='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='widthA':
-                        arr2[1]=arr2[1]+',widthA='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='widthB':
-                        arr2[1]=arr2[1]+',widthB='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='lengthB':
-                        arr2[1]=arr2[1]+',lengthB='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='as_angleB':
-                        arr2[1]=arr2[1]+',angleB='+arr[j].split('=')[1]
-                print('Found arrowstyle option, reprocessed:',arr2[1])
-
-            # If one of the entries is connection style, then process
-            # accordingly
-            if arr2[0]=='connectionstyle':
-                for j in range(0,len(arr)):
-                    if arr[j].split('=')[0]=='angleA':
-                        arr2[1]=arr2[1]+',angleA='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='cs_angleB':
-                        arr2[1]=arr2[1]+',angleB='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='armA':
-                        arr2[1]=arr2[1]+',armA='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='armB':
-                        arr2[1]=arr2[1]+',armB='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='rad':
-                        arr2[1]=arr2[1]+',rad='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='fraction':
-                        arr2[1]=arr2[1]+',fraction='+arr[j].split('=')[1]
-                    if arr[j].split('=')[0]=='angle':
-                        arr2[1]=arr2[1]+',angle='+arr[j].split('=')[1]
-                print('Found connectionstyle option, reprocessed:',arr2[1])
-                
-            # convert strings to numbers if necessary
-            if arr2[0]=='zorder':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='lw':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='linewidth':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='elinewidth':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='alpha':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='shrinkA':
-                arr2[1]=int(arr2[1])
-            if arr2[0]=='shrinkB':
-                arr2[1]=int(arr2[1])
-            if arr2[0]=='bins':
-                arr2[1]=int(arr2[1])
-            if arr2[0]=='fig_size_x':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='fig_size_y':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='left_margin':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='right_margin':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='top_margin':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='bottom_margin':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='left':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='right':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='top':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='bottom':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='wspace':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='hspace':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='fontsize':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='font':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='scale':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='dpi':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='pad':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='capsize':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='capthick':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='rotation':
-                arr2[1]=float(arr2[1])
-
-            # Convert strings to bool values
-            if arr2[0]=='sharex':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='lolims':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='uplims':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='xlolims':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='xuplims':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='reorient':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='sharey':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='squeeze':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='fill':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='ticks_in':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='rt_ticks':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-            if arr2[0]=='pcm':
-                if arr2[1]=='True':
-                    arr2[1]=True
-                else:
-                    arr2[1]=False
-                    
-            # Process color entries. The challenge here is that
-            # dictionary entries are separated by commas, but there
-            # are also commas inside color specifications. If color
-            # contains a left parenthesis or a left bracket, then we
-            # have to convert the string to an array. However, this
-            # algorithm has a limitation: it can only handle (rgb) or
-            # [rgba], but not [rgb] or (rgba).
-
-            if (arr2[0]=='color' and
-                arr[i][5]=='=' and arr[i][6]=='('):
-                arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]
-                skip=2
-                arr2[1]=arr2[1][1:len(arr2[1])-1]
-                arr3=arr2[1].split(',')
-                arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]))
-                print('Found color:',arr2[1])
-            elif (arr2[0]=='color' and
-                  arr[i][5]=='=' and arr[i][6]=='['):
-                arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]+','+arr[i+3]
-                skip=3
-                arr2[1]=arr2[1][1:len(arr2[1])-1]
-                arr3=arr2[1].split(',')
-                arr2[1]=[float(arr3[0]),float(arr3[1]),float(arr3[2]),
-                         float(arr3[3])]
-                print('Found color:',arr2[1])
-            elif (arr2[0]=='textcolor' and
-                arr[i][9]=='=' and arr[i][10]=='('):
-                arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]
-                skip=2
-                arr2[1]=arr2[1][1:len(arr2[1])-1]
-                arr3=arr2[1].split(',')
-                arr2[1]=(float(arr3[0]),float(arr3[1]),float(arr3[2]))
-                print('Found color:',arr2[1])
-            elif (arr2[0]=='textcolor' and
-                  arr[i][9]=='=' and arr[i][10]=='['):
-                arr2[1]=arr2[1]+','+arr[i+1]+','+arr[i+2]+','+arr[i+3]
-                skip=3
-                arr2[1]=arr2[1][1:len(arr2[1])-1]
-                arr3=arr2[1].split(',')
-                arr2[1]=[float(arr3[0]),float(arr3[1]),float(arr3[2]),
-                         float(arr3[3])]
-                print('Found color:',arr2[1])
-
-            if ((arr2[0]=='ls' or arr2[0]=='linestyle')
-                and len(arr2)>=2 and len(arr2[1])>1
-                and arr2[1][0]=='('):
-                lstemp=arr[i]
-                skip=0
-                while (lstemp[-1]!=')' and lstemp[-2]!=')' and
-                       i+1<len(arr)):
-                    lstemp=lstemp+','+arr[i+1]
-                    skip=skip+1
-                    i=i+1
-                if lstemp[-2]!=')' or lstemp[-1]!=')':
-                    print('Failed to parse line style from',s)
-                    quit()
-                arr2[1]=eval(lstemp[3:])
-
-            # if (arr2[0]=='color' and (arr2[1].find('(')!=-1 or
-            #                           arr2[1].find('[')!=-1)):
-            #     print('here',arr2[0],arr2[1])
-            #     if arr2[1].find('(')==-1:
-            #         loc1=arr2[1].find('[')
-            #         loc2=arr2[1].find(']')
-            #     else:
-            #         loc1=arr2[1].find('(')
-            #         loc2=arr2[1].find(')')
-            #     print('here2',loc1,loc2)
-            #     arr2[1]=arr2[1][loc1:loc2-loc1+1]
-            #     print('here3',arr2[1])
-            #     temp=arr2[1].split(',')
-            #     if len(temp)==3:
-            #         arr2[1]=[float(temp[0]),float(temp[1]),
-            #                  float(temp[2])]
-            #     else:
-            #         arr2[1]=[float(temp[0]),float(temp[1]),
-            #                  float(temp[2]),float(temp[3])]
-            #     print('here4',arr2[1])
-
-            # assign to dictionary (except for arrowstyle and
-            # connectionstyle options which are handled separately
-            # above)
-            if (arr2[0]!='head_width' and arr2[0]!='head_length' and
-                arr2[0]!='tail_width' and arr2[0]!='rad' and
-                arr2[0]!='angleA' and arr2[0]!='as_angleB' and
-                arr2[0]!='armA' and arr2[0]!='armB' and
-                arr2[0]!='angle' and arr2[0]!='fraction' and
-                arr2[0]!='shrink_factor' and arr2[0]!='widthA' and
-                arr2[0]!='lengthB' and arr2[0]!='widthB' and
-                arr2[0]!='cs_angleB'):
-                if len(arr2)<2:
-                    print('Original string:',s)
-                    print('Current entry:',arr2)
-                    print('Current dictionary:',dct)
-                    raise Exception('Failed to parse string "'+s+
-                                    '" as dictionary.')
-                dct[arr2[0]]=arr2[1]
-        
-    return dct
+                                           'markerfacecoloralt','mfcalt',
+                                           'ecolor'])
 
 class terminal_py:
     """

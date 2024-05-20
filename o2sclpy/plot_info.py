@@ -130,26 +130,26 @@ def markers_plot(fname=''):
     row_ctr=0
     col_ctr=0
     for entry in mlist:
-        if row_ctr>2:
-            plot.rc('text',usetex=False)
-            axes.plot([(col_ctr+0.1)/(ncols)],
-                      [float(nrows-row_ctr)/(nrows+1)],
-                      marker=entry[0],color='black',markersize=10)
-            axes.text((col_ctr+0.25)/(ncols),
-                      float(nrows-row_ctr)/(nrows+1),
-                      entry[1],family='monospace',
-                      va='center',ha='center',fontsize=16)
-            plot.rc('text',usetex=True)
-            axes.text((col_ctr+0.37)/(ncols),
-                      float(nrows-row_ctr)/(nrows+1),
-                      entry[2].replace('_','\\_'),
-                      va='center',ha='left',fontsize=16)
+        
+        plot.rc('text',usetex=False)
+        y=float(nrows-row_ctr)/(nrows+5)
+        axes.plot([(col_ctr+0.1)/(ncols)],[y],
+                  marker=entry[0],color='black',markersize=10)
+        axes.text((col_ctr+0.25)/(ncols),y,
+                  entry[1],family='monospace',
+                  va='center',ha='center',fontsize=16)
+        
+        plot.rc('text',usetex=True)
+        axes.text((col_ctr+0.37)/(ncols),y,
+                  entry[2].replace('_','\\_'),
+                  va='center',ha='left',fontsize=16)
+        
         row_ctr=row_ctr+1
         if row_ctr>=nrows:
             row_ctr=0
             col_ctr=col_ctr+1
-        axes.text(0.5,0.835,r'$ \mathrm{O}_2\mathrm{sc'+
-                  'lpy~markers~summary} $',
+        axes.text(0.5,0.835,r'$ \mathtt{o2gr'+
+                  'aph}~\mathrm{markers~summary} $',
                   fontsize=16,ha='center')
     if fname!='':
         plot.savefig(fname)

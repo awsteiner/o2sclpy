@@ -1,0 +1,15 @@
+o2graph -backend Agg -xlimits 0 1 -ylimits 0 1 \
+-arrow 0.1 0.1 0.4 0.1 \
+"arrowstyle=fancy,connectionstyle=arc3,rad=0.1,ec=blue,fc=(1,0,0),lw=2,tail_width=1.5,head_width=2.0" \
+-arrow 0.6 0.1 0.9 0.1 \
+"arrowstyle=fancy,connectionstyle=arc3,rad=0.1,ec=blue,fc=(1,0,0),lw=2,tail_width=1.5,head_width=2.0,hatch=||" \
+-textbox 0.5 0.3 "This is a box with math: $\sqrt{x}$" "fc=#ddffdd,ec=forestgreen,ls=:,lw=2" "color=[1,0,0,0.5]" \
+-point 0.2 0.5 "marker=P,ms=20,mfc=xkcd:sea green,mfc=xkcd:dark pink,mew=2" \
+-point 0.4 0.5 "marker=o,ms=20,fillstyle=left,mfc=xkcd:sea green,mfc=xkcd:dark pink,mew=1,mfcalt=(0,1,1)" \
+-point 0.6 0.5 "marker=$\sqrt{x}$,ms=40,c=xkcd:sea green" \
+-point 0.8 0.5 "marker=$\sqrt{x}$,ms=30,c=xkcd:magenta" \
+-error-point 0.3 0.7 0.1 0.15 0.2 0.25 \
+"marker=o,ms=30,mfc=green,mec=red,ecolor=blue,capsize=10,capthick=2" \
+-error-point 0.7 0.7 0.1 0.15 0.2 0.25 \
+"marker=o,ms=30,mfc=green,mec=red,ecolor=blue,capsize=10,capthick=2,lolims=True,xuplims=True" \
+-save figures/obj_color.png

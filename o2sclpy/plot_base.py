@@ -1624,6 +1624,9 @@ class plot_base:
         '-', '+', 'x', 'o', 'O', '.', '*'}), linestyle (ls), and
         linewidth (lw). The keyword arguments are for the text
         properties, and follow those of the text command.
+
+        For more information, see:
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.FancyBboxPatch.html
         """
         if self.canvas_flag==False:
             self.canvas()
