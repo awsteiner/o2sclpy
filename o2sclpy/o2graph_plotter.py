@@ -202,7 +202,6 @@ extra_list=[
     ["table","yt-vertex-list",0],
     ["table3d","den-plot",0],
     ["table3d","den-plot-rgb",0],
-    ["table3d","make-png",0],
     ["tensor","den-plot",0],
     ["tensor<int>","den-plot",0],
     ["tensor<size_t>","den-plot",0],
@@ -1486,8 +1485,7 @@ class o2graph_plotter(td_plot_base):
         return
 
     def den_plot_rgb_o2graph(self,o2scl,amp,link,args):
-        """
-        Documentation for o2graph command ``den-plot-rgb``:
+        """Documentation for o2graph command ``den-plot-rgb``:
 
         For objects of type ``table3d``:
 
@@ -1497,10 +1495,14 @@ class o2graph_plotter(td_plot_base):
 
         Create a density plot from the three specified slices. This
         command uses imshow(). To directly create a .png file with no
-        axes, use make-png instead. For example::
+        axes, specify the output png filename with the kwarg make_png.
+        Making png files requires the Pillow python package.
+
+        For example::
 
             o2graph -create table3d x "grid:0,1,0.01" y "grid:0,1,0.01" \\
             r "x" -function "y" g -function 0 b -den-plot-rgb r g b -show
+
         """
 
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
@@ -1548,51 +1550,6 @@ class o2graph_plotter(td_plot_base):
 
         return
     
-    def make_png_o2graph(self,o2scl,amp,link,args):
-        """Documentation for o2graph command ``make-png``:
-        
-        For objects of type ``table3d``:
-
-        Command-line arguments: ``<slice r> <slice g> <slice b> [kwargs]``
-
-        Create a .png file from the three specified table3d slices.
-        This command requires pillow. To create a density-plot with
-        axes instead, use den-plot-rgb.
-
-        The only keyword argument is ``renorm=False``, which
-        renormalizes the red, green, and blue channels separately to
-        ensure the minimum in each channel is 0 and the maximum in
-        each channel is 255.
-        """
-
-        curr_type=o2scl_get_type(o2scl,amp,self.link2)
-        amt=acol_manager(self.link2,amp)
-
-        kwstring=''
-        if curr_type!=b'table3d':
-            print("Command 'make-png' not supported for type",
-                  curr_type,".")
-            return
-            
-        slice_r=args[0]
-        slice_g=args[1]
-        slice_b=args[2]
-        fname=args[3]
-        if len(args)>=5:
-            kwstring=args[4]
-
-        dctt=string_to_dict(kwstring)
-        renorm=dctt.pop('renorm',False)
-
-        try:
-            self.den_plot_rgb(amt.get_table3d_obj(),slice_r,slice_g,slice_b,
-                              make_png=fname,renorm=renorm,**dctt)
-        except Exception as e:
-            print('Exception in make_png_o2graph()',e)
-            raise
-            
-        return
-
     def kde_plot(self,o2scl,amp,args,link):
         """Documentation for o2graph command ``kde-plot``:
 
@@ -5469,18 +5426,6 @@ class o2graph_plotter(td_plot_base):
                         self.cmap(strlist[ix+1])
                     else:
                         self.cmap(strlist[ix+1],strlist[ix+2:ix_next])
-                        
-                elif cmd_name=='make-png':
-
-                    if self.verbose>2:
-                        print('Process make-png.')
-                        print('args:',strlist[ix:ix_next])
-                        
-                    if ix_next-ix<3:
-                        print('Not enough parameters for make-png option.')
-                    else:
-                        self.make_png_o2graph(o2scl,amp,self.link2,
-                                              strlist[ix+1:ix_next])
                         
                 elif cmd_name=='get':
                     

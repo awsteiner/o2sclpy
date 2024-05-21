@@ -739,16 +739,16 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
     height of the original image (incremented by one if necessary to
     make them even), and the width and height of the new image.
 
-    This function uses Pillow to determine the original width and
-    height and perform the resizing. If the width and height are
-    already a power of two, then the file is simply copied, unless the
-    input and output filenames are the same, in which case this
-    function does nothing. If the input and output filenames are the
-    same, and the width and height are not a power of two, then this
-    function will throw an exception to help prevent the user from
-    inadvertently overwriting the original file. This function will
-    overwrite the output file when the input and output filenames
-    are different. 
+    This function uses the Pillow python package to determine the
+    original width and height and perform the resizing. If the width
+    and height are already a power of two, then the file is simply
+    copied, unless the input and output filenames are the same, in
+    which case this function does nothing. If the input and output
+    filenames are the same, and the width and height are not a power
+    of two, then this function will throw an exception to help prevent
+    the user from inadvertently overwriting the original file. This
+    function will overwrite the output file when the input and output
+    filenames are different.
 
     The default background color is black.
 
@@ -805,7 +805,7 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
         
     else:
         
-        # Use Pillow to resize the image, giving new pixes the color
+        # Use Pillow to resize the image, giving new pixels the color
         # specified in bgcolor
         img_new=Image.new('RGBA',(w_new,h_new),
                           ('rgba('+str(bgcolor[0])+','+str(bgcolor[1])+','+
@@ -873,7 +873,12 @@ def latex_to_png(tex: str, png_file: str, verbose: int = 0,
     The standalone LaTeX package is used to make png, and the default
     background is transparent, but the antialiasing used to render the
     equations means that only white backgrounds work without creating
-    edge effects.
+    edge effects. The additional LaTeX packages listed in ``packages``
+    are loaded with the ``usepackage`` LaTeX command. A common use-case
+    is to load the color package to get colored LaTeX output.
+
+    The destination file ``png_file`` will be silently overwritten
+    if it is already present.
     """
     import tempfile
 

@@ -1323,7 +1323,7 @@ class td_plot_base(yt_plot_base):
     A class for managing 3D visualizations
     """
 
-    latex_png_counter=0
+    png_counter=0
     """
     Counter for PNGs from LaTeX used in td_mat()
     """
@@ -1332,7 +1332,7 @@ class td_plot_base(yt_plot_base):
         super().__init__()
         self.to=threed_objects()
         self.td_wdir='.'
-        self.latex_png_counter=0
+        self.png_counter=0
         return
 
     def td_den_plot(self,o2scl,amp,args,cmap='',mat_name='white',
@@ -2123,6 +2123,12 @@ class td_plot_base(yt_plot_base):
         * prefix: str = '' \\
         * resize: bool = True \\
 
+        Images are always resized to ensure the width and height are a
+        power of 2. If ``resize`` is true, then the image is resized
+        to fit the new width and height using the Pillow package.
+        Otherwise, the color specified in r, g, and b is used to pad the
+        edges if necessary.
+
         If the texture filename begins with the characters 'cmap:', it
         is constructed with a matplotlib colormap rather than from a
         file. If it begins with 'latex:', then it is constructed from
@@ -2151,29 +2157,35 @@ class td_plot_base(yt_plot_base):
         w_new=0
         h_new=0
             
-        # First, if the texture is to be built from a LaTeX string,
-        # then generate the associated png and replace the string
-        # ``txt`` with the png filename.
+        # First, 
 
         latex_png=False
         cmap_png=False
         
         if txt[0:5]=='cmap:':
             
-            self.latex_png_counter=self.latex_png_counter+1
+            # If the texture is to be built from a colormap
+            # then generate the associated png and replace the string
+            # ``txt`` with the png filename.
+            
+            self.png_counter=self.png_counter+1
             cmap_png_name=(self.td_wdir+'/'+prefix+'cmap'+
-                           str(self.latex_png_counter)+'.png')
+                           str(self.png_counter)+'.png')
             cmap_to_png(txt[5:],cmap_png_name)
             
             txt=cmap_png_name
             cmap_png=True
             
         elif txt[0:6]=='latex:':
+
+            # If the texture is to be built from a LaTeX string,
+            # then generate the associated png and replace the string
+            # ``txt`` with the png filename.
             
             latex=txt[6:]
-            self.latex_png_counter=self.latex_png_counter+1
+            self.png_counter=self.png_counter+1
             tex_png_name=(self.td_wdir+'/'+prefix+'latex'+
-                          str(self.latex_png_counter)+'.png')
+                          str(self.png_counter)+'.png')
 
             pack_split=[]
             if packages!='':
@@ -2201,7 +2213,7 @@ class td_plot_base(yt_plot_base):
             if latex_png==True:
                 txt_dir=self.td_wdir
                 txt_base=os.path.basename(txt)
-                txt_out_base=(prefix+'latexr'+str(self.latex_png_counter)+
+                txt_out_base=(prefix+'latexr'+str(self.png_counter)+
                               '.png')
                 txt_out=self.td_wdir+'/'+txt_out_base
                 
@@ -2252,11 +2264,10 @@ class td_plot_base(yt_plot_base):
                     txt_dim=(1.0,1.0)
                 if self.verbose>1:
                     print('td_mat(): txt_dim:',txt_dim)
-
+                    
         mat=material(name,[r,g,b,alpha],txt=txt_out_base,metal=metal,
-                     rough=rough,
-                     ds=ds,alpha_mode=alpha_mode,alpha_cutoff=alpha_cutoff,
-                     emi_factor=emi_factor)
+                     rough=rough,ds=ds,alpha_mode=alpha_mode,
+                     alpha_cutoff=alpha_cutoff,emi_factor=emi_factor)
         
         mat.txt_frac_w=txt_dim[0]
         mat.txt_frac_h=txt_dim[1]
