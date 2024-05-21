@@ -928,11 +928,11 @@ class o2graph_plotter(td_plot_base):
         "out.mp4". If the "mp4" suffix is omitted, it is automatically
         added.
 
-        Useful kwargs are loop=False, fps=10, and vf=''. The former
-        controls whether or not the ``-stream_loop -1`` is passed to
-        ffmpeg and the latter is the video filter to be applied with
-        ffmpeg's ``-vf`` flag. A typical video filter kwarg is e.g.
-        vf='eq=brightness=0.5:contrast=10'.
+        The allowed kwargs are loop=False, fps=10, and vf=''. The
+        former controls whether or not the ``-stream_loop -1`` is
+        passed to ffmpeg and the latter is the video filter to be
+        applied with ffmpeg's ``-vf`` flag. A typical video filter
+        kwarg is e.g. vf='eq=brightness=0.5:contrast=10'.
 
         This command requires the installation of ``ffmpeg``.
 
@@ -973,8 +973,7 @@ class o2graph_plotter(td_plot_base):
                    bg_color : str = '', cam_type : str = '',
                    res_x: int = 1600, res_y : int = 900,
                    blend_file : str = ''):
-        """
-        Documentation for o2graph command ``bl-yaw-mp4``:
+        """Documentation for o2graph command ``bl-yaw-mp4``:
 
         View 3D objects in a movie by rotating the camera
 
@@ -983,12 +982,14 @@ class o2graph_plotter(td_plot_base):
         This command requires Blender, the associated python package,
         ``bpy``, and the installation of ``ffmpeg``.
 
-        Useful kwargs are blender_cmd='', o2sclpy_dir='', vf='',
-        cam_dist=5.0, light_energy=800.0, light_dist=5.8, bg_color='',
-        cam_type='', res_x=1600, res_y=900, and blend_file=''.
+        The allowed keyword arguments are blender_cmd='',
+        o2sclpy_dir='', vf='', cam_dist=5.0, light_energy=800.0,
+        light_dist=5.8, bg_color='', cam_type='', res_x=1600,
+        res_y=900, and blend_file=''.
 
         The vf kwarg is forwarded to the ``mp4`` command to
         generate the final video.
+
         """
 
         import tempfile
@@ -1528,9 +1529,13 @@ class o2graph_plotter(td_plot_base):
 
         Write a GLTF file from 3D objects (experimental)
 
-        Command-line arguments: ``<prefix> [kwargs]``
+        Command-line arguments: ``<prefix>``
 
-        Write a GLTF file from 3D objects.
+        Write a GLTF file from 3D objects to the file called
+        ``prefix.gltf``. The user should consider modifying the
+        working directory for 3D objects first, using ``-set td_wdir
+        <dir>``. This command only constructs the GLTF file and thus
+        does not require Blender.
         """
         prefix=args[0]
         if len(args)>=2:
@@ -1544,8 +1549,7 @@ class o2graph_plotter(td_plot_base):
         return
     
     def make_png_o2graph(self,o2scl,amp,link,args):
-        """
-        Documentation for o2graph command ``make-png``:
+        """Documentation for o2graph command ``make-png``:
         
         For objects of type ``table3d``:
 
@@ -1554,6 +1558,11 @@ class o2graph_plotter(td_plot_base):
         Create a .png file from the three specified table3d slices.
         This command requires pillow. To create a density-plot with
         axes instead, use den-plot-rgb.
+
+        The only keyword argument is ``renorm=False``, which
+        renormalizes the red, green, and blue channels separately to
+        ensure the minimum in each channel is 0 and the maximum in
+        each channel is 255.
         """
 
         curr_type=o2scl_get_type(o2scl,amp,self.link2)
@@ -1607,7 +1616,6 @@ class o2graph_plotter(td_plot_base):
         between x_min and x_max is determined by the n_points parameter. 
         The y vector is multiplied by y_mult before plotting. 
         
-
         Useful KDE kwargs are kernel='gaussian', metric='euclidean',
         transform='unit', and bandwidth='none'.
 
