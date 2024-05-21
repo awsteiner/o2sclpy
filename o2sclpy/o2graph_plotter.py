@@ -465,8 +465,11 @@ def reformat_python_docs(cmd,doc_str,amp,link,
         print('')
         print('Long description:')
         last_pgh_colons=False
+        done_long=False
         for j in range(3,len(reflist2)):
-            if len(reflist2[j])>0:
+            if len(reflist2[j])>5 and reflist2[j][0:6]=='End of':
+                done_long=True
+            if len(reflist2[j])>0 and done_long==False:
                 if last_pgh_colons:
                     long_help=doc_replacements(reflist2[j].replace('\n',' '),
                                                ter,amp,link,script=True)
@@ -2524,18 +2527,18 @@ class o2graph_plotter(td_plot_base):
 
         Some useful kwargs for the errorbar command are::
 
-        keyword    description                       default value \\
-        ---------- --------------------------------- ------------- \\
-        ecolor     error bar color                   None \\
-        elinewidth error bar line width              None \\
-        capsize    cap size in points                None \\
-        barsabove  plot error bars on top of points  False \\
-        lolims     y value is lower limit            False \\
-        uplims     y value is upper limit            False \\
-        xlolims    x value is lower limit            False \\
-        xuplims    x value is upper limit            False \\
-        errorevery draw error bars on subset of data 1 \\
-        capthick   thickness of error bar cap        None \\
+            keyword    description                       default value \\
+            ---------- --------------------------------- ------------- \\
+            ecolor     error bar color                   None \\
+            elinewidth error bar line width              None \\
+            capsize    cap size in points                None \\
+            barsabove  plot error bars on top of points  False \\
+            lolims     y value is lower limit            False \\
+            uplims     y value is upper limit            False \\
+            xlolims    x value is lower limit            False \\
+            xuplims    x value is upper limit            False \\
+            errorevery draw error bars on subset of data 1 \\
+            capthick   thickness of error bar cap        None \\
 
         For error points with no lines use, e.g. lw=0,elinewidth=1.
         See also ``error-point`` for plotting a single point with
@@ -5893,7 +5896,7 @@ class o2graph_plotter(td_plot_base):
                                     float(strlist[ix+4]),
                                     **string_to_dict2(strlist[ix+5],
                                                       list_of_bools=
-                                                      ['ds'],
+                                                      ['ds','resize'],
                                                       list_of_floats=
                                                       ['metal','rough',
                                                        'alpha','efr',

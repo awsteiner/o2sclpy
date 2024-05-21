@@ -163,18 +163,22 @@ class mesh_object:
     """
     List of vertices
     """
+
     vn_list=[]
     """
     List of vertex normals
     """
+
     vt_list=[]
     """
     List of texture coordinates
     """
+
     faces=[]
     """
     The list of faces
     """
+
     name: str = ''
     """
     The name of the mesh object
@@ -192,6 +196,7 @@ class mesh_object:
     If this string is non-empty, but all of the faces specify a 
     material, then the ``sort_by_mat()`` function will
     """
+
     obj_type: str = 'triangles'
     """
     Either 'triangles', 'lines', or 'points'
@@ -2106,7 +2111,9 @@ class td_plot_base(yt_plot_base):
 
         Command-line arguments: ``<name> <r> <g> <b> [kwargs]``
 
-        Create a new material with the specified properties.
+        Create a new material with the specified properties. The
+        colors r, g, and b should be between 0 and 1. 
+     
         Useful kwargs are::
         
         * alpha: float=1 \\
@@ -2123,25 +2130,41 @@ class td_plot_base(yt_plot_base):
         * prefix: str = '' \\
         * resize: bool = True \\
 
+        The value of alpha should be between 0 (fully transparent) and
+        1 (fully opaque).
+        
         Images are always resized to ensure the width and height are a
         power of 2. If ``resize`` is true, then the image is resized
         to fit the new width and height using the Pillow package.
         Otherwise, the color specified in r, g, and b is used to pad the
-        edges if necessary.
+        edges if necessary. To pad with transparent pixels, set
+        ``resize`` to false and ``alpha`` to zero.
 
-        If the texture filename begins with the characters 'cmap:', it
-        is constructed with a matplotlib colormap rather than from a
-        file. If it begins with 'latex:', then it is constructed from
-        a LaTeX expression.
+        If the texture filename begins with the characters 'cmap:', a
+        256 by 2 png image is constructed with a matplotlib colormap.
+        If it begins with 'latex:', then it is constructed from a
+        LaTeX expression.
         
-        LaTeX textures are created in the working directory with
-        the name ``[prefix]latex%d.png`` and then resized, if necessary,
-        to files named ``[prefix]latexr%d.png``.
+        LaTeX textures are created in the working directory with the
+        name ``[td_wdir]/[prefix]latex%d.png`` and then resized, if
+        necessary, to files named ``[td_wdir]/[prefix]latexr%d.png``.
+
+        End of documentation for o2graph command ``td-mat``.
+        
+        This function uses :py:func:`o2sclpy.latex_to_png`,
+        :py:func:`o2sclpy.cmap_to_png`, and
+        :py:func:`o2sclpy.png_power_two` to generate
+        textures and then creates an object of type
+        :py:class:`o2sclpy.td_plot_base.material`.
 
         """
         import os.path
         import tempfile
 
+        if r<0.0 or g<0.0 or b<0.0 or r>1.0 or g>1.0 or b>1.0:
+            raise ValueError('Colors out of range in '+
+                             ' in td_plot_base::td_mat().')
+        
         if self.to.is_mat(name):
             raise ValueError('Already a material with the name '+
                              name+' in td_plot_base::td_mat().')
@@ -2357,7 +2380,7 @@ class td_plot_base(yt_plot_base):
         return
 
     def td_pgram(self,x1,y1,z1,x2,y2,z2,x3,y3,z3,
-                 name='pgram',mat='',force_rect=False,
+                 name='pgram',mat='white',force_rect=False,
                  match_txt=False,coords='user'):
         """Documentation for o2graph command ``td-pgram``:
 
@@ -2365,6 +2388,26 @@ class td_plot_base(yt_plot_base):
 
         Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> 
         <x3> <y3> <z3> [kwargs]``
+
+        Plot a parallelogram with lower-left corner at (x1,y1,z1),
+        lower-right corner at (x2,y2,z2), and upper-left corner at
+        (x3,y3,z3). The coordinates of the upper-right corner are
+        automatically computed.
+
+        The allowed keyword arguments are name='pgram', mat='white',
+        force_rect=False, match_txt=False and coords='user'. The value
+        ``name`` is the name of the associated mesh object. The value
+        ``mat`` is the name of the material to be used. By default, a
+        pure white material is created. If ``force_rect`` is true,
+        then the parallelogram is forced to be a rectangle by shifting
+        the upper-left corner along the vector defined by the lower
+        corners. If ``match_txt`` is true, then the parallelogram size
+        is modified (by moving the corners closer to the lower-left
+        corner) to fit the texture specified in ``mat``.
+
+        End of documentation for o2graph command ``td-pgram``.
+        
+        This function uses :py:func:`o2sclpy.parallelogram`,
         """
         uname=self.to.make_unique_name(name)
 
@@ -2382,6 +2425,15 @@ class td_plot_base(yt_plot_base):
             y3=(y3-self.ylo)/(self.yhi-self.ylo)
             z3=(z3-self.zlo)/(self.zhi-self.zlo)
 
+        if self.to.is_mat(mat)==False:
+                
+            if mat=='white':
+                white=material(mat,[1,1,1])
+                self.to.add_mat(white)
+            else:
+                print('Material '+mat+' not found in td-pgram.')
+                return
+            
         # Get the material info
         m=self.to.get_mat(mat)
         

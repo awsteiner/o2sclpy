@@ -1,5 +1,7 @@
-o2graph -set td_wdir . \
--td-mat one 1 0 0 "txt=latex:$x^2$" \
--td-mat two 1 0 0 "txt=latex:$x^2$,resize=False" \
--td-mat three 1 0 0 "txt=latex:$x^2~{\color{blue}x^3}$,resize=False,packages=xcolor" \
-
+# This example demonstrates various options for materials and the
+# associated latex or colormap texture files
+o2graph -set verbose 3 -set td_wdir gltf \
+-td-mat one 1 0 0 "txt=latex:$ x^2$,prefix=mat_" \
+-td-mat two 0 0 0 "alpha=0,txt=latex:$ x^2$,resize=False,prefix=mat_" \
+-td-mat three 1 0 0 "txt=latex:$ x^2~{\color{blue}x^3}$,resize=False,packages=xcolor,prefix=mat_" \
+-td-mat four 1 0 0 "txt=cmap:viridis,prefix=mat_"

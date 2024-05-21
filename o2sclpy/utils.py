@@ -778,6 +778,10 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
 
     wadj=w+(w%2)
     hadj=h+(h%2)
+    
+    odd=False
+    if w%2==1 or h%2==1:
+        odd=True
         
     # If these are all equal, there is nothing to do
     if w_new==w and h_new==h and odd==False:
@@ -786,7 +790,7 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
         if png_input==png_output:
             if verbose>1:
                 print('png_power_two(): Skipping.')
-            return
+            return wadj,hadj,w_new,h_new
         
         # No resizing required, so just copy
         cmd='cp '+png_input+' '+png_output
@@ -801,10 +805,14 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
 
     if resize:
         
+        if verbose>1:
+            print('png_power_two(): resizing to',w_new,'by',h_new)
         img_new=img.resize((w_new,h_new))
         
     else:
         
+        if verbose>1:
+            print('png_power_two(): padding image edges')
         # Use Pillow to resize the image, giving new pixels the color
         # specified in bgcolor
         img_new=Image.new('RGBA',(w_new,h_new),

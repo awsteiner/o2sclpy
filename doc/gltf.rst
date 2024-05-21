@@ -33,16 +33,16 @@ automatically by the first yt-related command. All commands work on
 the user coordinate system by default, and then transform their
 arguments to :math:`[0,1]` when necessary.
 
-Scatter plot example
---------------------
+3D Scatter plot example
+-----------------------
 
 .. include:: ../examples/gltf_scatter_col.scr
    :literal:
 .. image:: static/gltf/scatter_col.png
    :width: 70%
 
-Density plot example
---------------------
+3D Density plot example
+-----------------------
 
 .. include:: ../examples/gltf_den_plot_col.scr
    :literal:
