@@ -25,6 +25,7 @@ Other O₂sclpy functions
 .. autofunction:: o2sclpy.if_yt_then_Agg
 .. autofunction:: o2sclpy.is_number
 .. autofunction:: o2sclpy.latex_to_png
+.. autofunction:: o2sclpy.latex_prism
 .. autofunction:: o2sclpy.length_without_colors
 .. autofunction:: o2sclpy.mag3
 .. autofunction:: o2sclpy.norm3

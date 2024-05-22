@@ -71,6 +71,14 @@ def rect_to_spher(v):
     theta=numpy.arccos(z/r)
     # arctan2 returns a number in [-pi,pi]
     phi=numpy.arctan2(y,x)
+
+    # AWS, 5/21/24: These are just for testing but I've never seen them
+    # occur in practice.
+    if phi<-numpy.pi or phi>numpy.pi:
+        raise ValueError('Problem 1')
+    if theta<0 or theta>numpy.pi:
+        raise ValueError('Problem 2.')
+    
     return [r,phi,theta]
     
 
@@ -314,11 +322,15 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
     """Construct the vertices and faces of an icosphere centered at
     (x,y,z) with radius r
 
-    This function is based on material from [1].
+    This function is based on material from [1]. The icosphere
+    is constructed from the corners of three golden rectangles
+    aligned along the axes.
 
     This function returns a set of three lists, the first is the
     vertices, the second are the vertex normals, and the third are the
     faces. The normal vectors always point outwards.
+
+    The phi_cut keyword argument does not yet work.
 
     [1] https://danielsieger.com/blog/2021/03/27/generating-spheres.html
     """
@@ -563,6 +575,8 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
     texcoord=[]
     for i in range(0,len(vert)):
         tc=rect_to_spher(vert[i])
+        xx=tc[1]/numpy.pi/2.0+0.5
+        yy=tc[2]/numpy.pi
         texcoord.append([tc[1]/numpy.pi/2.0+0.5,tc[2]/numpy.pi])
 
     # Shift the origin to the user-specified coordinates
@@ -598,10 +612,52 @@ def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
 
         face2.append([i*3,i*3+1,i*3+2])
 
-        # Add the vertices to the new vertex array
-        texcoord2.append(texcoord[face[i][0]-1])
-        texcoord2.append(texcoord[face[i][1]-1])
-        texcoord2.append(texcoord[face[i][2]-1])
+        # Add the texture coordinates to the new vertex array
+        tx0=copy.deepcopy(texcoord[face[i][0]-1])
+        tx1=copy.deepcopy(texcoord[face[i][1]-1])
+        tx2=copy.deepcopy(texcoord[face[i][2]-1])
+
+        # This modification helps ensure faces have nearby
+        # vertices and avoid texture artifacts on the sphere
+        
+        debug=False
+        #if tx0[1]>0.99 or tx1[1]>0.99 or tx2[1]>0.99:
+        #debug=True
+        if False:
+            print('sx: %d %d %d %7.6e %7.6e %7.6e %7.6e %7.6e %7.6e ' %
+                  (face[i][0]-1,face[i][1]-1,face[i][2]-1,
+                   tx0[0],tx0[1],tx1[0],tx1[1],tx2[0],tx2[1]))
+        if tx0[0]<0.25 and tx1[0]>0.75 and tx2[0]>0.75:
+            tx0[0]=tx0[0]+1.0
+            if debug:
+                print('1')
+        elif tx0[0]>0.75 and tx1[0]<0.25 and tx2[0]<0.25:
+            tx0[0]=tx0[0]-1.0
+            if debug:
+                print('2')
+        elif tx1[0]<0.25 and tx0[0]>0.75 and tx2[0]>0.75:
+            tx1[0]=tx1[0]+1.0
+            if debug:
+                print('3')
+        elif tx1[0]>0.75 and tx0[0]<0.25 and tx2[0]<0.25:
+            tx1[0]=tx1[0]-1.0
+            if debug:
+                print('4')
+        elif tx2[0]<0.25 and tx0[0]>0.75 and tx1[0]>0.75:
+            tx2[0]=tx2[0]+1.0
+            if debug:
+                print('5')
+        elif tx2[0]>0.75 and tx0[0]<0.25 and tx1[0]<0.25:
+            tx2[0]=tx2[0]-1.0
+            if debug:
+                print('6')
+        if debug:
+            print('tx: %7.6e %7.6e %7.6e %7.6e %7.6e %7.6e ' %
+                  (tx0[0],tx0[1],tx1[0],tx1[1],tx2[0],tx2[1]))
+            
+        texcoord2.append([tx0[0],tx0[1]])
+        texcoord2.append([tx1[0],tx1[1]])
+        texcoord2.append([tx2[0],tx2[1]])
         
     if False:
         for k in range(0,len(norms2)):

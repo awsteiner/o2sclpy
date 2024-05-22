@@ -529,6 +529,10 @@ def parallelogram(x1,y1,z1,x2,y2,z2,x3,y3,z3,mat_name='',verbose=0,
     If ``force_rect=True``, then the third coordinate of the 
     parallelogram is modified to make sure the two adjacent sides
     are orthogonal.
+
+    Internally, the parallelogram is represented by two triangular
+    faces and four vertices.
+
     """
 
     if force_rect:
@@ -1806,23 +1810,28 @@ class td_plot_base(yt_plot_base):
 
         return
 
-    def td_icos(self,args,n_subdiv=0,r=0.04,phi_cut='',mat=''):
+    def td_icos(self,args,n_subdiv=0,r=0.04,phi_cut='',mat='white'):
         """Documentation for o2graph command ``td-icos``:
 
         Create a 3D icosphere (experimental).
 
         Command-line arguments: ``<x> <y> <z> [kwargs]``
 
-        Plot an icosphere at the specified location. Useful kwargs are
-        ``n_subdiv=0``, the number of subdivisions of the original
-        icosahedron, ``r=0.04``, the radius of the icosphere in the
-        internal coordinate system, and ``mat=''``, the material to
-        use for the icosphere surface.
+        Plot an icosphere at the specified location. The allowed
+        keyword arguments are ``n_subdiv=0``, the number of
+        subdivisions of the original icosahedron, ``r=0.04``, the
+        radius of the icosphere in the internal coordinate system, and
+        ``mat='white'``, the material to use for the icosphere
+        surface. The phi_cut keyword argument does not yet work.
 
         Note that normals are typically not specified, because the
-        density plot presumes flat shading. Blender, for example, uses
+        icosphere presumes flat shading. Blender, for example, uses
         smooth shading for GLTF files when normals are specified, and
         this can complicate the texture mapping.
+
+        End of documentation for o2graph command ``td-icos``.
+        
+        This function uses :py:func:`o2sclpy.icosphere`.
         """
         import copy
         
@@ -2392,7 +2401,8 @@ class td_plot_base(yt_plot_base):
         Plot a parallelogram with lower-left corner at (x1,y1,z1),
         lower-right corner at (x2,y2,z2), and upper-left corner at
         (x3,y3,z3). The coordinates of the upper-right corner are
-        automatically computed.
+        automatically computed. The parallelogram is two-dimensional
+        and thus may disappear when viewed edge-on.
 
         The allowed keyword arguments are name='pgram', mat='white',
         force_rect=False, match_txt=False and coords='user'. The value
@@ -2541,13 +2551,20 @@ class td_plot_base(yt_plot_base):
         ``height`` is used for the height dimension of the faces with
         the LaTeX image, and the width is computed automatically from
         the aspect ratio of the LaTeX output.
+        
+        End of documentation for o2graph command ``td-axis-label``.
+        
+        This function uses :py:func:`o2sclpy.latex_prism`,
         """
 
         if end_mat_name=='white':
             if self.to.is_mat('white')==False:
                 white=material('white',[1,1,1])
                 self.to.add_mat(white)
-        
+
+        # Alias for latex_prism() function.
+        lp=latex_prism
+            
         if ldir=='x':
             
             if png_file=='':
@@ -2562,14 +2579,14 @@ class td_plot_base(yt_plot_base):
                       tex_mat_name,'group_name:',group_name,'flatten:',
                       flatten,'type(flatten):',type(flatten))
 
-            x_v,x_f,x_t,x_n,x_m=latex_prism(0.5,-offset-height/2.0,
-                                            -offset+height/2.0,0.5,
-                                            -offset+height/2.0,
-                                            -offset-height/2.0,
-                                            tex_label,
-                                            self.td_wdir,png_file,tex_mat_name,
-                                            dir=ldir,end_mat=end_mat_name,
-                                            verbose=self.verbose)
+            x_v,x_f,x_t,x_n,x_m=lp(0.5,-offset-height/2.0,
+                                   -offset+height/2.0,0.5,
+                                   -offset+height/2.0,
+                                   -offset-height/2.0,
+                                   tex_label,
+                                   self.td_wdir,png_file,tex_mat_name,
+                                   dir=ldir,end_mat=end_mat_name,
+                                   verbose=self.verbose)
 
             self.to.add_mat(x_m)
             gf=mesh_object(group_name,x_f)
@@ -2591,13 +2608,13 @@ class td_plot_base(yt_plot_base):
                 print('td_axis_label(): png_file:',png_file,'tex_mat_name:',
                       tex_mat_name,'group_name:',group_name)
 
-            y_v,y_f,y_t,y_n,y_m=latex_prism(-offset-height/2.0,0.5,
-                                            -offset+height/2.0,
-                                            -offset+height/2.0,
-                                            0.5,-offset-height/2.0,
-                                            tex_label,
-                                            self.td_wdir,png_file,tex_mat_name,
-                                            dir=ldir,end_mat=end_mat_name)
+            y_v,y_f,y_t,y_n,y_m=lp(-offset-height/2.0,0.5,
+                                   -offset+height/2.0,
+                                   -offset+height/2.0,
+                                   0.5,-offset-height/2.0,
+                                   tex_label,
+                                   self.td_wdir,png_file,tex_mat_name,
+                                   dir=ldir,end_mat=end_mat_name)
             
             self.to.add_mat(y_m)
             gf=mesh_object(group_name,y_f)
@@ -2619,13 +2636,13 @@ class td_plot_base(yt_plot_base):
                 print('td_axis_label(): png_file:',png_file,'tex_mat_name:',
                       tex_mat_name,'group_name:',group_name)
                 
-            z_v,z_f,z_t,z_n,z_m=latex_prism(-offset-height/2.0,
-                                            -offset+height/2.0,
-                                            0.5,-offset+height/2.0,
-                                            -offset-height/2.0,0.5,
-                                            tex_label,
-                                            self.td_wdir,png_file,tex_mat_name,
-                                            dir=ldir,end_mat=end_mat_name)
+            z_v,z_f,z_t,z_n,z_m=lp(-offset-height/2.0,
+                                   -offset+height/2.0,
+                                   0.5,-offset+height/2.0,
+                                   -offset-height/2.0,0.5,
+                                   tex_label,
+                                   self.td_wdir,png_file,tex_mat_name,
+                                   dir=ldir,end_mat=end_mat_name)
             
             self.to.add_mat(z_m)
             gf=mesh_object(group_name,z_f)
