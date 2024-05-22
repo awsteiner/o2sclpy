@@ -49,6 +49,10 @@ arguments to :math:`[0,1]` when necessary.
 .. image:: static/gltf/den_plot_col.png
    :width: 70%
 
+The GLTF can be viewed in any GLTF reader, for example at
+http://3dviewer.net/#model=https://github.com/awsteiner/o2sclpy/blob/dev/doc/static/gltf/den_plot_col.zip
+.
+           
 Density plot movie
 ------------------
 

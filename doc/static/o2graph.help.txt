@@ -8,7 +8,7 @@ List of command-line options which do not require a current object:
   -arrow           Plot an arrow.
   -autocorr        Compute autocorrelation coefficients. 
   -backend         Select the matplotlib backend to use.
-  -bl-import       Load a GLTF file into blender
+  -bl-import       Load a GLTF file into Blender
   -bl-six-mp4      View each axis of a set of 3D objects in a movie 
   -bl-yaw-mp4      View 3D objects in a movie by rotating the camera
   -calc            Compute the value of a constant expression. 
