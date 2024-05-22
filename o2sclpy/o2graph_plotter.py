@@ -972,7 +972,7 @@ class o2graph_plotter(td_plot_base):
                    vf: str = '', cam_dist: float = 5.0,
                    light_energy : float = 800,
                    light_dist : float = 5.8,
-                   bg_color : str = '', cam_type : str = '',
+                   bg_color : str = '', cam_type : str = 'ORTHO',
                    res_x: int = 1600, res_y : int = 900,
                    blend_file : str = ''):
         """Documentation for o2graph command ``bl-yaw-mp4``:
@@ -1017,7 +1017,7 @@ class o2graph_plotter(td_plot_base):
             bg_color='(0,0,0,0)'
             
         if cam_type=='':
-            cam_type='PERSP'
+            cam_type='ORTHO'
 
         if len(res)<2 or res[0]<2 or res[1]<2:
             print('Value of res:',res)
@@ -1085,7 +1085,7 @@ class o2graph_plotter(td_plot_base):
                    vf: str = '', cam_dist: float = 5.0,
                    light_energy : float = 800,
                    light_dist : float = 5.8,
-                   bg_color : str = '', cam_type : str = '',
+                   bg_color : str = '(0,0,0,0)', cam_type : str = 'ORTHO',
                    res_x: int = 1600, res_y : int = 900,
                    blend_file : str = ''):
         """
@@ -1098,9 +1098,19 @@ class o2graph_plotter(td_plot_base):
         This command requires Blender, the associated python package,
         ``bpy``, and the installation of ``ffmpeg``. 
 
-        Useful kwargs are blender_cmd='', o2sclpy_dir='', vf='',
-        cam_dist=5.0, light_energy=800.0, light_dist=5.8, bg_color='',
-        cam_type='', res_x=1600, res_y=900, and blend_file=''.
+        The allowed keyword arguments are::
+
+            blender_cmd='', the path to the Blender executable \\
+            o2sclpy_dir='', the directory to the O2sclpy package \\
+            vf='', the video filter to send to ffmpeg \\
+            cam_dist=5.0, the camera's distance from the volume center \\
+            light_energy=800.0, the light source energy \\
+            light_dist=5.8, the light's distance from the volume center \\
+            bg_color='(0,0,0,0)', the background color \\
+            cam_type='ORTHO', the camera type, PERSP, ORTHO, or PANO \\
+            res_x=1600, the x resolution of the rendered image \\
+            res_y=900, the y resolution of the rendered image \\
+            blend_file='', the optional blend file for the output \\
 
         The vf kwarg is forwarded to the ``mp4`` command to
         generate the final video.
@@ -1192,19 +1202,46 @@ class o2graph_plotter(td_plot_base):
     def bl_import(self, gltf_path: str='',
                   blender_cmd: str = '', o2sclpy_dir: str = '',
                   cam_dist: float = 5.0,
-                  light_energy : float = 800,
-                  light_dist : float = 5.8,
-                  bg_color : str = '', cam_type : str = '',
+                  light_energy : float = 800, light_dist : float = 5.8,
+                  bg_color : str = '(0,0,0,0)',
+                  cam_type : str = 'ORTHO', ortho_scale : float = 2.0,
                   res_x: int = 1600, res_y : int = 900,
                   blend_file : str = '', output_png : str = ''):
-        """
-        Documentation for o2graph command ``bl-import``:
+        """Documentation for o2graph command ``bl-import``:
         
-        Load a GLTF file into blender
+        Load a GLTF file into Blender
 
-        Command-line arguments: ``<gltf file>``
+        Command-line arguments: ``<gltf file> [kwargs]``
 
-        This command requires the Blender python package, ``bpy``.
+        This command opens up Blender, removes the default Blender
+        objects (for example the default cube), and loads the
+        specified GLTF file. A camera is included and eight
+        light sources, one at each corner of a large cube with
+        a edge length of twice ``light_dist``. 
+        
+        This command requires Blender.
+
+        The allowed keyword arguments are::
+
+            blender_cmd='', the path to the Blender executable \\
+            o2sclpy_dir='', the directory to the O2sclpy package \\
+            cam_dist=5.0, the camera's distance from the volume center \\
+            light_energy=800.0, the light source energy \\
+            light_dist=5.8, the relative coordinate of the light sources \\
+            bg_color='(0,0,0,0)', the background color \\
+            cam_type='ORTHO', the camera type, PERSP, ORTHO, or PANO \\
+            ortho_scale=2.0, the scale of orthographic cameras \\
+            res_x=1600, the x resolution of the rendered image \\
+            res_y=900, the y resolution of the rendered image \\
+            blend_file='', the optional blend file for the output \\
+            output_png='', an optional output rendered image \\
+
+        If ``blender_cmd`` and ``o2sclpy_dir`` are not specified, then
+        o2sclpy attempts to automatically determine them. Because
+        ``bg_color`` is a string, it can contain python code. The
+        value of ``ortho_scale`` is only used for the orthographic
+        camera.
+
         """
 
         gltf_file_name=gltf_path
@@ -1222,21 +1259,16 @@ class o2graph_plotter(td_plot_base):
         
         print('Original script at:',orig_script)
 
-        if bg_color=='':
-            bg_color='(0,0,0,0)'
-
-        if cam_type=='':
-            cam_type='PERSP'
-            
         rep_list={'BG_COLOR': bg_color,
                   'LIGHT_DIST': str(light_dist),
                   'LIGHT_ENERGY': str(light_energy),
-                  'GLTF_PATH': gltf_file_name,
+                  'CAM_DIST': str(cam_dist),
+                  'ORTHO_SCALE': str(ortho_scale),
+                  'CAMERA_TYPE': str(cam_type),
                   'RES_X': str(res_x),
                   'RES_Y': str(res_y),
-                  'OUTPUT_PNG': output_png,
-                  'CAM_DIST': str(cam_dist),
-                  'CAMERA_TYPE': str(cam_type)}
+                  'GLTF_PATH': gltf_file_name,
+                  'OUTPUT_PNG': output_png}
         print('Making replacements:',rep_list)
 
         forig=open(orig_script,'r')
@@ -1246,12 +1278,13 @@ class o2graph_plotter(td_plot_base):
             line=line.replace('BG_COLOR',rep_list['BG_COLOR'])
             line=line.replace('LIGHT_DIST',rep_list['LIGHT_DIST'])
             line=line.replace('LIGHT_ENERGY',rep_list['LIGHT_ENERGY'])
-            line=line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
             line=line.replace('CAM_DIST',rep_list['CAM_DIST'])
+            line=line.replace('CAMERA_TYPE',rep_list['CAMERA_TYPE'])
+            line=line.replace('ORTHO_SCALE',rep_list['ORTHO_SCALE'])
             line=line.replace('RES_X',rep_list['RES_X'])
             line=line.replace('RES_Y',rep_list['RES_Y'])
+            line=line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
             line=line.replace('OUTPUT_PNG',rep_list['OUTPUT_PNG'])
-            line=line.replace('CAMERA_TYPE',rep_list['CAMERA_TYPE'])
             frep.write(line)
         forig.close()
         frep.close()

@@ -3,6 +3,7 @@
 # LIGHT_ENERGY
 # GLTF_PATH
 # CAM_DIST
+# ORTHO_SCALE
 # CAMERA_TYPE
 # OUTPUT_PNG
 # RES_X
@@ -31,6 +32,7 @@ scene.world.node_tree.nodes["Background"].inputs[0].default_value=BG_COLOR
 camera_data=bpy.data.cameras.new(name='camera')
 # 'PANO', 'PERSP' and 'ORTHO'
 camera_data.type='CAMERA_TYPE'
+camera_data.ortho_scale=ORTHO_SCALE
 camera=bpy.data.objects.new('camera',camera_data)
 scene.collection.objects.link(camera)
 camera.rotation_mode='XYZ'
