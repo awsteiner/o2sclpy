@@ -1,14 +1,15 @@
 # BG_COLOR
 # LIGHT_DIST
 # LIGHT_ENERGY
-# GLTF_PATH
-# N_FRAMES
-# N_SIT
+# CAMERA_TYPE
 # CAM_DIST
+# ORTHO_SCALE
 # RES_X
 # RES_Y
+# N_FRAMES
+# N_SIT
+# GLTF_PATH
 # BLEND_FILE
-# CAMERA_TYPE
 
 import bpy
 import os.path
@@ -31,11 +32,8 @@ scene.world.node_tree.nodes["Background"].inputs[0].default_value=BG_COLOR
 
 # Create camera
 camera_data=bpy.data.cameras.new(name='camera')
-# 'PANO', 'PERSP' and 'ORTHO'
 camera_data.type='CAMERA_TYPE'
-else:
-    camera_data.type='ORTHO'
-camera_data.ortho_scale=2.0
+camera_data.ortho_scale=ORTHO_SCALE
 camera=bpy.data.objects.new('camera',camera_data)
 scene.collection.objects.link(camera)
 camera.rotation_mode='XYZ'
@@ -193,10 +191,10 @@ for i in range(0,6):
 
     if i==0 and 'BLEND_FILE'!='':
         # Save a blend file
-        bpy.ops.wm.save_as_mainfile(filepath=BLEND_FILE)
+        bpy.ops.wm.save_as_mainfile(filepath='BLEND_FILE')
         
     # Assemble the path
-    scene.render.filepath='bl_gltf_six_%01d.png' % i
+    scene.render.filepath='bl_gltf_six_%03d.png' % i
     
     # Perform the render
     bpy.ops.render.render(write_still=True)

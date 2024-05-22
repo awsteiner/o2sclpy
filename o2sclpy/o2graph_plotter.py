@@ -981,13 +981,29 @@ class o2graph_plotter(td_plot_base):
 
         Command-line arguments: ``<n_frames> <mp4 file> <kwargs>``
 
+        This command saves the current 3D objects into a GLTF file and
+        then uses Blender to render them into a series of images which
+        are then combined to a mp4 file using ffmpeg. The camera is
+        rotated around the vector which starts at the center of the
+        volume and points upwards along the z-axis. Five light sources
+        are used, arranged in a quincunx lying above the x-y plane.
+        
         This command requires Blender, the associated python package,
-        ``bpy``, and the installation of ``ffmpeg``.
+        ``bpy``, and the installation of ``ffmpeg``. 
 
-        The allowed keyword arguments are blender_cmd='',
-        o2sclpy_dir='', vf='', cam_dist=5.0, light_energy=800.0,
-        light_dist=5.8, bg_color='', cam_type='', res_x=1600,
-        res_y=900, and blend_file=''.
+        The allowed keyword arguments are::
+
+            blender_cmd='', the path to the Blender executable \\
+            o2sclpy_dir='', the directory to the O2sclpy package \\
+            vf='', the video filter to send to ffmpeg \\
+            cam_dist=5.0, the camera's distance from the volume center \\
+            light_energy=800.0, the light source energy \\
+            light_dist=5.8, the light's distance from the volume center \\
+            bg_color='(0,0,0,0)', the background color \\
+            cam_type='ORTHO', the camera type, PERSP, ORTHO, or PANO \\
+            res_x=1600, the x resolution of the rendered image \\
+            res_y=900, the y resolution of the rendered image \\
+            blend_file='', the optional blend file for the output \\
 
         The vf kwarg is forwarded to the ``mp4`` command to
         generate the final video.
@@ -1213,11 +1229,11 @@ class o2graph_plotter(td_plot_base):
 
         Command-line arguments: ``<gltf file> [kwargs]``
 
-        This command opens up Blender, removes the default Blender
-        objects (for example the default cube), and loads the
-        specified GLTF file. A camera is included and eight
-        light sources, one at each corner of a large cube with
-        a edge length of twice ``light_dist``. 
+        This command opens up the Blender GUI, removes the default
+        Blender objects (for example the default cube), and loads the
+        specified GLTF file. It also loads a camera and eight light
+        sources, one at each corner of a large cube with a edge length
+        of twice the value of ``light_dist``. 
         
         This command requires Blender.
 
