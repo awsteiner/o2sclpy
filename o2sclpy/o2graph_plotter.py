@@ -971,8 +971,8 @@ class o2graph_plotter(td_plot_base):
                    blender_cmd: str = '', o2sclpy_dir: str = '',
                    vf: str = '', cam_dist: float = 5.0,
                    light_energy : float = 800,
-                   light_dist : float = 5.8,
-                   bg_color : str = '', cam_type : str = 'ORTHO',
+                   light_dist : float = 5.8, bg_color : str = '', 
+                   cam_type : str = 'ORTHO', ortho_scale : float = 2.0,
                    res_x: int = 1600, res_y : int = 900,
                    blend_file : str = ''):
         """Documentation for o2graph command ``bl-yaw-mp4``:
@@ -1001,6 +1001,7 @@ class o2graph_plotter(td_plot_base):
             light_dist=5.8, the light's distance from the volume center \\
             bg_color='(0,0,0,0)', the background color \\
             cam_type='ORTHO', the camera type, PERSP, ORTHO, or PANO \\
+            ortho_scale=2.0, the scale of orthographic cameras \\
             res_x=1600, the x resolution of the rendered image \\
             res_y=900, the y resolution of the rendered image \\
             blend_file='', the optional blend file for the output \\
@@ -1035,17 +1036,13 @@ class o2graph_plotter(td_plot_base):
         if cam_type=='':
             cam_type='ORTHO'
 
-        if len(res)<2 or res[0]<2 or res[1]<2:
-            print('Value of res:',res)
-            raise ValueError('Resolution of image (',res,
-                             ') invalid in bl_yaw_mp4')
-        
         rep_list={'BG_COLOR': bg_color,
                   'LIGHT_DIST': str(light_dist),
                   'LIGHT_ENERGY': str(light_energy),
                   'GLTF_PATH': gltf_file_name,
                   'N_FRAMES': str(n_frames),
                   'CAM_DIST': str(cam_dist),
+                  'ORTHO_SCALE': str(ortho_scale),
                   'RES_X': str(res_x),
                   'RES_Y': str(res_y),
                   'BLEND_FILE': str(blend_file),
@@ -1062,6 +1059,7 @@ class o2graph_plotter(td_plot_base):
             line=line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
             line=line.replace('N_FRAMES',rep_list['N_FRAMES'])
             line=line.replace('CAM_DIST',rep_list['CAM_DIST'])
+            line=line.replace('ORTHO_SCALE',rep_list['ORTHO_SCALE'])
             line=line.replace('RES_X',rep_list['RES_X'])
             line=line.replace('RES_Y',rep_list['RES_Y'])
             line=line.replace('BLEND_FILE',rep_list['BLEND_FILE'])
@@ -1097,11 +1095,11 @@ class o2graph_plotter(td_plot_base):
         return
         
     def bl_six_mp4(self, n_frames: int, mp4_file: str,
-                   blender_cmd: str = '', o2sclpy_dir: str = '',
-                   vf: str = '', cam_dist: float = 5.0,
-                   light_energy : float = 800,
-                   light_dist : float = 5.8,
-                   bg_color : str = '(0,0,0,0)', cam_type : str = 'ORTHO',
+                   n_sit: int = 0, blender_cmd: str = '',
+                   o2sclpy_dir: str = '', vf: str = '',
+                   cam_dist: float = 5.0, light_energy : float = 800,
+                   light_dist : float = 5.8, bg_color : str = '(0,0,0,0)',
+                   cam_type : str = 'ORTHO', 
                    res_x: int = 1600, res_y : int = 900,
                    blend_file : str = ''):
         """
@@ -1109,13 +1107,14 @@ class o2graph_plotter(td_plot_base):
 
         View each axis of a set of 3D objects in a movie 
 
-        Command-line arguments: ``<n_frames> <kwargs>``
+        Command-line arguments: ``<n_frames> <mp4 file> [kwargs]``
 
         This command requires Blender, the associated python package,
         ``bpy``, and the installation of ``ffmpeg``. 
 
         The allowed keyword arguments are::
 
+            n_sit=0, the number of frames to sit at the six faces \\
             blender_cmd='', the path to the Blender executable \\
             o2sclpy_dir='', the directory to the O2sclpy package \\
             vf='', the video filter to send to ffmpeg \\
@@ -1156,13 +1155,15 @@ class o2graph_plotter(td_plot_base):
             
         if cam_type=='':
             cam_type='ORTHO'
-            
+
         rep_list={'BG_COLOR': bg_color,
                   'LIGHT_DIST': str(light_dist),
                   'LIGHT_ENERGY': str(light_energy),
                   'GLTF_PATH': gltf_file_name,
                   'N_FRAMES': str(n_frames),
                   'CAM_DIST': str(cam_dist),
+                  'N_FRAMES': str(n_frames),
+                  'N_SIT': str(n_sit),
                   'RES_X': str(res_x),
                   'RES_Y': str(res_y),
                   'BLEND_FILE': str(blend_file),
@@ -1179,6 +1180,8 @@ class o2graph_plotter(td_plot_base):
             line=line.replace('GLTF_PATH',rep_list['GLTF_PATH'])
             line=line.replace('N_FRAMES',rep_list['N_FRAMES'])
             line=line.replace('CAM_DIST',rep_list['CAM_DIST'])
+            line=line.replace('N_FRAMES',rep_list['N_FRAMES'])
+            line=line.replace('N_SIT',rep_list['N_SIT'])
             line=line.replace('RES_X',rep_list['RES_X'])
             line=line.replace('RES_Y',rep_list['RES_Y'])
             line=line.replace('BLEND_FILE',rep_list['BLEND_FILE'])

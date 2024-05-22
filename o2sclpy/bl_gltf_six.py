@@ -32,8 +32,15 @@ scene.world.node_tree.nodes["Background"].inputs[0].default_value=BG_COLOR
 
 # Create camera
 camera_data=bpy.data.cameras.new(name='camera')
-camera_data.type='CAMERA_TYPE'
-camera_data.ortho_scale=ORTHO_SCALE
+ctype='CAMERA_TYPE'
+if ctype[0:3]=='PE:':
+    camera_data.type='PERSP'
+    camera_data.lens=float(ctype[3:])
+elif ctype[0:3]=='OR:':
+    camera_data.type='ORTHO'
+    camera_data.ortho_scale=float(ctype[3:])
+else:
+    camera_data.type=ctype
 camera=bpy.data.objects.new('camera',camera_data)
 scene.collection.objects.link(camera)
 camera.rotation_mode='XYZ'
@@ -135,6 +142,9 @@ rotx=[[0,0,0],
 
 for i in range(0,6):
 
+    camx2=[]
+    rotx2=[]
+    
     for j in range(0,N_SIT):
 
         camx2.append(camx[i])
@@ -201,5 +211,5 @@ for i in range(0,6):
 
     # Save a blend file
     bpy.ops.wm.save_as_mainfile(filepath=
-                                ('/Users/awsteiner2/six_%01d.blend' % i))
+                                ('/home/awsteiner/six_%01d.blend' % i))
 
