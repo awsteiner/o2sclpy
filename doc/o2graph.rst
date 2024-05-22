@@ -144,6 +144,22 @@ Subplot example 3
 .. image:: static/figures/subplots3.png
    :width: 70%
 	   
+Arrows example
+--------------
+
+.. include:: ../examples/arrows.scr
+   :literal:
+.. image:: static/figures/arrows.png
+   :width: 70%
+	   
+Object properties example
+-------------------------
+
+.. include:: ../examples/obj_props.scr
+   :literal:
+.. image:: static/figures/obj_props.png
+   :width: 70%
+	   
 Colormap and transparency example
 ---------------------------------
 
