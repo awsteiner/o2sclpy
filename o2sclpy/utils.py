@@ -80,7 +80,20 @@ def rect_to_spher(v):
         raise ValueError('Problem 2.')
     
     return [r,phi,theta]
-    
+
+def spher_to_rect(v):
+    """
+    Desc
+    """
+    r=v[0]
+    theta=v[1]
+    phi=v[2]
+
+    x=r*numpy.sin(theta)*numpy.cos(phi)
+    y=r*numpy.sin(theta)*numpy.sin(phi)
+    z=r*numpy.cos(theta)
+
+    return [x,y,z]
 
 def cross(x,y,norm=False):
     """Return the cross product between two vectors

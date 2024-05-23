@@ -2,4 +2,4 @@ o2graph -set td_wdir gltf -create table3d x grid:0,1,0.01 y grid:0,1,0.1 \
 z "exp(-(x-0.3)^2-(y-0.7)^2)" \
 -td-den-plot z "cmap=viridis" -td-axis "$ R~(\mathrm{km}) $" \
 "$ M~(\mathrm{M}_{\odot}) $" "Probability" bl_den_plot_six_ \
--bl-six-mp4 40 gltf/bl_den_plot_six.mp4 "cam_type=OR:2.0"
+-bl-six-mp4 10 gltf/bl_den_plot_six.mp4 "cam_type=OR:2.5"

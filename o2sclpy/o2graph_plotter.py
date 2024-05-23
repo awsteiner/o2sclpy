@@ -6017,7 +6017,7 @@ class o2graph_plotter(td_plot_base):
                                                           list_of_ints=
                                                           ['res_x',
                                                            'res_y']))
-                    if ix_next-ix>=3:
+                    elif ix_next-ix>=3:
                         self.bl_six_mp4(int(strlist[ix+1]),
                                         strlist[ix+2])
                     else:

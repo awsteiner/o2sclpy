@@ -14,6 +14,7 @@
 import bpy
 import os.path
 import numpy
+import o2sclpy
 
 # Scene variable
 scene=bpy.context.scene
@@ -117,40 +118,35 @@ camx=[[0.5,0.5,CAM_DIST+0.5],
       [0.5,-CAM_DIST+0.5,0.5],
       [-CAM_DIST+0.5,0.5,0.5]]
 
-# Spherical r, theta (azimuth), phi coordinates
-sphx=[[CAM_DIST,numpy.pi/2.0,0],
-      [CAM_DIST,0,3.0*numpy.pi/2.0],
-      [CAM_DIST,0,0.0]]
+# Spherical r, theta (azimuth), phi coordinates shifted
+sphx=[o2sclpy.rect_to_spher([camx[i][0]-0.5,
+                             camx[i][1]-0.5,
+                             camx[i][2]-0.5]) for i in range(0,6)]
 
-for k in range(0,3):
-    rt=sphx[k][0]
-    thetat=sphx[k][1]
-    phit=sphx[k][2]
-    xt=rt*numpy.cos(thetat)*numpy.sin(phit)
-    yt=rt*numpy.sin(thetat)*numpy.sin(phit)
-    zt=rt*numpy.cos(phit)
-    print(camx[k][0],xt+0.5)
-    print(camx[k][1],yt+0.5)
-    print(camx[k][2],zt+0.5)
-
+# Euler angles for the rotation at each of the six positions
 rotx=[[0,0,0],
-      [numpy.pi/2.0,numpy.pi*3.0/2.0,numpy.pi],
+      [numpy.pi/2.0,-numpy.pi/2.0,numpy.pi],
       [numpy.pi/2.0,0,numpy.pi/2.0],
       [0,numpy.pi,numpy.pi*3.0/2.0],
       [numpy.pi/2.0,0,0],
       [numpy.pi/2.0,numpy.pi*3.0/2.0,numpy.pi*3.0/2.0]]
 
+if False:
+    for i in range(0,6):
+        print('sphx',sphx[i])
+        print('rotx',rotx[i])
+
+sphx2=[]
+rotx2=[]
+    
 for i in range(0,6):
 
-    camx2=[]
-    rotx2=[]
-    
     for j in range(0,N_SIT):
 
-        camx2.append(camx[i])
+        sphx2.append(sphx[i])
         rotx2.append(rotx[i])
 
-        print(i,j,camx[i][0],rotx[i][0])
+        print(i,j,sphx[i][0],rotx[i][0])
 
     half_wid=(float(N_FRAMES)-1)/2.0
     a0=1.0/(1.0+numpy.exp(half_wid))
@@ -158,38 +154,40 @@ for i in range(0,6):
     
     for j in range(0,N_FRAMES):
 
-        dj=float(j)/(float(N_FRAMES)-1)
+        dj=float(j)
         a=1.0/(1.0+numpy.exp(-dj+half_wid))
         
         if i<5:
-            cam_temp_x=(camx[i][0]+(a-a0)*(a1-a0)*
-                        camx[i+1][0])
-            cam_temp_y=(camx[i][1]+(a-a0)*(a1-a0)*
-                        camx[i+1][1])
-            cam_temp_z=(camx[i][2]+(a-a0)*(a1-a0)*
-                        camx[i+1][2])
-            rot_temp_x=(rotx[i][0]+(a-a0)*(a1-a0)*
-                        rotx[i+1][0])
-            rot_temp_y=(rotx[i][1]+(a-a0)*(a1-a0)*
-                        rotx[i+1][1])
-            rot_temp_z=(rotx[i][2]+(a-a0)*(a1-a0)*
-                        rotx[i+1][2])
+            sph_temp_x=(sphx[i][0]+(a-a0)/(a1-a0)*
+                        (sphx[i+1][0]-sphx[i][0]))
+            sph_temp_y=(sphx[i][1]+(a-a0)/(a1-a0)*
+                        (sphx[i+1][1]-sphx[i][1]))
+            sph_temp_z=(sphx[i][2]+(a-a0)/(a1-a0)*
+                        (sphx[i+1][2]-sphx[i][2]))
+            rot_temp_x=(rotx[i][0]+(a-a0)/(a1-a0)*
+                        (rotx[i+1][0]-rotx[i][0]))
+            rot_temp_y=(rotx[i][1]+(a-a0)/(a1-a0)*
+                        (rotx[i+1][1]-rotx[i][1]))
+            rot_temp_z=(rotx[i][2]+(a-a0)/(a1-a0)*
+                        (rotx[i+1][2]-rotx[i][2]))
         else:
-            cam_temp_x=(camx[i][0]+(a-a0)*(a1-a0)*
-                        camx[0][0])
-            cam_temp_y=(camx[i][1]+(a-a0)*(a1-a0)*
-                        camx[0][1])
-            cam_temp_z=(camx[i][2]+(a-a0)*(a1-a0)*
-                        camx[0][2])
-            rot_temp_x=(rotx[i][0]+(a-a0)*(a1-a0)*
-                        rotx[0][0])
-            rot_temp_y=(rotx[i][1]+(a-a0)*(a1-a0)*
-                        rotx[0][1])
-            rot_temp_z=(rotx[i][2]+(a-a0)*(a1-a0)*
-                        rotx[0][2])
-        print(i,j,a0,dj,a1,cam_temp_x,rot_temp_x)
+            sph_temp_x=(sphx[i][0]+(a-a0)/(a1-a0)*
+                        (sphx[0][0]-sphx[i][0]))
+            sph_temp_y=(sphx[i][1]+(a-a0)/(a1-a0)*
+                        (sphx[0][1]-sphx[i][1]))
+            sph_temp_z=(sphx[i][2]+(a-a0)/(a1-a0)*
+                        (sphx[0][2]-sphx[i][2]))
+            rot_temp_x=(rotx[i][0]+(a-a0)/(a1-a0)*
+                        (rotx[0][0]-rotx[i][0]))
+            rot_temp_y=(rotx[i][1]+(a-a0)/(a1-a0)*
+                        (rotx[0][1]-rotx[i][1]))
+            rot_temp_z=(rotx[i][2]+(a-a0)/(a1-a0)*
+                        (rotx[0][2]-rotx[i][2]))
             
-        camx2.append([cam_temp_x,cam_temp_y,cam_temp_z])
+        print('%2d %2d %7.6e %7.6e %7.6e %7.6e %7.6e' %
+              (i,j,a0,dj,a,sph_temp_x,rot_temp_x))
+            
+        sphx2.append([sph_temp_x,sph_temp_y,sph_temp_z])
         rotx2.append([rot_temp_x,rot_temp_y,rot_temp_z])
 
 # Iterate through the dict, set the locations and render
@@ -198,6 +196,26 @@ for i in range(0,6):
     # Set the camera location
     camera.location=camx[i]
     camera.rotation_euler=rotx[i]
+
+    # Assemble the path
+    scene.render.filepath='bl_gltf_six_temp_%03d.png' % i
+    
+    # Perform the render
+    bpy.ops.render.render(write_still=True)
+
+    if True:
+        # Save a blend file
+        bpy.ops.wm.save_as_mainfile(filepath=
+                                    ('/home/awsteiner/six_temp_%01d.blend' % i))
+
+# Iterate through the dict, set the locations and render
+for i in range(0,len(sphx2)):
+
+    camx2=o2sclpy.spher_to_rect(sphx2[i])
+        
+    # Set the camera location
+    camera.location=[camx2[0]+0.5,camx2[1]+0.5,camx2[2]+0.5]
+    camera.rotation_euler=rotx2[i]
 
     if i==0 and 'BLEND_FILE'!='':
         # Save a blend file
@@ -209,7 +227,8 @@ for i in range(0,6):
     # Perform the render
     bpy.ops.render.render(write_still=True)
 
-    # Save a blend file
-    bpy.ops.wm.save_as_mainfile(filepath=
-                                ('/home/awsteiner/six_%01d.blend' % i))
+    if i<15:
+        # Save a blend file
+        bpy.ops.wm.save_as_mainfile(filepath=
+                                    ('/home/awsteiner/six_%03d.blend' % i))
 
