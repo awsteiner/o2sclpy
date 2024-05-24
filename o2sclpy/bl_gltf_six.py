@@ -123,6 +123,10 @@ sphx=[o2sclpy.rect_to_spher([camx[i][0]-0.5,
                              camx[i][1]-0.5,
                              camx[i][2]-0.5]) for i in range(0,6)]
 
+# 1: focus up (z), north is +y, right is +x.
+# ((1,0,0),(0,1,0),(0,0,-1))
+# yaw = atan2(0,1)=0, pitch is 0, and roll is atan2(-1,0)
+
 # Euler angles for the rotation at each of the six positions
 rotx=[[0,0,0],
       [numpy.pi/2.0,-numpy.pi/2.0,numpy.pi],
