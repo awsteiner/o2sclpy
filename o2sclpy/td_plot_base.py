@@ -1810,7 +1810,8 @@ class td_plot_base(yt_plot_base):
 
         return
 
-    def td_icos(self,args,n_subdiv=0,r=0.04,phi_cut='',mat='white'):
+    def td_icos(self,args,n_subdiv=0,r=0.04,phi_cut='',mat='white',
+                coords='user'):
         """Documentation for o2graph command ``td-icos``:
 
         Create a 3D icosphere (experimental).
@@ -1849,6 +1850,15 @@ class td_plot_base(yt_plot_base):
         val_x=float(args[0])
         val_y=float(args[1])
         val_z=float(args[2])
+
+        if coords=='user':
+            if self.xset==False or self.yset==False or self.zset==False:
+                raise ValueError("User coordinates not set in"+
+                                 " td_plot_base::td_icos().")
+            val_x=(val_x-self.xlo)/(self.xhi-self.xlo)
+            val_y=(val_y-self.ylo)/(self.yhi-self.ylo)
+            val_z=(val_z-self.zlo)/(self.zhi-self.zlo)
+        
         if self.xset==False:
             if val_x<0:
                 self.xlo=val_x*2
