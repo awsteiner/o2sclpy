@@ -690,7 +690,7 @@ class threed_objects:
         """Using the specified ``prefix``, create a unique name for a mesh
         object by adding an integer suffix from 1 to 100.
         """
-        for i in range(1,101):
+        for i in range(1,10001):
             found=False
             name=prefix+str(i)
             for j in range(0,len(self.mesh_list)):
@@ -1835,7 +1835,7 @@ class td_plot_base(yt_plot_base):
         """
         import copy
         
-        if mat=='':
+        if mat=='white':
             if self.to.is_mat('white')==False:
                 m=material('white',[1,1,1])
                 self.to.add_mat(m)
