@@ -20,6 +20,7 @@ Other classes from O\ :sub:`2`\ scl
 * :ref:`Class contour`
 * :ref:`Class prob_dens_func`
 * :ref:`Class prob_dens_gaussian`
+* :ref:`Class prob_dens_hist`
 * :ref:`Class prob_dens_mdim`
 * :ref:`Class prob_dens_mdim_biv_gaussian`
 * :ref:`Class prob_dens_mdim_gaussian`
@@ -199,6 +200,17 @@ Class prob_dens_gaussian
 ------------------------
 
 .. autoclass:: o2sclpy.prob_dens_gaussian
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class prob_dens_hist
+--------------------
+
+.. autoclass:: o2sclpy.prob_dens_hist
         :members:
         :undoc-members:
 

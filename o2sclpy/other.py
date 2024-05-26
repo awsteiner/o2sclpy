@@ -2110,6 +2110,16 @@ class prob_dens_func:
         ret=func(self._ptr)
         return ret
 
+    def sample(self):
+        """
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_prob_dens_func_sample
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
 
 class prob_dens_gaussian(prob_dens_func):
     """
@@ -2180,6 +2190,68 @@ class prob_dens_gaussian(prob_dens_func):
         func=self._link.o2scl.o2scl_prob_dens_gaussian_set_sigma
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,sigma)
+        return
+
+
+class prob_dens_hist(prob_dens_func):
+    """
+    Python interface for O2scl class ``prob_dens_hist``,
+    See
+    https://awsteiner.org/code/o2scl/html/class/prob_dens_hist.html .
+    """
+
+    def __init__(self,link,pointer=0):
+        """
+        Init function for class prob_dens_hist
+
+        | Parameters:
+        | *link* :class:`linker` object
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=link.o2scl.o2scl_create_prob_dens_hist
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=link
+        return
+
+    def __del__(self):
+        """
+        Delete function for class prob_dens_hist
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_prob_dens_hist
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class prob_dens_hist
+        
+        Returns: prob_dens_hist object
+        """
+
+        new_obj=type(self)(self._link,self._ptr)
+        return new_obj
+
+    def init(self,h):
+        """
+        | Parameters:
+        | *h*: :class:`hist` object
+        """
+        func=self._link.o2scl.o2scl_prob_dens_hist_init
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,h._ptr)
         return
 
 
