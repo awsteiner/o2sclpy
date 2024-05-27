@@ -1,17 +1,19 @@
 # This example demonstrates various options for materials and the
 # associated latex or colormap texture files
-o2graph -set verbose 3 -set td_wdir gltf \
+o2graph -set td_wdir gltf \
 -xlimits 0 1 -ylimits 0 1 -zlimits 0 1 \
--td-mat one 0 0 1 \
--td-mat two 1 0 0 "txt=latex:$ x^2$,prefix=mat_" \
--td-mat three 0 0 0 "alpha=0,txt=latex:$ x^2$,resize=False,alpha_mode=blend,prefix=mat_" \
--td-mat four 1 0 0 "txt=latex:$ x^2~{\color{blue}x^3}$,resize=False,packages=xcolor,prefix=mat_" \
+-td-mat one 0 0 0.5 \
+-td-mat two 0.5 0 0 "txt=latex:$ x^2$,prefix=mat_" \
+-td-mat three 0 0 0 \
+"alpha=0,txt=latex:$ x^2$,resize=False,alpha_mode=blend,prefix=mat_" \
+-td-mat four 0.5 0 0 \
+"txt=latex:$ x^2~{\color{blue}x^3}$,resize=False,packages=xcolor,prefix=mat_" \
 -td-mat five 1 0 0 "txt=cmap:viridis,prefix=mat_" \
--td-mat six 0 0 1 "alpha=0.5,alpha_mode=blend" \
--td-pgram 0.1 0.1 0.1 0.4 0.1 0.1 0.1 0.4 0.1 "mat=one" \
--td-pgram 0.2 0.2 0.2 0.5 0.2 0.2 0.2 0.5 0.2 "mat=two" \
--td-pgram 0.3 0.3 0.4 0.6 0.3 0.4 0.3 0.6 0.4 "mat=three" \
--td-pgram 0.4 0.4 0.5 0.7 0.4 0.5 0.4 0.7 0.5 "mat=four" \
--td-pgram 0.5 0.5 0.7 0.8 0.5 0.7 0.5 0.8 0.7 "mat=five" \
--td-pgram 0.6 0.6 0.8 0.9 0.6 0.8 0.6 0.9 0.8 "mat=six" \
+-td-mat six 0 0 0.5 "alpha=0.5,alpha_mode=blend" \
+-td-pgram 0.14 0.1 0.1 0.14 0.4 0.1 0.14 0.1 0.4 "mat=one" \
+-td-pgram 0.28 0.2 0.2 0.28 0.5 0.2 0.28 0.2 0.5 "mat=two,match_txt=True" \
+-td-pgram 0.42 0.3 0.3 0.42 0.6 0.3 0.42 0.3 0.6 "mat=three" \
+-td-pgram 0.57 0.4 0.4 0.57 0.7 0.4 0.57 0.4 0.7 "mat=four,match_txt=True" \
+-td-pgram 0.71 0.5 0.5 0.71 0.8 0.5 0.71 0.5 0.8 "mat=five" \
+-td-pgram 0.85 0.6 0.6 0.85 0.9 0.6 0.85 0.6 0.9 "mat=six" \
 -gltf mat.gltf

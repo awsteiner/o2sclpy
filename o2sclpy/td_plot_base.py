@@ -575,7 +575,7 @@ def parallelogram(x1,y1,z1,x2,y2,z2,x3,y3,z3,mat_name='',verbose=0,
     x4=(x2-x1)+x3
     y4=(y2-y1)+y3
     z4=(z2-z1)+z3
-    if verbose>0:
+    if verbose>2:
         print('parallelogram(): x1,y1,z1,mat',x1,y1,z1,mat_name)
         print('parallelogram(): x2,y2,z2',x2,y2,z2)
         print('parallelogram(): x3,y3,z3',x3,y3,z3)
@@ -1336,11 +1336,12 @@ class threed_objects:
             print('Closing .bin file:')
         f2.close()
 
-        print('zip_files:',zip_files)
-        zip_cmd='cd '+wdir+'; zip '+zip_main
-        for i in range(0,len(zip_files)):
-            zip_cmd=zip_cmd+' '+zip_files[i]
-        os.system(zip_cmd)
+        if zip_file==True:
+            print('zip_files:',zip_files)
+            zip_cmd='cd '+wdir+'; zip '+zip_main
+            for i in range(0,len(zip_files)):
+                zip_cmd=zip_cmd+' '+zip_files[i]
+            os.system(zip_cmd)
             
         return
         
@@ -2319,7 +2320,6 @@ class td_plot_base(yt_plot_base):
                                               verbose=self.verbose,
                                               resize=resize,
                                               flatten=True)
-                print('herex',w,h,w_new,h_new)
                 if resize==False:
                     txt_dim=(float(w)/float(w_new),
                              float(h)/float(h_new))
@@ -2444,7 +2444,7 @@ class td_plot_base(yt_plot_base):
         the upper-left corner along the vector defined by the lower
         corners. If ``match_txt`` is true, then the parallelogram size
         is modified (by moving the corners closer to the lower-left
-        corner) to fit the texture specified in ``mat``.
+        corner) to fit the texture aspect ratio specified in ``mat``.
 
         End of documentation for o2graph command ``td-pgram``.
         
