@@ -1829,7 +1829,7 @@ class td_plot_base(yt_plot_base):
         return
 
     def td_icos(self,args,n_subdiv=0,r=0.04,phi_cut='',mat='white',
-                coords='user'):
+                coords='user',name=''):
         """Documentation for o2graph command ``td-icos``:
 
         Create a 3D icosphere (experimental).
@@ -1841,7 +1841,10 @@ class td_plot_base(yt_plot_base):
         subdivisions of the original icosahedron, ``r=0.04``, the
         radius of the icosphere in the internal coordinate system, and
         ``mat='white'``, the material to use for the icosphere
-        surface. The phi_cut keyword argument does not yet work.
+        surface, and ``name``, the name of the GLTF mesh. If the name
+        is specified, the user is responsible for making sure that
+        this name is unique. The phi_cut keyword argument does not yet
+        work.
 
         Note that normals are typically not specified, because the
         icosphere presumes flat shading. Blender, for example, uses
@@ -1851,6 +1854,7 @@ class td_plot_base(yt_plot_base):
         End of documentation for o2graph command ``td-icos``.
         
         This function uses :py:func:`o2sclpy.icosphere`.
+
         """
         import copy
         
@@ -1917,9 +1921,10 @@ class td_plot_base(yt_plot_base):
                 print('td_icos(): z limits not set, so setting to',
                       self.zlo,',',self.zhi)
 
-        print('time',datetime.now())
-        uname=self.to.make_unique_name('icos')
-        print('time',datetime.now())
+        if name=='':
+            uname=self.to.make_unique_name('icos')
+        else:
+            uname=name
                 
         gf=mesh_object(uname,[],mat=mat)
             

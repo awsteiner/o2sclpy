@@ -827,7 +827,7 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
 
     If flatten is True and bgcolor[3] is non-zero,
     then any pixels with alpha=0 are replaced with bgcolor. This
-    is particularly useful for pngs created by the latex_png()
+    is particularly useful for pngs created by the latex_to_png()
     function.
 
     The background color argument should consist of integers from 0 to

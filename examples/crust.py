@@ -194,7 +194,8 @@ for i in range(0,N_part):
     if random.random()<ratio:
         
         rnuc=numpy.cbrt(3*(Zt+Nt)/0.16/4/numpy.pi)
-        op.td_icos([xt,yt,zt],r=rnuc*cf*r_fudge,mat=mat_name)
+        op.td_icos([xt,yt,zt],r=rnuc*cf*r_fudge,mat=mat_name,
+                   name='icos_'+str(i))
         if i<100:
             print('nuc %5.4e %5.4e %5.4e %5.4e %5.4e %5.4e' %
                   (xt,yt,zt,rnuc*cf,Zt,Nt))
@@ -202,14 +203,14 @@ for i in range(0,N_part):
 
         # Neutron radius is 0.8 femtometers
         rneut=0.8
-        op.td_icos([xt,yt,zt],r=rneut*cf*r_fudge,mat=mat_name)
+        op.td_icos([xt,yt,zt],r=rneut*cf*r_fudge,mat=mat_name,
+                   name='icos_'+str(i))
         if i<100:
             print('n   %5.4e %5.4e %5.4e %5.4e' % 
                   (xt,yt,zt,rneut*cf))
 
-    if i%100==99:
+    if i%1000==999:
         print('Completed particle',i+1,' of ',N_part)
-        print('time',datetime.now())
             
 print('Minimum x coordinate:',xmin)
 print('Maximum neutron number:',Nmax)
@@ -220,12 +221,13 @@ print('Maximum neutron number:',Nmax)
 width=0.33
 height=0.33
 op.td_mat('sign_1',1.0,1.0,1.0,prefix='crust_',
-          txt='latex:\\parbox{5cm}{Neutron star crust visualization}')
+          txt='latex:\\parbox{2cm}{Neutron star crust visualization}',
+          resize=False)
 op.td_pgram(5.0-width/2.0,0.0,0.5-height/2.0,
             5.0+width/2.0,0.0,0.5-height/2.0,
-            5.0-width/2.0,0.0,0.5+height/2.0,mat='sign_1')
+            5.0-width/2.0,0.0,0.5+height/2.0,mat='sign_1',match_txt=True)
 
 # 
 
-op.to.write_gltf(op.td_wdir,'crust')        
+op.to.write_gltf(op.td_wdir,'crust',zip_file=True)        
 
