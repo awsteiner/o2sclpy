@@ -40,6 +40,8 @@ from o2sclpy.hdf import *
 from o2sclpy.base import *
 from o2sclpy.kde import *
 
+from datetime import datetime
+
 def o2scl_get_type(o2scl,amp,link):
     """
     Get the type of the current object stored in the acol_manager
@@ -845,18 +847,24 @@ class threed_objects:
         return
 
     def write_gltf(self, wdir: str, prefix: str, verbose: int = 0,
-                   rotate_zup: bool = True):
+                   rotate_zup: bool = True, zip_file=False):
         """Write all objects to an '.gltf' file, creating a '.bin' file
         """
 
         import json
         from struct import pack
+
+        zip_files=[]
         
         # Remove suffix if it is present
         if prefix[-5:]=='.gltf':
             prefix=prefix[:-5]
         gltf_file=wdir+"/"+prefix+'.gltf'
         bin_file=wdir+"/"+prefix+'.bin'
+        
+        zip_main=prefix+'.zip'
+        zip_files.append(prefix+'.gltf')
+        zip_files.append(prefix+'.bin')
         
         nodes_list=[]
             
@@ -916,6 +924,9 @@ class threed_objects:
                                  "uri": this_mat.txt})
                 texture_map[i]=texture_index
                 texture_index=texture_index+1
+
+                zip_files.append(this_mat.txt)
+                
             elif len(this_mat.base_color)>=4:
                 pbr_dict["baseColorFactor"]=[
                         this_mat.base_color[0],
@@ -1324,6 +1335,12 @@ class threed_objects:
         if verbose>2:
             print('Closing .bin file:')
         f2.close()
+
+        print('zip_files:',zip_files)
+        zip_cmd='cd '+wdir+'; zip '+zip_main
+        for i in range(0,len(zip_files)):
+            zip_cmd=zip_cmd+' '+zip_files[i]
+        os.system(zip_cmd)
             
         return
         
@@ -1899,7 +1916,9 @@ class td_plot_base(yt_plot_base):
                 print('td_icos(): z limits not set, so setting to',
                       self.zlo,',',self.zhi)
 
+        print('time',datetime.now())
         uname=self.to.make_unique_name('icos')
+        print('time',datetime.now())
                 
         gf=mesh_object(uname,[],mat=mat)
             
@@ -2258,7 +2277,7 @@ class td_plot_base(yt_plot_base):
                 txt_out_base=(prefix+'latexr'+str(self.png_counter)+
                               '.png')
                 txt_out=self.td_wdir+'/'+txt_out_base
-                
+ 
             else:
                 txt_dir=os.path.dirname(txt)
                 txt_base=os.path.basename(txt)
@@ -2298,7 +2317,9 @@ class td_plot_base(yt_plot_base):
                 w,h,w_new,h_new=png_power_two(txt,txt_out,
                                               bgcolor=bgcolor,
                                               verbose=self.verbose,
-                                              resize=resize)
+                                              resize=resize,
+                                              flatten=True)
+                print('herex',w,h,w_new,h_new)
                 if resize==False:
                     txt_dim=(float(w)/float(w_new),
                              float(h)/float(h_new))
@@ -2433,6 +2454,9 @@ class td_plot_base(yt_plot_base):
 
         if coords=='user':
             if self.xset==False or self.yset==False or self.zset==False:
+                print('xset:',self.xset)
+                print('yset:',self.yset)
+                print('zset:',self.zset)
                 raise ValueError("User coordinates not set in"+
                                  " td_plot_base::td_pgram().")
             x1=(x1-self.xlo)/(self.xhi-self.xlo)
@@ -2517,10 +2541,12 @@ class td_plot_base(yt_plot_base):
             
             txt2=copy.deepcopy(pgram_txt)
             for i in range(0,len(pgram_txt)):
-                txt2[i][0]=pgram_txt[i][0]*m.txt_frac_w
-                txt2[i][1]=pgram_txt[i][1]*m.txt_frac_h
+                txt2[i][0]=(pgram_txt[i][0]*m.txt_frac_w+
+                            (1.0-m.txt_frac_w)/2.0)
+                txt2[i][1]=(pgram_txt[i][1]*m.txt_frac_h+
+                            (1.0-m.txt_frac_h)/2.0)
             gf.vt_list=txt2
-            
+
         self.to.add_object(gf)
 
         return

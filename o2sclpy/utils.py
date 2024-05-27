@@ -797,6 +797,7 @@ def force_string(obj):
         return obj.decode('utf-8')
     return obj
 
+
 def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
                   verbose: int = 0, flatten: bool = False,
                   resize: bool = True):
@@ -805,21 +806,32 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
     in ``png_output``.
 
     This function returns a tuple of four numbers, the width and
-    height of the original image (incremented by one if necessary to
-    make them even), and the width and height of the new image.
+    height of the usable part of the image and the width and height of
+    the full image. The latter two numbers are always a power of two.
 
     This function uses the Pillow python package to determine the
     original width and height and perform the resizing. If the width
-    and height are already a power of two, then the file is simply
-    copied, unless the input and output filenames are the same, in
-    which case this function does nothing. If the input and output
+    and height are already both a power of two, then the file is
+    simply copied, unless the input and output filenames are the same,
+    in which case this function does nothing. If the input and output
     filenames are the same, and the width and height are not a power
     of two, then this function will throw an exception to help prevent
     the user from inadvertently overwriting the original file. This
-    function will overwrite the output file when the input and output
-    filenames are different.
+    function always overwrites the output file when the input and
+    output filenames are different.
 
-    The default background color is black.
+    When resize is True, the image is resized to fit the new width
+    and height. When resize is False, then the original image is
+    centered in the new canvas, and the canvas is filled with the
+    background color.
+
+    If flatten is True and bgcolor[3] is non-zero,
+    then any pixels with alpha=0 are replaced with bgcolor. This
+    is particularly useful for pngs created by the latex_png()
+    function.
+
+    The background color argument should consist of integers from 0 to
+    255. The default background color is transparent black.
 
     If verbose is greater than 1, then several details are written to 
     stdout.
@@ -859,7 +871,7 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
         if png_input==png_output:
             if verbose>1:
                 print('png_power_two(): Skipping.')
-            return wadj,hadj,w_new,h_new
+            return w,h,w,h
         
         # No resizing required, so just copy
         cmd='cp '+png_input+' '+png_output
@@ -877,6 +889,13 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
         if verbose>1:
             print('png_power_two(): resizing to',w_new,'by',h_new)
         img_new=img.resize((w_new,h_new))
+        wadj=w_new
+        hadj=h_new
+
+        # If we're going to flatten the image below, we need
+        # to convert modes
+        if flatten and bgcolor[3]!=0:
+            img_new=img_new.convert('RGBA')
         
     else:
         
@@ -890,19 +909,21 @@ def png_power_two(png_input: str, png_output: str, bgcolor=[0,0,0,0],
 
         # Ensure the image is centered
         img_new.paste(img,(int((w_new-w)/2),int((h_new-h)/2)))
+
+    # If requested, flatten all transparent pixels
+    if flatten and bgcolor[3]!=0:
         
-        if flatten:
-            dat=img_new.getdata()
-            dat_new=[]
-            for px in dat:
-                # Convert transparent pixels to the specified background
-                # color
-                if px[3]==0:
-                    dat_new.append((bgcolor[0],bgcolor[1],bgcolor[2],
-                                    bgcolor[3]))
-                else:
-                    dat_new.append(px)
-            img_new.putdata(dat_new)
+        dat=img_new.getdata()
+        dat_new=[]
+        for px in dat:
+            # Convert transparent pixels to the specified background
+            # color
+            if px[3]==0:
+                dat_new.append((bgcolor[0],bgcolor[1],bgcolor[2],
+                                bgcolor[3]))
+            else:
+                dat_new.append(px)
+        img_new.putdata(dat_new)
 
     # Save the new image in the output PNG file
     img_new.save(png_output)

@@ -6273,6 +6273,18 @@ class o2graph_plotter(td_plot_base):
                         self.ylimits(float(eval(strlist[ix+1])),
                                      float(eval(strlist[ix+2])))
                         
+                elif cmd_name=='zlimits':
+                    
+                    if self.verbose>2:
+                        print('Process zlimits.')
+                        print('args:',strlist[ix:ix_next])
+                        
+                    if ix_next-ix<3:
+                        print('Not enough parameters for zlimits option.')
+                    else:
+                        self.zlimits(float(eval(strlist[ix+1])),
+                                     float(eval(strlist[ix+2])))
+                        
                 elif cmd_name=='save':
                     
                     if self.verbose>2:
