@@ -1,4 +1,4 @@
-# # O$_2$scl table example for O$_2$sclpy
+# # Neutron star crust example for O$_2$sclpy
 
 # See the O$_2$sclpy documentation at
 # https://awsteiner.org/code/o2sclpy for more information.
@@ -157,6 +157,7 @@ op.td_wdir='gltf'
 #print('x          r')
 xmin=1e99
 Nmax=0
+Nnuclei=0
 
 mat_flag=numpy.zeros((100),dtype=int)
 
@@ -195,16 +196,22 @@ for i in range(0,N_part):
         
         rnuc=numpy.cbrt(3*(Zt+Nt)/0.16/4/numpy.pi)
         op.td_icos([xt,yt,zt],r=rnuc*cf*r_fudge,mat=mat_name,
-                   name='icos_'+str(i))
+                   name='icos_'+str(i),n_subdiv=1)
         if i<100:
             print('nuc %5.4e %5.4e %5.4e %5.4e %5.4e %5.4e' %
                   (xt,yt,zt,rnuc*cf,Zt,Nt))
+        Nnuclei=Nnuclei+1
+        
     else:
 
+        if mat_flag[0]==0:
+            mat_flag[0]=1
+            op.td_mat('mat_0',1.0,1.0,1.0,1.0,prefix='crust_')
+            
         # Neutron radius is 0.8 femtometers
         rneut=0.8
-        op.td_icos([xt,yt,zt],r=rneut*cf*r_fudge,mat=mat_name,
-                   name='icos_'+str(i))
+        op.td_icos([xt,yt,zt],r=rneut*cf*r_fudge,mat='mat_0',
+                   name='icos_'+str(i),n_subdiv=1)
         if i<100:
             print('n   %5.4e %5.4e %5.4e %5.4e' % 
                   (xt,yt,zt,rneut*cf))
@@ -214,18 +221,31 @@ for i in range(0,N_part):
             
 print('Minimum x coordinate:',xmin)
 print('Maximum neutron number:',Nmax)
+print('Number of nuclei:',Nnuclei)
 
 # This section may need to be modified if the initial settings
 # are changed
 
 width=0.33
 height=0.33
-op.td_mat('sign_1',1.0,1.0,1.0,prefix='crust_',
-          txt='latex:\\parbox{2cm}{Neutron star crust visualization}',
-          resize=False)
-op.td_pgram(5.0-width/2.0,0.0,0.5-height/2.0,
-            5.0+width/2.0,0.0,0.5-height/2.0,
-            5.0-width/2.0,0.0,0.5+height/2.0,mat='sign_1',match_txt=True)
+
+sign_array=[
+    ['first.png',5.0],
+    ['ns.png',4.0],
+    ['crust.png',3.0],
+    ['scale.png',2.0],
+    ['electrons.png',1.0],
+    ['e9.png',0.0],
+    ['e12.png',10.0]
+]
+
+for k in range(0,len(sign_array)):    
+    op.td_mat('sign_'+str(k),1.0,1.0,1.0,prefix='crust_',
+              txt=sign_array[k][0],resize=True)
+    op.td_pgram(sign_array[k][1]-width/2.0,0.0,0.5-height/2.0,
+                sign_array[k][1]+width/2.0,0.0,0.5-height/2.0,
+                sign_array[k][1]-width/2.0,0.0,0.5+height/2.0,
+                mat='sign_'+str(k),match_txt=True)
 
 # 
 
