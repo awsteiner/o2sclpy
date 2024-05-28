@@ -160,12 +160,28 @@ Nmax=0
 Nnuclei=0
 
 mat_flag=numpy.zeros((100),dtype=int)
+found_nucleus=numpy.zeros((N_bins),dtype=int)
+
+op.td_mat('mat_blue',0,0,1,prefix='crust_')
+op.td_mat('mat_red',1,0,0,prefix='crust_')
+
+# Nucleon radius is 0.8 femtometers
+r_nucleon=0.8
 
 for i in range(0,N_part):
 
     xt=pdh.sample()
     if xt<xmin:
         xmin=xt
+
+    i_bin=0
+    for k in range(1,N_bins):
+        if xt>ug_r[k] and xt<ug_r[k+1]:
+            i_bin=k
+    if xt>ug_r[N_bins]:
+        print('Problem',xt,ug_r[0],ug_r[N_bins])
+        quit()
+        
     rt=r_out-xt/x_scale
     nbt=tov_tab.interp('r',rt,'nb')
     rhot=eos_tab.interp('nb',nbt,'rho')
@@ -182,6 +198,11 @@ for i in range(0,N_part):
         Ni=1
     if Nt>Nmax:
         Nmax=Nt
+    Zi=int(Zt+1.0e-10)
+    if Zi>100:
+        Zi=100
+    if Zi<1:
+        Zi=1
     ratio=nnuct/(nnuct+nnt)
     yt=yz_size*random.random()
     zt=yz_size*random.random()
@@ -193,28 +214,72 @@ for i in range(0,N_part):
                    1.0-float(Ni-1)/99.0,1.0,1.0,prefix='crust_')
     
     if random.random()<ratio:
-        
+
         rnuc=numpy.cbrt(3*(Zt+Nt)/0.16/4/numpy.pi)
-        op.td_icos([xt,yt,zt],r=rnuc*cf*r_fudge,mat=mat_name,
-                   name='icos_'+str(i),n_subdiv=1)
+        
+        if found_nucleus[i_bin]==0:
+            
+            found_nucleus[i_bin]=1
+
+            op.td_mat('nuc_sign_'+str(i_bin),1.0,1.0,1.0,
+                      prefix='crust_',
+                      txt='latex:('+str(Zi)+','+str(Ni)+')',
+                      resize=True,ds=False)
+            op.td_pgram(xt,yt+0.1,zt,
+                        xt,yt+0.1,zt+0.1,
+                        xt,yt+0.2,zt,
+                        mat='nuc_sign_'+str(k),match_txt=True)
+            
+            print('Adding nucleus, Z',Zi,'N',Ni,'for bin',i_bin)
+            for k in range(0,Ni):
+                rshift=random.random()*rnuc*cf*r_fudge
+                ctshift=random.random()*2-1
+                tshift=numpy.arcsin(ctshift)
+                pshift=random.random()*2.0*numpy.pi
+                xshift=rshift*numpy.cos(pshift)*numpy.sin(tshift)
+                yshift=rshift*numpy.sin(pshift)*numpy.sin(tshift)
+                zshift=rshift*numpy.cos(tshift)
+                if k<2:
+                    print('ct,r,t,p: %6.5e %6.5e %6.5e %6.5e' %
+                          (ctshift,rshift,tshift,pshift))
+                    print('rshift,rnuc,rnucl: %6.5e %6.5e %6.5e' %
+                          (rshift,rnuc,r_nucleon))
+                    print('x,y,z,x2,y2,z2: %6.5e %6.5e %6.5e %6.5e %6.5e %6.5e' %
+                          (xt,yt,zt,xshift,yshift,zshift))
+                    #quit()
+                op.td_icos([xt+xshift,yt+xshift,zt+zshift],
+                           r=r_nucleon*cf*r_fudge,mat='mat_blue',
+                           name='icos_'+str(i),n_subdiv=1)
+            for k in range(0,Zi):
+                rshift=random.random()*rnuc*cf*r_fudge
+                ctshift=random.random()*2-1
+                tshift=numpy.arcsin(ctshift)
+                pshift=random.random()*2.0*numpy.pi
+                xshift=rshift*numpy.cos(pshift)*numpy.sin(tshift)
+                yshift=rshift*numpy.sin(pshift)*numpy.sin(tshift)
+                zshift=rshift*numpy.cos(tshift)
+                op.td_icos([xt+xshift,yt+xshift,zt+zshift],
+                           r=r_nucleon*cf*r_fudge,mat='mat_red',
+                           name='icos_'+str(i),n_subdiv=1)
+
+        else:
+            
+            op.td_icos([xt,yt,zt],r=rnuc*cf*r_fudge,mat=mat_name,
+                       name='icos_'+str(i),n_subdiv=1)
+            
         if i<100:
             print('nuc %5.4e %5.4e %5.4e %5.4e %5.4e %5.4e' %
                   (xt,yt,zt,rnuc*cf,Zt,Nt))
+                
         Nnuclei=Nnuclei+1
-        
+
     else:
 
-        if mat_flag[0]==0:
-            mat_flag[0]=1
-            op.td_mat('mat_0',1.0,1.0,1.0,1.0,prefix='crust_')
-            
-        # Neutron radius is 0.8 femtometers
-        rneut=0.8
-        op.td_icos([xt,yt,zt],r=rneut*cf*r_fudge,mat='mat_0',
+        op.td_icos([xt,yt,zt],r=r_nucleon*cf*r_fudge,mat='mat_blue',
                    name='icos_'+str(i),n_subdiv=1)
         if i<100:
             print('n   %5.4e %5.4e %5.4e %5.4e' % 
-                  (xt,yt,zt,rneut*cf))
+                  (xt,yt,zt,r_nucleon*cf))
 
     if i%1000==999:
         print('Completed particle',i+1,' of ',N_part)
@@ -231,17 +296,18 @@ height=0.33
 
 sign_array=[
     ['first.png',5.0],
-    ['ns.png',4.0],
-    ['crust.png',3.0],
-    ['scale.png',2.0],
+    ['ns.png',4.2],
+    ['crust.png',3.4],
+    ['nuclei.png',2.6],
+    ['scale.png',1.8],
     ['electrons.png',1.0],
-    ['e9.png',0.0],
+    ['e9.png',0.2],
     ['e12.png',10.0]
 ]
 
 for k in range(0,len(sign_array)):    
     op.td_mat('sign_'+str(k),1.0,1.0,1.0,prefix='crust_',
-              txt=sign_array[k][0],resize=True)
+              txt=sign_array[k][0],resize=True,ds=False)
     op.td_pgram(sign_array[k][1]-width/2.0,0.0,0.5-height/2.0,
                 sign_array[k][1]+width/2.0,0.0,0.5-height/2.0,
                 sign_array[k][1]-width/2.0,0.0,0.5+height/2.0,
@@ -249,5 +315,5 @@ for k in range(0,len(sign_array)):
 
 # 
 
-op.to.write_gltf(op.td_wdir,'crust',zip_file=True)        
+op.to.write_gltf(op.td_wdir,'crust',zip_file='crust.zip')        
 

@@ -847,24 +847,26 @@ class threed_objects:
         return
 
     def write_gltf(self, wdir: str, prefix: str, verbose: int = 0,
-                   rotate_zup: bool = True, zip_file=False):
+                   rotate_zup: bool = True, zip_file=''):
         """Write all objects to an '.gltf' file, creating a '.bin' file
         """
 
         import json
         from struct import pack
 
-        zip_files=[]
+        zip_list=[]
         
         # Remove suffix if it is present
         if prefix[-5:]=='.gltf':
             prefix=prefix[:-5]
         gltf_file=wdir+"/"+prefix+'.gltf'
         bin_file=wdir+"/"+prefix+'.bin'
-        
-        zip_main=prefix+'.zip'
-        zip_files.append(prefix+'.gltf')
-        zip_files.append(prefix+'.bin')
+
+        if zip_file!='':
+            if zip_file[-4:]!='.zip':
+                zip_file=zip_file+'.zip'
+            zip_list.append(prefix+'.gltf')
+            zip_list.append(prefix+'.bin')
         
         nodes_list=[]
             
@@ -925,7 +927,8 @@ class threed_objects:
                 texture_map[i]=texture_index
                 texture_index=texture_index+1
 
-                zip_files.append(this_mat.txt)
+                if zip_file!='':
+                    zip_list.append(this_mat.txt)
                 
             elif len(this_mat.base_color)>=4:
                 pbr_dict["baseColorFactor"]=[
@@ -1336,11 +1339,11 @@ class threed_objects:
             print('Closing .bin file:')
         f2.close()
 
-        if zip_file==True:
-            print('zip_files:',zip_files)
-            zip_cmd='cd '+wdir+'; zip '+zip_main
-            for i in range(0,len(zip_files)):
-                zip_cmd=zip_cmd+' '+zip_files[i]
+        if zip_file!='':
+            print('zip_list:',zip_list)
+            zip_cmd='cd '+wdir+'; zip '+zip_file
+            for i in range(0,len(zip_list)):
+                zip_cmd=zip_cmd+' '+zip_list[i]
             os.system(zip_cmd)
             
         return
@@ -2292,7 +2295,7 @@ class td_plot_base(yt_plot_base):
                 
             if self.verbose>0:
                 print('td_mat(): Reading file named '+txt_base+
-                      ' from directory '+txt_dir+' and writing\n '+
+                      ' from directory '+txt_dir+'and writing\n '+
                       ' file '+txt_out)
             
             txt_two_done=False
