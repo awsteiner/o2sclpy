@@ -2295,7 +2295,7 @@ class td_plot_base(yt_plot_base):
                 
             if self.verbose>0:
                 print('td_mat(): Reading file named '+txt_base+
-                      ' from directory '+txt_dir+'and writing\n '+
+                      ' from directory '+txt_dir+' and writing\n '+
                       ' file '+txt_out)
             
             txt_two_done=False
