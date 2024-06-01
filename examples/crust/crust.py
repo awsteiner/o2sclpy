@@ -164,6 +164,7 @@ found_nucleus=numpy.zeros((N_bins),dtype=int)
 
 op.td_mat('mat_blue',0,0,1,prefix='crust_')
 op.td_mat('mat_red',1,0,0,prefix='crust_')
+op.td_mat('mat_white',1,1,1,prefix='crust_')
 
 # Nucleon radius is 0.8 femtometers
 r_nucleon=0.8
@@ -223,12 +224,19 @@ for i in range(0,N_part):
 
             op.td_mat('nuc_sign_'+str(i_bin),1.0,1.0,1.0,
                       prefix='crust_',
-                      txt='latex:('+str(Zi)+','+str(Ni)+')',
+                      txt=('latex:Nucleus with '+str(Zi)+
+                      ' protons and '+str(Ni)+' neutrons'),
                       resize=True,ds=False)
-            op.td_pgram(xt,yt+0.1,zt,
-                        xt,yt+0.1,zt+0.1,
-                        xt,yt+0.2,zt,
-                        mat='nuc_sign_'+str(k),match_txt=True)
+            (px1,py1,pz1,px2,py2,
+             pz2,px3,py3,pz3)=op.td_pgram(xt+0.1,yt,zt+0.1,
+                                          xt-0.1,yt,zt+0.1,
+                                          xt+0.1,yt,zt+0.2,
+                                          mat='nuc_sign_'+str(k),
+                                          match_txt=True)
+            op.td_pgram(px1,py1-0.001,pz1,
+                        px2,py2-0.001,pz2,
+                        px3,py3-0.001,pz3,
+                        mat='white')
             
             print('Adding nucleus, Z',Zi,'N',Ni,'for bin',i_bin)
             for k in range(0,Ni):
@@ -247,7 +255,7 @@ for i in range(0,N_part):
                     print('x,y,z,x2,y2,z2: %6.5e %6.5e %6.5e %6.5e %6.5e %6.5e' %
                           (xt,yt,zt,xshift,yshift,zshift))
                     #quit()
-                op.td_icos([xt+xshift,yt+xshift,zt+zshift],
+                op.td_icos([xt+xshift,yt+yshift,zt+zshift],
                            r=r_nucleon*cf*r_fudge,mat='mat_blue',
                            name='icos_'+str(i),n_subdiv=1)
             for k in range(0,Zi):
@@ -258,7 +266,7 @@ for i in range(0,N_part):
                 xshift=rshift*numpy.cos(pshift)*numpy.sin(tshift)
                 yshift=rshift*numpy.sin(pshift)*numpy.sin(tshift)
                 zshift=rshift*numpy.cos(tshift)
-                op.td_icos([xt+xshift,yt+xshift,zt+zshift],
+                op.td_icos([xt+xshift,yt+yshift,zt+zshift],
                            r=r_nucleon*cf*r_fudge,mat='mat_red',
                            name='icos_'+str(i),n_subdiv=1)
 
@@ -308,10 +316,16 @@ sign_array=[
 for k in range(0,len(sign_array)):    
     op.td_mat('sign_'+str(k),1.0,1.0,1.0,prefix='crust_',
               txt=sign_array[k][0],resize=True,ds=False)
-    op.td_pgram(sign_array[k][1]-width/2.0,0.0,0.5-height/2.0,
-                sign_array[k][1]+width/2.0,0.0,0.5-height/2.0,
-                sign_array[k][1]-width/2.0,0.0,0.5+height/2.0,
-                mat='sign_'+str(k),match_txt=True)
+    (px1,py1,pz1,px2,py2,
+     pz2,px3,py3,pz3)=op.td_pgram(sign_array[k][1]-width/2.0,0.0,
+                                  0.5-height/2.0,
+                                  sign_array[k][1]+width/2.0,0.0,
+                                  0.5-height/2.0,
+                                  sign_array[k][1]-width/2.0,0.0,
+                                  0.5+height/2.0,
+                                  mat='sign_'+str(k),match_txt=True)
+    op.td_pgram(px1,py1+0.001,pz1,px2,py2+0.001,pz2,px3,py3+0.001,pz3,
+                mat='white')
 
 # 
 

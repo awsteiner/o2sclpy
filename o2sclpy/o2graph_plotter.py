@@ -6131,49 +6131,14 @@ class o2graph_plotter(td_plot_base):
                     self.den_plot_o2graph(o2scl,amp,self.link2,
                                           strlist[ix+1:ix_next])
                 
-                elif cmd_name=='mp4':
+                elif cmd_name=='den-plot-anim':
                     
                     if self.verbose>2:
-                        print('Process mp4.')
+                        print('Process den-plot-anim.')
                         print('args:',strlist[ix:ix_next])
 
-                    if ix_next-ix<3:
-                        print('Not enough parameters for yt-render.')
-                    elif ix_next-ix<4:
-                        self.mp4(o2scl,amp,self.link2,[strlist[ix+1],
-                                                       strlist[ix+2]])
-                    else:
-                        self.mp4(o2scl,amp,self.link2,[strlist[ix+1],
-                                                       strlist[ix+2]],
-                                 string_to_dict2(strlist[ix+3:ix_next],
-                                                 list_of_bools=['loop']))
-                
-                elif cmd_name=='kde-plot':
-                    
-                    if self.verbose>2:
-                        print('Process kde-plot.')
-                        print('args:',strlist[ix:ix_next])
-
-                    self.kde_plot(o2scl,amp,strlist[ix+1:ix_next],
-                                  self.link2)
-                
-                elif cmd_name=='kde-2d-plot':
-                    
-                    if self.verbose>2:
-                        print('Process kde-2d-plot.')
-                        print('args:',strlist[ix:ix_next])
-
-                    self.kde_2d_plot(o2scl,amp,strlist[ix+1:ix_next],
-                                     self.link2)
-                
-                elif cmd_name=='to-kde':
-                    
-                    if self.verbose>2:
-                        print('Process to-kde.')
-                        print('args:',strlist[ix:ix_next])
-
-                    self.to_kde(o2scl,amp,self.link2,
-                                strlist[ix+1:ix_next])
+                    self.den_plot_anim(o2scl,amp,self.link2,
+                                       strlist[ix+1:ix_next])
                 
                 elif cmd_name=='den-plot-rgb':
                     
@@ -6193,14 +6158,40 @@ class o2graph_plotter(td_plot_base):
                     self.gltf_o2graph(o2scl,amp,self.link2,
                                               strlist[ix+1:ix_next])
                 
-                elif cmd_name=='den-plot-anim':
+                elif cmd_name=='kde-plot':
                     
                     if self.verbose>2:
-                        print('Process den-plot-anim.')
+                        print('Process kde-plot.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.den_plot_anim(o2scl,amp,self.link2,
-                                       strlist[ix+1:ix_next])
+                    self.kde_plot(o2scl,amp,strlist[ix+1:ix_next],
+                                  self.link2)
+                
+                elif cmd_name=='kde-2d-plot':
+                    
+                    if self.verbose>2:
+                        print('Process kde-2d-plot.')
+                        print('args:',strlist[ix:ix_next])
+
+                    self.kde_2d_plot(o2scl,amp,strlist[ix+1:ix_next],
+                                     self.link2)
+                
+                elif cmd_name=='mp4':
+                    
+                    if self.verbose>2:
+                        print('Process mp4.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<3:
+                        print('Not enough parameters for yt-render.')
+                    elif ix_next-ix<4:
+                        self.mp4(o2scl,amp,self.link2,[strlist[ix+1],
+                                                       strlist[ix+2]])
+                    else:
+                        self.mp4(o2scl,amp,self.link2,[strlist[ix+1],
+                                                       strlist[ix+2]],
+                                 string_to_dict2(strlist[ix+3:ix_next],
+                                                 list_of_bools=['loop']))
                 
                 elif cmd_name=='plot1':
                     
@@ -6227,14 +6218,36 @@ class o2graph_plotter(td_plot_base):
                         print('Process text.')
                         print('args:',strlist[ix:ix_next])
                         
-                    if ix_next-ix<4:
+                    if ix_next-ix<3:
                         print('Not enough parameters for text option.')
+                    elif ix_next-ix<4:
+                        curr_type=o2scl_get_type(o2scl,amp,self.link2)
+                        if curr_type=='string':
+                            print('Using string: ',amt.get_string_obj())
+                            self.text_yt(strlist[ix+1],strlist[ix+2],
+                                         amt.get_string_obj())
+                        elif curr_type=='string[]':
+                            print('Using string: ',
+                                  amt.get_stringv_obj()[0])
+                            self.text_yt(strlist[ix+1],strlist[ix+2],
+                                         amt.get_stringv_obj()[0])
+                        else:
+                            print('Not enough parameters for text option.')
                     elif ix_next-ix<5:
-                        self.text2(strlist[ix+1],strlist[ix+2],strlist[ix+3])
+                        self.text_yt(strlist[ix+1],strlist[ix+2],strlist[ix+3])
                     else:
-                        self.text2(strlist[ix+1],strlist[ix+2],strlist[ix+3],
-                                  **string_to_dict(strlist[ix+4]))
+                        self.text_yt(strlist[ix+1],strlist[ix+2],strlist[ix+3],
+                                     **string_to_dict(strlist[ix+4]))
                         
+                elif cmd_name=='to-kde':
+                    
+                    if self.verbose>2:
+                        print('Process to-kde.')
+                        print('args:',strlist[ix:ix_next])
+
+                    self.to_kde(o2scl,amp,self.link2,
+                                strlist[ix+1:ix_next])
+                
                 elif cmd_name=='ttext':
                     
                     if self.verbose>2:

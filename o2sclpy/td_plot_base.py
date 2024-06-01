@@ -2484,7 +2484,7 @@ class td_plot_base(yt_plot_base):
                 self.to.add_mat(white)
             else:
                 print('Material '+mat+' not found in td-pgram.')
-                return
+                return x1,y1,z1,x2,y2,z2,x3,y3,z3
             
         # Get the material info
         m=self.to.get_mat(mat)
@@ -2557,7 +2557,7 @@ class td_plot_base(yt_plot_base):
 
         self.to.add_object(gf)
 
-        return
+        return x1,y1,z1,x2,y2,z2,x3,y3,z3
 
     def td_axis_label(self, ldir : str, tex_label : str,
                       tex_mat_name : str = '', end_mat_name: str = 'white',

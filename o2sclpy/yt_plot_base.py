@@ -1029,7 +1029,7 @@ class yt_plot_base(plot_base):
         # End of function plot_base::yt_def_vol()
         return
             
-    def text2(self,tx,ty,textstr,**kwargs):
+    def text_yt(self,tx,ty,textstr,**kwargs):
         """
         A wrapper for plot_base::yt() which ensures that the
         yt transformations are done

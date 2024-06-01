@@ -1546,7 +1546,7 @@ class plot_base:
 
         Plot text in the data coordinates.
 
-        Command-line arguments: ``<x> <y> <text> [kwargs]``
+        Command-line arguments: ``<x> <y> [text] [kwargs]``
 
         The ``text`` command plots text in the data coordinates
         defined by the current axes with the font size determined by
@@ -1558,6 +1558,11 @@ class plot_base:
         backgroundcolor, rotation, horizontalalignment (ha), and
         verticalalignment (va). Note that you must disable LaTeX
         rendering to change fontfamily or fontstyle.
+
+        If [text] is unspecified and the current object is either
+        of type ``string``, then this string is used as the third
+        argument. If the current or type ``string[]``, then the first
+        string is used.
 
         If <x> or <y> are strings, then they are passed through the
         ``eval()`` function and converted to floating-point numbers. A
