@@ -1707,6 +1707,15 @@ class td_plot_base(yt_plot_base):
             ghi=numpy.max(cg)
             blo=numpy.min(cb)
             bhi=numpy.max(cb)
+            if rlo==rhi:
+                rlo=0.0
+                rhi=1.0
+            if glo==ghi:
+                glo=0.0
+                ghi=1.0
+            if blo==bhi:
+                blo=0.0
+                bhi=1.0
             if col_m!='':
                 cm=table[col_m][0:n]
                 mlo=numpy.min(cm)
