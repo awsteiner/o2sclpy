@@ -2182,9 +2182,9 @@ class o2graph_plotter(td_plot_base):
 
             amt=acol_manager(self.link2,amp)
             tab=amt.get_table_obj()
-            xv=tab[force_bytes(args[0])]
-            yv=tab[force_bytes(args[1])]
-            zv=tab[force_bytes(args[2])]
+            xv=tab[force_bytes(args[0])][0:tab.get_nlines()]
+            yv=tab[force_bytes(args[1])][0:tab.get_nlines()]
+            zv=tab[force_bytes(args[2])][0:tab.get_nlines()]
             
             cmap=args[3]
             if args[3][0:5]=='cmyt.':
@@ -2272,12 +2272,12 @@ class o2graph_plotter(td_plot_base):
 
             amt=acol_manager(self.link2,amp)
             tab=amt.get_table_obj()
-            xv=tab[force_bytes(args[0])]
-            yv=tab[force_bytes(args[1])]
+            xv=tab[force_bytes(args[0])][0:tab.get_nlines()]
+            yv=tab[force_bytes(args[1])][0:tab.get_nlines()]
                 
             if len(args)>3:
-                zv=tab[force_bytes(args[2])]
-                wv=tab[force_bytes(args[3])]
+                zv=tab[force_bytes(args[2])][0:tab.get_nlines()]
+                wv=tab[force_bytes(args[3])][0:tab.get_nlines()]
 
                 for i in range(0,len(zv)):
                     xv=numpy.append(xv,zv[len(zv)-1-i])
@@ -2348,19 +2348,19 @@ class o2graph_plotter(td_plot_base):
 
             amt=acol_manager(self.link2,amp)
             tab=amt.get_table_obj()
-            xv=tab[force_bytes(args[0])]
-            yv=tab[force_bytes(args[1])]
+            xv=tab[force_bytes(args[0])][0:tab.get_nlines()]
+            yv=tab[force_bytes(args[1])][0:tab.get_nlines()]
 
             sv=[]
             cv=[]
 
             if (len(args)>2 and force_bytes(args[2])!=b'None' and
                 force_bytes(args[2])!=b'none'):
-                sv=tab[force_bytes(args[2])]
+                sv=tab[force_bytes(args[2])][0:tab.get_nlines()]
 
             if (len(args)>3 and force_bytes(args[3])!=b'None' and
                 force_bytes(args[3])!=b'none'):
-                cv=tab[force_bytes(args[3])]
+                cv=tab[force_bytes(args[3])][0:tab.get_nlines()]
 
             if failed==False:
                 
@@ -2459,7 +2459,7 @@ class o2graph_plotter(td_plot_base):
                 
             amt=acol_manager(self.link2,amp)
             tab=amt.get_table_obj()
-            xv=tab[force_bytes(args[0])]
+            xv=tab[force_bytes(args[0])][0:tab.get_nlines()]
 
             if failed==False:
         
@@ -2528,8 +2528,8 @@ class o2graph_plotter(td_plot_base):
                             
             amt=acol_manager(self.link2,amp)
             tab=amt.get_table_obj()
-            xv=tab[force_bytes(args[0])]
-            yv=tab[force_bytes(args[1])]
+            xv=tab[force_bytes(args[0])][0:tab.get_nlines()]
+            yv=tab[force_bytes(args[1])][0:tab.get_nlines()]
 
             failed=False
 
@@ -4084,9 +4084,9 @@ class o2graph_plotter(td_plot_base):
             
             amt=acol_manager(self.link2,amp)
             tab=amt.get_table_obj()
-            ptrx=tab[force_bytes(column_x)]
-            ptry=tab[force_bytes(column_y)]
-            ptrz=tab[force_bytes(column_z)]
+            ptrx=tab[force_bytes(column_x)][0:tab.get_nlines()]
+            ptry=tab[force_bytes(column_y)][0:tab.get_nlines()]
+            ptrz=tab[force_bytes(column_z)][0:tab.get_nlines()]
 
             if (force_bytes(size_column)==b'None' or
                 force_bytes(size_column)==b'none'):
@@ -4108,19 +4108,19 @@ class o2graph_plotter(td_plot_base):
                   green_column,blue_column,alpha_column)
             
             if size_column!='':
-                ptrs=tab[force_bytes(size_column)]
+                ptrs=tab[force_bytes(size_column)][0:tab.get_nlines()]
                 
             if red_column!='':
-                ptrr=tab[force_bytes(red_column)]
+                ptrr=tab[force_bytes(red_column)][0:tab.get_nlines()]
                 
             if green_column!='':
-                ptrg=tab[force_bytes(green_column)]
+                ptrg=tab[force_bytes(green_column)][0:tab.get_nlines()]
                 
             if blue_column!='':
-                ptrb=tab[force_bytes(blue_column)]
+                ptrb=tab[force_bytes(blue_column)][0:tab.get_nlines()]
                 
             if alpha_column!='':
-                ptra=tab[force_bytes(alpha_column)]
+                ptra=tab[force_bytes(alpha_column)][0:tab.get_nlines()]
 
             if red_column!='' and blue_column!='' and green_column!='':
                 rescale_r=False
@@ -4315,9 +4315,9 @@ class o2graph_plotter(td_plot_base):
             
             amt=acol_manager(self.link2,amp)
             tab=amt.get_table_obj()
-            ptrx=tab[force_bytes(column_x)]
-            ptry=tab[force_bytes(column_y)]
-            ptrz=tab[force_bytes(column_z)]
+            ptrx=tab[force_bytes(column_x)][0:tab.get_nlines()]
+            ptry=tab[force_bytes(column_y)][0:tab.get_nlines()]
+            ptrz=tab[force_bytes(column_z)][0:tab.get_nlines()]
 
             if self.xset==False:
                 self.xlo=ptrx[0]
