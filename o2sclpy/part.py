@@ -35,7 +35,7 @@ class thermo:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class thermo
 
@@ -76,7 +76,7 @@ class thermo:
         Returns: thermo object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -149,7 +149,7 @@ class part:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class part
 
@@ -190,7 +190,7 @@ class part:
         Returns: part object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -443,7 +443,7 @@ class fermion(part):
     .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class fermion
 
@@ -484,7 +484,7 @@ class fermion(part):
         Returns: fermion object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -535,7 +535,7 @@ class quark(fermion):
     https://awsteiner.org/code/o2scl/html/class/quark.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class quark
 
@@ -576,7 +576,7 @@ class quark(fermion):
         Returns: quark object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -629,7 +629,7 @@ class fermion_zerot:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class fermion_zerot
 
@@ -670,7 +670,7 @@ class fermion_zerot:
         Returns: fermion_zerot object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def kf_from_density(self,f):
@@ -730,7 +730,7 @@ class fermion_thermo(fermion_zerot):
     """
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class fermion_thermo
 
@@ -771,7 +771,7 @@ class fermion_thermo(fermion_zerot):
         Returns: fermion_thermo object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def calc_mu_deg(self,f,T,prec):
@@ -853,7 +853,7 @@ class fermion_rel(fermion_thermo):
     Python interface for class :ref:`fermion_rel <o2scl:fermion_rel_tl>`.
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class fermion_rel
 
@@ -894,7 +894,7 @@ class fermion_rel(fermion_thermo):
         Returns: fermion_rel object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -1105,7 +1105,7 @@ class fermion_rel(fermion_thermo):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=fermion(self._link,ptr)
+        obj=fermion(ptr)
         return obj
 
     def set_unc(self,value):
@@ -1184,7 +1184,7 @@ class fermion_nonrel(fermion_zerot):
     Python interface for class :ref:`fermion_nonrel <o2scl:fermion_nonrel_tl>`.
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class fermion_nonrel
 
@@ -1225,7 +1225,7 @@ class fermion_nonrel(fermion_zerot):
         Returns: fermion_nonrel object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def calc_density(self,f,T):
@@ -1271,7 +1271,7 @@ class boson(part):
     https://awsteiner.org/code/o2scl/html/class/boson.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class boson
 
@@ -1312,7 +1312,7 @@ class boson(part):
         Returns: boson object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -1347,7 +1347,7 @@ class boson_rel:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class boson_rel
 
@@ -1388,7 +1388,7 @@ class boson_rel:
         Returns: boson_rel object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def calc_density(self,b,T):
@@ -1456,7 +1456,7 @@ class classical_thermo:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class classical_thermo
 
@@ -1497,7 +1497,7 @@ class classical_thermo:
         Returns: classical_thermo object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def calc_density(self,p,T):
@@ -1532,7 +1532,7 @@ class thermo_np_deriv_press:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class thermo_np_deriv_press
 
@@ -1573,7 +1573,7 @@ class thermo_np_deriv_press:
         Returns: thermo_np_deriv_press object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -1706,7 +1706,7 @@ class thermo_np_deriv_helm:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class thermo_np_deriv_helm
 
@@ -1747,7 +1747,7 @@ class thermo_np_deriv_helm:
         Returns: thermo_np_deriv_helm object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -1880,7 +1880,7 @@ class part_deriv_press:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class part_deriv_press
 
@@ -1921,7 +1921,7 @@ class part_deriv_press:
         Returns: part_deriv_press object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -2003,7 +2003,7 @@ class part_deriv(part):
     Python interface for class :ref:`part_deriv <o2scl:part_deriv_tl>`.
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class part_deriv
 
@@ -2044,7 +2044,7 @@ class part_deriv(part):
         Returns: part_deriv object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -2053,7 +2053,7 @@ class fermion_deriv(fermion):
     Python interface for class :ref:`fermion_deriv <o2scl:fermion_deriv_tl>`.
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class fermion_deriv
 
@@ -2094,7 +2094,7 @@ class fermion_deriv(fermion):
         Returns: fermion_deriv object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -2107,7 +2107,7 @@ class deriv_thermo_base:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class deriv_thermo_base
 
@@ -2148,7 +2148,7 @@ class deriv_thermo_base:
         Returns: deriv_thermo_base object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def heat_cap_ppart_const_vol(self,p,T):
@@ -2239,7 +2239,7 @@ class classical_deriv_thermo:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class classical_deriv_thermo
 
@@ -2280,7 +2280,7 @@ class classical_deriv_thermo:
         Returns: classical_deriv_thermo object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def calc_density(self,p,T):
@@ -2317,7 +2317,7 @@ class fermion_mag_zerot:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class fermion_mag_zerot
 
@@ -2358,7 +2358,7 @@ class fermion_mag_zerot:
         Returns: fermion_mag_zerot object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property

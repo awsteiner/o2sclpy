@@ -29,7 +29,7 @@ link.link_o2scl()
 
 # To test that the link worked, obtain the O$_2$scl version from the DLL:
 
-o2scl_settings=o2sclpy.lib_settings_class(o2sclpy.doc_data.top_linker)
+o2scl_settings=o2sclpy.lib_settings_class()
 
 print(o2scl_settings.o2scl_version())
 

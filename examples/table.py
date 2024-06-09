@@ -20,15 +20,15 @@ link.link_o2scl()
 
 # Create an HDF5 file object and open the table in O$_2$scl's data file for the Akmal, Pandharipande, and Ravenhall equation of state. The `open()` function for the `hdf_file` class is documented [here](https://awsteiner.org/code/o2sclpy/hdf.html#o2sclpy.hdf_file.open).
 
-o2scl_settings=o2sclpy.lib_settings_class(o2sclpy.doc_data.top_linker)
+o2scl_settings=o2sclpy.lib_settings_class()
 
-hf=o2sclpy.hdf_file(link)
+hf=o2sclpy.hdf_file()
 hf.open(o2scl_settings.get_data_dir()+b'apr98.o2')
 
 # We create a table object and specify a blank name to indicate
 # that we just want to read the first table in the file.
 
-tab=o2sclpy.table(link)
+tab=o2sclpy.table()
 name=b''
 
 # Read the table:

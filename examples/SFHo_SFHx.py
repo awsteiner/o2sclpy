@@ -22,7 +22,7 @@ link.link_o2scl()
 # Get a copy (a pointer to) the O$_2$scl unit conversion object, which
 # also allows access to the constant library, then get ħc.
 
-o2scl_settings=o2sclpy.lib_settings_class(o2sclpy.doc_data.top_linker)
+o2scl_settings=o2sclpy.lib_settings_class()
 cu=o2scl_settings.get_convert_units()
 
 ħc=cu.find_unique('hbarc','MeV*fm')

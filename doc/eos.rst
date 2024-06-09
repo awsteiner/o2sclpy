@@ -287,10 +287,10 @@ Class nucleus_rmf
 Function skyrme_load
 --------------------
 
-.. autofunction:: o2sclpy.skyrme_load(link,sk,model,external,verbose)
+.. autofunction:: o2sclpy.skyrme_load(sk,model,external,verbose)
 
 Function rmf_load
 -----------------
 
-.. autofunction:: o2sclpy.rmf_load(link,rmf,model,external)
+.. autofunction:: o2sclpy.rmf_load(rmf,model,external)
 

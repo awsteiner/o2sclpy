@@ -40,7 +40,7 @@ class hdf_file:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class hdf_file
 
@@ -81,7 +81,7 @@ class hdf_file:
         Returns: hdf_file object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -771,7 +771,7 @@ class acol_manager:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class acol_manager
 
@@ -812,7 +812,7 @@ class acol_manager:
         Returns: acol_manager object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def get_env_var_name(self):
@@ -822,7 +822,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_env_var_name
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -843,7 +843,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=cli(self._link,ptr)
+        obj=cli(ptr)
         return obj
 
     def set_cl(self,value):
@@ -882,7 +882,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_def_args
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -902,7 +902,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_type
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -923,7 +923,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=table_units(self._link,ptr)
+        obj=table_units(ptr)
         return obj
 
     def set_table_obj(self,value):
@@ -943,7 +943,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=table3d(self._link,ptr)
+        obj=table3d(ptr)
         return obj
 
     def set_table3d_obj(self,value):
@@ -963,7 +963,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=hist(self._link,ptr)
+        obj=hist(ptr)
         return obj
 
     def set_hist_obj(self,value):
@@ -983,7 +983,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=hist_2d(self._link,ptr)
+        obj=hist_2d(ptr)
         return obj
 
     def set_hist_2d_obj(self,value):
@@ -1082,7 +1082,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_string_obj
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -1103,7 +1103,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=vector_contour_line(self._link,ptr)
+        obj=vector_contour_line(ptr)
         return obj
 
     def set_cont_obj(self,value):
@@ -1123,7 +1123,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=uniform_grid<double>(self._link,ptr)
+        obj=uniform_grid<double>(ptr)
         return obj
 
     def set_ug_obj(self,value):
@@ -1143,7 +1143,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector_int(self._link,ptr)
+        obj=std_vector_int(ptr)
         return obj
 
     def set_intv_obj(self,value):
@@ -1163,7 +1163,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_doublev_obj(self,value):
@@ -1183,7 +1183,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector_size_t(self._link,ptr)
+        obj=std_vector_size_t(ptr)
         return obj
 
     def set_size_tv_obj(self,value):
@@ -1203,7 +1203,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector_string(self._link,ptr)
+        obj=std_vector_string(ptr)
         return obj
 
     def set_stringv_obj(self,value):
@@ -1223,7 +1223,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=vec_vec_string(self._link,ptr)
+        obj=vec_vec_string(ptr)
         return obj
 
     def set_vvstring_obj(self,value):
@@ -1243,7 +1243,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector_vector(self._link,ptr)
+        obj=std_vector_vector(ptr)
         return obj
 
     def set_vvdouble_obj(self,value):
@@ -1263,7 +1263,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=tensor(self._link,ptr)
+        obj=tensor(ptr)
         return obj
 
     def set_tensor_obj(self,value):
@@ -1283,7 +1283,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=tensor_int(self._link,ptr)
+        obj=tensor_int(ptr)
         return obj
 
     def set_tensor_int_obj(self,value):
@@ -1303,7 +1303,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=tensor_size_t(self._link,ptr)
+        obj=tensor_size_t(ptr)
         return obj
 
     def set_tensor_size_t_obj(self,value):
@@ -1323,7 +1323,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=tensor_grid(self._link,ptr)
+        obj=tensor_grid(ptr)
         return obj
 
     def set_tensor_grid_obj(self,value):
@@ -1343,7 +1343,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=prob_dens_mdim_amr(self._link,ptr)
+        obj=prob_dens_mdim_amr(ptr)
         return obj
 
     def set_pdma_obj(self,value):
@@ -1363,7 +1363,7 @@ class acol_manager:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=prob_dens_mdim_gaussian(self._link,ptr)
+        obj=prob_dens_mdim_gaussian(ptr)
         return obj
 
     def set_pdmg_obj(self,value):
@@ -1382,7 +1382,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_command_color
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -1402,7 +1402,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_type_color
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -1422,7 +1422,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_param_color
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -1442,7 +1442,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_help_color
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -1462,7 +1462,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_exec_color
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -1482,7 +1482,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_url_color
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -1502,7 +1502,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_default_color
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -1522,7 +1522,7 @@ class acol_manager:
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_color_spec
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -1614,7 +1614,7 @@ class cloud_file:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class cloud_file
 
@@ -1655,7 +1655,7 @@ class cloud_file:
         Returns: cloud_file object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -1833,7 +1833,7 @@ class cloud_file:
         return ret
 
 
-def hdf_input_table(link,hf,t,name=""):
+def hdf_input_table(hf,t,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1847,7 +1847,7 @@ def hdf_input_table(link,hf,t,name=""):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_n_table(link,hf,t,name):
+def hdf_input_n_table(hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1861,7 +1861,7 @@ def hdf_input_n_table(link,hf,t,name):
     name._owner=True
     return
 
-def hdf_output_table(link,hf,t,name):
+def hdf_output_table(hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1875,7 +1875,7 @@ def hdf_output_table(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_table_units(link,hf,t,name=""):
+def hdf_input_table_units(hf,t,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1889,7 +1889,7 @@ def hdf_input_table_units(link,hf,t,name=""):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_n_table_units(link,hf,t,name):
+def hdf_input_n_table_units(hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1903,7 +1903,7 @@ def hdf_input_n_table_units(link,hf,t,name):
     name._owner=True
     return
 
-def hdf_output_table_units(link,hf,t,name):
+def hdf_output_table_units(hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1917,7 +1917,7 @@ def hdf_output_table_units(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_table3d(link,hf,t,name=""):
+def hdf_input_table3d(hf,t,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1931,7 +1931,7 @@ def hdf_input_table3d(link,hf,t,name=""):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_n_table3d(link,hf,t,name):
+def hdf_input_n_table3d(hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1945,7 +1945,7 @@ def hdf_input_n_table3d(link,hf,t,name):
     name._owner=True
     return
 
-def hdf_output_table3d(link,hf,t,name):
+def hdf_output_table3d(hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1959,7 +1959,7 @@ def hdf_output_table3d(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_uniform_grid(link,hf,t,name=""):
+def hdf_input_uniform_grid(hf,t,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1973,7 +1973,7 @@ def hdf_input_uniform_grid(link,hf,t,name=""):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_n_uniform_grid(link,hf,t,name):
+def hdf_input_n_uniform_grid(hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -1987,7 +1987,7 @@ def hdf_input_n_uniform_grid(link,hf,t,name):
     name._owner=True
     return
 
-def hdf_output_uniform_grid(link,hf,t,name):
+def hdf_output_uniform_grid(hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2001,7 +2001,7 @@ def hdf_output_uniform_grid(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_tensor_grid(link,hf,t,name=""):
+def hdf_input_tensor_grid(hf,t,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2015,7 +2015,7 @@ def hdf_input_tensor_grid(link,hf,t,name=""):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_n_tensor_grid(link,hf,t,name):
+def hdf_input_n_tensor_grid(hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2029,7 +2029,7 @@ def hdf_input_n_tensor_grid(link,hf,t,name):
     name._owner=True
     return
 
-def hdf_output_tensor_grid(link,hf,t,name):
+def hdf_output_tensor_grid(hf,t,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2043,7 +2043,7 @@ def hdf_output_tensor_grid(link,hf,t,name):
     func(hf._ptr,t._ptr,name_)
     return
 
-def hdf_input_vector_contour_line(link,hf,v,name=""):
+def hdf_input_vector_contour_line(hf,v,name=""):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2057,7 +2057,7 @@ def hdf_input_vector_contour_line(link,hf,v,name=""):
     func(hf._ptr,v._ptr,name_)
     return
 
-def hdf_input_n_vector_contour_line(link,hf,v,name):
+def hdf_input_n_vector_contour_line(hf,v,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2071,7 +2071,7 @@ def hdf_input_n_vector_contour_line(link,hf,v,name):
     name._owner=True
     return
 
-def hdf_output_vector_contour_line(link,hf,v,name):
+def hdf_output_vector_contour_line(hf,v,name):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2085,7 +2085,7 @@ def hdf_output_vector_contour_line(link,hf,v,name):
     func(hf._ptr,v._ptr,name_)
     return
 
-def value_spec(link,spec,d,verbose=0,err_on_fail=True):
+def value_spec(spec,d,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2102,7 +2102,7 @@ def value_spec(link,spec,d,verbose=0,err_on_fail=True):
     ret=func(spec_,d._ptr,verbose,err_on_fail)
     return ret
 
-def vector_spec(link,spec,v,verbose=0,err_on_fail=True):
+def vector_spec(spec,v,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2119,7 +2119,7 @@ def vector_spec(link,spec,v,verbose=0,err_on_fail=True):
     ret=func(spec_,v._ptr,verbose,err_on_fail)
     return ret
 
-def strings_spec(link,spec,v,verbose=0,err_on_fail=True):
+def strings_spec(spec,v,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2136,7 +2136,7 @@ def strings_spec(link,spec,v,verbose=0,err_on_fail=True):
     ret=func(spec_,v._ptr,verbose,err_on_fail)
     return ret
 
-def vector_spec_v(link,spec):
+def vector_spec_v(spec):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2150,7 +2150,7 @@ def vector_spec_v(link,spec):
     ret=func(spec_)
     return ret
 
-def mult_vector_spec(link,spec,v,use_regex=False,verbose=0,err_on_fail=True):
+def mult_vector_spec(spec,v,use_regex=False,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object

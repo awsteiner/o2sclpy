@@ -22,7 +22,7 @@ link.link_o2scl()
 # Get a copy (a pointer to) the O$_2$scl unit conversion object,
 # which also allows access to the constant library
 
-o2scl_settings=o2sclpy.lib_settings_class(o2sclpy.doc_data.top_linker)
+o2scl_settings=o2sclpy.lib_settings_class()
 cu=o2scl_settings.get_convert_units()
 
 # Get the value of $\hbar c$ from an O$_2$scl find_constants object:
@@ -34,18 +34,18 @@ print('hbarc = %7.6e' % (hc))
 # masses. The O$_2$scl EOS classes expect these masses to be in units
 # of inverse femtometers.
 
-neut=o2sclpy.fermion(link)
+neut=o2sclpy.fermion()
 neut.g=2.0
 neut.m=cu.convert('g','1/fm',cu.find_unique('massneutron','g'))
 
-prot=o2sclpy.fermion(link)
+prot=o2sclpy.fermion()
 prot.g=2.0
 prot.m=cu.convert('g','1/fm',cu.find_unique('massproton','g'))
 
 # Create the Skyrme EOS object and load the NRAPR parameterization:
 
-sk=o2sclpy.eos_had_skyrme(link)
-o2sclpy.skyrme_load(link,sk,'NRAPR',False,0)
+sk=o2sclpy.eos_had_skyrme()
+o2sclpy.skyrme_load(sk,'NRAPR',False,0)
 
 # Compute nuclear saturation and output the saturation density
 # and binding energy:
@@ -57,7 +57,7 @@ print('')
 # Create the nstar_cold object for automatically computing the
 # beta-equilibrium EOS and solving the TOV equations:
 
-nc=o2sclpy.nstar_cold(link)
+nc=o2sclpy.nstar_cold()
 
 # Let the nstar_cold object know we want to use the Skyrme NRAPR EOS:
 
@@ -143,7 +143,7 @@ if plots:
 # Create a O$_2$scl ``tov_love`` object to compute the tidal
 # deformability of a 1.4 solar mass neutron star.
 
-tl=o2sclpy.tov_love(link)
+tl=o2sclpy.tov_love()
 
 # The ``tov_love`` class requires the energy density and pressure to
 # be in units of $ \mathrm{M}_{\odot}/\mathrm{km}^3 $, so we convert

@@ -25,7 +25,7 @@ link.link_o2scl()
 
 # Create the data set:
 
-ug=o2sclpy.uniform_grid_end.init(link,0,2,49)
+ug=o2sclpy.uniform_grid_end.init(0,2,49)
 t3d=o2sclpy.table3d(link)
 t3d.set_xy_grid("x",ug,"y",ug)
 t3d.new_slice("z")

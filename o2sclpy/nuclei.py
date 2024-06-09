@@ -35,7 +35,7 @@ class nucleus(part):
     https://awsteiner.org/code/o2scl/html/class/nucleus.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucleus
 
@@ -76,7 +76,7 @@ class nucleus(part):
         Returns: nucleus object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -191,7 +191,7 @@ class nucmass_info:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_info
 
@@ -232,7 +232,7 @@ class nucmass_info:
         Returns: nucmass_info object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def parse_elstring(self,ela):
@@ -274,7 +274,7 @@ class nucmass_info:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,Z)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -288,7 +288,7 @@ class nucmass_info:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,Z)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -303,7 +303,7 @@ class nucmass_info:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         ret=func(self._ptr,Z,N)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -317,7 +317,7 @@ class nucmass_info:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         ret=func(self._ptr,g)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -347,7 +347,7 @@ class nucmass:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass
 
@@ -388,7 +388,7 @@ class nucmass:
         Returns: nucmass object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -675,7 +675,7 @@ class nucmass_table(nucmass):
     """
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_table
 
@@ -716,7 +716,7 @@ class nucmass_table(nucmass):
         Returns: nucmass_table object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -746,7 +746,7 @@ class nucmass_table(nucmass):
         func=self._link.o2scl.o2scl_nucmass_table_get_reference
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -788,7 +788,7 @@ class nucmass_fit_base(nucmass):
     """
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_fit_base
 
@@ -829,7 +829,7 @@ class nucmass_fit_base(nucmass):
         Returns: nucmass_fit_base object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -860,7 +860,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
     https://awsteiner.org/code/o2scl/html/class/nucmass_semi_empirical.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_semi_empirical
 
@@ -901,7 +901,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
         Returns: nucmass_semi_empirical object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -1038,7 +1038,7 @@ class nucmass_ame(nucmass_table):
     https://awsteiner.org/code/o2scl/html/class/nucmass_ame.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_ame
 
@@ -1079,7 +1079,7 @@ class nucmass_ame(nucmass_table):
         Returns: nucmass_ame object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1090,7 +1090,7 @@ class nucmass_dz_table(nucmass_table):
     https://awsteiner.org/code/o2scl/html/class/nucmass_dz_table.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_dz_table
 
@@ -1131,7 +1131,7 @@ class nucmass_dz_table(nucmass_table):
         Returns: nucmass_dz_table object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1142,7 +1142,7 @@ class nucmass_dz_fit(nucmass_fit_base):
     https://awsteiner.org/code/o2scl/html/class/nucmass_dz_fit.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_dz_fit
 
@@ -1183,7 +1183,7 @@ class nucmass_dz_fit(nucmass_fit_base):
         Returns: nucmass_dz_fit object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1194,7 +1194,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
     https://awsteiner.org/code/o2scl/html/class/nucmass_dz_fit_33.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_dz_fit_33
 
@@ -1235,7 +1235,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
         Returns: nucmass_dz_fit_33 object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1246,7 +1246,7 @@ class nucmass_frdm(nucmass_fit_base):
     https://awsteiner.org/code/o2scl/html/class/nucmass_frdm.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_frdm
 
@@ -1287,7 +1287,7 @@ class nucmass_frdm(nucmass_fit_base):
         Returns: nucmass_frdm object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -1818,7 +1818,7 @@ class nucmass_mnmsk(nucmass_table):
     https://awsteiner.org/code/o2scl/html/class/nucmass_mnmsk.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_mnmsk
 
@@ -1859,7 +1859,7 @@ class nucmass_mnmsk(nucmass_table):
         Returns: nucmass_mnmsk object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1870,7 +1870,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
     https://awsteiner.org/code/o2scl/html/class/nucmass_mnmsk_exp.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_mnmsk_exp
 
@@ -1911,7 +1911,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
         Returns: nucmass_mnmsk_exp object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1922,7 +1922,7 @@ class nucmass_gen(nucmass_table):
     https://awsteiner.org/code/o2scl/html/class/nucmass_gen.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_gen
 
@@ -1963,7 +1963,7 @@ class nucmass_gen(nucmass_table):
         Returns: nucmass_gen object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1974,7 +1974,7 @@ class nucmass_dglg(nucmass_table):
     https://awsteiner.org/code/o2scl/html/class/nucmass_dglg.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_dglg
 
@@ -2015,7 +2015,7 @@ class nucmass_dglg(nucmass_table):
         Returns: nucmass_dglg object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -2026,7 +2026,7 @@ class nucmass_hfb(nucmass_table):
     https://awsteiner.org/code/o2scl/html/class/nucmass_hfb.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_hfb
 
@@ -2067,7 +2067,7 @@ class nucmass_hfb(nucmass_table):
         Returns: nucmass_hfb object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -2078,7 +2078,7 @@ class nucmass_hfb_sp(nucmass_table):
     https://awsteiner.org/code/o2scl/html/class/nucmass_hfb_sp.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_hfb_sp
 
@@ -2119,7 +2119,7 @@ class nucmass_hfb_sp(nucmass_table):
         Returns: nucmass_hfb_sp object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -2130,7 +2130,7 @@ class nucmass_ktuy(nucmass_table):
     https://awsteiner.org/code/o2scl/html/class/nucmass_ktuy.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_ktuy
 
@@ -2171,7 +2171,7 @@ class nucmass_ktuy(nucmass_table):
         Returns: nucmass_ktuy object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -2182,7 +2182,7 @@ class nucmass_sdnp(nucmass_table):
     https://awsteiner.org/code/o2scl/html/class/nucmass_sdnp.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_sdnp
 
@@ -2223,7 +2223,7 @@ class nucmass_sdnp(nucmass_table):
         Returns: nucmass_sdnp object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -2234,7 +2234,7 @@ class nucmass_wlw(nucmass_table):
     https://awsteiner.org/code/o2scl/html/class/nucmass_wlw.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucmass_wlw
 
@@ -2275,11 +2275,11 @@ class nucmass_wlw(nucmass_table):
         Returns: nucmass_wlw object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
-def ame_load(link,ame,name,exp_only):
+def ame_load(ame,name,exp_only):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2293,7 +2293,7 @@ def ame_load(link,ame,name,exp_only):
     func(ame._ptr,name_,exp_only)
     return
 
-def ame_load_ext(link,ame,file_name,table_name,exp_only):
+def ame_load_ext(ame,file_name,table_name,exp_only):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2309,7 +2309,7 @@ def ame_load_ext(link,ame,file_name,table_name,exp_only):
     func(ame._ptr,file_name_,table_name_,exp_only)
     return
 
-def mnmsk_load(link,mnmsk,model,filename):
+def mnmsk_load(mnmsk,model,filename):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2324,7 +2324,7 @@ def mnmsk_load(link,mnmsk,model,filename):
     func(mnmsk._ptr,model_,filename_)
     return
 
-def hfb_load(link,hfb,model,filename):
+def hfb_load(hfb,model,filename):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -2338,7 +2338,7 @@ def hfb_load(link,hfb,model,filename):
     func(hfb._ptr,model,filename_)
     return
 
-def hfb_sp_load(link,hfb,model,filename):
+def hfb_sp_load(hfb,model,filename):
     """
         | Parameters:
         | *link* :class:`linker` object

@@ -39,7 +39,7 @@ class slack_messenger:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class slack_messenger
 
@@ -80,7 +80,7 @@ class slack_messenger:
         Returns: slack_messenger object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -110,7 +110,7 @@ class slack_messenger:
         func=self._link.o2scl.o2scl_slack_messenger_get_url
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -130,7 +130,7 @@ class slack_messenger:
         func=self._link.o2scl.o2scl_slack_messenger_get_channel
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -150,7 +150,7 @@ class slack_messenger:
         func=self._link.o2scl.o2scl_slack_messenger_get_icon
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -170,7 +170,7 @@ class slack_messenger:
         func=self._link.o2scl.o2scl_slack_messenger_get_username
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -282,7 +282,7 @@ class quadratic_real_coeff_gsl:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class quadratic_real_coeff_gsl
 
@@ -323,7 +323,7 @@ class quadratic_real_coeff_gsl:
         Returns: quadratic_real_coeff_gsl object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def solve_r(self,a2,b2,c2):
@@ -370,7 +370,7 @@ class quadratic_real_coeff_gsl2:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class quadratic_real_coeff_gsl2
 
@@ -411,7 +411,7 @@ class quadratic_real_coeff_gsl2:
         Returns: quadratic_real_coeff_gsl2 object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def solve_r(self,a2,b2,c2):
@@ -458,7 +458,7 @@ class cubic_real_coeff_cern:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class cubic_real_coeff_cern
 
@@ -499,7 +499,7 @@ class cubic_real_coeff_cern:
         Returns: cubic_real_coeff_cern object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def solve_r(self,a3,b3,c3,d3):
@@ -550,7 +550,7 @@ class cubic_real_coeff_gsl:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class cubic_real_coeff_gsl
 
@@ -591,7 +591,7 @@ class cubic_real_coeff_gsl:
         Returns: cubic_real_coeff_gsl object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def solve_r(self,a3,b3,c3,d3):
@@ -642,7 +642,7 @@ class quartic_real_coeff_cern:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class quartic_real_coeff_cern
 
@@ -683,7 +683,7 @@ class quartic_real_coeff_cern:
         Returns: quartic_real_coeff_cern object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def solve_r(self,a4,b4,c4,d4,e4):
@@ -738,7 +738,7 @@ class fermi_dirac_integ_gsl:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class fermi_dirac_integ_gsl
 
@@ -779,7 +779,7 @@ class fermi_dirac_integ_gsl:
         Returns: fermi_dirac_integ_gsl object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def calc_m1o2(self,x):
@@ -854,7 +854,7 @@ class bessel_K_exp_integ_gsl:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class bessel_K_exp_integ_gsl
 
@@ -895,7 +895,7 @@ class bessel_K_exp_integ_gsl:
         Returns: bessel_K_exp_integ_gsl object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def K1exp(self,x):
@@ -946,7 +946,7 @@ class hist:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class hist
 
@@ -987,7 +987,7 @@ class hist:
         Returns: hist object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -997,7 +997,7 @@ class hist:
         Returns: new copy of the hist object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_hist
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -1061,7 +1061,7 @@ class hist:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        ret2=ublas_vector(self._link,ret)
+        ret2=ublas_vector(ret)
         return ret2
 
     def get_bins(self):
@@ -1072,7 +1072,7 @@ class hist:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        ret2=ublas_vector(self._link,ret)
+        ret2=ublas_vector(ret)
         return ret2
 
     def from_table(self,t,colx,n_bins):
@@ -1258,7 +1258,7 @@ class hist_2d:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class hist_2d
 
@@ -1299,7 +1299,7 @@ class hist_2d:
         Returns: hist_2d object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -1309,7 +1309,7 @@ class hist_2d:
         Returns: new copy of the hist_2d object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_hist_2d
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -1583,7 +1583,7 @@ class hist_2d:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        ret2=ublas_matrix(self._link,ret)
+        ret2=ublas_matrix(ret)
         return ret2
 
     def clear(self):
@@ -1614,7 +1614,7 @@ class contour_line:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class contour_line
 
@@ -1655,7 +1655,7 @@ class contour_line:
         Returns: contour_line object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -1665,7 +1665,7 @@ class contour_line:
         Returns: new copy of the contour_line object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_contour_line
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -1699,7 +1699,7 @@ class contour_line:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_x(self,value):
@@ -1719,7 +1719,7 @@ class contour_line:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_y(self,value):
@@ -1743,7 +1743,7 @@ class vector_contour_line:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class vector_contour_line
 
@@ -1784,7 +1784,7 @@ class vector_contour_line:
         Returns: vector_contour_line object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __getitem__(self,n):
@@ -1797,7 +1797,7 @@ class vector_contour_line:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        vcl=contour_line(self._link,ret)
+        vcl=contour_line(ret)
         return vcl
 
     def __setitem__(self,i,value):
@@ -1851,7 +1851,7 @@ class contour:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class contour
 
@@ -1892,7 +1892,7 @@ class contour:
         Returns: contour object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -2000,7 +2000,7 @@ class prob_dens_func:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class prob_dens_func
 
@@ -2041,7 +2041,7 @@ class prob_dens_func:
         Returns: prob_dens_func object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def pdf(self,x):
@@ -2129,7 +2129,7 @@ class prob_dens_gaussian(prob_dens_func):
     https://awsteiner.org/code/o2scl/html/class/prob_dens_gaussian.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class prob_dens_gaussian
 
@@ -2170,7 +2170,7 @@ class prob_dens_gaussian(prob_dens_func):
         Returns: prob_dens_gaussian object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def set_center(self,cent):
@@ -2201,7 +2201,7 @@ class prob_dens_hist(prob_dens_func):
     https://awsteiner.org/code/o2scl/html/class/prob_dens_hist.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class prob_dens_hist
 
@@ -2242,7 +2242,7 @@ class prob_dens_hist(prob_dens_func):
         Returns: prob_dens_hist object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def init(self,h):
@@ -2267,7 +2267,7 @@ class prob_dens_mdim:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class prob_dens_mdim
 
@@ -2308,7 +2308,7 @@ class prob_dens_mdim:
         Returns: prob_dens_mdim object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def pdf(self,x):
@@ -2364,7 +2364,7 @@ class prob_dens_mdim_biv_gaussian(prob_dens_mdim):
     https://awsteiner.org/code/o2scl/html/class/prob_dens_mdim_biv_gaussian<std::vector<double>>.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class prob_dens_mdim_biv_gaussian
 
@@ -2405,7 +2405,7 @@ class prob_dens_mdim_biv_gaussian(prob_dens_mdim):
         Returns: prob_dens_mdim_biv_gaussian object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def set(self,x_cent,y_cent,x_std,y_std,covar):
@@ -2457,7 +2457,7 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
     https://awsteiner.org/code/o2scl/html/class/prob_dens_mdim_gaussian<>.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class prob_dens_mdim_gaussian
 
@@ -2498,7 +2498,7 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
         Returns: prob_dens_mdim_gaussian object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def make_biv(self):
@@ -2509,7 +2509,7 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret2=func(self._ptr)
-        ret=prob_dens_mdim_biv_gaussian(self._link,ret2)
+        ret=prob_dens_mdim_biv_gaussian(ret2)
         ret.owner=True
         return ret
 
@@ -2525,7 +2525,7 @@ class hypercube:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class hypercube
 
@@ -2566,7 +2566,7 @@ class hypercube:
         Returns: hypercube object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -2597,7 +2597,7 @@ class hypercube:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_low(self,value):
@@ -2617,7 +2617,7 @@ class hypercube:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_high(self,value):
@@ -2637,7 +2637,7 @@ class hypercube:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector_size_t(self._link,ptr)
+        obj=std_vector_size_t(ptr)
         return obj
 
     def set_inside(self,value):
@@ -2701,7 +2701,7 @@ class std_vector_hypercube:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class std_vector_hypercube
 
@@ -2742,7 +2742,7 @@ class std_vector_hypercube:
         Returns: std_vector_hypercube object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def resize(self,n):
@@ -2775,7 +2775,7 @@ class std_vector_hypercube:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        hc=hypercube(self._link,ret)
+        hc=hypercube(ret)
         return hc
 
     def __setitem__(self,i,value):
@@ -2797,7 +2797,7 @@ class prob_dens_mdim_amr(prob_dens_mdim):
     https://awsteiner.org/code/o2scl/html/class/prob_dens_mdim_amr<>.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class prob_dens_mdim_amr
 
@@ -2838,7 +2838,7 @@ class prob_dens_mdim_amr(prob_dens_mdim):
         Returns: prob_dens_mdim_amr object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def get_mesh(self):
@@ -2849,7 +2849,7 @@ class prob_dens_mdim_amr(prob_dens_mdim):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector_hypercube(self._link,ptr)
+        obj=std_vector_hypercube(ptr)
         return obj
 
     def set_mesh(self,value):
@@ -2889,7 +2889,7 @@ class prob_dens_mdim_amr(prob_dens_mdim):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_low(self,value):
@@ -2909,7 +2909,7 @@ class prob_dens_mdim_amr(prob_dens_mdim):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_high(self,value):
@@ -2949,7 +2949,7 @@ class prob_dens_mdim_amr(prob_dens_mdim):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_scale(self,value):
@@ -3008,7 +3008,7 @@ class prob_dens_mdim_amr(prob_dens_mdim):
         return ret
 
 
-def vector_mean(link,n,v):
+def vector_mean(n,v):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -3022,7 +3022,7 @@ def vector_mean(link,n,v):
     ret=func(n,v._ptr)
     return ret
 
-def vector_stddev(link,n,v):
+def vector_stddev(n,v):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -3036,7 +3036,7 @@ def vector_stddev(link,n,v):
     ret=func(n,v._ptr)
     return ret
 
-def vector_lagk_autocorr(link,n,v,k):
+def vector_lagk_autocorr(n,v,k):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -3051,7 +3051,7 @@ def vector_lagk_autocorr(link,n,v,k):
     ret=func(n,v._ptr,k)
     return ret
 
-def vector_autocorr_vector(link,n,v,ac):
+def vector_autocorr_vector(n,v,ac):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -3064,7 +3064,7 @@ def vector_autocorr_vector(link,n,v,ac):
     func(n,v._ptr,ac._ptr)
     return
 
-def vector_autocorr_vector_fftw(link,v,ac,mean,stddev):
+def vector_autocorr_vector_fftw(v,ac,mean,stddev):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -3078,7 +3078,7 @@ def vector_autocorr_vector_fftw(link,v,ac,mean,stddev):
     func(v._ptr,ac._ptr,mean,stddev)
     return
 
-def vector_autocorr_tau(link,ac,ftom):
+def vector_autocorr_tau(ac,ftom):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -3092,7 +3092,7 @@ def vector_autocorr_tau(link,ac,ftom):
     ret=func(ac._ptr,ftom._ptr)
     return ret
 
-def vector_acor(link,n,v,mean,sigma,tau):
+def vector_acor(n,v,mean,sigma,tau):
     """
         | Parameters:
         | *link* :class:`linker` object

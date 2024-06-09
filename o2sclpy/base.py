@@ -46,7 +46,7 @@ class std_string:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class std_string
 
@@ -87,7 +87,7 @@ class std_string:
         Returns: std_string object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -97,7 +97,7 @@ class std_string:
         Returns: new copy of the std_string object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_std_string
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -185,7 +185,7 @@ class std_vector:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class std_vector
 
@@ -226,7 +226,7 @@ class std_vector:
         Returns: std_vector object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -236,7 +236,7 @@ class std_vector:
         Returns: new copy of the std_vector object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_std_vector_double_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -352,7 +352,7 @@ class std_vector_int:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class std_vector_int
 
@@ -393,7 +393,7 @@ class std_vector_int:
         Returns: std_vector_int object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -403,7 +403,7 @@ class std_vector_int:
         Returns: new copy of the std_vector_int object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_std_vector_int_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -479,7 +479,7 @@ class std_vector_size_t:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class std_vector_size_t
 
@@ -520,7 +520,7 @@ class std_vector_size_t:
         Returns: std_vector_size_t object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -530,7 +530,7 @@ class std_vector_size_t:
         Returns: new copy of the std_vector_size_t object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_std_vector_size_t_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -628,7 +628,7 @@ class std_vector_string:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class std_vector_string
 
@@ -669,7 +669,7 @@ class std_vector_string:
         Returns: std_vector_string object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -679,7 +679,7 @@ class std_vector_string:
         Returns: new copy of the std_vector_string object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_std_vector_std_string_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -726,7 +726,7 @@ class std_vector_string:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -738,7 +738,7 @@ class std_vector_string:
         """
         func=self._link.o2scl.o2scl_std_vector_std_string__setitem
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s.init_bytes(value)
         func(self._ptr,i,s._ptr)
         return
@@ -785,7 +785,7 @@ class ublas_vector:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ublas_vector
 
@@ -826,7 +826,7 @@ class ublas_vector:
         Returns: ublas_vector object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -836,7 +836,7 @@ class ublas_vector:
         Returns: new copy of the ublas_vector object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_boost_numeric_ublas_vector_double_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -912,7 +912,7 @@ class ublas_vector_int:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ublas_vector_int
 
@@ -953,7 +953,7 @@ class ublas_vector_int:
         Returns: ublas_vector_int object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -963,7 +963,7 @@ class ublas_vector_int:
         Returns: new copy of the ublas_vector_int object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_boost_numeric_ublas_vector_int_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -1039,7 +1039,7 @@ class ublas_matrix:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ublas_matrix
 
@@ -1080,7 +1080,7 @@ class ublas_matrix:
         Returns: ublas_matrix object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -1090,7 +1090,7 @@ class ublas_matrix:
         Returns: new copy of the ublas_matrix object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_boost_numeric_ublas_matrix_double_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -1169,7 +1169,7 @@ class ublas_matrix_int:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ublas_matrix_int
 
@@ -1210,7 +1210,7 @@ class ublas_matrix_int:
         Returns: ublas_matrix_int object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -1220,7 +1220,7 @@ class ublas_matrix_int:
         Returns: new copy of the ublas_matrix_int object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_boost_numeric_ublas_matrix_int_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -1299,7 +1299,7 @@ class std_vector_vector:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class std_vector_vector
 
@@ -1340,7 +1340,7 @@ class std_vector_vector:
         Returns: std_vector_vector object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -1350,7 +1350,7 @@ class std_vector_vector:
         Returns: new copy of the std_vector_vector object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_std_vector_std_vector_double_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -1398,7 +1398,7 @@ class std_vector_vector:
         | *value*: Python array
         """
         func=self._link.o2scl.o2scl_std_vector_std_vector_double__setitem
-        sv=std_vector(self._link)
+        sv=std_vector()
         sv.resize(len(value))
         for j in range(0,len(value)):
             sv[j]=value[j]
@@ -1423,7 +1423,7 @@ class vec_vec_string:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class vec_vec_string
 
@@ -1464,7 +1464,7 @@ class vec_vec_string:
         Returns: vec_vec_string object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -1474,7 +1474,7 @@ class vec_vec_string:
         Returns: new copy of the vec_vec_string object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_std_vector_std_vector_std_string_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -1510,7 +1510,7 @@ class vec_vec_string:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        vstrt=std_vector_string(self._link,ret)
+        vstrt=std_vector_string(ret)
         return vstrt
 
     def __setitem__(self,i,value):
@@ -1544,7 +1544,7 @@ class std_complex:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class std_complex
 
@@ -1585,7 +1585,7 @@ class std_complex:
         Returns: std_complex object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def real(self):
@@ -1663,7 +1663,7 @@ class lib_settings_class:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class lib_settings_class
 
@@ -1704,7 +1704,7 @@ class lib_settings_class:
         Returns: lib_settings_class object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def get_data_dir(self):
@@ -1715,7 +1715,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -1740,7 +1740,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -1835,7 +1835,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -1857,7 +1857,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -1869,7 +1869,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -1881,7 +1881,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -1901,8 +1901,9 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        ret2=convert_units(self._link,ret)
+        ret2=convert_units(ret)
         return ret2
+
 
 class table:
     """
@@ -1915,7 +1916,7 @@ class table:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class table
 
@@ -1956,7 +1957,7 @@ class table:
         Returns: table object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -1966,7 +1967,7 @@ class table:
         Returns: new copy of the table object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_table_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -2106,7 +2107,7 @@ class table:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -2144,7 +2145,7 @@ class table:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -2769,7 +2770,7 @@ class table_units(table):
     https://awsteiner.org/code/o2scl/html/class/table_units.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class table_units
 
@@ -2810,7 +2811,7 @@ class table_units(table):
         Returns: table_units object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -2820,7 +2821,7 @@ class table_units(table):
         Returns: new copy of the table_units object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_table_units_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -2850,7 +2851,7 @@ class table_units(table):
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,col_)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -2904,7 +2905,7 @@ class uniform_grid:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class uniform_grid
 
@@ -2945,7 +2946,7 @@ class uniform_grid:
         Returns: uniform_grid object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def get_nbins(self):
@@ -3049,7 +3050,7 @@ class uniform_grid_end(uniform_grid):
     https://awsteiner.org/code/o2scl/html/class/uniform_grid_end.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class uniform_grid_end
 
@@ -3090,7 +3091,7 @@ class uniform_grid_end(uniform_grid):
         Returns: uniform_grid_end object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -3115,7 +3116,7 @@ class uniform_grid_width(uniform_grid):
     https://awsteiner.org/code/o2scl/html/class/uniform_grid_width.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class uniform_grid_width
 
@@ -3156,7 +3157,7 @@ class uniform_grid_width(uniform_grid):
         Returns: uniform_grid_width object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -3181,7 +3182,7 @@ class uniform_grid_end_width(uniform_grid):
     https://awsteiner.org/code/o2scl/html/class/uniform_grid_end_width.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class uniform_grid_end_width
 
@@ -3222,7 +3223,7 @@ class uniform_grid_end_width(uniform_grid):
         Returns: uniform_grid_end_width object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -3247,7 +3248,7 @@ class uniform_grid_log_end(uniform_grid):
     https://awsteiner.org/code/o2scl/html/class/uniform_grid_log_end.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class uniform_grid_log_end
 
@@ -3288,7 +3289,7 @@ class uniform_grid_log_end(uniform_grid):
         Returns: uniform_grid_log_end object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -3313,7 +3314,7 @@ class uniform_grid_log_width(uniform_grid):
     https://awsteiner.org/code/o2scl/html/class/uniform_grid_log_width.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class uniform_grid_log_width
 
@@ -3354,7 +3355,7 @@ class uniform_grid_log_width(uniform_grid):
         Returns: uniform_grid_log_width object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -3379,7 +3380,7 @@ class uniform_grid_log_end_width(uniform_grid):
     https://awsteiner.org/code/o2scl/html/class/uniform_grid_log_end_width.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class uniform_grid_log_end_width
 
@@ -3420,7 +3421,7 @@ class uniform_grid_log_end_width(uniform_grid):
         Returns: uniform_grid_log_end_width object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -3450,7 +3451,7 @@ class table3d:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class table3d
 
@@ -3491,7 +3492,7 @@ class table3d:
         Returns: table3d object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -3501,7 +3502,7 @@ class table3d:
         Returns: new copy of the table3d object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_table3d
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -3689,7 +3690,7 @@ class table3d:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -3701,7 +3702,7 @@ class table3d:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -3799,7 +3800,7 @@ class table3d:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,i)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -3890,7 +3891,7 @@ class table3d:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,slice_)
-        ret2=ublas_matrix(self._link,ret)
+        ret2=ublas_matrix(ret)
         return ret2
 
     def get_slice_i(self,slice):
@@ -3904,7 +3905,7 @@ class table3d:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,slice_)
-        ret2=ublas_matrix(self._link,ret)
+        ret2=ublas_matrix(ret)
         return ret2
 
     def lookup_x(self,val,ix):
@@ -4086,7 +4087,7 @@ class index_spec:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class index_spec
 
@@ -4127,7 +4128,7 @@ class index_spec:
         Returns: index_spec object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -4284,7 +4285,7 @@ class ix_index:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ix_index
 
@@ -4325,7 +4326,7 @@ class ix_index:
         Returns: ix_index object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -4356,7 +4357,7 @@ class ix_fixed:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ix_fixed
 
@@ -4397,7 +4398,7 @@ class ix_fixed:
         Returns: ix_fixed object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -4428,7 +4429,7 @@ class ix_sum:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ix_sum
 
@@ -4469,7 +4470,7 @@ class ix_sum:
         Returns: ix_sum object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -4500,7 +4501,7 @@ class ix_trace:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ix_trace
 
@@ -4541,7 +4542,7 @@ class ix_trace:
         Returns: ix_trace object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -4572,7 +4573,7 @@ class ix_reverse:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ix_reverse
 
@@ -4613,7 +4614,7 @@ class ix_reverse:
         Returns: ix_reverse object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -4644,7 +4645,7 @@ class ix_range:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ix_range
 
@@ -4685,7 +4686,7 @@ class ix_range:
         Returns: ix_range object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -4716,7 +4717,7 @@ class ix_interp:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ix_interp
 
@@ -4757,7 +4758,7 @@ class ix_interp:
         Returns: ix_interp object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -4788,7 +4789,7 @@ class ix_grid:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ix_grid
 
@@ -4829,7 +4830,7 @@ class ix_grid:
         Returns: ix_grid object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -4860,7 +4861,7 @@ class ix_gridw:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class ix_gridw
 
@@ -4901,7 +4902,7 @@ class ix_gridw:
         Returns: ix_gridw object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @classmethod
@@ -4930,7 +4931,7 @@ class tensor:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class tensor
 
@@ -4971,7 +4972,7 @@ class tensor:
         Returns: tensor object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -4981,7 +4982,7 @@ class tensor:
         Returns: new copy of the tensor object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_tensor_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -5087,7 +5088,7 @@ class tensor:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        ret2=std_vector_size_t(self._link,ret)
+        ret2=std_vector_size_t(ret)
         return ret2
 
     def get_data(self):
@@ -5349,7 +5350,7 @@ class tensor_int:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class tensor_int
 
@@ -5390,7 +5391,7 @@ class tensor_int:
         Returns: tensor_int object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -5400,7 +5401,7 @@ class tensor_int:
         Returns: new copy of the tensor_int object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_tensor_int_std_vector_int_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -5496,7 +5497,7 @@ class tensor_int:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        ret2=std_vector_int(self._link,ret)
+        ret2=std_vector_int(ret)
         return ret2
 
     def total_size(self):
@@ -5746,7 +5747,7 @@ class tensor_size_t:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class tensor_size_t
 
@@ -5787,7 +5788,7 @@ class tensor_size_t:
         Returns: tensor_size_t object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -5797,7 +5798,7 @@ class tensor_size_t:
         Returns: new copy of the tensor_size_t object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_tensor_size_t_std_vector_size_t_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -5893,7 +5894,7 @@ class tensor_size_t:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        ret2=std_vector_size_t(self._link,ret)
+        ret2=std_vector_size_t(ret)
         return ret2
 
     def total_size(self):
@@ -6116,7 +6117,7 @@ class tensor_grid(tensor):
     https://awsteiner.org/code/o2scl/html/class/tensor_grid.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class tensor_grid
 
@@ -6157,7 +6158,7 @@ class tensor_grid(tensor):
         Returns: tensor_grid object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def __deepcopy__(self,memo):
@@ -6167,7 +6168,7 @@ class tensor_grid(tensor):
         Returns: new copy of the tensor_grid object
         """
 
-        new_obj=type(self)(self._link)
+        new_obj=type(self)()
         f2=self._link.o2scl.o2scl_copy_tensor_grid_
         f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         f2(self._ptr,new_obj._ptr)
@@ -6337,7 +6338,7 @@ class tensor_grid(tensor):
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         ret2=func(self._ptr,ifix._ptr,vals._ptr)
-        ret=tensor_grid(self._link,ret2)
+        ret=tensor_grid(ret2)
         ret.owner=True
         return ret
 
@@ -6507,7 +6508,7 @@ class find_constants_const_entry:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class find_constants_const_entry
 
@@ -6548,7 +6549,7 @@ class find_constants_const_entry:
         Returns: find_constants_const_entry object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def get_names(self):
@@ -6559,7 +6560,7 @@ class find_constants_const_entry:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector_string(self._link,ptr)
+        obj=std_vector_string(ptr)
         return obj
 
     def set_names(self,value):
@@ -6578,7 +6579,7 @@ class find_constants_const_entry:
         func=self._link.o2scl.o2scl_find_constants_const_entry_get_unit
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -6638,7 +6639,7 @@ class find_constants_const_entry:
         func=self._link.o2scl.o2scl_find_constants_const_entry_get_source
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -6804,7 +6805,7 @@ class find_constants:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class find_constants
 
@@ -6845,7 +6846,7 @@ class find_constants:
         Returns: find_constants object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def output_list_cout(self):
@@ -6892,7 +6893,7 @@ class convert_units_der_unit:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class convert_units_der_unit
 
@@ -6933,7 +6934,7 @@ class convert_units_der_unit:
         Returns: convert_units_der_unit object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def get_label(self):
@@ -6943,7 +6944,7 @@ class convert_units_der_unit:
         func=self._link.o2scl.o2scl_convert_units_der_unit_get_label
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -7123,7 +7124,7 @@ class convert_units_der_unit:
         func=self._link.o2scl.o2scl_convert_units_der_unit_get_name
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -7168,7 +7169,7 @@ class convert_units:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class convert_units
 
@@ -7209,7 +7210,7 @@ class convert_units:
         Returns: convert_units object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -7452,7 +7453,7 @@ class columnify:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class columnify
 
@@ -7493,7 +7494,7 @@ class columnify:
         Returns: columnify object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -7569,7 +7570,7 @@ class format_float:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class format_float
 
@@ -7610,7 +7611,7 @@ class format_float:
         Returns: format_float object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def set_sig_figs(self,sig_figs):
@@ -7700,7 +7701,7 @@ class format_float:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_bool]
         ret=func(self._ptr,x,debug)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -7717,7 +7718,7 @@ class interp_vec:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class interp_vec
 
@@ -7758,7 +7759,7 @@ class interp_vec:
         Returns: interp_vec object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def set(self,n,x,y,interp_type):
@@ -7844,7 +7845,7 @@ class interp_krige_optim_rbf_noise:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class interp_krige_optim_rbf_noise
 
@@ -7885,7 +7886,7 @@ class interp_krige_optim_rbf_noise:
         Returns: interp_krige_optim_rbf_noise object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -8054,7 +8055,7 @@ class terminal:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class terminal
 
@@ -8095,7 +8096,7 @@ class terminal:
         Returns: terminal object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def is_redirected(self):
@@ -8131,7 +8132,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8143,7 +8144,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8155,7 +8156,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8167,7 +8168,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8179,7 +8180,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8191,7 +8192,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8203,7 +8204,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8215,7 +8216,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8227,7 +8228,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8239,7 +8240,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8251,7 +8252,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8263,7 +8264,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8275,7 +8276,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8287,7 +8288,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8299,7 +8300,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8312,7 +8313,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_short]
         ret=func(self._ptr,col)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8325,7 +8326,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_short]
         ret=func(self._ptr,col)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8337,7 +8338,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8349,7 +8350,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8361,7 +8362,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8373,7 +8374,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8385,7 +8386,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8397,7 +8398,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8409,7 +8410,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8421,7 +8422,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -8438,7 +8439,7 @@ class gen_test_number:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class gen_test_number
 
@@ -8479,7 +8480,7 @@ class gen_test_number:
         Returns: gen_test_number object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def reset(self):
@@ -8524,7 +8525,7 @@ class funct_string:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class funct_string
 
@@ -8565,7 +8566,7 @@ class funct_string:
         Returns: funct_string object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def set_parm(self,name,val):
@@ -8620,7 +8621,7 @@ class comm_option_s:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class comm_option_s
 
@@ -8661,7 +8662,7 @@ class comm_option_s:
         Returns: comm_option_s object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -8691,7 +8692,7 @@ class comm_option_s:
         func=self._link.o2scl.o2scl_comm_option_s_get_lng
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -8711,7 +8712,7 @@ class comm_option_s:
         func=self._link.o2scl.o2scl_comm_option_s_get_desc
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -8771,7 +8772,7 @@ class comm_option_s:
         func=self._link.o2scl.o2scl_comm_option_s_get_parm_desc
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -8791,7 +8792,7 @@ class comm_option_s:
         func=self._link.o2scl.o2scl_comm_option_s_get_help
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -8837,7 +8838,7 @@ class cmd_line_arg:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class cmd_line_arg
 
@@ -8878,7 +8879,7 @@ class cmd_line_arg:
         Returns: cmd_line_arg object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def get_arg(self):
@@ -8888,7 +8889,7 @@ class cmd_line_arg:
         func=self._link.o2scl.o2scl_cmd_line_arg_get_arg
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -8949,7 +8950,7 @@ class cmd_line_arg:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector_string(self._link,ptr)
+        obj=std_vector_string(ptr)
         return obj
 
     def set_parms(self,value):
@@ -8974,7 +8975,7 @@ class cli:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class cli
 
@@ -9015,7 +9016,7 @@ class cli:
         Returns: cli object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -9065,7 +9066,7 @@ class cli:
         func=self._link.o2scl.o2scl_cli_get_desc
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -9085,7 +9086,7 @@ class cli:
         func=self._link.o2scl.o2scl_cli_get_cmd_name
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -9105,7 +9106,7 @@ class cli:
         func=self._link.o2scl.o2scl_cli_get_addl_help_cmd
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -9125,7 +9126,7 @@ class cli:
         func=self._link.o2scl.o2scl_cli_get_addl_help_cli
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -9186,7 +9187,7 @@ class cli:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        vstrt=std_vector_string(self._link,ret)
+        vstrt=std_vector_string(ret)
         return vstrt
 
     def parameter_desc(self,name):
@@ -9200,7 +9201,7 @@ class cli:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,name_)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -9215,7 +9216,7 @@ class cli:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
         ret=func(self._ptr,name_)
-        strt=std_string(self._link,ret)
+        strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
 
@@ -9259,7 +9260,7 @@ class shared_ptr_table_units(table_units):
         f(self._s_ptr)
         return
 
-def rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
+def rearrange_and_copy(t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9274,11 +9275,11 @@ def rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
     func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
-    ten=tensor(link,ret)
+    ten=tensor(ret)
     ten._owner=True
     return ten
 
-def rearrange_and_copy_int(link,t,spec,verbose=0,err_on_fail=True):
+def rearrange_and_copy_int(t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9293,11 +9294,11 @@ def rearrange_and_copy_int(link,t,spec,verbose=0,err_on_fail=True):
     func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
-    ten=tensor(link,ret)
+    ten=tensor(ret)
     ten._owner=True
     return ten
 
-def rearrange_and_copy_size_t(link,t,spec,verbose=0,err_on_fail=True):
+def rearrange_and_copy_size_t(t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9312,11 +9313,11 @@ def rearrange_and_copy_size_t(link,t,spec,verbose=0,err_on_fail=True):
     func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
-    ten=tensor(link,ret)
+    ten=tensor(ret)
     ten._owner=True
     return ten
 
-def grid_rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
+def grid_rearrange_and_copy(t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9331,11 +9332,11 @@ def grid_rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
     func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
-    ten=tensor_grid(link,ret)
+    ten=tensor_grid(ret)
     ten._owner=True
     return ten
 
-def fermi_function(link,x):
+def fermi_function(x):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9348,7 +9349,7 @@ def fermi_function(link,x):
     ret=func(x)
     return ret
 
-def bose_function(link,x):
+def bose_function(x):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9361,7 +9362,7 @@ def bose_function(link,x):
     ret=func(x)
     return ret
 
-def quadratic_extremum_x(link,x1,x2,x3,y1,y2,y3):
+def quadratic_extremum_x(x1,x2,x3,y1,y2,y3):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9379,7 +9380,7 @@ def quadratic_extremum_x(link,x1,x2,x3,y1,y2,y3):
     ret=func(x1,x2,x3,y1,y2,y3)
     return ret
 
-def quadratic_extremum_y(link,x1,x2,x3,y1,y2,y3):
+def quadratic_extremum_y(x1,x2,x3,y1,y2,y3):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9397,7 +9398,7 @@ def quadratic_extremum_y(link,x1,x2,x3,y1,y2,y3):
     ret=func(x1,x2,x3,y1,y2,y3)
     return ret
 
-def screenify(link,nin,in_cols,out_cols,max_size=80):
+def screenify(nin,in_cols,out_cols,max_size=80):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9411,7 +9412,7 @@ def screenify(link,nin,in_cols,out_cols,max_size=80):
     func(nin,in_cols._ptr,out_cols._ptr,max_size)
     return
 
-def file_exists(link,fname):
+def file_exists(fname):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9425,7 +9426,7 @@ def file_exists(link,fname):
     ret=func(fname_)
     return ret
 
-def RGBtoHSV(link,r,g,b,h,s,v):
+def RGBtoHSV(r,g,b,h,s,v):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9441,7 +9442,7 @@ def RGBtoHSV(link,r,g,b,h,s,v):
     func(r,g,b,h._ptr,s._ptr,v._ptr)
     return
 
-def HSVtoRGB(link,h,s,v,r,g,b):
+def HSVtoRGB(h,s,v,r,g,b):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9457,7 +9458,7 @@ def HSVtoRGB(link,h,s,v,r,g,b):
     func(h,s,v,r._ptr,g._ptr,b._ptr)
     return
 
-def wordexp_single_file(link,fname):
+def wordexp_single_file(fname):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9469,7 +9470,7 @@ def wordexp_single_file(link,fname):
     fname._owner=True
     return
 
-def wordexp_wrapper(link,word,matches):
+def wordexp_wrapper(word,matches):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9482,7 +9483,7 @@ def wordexp_wrapper(link,word,matches):
     func(word_,matches._ptr)
     return
 
-def function_to_double(link,s,verbose=0):
+def function_to_double(s,verbose=0):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9497,7 +9498,7 @@ def function_to_double(link,s,verbose=0):
     ret=func(s_,verbose)
     return ret
 
-def function_to_double_nothrow(link,s,result,verbose=0):
+def function_to_double_nothrow(s,result,verbose=0):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9513,7 +9514,7 @@ def function_to_double_nothrow(link,s,result,verbose=0):
     ret=func(s_,result._ptr,verbose)
     return ret
 
-def find_constant(link,name,unit):
+def find_constant(name,unit):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9529,7 +9530,7 @@ def find_constant(link,name,unit):
     ret=func(name_,unit_)
     return ret
 
-def string_to_uint_list(link,x,list):
+def string_to_uint_list(x,list):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9544,7 +9545,7 @@ def string_to_uint_list(link,x,list):
     x._owner=True
     return ret
 
-def rewrap_keep_endlines(link,str,sv,ncol=79,verbose=0,ignore_vt100=True):
+def rewrap_keep_endlines(str,sv,ncol=79,verbose=0,ignore_vt100=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9560,7 +9561,7 @@ def rewrap_keep_endlines(link,str,sv,ncol=79,verbose=0,ignore_vt100=True):
     func(str_,sv._ptr,ncol,verbose,ignore_vt100)
     return
 
-def vector_level_count(link,level,n,x,y):
+def vector_level_count(level,n,x,y):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9576,7 +9577,7 @@ def vector_level_count(link,level,n,x,y):
     ret=func(level,n,x._ptr,y._ptr)
     return ret
 
-def vector_deriv_interp(link,n,v,dv,interp_type=2):
+def vector_deriv_interp(n,v,dv,interp_type=2):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9590,7 +9591,7 @@ def vector_deriv_interp(link,n,v,dv,interp_type=2):
     func(n,v._ptr,dv._ptr,interp_type)
     return
 
-def vector_deriv2_interp(link,n,v,dv,interp_type=2):
+def vector_deriv2_interp(n,v,dv,interp_type=2):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9604,7 +9605,7 @@ def vector_deriv2_interp(link,n,v,dv,interp_type=2):
     func(n,v._ptr,dv._ptr,interp_type)
     return
 
-def vector_deriv_xy_interp(link,n,vx,vy,dv,interp_type=2):
+def vector_deriv_xy_interp(n,vx,vy,dv,interp_type=2):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9619,7 +9620,7 @@ def vector_deriv_xy_interp(link,n,vx,vy,dv,interp_type=2):
     func(n,vx._ptr,vy._ptr,dv._ptr,interp_type)
     return
 
-def vector_deriv2_xy_interp(link,n,vx,vy,dv,interp_type=2):
+def vector_deriv2_xy_interp(n,vx,vy,dv,interp_type=2):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9634,7 +9635,7 @@ def vector_deriv2_xy_interp(link,n,vx,vy,dv,interp_type=2):
     func(n,vx._ptr,vy._ptr,dv._ptr,interp_type)
     return
 
-def vector_integ_interp(link,n,vx,interp_type=2):
+def vector_integ_interp(n,vx,interp_type=2):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9649,7 +9650,7 @@ def vector_integ_interp(link,n,vx,interp_type=2):
     ret=func(n,vx._ptr,interp_type)
     return ret
 
-def vector_integ_xy_interp(link,n,vx,vy,interp_type=2):
+def vector_integ_xy_interp(n,vx,vy,interp_type=2):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9665,7 +9666,7 @@ def vector_integ_xy_interp(link,n,vx,vy,interp_type=2):
     ret=func(n,vx._ptr,vy._ptr,interp_type)
     return ret
 
-def vector_integ_ul_interp(link,n,x2,v,interp_type=2):
+def vector_integ_ul_interp(n,x2,v,interp_type=2):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9681,7 +9682,7 @@ def vector_integ_ul_interp(link,n,x2,v,interp_type=2):
     ret=func(n,x2,v._ptr,interp_type)
     return ret
 
-def vector_integ_ul_xy_interp(link,n,x2,vx,vy,interp_type=2):
+def vector_integ_ul_xy_interp(n,x2,vx,vy,interp_type=2):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9698,7 +9699,7 @@ def vector_integ_ul_xy_interp(link,n,x2,vx,vy,interp_type=2):
     ret=func(n,x2,vx._ptr,vy._ptr,interp_type)
     return ret
 
-def vector_find_level(link,level,n,x,y,locs):
+def vector_find_level(level,n,x,y,locs):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9713,7 +9714,7 @@ def vector_find_level(link,level,n,x,y,locs):
     func(level,n,x._ptr,y._ptr,locs._ptr)
     return
 
-def vector_invert_enclosed_sum(link,sum,n,x,y,lev,boundaries=0,verbose=0,err_on_fail=True):
+def vector_invert_enclosed_sum(sum,n,x,y,lev,boundaries=0,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9731,7 +9732,7 @@ def vector_invert_enclosed_sum(link,sum,n,x,y,lev,boundaries=0,verbose=0,err_on_
     func(sum,n,x._ptr,y._ptr,lev._ptr,boundaries,verbose,err_on_fail)
     return
 
-def vector_region_int(link,n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=True):
+def vector_region_int(n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9751,7 +9752,7 @@ def vector_region_int(link,n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=Tr
     ret=func(n,x._ptr,y._ptr,intl,locs._ptr,boundaries,verbose,err_on_fail)
     return ret
 
-def vector_region_fracint(link,n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=True):
+def vector_region_fracint(n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9771,7 +9772,7 @@ def vector_region_fracint(link,n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fai
     ret=func(n,x._ptr,y._ptr,intl,locs._ptr,boundaries,verbose,err_on_fail)
     return ret
 
-def vector_bound_fracint(link,n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail=True):
+def vector_bound_fracint(n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9792,7 +9793,7 @@ def vector_bound_fracint(link,n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_
     ret=func(n,x._ptr,y._ptr,frac,low._ptr,high._ptr,boundaries,verbose,err_on_fail)
     return ret
 
-def vector_bound_int(link,n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail=True):
+def vector_bound_int(n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail=True):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9813,7 +9814,7 @@ def vector_bound_int(link,n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail
     ret=func(n,x._ptr,y._ptr,frac,low._ptr,high._ptr,boundaries,verbose,err_on_fail)
     return ret
 
-def rebin_xy(link,x,y,x_out,y_out,n_pts,interp_type):
+def rebin_xy(x,y,x_out,y_out,n_pts,interp_type):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9829,7 +9830,7 @@ def rebin_xy(link,x,y,x_out,y_out,n_pts,interp_type):
     func(x._ptr,y._ptr,x_out._ptr,y_out._ptr,n_pts,interp_type)
     return
 
-def linear_or_log_chi2(link,x,y):
+def linear_or_log_chi2(x,y):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9843,7 +9844,7 @@ def linear_or_log_chi2(link,x,y):
     ret=func(x._ptr,y._ptr)
     return ret
 
-def linear_or_log_pair(link,x,y,log_x,log_y):
+def linear_or_log_pair(x,y,log_x,log_y):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9857,7 +9858,7 @@ def linear_or_log_pair(link,x,y,log_x,log_y):
     func(x._ptr,y._ptr,log_x._ptr,log_y._ptr)
     return
 
-def vector_refine(link,n,index,data,factor,interp_type=2):
+def vector_refine(n,index,data,factor,interp_type=2):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9872,7 +9873,7 @@ def vector_refine(link,n,index,data,factor,interp_type=2):
     func(n,index._ptr,data._ptr,factor,interp_type)
     return
 
-def linear_or_log(link,x,log_x):
+def linear_or_log(x,log_x):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -9884,7 +9885,7 @@ def linear_or_log(link,x,log_x):
     func(x._ptr,log_x._ptr)
     return
 
-def get_screen_size_ioctl(link,row,col):
+def get_screen_size_ioctl(row,col):
     """
         | Parameters:
         | *link* :class:`linker` object

@@ -40,7 +40,7 @@ class eos_base:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_base
 
@@ -81,7 +81,7 @@ class eos_base:
         Returns: eos_base object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def get_def_thermo(self):
@@ -92,7 +92,7 @@ class eos_base:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=thermo(self._link,ptr)
+        obj=thermo(ptr)
         return obj
 
     def set_def_thermo(self,value):
@@ -116,7 +116,7 @@ class eos_leptons:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_leptons
 
@@ -157,7 +157,7 @@ class eos_leptons:
         Returns: eos_leptons object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def get_th(self):
@@ -168,7 +168,7 @@ class eos_leptons:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=thermo(self._link,ptr)
+        obj=thermo(ptr)
         return obj
 
     def set_th(self,value):
@@ -188,7 +188,7 @@ class eos_leptons:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=fermion(self._link,ptr)
+        obj=fermion(ptr)
         return obj
 
     def set_e(self,value):
@@ -208,7 +208,7 @@ class eos_leptons:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=fermion(self._link,ptr)
+        obj=fermion(ptr)
         return obj
 
     def set_mu(self,value):
@@ -228,7 +228,7 @@ class eos_leptons:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=boson(self._link,ptr)
+        obj=boson(ptr)
         return obj
 
     def set_ph(self,value):
@@ -248,7 +248,7 @@ class eos_leptons:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=part_deriv_press(self._link,ptr)
+        obj=part_deriv_press(ptr)
         return obj
 
     def set_ed(self,value):
@@ -268,7 +268,7 @@ class eos_leptons:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=part_deriv_press(self._link,ptr)
+        obj=part_deriv_press(ptr)
         return obj
 
     def set_mud(self,value):
@@ -288,7 +288,7 @@ class eos_leptons:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=part_deriv_press(self._link,ptr)
+        obj=part_deriv_press(ptr)
         return obj
 
     def set_phd(self,value):
@@ -408,7 +408,7 @@ class eos_leptons:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=fermion_rel(self._link,ptr)
+        obj=fermion_rel(ptr)
         return obj
 
     def set_frel(self,value):
@@ -510,7 +510,7 @@ class eos_had_base(eos_base):
     """
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_had_base
 
@@ -551,7 +551,7 @@ class eos_had_base(eos_base):
         Returns: eos_had_base object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -702,7 +702,7 @@ class eos_had_base(eos_base):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=fermion(self._link,ptr)
+        obj=fermion(ptr)
         return obj
 
     def set_def_neutron(self,value):
@@ -722,7 +722,7 @@ class eos_had_base(eos_base):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=fermion(self._link,ptr)
+        obj=fermion(ptr)
         return obj
 
     def set_def_proton(self,value):
@@ -1175,7 +1175,7 @@ class eos_had_eden_base(eos_had_base):
     """
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_had_eden_base
 
@@ -1216,7 +1216,7 @@ class eos_had_eden_base(eos_had_base):
         Returns: eos_had_eden_base object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1228,7 +1228,7 @@ class eos_had_pres_base(eos_had_base):
     """
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_had_pres_base
 
@@ -1269,7 +1269,7 @@ class eos_had_pres_base(eos_had_base):
         Returns: eos_had_pres_base object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1281,7 +1281,7 @@ class eos_had_temp_base(eos_had_base):
     """
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_had_temp_base
 
@@ -1322,7 +1322,7 @@ class eos_had_temp_base(eos_had_base):
         Returns: eos_had_temp_base object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def calc_temp_e(self,n,p,T,th):
@@ -1364,7 +1364,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
     """
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_had_temp_eden_base
 
@@ -1405,7 +1405,7 @@ class eos_had_temp_eden_base(eos_had_temp_base):
         Returns: eos_had_temp_eden_base object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1417,7 +1417,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
     """
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_had_temp_pres_base
 
@@ -1458,7 +1458,7 @@ class eos_had_temp_pres_base(eos_had_temp_base):
         Returns: eos_had_temp_pres_base object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -1469,7 +1469,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
     https://awsteiner.org/code/o2scl/html/class/eos_had_skyrme.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_had_skyrme
 
@@ -1510,7 +1510,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         Returns: eos_had_skyrme object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -1820,7 +1820,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         func=self._link.o2scl.o2scl_eos_had_skyrme_get_reference
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        s=std_string(self._link)
+        s=std_string()
         s._ptr=func(self._ptr)
         return s.to_bytes()
 
@@ -1841,7 +1841,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=fermion_deriv_nr(self._link,ptr)
+        obj=fermion_deriv_nr(ptr)
         return obj
 
     def set_nrfd(self,value):
@@ -1861,7 +1861,7 @@ class eos_had_apr(eos_had_temp_eden_base):
     https://awsteiner.org/code/o2scl/html/class/eos_had_apr.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_had_apr
 
@@ -1902,7 +1902,7 @@ class eos_had_apr(eos_had_temp_eden_base):
         Returns: eos_had_apr object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -1953,7 +1953,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
     https://awsteiner.org/code/o2scl/html/class/eos_had_rmf.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_had_rmf
 
@@ -1994,7 +1994,7 @@ class eos_had_rmf(eos_had_temp_pres_base):
         Returns: eos_had_rmf object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -2516,7 +2516,7 @@ class eos_quark(eos_base):
     https://awsteiner.org/code/o2scl/html/class/eos_quark.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_quark
 
@@ -2557,7 +2557,7 @@ class eos_quark(eos_base):
         Returns: eos_quark object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
 
@@ -2568,7 +2568,7 @@ class eos_quark_bag(eos_quark):
     https://awsteiner.org/code/o2scl/html/class/eos_quark_bag.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_quark_bag
 
@@ -2609,7 +2609,7 @@ class eos_quark_bag(eos_quark):
         Returns: eos_quark_bag object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -2640,7 +2640,7 @@ class eos_quark_njl(eos_quark):
     https://awsteiner.org/code/o2scl/html/class/eos_quark_njl.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_quark_njl
 
@@ -2681,7 +2681,7 @@ class eos_quark_njl(eos_quark):
         Returns: eos_quark_njl object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -2817,7 +2817,7 @@ class eos_tov:
     _owner=True
 
     @abstractmethod
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_tov
 
@@ -2858,7 +2858,7 @@ class eos_tov:
         Returns: eos_tov object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -2984,7 +2984,7 @@ class eos_tov_buchdahl(eos_tov):
     https://awsteiner.org/code/o2scl/html/class/eos_tov_buchdahl.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_tov_buchdahl
 
@@ -3025,7 +3025,7 @@ class eos_tov_buchdahl(eos_tov):
         Returns: eos_tov_buchdahl object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -3151,7 +3151,7 @@ class eos_tov_polytrope(eos_tov):
     https://awsteiner.org/code/o2scl/html/class/eos_tov_polytrope.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_tov_polytrope
 
@@ -3192,7 +3192,7 @@ class eos_tov_polytrope(eos_tov):
         Returns: eos_tov_polytrope object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def set_coeff_index(self,coeff,index):
@@ -3214,7 +3214,7 @@ class eos_tov_linear(eos_tov):
     https://awsteiner.org/code/o2scl/html/class/eos_tov_linear.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_tov_linear
 
@@ -3255,7 +3255,7 @@ class eos_tov_linear(eos_tov):
         Returns: eos_tov_linear object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     def set_cs2_eps0(self,cs2,eps0):
@@ -3277,7 +3277,7 @@ class eos_tov_interp(eos_tov):
     https://awsteiner.org/code/o2scl/html/class/eos_tov_interp.html .
     """
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class eos_tov_interp
 
@@ -3318,7 +3318,7 @@ class eos_tov_interp(eos_tov):
         Returns: eos_tov_interp object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -3349,7 +3349,7 @@ class eos_tov_interp(eos_tov):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_full_vece(self,value):
@@ -3369,7 +3369,7 @@ class eos_tov_interp(eos_tov):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_full_vecp(self,value):
@@ -3389,7 +3389,7 @@ class eos_tov_interp(eos_tov):
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=std_vector(self._link,ptr)
+        obj=std_vector(ptr)
         return obj
 
     def set_full_vecnb(self,value):
@@ -3504,7 +3504,7 @@ class tov_solve:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class tov_solve
 
@@ -3545,7 +3545,7 @@ class tov_solve:
         Returns: tov_solve object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -4191,7 +4191,7 @@ class tov_solve:
         func=self._link.o2scl.o2scl_tov_solve_get_results
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        sp=shared_ptr_table_units(self._link,func(self._ptr))
+        sp=shared_ptr_table_units(func(self._ptr))
         return sp
 
 
@@ -4206,7 +4206,7 @@ class tov_love:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class tov_love
 
@@ -4247,7 +4247,7 @@ class tov_love:
         Returns: tov_love object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -4318,7 +4318,7 @@ class tov_love:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=table_units(self._link,ptr)
+        obj=table_units(ptr)
         return obj
 
     def set_results(self,value):
@@ -4374,7 +4374,7 @@ class tov_love:
         """
         Object of type :class:`table_units<>`
         """
-        sp=shared_ptr_table_units(self._link)
+        sp=shared_ptr_table_units()
         func=self._link.o2scl.o2scl_tov_love_get_tab
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,sp._s_ptr)
@@ -4452,7 +4452,7 @@ class nstar_cold:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nstar_cold
 
@@ -4493,7 +4493,7 @@ class nstar_cold:
         Returns: nstar_cold object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -4624,7 +4624,7 @@ class nstar_cold:
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=tov_solve(self._link,ptr)
+        obj=tov_solve(ptr)
         return obj
 
     @property
@@ -4858,7 +4858,7 @@ class nstar_cold:
         func=self._link.o2scl.o2scl_nstar_cold_get_eos_results
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        sp=shared_ptr_table_units(self._link,func(self._ptr))
+        sp=shared_ptr_table_units(func(self._ptr))
         return sp
 
     def get_tov_results(self):
@@ -4868,7 +4868,7 @@ class nstar_cold:
         func=self._link.o2scl.o2scl_nstar_cold_get_tov_results
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        sp=shared_ptr_table_units(self._link,func(self._ptr))
+        sp=shared_ptr_table_units(func(self._ptr))
         return sp
 
 
@@ -4883,7 +4883,7 @@ class nucleus_rmf:
     _link=0
     _owner=True
 
-    def __init__(self,link,pointer=0):
+    def __init__(self,pointer=0):
         """
         Init function for class nucleus_rmf
 
@@ -4924,7 +4924,7 @@ class nucleus_rmf:
         Returns: nucleus_rmf object
         """
 
-        new_obj=type(self)(self._link,self._ptr)
+        new_obj=type(self)(self._ptr)
         return new_obj
 
     @property
@@ -5089,7 +5089,7 @@ class nucleus_rmf:
         func=self._link.o2scl.o2scl_nucleus_rmf_get_profiles
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        sp=shared_ptr_table_units(self._link,func(self._ptr))
+        sp=shared_ptr_table_units(func(self._ptr))
         return sp
 
     def get_chden(self):
@@ -5099,11 +5099,11 @@ class nucleus_rmf:
         func=self._link.o2scl.o2scl_nucleus_rmf_get_chden
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
-        sp=shared_ptr_table_units(self._link,func(self._ptr))
+        sp=shared_ptr_table_units(func(self._ptr))
         return sp
 
 
-def skyrme_load(link,sk,model,external=False,verbose=0):
+def skyrme_load(sk,model,external=False,verbose=0):
     """
         | Parameters:
         | *link* :class:`linker` object
@@ -5118,7 +5118,7 @@ def skyrme_load(link,sk,model,external=False,verbose=0):
     func(sk._ptr,model_,external,verbose)
     return
 
-def rmf_load(link,rmf,model,external=False):
+def rmf_load(rmf,model,external=False):
     """
         | Parameters:
         | *link* :class:`linker` object

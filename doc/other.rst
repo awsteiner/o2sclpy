@@ -290,35 +290,35 @@ Class prob_dens_mdim_amr
 Function vector_mean
 --------------------
 
-.. autofunction:: o2sclpy.vector_mean(link,n,v)
+.. autofunction:: o2sclpy.vector_mean(n,v)
 
 Function vector_stddev
 ----------------------
 
-.. autofunction:: o2sclpy.vector_stddev(link,n,v)
+.. autofunction:: o2sclpy.vector_stddev(n,v)
 
 Function vector_lagk_autocorr
 -----------------------------
 
-.. autofunction:: o2sclpy.vector_lagk_autocorr(link,n,v,k)
+.. autofunction:: o2sclpy.vector_lagk_autocorr(n,v,k)
 
 Function vector_autocorr_vector
 -------------------------------
 
-.. autofunction:: o2sclpy.vector_autocorr_vector(link,n,v,ac)
+.. autofunction:: o2sclpy.vector_autocorr_vector(n,v,ac)
 
 Function vector_autocorr_vector_fftw
 ------------------------------------
 
-.. autofunction:: o2sclpy.vector_autocorr_vector_fftw(link,v,ac,mean,stddev)
+.. autofunction:: o2sclpy.vector_autocorr_vector_fftw(v,ac,mean,stddev)
 
 Function vector_autocorr_tau
 ----------------------------
 
-.. autofunction:: o2sclpy.vector_autocorr_tau(link,ac,ftom)
+.. autofunction:: o2sclpy.vector_autocorr_tau(ac,ftom)
 
 Function vector_acor
 --------------------
 
-.. autofunction:: o2sclpy.vector_acor(link,n,v,mean,sigma,tau)
+.. autofunction:: o2sclpy.vector_acor(n,v,mean,sigma,tau)
 

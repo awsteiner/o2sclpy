@@ -254,25 +254,25 @@ Class nucmass_wlw
 Function ame_load
 -----------------
 
-.. autofunction:: o2sclpy.ame_load(link,ame,name,exp_only)
+.. autofunction:: o2sclpy.ame_load(ame,name,exp_only)
 
 Function ame_load_ext
 ---------------------
 
-.. autofunction:: o2sclpy.ame_load_ext(link,ame,file_name,table_name,exp_only)
+.. autofunction:: o2sclpy.ame_load_ext(ame,file_name,table_name,exp_only)
 
 Function mnmsk_load
 -------------------
 
-.. autofunction:: o2sclpy.mnmsk_load(link,mnmsk,model,filename)
+.. autofunction:: o2sclpy.mnmsk_load(mnmsk,model,filename)
 
 Function hfb_load
 -----------------
 
-.. autofunction:: o2sclpy.hfb_load(link,hfb,model,filename)
+.. autofunction:: o2sclpy.hfb_load(hfb,model,filename)
 
 Function hfb_sp_load
 --------------------
 
-.. autofunction:: o2sclpy.hfb_sp_load(link,hfb,model,filename)
+.. autofunction:: o2sclpy.hfb_sp_load(hfb,model,filename)
 

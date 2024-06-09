@@ -68,115 +68,115 @@ Class cloud_file
 Function hdf_input_table
 ------------------------
 
-.. autofunction:: o2sclpy.hdf_input_table(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_table(hf,t,name)
 
 Function hdf_input_n_table
 --------------------------
 
-.. autofunction:: o2sclpy.hdf_input_n_table(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_n_table(hf,t,name)
 
 Function hdf_output_table
 -------------------------
 
-.. autofunction:: o2sclpy.hdf_output_table(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_output_table(hf,t,name)
 
 Function hdf_input_table_units
 ------------------------------
 
-.. autofunction:: o2sclpy.hdf_input_table_units(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_table_units(hf,t,name)
 
 Function hdf_input_n_table_units
 --------------------------------
 
-.. autofunction:: o2sclpy.hdf_input_n_table_units(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_n_table_units(hf,t,name)
 
 Function hdf_output_table_units
 -------------------------------
 
-.. autofunction:: o2sclpy.hdf_output_table_units(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_output_table_units(hf,t,name)
 
 Function hdf_input_table3d
 --------------------------
 
-.. autofunction:: o2sclpy.hdf_input_table3d(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_table3d(hf,t,name)
 
 Function hdf_input_n_table3d
 ----------------------------
 
-.. autofunction:: o2sclpy.hdf_input_n_table3d(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_n_table3d(hf,t,name)
 
 Function hdf_output_table3d
 ---------------------------
 
-.. autofunction:: o2sclpy.hdf_output_table3d(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_output_table3d(hf,t,name)
 
 Function hdf_input_uniform_grid
 -------------------------------
 
-.. autofunction:: o2sclpy.hdf_input_uniform_grid(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_uniform_grid(hf,t,name)
 
 Function hdf_input_n_uniform_grid
 ---------------------------------
 
-.. autofunction:: o2sclpy.hdf_input_n_uniform_grid(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_n_uniform_grid(hf,t,name)
 
 Function hdf_output_uniform_grid
 --------------------------------
 
-.. autofunction:: o2sclpy.hdf_output_uniform_grid(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_output_uniform_grid(hf,t,name)
 
 Function hdf_input_tensor_grid
 ------------------------------
 
-.. autofunction:: o2sclpy.hdf_input_tensor_grid(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_tensor_grid(hf,t,name)
 
 Function hdf_input_n_tensor_grid
 --------------------------------
 
-.. autofunction:: o2sclpy.hdf_input_n_tensor_grid(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_input_n_tensor_grid(hf,t,name)
 
 Function hdf_output_tensor_grid
 -------------------------------
 
-.. autofunction:: o2sclpy.hdf_output_tensor_grid(link,hf,t,name)
+.. autofunction:: o2sclpy.hdf_output_tensor_grid(hf,t,name)
 
 Function hdf_input_vector_contour_line
 --------------------------------------
 
-.. autofunction:: o2sclpy.hdf_input_vector_contour_line(link,hf,v,name)
+.. autofunction:: o2sclpy.hdf_input_vector_contour_line(hf,v,name)
 
 Function hdf_input_n_vector_contour_line
 ----------------------------------------
 
-.. autofunction:: o2sclpy.hdf_input_n_vector_contour_line(link,hf,v,name)
+.. autofunction:: o2sclpy.hdf_input_n_vector_contour_line(hf,v,name)
 
 Function hdf_output_vector_contour_line
 ---------------------------------------
 
-.. autofunction:: o2sclpy.hdf_output_vector_contour_line(link,hf,v,name)
+.. autofunction:: o2sclpy.hdf_output_vector_contour_line(hf,v,name)
 
 Function value_spec
 -------------------
 
-.. autofunction:: o2sclpy.value_spec(link,spec,d,verbose,err_on_fail)
+.. autofunction:: o2sclpy.value_spec(spec,d,verbose,err_on_fail)
 
 Function vector_spec
 --------------------
 
-.. autofunction:: o2sclpy.vector_spec(link,spec,v,verbose,err_on_fail)
+.. autofunction:: o2sclpy.vector_spec(spec,v,verbose,err_on_fail)
 
 Function strings_spec
 ---------------------
 
-.. autofunction:: o2sclpy.strings_spec(link,spec,v,verbose,err_on_fail)
+.. autofunction:: o2sclpy.strings_spec(spec,v,verbose,err_on_fail)
 
 Function vector_spec_v
 ----------------------
 
-.. autofunction:: o2sclpy.vector_spec_v(link,spec)
+.. autofunction:: o2sclpy.vector_spec_v(spec)
 
 Function mult_vector_spec
 -------------------------
 
-.. autofunction:: o2sclpy.mult_vector_spec(link,spec,v,use_regex,verbose,err_on_fail)
+.. autofunction:: o2sclpy.mult_vector_spec(spec,v,use_regex,verbose,err_on_fail)
 
