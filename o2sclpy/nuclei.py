@@ -24,6 +24,7 @@
 import ctypes
 from abc import abstractmethod
 from o2sclpy.utils import force_bytes
+import o2sclpy.doc_data
 
 from o2sclpy.part import *
 
@@ -45,14 +46,14 @@ class nucleus(part):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucleus
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucleus
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -201,14 +202,14 @@ class nucmass_info:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_info
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_info
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -357,14 +358,14 @@ class nucmass:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -685,14 +686,14 @@ class nucmass_table(nucmass):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_table
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_table
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -798,14 +799,14 @@ class nucmass_fit_base(nucmass):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_fit_base
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_fit_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -870,14 +871,14 @@ class nucmass_semi_empirical(nucmass_fit_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_semi_empirical
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_semi_empirical
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1048,14 +1049,14 @@ class nucmass_ame(nucmass_table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_ame
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_ame
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1100,14 +1101,14 @@ class nucmass_dz_table(nucmass_table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_dz_table
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_dz_table
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1152,14 +1153,14 @@ class nucmass_dz_fit(nucmass_fit_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_dz_fit
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_dz_fit
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1204,14 +1205,14 @@ class nucmass_dz_fit_33(nucmass_fit_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_dz_fit_33
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_dz_fit_33
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1256,14 +1257,14 @@ class nucmass_frdm(nucmass_fit_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_frdm
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_frdm
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1828,14 +1829,14 @@ class nucmass_mnmsk(nucmass_table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_mnmsk
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_mnmsk
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1880,14 +1881,14 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_mnmsk_exp
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_mnmsk_exp
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1932,14 +1933,14 @@ class nucmass_gen(nucmass_table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_gen
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_gen
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1984,14 +1985,14 @@ class nucmass_dglg(nucmass_table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_dglg
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_dglg
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2036,14 +2037,14 @@ class nucmass_hfb(nucmass_table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_hfb
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_hfb
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2088,14 +2089,14 @@ class nucmass_hfb_sp(nucmass_table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_hfb_sp
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_hfb_sp
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2140,14 +2141,14 @@ class nucmass_ktuy(nucmass_table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_ktuy
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_ktuy
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2192,14 +2193,14 @@ class nucmass_sdnp(nucmass_table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_sdnp
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_sdnp
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2244,14 +2245,14 @@ class nucmass_wlw(nucmass_table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucmass_wlw
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_wlw
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2287,7 +2288,7 @@ def ame_load(link,ame,name,exp_only):
         | *exp_only*: ``bool``
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_ame_load_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_ame_load_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
     func(ame._ptr,name_,exp_only)
     return
@@ -2303,7 +2304,7 @@ def ame_load_ext(link,ame,file_name,table_name,exp_only):
     """
     file_name_=ctypes.c_char_p(force_bytes(file_name))
     table_name_=ctypes.c_char_p(force_bytes(table_name))
-    func=link.o2scl.o2scl_ame_load_ext_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_ame_load_ext_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_bool]
     func(ame._ptr,file_name_,table_name_,exp_only)
     return
@@ -2318,7 +2319,7 @@ def mnmsk_load(link,mnmsk,model,filename):
     """
     model_=ctypes.c_char_p(force_bytes(model))
     filename_=ctypes.c_char_p(force_bytes(filename))
-    func=link.o2scl.o2scl_mnmsk_load_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_mnmsk_load_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
     func(mnmsk._ptr,model_,filename_)
     return
@@ -2332,7 +2333,7 @@ def hfb_load(link,hfb,model,filename):
         | *filename*: string
     """
     filename_=ctypes.c_char_p(force_bytes(filename))
-    func=link.o2scl.o2scl_hfb_load_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hfb_load_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char_p]
     func(hfb._ptr,model,filename_)
     return
@@ -2346,7 +2347,7 @@ def hfb_sp_load(link,hfb,model,filename):
         | *filename*: string
     """
     filename_=ctypes.c_char_p(force_bytes(filename))
-    func=link.o2scl.o2scl_hfb_sp_load_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hfb_sp_load_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char_p]
     func(hfb._ptr,model,filename_)
     return

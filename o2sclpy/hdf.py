@@ -24,6 +24,7 @@
 import ctypes
 from abc import abstractmethod
 from o2sclpy.utils import force_bytes
+import o2sclpy.doc_data
 
 from o2sclpy.base import *
 from o2sclpy.other import *
@@ -50,14 +51,14 @@ class hdf_file:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_hdf_create_hdf_file
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_create_hdf_file
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -781,14 +782,14 @@ class acol_manager:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_hdf_create_acol_manager
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_create_acol_manager
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1624,14 +1625,14 @@ class cloud_file:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_hdf_create_cloud_file
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_create_cloud_file
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1841,7 +1842,7 @@ def hdf_input_table(link,hf,t,name=""):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_input_table_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_table_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1854,7 +1855,7 @@ def hdf_input_n_table(link,hf,t,name):
         | *t*: :class:`table<>` object
         | *name*: :class:`std::string` object
     """
-    func=link.o2scl.o2scl_hdf_hdf_input_n_table_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_n_table_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
     func(hf._ptr,t._ptr,name._ptr)
     name._owner=True
@@ -1869,7 +1870,7 @@ def hdf_output_table(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_output_table_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_output_table_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1883,7 +1884,7 @@ def hdf_input_table_units(link,hf,t,name=""):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_input_table_units_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_table_units_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1896,7 +1897,7 @@ def hdf_input_n_table_units(link,hf,t,name):
         | *t*: :class:`table_units<>` object
         | *name*: :class:`std::string` object
     """
-    func=link.o2scl.o2scl_hdf_hdf_input_n_table_units_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_n_table_units_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
     func(hf._ptr,t._ptr,name._ptr)
     name._owner=True
@@ -1911,7 +1912,7 @@ def hdf_output_table_units(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_output_table_units_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_output_table_units_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1925,7 +1926,7 @@ def hdf_input_table3d(link,hf,t,name=""):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_input_table3d_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_table3d_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1938,7 +1939,7 @@ def hdf_input_n_table3d(link,hf,t,name):
         | *t*: :class:`table3d` object
         | *name*: :class:`std::string` object
     """
-    func=link.o2scl.o2scl_hdf_hdf_input_n_table3d_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_n_table3d_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
     func(hf._ptr,t._ptr,name._ptr)
     name._owner=True
@@ -1953,7 +1954,7 @@ def hdf_output_table3d(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_output_table3d_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_output_table3d_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1967,7 +1968,7 @@ def hdf_input_uniform_grid(link,hf,t,name=""):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_input_uniform_grid_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_uniform_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -1980,7 +1981,7 @@ def hdf_input_n_uniform_grid(link,hf,t,name):
         | *t*: :class:`uniform_grid<>` object
         | *name*: :class:`std::string` object
     """
-    func=link.o2scl.o2scl_hdf_hdf_input_n_uniform_grid_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_n_uniform_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
     func(hf._ptr,t._ptr,name._ptr)
     name._owner=True
@@ -1995,7 +1996,7 @@ def hdf_output_uniform_grid(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_output_uniform_grid_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_output_uniform_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -2009,7 +2010,7 @@ def hdf_input_tensor_grid(link,hf,t,name=""):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_input_tensor_grid_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_tensor_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -2022,7 +2023,7 @@ def hdf_input_n_tensor_grid(link,hf,t,name):
         | *t*: :class:`tensor_grid<>` object
         | *name*: :class:`std::string` object
     """
-    func=link.o2scl.o2scl_hdf_hdf_input_n_tensor_grid_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_n_tensor_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
     func(hf._ptr,t._ptr,name._ptr)
     name._owner=True
@@ -2037,7 +2038,7 @@ def hdf_output_tensor_grid(link,hf,t,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_output_tensor_grid_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_output_tensor_grid_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,t._ptr,name_)
     return
@@ -2051,7 +2052,7 @@ def hdf_input_vector_contour_line(link,hf,v,name=""):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_input_vector_contour_line_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_vector_contour_line_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,v._ptr,name_)
     return
@@ -2064,7 +2065,7 @@ def hdf_input_n_vector_contour_line(link,hf,v,name):
         | *v*: :class:`std::vector<contour_line>` object
         | *name*: :class:`std::string` object
     """
-    func=link.o2scl.o2scl_hdf_hdf_input_n_vector_contour_line_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_input_n_vector_contour_line_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
     func(hf._ptr,v._ptr,name._ptr)
     name._owner=True
@@ -2079,7 +2080,7 @@ def hdf_output_vector_contour_line(link,hf,v,name):
         | *name*: string
     """
     name_=ctypes.c_char_p(force_bytes(name))
-    func=link.o2scl.o2scl_hdf_hdf_output_vector_contour_line_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_hdf_output_vector_contour_line_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
     func(hf._ptr,v._ptr,name_)
     return
@@ -2095,7 +2096,7 @@ def value_spec(link,spec,d,verbose=0,err_on_fail=True):
         | Returns: ``ctypes.c_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_hdf_value_spec_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_value_spec_wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
     ret=func(spec_,d._ptr,verbose,err_on_fail)
@@ -2112,7 +2113,7 @@ def vector_spec(link,spec,v,verbose=0,err_on_fail=True):
         | Returns: ``ctypes.c_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_hdf_vector_spec_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_vector_spec_std_vector_double__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
     ret=func(spec_,v._ptr,verbose,err_on_fail)
@@ -2129,7 +2130,7 @@ def strings_spec(link,spec,v,verbose=0,err_on_fail=True):
         | Returns: ``ctypes.c_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_hdf_strings_spec_std_vector_std_string__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_strings_spec_std_vector_std_string__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
     ret=func(spec_,v._ptr,verbose,err_on_fail)
@@ -2143,7 +2144,7 @@ def vector_spec_v(link,spec):
         | Returns: ``std_vector`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_hdf_vector_spec_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_vector_spec_wrapper
     func.restype=std_vector
     func.argtypes=[ctypes.c_char_p]
     ret=func(spec_)
@@ -2161,7 +2162,7 @@ def mult_vector_spec(link,spec,v,use_regex=False,verbose=0,err_on_fail=True):
         | Returns: ``ctypes.c_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_hdf_mult_vector_spec_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hdf_mult_vector_spec_std_vector_double__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int,ctypes.c_bool]
     ret=func(spec_,v._ptr,use_regex,verbose,err_on_fail)

@@ -34,8 +34,6 @@ from o2sclpy.utils import force_bytes, if_yt_then_Agg
 # For find_library() in link_o2scl()
 from ctypes.util import find_library
 
-from o2sclpy.base import lib_settings_class
-
 class linker:
     """
     The class which controls the dynamic linking of the O2scl libraries
@@ -235,7 +233,7 @@ class linker:
         ptr=func()
 
         # Create a library settings object with the pointer
-        self.o2scl_settings=lib_settings_class(self,ptr)
+        #self.o2scl_settings=lib_settings_class(self,ptr)
         
         return
     

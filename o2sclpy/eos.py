@@ -24,6 +24,7 @@
 import ctypes
 from abc import abstractmethod
 from o2sclpy.utils import force_bytes
+import o2sclpy.doc_data
 
 from o2sclpy.base import *
 from o2sclpy.part import *
@@ -50,14 +51,14 @@ class eos_base:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_base
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -126,14 +127,14 @@ class eos_leptons:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_leptons
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_leptons
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -520,14 +521,14 @@ class eos_had_base(eos_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_had_base
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_had_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1185,14 +1186,14 @@ class eos_had_eden_base(eos_had_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_had_eden_base
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_had_eden_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1238,14 +1239,14 @@ class eos_had_pres_base(eos_had_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_had_pres_base
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_had_pres_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1291,14 +1292,14 @@ class eos_had_temp_base(eos_had_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_had_temp_base
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_had_temp_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1374,14 +1375,14 @@ class eos_had_temp_eden_base(eos_had_temp_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_had_temp_eden_base
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_had_temp_eden_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1427,14 +1428,14 @@ class eos_had_temp_pres_base(eos_had_temp_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_had_temp_pres_base
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_had_temp_pres_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1479,14 +1480,14 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_had_skyrme
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_had_skyrme
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1871,14 +1872,14 @@ class eos_had_apr(eos_had_temp_eden_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_had_apr
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_had_apr
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1963,14 +1964,14 @@ class eos_had_rmf(eos_had_temp_pres_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_had_rmf
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_had_rmf
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2526,14 +2527,14 @@ class eos_quark(eos_base):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_quark
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_quark
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2578,14 +2579,14 @@ class eos_quark_bag(eos_quark):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_quark_bag
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_quark_bag
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2650,14 +2651,14 @@ class eos_quark_njl(eos_quark):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_quark_njl
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_quark_njl
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2827,14 +2828,14 @@ class eos_tov:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_tov
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_tov
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2994,14 +2995,14 @@ class eos_tov_buchdahl(eos_tov):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_tov_buchdahl
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_tov_buchdahl
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3161,14 +3162,14 @@ class eos_tov_polytrope(eos_tov):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_tov_polytrope
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_tov_polytrope
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3224,14 +3225,14 @@ class eos_tov_linear(eos_tov):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_tov_linear
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_tov_linear
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3287,14 +3288,14 @@ class eos_tov_interp(eos_tov):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_eos_tov_interp
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_tov_interp
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3514,14 +3515,14 @@ class tov_solve:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_tov_solve
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_tov_solve
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4216,14 +4217,14 @@ class tov_love:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_tov_love
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_tov_love
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4462,14 +4463,14 @@ class nstar_cold:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nstar_cold
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nstar_cold
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4893,14 +4894,14 @@ class nucleus_rmf:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_nucleus_rmf
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucleus_rmf
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -5112,7 +5113,7 @@ def skyrme_load(link,sk,model,external=False,verbose=0):
         | *verbose*: ``int``
     """
     model_=ctypes.c_char_p(force_bytes(model))
-    func=link.o2scl.o2scl_skyrme_load_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_skyrme_load_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool,ctypes.c_int]
     func(sk._ptr,model_,external,verbose)
     return
@@ -5126,7 +5127,7 @@ def rmf_load(link,rmf,model,external=False):
         | *external*: ``bool``
     """
     model_=ctypes.c_char_p(force_bytes(model))
-    func=link.o2scl.o2scl_rmf_load_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_rmf_load_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
     func(rmf._ptr,model_,external)
     return

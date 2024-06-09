@@ -24,6 +24,7 @@
 import ctypes
 from abc import abstractmethod
 from o2sclpy.utils import force_bytes
+import o2sclpy.doc_data
 
 from o2sclpy.base import *
 
@@ -49,14 +50,14 @@ class slack_messenger:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_slack_messenger
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_slack_messenger
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -264,7 +265,7 @@ class slack_messenger:
 
         """
 
-        f=link.o2scl.o2scl_slack_messenger_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_slack_messenger_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_bool]
         return cls(link,f(p_channel_,p_username_,p_url_,p_mpi_time))
@@ -292,14 +293,14 @@ class quadratic_real_coeff_gsl:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_quadratic_real_coeff_gsl
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_quadratic_real_coeff_gsl
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -380,14 +381,14 @@ class quadratic_real_coeff_gsl2:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_quadratic_real_coeff_gsl2_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_quadratic_real_coeff_gsl2_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -468,14 +469,14 @@ class cubic_real_coeff_cern:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_cubic_real_coeff_cern_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_cubic_real_coeff_cern_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -560,14 +561,14 @@ class cubic_real_coeff_gsl:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_cubic_real_coeff_gsl
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_cubic_real_coeff_gsl
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -652,14 +653,14 @@ class quartic_real_coeff_cern:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_quartic_real_coeff_cern_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_quartic_real_coeff_cern_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -748,14 +749,14 @@ class fermi_dirac_integ_gsl:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_fermi_dirac_integ_gsl
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_fermi_dirac_integ_gsl
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -864,14 +865,14 @@ class bessel_K_exp_integ_gsl:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_bessel_K_exp_integ_gsl
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_bessel_K_exp_integ_gsl
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -956,14 +957,14 @@ class hist:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_hist
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_hist
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1268,14 +1269,14 @@ class hist_2d:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_hist_2d
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_hist_2d
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1624,14 +1625,14 @@ class contour_line:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_contour_line
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_contour_line
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1753,14 +1754,14 @@ class vector_contour_line:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std_vector_contour_line_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_vector_contour_line_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1861,14 +1862,14 @@ class contour:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_contour
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_contour
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2010,14 +2011,14 @@ class prob_dens_func:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_prob_dens_func
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_prob_dens_func
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2139,14 +2140,14 @@ class prob_dens_gaussian(prob_dens_func):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_prob_dens_gaussian
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_prob_dens_gaussian
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2211,14 +2212,14 @@ class prob_dens_hist(prob_dens_func):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_prob_dens_hist
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_prob_dens_hist
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2277,14 +2278,14 @@ class prob_dens_mdim:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_prob_dens_mdim_std_vector_double_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_prob_dens_mdim_std_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2374,14 +2375,14 @@ class prob_dens_mdim_biv_gaussian(prob_dens_mdim):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_prob_dens_mdim_biv_gaussian_std_vector_double_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_prob_dens_mdim_biv_gaussian_std_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2467,14 +2468,14 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_prob_dens_mdim_gaussian_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_prob_dens_mdim_gaussian_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2535,14 +2536,14 @@ class hypercube:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_prob_dens_mdim_amr_hypercube
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_prob_dens_mdim_amr_hypercube
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2711,14 +2712,14 @@ class std_vector_hypercube:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std_vector_prob_dens_mdim_amr_hypercube_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_vector_prob_dens_mdim_amr_hypercube_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2807,14 +2808,14 @@ class prob_dens_mdim_amr(prob_dens_mdim):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_prob_dens_mdim_amr_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_prob_dens_mdim_amr_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3015,7 +3016,7 @@ def vector_mean(link,n,v):
         | *v*: :class:`vector<double>` object
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_vector_mean_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_mean_std_vector_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
     ret=func(n,v._ptr)
@@ -3029,7 +3030,7 @@ def vector_stddev(link,n,v):
         | *v*: :class:`vector<double>` object
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_vector_stddev_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_stddev_std_vector_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
     ret=func(n,v._ptr)
@@ -3044,7 +3045,7 @@ def vector_lagk_autocorr(link,n,v,k):
         | *k*: ``size_t``
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_vector_lagk_autocorr_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_lagk_autocorr_std_vector_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t]
     ret=func(n,v._ptr,k)
@@ -3058,7 +3059,7 @@ def vector_autocorr_vector(link,n,v,ac):
         | *v*: :class:`vector<double>` object
         | *ac*: :class:`vector<double>` object
     """
-    func=link.o2scl.o2scl_vector_autocorr_vector_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_autocorr_vector_std_vector_double_std_vector_double__wrapper
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
     func(n,v._ptr,ac._ptr)
     return
@@ -3072,7 +3073,7 @@ def vector_autocorr_vector_fftw(link,v,ac,mean,stddev):
         | *mean*: ``double``
         | *stddev*: ``double``
     """
-    func=link.o2scl.o2scl_vector_autocorr_vector_fftw_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_autocorr_vector_fftw_std_vector_double_std_vector_double__wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
     func(v._ptr,ac._ptr,mean,stddev)
     return
@@ -3085,7 +3086,7 @@ def vector_autocorr_tau(link,ac,ftom):
         | *ftom*: :class:`vector<double>` object
         | Returns: ``ctypes.c_size_t`` object
     """
-    func=link.o2scl.o2scl_vector_autocorr_tau_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_autocorr_tau_std_vector_double_std_vector_double__wrapper
     func.restype=ctypes.c_size_t
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
     ret=func(ac._ptr,ftom._ptr)
@@ -3101,7 +3102,7 @@ def vector_acor(link,n,v,mean,sigma,tau):
         | *sigma*: ``double``
         | *tau*: ``double``
     """
-    func=link.o2scl.o2scl_vector_acor_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_acor_std_vector_double__wrapper
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
     func(n,v._ptr,mean,sigma,tau._ptr)
     return

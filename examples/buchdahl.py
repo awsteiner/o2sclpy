@@ -21,7 +21,8 @@ link.link_o2scl()
 
 # Get a copy (a pointer to) the O$_2$scl unit conversion object:
 
-cu=link.o2scl_settings.get_convert_units()
+o2scl_settings=o2sclpy.lib_settings_class(o2sclpy.doc_data.top_linker)
+cu=o2scl_settings.get_convert_units()
 
 # Create the Buchdahl EOS object:
 

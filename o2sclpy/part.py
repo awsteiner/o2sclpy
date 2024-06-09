@@ -24,6 +24,7 @@
 import ctypes
 from abc import abstractmethod
 from o2sclpy.utils import force_bytes
+import o2sclpy.doc_data
 
 class thermo:
     """
@@ -45,14 +46,14 @@ class thermo:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_thermo
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_thermo
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -159,14 +160,14 @@ class part:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_part
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_part
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -453,14 +454,14 @@ class fermion(part):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_fermion
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_fermion
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -545,14 +546,14 @@ class quark(fermion):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_quark
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_quark
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -639,14 +640,14 @@ class fermion_zerot:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_fermion_zerot
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_fermion_zerot
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -740,14 +741,14 @@ class fermion_thermo(fermion_zerot):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_fermion_thermo
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_fermion_thermo
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -863,14 +864,14 @@ class fermion_rel(fermion_thermo):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_fermion_rel
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_fermion_rel
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1194,14 +1195,14 @@ class fermion_nonrel(fermion_zerot):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_fermion_nonrel
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_fermion_nonrel
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1281,14 +1282,14 @@ class boson(part):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_boson
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_boson
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1357,14 +1358,14 @@ class boson_rel:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_boson_rel
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_boson_rel
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1466,14 +1467,14 @@ class classical_thermo:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_classical_thermo
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_classical_thermo
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1542,14 +1543,14 @@ class thermo_np_deriv_press:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_thermo_np_deriv_press
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_thermo_np_deriv_press
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1716,14 +1717,14 @@ class thermo_np_deriv_helm:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_thermo_np_deriv_helm
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_thermo_np_deriv_helm
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1890,14 +1891,14 @@ class part_deriv_press:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_part_deriv_press
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_part_deriv_press
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2013,14 +2014,14 @@ class part_deriv(part):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_part_deriv
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_part_deriv
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2063,14 +2064,14 @@ class fermion_deriv(fermion):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_fermion_deriv
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_fermion_deriv
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2117,14 +2118,14 @@ class deriv_thermo_base:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_deriv_thermo_base
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_deriv_thermo_base
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2249,14 +2250,14 @@ class classical_deriv_thermo:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_classical_deriv_thermo
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_classical_deriv_thermo
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2327,14 +2328,14 @@ class fermion_mag_zerot:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_fermion_mag_zerot
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_fermion_mag_zerot
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):

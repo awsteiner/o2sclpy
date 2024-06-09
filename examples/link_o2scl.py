@@ -29,7 +29,9 @@ link.link_o2scl()
 
 # To test that the link worked, obtain the O$_2$scl version from the DLL:
 
-print(link.o2scl_settings.o2scl_version())
+o2scl_settings=o2sclpy.lib_settings_class(o2sclpy.doc_data.top_linker)
+
+print(o2scl_settings.o2scl_version())
 
 def test_fun():
     assert link.o2scl_settings.o2scl_version()==b'0.930a1'

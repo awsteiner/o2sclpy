@@ -24,12 +24,11 @@ from o2sclpy.link_o2scl import linker
 
 ter=terminal_py()
 
-print('Instantiating linker.')
+print('Linking.')
 top_linker=linker()
 top_linker.link_o2scl()
-print('Done instantiating linker.')
-top_link=top_linker.o2scl
-print('Done setting link.')
+#top_link=top_linker.o2scl
+print('Done linking.')
 
 version='0.930a1'
 

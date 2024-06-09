@@ -56,10 +56,6 @@ class std_string:
 
         """
 
-        #print('hx')
-        #print(link,o2sclpy.doc_data.top_link)
-        #print('hy')
-        
         if pointer==0:
             f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_string
             f.restype=ctypes.c_void_p
@@ -200,14 +196,14 @@ class std_vector:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std_vector_double_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -367,14 +363,14 @@ class std_vector_int:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std_vector_int_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_vector_int_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -494,14 +490,14 @@ class std_vector_size_t:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std_vector_size_t_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_vector_size_t_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -643,14 +639,14 @@ class std_vector_string:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std_vector_std_string_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_vector_std_string_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -800,14 +796,14 @@ class ublas_vector:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_boost_numeric_ublas_vector_double_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_boost_numeric_ublas_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -927,14 +923,14 @@ class ublas_vector_int:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_boost_numeric_ublas_vector_int_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_boost_numeric_ublas_vector_int_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1054,14 +1050,14 @@ class ublas_matrix:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_boost_numeric_ublas_matrix_double_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_boost_numeric_ublas_matrix_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1184,14 +1180,14 @@ class ublas_matrix_int:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_boost_numeric_ublas_matrix_int_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_boost_numeric_ublas_matrix_int_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1314,14 +1310,14 @@ class std_vector_vector:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std_vector_std_vector_double_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_vector_std_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1438,14 +1434,14 @@ class vec_vec_string:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std_vector_std_vector_std_string_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_vector_std_vector_std_string_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1559,14 +1555,14 @@ class std_complex:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_std_complex_double_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_complex_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1641,7 +1637,7 @@ class std_complex:
 
         """
 
-        f=link.o2scl.o2scl_std_complex_double__init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_std_complex_double__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double]
         return cls(link,f(re,im))
@@ -1678,14 +1674,14 @@ class lib_settings_class:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_lib_settings_class
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_lib_settings_class
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -1908,7 +1904,6 @@ class lib_settings_class:
         ret2=convert_units(self._link,ret)
         return ret2
 
-
 class table:
     """
     Python interface for O2scl class ``table``,
@@ -1931,14 +1926,14 @@ class table:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_table_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_table_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2785,14 +2780,14 @@ class table_units(table):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_table_units_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_table_units_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -2920,14 +2915,14 @@ class uniform_grid:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_uniform_grid_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3065,14 +3060,14 @@ class uniform_grid_end(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_end_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_uniform_grid_end_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3107,7 +3102,7 @@ class uniform_grid_end(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_end__init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_end__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
         return cls(link,f(start,end,n_bins))
@@ -3131,14 +3126,14 @@ class uniform_grid_width(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_width_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_uniform_grid_width_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3173,7 +3168,7 @@ class uniform_grid_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_width__init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
         return cls(link,f(start,width,n_bins))
@@ -3197,14 +3192,14 @@ class uniform_grid_end_width(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_end_width_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_uniform_grid_end_width_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3239,7 +3234,7 @@ class uniform_grid_end_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_end_width__init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_end_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double]
         return cls(link,f(start,end,width))
@@ -3263,14 +3258,14 @@ class uniform_grid_log_end(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_log_end_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_uniform_grid_log_end_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3305,7 +3300,7 @@ class uniform_grid_log_end(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_log_end__init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_log_end__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
         return cls(link,f(start,end,n_bins))
@@ -3329,14 +3324,14 @@ class uniform_grid_log_width(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_log_width_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_uniform_grid_log_width_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3371,7 +3366,7 @@ class uniform_grid_log_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_log_width__init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_log_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
         return cls(link,f(start,width,n_bins))
@@ -3395,14 +3390,14 @@ class uniform_grid_log_end_width(uniform_grid):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_uniform_grid_log_end_width_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_uniform_grid_log_end_width_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -3437,7 +3432,7 @@ class uniform_grid_log_end_width(uniform_grid):
 
         """
 
-        f=link.o2scl.o2scl_uniform_grid_log_end_width__init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_log_end_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double]
         return cls(link,f(start,end,width))
@@ -3466,14 +3461,14 @@ class table3d:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_table3d
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_table3d
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4102,14 +4097,14 @@ class index_spec:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_index_spec
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_index_spec
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4300,14 +4295,14 @@ class ix_index:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_ix_index
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_ix_index
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4342,7 +4337,7 @@ class ix_index:
 
         """
 
-        f=link.o2scl.o2scl_ix_index_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_index_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t]
         return cls(link,f(ix))
@@ -4372,14 +4367,14 @@ class ix_fixed:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_ix_fixed
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_ix_fixed
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4414,7 +4409,7 @@ class ix_fixed:
 
         """
 
-        f=link.o2scl.o2scl_ix_fixed_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_fixed_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_size_t]
         return cls(link,f(ix,ix2))
@@ -4444,14 +4439,14 @@ class ix_sum:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_ix_sum
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_ix_sum
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4486,7 +4481,7 @@ class ix_sum:
 
         """
 
-        f=link.o2scl.o2scl_ix_sum_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_sum_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t]
         return cls(link,f(ix))
@@ -4516,14 +4511,14 @@ class ix_trace:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_ix_trace
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_ix_trace
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4558,7 +4553,7 @@ class ix_trace:
 
         """
 
-        f=link.o2scl.o2scl_ix_trace_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_trace_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_size_t]
         return cls(link,f(ix,ix2))
@@ -4588,14 +4583,14 @@ class ix_reverse:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_ix_reverse
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_ix_reverse
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4630,7 +4625,7 @@ class ix_reverse:
 
         """
 
-        f=link.o2scl.o2scl_ix_reverse_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_reverse_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t]
         return cls(link,f(ix))
@@ -4660,14 +4655,14 @@ class ix_range:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_ix_range
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_ix_range
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4702,7 +4697,7 @@ class ix_range:
 
         """
 
-        f=link.o2scl.o2scl_ix_range_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_range_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_size_t,ctypes.c_size_t]
         return cls(link,f(ix,start,end))
@@ -4732,14 +4727,14 @@ class ix_interp:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_ix_interp
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_ix_interp
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4774,7 +4769,7 @@ class ix_interp:
 
         """
 
-        f=link.o2scl.o2scl_ix_interp_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_interp_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_double]
         return cls(link,f(ix,v))
@@ -4804,14 +4799,14 @@ class ix_grid:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_ix_grid
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_ix_grid
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4846,7 +4841,7 @@ class ix_grid:
 
         """
 
-        f=link.o2scl.o2scl_ix_grid_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_grid_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_size_t,ctypes.c_bool]
         return cls(link,f(ix,start,end,n_bins,log))
@@ -4876,14 +4871,14 @@ class ix_gridw:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_ix_gridw
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_ix_gridw
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -4918,7 +4913,7 @@ class ix_gridw:
 
         """
 
-        f=link.o2scl.o2scl_ix_gridw_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_gridw_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
         return cls(link,f(ix,start,end,width,log))
@@ -4946,14 +4941,14 @@ class tensor:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_tensor_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_tensor_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -5296,7 +5291,7 @@ class tensor:
 
         """
 
-        f=link.o2scl.o2scl_tensor__create_size
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_tensor__create_size
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
         return cls(link,f(rank,sizes._ptr))
@@ -5365,14 +5360,14 @@ class tensor_int:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_tensor_int_std_vector_int_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_tensor_int_std_vector_int_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -5693,7 +5688,7 @@ class tensor_int:
 
         """
 
-        f=link.o2scl.o2scl_tensor_int_std_vector_int__create_size
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_tensor_int_std_vector_int__create_size
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
         return cls(link,f(rank,sizes._ptr))
@@ -5762,14 +5757,14 @@ class tensor_size_t:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_tensor_size_t_std_vector_size_t_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_tensor_size_t_std_vector_size_t_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -6067,7 +6062,7 @@ class tensor_size_t:
 
         """
 
-        f=link.o2scl.o2scl_tensor_size_t_std_vector_size_t__create_size
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_tensor_size_t_std_vector_size_t__create_size
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
         return cls(link,f(rank,sizes._ptr))
@@ -6132,14 +6127,14 @@ class tensor_grid(tensor):
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_tensor_grid_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_tensor_grid_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -6523,14 +6518,14 @@ class find_constants_const_entry:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_find_constants_const_entry
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_find_constants_const_entry
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -6820,14 +6815,14 @@ class find_constants:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_find_constants_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_find_constants_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -6908,14 +6903,14 @@ class convert_units_der_unit:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_convert_units_der_unit
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_convert_units_der_unit
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -7184,14 +7179,14 @@ class convert_units:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_convert_units_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_convert_units_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -7468,14 +7463,14 @@ class columnify:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_columnify
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_columnify
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -7585,14 +7580,14 @@ class format_float:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_format_float
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_format_float
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -7733,14 +7728,14 @@ class interp_vec:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_interp_vec_std_vector_double_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_interp_vec_std_vector_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -7860,14 +7855,14 @@ class interp_krige_optim_rbf_noise:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -8070,14 +8065,14 @@ class terminal:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_terminal
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_terminal
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -8454,14 +8449,14 @@ class gen_test_number:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_gen_test_number_double_
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_gen_test_number_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -8540,14 +8535,14 @@ class funct_string:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_funct_string
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_funct_string
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -8607,7 +8602,7 @@ class funct_string:
 
         """
 
-        f=link.o2scl.o2scl_funct_string_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_funct_string_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
         return cls(link,f(expr_,var_))
@@ -8636,14 +8631,14 @@ class comm_option_s:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_comm_option_s
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_comm_option_s
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -8853,14 +8848,14 @@ class cmd_line_arg:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_cmd_line_arg
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_cmd_line_arg
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -8990,14 +8985,14 @@ class cli:
         """
 
         if pointer==0:
-            f=link.o2scl.o2scl_create_cli
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_cli
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):
@@ -9240,7 +9235,7 @@ class shared_ptr_table_units(table_units):
         Init function for shared_ptr_table_units .
         """
 
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         if shared_ptr==0:
             f2=self._link.o2scl.o2scl_create_shared_ptr_table_units_
             f2.restype=ctypes.c_void_p
@@ -9275,7 +9270,7 @@ def rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
         | Returns: ``tensor`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_rearrange_and_copy_tensor_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_rearrange_and_copy_tensor_double__wrapper
     func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
@@ -9294,7 +9289,7 @@ def rearrange_and_copy_int(link,t,spec,verbose=0,err_on_fail=True):
         | Returns: ``tensor_int`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_rearrange_and_copy_tensor_int_int__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_rearrange_and_copy_tensor_int_int__wrapper
     func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
@@ -9313,7 +9308,7 @@ def rearrange_and_copy_size_t(link,t,spec,verbose=0,err_on_fail=True):
         | Returns: ``tensor_size_t`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_rearrange_and_copy_tensor_size_t_size_t__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_rearrange_and_copy_tensor_size_t_size_t__wrapper
     func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
@@ -9332,7 +9327,7 @@ def grid_rearrange_and_copy(link,t,spec,verbose=0,err_on_fail=True):
         | Returns: ``tensor_grid`` object
     """
     spec_=ctypes.c_char_p(force_bytes(spec))
-    func=link.o2scl.o2scl_grid_rearrange_and_copy_tensor_grid_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_grid_rearrange_and_copy_tensor_grid_double__wrapper
     func.restype=ctypes.c_void_p
     func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.c_bool]
     ret=func(t._ptr,spec_,verbose,err_on_fail)
@@ -9347,7 +9342,7 @@ def fermi_function(link,x):
         | *x*: ``double``
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_fermi_function_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_fermi_function_wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_double]
     ret=func(x)
@@ -9360,7 +9355,7 @@ def bose_function(link,x):
         | *x*: ``double``
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_bose_function_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_bose_function_wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_double]
     ret=func(x)
@@ -9378,7 +9373,7 @@ def quadratic_extremum_x(link,x1,x2,x3,y1,y2,y3):
         | *y3*: ``double``
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_quadratic_extremum_x_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_quadratic_extremum_x_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
     ret=func(x1,x2,x3,y1,y2,y3)
@@ -9396,7 +9391,7 @@ def quadratic_extremum_y(link,x1,x2,x3,y1,y2,y3):
         | *y3*: ``double``
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_quadratic_extremum_y_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_quadratic_extremum_y_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
     ret=func(x1,x2,x3,y1,y2,y3)
@@ -9411,7 +9406,7 @@ def screenify(link,nin,in_cols,out_cols,max_size=80):
         | *out_cols*: :class:`vector<std::string>` object
         | *max_size*: ``size_t``
     """
-    func=link.o2scl.o2scl_screenify_vector_std_string__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_screenify_vector_std_string__wrapper
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
     func(nin,in_cols._ptr,out_cols._ptr,max_size)
     return
@@ -9424,7 +9419,7 @@ def file_exists(link,fname):
         | Returns: ``ctypes.c_bool`` object
     """
     fname_=ctypes.c_char_p(force_bytes(fname))
-    func=link.o2scl.o2scl_file_exists_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_file_exists_wrapper
     func.restype=ctypes.c_bool
     func.argtypes=[ctypes.c_char_p]
     ret=func(fname_)
@@ -9441,7 +9436,7 @@ def RGBtoHSV(link,r,g,b,h,s,v):
         | *s*: ``double``
         | *v*: ``double``
     """
-    func=link.o2scl.o2scl_RGBtoHSV_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_RGBtoHSV_wrapper
     func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
     func(r,g,b,h._ptr,s._ptr,v._ptr)
     return
@@ -9457,7 +9452,7 @@ def HSVtoRGB(link,h,s,v,r,g,b):
         | *g*: ``double``
         | *b*: ``double``
     """
-    func=link.o2scl.o2scl_HSVtoRGB_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_HSVtoRGB_wrapper
     func.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
     func(h,s,v,r._ptr,g._ptr,b._ptr)
     return
@@ -9468,7 +9463,7 @@ def wordexp_single_file(link,fname):
         | *link* :class:`linker` object
         | *fname*: :class:`std::string` object
     """
-    func=link.o2scl.o2scl_wordexp_single_file_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_wordexp_single_file_wrapper
     func.argtypes=[ctypes.c_void_p]
     func(fname._ptr)
     fname._owner=True
@@ -9482,7 +9477,7 @@ def wordexp_wrapper(link,word,matches):
         | *matches*: :class:`std::vector<std::string>` object
     """
     word_=ctypes.c_char_p(force_bytes(word))
-    func=link.o2scl.o2scl_wordexp_wrapper_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_wordexp_wrapper_wrapper
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p]
     func(word_,matches._ptr)
     return
@@ -9496,7 +9491,7 @@ def function_to_double(link,s,verbose=0):
         | Returns: ``ctypes.c_double`` object
     """
     s_=ctypes.c_char_p(force_bytes(s))
-    func=link.o2scl.o2scl_function_to_double_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_function_to_double_wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_char_p,ctypes.c_int]
     ret=func(s_,verbose)
@@ -9512,7 +9507,7 @@ def function_to_double_nothrow(link,s,result,verbose=0):
         | Returns: ``ctypes.c_int`` object
     """
     s_=ctypes.c_char_p(force_bytes(s))
-    func=link.o2scl.o2scl_function_to_double_nothrow_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_function_to_double_nothrow_wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_int]
     ret=func(s_,result._ptr,verbose)
@@ -9528,7 +9523,7 @@ def find_constant(link,name,unit):
     """
     name_=ctypes.c_char_p(force_bytes(name))
     unit_=ctypes.c_char_p(force_bytes(unit))
-    func=link.o2scl.o2scl_find_constant_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_find_constant_wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
     ret=func(name_,unit_)
@@ -9542,7 +9537,7 @@ def string_to_uint_list(link,x,list):
         | *list*: :class:`vector<size_t>` object
         | Returns: ``ctypes.c_int`` object
     """
-    func=link.o2scl.o2scl_string_to_uint_list_vector_size_t__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_string_to_uint_list_vector_size_t__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
     ret=func(x._ptr,list._ptr)
@@ -9560,7 +9555,7 @@ def rewrap_keep_endlines(link,str,sv,ncol=79,verbose=0,ignore_vt100=True):
         | *ignore_vt100*: ``bool``
     """
     str_=ctypes.c_char_p(force_bytes(str))
-    func=link.o2scl.o2scl_rewrap_keep_endlines_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_rewrap_keep_endlines_wrapper
     func.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_int,ctypes.c_bool]
     func(str_,sv._ptr,ncol,verbose,ignore_vt100)
     return
@@ -9575,7 +9570,7 @@ def vector_level_count(link,level,n,x,y):
         | *y*: :class:`std::vector<double>` object
         | Returns: ``ctypes.c_size_t`` object
     """
-    func=link.o2scl.o2scl_vector_level_count_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_level_count_std_vector_double_std_vector_double__wrapper
     func.restype=ctypes.c_size_t
     func.argtypes=[ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
     ret=func(level,n,x._ptr,y._ptr)
@@ -9590,7 +9585,7 @@ def vector_deriv_interp(link,n,v,dv,interp_type=2):
         | *dv*: :class:`std::vector<double>` object
         | *interp_type*: ``size_t``
     """
-    func=link.o2scl.o2scl_vector_deriv_interp_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_deriv_interp_std_vector_double_std_vector_double__wrapper
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
     func(n,v._ptr,dv._ptr,interp_type)
     return
@@ -9604,7 +9599,7 @@ def vector_deriv2_interp(link,n,v,dv,interp_type=2):
         | *dv*: :class:`std::vector<double>` object
         | *interp_type*: ``size_t``
     """
-    func=link.o2scl.o2scl_vector_deriv2_interp_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_deriv2_interp_std_vector_double_std_vector_double__wrapper
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
     func(n,v._ptr,dv._ptr,interp_type)
     return
@@ -9619,7 +9614,7 @@ def vector_deriv_xy_interp(link,n,vx,vy,dv,interp_type=2):
         | *dv*: :class:`std::vector<double>` object
         | *interp_type*: ``size_t``
     """
-    func=link.o2scl.o2scl_vector_deriv_xy_interp_std_vector_double_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_deriv_xy_interp_std_vector_double_std_vector_double_std_vector_double__wrapper
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
     func(n,vx._ptr,vy._ptr,dv._ptr,interp_type)
     return
@@ -9634,7 +9629,7 @@ def vector_deriv2_xy_interp(link,n,vx,vy,dv,interp_type=2):
         | *dv*: :class:`std::vector<double>` object
         | *interp_type*: ``size_t``
     """
-    func=link.o2scl.o2scl_vector_deriv2_xy_interp_std_vector_double_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_deriv2_xy_interp_std_vector_double_std_vector_double_std_vector_double__wrapper
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
     func(n,vx._ptr,vy._ptr,dv._ptr,interp_type)
     return
@@ -9648,7 +9643,7 @@ def vector_integ_interp(link,n,vx,interp_type=2):
         | *interp_type*: ``size_t``
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_vector_integ_interp_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_integ_interp_std_vector_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t]
     ret=func(n,vx._ptr,interp_type)
@@ -9664,7 +9659,7 @@ def vector_integ_xy_interp(link,n,vx,vy,interp_type=2):
         | *interp_type*: ``size_t``
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_vector_integ_xy_interp_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_integ_xy_interp_std_vector_double_std_vector_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
     ret=func(n,vx._ptr,vy._ptr,interp_type)
@@ -9680,7 +9675,7 @@ def vector_integ_ul_interp(link,n,x2,v,interp_type=2):
         | *interp_type*: ``size_t``
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_vector_integ_ul_interp_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_integ_ul_interp_std_vector_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_void_p,ctypes.c_size_t]
     ret=func(n,x2,v._ptr,interp_type)
@@ -9697,7 +9692,7 @@ def vector_integ_ul_xy_interp(link,n,x2,vx,vy,interp_type=2):
         | *interp_type*: ``size_t``
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_vector_integ_ul_xy_interp_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_integ_ul_xy_interp_std_vector_double_std_vector_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
     ret=func(n,x2,vx._ptr,vy._ptr,interp_type)
@@ -9713,7 +9708,7 @@ def vector_find_level(link,level,n,x,y,locs):
         | *y*: :class:`std::vector<double>` object
         | *locs*: :class:`std::vector<double>` object
     """
-    func=link.o2scl.o2scl_vector_find_level_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_find_level_std_vector_double_std_vector_double__wrapper
     func.argtypes=[ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
     func(level,n,x._ptr,y._ptr,locs._ptr)
     return
@@ -9731,7 +9726,7 @@ def vector_invert_enclosed_sum(link,sum,n,x,y,lev,boundaries=0,verbose=0,err_on_
         | *verbose*: ``int``
         | *err_on_fail*: ``bool``
     """
-    func=link.o2scl.o2scl_vector_invert_enclosed_sum_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_invert_enclosed_sum_std_vector_double_std_vector_double__wrapper
     func.argtypes=[ctypes.c_double,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_bool]
     func(sum,n,x._ptr,y._ptr,lev._ptr,boundaries,verbose,err_on_fail)
     return
@@ -9750,7 +9745,7 @@ def vector_region_int(link,n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=Tr
         | *err_on_fail*: ``bool``
         | Returns: ``ctypes.c_int`` object
     """
-    func=link.o2scl.o2scl_vector_region_int_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_region_int_std_vector_double_std_vector_double__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_bool]
     ret=func(n,x._ptr,y._ptr,intl,locs._ptr,boundaries,verbose,err_on_fail)
@@ -9770,7 +9765,7 @@ def vector_region_fracint(link,n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fai
         | *err_on_fail*: ``bool``
         | Returns: ``ctypes.c_int`` object
     """
-    func=link.o2scl.o2scl_vector_region_fracint_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_region_fracint_std_vector_double_std_vector_double__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_bool]
     ret=func(n,x._ptr,y._ptr,intl,locs._ptr,boundaries,verbose,err_on_fail)
@@ -9791,7 +9786,7 @@ def vector_bound_fracint(link,n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_
         | *err_on_fail*: ``bool``
         | Returns: ``ctypes.c_int`` object
     """
-    func=link.o2scl.o2scl_vector_bound_fracint_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_bound_fracint_std_vector_double_std_vector_double__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_bool]
     ret=func(n,x._ptr,y._ptr,frac,low._ptr,high._ptr,boundaries,verbose,err_on_fail)
@@ -9812,7 +9807,7 @@ def vector_bound_int(link,n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail
         | *err_on_fail*: ``bool``
         | Returns: ``ctypes.c_int`` object
     """
-    func=link.o2scl.o2scl_vector_bound_int_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_bound_int_std_vector_double_std_vector_double__wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_bool]
     ret=func(n,x._ptr,y._ptr,frac,low._ptr,high._ptr,boundaries,verbose,err_on_fail)
@@ -9829,7 +9824,7 @@ def rebin_xy(link,x,y,x_out,y_out,n_pts,interp_type):
         | *n_pts*: ``size_t``
         | *interp_type*: ``size_t``
     """
-    func=link.o2scl.o2scl_rebin_xy_std_vector_double_std_vector_double_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_rebin_xy_std_vector_double_std_vector_double_std_vector_double_std_vector_double__wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
     func(x._ptr,y._ptr,x_out._ptr,y_out._ptr,n_pts,interp_type)
     return
@@ -9842,7 +9837,7 @@ def linear_or_log_chi2(link,x,y):
         | *y*: :class:`std::vector<double>` object
         | Returns: ``ctypes.c_double`` object
     """
-    func=link.o2scl.o2scl_linear_or_log_chi2_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_linear_or_log_chi2_std_vector_double_std_vector_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
     ret=func(x._ptr,y._ptr)
@@ -9857,7 +9852,7 @@ def linear_or_log_pair(link,x,y,log_x,log_y):
         | *log_x*: ``bool``
         | *log_y*: ``bool``
     """
-    func=link.o2scl.o2scl_linear_or_log_std_vector_double_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_linear_or_log_std_vector_double_std_vector_double__wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
     func(x._ptr,y._ptr,log_x._ptr,log_y._ptr)
     return
@@ -9872,7 +9867,7 @@ def vector_refine(link,n,index,data,factor,interp_type=2):
         | *factor*: ``size_t``
         | *interp_type*: ``size_t``
     """
-    func=link.o2scl.o2scl_vector_refine_std_vector_double_std_vector_double_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_refine_std_vector_double_std_vector_double_double__wrapper
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
     func(n,index._ptr,data._ptr,factor,interp_type)
     return
@@ -9884,7 +9879,7 @@ def linear_or_log(link,x,log_x):
         | *x*: :class:`std::vector<double>` object
         | *log_x*: ``bool``
     """
-    func=link.o2scl.o2scl_linear_or_log_std_vector_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_linear_or_log_std_vector_double__wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
     func(x._ptr,log_x._ptr)
     return
@@ -9897,7 +9892,7 @@ def get_screen_size_ioctl(link,row,col):
         | *col*: ``int``
         | Returns: ``ctypes.c_int`` object
     """
-    func=link.o2scl.o2scl_get_screen_size_ioctl_wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_get_screen_size_ioctl_wrapper
     func.restype=ctypes.c_int
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
     ret=func(row._ptr,col._ptr)
