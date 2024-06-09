@@ -22,9 +22,9 @@
 import o2sclpy
 import numpy
 
-def subtest_std_string(link):
+def subtest_std_string():
     # Test the std_string class
-    s=o2sclpy.std_string(link)
+    s=o2sclpy.std_string()
     s.init_bytes(b'abcXe')
     s[0]=b'a'
     s[1]=b'b'
@@ -44,9 +44,9 @@ def subtest_std_string(link):
     assert s.to_bytes()==b'bb','shallow copy and to_bytes()'
     return
 
-def subtest_std_vector(link):
+def subtest_std_vector():
     # Test the std_vector class
-    v=o2sclpy.std_vector(link)
+    v=o2sclpy.std_vector()
     v.resize(5)
     v[0]=3.0
     v[1]=1.0
@@ -64,9 +64,9 @@ def subtest_std_vector(link):
     
     return
 
-def subtest_std_vector_int(link):
+def subtest_std_vector_int():
     # Test the std_vector_int class
-    v=o2sclpy.std_vector_int(link)
+    v=o2sclpy.std_vector_int()
     v.resize(5)
     v[0]=3
     v[1]=1
@@ -84,9 +84,9 @@ def subtest_std_vector_int(link):
 
     return
 
-def subtest_std_vector_size_t(link):
+def subtest_std_vector_size_t():
     # Test the std_vector_size_t class
-    v=o2sclpy.std_vector_size_t(link)
+    v=o2sclpy.std_vector_size_t()
     v.resize(5)
     v[0]=3
     v[1]=1
@@ -104,9 +104,9 @@ def subtest_std_vector_size_t(link):
 
     return
 
-def subtest_std_vector_string(link):
+def subtest_std_vector_string():
     # Test the std_vector_string class
-    v=o2sclpy.std_vector_string(link)
+    v=o2sclpy.std_vector_string()
     v.resize(5)
     v[0]=b'abc'
     v[1]=b'def'
@@ -114,7 +114,7 @@ def subtest_std_vector_string(link):
     v[3]=b'jkl'
     v[4]=b'mno'
     # test set_list()
-    v2=o2sclpy.std_vector_string(link)
+    v2=o2sclpy.std_vector_string()
     v2.set_list(['abc','def','ghi','jkl','mno'])
     for i in range(0,len(v)):
         assert v[i]==v2[i],'set item'
@@ -127,9 +127,9 @@ def subtest_std_vector_string(link):
 
     return
 
-def subtest_ublas_vector(link):
+def subtest_ublas_vector():
     # Test the ublas_vector class
-    v=o2sclpy.ublas_vector(link)
+    v=o2sclpy.ublas_vector()
     v.resize(5)
     v[0]=3.0
     v[1]=1.0
@@ -147,9 +147,9 @@ def subtest_ublas_vector(link):
     
     return
 
-def subtest_ublas_vector_int(link):
+def subtest_ublas_vector_int():
     # Test the ublas_vector class
-    v=o2sclpy.ublas_vector_int(link)
+    v=o2sclpy.ublas_vector_int()
     v.resize(5)
     v[0]=3
     v[1]=1
@@ -167,9 +167,9 @@ def subtest_ublas_vector_int(link):
     
     return
 
-def subtest_ublas_matrix(link):
+def subtest_ublas_matrix():
     # Test the ublas_matrix class
-    v=o2sclpy.ublas_matrix(link)
+    v=o2sclpy.ublas_matrix()
     v.resize(2,3)
     v[0,0]=3.0
     v[0,1]=1.0
@@ -190,9 +190,9 @@ def subtest_ublas_matrix(link):
     
     return
 
-def subtest_ublas_matrix_int(link):
+def subtest_ublas_matrix_int():
     # Test the ublas_matrix class
-    v=o2sclpy.ublas_matrix(link)
+    v=o2sclpy.ublas_matrix()
     v.resize(2,3)
     v[0,0]=3
     v[0,1]=1
@@ -213,9 +213,9 @@ def subtest_ublas_matrix_int(link):
     
     return
 
-def subtest_std_vector_vector(link):
+def subtest_std_vector_vector():
     # Test the std_complex class
-    vv=o2sclpy.std_vector_vector(link)
+    vv=o2sclpy.std_vector_vector()
     vv.resize(3)
     assert vv.size()==3,'vv size'
     vv[0]=[1,2,3]
@@ -224,12 +224,12 @@ def subtest_std_vector_vector(link):
     assert numpy.allclose(vv[2][3],7,1.0e-14),'vv'
     return
     
-def subtest_vec_vec_string(link):
+def subtest_vec_vec_string():
     # Test the std_complex class
-    vv=o2sclpy.vec_vec_string(link)
+    vv=o2sclpy.vec_vec_string()
     vv.resize(3)
     assert vv.size()==3,'vv size'
-    v=o2sclpy.std_vector_string(link)
+    v=o2sclpy.std_vector_string()
     v.set_list(['this','is','a'])
     vv[0]=v
     v.set_list(['test','of'])
@@ -239,9 +239,9 @@ def subtest_vec_vec_string(link):
     assert vv[2][3]==b'system.','vvs'
     return
     
-def subtest_std_complex(link):
+def subtest_std_complex():
     # Test the std_complex class
-    c=o2sclpy.std_complex(link)
+    c=o2sclpy.std_complex()
     c.real_set(2)
     c.imag_set(3)
     assert numpy.allclose(c.real(),2,rtol=1.0e-12),'c real'
@@ -253,21 +253,18 @@ def subtest_std_complex(link):
     
 
 def test_all():
-    link=o2sclpy.linker()
-    link.link_o2scl()
-
-    subtest_std_string(link)
-    subtest_std_vector(link)
-    subtest_std_vector_int(link)
-    subtest_std_vector_size_t(link)
-    subtest_std_vector_string(link)
-    subtest_ublas_vector(link)
-    subtest_ublas_vector_int(link)
-    subtest_ublas_matrix(link)
-    subtest_ublas_matrix_int(link)
-    subtest_std_vector_vector(link)
-    subtest_vec_vec_string(link)
-    subtest_std_complex(link)
+    subtest_std_string()
+    subtest_std_vector()
+    subtest_std_vector_int()
+    subtest_std_vector_size_t()
+    subtest_std_vector_string()
+    subtest_ublas_vector()
+    subtest_ublas_vector_int()
+    subtest_ublas_matrix()
+    subtest_ublas_matrix_int()
+    subtest_std_vector_vector()
+    subtest_vec_vec_string()
+    subtest_std_complex()
 
     return
     

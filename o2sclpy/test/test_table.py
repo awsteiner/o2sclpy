@@ -23,8 +23,8 @@ import o2sclpy
 import copy
 import numpy
 
-def def_table(link):
-    table=o2sclpy.table(link)
+def def_table():
+    table=o2sclpy.table()
     table.line_of_names('col1 col2 col3')
     table.set_nlines(5)
     table.set('col1',0,3)
@@ -36,9 +36,9 @@ def def_table(link):
     table.function_column('sin(col2)','col3')
     return table
 
-def subtest_basic(link):
+def subtest_basic():
 
-    table=def_table(link)
+    table=def_table()
     assert table.get_nlines()==5,'get_nlines()'
     assert table.get_ncolumns()==3,'get_ncolumns()'
     assert table.get('col1',2)==4,'get()'
@@ -78,9 +78,9 @@ def subtest_basic(link):
     table.summary()
     return
 
-def subtest_copying(link):
+def subtest_copying():
     
-    tab1=def_table(link)
+    tab1=def_table()
     tab2=copy.copy(tab1)
     assert tab2.get('col1',2)==4,'Check the shallow copy'
     tab2.set('col1',2,3)
@@ -90,23 +90,23 @@ def subtest_copying(link):
     assert tab1.get('col1',2)==3,'Show deep copy produces unique table'
     return
 
-def subtest_hdf5(link,tmp_path):
+def subtest_hdf5(tmp_path):
     
     p=tmp_path/"table.o2"
     filename=bytes(str(p),'utf-8')
     
-    tab1=def_table(link)
+    tab1=def_table()
 
     # Write tab1 to a file
-    hf=o2sclpy.hdf_file(link)
+    hf=o2sclpy.hdf_file()
     hf.open_or_create(filename)
-    o2sclpy.hdf_output_table(link,hf,tab1,b'table')
+    o2sclpy.hdf_output_table(hf,tab1,b'table')
     hf.close()
 
     # Open the file and read into tab2
     hf.open(filename,False,True)
-    tab2=o2sclpy.table(link)
-    o2sclpy.hdf_input_table(link,hf,tab2)
+    tab2=o2sclpy.table()
+    o2sclpy.hdf_input_table(hf,tab2)
     hf.close()
     assert tab2.get_nlines()==tab1.get_nlines(),"nlines after hdf_input()"
     return
@@ -115,12 +115,9 @@ def test_all(tmp_path):
 
     print('Running test_table.py:test_all().')
     
-    link=o2sclpy.linker()
-    link.link_o2scl()
-
-    subtest_basic(link)
-    subtest_copying(link)
-    subtest_hdf5(link,tmp_path)
+    subtest_basic()
+    subtest_copying()
+    subtest_hdf5(tmp_path)
     
     print('Done in test_table.py:test_all().')
     

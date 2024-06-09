@@ -23,7 +23,7 @@ import o2sclpy
 import random
 import numpy
 
-def subtest_acor(link):
+def subtest_acor():
 
     # This dataset has an approximate correlation length
     # of 100
@@ -32,44 +32,41 @@ def subtest_acor(link):
         for j in range(0,100):
             data.append(float(i)/20.0+random.random())
 
-    vec=o2sclpy.std_vector(link)
+    vec=o2sclpy.std_vector()
     vec.from_list(data)
 
-    m=o2sclpy.vector_mean(link,len(vec),vec)
+    m=o2sclpy.vector_mean(len(vec),vec)
     print('mean:',m)
     assert numpy.allclose(m,0.72,rtol=4.0e-2)
-    s=o2sclpy.vector_stddev(link,len(vec),vec)
+    s=o2sclpy.vector_stddev(len(vec),vec)
     print('stddev:',s)
     assert numpy.allclose(s,0.33,rtol=4.0e-2)
 
-    assert numpy.allclose(o2sclpy.vector_lagk_autocorr(link,len(vec),
+    assert numpy.allclose(o2sclpy.vector_lagk_autocorr(len(vec),
                                                        vec,100),0.1,
                           rtol=2.0)
 
-    ac=o2sclpy.std_vector(link)
-    o2sclpy.vector_autocorr_vector(link,len(vec),vec,ac)
-    ftom=o2sclpy.std_vector(link)
-    assert numpy.allclose(o2sclpy.vector_autocorr_tau(link,ac,ftom),
+    ac=o2sclpy.std_vector()
+    o2sclpy.vector_autocorr_vector(len(vec),vec,ac)
+    ftom=o2sclpy.std_vector()
+    assert numpy.allclose(o2sclpy.vector_autocorr_tau(ac,ftom),
                           100,atol=50)
 
-    ac2=o2sclpy.std_vector(link)
-    o2sclpy.vector_autocorr_vector_fftw(link,vec,ac2,m,s)
-    ftom2=o2sclpy.std_vector(link)
-    assert numpy.allclose(o2sclpy.vector_autocorr_tau(link,ac2,ftom2),
+    ac2=o2sclpy.std_vector()
+    o2sclpy.vector_autocorr_vector_fftw(vec,ac2,m,s)
+    ftom2=o2sclpy.std_vector()
+    assert numpy.allclose(o2sclpy.vector_autocorr_tau(ac2,ftom2),
                           100,atol=50)
 
     # This doesn't work yet
     #tau=0.0
-    #o2sclpy.vector_acor(link,len(vec),vec,m,s,tau)
+    #o2sclpy.vector_acor(len(vec),vec,m,s,tau)
     #print(tau)
     
     return
 
 def test_all():
-    link=o2sclpy.linker()
-    link.link_o2scl()
-
-    subtest_acor(link)
+    subtest_acor()
     return
     
 if __name__ == '__main__':

@@ -32,9 +32,6 @@ def test_all(tmp_path):
 
     print('Running test_den_plot.py:test_all().')
     
-    link=o2sclpy.linker()
-    link.link_o2scl()
-
     for k in range(0,2):
 
         if k>0:
@@ -44,7 +41,7 @@ def test_all(tmp_path):
             
             x=[i*0.3+0.3 for i in range(0,5)]
             y=[i*0.3+0.3 for i in range(0,5)]
-            m=o2sclpy.ublas_matrix(link)
+            m=o2sclpy.ublas_matrix()
             m.resize(5,5)
             for i in range(0,5):
                 for j in range(0,5):
@@ -58,9 +55,9 @@ def test_all(tmp_path):
             
         elif k==1:
 
-            t=o2sclpy.table3d(link)
-            x=o2sclpy.std_vector(link)
-            y=o2sclpy.std_vector(link)
+            t=o2sclpy.table3d()
+            x=o2sclpy.std_vector()
+            y=o2sclpy.std_vector()
             x.from_list([i*0.3+0.3 for i in range(0,5)])
             y.from_list([i*0.3+0.3 for i in range(0,5)])
             t.set_xy('x',len(x),x,'y',len(y),y)
@@ -73,7 +70,7 @@ def test_all(tmp_path):
                     
         elif k==2:
 
-            h=o2sclpy.hist_2d(link)
+            h=o2sclpy.hist_2d()
             x=[i*0.3+0.15 for i in range(0,6)]
             y=[i*0.3+0.15 for i in range(0,6)]
             h.set_xy(x,y)

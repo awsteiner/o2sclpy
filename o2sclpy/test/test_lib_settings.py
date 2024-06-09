@@ -23,10 +23,7 @@ import o2sclpy
 import numpy
 
 def test_all():
-    link=o2sclpy.linker()
-    link.link_o2scl()
-
-    ls=link.o2scl_settings
+    ls=o2sclpy.lib_settings_class()
 
     obj=ls.date_compiled()
     s='check type of string properties'
