@@ -14,11 +14,6 @@ if 'pytest' in sys.modules:
     plots=False
 # -
 
-# Link the O$_2$scl library:
-
-link=o2sclpy.linker()
-link.link_o2scl()
-
 # This is the APR EOS as computed in ``o2scl/examples/ex_eos_had_apr.cpp``.
 
 eos=[[4.500000e-02,2.156413e-01,6.998033e-04],
@@ -73,7 +68,7 @@ eos=[[4.500000e-02,2.156413e-01,6.998033e-04],
 
 # Create a table, the columns, and the units for each column
 
-tab=o2sclpy.table_units(link)
+tab=o2sclpy.table_units()
 tab.line_of_names("nb ed pr")
 tab.line_of_units("1/fm^3 1/fm^4 1/fm^4")
 
@@ -90,13 +85,13 @@ tab.function_column('(ed+pr)/nb','mu')
 # Create the object which interpolates the EOS for the TOV
 # solver. Use the default crust EOS.
 
-eti=o2sclpy.eos_tov_interp(link)
+eti=o2sclpy.eos_tov_interp()
 eti.default_low_dens_eos()
 eti.read_table(tab,'ed','pr','nb')
 
 # Specify the EOS and determine the M-R curve
 
-ts=o2sclpy.tov_solve(link)
+ts=o2sclpy.tov_solve()
 ts.set_eos(eti)
 ts.mvsr()
 

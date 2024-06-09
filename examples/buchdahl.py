@@ -14,11 +14,6 @@ if 'pytest' in sys.modules:
     plots=False
 # -
 
-# Link the O$_2$scl library:
-
-link=o2sclpy.linker()
-link.link_o2scl()
-
 # Get a copy (a pointer to) the O$_2$scl unit conversion object:
 
 o2scl_settings=o2sclpy.lib_settings_class()
@@ -26,11 +21,11 @@ cu=o2scl_settings.get_convert_units()
 
 # Create the Buchdahl EOS object:
 
-b=o2sclpy.eos_tov_buchdahl(link)
+b=o2sclpy.eos_tov_buchdahl()
 
 # Create the TOV solve object, set the EOS and compute the M-R curve:
 
-ts=o2sclpy.tov_solve(link)
+ts=o2sclpy.tov_solve()
 ts.set_eos(b);
 ts.fixed(1.4,1.0e-4)
 print('Exact radius is %7.6e, computed radius is %7.6e.' %

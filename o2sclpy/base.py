@@ -1629,7 +1629,7 @@ class std_complex:
         return
 
     @classmethod
-    def init(cls,link,re,im):
+    def init(cls,re,im):
         """
         Constructor-like class method for std::complex<double> .
 
@@ -1640,7 +1640,7 @@ class std_complex:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_std_complex_double__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double]
-        return cls(link,f(re,im))
+        return cls(f(re,im))
 
     def to_python(self):
         """
@@ -2746,7 +2746,7 @@ class table:
         data to the table
         """
         # Create a std_vector object and copy the data over
-        vec=std_vector(self._link)
+        vec=std_vector()
         vec.resize(len(v))
         for i in range(0,len(v)):
             vec[i]=v[i]
@@ -3036,7 +3036,7 @@ class uniform_grid:
     
         Returns: a one-dimensional ``numpy`` array
         """
-        v=std_vector(self._link)
+        v=std_vector()
         self.vector(v)
         ret=numpy.zeros((self.get_npoints()))
         for i in range(0,self.get_npoints()):
@@ -3095,7 +3095,7 @@ class uniform_grid_end(uniform_grid):
         return new_obj
 
     @classmethod
-    def init(cls,link,start,end,n_bins):
+    def init(cls,start,end,n_bins):
         """
         Constructor-like class method for uniform_grid_end<> .
 
@@ -3106,7 +3106,7 @@ class uniform_grid_end(uniform_grid):
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_end__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        return cls(link,f(start,end,n_bins))
+        return cls(f(start,end,n_bins))
 
 
 class uniform_grid_width(uniform_grid):
@@ -3161,7 +3161,7 @@ class uniform_grid_width(uniform_grid):
         return new_obj
 
     @classmethod
-    def init(cls,link,start,width,n_bins):
+    def init(cls,start,width,n_bins):
         """
         Constructor-like class method for uniform_grid_width<> .
 
@@ -3172,7 +3172,7 @@ class uniform_grid_width(uniform_grid):
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        return cls(link,f(start,width,n_bins))
+        return cls(f(start,width,n_bins))
 
 
 class uniform_grid_end_width(uniform_grid):
@@ -3227,7 +3227,7 @@ class uniform_grid_end_width(uniform_grid):
         return new_obj
 
     @classmethod
-    def init(cls,link,start,end,width):
+    def init(cls,start,end,width):
         """
         Constructor-like class method for uniform_grid_end_width<> .
 
@@ -3238,7 +3238,7 @@ class uniform_grid_end_width(uniform_grid):
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_end_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double]
-        return cls(link,f(start,end,width))
+        return cls(f(start,end,width))
 
 
 class uniform_grid_log_end(uniform_grid):
@@ -3293,7 +3293,7 @@ class uniform_grid_log_end(uniform_grid):
         return new_obj
 
     @classmethod
-    def init(cls,link,start,end,n_bins):
+    def init(cls,start,end,n_bins):
         """
         Constructor-like class method for uniform_grid_log_end<> .
 
@@ -3304,7 +3304,7 @@ class uniform_grid_log_end(uniform_grid):
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_log_end__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        return cls(link,f(start,end,n_bins))
+        return cls(f(start,end,n_bins))
 
 
 class uniform_grid_log_width(uniform_grid):
@@ -3359,7 +3359,7 @@ class uniform_grid_log_width(uniform_grid):
         return new_obj
 
     @classmethod
-    def init(cls,link,start,width,n_bins):
+    def init(cls,start,width,n_bins):
         """
         Constructor-like class method for uniform_grid_log_width<> .
 
@@ -3370,7 +3370,7 @@ class uniform_grid_log_width(uniform_grid):
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_log_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_size_t]
-        return cls(link,f(start,width,n_bins))
+        return cls(f(start,width,n_bins))
 
 
 class uniform_grid_log_end_width(uniform_grid):
@@ -3425,7 +3425,7 @@ class uniform_grid_log_end_width(uniform_grid):
         return new_obj
 
     @classmethod
-    def init(cls,link,start,end,width):
+    def init(cls,start,end,width):
         """
         Constructor-like class method for uniform_grid_log_end_width<> .
 
@@ -3436,7 +3436,7 @@ class uniform_grid_log_end_width(uniform_grid):
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_uniform_grid_log_end_width__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_double,ctypes.c_double,ctypes.c_double]
-        return cls(link,f(start,end,width))
+        return cls(f(start,end,width))
 
 
 class table3d:
@@ -4330,7 +4330,7 @@ class ix_index:
         return new_obj
 
     @classmethod
-    def init(cls,link,ix):
+    def init(cls,ix):
         """
         Constructor-like class method for ix_index .
 
@@ -4341,7 +4341,7 @@ class ix_index:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_index_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t]
-        return cls(link,f(ix))
+        return cls(f(ix))
 
 
 class ix_fixed:
@@ -4402,7 +4402,7 @@ class ix_fixed:
         return new_obj
 
     @classmethod
-    def init(cls,link,ix,ix2):
+    def init(cls,ix,ix2):
         """
         Constructor-like class method for ix_fixed .
 
@@ -4413,7 +4413,7 @@ class ix_fixed:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_fixed_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_size_t]
-        return cls(link,f(ix,ix2))
+        return cls(f(ix,ix2))
 
 
 class ix_sum:
@@ -4474,7 +4474,7 @@ class ix_sum:
         return new_obj
 
     @classmethod
-    def init(cls,link,ix):
+    def init(cls,ix):
         """
         Constructor-like class method for ix_sum .
 
@@ -4485,7 +4485,7 @@ class ix_sum:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_sum_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t]
-        return cls(link,f(ix))
+        return cls(f(ix))
 
 
 class ix_trace:
@@ -4546,7 +4546,7 @@ class ix_trace:
         return new_obj
 
     @classmethod
-    def init(cls,link,ix,ix2):
+    def init(cls,ix,ix2):
         """
         Constructor-like class method for ix_trace .
 
@@ -4557,7 +4557,7 @@ class ix_trace:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_trace_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_size_t]
-        return cls(link,f(ix,ix2))
+        return cls(f(ix,ix2))
 
 
 class ix_reverse:
@@ -4618,7 +4618,7 @@ class ix_reverse:
         return new_obj
 
     @classmethod
-    def init(cls,link,ix):
+    def init(cls,ix):
         """
         Constructor-like class method for ix_reverse .
 
@@ -4629,7 +4629,7 @@ class ix_reverse:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_reverse_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t]
-        return cls(link,f(ix))
+        return cls(f(ix))
 
 
 class ix_range:
@@ -4690,7 +4690,7 @@ class ix_range:
         return new_obj
 
     @classmethod
-    def init(cls,link,ix,start,end):
+    def init(cls,ix,start,end):
         """
         Constructor-like class method for ix_range .
 
@@ -4701,7 +4701,7 @@ class ix_range:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_range_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_size_t,ctypes.c_size_t]
-        return cls(link,f(ix,start,end))
+        return cls(f(ix,start,end))
 
 
 class ix_interp:
@@ -4762,7 +4762,7 @@ class ix_interp:
         return new_obj
 
     @classmethod
-    def init(cls,link,ix,v):
+    def init(cls,ix,v):
         """
         Constructor-like class method for ix_interp .
 
@@ -4773,7 +4773,7 @@ class ix_interp:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_interp_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_double]
-        return cls(link,f(ix,v))
+        return cls(f(ix,v))
 
 
 class ix_grid:
@@ -4834,7 +4834,7 @@ class ix_grid:
         return new_obj
 
     @classmethod
-    def init(cls,link,ix,start,end,n_bins,log):
+    def init(cls,ix,start,end,n_bins,log):
         """
         Constructor-like class method for ix_grid .
 
@@ -4845,7 +4845,7 @@ class ix_grid:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_grid_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_size_t,ctypes.c_bool]
-        return cls(link,f(ix,start,end,n_bins,log))
+        return cls(f(ix,start,end,n_bins,log))
 
 
 class ix_gridw:
@@ -4906,7 +4906,7 @@ class ix_gridw:
         return new_obj
 
     @classmethod
-    def init(cls,link,ix,start,end,width,log):
+    def init(cls,ix,start,end,width,log):
         """
         Constructor-like class method for ix_gridw .
 
@@ -4917,7 +4917,7 @@ class ix_gridw:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_ix_gridw_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
-        return cls(link,f(ix,start,end,width,log))
+        return cls(f(ix,start,end,width,log))
 
 
 class tensor:
@@ -5284,7 +5284,7 @@ class tensor:
         return
 
     @classmethod
-    def create_size(cls,link,rank,sizes):
+    def create_size(cls,rank,sizes):
         """
         Constructor-like class method for tensor<> .
 
@@ -5295,7 +5295,7 @@ class tensor:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_tensor__create_size
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
-        return cls(link,f(rank,sizes._ptr))
+        return cls(f(rank,sizes._ptr))
 
     def create_size(self,v):
         """
@@ -5303,7 +5303,7 @@ class tensor:
         data to the table
         """
         # Create a std_vector object and copy the data over
-        vec=std_vector_size_t(self._link)
+        vec=std_vector_size_t()
         vec.resize(len(v))
         for i in range(0,len(v)):
             vec[i]=v[i]
@@ -5315,7 +5315,7 @@ class tensor:
         Copy ``index`` to an :class:`std_vector_size_t` object and add the 
         data to the table
         """
-        svst=std_vector_size_t(self._link)
+        svst=std_vector_size_t()
         svst.init_py(index)
         self.set_vector(svst,val)
         return
@@ -5325,7 +5325,7 @@ class tensor:
         Copy ``index`` to an :class:`std_vector_size_t` object and get the 
         data from the table
         """
-        svst=std_vector_size_t(self._link)
+        svst=std_vector_size_t()
         svst.init_py(index)
         return self.get_vector(svst)
     
@@ -5334,7 +5334,7 @@ class tensor:
         Copy ``index`` to an :class:`std_vector_size_t` object 
         and resize
         """
-        svst=std_vector_size_t(self._link)
+        svst=std_vector_size_t()
         svst.init_py(index)
         self.resize_vector(len(svst),svst)
         return
@@ -5681,7 +5681,7 @@ class tensor_int:
         return
 
     @classmethod
-    def create_size(cls,link,rank,sizes):
+    def create_size(cls,rank,sizes):
         """
         Constructor-like class method for tensor<int,std::vector<int>> .
 
@@ -5692,7 +5692,7 @@ class tensor_int:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_tensor_int_std_vector_int__create_size
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
-        return cls(link,f(rank,sizes._ptr))
+        return cls(f(rank,sizes._ptr))
 
     def create_size(self,v):
         """
@@ -5700,7 +5700,7 @@ class tensor_int:
         data to the table
         """
         # Create a std_vector object and copy the data over
-        vec=std_vector_size_t(self._link)
+        vec=std_vector_size_t()
         vec.resize(len(v))
         for i in range(0,len(v)):
             vec[i]=v[i]
@@ -5712,7 +5712,7 @@ class tensor_int:
         Copy ``index`` to an :class:`std_vector_size_t` object and add the 
         data to the table
         """
-        svst=std_vector_size_t(self._link)
+        svst=std_vector_size_t()
         svst.init_py(index)
         self.set_vector(svst,val)
         return
@@ -5722,7 +5722,7 @@ class tensor_int:
         Copy ``index`` to an :class:`std_vector_size_t` object and get the 
         data from the table
         """
-        svst=std_vector_size_t(self._link)
+        svst=std_vector_size_t()
         svst.init_py(index)
         return self.get_vector(svst)
     
@@ -5731,7 +5731,7 @@ class tensor_int:
         Copy ``index`` to an :class:`std_vector_size_t` object 
         and resize
         """
-        svst=std_vector_size_t(self._link)
+        svst=std_vector_size_t()
         svst.init_py(index)
         self.resize_vector(svst)
         return
@@ -6055,7 +6055,7 @@ class tensor_size_t:
         return
 
     @classmethod
-    def create_size(cls,link,rank,sizes):
+    def create_size(cls,rank,sizes):
         """
         Constructor-like class method for tensor<size_t,std::vector<size_t>> .
 
@@ -6066,7 +6066,7 @@ class tensor_size_t:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_tensor_size_t_std_vector_size_t__create_size
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
-        return cls(link,f(rank,sizes._ptr))
+        return cls(f(rank,sizes._ptr))
 
     def create_size(self,v):
         """
@@ -6074,7 +6074,7 @@ class tensor_size_t:
         data to the table
         """
         # Create a std_vector object and copy the data over
-        vec=std_vector_size_t(self._link)
+        vec=std_vector_size_t()
         vec.resize(len(v))
         for i in range(0,len(v)):
             vec[i]=v[i]
@@ -6086,7 +6086,7 @@ class tensor_size_t:
         Copy ``index`` to an :class:`std_vector_size_t` object and add the 
         data to the table
         """
-        svst=std_vector_size_t(self._link)
+        svst=std_vector_size_t()
         svst.init_py(index)
         self.set_vector(svst,val)
         return
@@ -6096,7 +6096,7 @@ class tensor_size_t:
         Copy ``index`` to an :class:`std_vector_size_t` object and get the 
         data from the table
         """
-        svst=std_vector_size_t(self._link)
+        svst=std_vector_size_t()
         svst.init_py(index)
         return self.get_vector(svst)
     
@@ -6105,7 +6105,7 @@ class tensor_size_t:
         Copy ``index`` to an :class:`std_vector_size_t` object 
         and resize
         """
-        svst=std_vector_size_t(self._link)
+        svst=std_vector_size_t()
         svst.init_py(index)
         self.resize_vector(svst)
         return
@@ -6491,7 +6491,7 @@ class tensor_grid(tensor):
         Copy ``index`` to an :class:`std_vector_size_t` object 
         and resize
         """
-        svst=std_vector_size_t(self._link)
+        svst=std_vector_size_t()
         svst.init_py(index)
         self.resize_vector(len(svst),svst)
         return
@@ -7142,11 +7142,11 @@ class convert_units_der_unit:
         Set the properties of a derived unit
         FIXME: better docs here
         """
-        label2=std_string(self._link)
+        label2=std_string()
         label2.init_bytes(force_bytes(label))
         self.set_label(label2)
         self.val=val
-        name2=std_string(self._link)
+        name2=std_string()
         name2.init_bytes(force_bytes(name))
         self.set_name(name2)
         self.m=m
@@ -7436,7 +7436,7 @@ class convert_units:
         """
         Add a unit
         """
-        du=convert_units_der_unit(self._link)
+        du=convert_units_der_unit()
         du.set(label,val,name,m,k,s,K,A,mol,cd)
         self.add_unit_internal(du)
         return
@@ -8595,7 +8595,7 @@ class funct_string:
         return ret
 
     @classmethod
-    def init(cls,link,expr,var):
+    def init(cls,expr,var):
         """
         Constructor-like class method for funct_string .
 
@@ -8606,7 +8606,7 @@ class funct_string:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_funct_string_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
-        return cls(link,f(expr_,var_))
+        return cls(f(expr_,var_))
 
 
 class comm_option_s:
@@ -9231,7 +9231,7 @@ class shared_ptr_table_units(table_units):
     _link=0
     _owner=True
 
-    def __init__(self,link,shared_ptr=0):
+    def __init__(self,shared_ptr=0):
         """
         Init function for shared_ptr_table_units .
         """

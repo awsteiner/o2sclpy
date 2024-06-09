@@ -14,11 +14,6 @@ if 'pytest' in sys.modules:
     plots=False
 # -
 
-# Link the O$_2$scl library:
-
-link=o2sclpy.linker()
-link.link_o2scl()
-
 # Get a copy (a pointer to) the O$_2$scl unit conversion object,
 # which also allows access to the constant library
 
@@ -72,7 +67,7 @@ ret1=nc.calc_eos(0.01)
 # need to convert them to strings to print them out.
 
 eos_table=nc.get_eos_results()
-print('EOS table:')
+print('EOS table:',eos_table.get_ncolumns())
 for i in range(0,eos_table.get_ncolumns()):
     col=eos_table.get_column_name(i)
     unit=eos_table.get_unit(col)

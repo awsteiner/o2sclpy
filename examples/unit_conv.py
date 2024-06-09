@@ -14,11 +14,6 @@ if 'pytest' in sys.modules:
     plots=False
 # -
 
-# Link the O$_2$scl library:
-
-link=o2sclpy.linker()
-link.link_o2scl()
-
 # Get a copy (a pointer to) the O$_2$scl unit conversion object:
 
 o2scl_settings=o2sclpy.lib_settings_class()

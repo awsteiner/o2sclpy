@@ -13,11 +13,6 @@ if 'pytest' in sys.modules:
     plots=False
 # -
 
-# Link the o2scl library:
-
-link=o2sclpy.linker()
-link.link_o2scl()
-
 # Create an HDF5 file object and open the table in O$_2$scl's data file for the Akmal, Pandharipande, and Ravenhall equation of state. The `open()` function for the `hdf_file` class is documented [here](https://awsteiner.org/code/o2sclpy/hdf.html#o2sclpy.hdf_file.open).
 
 o2scl_settings=o2sclpy.lib_settings_class()
@@ -33,7 +28,7 @@ name=b''
 
 # Read the table:
 
-o2sclpy.hdf_input_table(link,hf,tab,name)
+o2sclpy.hdf_input_table(hf,tab,name)
 
 # Close the HDF5 file.
 

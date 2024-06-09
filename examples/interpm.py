@@ -18,15 +18,10 @@ if 'pytest' in sys.modules:
 #import tensorflow as tf
 #print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
-# Link the O$_2$scl library:
-
-link=o2sclpy.linker()
-link.link_o2scl()
-
 # Create the data set:
 
 ug=o2sclpy.uniform_grid_end.init(0,2,49)
-t3d=o2sclpy.table3d(link)
+t3d=o2sclpy.table3d()
 t3d.set_xy_grid("x",ug,"y",ug)
 t3d.new_slice("z")
 for i in range(0,t3d.get_nx()):

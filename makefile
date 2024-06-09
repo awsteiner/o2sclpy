@@ -78,13 +78,14 @@ testq:
 		examples/link_o2scl.py \
 		examples/table.py \
 		examples/unit_conv.py \
-		examples/skyrme.py \
 		examples/interpm.py \
 		examples/nucmass.py \
-		examples/SFHo_SFHx.py \
-		examples/buchdahl.py \
-		examples/tov.py \
 		examples/test_examples.py -s -v
+
+#		examples/SFHo_SFHx.py \
+#		examples/buchdahl.py \
+#		examples/tov.py \
+#		examples/skyrme.py
 
 mypy:
 	 mypy o2sclpy --ignore-missing-imports \

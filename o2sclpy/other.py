@@ -257,7 +257,7 @@ class slack_messenger:
         return ret
 
     @classmethod
-    def init(cls,link,p_channel,p_username,p_url,p_mpi_time):
+    def init(cls,p_channel,p_username,p_url,p_mpi_time):
         """
         Constructor-like class method for slack_messenger .
 
@@ -268,7 +268,7 @@ class slack_messenger:
         f=o2sclpy.doc_data.top_linker.o2scl.o2scl_slack_messenger_init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_bool]
-        return cls(link,f(p_channel_,p_username_,p_url_,p_mpi_time))
+        return cls(f(p_channel_,p_username_,p_url_,p_mpi_time))
 
 
 class quadratic_real_coeff_gsl:

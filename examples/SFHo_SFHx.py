@@ -14,11 +14,6 @@ if 'pytest' in sys.modules:
     plots=False
 # -
 
-# Link the O$_2$scl library:
-
-link=o2sclpy.linker()
-link.link_o2scl()
-
 # Get a copy (a pointer to) the O$_2$scl unit conversion object, which
 # also allows access to the constant library, then get ħc.
 
@@ -30,10 +25,10 @@ print('ħc = %7.6e\n' % (ħc))
 
 # Create the EOS objects
 
-sfho=o2sclpy.eos_had_rmf(link)
-o2sclpy.rmf_load(link,sfho,'SFHo')
-sfhx=o2sclpy.eos_had_rmf(link)
-o2sclpy.rmf_load(link,sfhx,'SFHx')
+sfho=o2sclpy.eos_had_rmf()
+o2sclpy.rmf_load(sfho,'SFHo')
+sfhx=o2sclpy.eos_had_rmf()
+o2sclpy.rmf_load(sfhx,'SFHx')
 
 # Compute nuclear saturation and output the saturation density
 # and binding energy:
@@ -56,15 +51,15 @@ print(('SFHx: n0=%7.6e 1/fm^3, E/A=%7.6e MeV, K=%7.6e MeV, '+
 # `uniform_grid_end_width` is like numpy.arange() but is numerically
 # stable.
 
-ug_nb=o2sclpy.uniform_grid_end_width.init(link,0.01,0.32,0.01)
+ug_nb=o2sclpy.uniform_grid_end_width.init(0.01,0.32,0.01)
 
 # Temperature grid in MeV
 
-ug_T=o2sclpy.uniform_grid_end_width.init(link,0.1,10.0,0.1)
+ug_T=o2sclpy.uniform_grid_end_width.init(0.1,10.0,0.1)
 
 # Store the EOS in a table3d object
 
-t3d=o2sclpy.table3d(link)
+t3d=o2sclpy.table3d()
 t3d.set_xy_grid('nB',ug_nb,'T',ug_T)
 
 # Create a new slice for the energy per baryon
