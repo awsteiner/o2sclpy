@@ -24,6 +24,7 @@
 import ctypes
 from abc import abstractmethod
 from o2sclpy.utils import force_bytes
+import o2sclpy.doc_data
 import numpy
 
 itp_linear=1
@@ -55,15 +56,19 @@ class std_string:
 
         """
 
+        #print('hx')
+        #print(link,o2sclpy.doc_data.top_link)
+        #print('hy')
+        
         if pointer==0:
-            f=link.o2scl.o2scl_create_std_string
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_string
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
         else:
             self._ptr=pointer
             self._owner=False
-        self._link=link
+        self._link=o2sclpy.doc_data.top_linker
         return
 
     def __del__(self):

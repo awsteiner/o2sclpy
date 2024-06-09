@@ -1,4 +1,4 @@
-#  -------------------------------------------------------------------
+#  ───────────────────────────────────────────────────────────────────
 #  
 #  Copyright (C) 2006-2024, Andrew W. Steiner
 #  
@@ -17,15 +17,14 @@
 #  You should have received a copy of the GNU General Public License
 #  along with O2sclpy. If not, see <http://www.gnu.org/licenses/>.
 #  
-#  -------------------------------------------------------------------
-#
+#  ───────────────────────────────────────────────────────────────────
 
 import sys
 import numpy
 import textwrap
 
 from o2sclpy.utils import default_plot, string_to_dict, terminal_py
-from o2sclpy.doc_data import cmaps, new_cmaps, yt_cmaps
+import o2sclpy.doc_data
 
 def marker_list():
     """ 
@@ -149,7 +148,7 @@ def markers_plot(fname=''):
             row_ctr=0
             col_ctr=col_ctr+1
         axes.text(0.5,0.835,r'$ \mathtt{o2gr'+
-                  'aph}~\mathrm{markers~summary} $',
+                  'aph}~\\mathrm{markers~summary} $',
                   fontsize=16,ha='center')
     if fname!='':
         plot.savefig(fname)
@@ -371,7 +370,7 @@ def cmap_list_func():
     else:
         inc_yt=True
         
-    for category, cmap_list in cmaps:
+    for category, cmap_list in o2sclpy.doc_data.cmaps:
         list2=''
         i=0
         for name in cmap_list:
@@ -384,7 +383,7 @@ def cmap_list_func():
             print(str_list[i])
         print(' ')
     if inc_yt==True:
-        for category, cmap_list in yt_cmaps:
+        for category, cmap_list in o2sclpy.doc_data.yt_cmaps:
             list2=''
             i=0
             for name in cmap_list:
@@ -396,7 +395,7 @@ def cmap_list_func():
             for i in range (0,len(str_list)):
                 print(str_list[i])
             print(' ')
-    for category, cmap_list in new_cmaps:
+    for category, cmap_list in o2sclpy.doc_data.new_cmaps:
         list2=''
         i=0
         for name in cmap_list:
@@ -445,14 +444,14 @@ def cmaps_plot(fname=''):
         inc_yt=True
     
     nrows=0
-    for category, cmap_list in cmaps:
+    for category, cmap_list in o2sclpy.doc_data.cmaps:
         for name in cmap_list:
             nrows=nrows+1
     if inc_yt==True:
-        for category, cmap_list in yt_cmaps:
+        for category, cmap_list in o2sclpy.doc_data.yt_cmaps:
             for name in cmap_list:
                 nrows=nrows+1
-    for category, cmap_list in new_cmaps:
+    for category, cmap_list in o2sclpy.doc_data.new_cmaps:
         for name in cmap_list:
             nrows=nrows+1
     ncols=3
@@ -480,7 +479,7 @@ def cmaps_plot(fname=''):
                         
     row_ctr=0
     col_ctr=0
-    for category, cmap_list in cmaps:
+    for category, cmap_list in o2sclpy.doc_data.cmaps:
         for name in cmap_list:
             ax=axes[row_ctr][col_ctr]
             ax.imshow(gradient,aspect='auto',
@@ -499,7 +498,7 @@ def cmaps_plot(fname=''):
                 row_ctr=0
                 col_ctr=col_ctr+1
     if inc_yt==True:
-        for category, cmap_list in yt_cmaps:
+        for category, cmap_list in o2sclpy.doc_data.yt_cmaps:
             for name in cmap_list:
                 ax=axes[row_ctr][col_ctr]
                 ax.imshow(gradient,aspect='auto',
@@ -514,7 +513,7 @@ def cmaps_plot(fname=''):
                 if row_ctr>=nrows:
                     row_ctr=0
                     col_ctr=col_ctr+1
-    for category, cmap_list in new_cmaps:
+    for category, cmap_list in o2sclpy.doc_data.new_cmaps:
         for name in cmap_list:
             ax=axes[row_ctr][col_ctr]
             ax.imshow(gradient,aspect='auto',

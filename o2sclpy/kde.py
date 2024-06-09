@@ -1,6 +1,6 @@
-#  -------------------------------------------------------------------
+#  ───────────────────────────────────────────────────────────────────
 #  
-#  Copyright (C) 2024, Andrew W. Steiner
+#  Copyright (C) 2006-2024, Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
 #  
@@ -17,8 +17,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with O2sclpy. If not, see <http://www.gnu.org/licenses/>.
 #  
-#  -------------------------------------------------------------------
-#
+#  ───────────────────────────────────────────────────────────────────
+
 import numpy
 
 from o2sclpy.utils import string_to_dict2

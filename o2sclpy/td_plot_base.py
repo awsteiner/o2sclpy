@@ -1,6 +1,6 @@
-#  -------------------------------------------------------------------
+#  ───────────────────────────────────────────────────────────────────
 #  
-#  Copyright (C) 2023-2024, Andrew W. Steiner
+#  Copyright (C) 2006-2024, Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
 #  
@@ -11,22 +11,20 @@
 #  
 #  O2sclpy is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FORA PARTICULAR PURPOSE.  See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #  
 #  You should have received a copy of the GNU General Public License
 #  along with O2sclpy. If not, see <http://www.gnu.org/licenses/>.
 #  
-#  -------------------------------------------------------------------
-#
+#  ───────────────────────────────────────────────────────────────────
+
 import math
 import sys
 import numpy
 import os
 
-from o2sclpy.doc_data import cmaps, new_cmaps, extra_types
-from o2sclpy.doc_data import acol_help_topics, version
-from o2sclpy.doc_data import o2graph_help_topics, acol_types
+import o2sclpy.doc_data
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot, cross
 from o2sclpy.utils import is_number, arrow, icosphere, png_power_two

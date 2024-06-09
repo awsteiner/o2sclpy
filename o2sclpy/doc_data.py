@@ -1,6 +1,35 @@
+#  ───────────────────────────────────────────────────────────────────
+#  
+#  Copyright (C) 2006-2024, Andrew W. Steiner
+#  
+#  This file is part of O2sclpy.
+#  
+#  O2sclpy is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#  
+#  O2sclpy is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with O2sclpy. If not, see <http://www.gnu.org/licenses/>.
+#  
+#  ───────────────────────────────────────────────────────────────────
+
 from o2sclpy.utils import terminal_py
+from o2sclpy.link_o2scl import linker
 
 ter=terminal_py()
+
+print('Instantiating linker.')
+top_linker=linker()
+top_linker.link_o2scl()
+print('Done instantiating linker.')
+top_link=top_linker.o2scl
+print('Done setting link.')
 
 version='0.930a1'
 

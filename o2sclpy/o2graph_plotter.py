@@ -1,4 +1,4 @@
-#  -------------------------------------------------------------------
+#  ───────────────────────────────────────────────────────────────────
 #  
 #  Copyright (C) 2006-2024, Andrew W. Steiner
 #  
@@ -17,8 +17,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with O2sclpy. If not, see <http://www.gnu.org/licenses/>.
 #  
-#  -------------------------------------------------------------------
-#
+#  ───────────────────────────────────────────────────────────────────
+
 import math
 import sys
 import ctypes
@@ -35,9 +35,7 @@ import code
 # For system type detection
 import platform
 
-from o2sclpy.doc_data import cmaps, new_cmaps, extra_types
-from o2sclpy.doc_data import acol_help_topics, version
-from o2sclpy.doc_data import o2graph_help_topics, acol_types
+import o2sclpy.doc_data
 from o2sclpy.utils import parse_arguments, string_to_dict, terminal_py
 from o2sclpy.utils import force_bytes, default_plot, cross
 from o2sclpy.utils import is_number, arrow, icosphere

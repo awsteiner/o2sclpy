@@ -1,4 +1,4 @@
-#  -------------------------------------------------------------------
+#  ───────────────────────────────────────────────────────────────────
 #  
 #  Copyright (C) 2022-2024, Mahamudul Hasan Anik, Satyajit Roy, and
 #  Andrew W. Steiner
@@ -18,8 +18,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with O2sclpy. If not, see <http://www.gnu.org/licenses/>.
 #  
-#  -------------------------------------------------------------------
-#
+#  ───────────────────────────────────────────────────────────────────
+
 import numpy
 
 class interpm_sklearn_gp:
