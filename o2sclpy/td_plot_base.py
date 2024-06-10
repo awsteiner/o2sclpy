@@ -1376,8 +1376,8 @@ class td_plot_base(yt_plot_base):
         smooth shading for GLTF files when normals are specified, and
         this can complicate the density plot.
         """
-        curr_type=o2scl_get_type(o2scl,amp,self.link2)
-        amt=acol_manager(self.link2,amp)
+        curr_type=o2scl_get_type(amp)
+        amt=acol_manager(amp)
 
         slice_name=''
         slice=args[0]
@@ -1630,8 +1630,8 @@ class td_plot_base(yt_plot_base):
         which provides the metalness, ``rough=''``, the column which
         describes the roughness.
         """
-        curr_type=o2scl_get_type(o2scl,amp,self.link2)
-        amt=acol_manager(self.link2,amp)
+        curr_type=o2scl_get_type(amp)
+        amt=acol_manager(amp)
 
         # If true, then a color map has been specified and we need
         # to add materials for each face

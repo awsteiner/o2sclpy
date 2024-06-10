@@ -2207,16 +2207,12 @@ class plot_base:
             
         elif str(type(args[0]))=='<class \'o2sclpy.other.hist\'>':
 
-            if self.link2==0:
-                print('o2scl library dll not set.')
-                return
-            
             failed=False
 
             h=args[0]
             n=h.size()
             yv=[h[i] for i in range(0,n)]
-            reps=std_vector(self.link2)
+            reps=std_vector()
             h.create_rep_vec(reps)
             xv=[reps[i] for i in range(0,n)]
 
@@ -2329,11 +2325,8 @@ class plot_base:
                 extent3=h2d.get_y_low_i(0)
                 extent4=h2d.get_y_high_i(nyt-1)
             else:
-                if self.link2==0:
-                    print('o2scl library dll not set.')
-                    return
-                xgrid=o2sclpy.std_vector_size_t(self.link2)
-                ygrid=o2sclpy.std_vector_size_t(self.link2)
+                xgrid=o2sclpy.std_vector_size_t()
+                ygrid=o2sclpy.std_vector_size_t()
                 h2d.create_x_rep_vec(xgrid)
                 h2d.create_y_rep_vec(ygrid)
 

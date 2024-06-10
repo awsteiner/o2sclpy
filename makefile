@@ -63,13 +63,13 @@ test:
 		examples/link_o2scl.py \
 		examples/table.py \
 		examples/unit_conv.py \
-		examples/skyrme.py \
-		examples/interpm.py \
-		examples/nucmass.py \
 		examples/SFHo_SFHx.py \
 		examples/buchdahl.py \
 		examples/tov.py \
+		examples/skyrme.py \
+		examples/nucmass.py \
 		examples/test_examples.py \
+		examples/interpm.py \
 		-s -v > test.out 2>&1 &
 
 # This target is used by cron scripts to redirect the testing output
@@ -78,14 +78,15 @@ testq:
 		examples/link_o2scl.py \
 		examples/table.py \
 		examples/unit_conv.py \
-		examples/interpm.py \
+		examples/SFHo_SFHx.py \
+		examples/buchdahl.py \
+		examples/tov.py \
+		examples/skyrme.py \
 		examples/nucmass.py \
-		examples/test_examples.py -s -v
+		examples/test_examples.py \
+		examples/interpm.py \
+		-s -v
 
-#		examples/SFHo_SFHx.py \
-#		examples/buchdahl.py \
-#		examples/tov.py \
-#		examples/skyrme.py
 
 mypy:
 	 mypy o2sclpy --ignore-missing-imports \
