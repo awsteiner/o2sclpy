@@ -3834,7 +3834,8 @@ class o2graph_plotter(td_plot_base):
                 strt+=' '+full_list2[k][1]
                 print(strt)
             print('\n'+str_line)
-            help_topics=sorted(acol_help_topics+o2graph_help_topics)
+            help_topics=sorted(o2sclpy.doc_data.acol_help_topics+
+                               o2sclpy.doc_data.o2graph_help_topics)
                 
             strt='Additional help topics: '
             for j in range(0,len(help_topics)):
