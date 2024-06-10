@@ -1600,10 +1600,10 @@ class plot_base:
 
         import matplotlib.pyplot as plot
         if self.usetex==False or self.usetex==0:
-            print('false')
+            #print('false')
             plot.rc('text',usetex=False)
         else:
-            print('true')
+            #print('true')
             plot.rc('text',usetex=True)
         
         self.axes.text(tx,ty,textstr,**kwargs)
