@@ -25,11 +25,12 @@
 import sys
 import os
 
-from o2sclpy.link_o2scl import linker
+import o2sclpy
+import o2sclpy.doc_data
 
-l=linker()
-backend=l.get_library_settings(sys.argv)
-l.link_o2scl()
+print('here1')
+
+backend=o2sclpy.doc_data.top_linker.get_library_settings(sys.argv)
 
 if backend!='':
     import matplotlib

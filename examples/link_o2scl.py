@@ -23,10 +23,6 @@ if 'pytest' in sys.modules:
 # for more detail. We set the verbose parameter to 1 to output more
 # information about which libraries are being linked.
 
-link=o2sclpy.linker()
-link.verbose=1
-link.link_o2scl()
-
 # To test that the link worked, obtain the O$_2$scl version from the DLL:
 
 o2scl_settings=o2sclpy.lib_settings_class()

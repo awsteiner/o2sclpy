@@ -40,13 +40,13 @@ from o2sclpy.kde import *
 
 from datetime import datetime
 
-def o2scl_get_type(o2scl,amp,link):
+def o2scl_get_type(amp):
     """
     Get the type of the current object stored in the acol_manager
     pointer and return as a bytes object.
     """
 
-    amt=acol_manager(link,amp)
+    amt=acol_manager(amp)
     return amt.get_type()
 
 class material:
@@ -1363,7 +1363,7 @@ class td_plot_base(yt_plot_base):
         self.png_counter=0
         return
 
-    def td_den_plot(self,o2scl,amp,args,cmap='',mat_name='white',
+    def td_den_plot(self,amp,args,cmap='',mat_name='white',
                     normals=False):
         """Documentation for o2graph command ``td-den-plot``:
 
@@ -1614,7 +1614,7 @@ class td_plot_base(yt_plot_base):
 
         return
         
-    def td_scatter(self,o2scl,amp,args,n_subdiv: int = 0, r: float = 0.04,
+    def td_scatter(self,amp,args,n_subdiv: int = 0, r: float = 0.04,
                    metal: str = '',rough: str = ''):
         """Documentation for o2graph command ``td-scatter``:
 

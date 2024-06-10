@@ -26,19 +26,18 @@ import os
 def o2graph():
 
     from o2sclpy.link_o2scl import linker
+    import o2sclpy
+    import o2sclpy.doc_data
 
-    l=linker()
-    backend=l.get_library_settings(sys.argv)
-    l.link_o2scl()
+    backend=o2sclpy.doc_data.top_linker.get_library_settings(sys.argv)
     
     if backend!='':
         import matplotlib
         matplotlib.use(backend)
         print('o2graph: Set matplotlib backend to',backend,'.')
         
-    import o2sclpy
     gc=o2sclpy.o2graph_plotter()
-    gc.parse_argv(sys.argv,l.o2scl,l)
+    gc.parse_argv(sys.argv)
 
     return
 
