@@ -348,10 +348,10 @@ def doc_replacements(s,ter,amp,script=False,verbose=0):
                     force_string(amt.get_default_color()))
 
     # Replace yt_parameters in acol_types
-    for i in range(0,len(acol_types)):
-        s=s.replace('``'+acol_types[i]+'``',
+    for i in range(0,len(o2sclpy.doc_data.acol_types)):
+        s=s.replace('``'+o2sclpy.doc_data.acol_types[i]+'``',
                     force_string(amt.get_type_color())+
-                    acol_types[i]+
+                    o2sclpy.doc_data.acol_types[i]+
                     force_string(amt.get_default_color()))
 
     # Decorate URLs
@@ -4539,7 +4539,7 @@ class o2graph_plotter(td_plot_base):
                 
             print(' ')
 
-            for this_type in acol_types:
+            for this_type in o2sclpy.doc_data.acol_types:
                 
                 print('Acol and o2graph commands for an object of type '+
                       ter.type_str(force_string(this_type),amt)+':\n')
@@ -4580,11 +4580,11 @@ class o2graph_plotter(td_plot_base):
             
             curr_type=args[0]
 
-            if curr_type not in acol_types:
+            if curr_type not in o2sclpy.doc_data.acol_types:
                 print("Command 'commands' cannot find type ",curr_type+'.')
                 print('List of valid types:')
                 print('')
-                print(acol_types)
+                print(o2sclpy.doc_data.acol_types)
                 return
 
             old_type=amt.get_type()
