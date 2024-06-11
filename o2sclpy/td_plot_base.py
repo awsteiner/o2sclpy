@@ -237,6 +237,9 @@ class mesh_object:
         # Find if there at least two distinct materials 
         two_mats=False
         for i in range(0,len(self.faces)):
+            if verbose>1 and i%100==99:
+                print('td_plot_base::sort_by_mat(): find two mats',
+                      i+1,'of',len(self.faces))
             if (len(self.faces[i])==4 and
                 self.faces[i][3]!=self.mat):
                 two_mats=True
@@ -279,12 +282,18 @@ class mesh_object:
         # mat_list
         face_copies=[False for i in range(0,len(self.faces))]
         for i in range(0,len(self.faces)):
+
+            if verbose>1 and i%100==99:
+                print('td_plot_base::sort_by_mat(): find unique mats',
+                      i+1,'of',len(self.faces))
+            
             if len(self.faces[i])==4:
                 mat_name=self.faces[i][3]
                 if mat_name not in mat_list:
                     if verbose>0:
                         print('mesh_object::sort_by_mat():',
-                              'At index',i,'adding faces for',mat_name)
+                              'At index',i,'of',len(self.faces),
+                              'adding faces for',mat_name)
                     mat_list.append(mat_name)
                     # If it's not found, then add the current face,
                     # and loop over the remaining faces which match
@@ -702,8 +711,7 @@ class threed_objects:
                          'make_unique_name(): Could not make unique '+
                          'name with prefix '+prefix+'.')
         return
-        
-    
+            
     def add_object(self, mesh: mesh_object, verbose : int = 0):
         """Add an object given 'lv', a list of vertices, and 'mesh', a mesh
         of triangular faces among those vertices.
@@ -744,6 +752,10 @@ class threed_objects:
         
         for i in range(0,len(mesh.faces)):
 
+            if verbose>1 and i%100==99:
+                print('threed_object::add_object(): Parsing face',
+                      i+1,'of',len(mesh.faces))
+                
             # Check to make sure we don't have OBJ indices in
             # GLTF mode
             if len(mesh.faces[i])>4:
@@ -779,7 +791,7 @@ class threed_objects:
         if verbose>0:
             print('threed_object::add_object(): Sort group named',
                   mesh.name,'by material.')
-        mesh.sort_by_mat()
+        mesh.sort_by_mat(verbose=verbose)
                 
         # Add the group of faces to the list
         self.mesh_list.append(mesh)
@@ -909,6 +921,10 @@ class threed_objects:
         
         for i in range(0,len(self.mat_list)):
 
+            if verbose>1 and i%100==99:
+                print('td_plot_base::gltf(): mat',i+1,'of',
+                      len(self.mat_list))
+                
             this_mat=self.mat_list[i]
 
             # Construct a Python dictory for the material JSON
@@ -963,6 +979,10 @@ class threed_objects:
         offset=0
 
         for i in range(0,len(self.mesh_list)):
+                
+            if verbose>1 and i%100==99:
+                print('td_plot_base::gltf(): mesh',i+1,'of',
+                      len(self.mesh_list))
                 
             normals=False
             if len(self.mesh_list[i].vn_list)>0:
@@ -1285,9 +1305,8 @@ class threed_objects:
                                          "byteOffset": offset,
                                          "target": 34963})
                         offset+=2*len(face_bin)
-                    if verbose>1:
+                    if verbose>2:
                         print('offset:',offset)
-
                         print('len(face_bin):',self.mesh_list[i].name,
                               len(face_bin))
                         print(('min,max: [%7.6e,%7.6e,%7.6e] '+
@@ -1749,6 +1768,9 @@ class td_plot_base(yt_plot_base):
             gf=mesh_object('scatter',[])
             
             for i in range(0,n):
+
+                if self.verbose>1 and i%100==99:
+                    print('td_scatter(): Adding point',i+1,'of',n)
                 
                 xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
                 ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
@@ -1790,6 +1812,9 @@ class td_plot_base(yt_plot_base):
         
         for i in range(0,len(gf.faces)):
 
+            if self.verbose>1 and i%10000==9999:
+                print('td_scatter(): convert',i+1,'of',len(gf.faces))
+                    
             # Add the vertices to the new vertex array
             vert2.append(gf.vert_list[gf.faces[i][0]])
             vert2.append(gf.vert_list[gf.faces[i][1]])
@@ -1834,8 +1859,11 @@ class td_plot_base(yt_plot_base):
         gf.vn_list=norms2
         if colors==False:
             gf.mat='white'
-        self.to.add_object(gf)
+        self.to.add_object(gf,verbose=self.verbose)
 
+        if self.verbose>1:
+            print('td_plot_base::td_scatter(): Done.')
+        
         return
 
     def td_icos(self,args,n_subdiv=0,r=0.04,phi_cut='',mat='white',
