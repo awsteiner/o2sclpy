@@ -40,7 +40,6 @@ class thermo:
         Init function for class thermo
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -154,7 +153,6 @@ class part:
         Init function for class part
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -448,7 +446,6 @@ class fermion(part):
         Init function for class fermion
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -540,7 +537,6 @@ class quark(fermion):
         Init function for class quark
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -634,7 +630,6 @@ class fermion_zerot:
         Init function for class fermion_zerot
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -735,7 +730,6 @@ class fermion_thermo(fermion_zerot):
         Init function for class fermion_thermo
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -858,7 +852,6 @@ class fermion_rel(fermion_thermo):
         Init function for class fermion_rel
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1189,7 +1182,6 @@ class fermion_nonrel(fermion_zerot):
         Init function for class fermion_nonrel
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1276,7 +1268,6 @@ class boson(part):
         Init function for class boson
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1352,7 +1343,6 @@ class boson_rel:
         Init function for class boson_rel
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1461,7 +1451,6 @@ class classical_thermo:
         Init function for class classical_thermo
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1537,7 +1526,6 @@ class thermo_np_deriv_press:
         Init function for class thermo_np_deriv_press
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1711,7 +1699,6 @@ class thermo_np_deriv_helm:
         Init function for class thermo_np_deriv_helm
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1885,7 +1872,6 @@ class part_deriv_press:
         Init function for class part_deriv_press
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2008,7 +1994,6 @@ class part_deriv(part):
         Init function for class part_deriv
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2058,7 +2043,6 @@ class fermion_deriv(fermion):
         Init function for class fermion_deriv
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2112,7 +2096,6 @@ class deriv_thermo_base:
         Init function for class deriv_thermo_base
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2244,7 +2227,6 @@ class classical_deriv_thermo:
         Init function for class classical_deriv_thermo
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2322,7 +2304,6 @@ class fermion_mag_zerot:
         Init function for class fermion_mag_zerot
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """

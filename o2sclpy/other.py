@@ -44,7 +44,6 @@ class slack_messenger:
         Init function for class slack_messenger
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -287,7 +286,6 @@ class quadratic_real_coeff_gsl:
         Init function for class quadratic_real_coeff_gsl
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -375,7 +373,6 @@ class quadratic_real_coeff_gsl2:
         Init function for class quadratic_real_coeff_gsl2
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -463,7 +460,6 @@ class cubic_real_coeff_cern:
         Init function for class cubic_real_coeff_cern
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -555,7 +551,6 @@ class cubic_real_coeff_gsl:
         Init function for class cubic_real_coeff_gsl
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -647,7 +642,6 @@ class quartic_real_coeff_cern:
         Init function for class quartic_real_coeff_cern
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -743,7 +737,6 @@ class fermi_dirac_integ_gsl:
         Init function for class fermi_dirac_integ_gsl
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -859,7 +852,6 @@ class bessel_K_exp_integ_gsl:
         Init function for class bessel_K_exp_integ_gsl
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -951,7 +943,6 @@ class hist:
         Init function for class hist
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1263,7 +1254,6 @@ class hist_2d:
         Init function for class hist_2d
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1619,7 +1609,6 @@ class contour_line:
         Init function for class contour_line
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1748,7 +1737,6 @@ class vector_contour_line:
         Init function for class vector_contour_line
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1856,7 +1844,6 @@ class contour:
         Init function for class contour
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2005,7 +1992,6 @@ class prob_dens_func:
         Init function for class prob_dens_func
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2134,7 +2120,6 @@ class prob_dens_gaussian(prob_dens_func):
         Init function for class prob_dens_gaussian
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2206,7 +2191,6 @@ class prob_dens_hist(prob_dens_func):
         Init function for class prob_dens_hist
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2272,7 +2256,6 @@ class prob_dens_mdim:
         Init function for class prob_dens_mdim
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2369,7 +2352,6 @@ class prob_dens_mdim_biv_gaussian(prob_dens_mdim):
         Init function for class prob_dens_mdim_biv_gaussian
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2462,7 +2444,6 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
         Init function for class prob_dens_mdim_gaussian
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2530,7 +2511,6 @@ class hypercube:
         Init function for class hypercube
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2706,7 +2686,6 @@ class std_vector_hypercube:
         Init function for class std_vector_hypercube
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2802,7 +2781,6 @@ class prob_dens_mdim_amr(prob_dens_mdim):
         Init function for class prob_dens_mdim_amr
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3011,7 +2989,6 @@ class prob_dens_mdim_amr(prob_dens_mdim):
 def vector_mean(n,v):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *v*: :class:`vector<double>` object
         | Returns: ``ctypes.c_double`` object
@@ -3025,7 +3002,6 @@ def vector_mean(n,v):
 def vector_stddev(n,v):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *v*: :class:`vector<double>` object
         | Returns: ``ctypes.c_double`` object
@@ -3039,7 +3015,6 @@ def vector_stddev(n,v):
 def vector_lagk_autocorr(n,v,k):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *v*: :class:`vector<double>` object
         | *k*: ``size_t``
@@ -3054,7 +3029,6 @@ def vector_lagk_autocorr(n,v,k):
 def vector_autocorr_vector(n,v,ac):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *v*: :class:`vector<double>` object
         | *ac*: :class:`vector<double>` object
@@ -3067,7 +3041,6 @@ def vector_autocorr_vector(n,v,ac):
 def vector_autocorr_vector_fftw(v,ac,mean,stddev):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *v*: :class:`vector<double>` object
         | *ac*: :class:`vector<double>` object
         | *mean*: ``double``
@@ -3081,7 +3054,6 @@ def vector_autocorr_vector_fftw(v,ac,mean,stddev):
 def vector_autocorr_tau(ac,ftom):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *ac*: :class:`vector<double>` object
         | *ftom*: :class:`vector<double>` object
         | Returns: ``ctypes.c_size_t`` object
@@ -3095,7 +3067,6 @@ def vector_autocorr_tau(ac,ftom):
 def vector_acor(n,v,mean,sigma,tau):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *v*: :class:`vector<double>` object
         | *mean*: ``double``

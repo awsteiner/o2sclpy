@@ -45,7 +45,6 @@ class eos_base:
         Init function for class eos_base
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -121,7 +120,6 @@ class eos_leptons:
         Init function for class eos_leptons
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -515,7 +513,6 @@ class eos_had_base(eos_base):
         Init function for class eos_had_base
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1180,7 +1177,6 @@ class eos_had_eden_base(eos_had_base):
         Init function for class eos_had_eden_base
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1233,7 +1229,6 @@ class eos_had_pres_base(eos_had_base):
         Init function for class eos_had_pres_base
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1286,7 +1281,6 @@ class eos_had_temp_base(eos_had_base):
         Init function for class eos_had_temp_base
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1369,7 +1363,6 @@ class eos_had_temp_eden_base(eos_had_temp_base):
         Init function for class eos_had_temp_eden_base
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1422,7 +1415,6 @@ class eos_had_temp_pres_base(eos_had_temp_base):
         Init function for class eos_had_temp_pres_base
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1474,7 +1466,6 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         Init function for class eos_had_skyrme
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1866,7 +1857,6 @@ class eos_had_apr(eos_had_temp_eden_base):
         Init function for class eos_had_apr
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1958,7 +1948,6 @@ class eos_had_rmf(eos_had_temp_pres_base):
         Init function for class eos_had_rmf
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2521,7 +2510,6 @@ class eos_quark(eos_base):
         Init function for class eos_quark
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2573,7 +2561,6 @@ class eos_quark_bag(eos_quark):
         Init function for class eos_quark_bag
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2645,7 +2632,6 @@ class eos_quark_njl(eos_quark):
         Init function for class eos_quark_njl
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2822,7 +2808,6 @@ class eos_tov:
         Init function for class eos_tov
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2989,7 +2974,6 @@ class eos_tov_buchdahl(eos_tov):
         Init function for class eos_tov_buchdahl
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3156,7 +3140,6 @@ class eos_tov_polytrope(eos_tov):
         Init function for class eos_tov_polytrope
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3219,7 +3202,6 @@ class eos_tov_linear(eos_tov):
         Init function for class eos_tov_linear
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3282,7 +3264,6 @@ class eos_tov_interp(eos_tov):
         Init function for class eos_tov_interp
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3509,7 +3490,6 @@ class tov_solve:
         Init function for class tov_solve
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4211,7 +4191,6 @@ class tov_love:
         Init function for class tov_love
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4457,7 +4436,6 @@ class nstar_cold:
         Init function for class nstar_cold
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4888,7 +4866,6 @@ class nucleus_rmf:
         Init function for class nucleus_rmf
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -5106,7 +5083,6 @@ class nucleus_rmf:
 def skyrme_load(sk,model,external=False,verbose=0):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *sk*: :class:`eos_had_skyrme` object
         | *model*: string
         | *external*: ``bool``
@@ -5121,7 +5097,6 @@ def skyrme_load(sk,model,external=False,verbose=0):
 def rmf_load(rmf,model,external=False):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *rmf*: :class:`eos_had_rmf` object
         | *model*: string
         | *external*: ``bool``
