@@ -971,26 +971,6 @@ class fermion_rel(fermion_thermo):
         return
 
     @property
-    def deg_entropy_fac(self):
-        """
-        Property of type ``ctypes.c_double``
-        """
-        func=self._link.o2scl.o2scl_fermion_rel_get_deg_entropy_fac
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @deg_entropy_fac.setter
-    def deg_entropy_fac(self,value):
-        """
-        Setter function for fermion_rel::deg_entropy_fac .
-        """
-        func=self._link.o2scl.o2scl_fermion_rel_set_deg_entropy_fac
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
-        func(self._ptr,value)
-        return
-
-    @property
     def verbose(self):
         """
         Property of type ``ctypes.c_int``
@@ -1067,26 +1047,6 @@ class fermion_rel(fermion_thermo):
         """
         func=self._link.o2scl.o2scl_fermion_rel_set_verify_ti
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
-        func(self._ptr,value)
-        return
-
-    @property
-    def therm_ident(self):
-        """
-        Property of type ``ctypes.c_double``
-        """
-        func=self._link.o2scl.o2scl_fermion_rel_get_therm_ident
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @therm_ident.setter
-    def therm_ident(self,value):
-        """
-        Setter function for fermion_rel::therm_ident .
-        """
-        func=self._link.o2scl.o2scl_fermion_rel_set_therm_ident
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
 

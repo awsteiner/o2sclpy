@@ -8467,9 +8467,9 @@ class gen_test_number:
 
 class funct_string:
     """
-    Python interface for O₂scl class ``funct_string``,
+    Python interface for O₂scl class ``funct_string<double>``,
     see
-    https://awsteiner.org/code/o2scl/html/class/funct_string.html .
+    https://awsteiner.org/code/o2scl/html/class/funct_string<double>.html .
     
     """
 
@@ -8488,7 +8488,7 @@ class funct_string:
         """
 
         if pointer==0:
-            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_funct_string
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_funct_string_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -8504,7 +8504,7 @@ class funct_string:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_funct_string
+            f=self._link.o2scl.o2scl_free_funct_string_double_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -8529,7 +8529,7 @@ class funct_string:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl.o2scl_funct_string_set_parm
+        func=self._link.o2scl.o2scl_funct_string_double__set_parm
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
         ret=func(self._ptr,name_,val)
@@ -8540,7 +8540,7 @@ class funct_string:
         | Parameters:
         | *x*: ``double``
         """
-        func=self._link.o2scl.o2scl_funct_string_getitem
+        func=self._link.o2scl.o2scl_funct_string_double__getitem
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,x)
@@ -8549,13 +8549,13 @@ class funct_string:
     @classmethod
     def init(cls,expr,var):
         """
-        Constructor-like class method for funct_string .
+        Constructor-like class method for funct_string<double> .
 
         | Parameters:
 
         """
 
-        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_funct_string_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_funct_string_double__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
         return cls(f(expr_,var_))
