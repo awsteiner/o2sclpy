@@ -21,6 +21,7 @@
 #  ───────────────────────────────────────────────────────────────────
 
 import numpy
+from o2sclpy.utils import string_to_dict2
 
 class interpm_sklearn_gp:
     """
@@ -34,50 +35,6 @@ class interpm_sklearn_gp:
         self.kernel=0
         self.outformat='numpy'
 
-    def string_to_dict(self,s):
-        """
-        Convert a string to a dictionary, converting strings to 
-        values when necessary.
-        """
-        
-        # First split into keyword = value pairs
-        arr=s.split(',')
-        # Create empty dictionary
-        dct={}
-
-        if len(s)==0:
-            return dct
-        
-        for i in range(0,len(arr)):
-
-            # For each pair, split keyword and value.
-            arr2=arr[i].split('=')
-        
-            # Remove preceeding and trailing whitespace from the
-            # keywords (not for the values)
-            while arr2[0][0].isspace():
-                arr2[0]=arr2[0][1:]
-            while arr2[0][len(arr2[0])-1].isspace():
-                arr2[0]=arr2[0][:-1]
-
-            # Remove quotes if necessary
-            if len(arr2)>1 and len(arr2[1])>2:
-                if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-                if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-
-            if arr2[0]=='verbose':
-                arr2[1]=int(arr2[1])
-            if arr2[0]=='test_size':
-                arr2[1]=float(arr2[1])
-            if arr2[0]=='normalize_y':
-                arr2[1]=(arr2[1]=='True')
-                    
-            dct[arr2[0]]=arr2[1]
-
-        return dct
-    
     def set_data(self,in_data,out_data,
                  kernel='1.0*RBF(1.0,(1e-2,1e2))',test_size=0.0,
                  normalize_y=True,outformat='numpy',verbose=0):
@@ -135,7 +92,9 @@ class interpm_sklearn_gp:
         using a string to specify the keyword arguments.
         """
 
-        dct=self.string_to_dict(options)
+        dct=string_to_dict2(options,list_of_ints['verbose'],
+                            list_of_floats['test_size'],
+                            list_of_bools['normalize_y'])
         print('String:',options,'Dictionary:',dct)
               
         self.set_data(in_data,out_data,**dct)
@@ -205,54 +164,6 @@ class interpm_tf_dnn:
         self.transform=0
         
         return
-    
-    def string_to_dict(self,s):
-        """
-        Convert a string to a dictionary, converting strings to 
-        values when necessary.
-        """
-        
-        # First split into keyword = value pairs
-        arr=s.split(',')
-        # Create empty dictionary
-        dct={}
-
-        if len(s)==0:
-            return dct
-        
-        for i in range(0,len(arr)):
-
-            # For each pair, split keyword and value.
-            arr2=arr[i].split('=')
-        
-            # Remove preceeding and trailing whitespace from the
-            # keywords (not for the values)
-            while arr2[0][0].isspace():
-                arr2[0]=arr2[0][1:]
-            while arr2[0][len(arr2[0])-1].isspace():
-                arr2[0]=arr2[0][:-1]
-
-            # Remove quotes if necessary
-            if len(arr2)>1 and len(arr2[1])>2:
-                if arr2[1][0]=='\'' and arr2[1][len(arr2[1])-1]=='\'':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-                if arr2[1][0]=='"' and arr2[1][len(arr2[1])-1]=='"':
-                    arr2[1]=arr2[1][1:len(arr2[1])-1]
-
-            if arr2[0]=='verbose':
-                arr2[1]=int(arr2[1])
-            elif arr2[0]=='batch_size':
-                arr2[1]=int(arr2[1])
-            elif arr2[0]=='epochs':
-                arr2[1]=int(arr2[1])
-            elif arr2[0]=='test_size':
-                arr2[1]=float(arr2[1])
-            elif arr2[0]=='evaluate':
-                arr2[1]=bool(arr2[1])
-                    
-            dct[arr2[0]]=arr2[1]
-
-        return dct
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  activations=['relu','relu'],
@@ -417,14 +328,25 @@ class interpm_tf_dnn:
         using a string to specify the keyword arguments.
         """
 
-        dct=self.string_to_dict(options)
-        print('String:',options,'Dictionary:',dct)
-
         try:
+            dct=string_to_dict2(options,list_of_ints=['verbose',
+                                                      'batch_size',
+                                                      'epochs'],
+                                list_of_floats=['test_size'],
+                                list_of_bools=['evaluate'])
+            if "hlayers" in dct:
+                htemp=dct["hlayers"]
+                htemp=htemp[1:-1]
+                htemp=htemp.split(',')
+                htemp2=[]
+                for i in range(0,len(htemp)):
+                    htemp2.append(int(htemp[i]))
+                dct["hlayers"]=htemp2
+            print('String:',options,'Dictionary:',dct)
+
             self.set_data(in_data,out_data,**dct)
         except Exception as e:
-            print('Call to set_data() failed.')
-            pass
+            print('Calls in interpm_tf_dnn::set_data_str() failed.',e)
 
         return
     
