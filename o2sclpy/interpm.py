@@ -74,7 +74,7 @@ class interpm_sklearn_gp:
         if self.transform_in=='moto':
             self.SS1=MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
-        elif self.transform=='quant':
+        elif self.transform_in=='quant':
             self.SS1=QuantileTransformer()
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
@@ -123,9 +123,9 @@ class interpm_sklearn_gp:
         using a string to specify the keyword arguments.
         """
 
-        dct=string_to_dict2(options,list_of_ints['verbose'],
-                            list_of_floats['test_size'],
-                            list_of_bools['normalize_y'])
+        dct=string_to_dict2(options,list_of_ints=['verbose'],
+                            list_of_floats=['test_size'],
+                            list_of_bools=['normalize_y'])
         print('String:',options,'Dictionary:',dct)
               
         self.set_data(in_data,out_data,**dct)
@@ -289,7 +289,7 @@ class interpm_tf_dnn:
         if self.transform_in=='moto':
             self.SS1=MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
-        elif self.transform=='quant':
+        elif self.transform_in=='quant':
             self.SS1=QuantileTransformer()
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
