@@ -34,10 +34,15 @@ class interpm_sklearn_gp:
         self.verbose=0
         self.kernel=0
         self.outformat='numpy'
+        self.transform_in=0
+        self.transform_out=0
+        self.SS1=0
+        self.SS2=0
 
     def set_data(self,in_data,out_data,
                  kernel='1.0*RBF(1.0,(1e-2,1e2))',test_size=0.0,
-                 normalize_y=True,outformat='numpy',verbose=0):
+                 normalize_y=True,transform_in='none',
+                 transform_out='none',outformat='numpy',verbose=0):
         """
         Set the input and output data to train the interpolator
         """
@@ -46,6 +51,8 @@ class interpm_sklearn_gp:
             print('interpm_sklearn_gp::set_data():')
             print('  kernel:',kernel)
             print('  normalize_y:',normalize_y)
+            print('  transform_in:',transform_in)
+            print('  transform_out:',transform_out)
             print('  outformat:',outformat)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
@@ -58,19 +65,43 @@ class interpm_sklearn_gp:
         self.kernel=eval(kernel)
         self.outformat=outformat
         self.verbose=verbose
+        self.transform_in=transform_in
+        self.transform_out=transform_out
+
+        from sklearn.preprocessing import QuantileTransformer
+        from sklearn.preprocessing import MinMaxScaler
+        
+        if self.transform_in=='moto':
+            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            in_data_trans=self.SS1.fit_transform(in_data)
+        elif self.transform=='quant':
+            self.SS1=QuantileTransformer()
+            in_data_trans=self.SS1.fit_transform(in_data)
+        else:
+            in_data_trans=in_data
+            
+        if self.transform_out=='moto':
+            self.SS2=MinMaxScaler(feature_range=(-1,1))
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='quant':
+            self.SS2=QuantileTransformer()
+            out_data_trans=self.SS2.fit_transform(out_data)
+        else:
+            out_data_trans=out_data
+
 
         if test_size>0.0:
             try:
                 from sklearn.model_selection import train_test_split
                 in_train,in_test,out_train,out_test=train_test_split(
-                    in_data,out_data,test_size=test_size)
+                    in_data_trans,out_data_trans,test_size=test_size)
             except Exception as e:
                 print('Exception in interpm_sklearn_gp::set_data()',
                       'at test_train_split().',e)
                 pass
         else:
-            in_train=in_data
-            out_train=out_data
+            in_train=in_data_trans
+            out_train=out_data_trans
             
         try:
             func=GaussianProcessRegressor
@@ -106,23 +137,45 @@ class interpm_sklearn_gp:
         Evaluate the GP at point ``v``.
         """
 
+        if self.transform_in!='none':
+            v_trans=0
+            try:
+                v_trans=self.SS1.transform(v.reshape(1,-1))
+            except Exception as e:
+                print(('Exception at input transformation '+
+                       'in interpm_sklearn_gp:'),
+                      e)
+                pass
+        else:
+            v_trans=v
+            
         # AWS, 3/27/24: Keep in mind that o2scl::interpm_python.eval()
         # expects the return type to be a numpy array. 
-        yp=self.gp.predict([v])
+        yp=self.gp.predict([v_trans])
+        
+        if self.transform_out!='none':
+            try:
+                yp_trans=self.SS2.inverse_transform(yp)
+            except Exception as e:
+                print('Exception 5 in interpm_tf_dnn:',e)
+                pass
+        else:
+            yp_trans=yp
+    
         if self.outformat=='list':
             if self.verbose>1:
                 print('interpm_sklearn_gp::eval(): list mode type(yp),v,yp:',
-                      type(yp),v,yp)
-            return yp[0].tolist()
-        if yp.ndim==1:
+                      type(yp_trans),v,yp_trans)
+            return yp_trans[0].tolist()
+        if yp_trans.ndim==1:
             if self.verbose>1:
                 print('interpm_sklearn_gp::eval(): ndim=1 mode type(yp),v,yp:',
-                      type(yp),v,yp)
-            return numpy.ascontiguousarray(yp)
+                      type(yp_trans),v,yp_trans)
+            return numpy.ascontiguousarray(yp_trans)
         if self.verbose>1:
             print('interpm_sklearn_gp::eval(): array mode type(yp[0]),v,yp[0]:',
-                  type(yp[0]),v,yp[0])
-        return numpy.ascontiguousarray(yp[0])
+                  type(yp_trans[0]),v,yp_trans[0])
+        return numpy.ascontiguousarray(yp_trans[0])
 
     def eval_unc(self,v):
         """
@@ -132,20 +185,45 @@ class interpm_sklearn_gp:
         # o2scl::interpm_python.eval_unc() expects the return type to
         # be a tuple of numpy arrays. 
         """
-        yp,std=self.gp.predict([v],return_std=True)
+
+        if self.transform_in!='none':
+            v_trans=0
+            try:
+                v_trans=self.SS1.transform(v.reshape(1,-1))
+            except Exception as e:
+                print(('Exception at input transformation '+
+                       'in interpm_sklearn_gp:'),
+                      e)
+                pass
+        else:
+            v_trans=v
+            
+        yp,std=self.gp.predict([v_trans],return_std=True)
+        
+        if self.transform_out!='none':
+            try:
+                yp_trans=self.SS2.inverse_transform(yp)
+                std_trans=self.SS2.inverse_transform(std)
+            except Exception as e:
+                print('Exception 5 in interpm_tf_dnn:',e)
+                pass
+        else:
+            yp_trans=yp
+            std_trans=std
+    
         if self.outformat=='list':
-            return yp[0].tolist(),std[0].tolist()
-        if yp.ndim==1:
+            return yp_trans[0].tolist(),std_trans[0].tolist()
+        if yp_trans.ndim==1:
             if self.verbose>1:
                 print('interpm_sklearn_gp::eval_unc(): type(yp),v,yp:',
-                      type(yp),v,yp)
-            return (numpy.ascontiguousarray(yp),
-                    numpy.ascontiguousarray(std))
+                      type(yp_trans),v,yp_trans)
+            return (numpy.ascontiguousarray(yp_trans),
+                    numpy.ascontiguousarray(std_trans))
         if self.verbose>1:
             print('interpm_sklearn_gp::eval_unc(): type(yp[0]),v,yp[0]:',
-                  type(yp[0]),v,yp[0])
-        return (numpy.ascontiguousarray(yp[0]),
-                numpy.ascontiguousarray(std[0]))
+                  type(yp_trans[0]),v,yp_trans[0])
+        return (numpy.ascontiguousarray(yp_trans[0]),
+                numpy.ascontiguousarray(std_trans[0]))
 
 class interpm_tf_dnn:
     """
@@ -161,14 +239,16 @@ class interpm_tf_dnn:
         self.dnn=0
         self.SS1=0
         self.SS2=0
-        self.transform=0
+        self.transform_in=0
+        self.transform_out=0
         
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  activations=['relu','relu'],
                  batch_size=None,epochs=100,
-                 transform='none',test_size=0.0,evaluate=False,
+                 transform_in='none',transform_out='none',
+                 test_size=0.0,evaluate=False,
                  hlayers=[8,8],loss='mean_squared_error'):
         """
         Set the input and output data to train the interpolator
@@ -194,30 +274,34 @@ class interpm_tf_dnn:
             print('  batch_size:',batch_size)
             print('  layers:',hlayers)
             print('  activation functions:',activations)
-            print('  transform:',transform)
+            print('  transform_in:',transform_in)
+            print('  transform_out:',transform_out)
             print('  epochs:',epochs)
             print('  test_size:',test_size)
 
         self.outformat=outformat
         self.verbose=verbose
-        self.transform=transform
+        self.transform_in=transform_in
+        self.transform_out=transform_out
 
         from sklearn.preprocessing import QuantileTransformer
         from sklearn.preprocessing import MinMaxScaler
-        if self.transform=='moto':
+        if self.transform_in=='moto':
             self.SS1=MinMaxScaler(feature_range=(-1,1))
-            self.SS2=MinMaxScaler(feature_range=(-1,1))
-        
             in_data_trans=self.SS1.fit_transform(in_data)
-            out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform=='quant':
             self.SS1=QuantileTransformer()
-            self.SS2=QuantileTransformer()
-        
             in_data_trans=self.SS1.fit_transform(in_data)
-            out_data_trans=self.SS2.fit_transform(out_data)
         else:
             in_data_trans=in_data
+            
+        if self.transform_out=='moto':
+            self.SS2=MinMaxScaler(feature_range=(-1,1))
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='quant':
+            self.SS2=QuantileTransformer()
+            out_data_trans=self.SS2.fit_transform(out_data)
+        else:
             out_data_trans=out_data
 
         if self.verbose>0:
@@ -342,6 +426,14 @@ class interpm_tf_dnn:
                 for i in range(0,len(htemp)):
                     htemp2.append(int(htemp[i]))
                 dct["hlayers"]=htemp2
+            if "activations" in dct:
+                atemp=dct["activations"]
+                atemp=atemp[1:-1]
+                atemp=atemp.split(',')
+                atemp2=[]
+                for i in range(0,len(atemp)):
+                    atemp2.append(atemp[i])
+                dct["activations"]=atemp2
             print('String:',options,'Dictionary:',dct)
 
             self.set_data(in_data,out_data,**dct)
@@ -355,7 +447,7 @@ class interpm_tf_dnn:
         Evaluate the NN at point ``v``.
         """
 
-        if self.transform!='none':
+        if self.transform_in!='none':
             v_trans=0
             try:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
@@ -372,7 +464,7 @@ class interpm_tf_dnn:
             print('Exception 4 in interpm_tf_dnn:',e)
             pass
             
-        if self.transform!='none':
+        if self.transform_out!='none':
             try:
                 pred_trans=self.SS2.inverse_transform(pred)
             except Exception as e:
