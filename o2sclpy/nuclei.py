@@ -40,7 +40,6 @@ class nucleus(part):
         Init function for class nucleus
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -196,7 +195,6 @@ class nucmass_info:
         Init function for class nucmass_info
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -352,7 +350,6 @@ class nucmass:
         Init function for class nucmass
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -680,7 +677,6 @@ class nucmass_table(nucmass):
         Init function for class nucmass_table
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -793,7 +789,6 @@ class nucmass_fit_base(nucmass):
         Init function for class nucmass_fit_base
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -865,7 +860,6 @@ class nucmass_semi_empirical(nucmass_fit_base):
         Init function for class nucmass_semi_empirical
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1043,7 +1037,6 @@ class nucmass_ame(nucmass_table):
         Init function for class nucmass_ame
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1095,7 +1088,6 @@ class nucmass_dz_table(nucmass_table):
         Init function for class nucmass_dz_table
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1147,7 +1139,6 @@ class nucmass_dz_fit(nucmass_fit_base):
         Init function for class nucmass_dz_fit
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1199,7 +1190,6 @@ class nucmass_dz_fit_33(nucmass_fit_base):
         Init function for class nucmass_dz_fit_33
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1251,7 +1241,6 @@ class nucmass_frdm(nucmass_fit_base):
         Init function for class nucmass_frdm
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1823,7 +1812,6 @@ class nucmass_mnmsk(nucmass_table):
         Init function for class nucmass_mnmsk
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1875,7 +1863,6 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
         Init function for class nucmass_mnmsk_exp
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1927,7 +1914,6 @@ class nucmass_gen(nucmass_table):
         Init function for class nucmass_gen
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1979,7 +1965,6 @@ class nucmass_dglg(nucmass_table):
         Init function for class nucmass_dglg
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2031,7 +2016,6 @@ class nucmass_hfb(nucmass_table):
         Init function for class nucmass_hfb
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2083,7 +2067,6 @@ class nucmass_hfb_sp(nucmass_table):
         Init function for class nucmass_hfb_sp
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2135,7 +2118,6 @@ class nucmass_ktuy(nucmass_table):
         Init function for class nucmass_ktuy
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2187,7 +2169,6 @@ class nucmass_sdnp(nucmass_table):
         Init function for class nucmass_sdnp
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2239,7 +2220,6 @@ class nucmass_wlw(nucmass_table):
         Init function for class nucmass_wlw
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2282,7 +2262,6 @@ class nucmass_wlw(nucmass_table):
 def ame_load(ame,name,exp_only):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *ame*: :class:`nucmass_ame` object
         | *name*: string
         | *exp_only*: ``bool``
@@ -2296,7 +2275,6 @@ def ame_load(ame,name,exp_only):
 def ame_load_ext(ame,file_name,table_name,exp_only):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *ame*: :class:`nucmass_ame` object
         | *file_name*: string
         | *table_name*: string
@@ -2312,7 +2290,6 @@ def ame_load_ext(ame,file_name,table_name,exp_only):
 def mnmsk_load(mnmsk,model,filename):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *mnmsk*: :class:`nucmass_mnmsk` object
         | *model*: string
         | *filename*: string
@@ -2327,7 +2304,6 @@ def mnmsk_load(mnmsk,model,filename):
 def hfb_load(hfb,model,filename):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hfb*: :class:`nucmass_hfb` object
         | *model*: ``size_t``
         | *filename*: string
@@ -2341,7 +2317,6 @@ def hfb_load(hfb,model,filename):
 def hfb_sp_load(hfb,model,filename):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hfb*: :class:`nucmass_hfb_sp` object
         | *model*: ``size_t``
         | *filename*: string

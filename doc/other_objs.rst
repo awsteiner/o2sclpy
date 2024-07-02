@@ -44,10 +44,10 @@ Other O₂sclpy functions
 Other O₂sclpy variables
 -----------------------
 
-.. autodata:: o2sclpy.cmaps
-.. autodata:: o2sclpy.extra_types
-.. autodata:: o2sclpy.new_cmaps
-.. autodata:: o2sclpy.version		  
+.. autodata:: o2sclpy.doc_data.cmaps
+.. autodata:: o2sclpy.doc_data.extra_types
+.. autodata:: o2sclpy.doc_data.new_cmaps
+.. autodata:: o2sclpy.doc_data.version		  
 
 Extra class for todo items
 --------------------------

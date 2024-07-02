@@ -40,7 +40,6 @@ class thermo:
         Init function for class thermo
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -154,7 +153,6 @@ class part:
         Init function for class part
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -448,7 +446,6 @@ class fermion(part):
         Init function for class fermion
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -540,7 +537,6 @@ class quark(fermion):
         Init function for class quark
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -634,7 +630,6 @@ class fermion_zerot:
         Init function for class fermion_zerot
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -735,7 +730,6 @@ class fermion_thermo(fermion_zerot):
         Init function for class fermion_thermo
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -858,7 +852,6 @@ class fermion_rel(fermion_thermo):
         Init function for class fermion_rel
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -978,26 +971,6 @@ class fermion_rel(fermion_thermo):
         return
 
     @property
-    def deg_entropy_fac(self):
-        """
-        Property of type ``ctypes.c_double``
-        """
-        func=self._link.o2scl.o2scl_fermion_rel_get_deg_entropy_fac
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @deg_entropy_fac.setter
-    def deg_entropy_fac(self,value):
-        """
-        Setter function for fermion_rel::deg_entropy_fac .
-        """
-        func=self._link.o2scl.o2scl_fermion_rel_set_deg_entropy_fac
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
-        func(self._ptr,value)
-        return
-
-    @property
     def verbose(self):
         """
         Property of type ``ctypes.c_int``
@@ -1074,26 +1047,6 @@ class fermion_rel(fermion_thermo):
         """
         func=self._link.o2scl.o2scl_fermion_rel_set_verify_ti
         func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
-        func(self._ptr,value)
-        return
-
-    @property
-    def therm_ident(self):
-        """
-        Property of type ``ctypes.c_double``
-        """
-        func=self._link.o2scl.o2scl_fermion_rel_get_therm_ident
-        func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p]
-        return func(self._ptr)
-
-    @therm_ident.setter
-    def therm_ident(self,value):
-        """
-        Setter function for fermion_rel::therm_ident .
-        """
-        func=self._link.o2scl.o2scl_fermion_rel_set_therm_ident
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
 
@@ -1189,7 +1142,6 @@ class fermion_nonrel(fermion_zerot):
         Init function for class fermion_nonrel
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1276,7 +1228,6 @@ class boson(part):
         Init function for class boson
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1352,7 +1303,6 @@ class boson_rel:
         Init function for class boson_rel
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1461,7 +1411,6 @@ class classical_thermo:
         Init function for class classical_thermo
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1537,7 +1486,6 @@ class thermo_np_deriv_press:
         Init function for class thermo_np_deriv_press
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1711,7 +1659,6 @@ class thermo_np_deriv_helm:
         Init function for class thermo_np_deriv_helm
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1885,7 +1832,6 @@ class part_deriv_press:
         Init function for class part_deriv_press
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2008,7 +1954,6 @@ class part_deriv(part):
         Init function for class part_deriv
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2058,7 +2003,6 @@ class fermion_deriv(fermion):
         Init function for class fermion_deriv
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2112,7 +2056,6 @@ class deriv_thermo_base:
         Init function for class deriv_thermo_base
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2244,7 +2187,6 @@ class classical_deriv_thermo:
         Init function for class classical_deriv_thermo
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2322,7 +2264,6 @@ class fermion_mag_zerot:
         Init function for class fermion_mag_zerot
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """

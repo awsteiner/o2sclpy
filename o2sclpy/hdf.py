@@ -45,7 +45,6 @@ class hdf_file:
         Init function for class hdf_file
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -776,7 +775,6 @@ class acol_manager:
         Init function for class acol_manager
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1619,7 +1617,6 @@ class cloud_file:
         Init function for class cloud_file
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1836,7 +1833,6 @@ class cloud_file:
 def hdf_input_table(hf,t,name=""):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table<>` object
         | *name*: string
@@ -1850,7 +1846,6 @@ def hdf_input_table(hf,t,name=""):
 def hdf_input_n_table(hf,t,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table<>` object
         | *name*: :class:`std::string` object
@@ -1864,7 +1859,6 @@ def hdf_input_n_table(hf,t,name):
 def hdf_output_table(hf,t,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table<>` object
         | *name*: string
@@ -1878,7 +1872,6 @@ def hdf_output_table(hf,t,name):
 def hdf_input_table_units(hf,t,name=""):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table_units<>` object
         | *name*: string
@@ -1892,7 +1885,6 @@ def hdf_input_table_units(hf,t,name=""):
 def hdf_input_n_table_units(hf,t,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table_units<>` object
         | *name*: :class:`std::string` object
@@ -1906,7 +1898,6 @@ def hdf_input_n_table_units(hf,t,name):
 def hdf_output_table_units(hf,t,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table_units<>` object
         | *name*: string
@@ -1920,7 +1911,6 @@ def hdf_output_table_units(hf,t,name):
 def hdf_input_table3d(hf,t,name=""):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table3d` object
         | *name*: string
@@ -1934,7 +1924,6 @@ def hdf_input_table3d(hf,t,name=""):
 def hdf_input_n_table3d(hf,t,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table3d` object
         | *name*: :class:`std::string` object
@@ -1948,7 +1937,6 @@ def hdf_input_n_table3d(hf,t,name):
 def hdf_output_table3d(hf,t,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`table3d` object
         | *name*: string
@@ -1962,7 +1950,6 @@ def hdf_output_table3d(hf,t,name):
 def hdf_input_uniform_grid(hf,t,name=""):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`uniform_grid<>` object
         | *name*: string
@@ -1976,7 +1963,6 @@ def hdf_input_uniform_grid(hf,t,name=""):
 def hdf_input_n_uniform_grid(hf,t,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`uniform_grid<>` object
         | *name*: :class:`std::string` object
@@ -1990,7 +1976,6 @@ def hdf_input_n_uniform_grid(hf,t,name):
 def hdf_output_uniform_grid(hf,t,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`uniform_grid<>` object
         | *name*: string
@@ -2004,7 +1989,6 @@ def hdf_output_uniform_grid(hf,t,name):
 def hdf_input_tensor_grid(hf,t,name=""):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`tensor_grid<>` object
         | *name*: string
@@ -2018,7 +2002,6 @@ def hdf_input_tensor_grid(hf,t,name=""):
 def hdf_input_n_tensor_grid(hf,t,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`tensor_grid<>` object
         | *name*: :class:`std::string` object
@@ -2032,7 +2015,6 @@ def hdf_input_n_tensor_grid(hf,t,name):
 def hdf_output_tensor_grid(hf,t,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *t*: :class:`tensor_grid<>` object
         | *name*: string
@@ -2046,7 +2028,6 @@ def hdf_output_tensor_grid(hf,t,name):
 def hdf_input_vector_contour_line(hf,v,name=""):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *v*: :class:`std::vector<contour_line>` object
         | *name*: string
@@ -2060,7 +2041,6 @@ def hdf_input_vector_contour_line(hf,v,name=""):
 def hdf_input_n_vector_contour_line(hf,v,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *v*: :class:`std::vector<contour_line>` object
         | *name*: :class:`std::string` object
@@ -2074,7 +2054,6 @@ def hdf_input_n_vector_contour_line(hf,v,name):
 def hdf_output_vector_contour_line(hf,v,name):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *hf*: :class:`hdf_file` object
         | *v*: :class:`std::vector<contour_line>` object
         | *name*: string
@@ -2088,7 +2067,6 @@ def hdf_output_vector_contour_line(hf,v,name):
 def value_spec(spec,d,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *spec*: string
         | *d*: ``double``
         | *verbose*: ``int``
@@ -2105,7 +2083,6 @@ def value_spec(spec,d,verbose=0,err_on_fail=True):
 def vector_spec(spec,v,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *spec*: string
         | *v*: :class:`std::vector<double>` object
         | *verbose*: ``int``
@@ -2122,7 +2099,6 @@ def vector_spec(spec,v,verbose=0,err_on_fail=True):
 def strings_spec(spec,v,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *spec*: string
         | *v*: :class:`std::vector<std::string>` object
         | *verbose*: ``int``
@@ -2139,7 +2115,6 @@ def strings_spec(spec,v,verbose=0,err_on_fail=True):
 def vector_spec_v(spec):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *spec*: string
         | Returns: ``std_vector`` object
     """
@@ -2153,7 +2128,6 @@ def vector_spec_v(spec):
 def mult_vector_spec(spec,v,use_regex=False,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *spec*: string
         | *v*: :class:`std::vector<std::vector<double>>` object
         | *use_regex*: ``bool``

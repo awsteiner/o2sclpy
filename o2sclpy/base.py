@@ -51,7 +51,6 @@ class std_string:
         Init function for class std_string
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -190,7 +189,6 @@ class std_vector:
         Init function for class std_vector
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -357,7 +355,6 @@ class std_vector_int:
         Init function for class std_vector_int
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -484,7 +481,6 @@ class std_vector_size_t:
         Init function for class std_vector_size_t
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -633,7 +629,6 @@ class std_vector_string:
         Init function for class std_vector_string
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -790,7 +785,6 @@ class ublas_vector:
         Init function for class ublas_vector
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -917,7 +911,6 @@ class ublas_vector_int:
         Init function for class ublas_vector_int
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1044,7 +1037,6 @@ class ublas_matrix:
         Init function for class ublas_matrix
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1174,7 +1166,6 @@ class ublas_matrix_int:
         Init function for class ublas_matrix_int
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1304,7 +1295,6 @@ class std_vector_vector:
         Init function for class std_vector_vector
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1428,7 +1418,6 @@ class vec_vec_string:
         Init function for class vec_vec_string
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1549,7 +1538,6 @@ class std_complex:
         Init function for class std_complex
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1668,7 +1656,6 @@ class lib_settings_class:
         Init function for class lib_settings_class
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -1921,7 +1908,6 @@ class table:
         Init function for class table
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2775,7 +2761,6 @@ class table_units(table):
         Init function for class table_units
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -2910,7 +2895,6 @@ class uniform_grid:
         Init function for class uniform_grid
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3055,7 +3039,6 @@ class uniform_grid_end(uniform_grid):
         Init function for class uniform_grid_end
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3121,7 +3104,6 @@ class uniform_grid_width(uniform_grid):
         Init function for class uniform_grid_width
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3187,7 +3169,6 @@ class uniform_grid_end_width(uniform_grid):
         Init function for class uniform_grid_end_width
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3253,7 +3234,6 @@ class uniform_grid_log_end(uniform_grid):
         Init function for class uniform_grid_log_end
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3319,7 +3299,6 @@ class uniform_grid_log_width(uniform_grid):
         Init function for class uniform_grid_log_width
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3385,7 +3364,6 @@ class uniform_grid_log_end_width(uniform_grid):
         Init function for class uniform_grid_log_end_width
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -3456,7 +3434,6 @@ class table3d:
         Init function for class table3d
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4092,7 +4069,6 @@ class index_spec:
         Init function for class index_spec
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4290,7 +4266,6 @@ class ix_index:
         Init function for class ix_index
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4362,7 +4337,6 @@ class ix_fixed:
         Init function for class ix_fixed
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4434,7 +4408,6 @@ class ix_sum:
         Init function for class ix_sum
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4506,7 +4479,6 @@ class ix_trace:
         Init function for class ix_trace
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4578,7 +4550,6 @@ class ix_reverse:
         Init function for class ix_reverse
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4650,7 +4621,6 @@ class ix_range:
         Init function for class ix_range
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4722,7 +4692,6 @@ class ix_interp:
         Init function for class ix_interp
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4794,7 +4763,6 @@ class ix_grid:
         Init function for class ix_grid
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4866,7 +4834,6 @@ class ix_gridw:
         Init function for class ix_gridw
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -4936,7 +4903,6 @@ class tensor:
         Init function for class tensor
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -5355,7 +5321,6 @@ class tensor_int:
         Init function for class tensor_int
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -5752,7 +5717,6 @@ class tensor_size_t:
         Init function for class tensor_size_t
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -6122,7 +6086,6 @@ class tensor_grid(tensor):
         Init function for class tensor_grid
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -6513,7 +6476,6 @@ class find_constants_const_entry:
         Init function for class find_constants_const_entry
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -6810,7 +6772,6 @@ class find_constants:
         Init function for class find_constants
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -6898,7 +6859,6 @@ class convert_units_der_unit:
         Init function for class convert_units_der_unit
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -7174,7 +7134,6 @@ class convert_units:
         Init function for class convert_units
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -7458,7 +7417,6 @@ class columnify:
         Init function for class columnify
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -7575,7 +7533,6 @@ class format_float:
         Init function for class format_float
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -7723,7 +7680,6 @@ class interp_vec:
         Init function for class interp_vec
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -7850,7 +7806,6 @@ class interp_krige_optim_rbf_noise:
         Init function for class interp_krige_optim_rbf_noise
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -8060,7 +8015,6 @@ class terminal:
         Init function for class terminal
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -8444,7 +8398,6 @@ class gen_test_number:
         Init function for class gen_test_number
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -8514,9 +8467,9 @@ class gen_test_number:
 
 class funct_string:
     """
-    Python interface for O₂scl class ``funct_string``,
+    Python interface for O₂scl class ``funct_string<double>``,
     see
-    https://awsteiner.org/code/o2scl/html/class/funct_string.html .
+    https://awsteiner.org/code/o2scl/html/class/funct_string<double>.html .
     
     """
 
@@ -8530,13 +8483,12 @@ class funct_string:
         Init function for class funct_string
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
 
         if pointer==0:
-            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_funct_string
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_funct_string_double_
             f.restype=ctypes.c_void_p
             f.argtypes=[]
             self._ptr=f()
@@ -8552,7 +8504,7 @@ class funct_string:
         """
 
         if self._owner==True:
-            f=self._link.o2scl.o2scl_free_funct_string
+            f=self._link.o2scl.o2scl_free_funct_string_double_
             f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
@@ -8577,7 +8529,7 @@ class funct_string:
         | Returns: a Python int
         """
         name_=ctypes.c_char_p(force_bytes(name))
-        func=self._link.o2scl.o2scl_funct_string_set_parm
+        func=self._link.o2scl.o2scl_funct_string_double__set_parm
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
         ret=func(self._ptr,name_,val)
@@ -8588,7 +8540,7 @@ class funct_string:
         | Parameters:
         | *x*: ``double``
         """
-        func=self._link.o2scl.o2scl_funct_string_getitem
+        func=self._link.o2scl.o2scl_funct_string_double__getitem
         func.restype=ctypes.c_double
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         ret=func(self._ptr,x)
@@ -8597,13 +8549,13 @@ class funct_string:
     @classmethod
     def init(cls,expr,var):
         """
-        Constructor-like class method for funct_string .
+        Constructor-like class method for funct_string<double> .
 
         | Parameters:
 
         """
 
-        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_funct_string_init
+        f=o2sclpy.doc_data.top_linker.o2scl.o2scl_funct_string_double__init
         f.restype=ctypes.c_void_p
         f.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
         return cls(f(expr_,var_))
@@ -8626,7 +8578,6 @@ class comm_option_s:
         Init function for class comm_option_s
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -8843,7 +8794,6 @@ class cmd_line_arg:
         Init function for class cmd_line_arg
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -8980,7 +8930,6 @@ class cli:
         Init function for class cli
 
         | Parameters:
-        | *link* :class:`linker` object
         | *pointer* ``ctypes.c_void_p`` pointer
 
         """
@@ -9263,7 +9212,6 @@ class shared_ptr_table_units(table_units):
 def rearrange_and_copy(t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *t*: :class:`tensor<>` object
         | *spec*: string
         | *verbose*: ``int``
@@ -9282,7 +9230,6 @@ def rearrange_and_copy(t,spec,verbose=0,err_on_fail=True):
 def rearrange_and_copy_int(t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *t*: :class:`tensor<int>` object
         | *spec*: string
         | *verbose*: ``int``
@@ -9301,7 +9248,6 @@ def rearrange_and_copy_int(t,spec,verbose=0,err_on_fail=True):
 def rearrange_and_copy_size_t(t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *t*: :class:`tensor<size_t>` object
         | *spec*: string
         | *verbose*: ``int``
@@ -9320,7 +9266,6 @@ def rearrange_and_copy_size_t(t,spec,verbose=0,err_on_fail=True):
 def grid_rearrange_and_copy(t,spec,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *t*: :class:`tensor_grid<>` object
         | *spec*: string
         | *verbose*: ``int``
@@ -9339,7 +9284,6 @@ def grid_rearrange_and_copy(t,spec,verbose=0,err_on_fail=True):
 def fermi_function(x):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *x*: ``double``
         | Returns: ``ctypes.c_double`` object
     """
@@ -9352,7 +9296,6 @@ def fermi_function(x):
 def bose_function(x):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *x*: ``double``
         | Returns: ``ctypes.c_double`` object
     """
@@ -9365,7 +9308,6 @@ def bose_function(x):
 def quadratic_extremum_x(x1,x2,x3,y1,y2,y3):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *x1*: ``double``
         | *x2*: ``double``
         | *x3*: ``double``
@@ -9383,7 +9325,6 @@ def quadratic_extremum_x(x1,x2,x3,y1,y2,y3):
 def quadratic_extremum_y(x1,x2,x3,y1,y2,y3):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *x1*: ``double``
         | *x2*: ``double``
         | *x3*: ``double``
@@ -9401,7 +9342,6 @@ def quadratic_extremum_y(x1,x2,x3,y1,y2,y3):
 def screenify(nin,in_cols,out_cols,max_size=80):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *nin*: ``size_t``
         | *in_cols*: :class:`vector<std::string>` object
         | *out_cols*: :class:`vector<std::string>` object
@@ -9415,7 +9355,6 @@ def screenify(nin,in_cols,out_cols,max_size=80):
 def file_exists(fname):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *fname*: string
         | Returns: ``ctypes.c_bool`` object
     """
@@ -9429,7 +9368,6 @@ def file_exists(fname):
 def RGBtoHSV(r,g,b,h,s,v):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *r*: ``double``
         | *g*: ``double``
         | *b*: ``double``
@@ -9445,7 +9383,6 @@ def RGBtoHSV(r,g,b,h,s,v):
 def HSVtoRGB(h,s,v,r,g,b):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *h*: ``double``
         | *s*: ``double``
         | *v*: ``double``
@@ -9461,7 +9398,6 @@ def HSVtoRGB(h,s,v,r,g,b):
 def wordexp_single_file(fname):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *fname*: :class:`std::string` object
     """
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_wordexp_single_file_wrapper
@@ -9473,7 +9409,6 @@ def wordexp_single_file(fname):
 def wordexp_wrapper(word,matches):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *word*: string
         | *matches*: :class:`std::vector<std::string>` object
     """
@@ -9486,7 +9421,6 @@ def wordexp_wrapper(word,matches):
 def function_to_double(s,verbose=0):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *s*: string
         | *verbose*: ``int``
         | Returns: ``ctypes.c_double`` object
@@ -9501,7 +9435,6 @@ def function_to_double(s,verbose=0):
 def function_to_double_nothrow(s,result,verbose=0):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *s*: string
         | *result*: ``double``
         | *verbose*: ``int``
@@ -9517,7 +9450,6 @@ def function_to_double_nothrow(s,result,verbose=0):
 def find_constant(name,unit):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *name*: string
         | *unit*: string
         | Returns: ``ctypes.c_double`` object
@@ -9533,7 +9465,6 @@ def find_constant(name,unit):
 def string_to_uint_list(x,list):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *x*: :class:`std::string` object
         | *list*: :class:`vector<size_t>` object
         | Returns: ``ctypes.c_int`` object
@@ -9548,7 +9479,6 @@ def string_to_uint_list(x,list):
 def rewrap_keep_endlines(str,sv,ncol=79,verbose=0,ignore_vt100=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *str*: string
         | *sv*: :class:`std::vector<std::string>` object
         | *ncol*: ``size_t``
@@ -9564,7 +9494,6 @@ def rewrap_keep_endlines(str,sv,ncol=79,verbose=0,ignore_vt100=True):
 def vector_level_count(level,n,x,y):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *level*: ``double``
         | *n*: ``size_t``
         | *x*: :class:`std::vector<double>` object
@@ -9580,7 +9509,6 @@ def vector_level_count(level,n,x,y):
 def vector_deriv_interp(n,v,dv,interp_type=2):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *v*: :class:`std::vector<double>` object
         | *dv*: :class:`std::vector<double>` object
@@ -9594,7 +9522,6 @@ def vector_deriv_interp(n,v,dv,interp_type=2):
 def vector_deriv2_interp(n,v,dv,interp_type=2):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *v*: :class:`std::vector<double>` object
         | *dv*: :class:`std::vector<double>` object
@@ -9608,7 +9535,6 @@ def vector_deriv2_interp(n,v,dv,interp_type=2):
 def vector_deriv_xy_interp(n,vx,vy,dv,interp_type=2):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *vx*: :class:`std::vector<double>` object
         | *vy*: :class:`std::vector<double>` object
@@ -9623,7 +9549,6 @@ def vector_deriv_xy_interp(n,vx,vy,dv,interp_type=2):
 def vector_deriv2_xy_interp(n,vx,vy,dv,interp_type=2):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *vx*: :class:`std::vector<double>` object
         | *vy*: :class:`std::vector<double>` object
@@ -9638,7 +9563,6 @@ def vector_deriv2_xy_interp(n,vx,vy,dv,interp_type=2):
 def vector_integ_interp(n,vx,interp_type=2):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *vx*: :class:`std::vector<double>` object
         | *interp_type*: ``size_t``
@@ -9653,7 +9577,6 @@ def vector_integ_interp(n,vx,interp_type=2):
 def vector_integ_xy_interp(n,vx,vy,interp_type=2):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *vx*: :class:`std::vector<double>` object
         | *vy*: :class:`std::vector<double>` object
@@ -9669,7 +9592,6 @@ def vector_integ_xy_interp(n,vx,vy,interp_type=2):
 def vector_integ_ul_interp(n,x2,v,interp_type=2):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *x2*: ``double``
         | *v*: :class:`std::vector<double>` object
@@ -9685,7 +9607,6 @@ def vector_integ_ul_interp(n,x2,v,interp_type=2):
 def vector_integ_ul_xy_interp(n,x2,vx,vy,interp_type=2):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *x2*: ``double``
         | *vx*: :class:`std::vector<double>` object
@@ -9702,7 +9623,6 @@ def vector_integ_ul_xy_interp(n,x2,vx,vy,interp_type=2):
 def vector_find_level(level,n,x,y,locs):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *level*: ``double``
         | *n*: ``size_t``
         | *x*: :class:`std::vector<double>` object
@@ -9717,7 +9637,6 @@ def vector_find_level(level,n,x,y,locs):
 def vector_invert_enclosed_sum(sum,n,x,y,lev,boundaries=0,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *sum*: ``double``
         | *n*: ``size_t``
         | *x*: :class:`std::vector<double>` object
@@ -9735,7 +9654,6 @@ def vector_invert_enclosed_sum(sum,n,x,y,lev,boundaries=0,verbose=0,err_on_fail=
 def vector_region_int(n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *x*: :class:`std::vector<double>` object
         | *y*: :class:`std::vector<double>` object
@@ -9755,7 +9673,6 @@ def vector_region_int(n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=True):
 def vector_region_fracint(n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *x*: :class:`std::vector<double>` object
         | *y*: :class:`std::vector<double>` object
@@ -9775,7 +9692,6 @@ def vector_region_fracint(n,x,y,intl,locs,boundaries=0,verbose=0,err_on_fail=Tru
 def vector_bound_fracint(n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *x*: :class:`std::vector<double>` object
         | *y*: :class:`std::vector<double>` object
@@ -9796,7 +9712,6 @@ def vector_bound_fracint(n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail=
 def vector_bound_int(n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail=True):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *x*: :class:`std::vector<double>` object
         | *y*: :class:`std::vector<double>` object
@@ -9817,7 +9732,6 @@ def vector_bound_int(n,x,y,frac,low,high,boundaries=0,verbose=0,err_on_fail=True
 def rebin_xy(x,y,x_out,y_out,n_pts,interp_type):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *x*: :class:`std::vector<double>` object
         | *y*: :class:`std::vector<double>` object
         | *x_out*: :class:`std::vector<double>` object
@@ -9833,7 +9747,6 @@ def rebin_xy(x,y,x_out,y_out,n_pts,interp_type):
 def linear_or_log_chi2(x,y):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *x*: :class:`std::vector<double>` object
         | *y*: :class:`std::vector<double>` object
         | Returns: ``ctypes.c_double`` object
@@ -9847,7 +9760,6 @@ def linear_or_log_chi2(x,y):
 def linear_or_log_pair(x,y,log_x,log_y):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *x*: :class:`std::vector<double>` object
         | *y*: :class:`std::vector<double>` object
         | *log_x*: ``bool``
@@ -9861,7 +9773,6 @@ def linear_or_log_pair(x,y,log_x,log_y):
 def vector_refine(n,index,data,factor,interp_type=2):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *n*: ``size_t``
         | *index*: :class:`std::vector<double>` object
         | *data*: :class:`std::vector<double>` object
@@ -9876,7 +9787,6 @@ def vector_refine(n,index,data,factor,interp_type=2):
 def linear_or_log(x,log_x):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *x*: :class:`std::vector<double>` object
         | *log_x*: ``bool``
     """
@@ -9888,7 +9798,6 @@ def linear_or_log(x,log_x):
 def get_screen_size_ioctl(row,col):
     """
         | Parameters:
-        | *link* :class:`linker` object
         | *row*: ``int``
         | *col*: ``int``
         | Returns: ``ctypes.c_int`` object
