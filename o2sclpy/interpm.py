@@ -33,6 +33,7 @@ class interpm_sklearn_gp:
         self.verbose=0
         self.kernel=0
         self.outformat='numpy'
+        self.SS1=0
 
     def string_to_dict(self,s):
         """
@@ -97,22 +98,25 @@ class interpm_sklearn_gp:
         from sklearn.gaussian_process.kernels import RBF, DotProduct
         from sklearn.gaussian_process.kernels import RationalQuadratic
         from sklearn.gaussian_process.kernels import Matern, WhiteKernel
+        from sklearn.preprocessing import QuantileTransformer
 
         self.kernel=eval(kernel)
         self.outformat=outformat
         self.verbose=verbose
+        self.SS1=QuantileTransformer(n_quantiles=len(in_data[1]))
+        in_data_trans=self.SS1.fit_transform(in_data)
 
         if test_size>0.0:
             try:
                 from sklearn.model_selection import train_test_split
                 in_train,in_test,out_train,out_test=train_test_split(
-                    in_data,out_data,test_size=test_size)
+                    in_data_trans,out_data,test_size=test_size)
             except Exception as e:
                 print('Exception in interpm_sklearn_gp::set_data()',
                       'at test_train_split().',e)
                 pass
         else:
-            in_train=in_data
+            in_train=in_data_trans
             out_train=out_data
             
         try:
@@ -149,7 +153,15 @@ class interpm_sklearn_gp:
 
         # AWS, 3/27/24: Keep in mind that o2scl::interpm_python.eval()
         # expects the return type to be a numpy array. 
-        yp=self.gp.predict([v])
+        v_trans=0
+        try:
+            v_trans=self.SS1.transform(v.reshape(1,-1))
+        except Exception as e:
+            print('Exception at input transformation in interpm_sklearn_gp:',
+                      e)
+            pass
+        
+        yp=self.gp.predict([v_trans])
         if self.outformat=='list':
             if self.verbose>1:
                 print('interpm_sklearn_gp::eval(): list mode type(yp),v,yp:',
@@ -173,7 +185,16 @@ class interpm_sklearn_gp:
         # o2scl::interpm_python.eval_unc() expects the return type to
         # be a tuple of numpy arrays. 
         """
-        yp,std=self.gp.predict([v],return_std=True)
+    
+        v_trans=0
+        try:
+            v_trans=self.SS1.transform(v.reshape(1,-1))
+        except Exception as e:
+            print('Exception at input transformation in interpm_sklearn_gp:',
+                      e)
+            pass
+
+        yp,std=self.gp.predict(v_trans,return_std=True)
         if self.outformat=='list':
             return yp[0].tolist(),std[0].tolist()
         if yp.ndim==1:
@@ -255,10 +276,10 @@ class interpm_tf_dnn:
         return dct
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
-                 activations=['relu','relu'],
+                 activations=['sigmoid','sigmoid'],
                  batch_size=None,epochs=100,
                  transform='none',test_size=0.0,evaluate=False,
-                 hlayers=[8,8],loss='mean_squared_error'):
+                 hlayers=[96,32],loss='mean_squared_error'):
         """
         Set the input and output data to train the interpolator
 
