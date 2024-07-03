@@ -76,10 +76,7 @@ class interpm_sklearn_gp:
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
             self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
-            print('Here:',type(in_data))
             in_data_trans=self.SS1.fit_transform(in_data)
-            print('Here2:',type(in_data),type(in_data_trans))
-            print('Here2:',in_data.shape,in_data_trans.shape)
         else:
             in_data_trans=in_data
             
@@ -106,11 +103,9 @@ class interpm_sklearn_gp:
             out_train=out_data_trans
             
         try:
-            print("Iere")
             func=GaussianProcessRegressor
             self.gp=func(normalize_y=True,
                          kernel=self.kernel).fit(in_train,out_train)
-            print("Iere2")
         except Exception as e:
             print('Exception in interpm_sklearn_gp::set_data()',
                   'at fit().',e)
@@ -140,7 +135,6 @@ class interpm_sklearn_gp:
         Evaluate the GP at point ``v``.
         """
 
-        print('Jere')
         if self.transform_in!='none':
             v_trans=0
             try:
@@ -152,12 +146,10 @@ class interpm_sklearn_gp:
         else:
             v_trans=v.reshape(1,-1)
             
-        print('Jere2')
         # AWS, 3/27/24: Keep in mind that o2scl::interpm_python.eval()
         # expects the return type to be a numpy array. 
         yp=self.gp.predict(v_trans)
         
-        print('Jere3')
         if self.transform_out!='none':
             try:
                 yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
