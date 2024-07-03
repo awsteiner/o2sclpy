@@ -75,8 +75,11 @@ class interpm_sklearn_gp:
             self.SS1=MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
-            self.SS1=QuantileTransformer()
+            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            print('Here:',type(in_data))
             in_data_trans=self.SS1.fit_transform(in_data)
+            print('Here2:',type(in_data),type(in_data_trans))
+            print('Here2:',in_data.shape,in_data_trans.shape)
         else:
             in_data_trans=in_data
             
@@ -84,7 +87,7 @@ class interpm_sklearn_gp:
             self.SS2=MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
-            self.SS2=QuantileTransformer()
+            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
             out_data_trans=self.SS2.fit_transform(out_data)
         else:
             out_data_trans=out_data
@@ -98,19 +101,19 @@ class interpm_sklearn_gp:
             except Exception as e:
                 print('Exception in interpm_sklearn_gp::set_data()',
                       'at test_train_split().',e)
-                pass
         else:
             in_train=in_data_trans
             out_train=out_data_trans
             
         try:
+            print("Iere")
             func=GaussianProcessRegressor
             self.gp=func(normalize_y=True,
                          kernel=self.kernel).fit(in_train,out_train)
+            print("Iere2")
         except Exception as e:
             print('Exception in interpm_sklearn_gp::set_data()',
                   'at fit().',e)
-            pass
 
         if test_size>0.0:
             print('score:',self.gp.score(in_test,out_test))
@@ -137,6 +140,7 @@ class interpm_sklearn_gp:
         Evaluate the GP at point ``v``.
         """
 
+        print('Jere')
         if self.transform_in!='none':
             v_trans=0
             try:
@@ -145,20 +149,20 @@ class interpm_sklearn_gp:
                 print(('Exception at input transformation '+
                        'in interpm_sklearn_gp:'),
                       e)
-                pass
         else:
-            v_trans=v
+            v_trans=v.reshape(1,-1)
             
+        print('Jere2')
         # AWS, 3/27/24: Keep in mind that o2scl::interpm_python.eval()
         # expects the return type to be a numpy array. 
-        yp=self.gp.predict([v_trans])
+        yp=self.gp.predict(v_trans)
         
+        print('Jere3')
         if self.transform_out!='none':
             try:
-                yp_trans=self.SS2.inverse_transform(yp)
+                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
             except Exception as e:
-                print('Exception 5 in interpm_tf_dnn:',e)
-                pass
+                print('Exception 5 in interpm_sklearn_gp:',e)
         else:
             yp_trans=yp
     
@@ -194,19 +198,17 @@ class interpm_sklearn_gp:
                 print(('Exception at input transformation '+
                        'in interpm_sklearn_gp:'),
                       e)
-                pass
         else:
-            v_trans=v
+            v_trans=v.reshape(1,-1)
             
-        yp,std=self.gp.predict([v_trans],return_std=True)
+        yp,std=self.gp.predict(v_trans,return_std=True)
         
         if self.transform_out!='none':
             try:
-                yp_trans=self.SS2.inverse_transform(yp)
-                std_trans=self.SS2.inverse_transform(std)
+                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                std_trans=self.SS2.inverse_transform(std.reshape(-1,1))
             except Exception as e:
-                print('Exception 5 in interpm_tf_dnn:',e)
-                pass
+                print('Exception 6 in interpm_sklearn_gp:',e)
         else:
             yp_trans=yp
             std_trans=std
@@ -290,7 +292,7 @@ class interpm_tf_dnn:
             self.SS1=MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
-            self.SS1=QuantileTransformer()
+            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
             in_data_trans=in_data
@@ -299,7 +301,7 @@ class interpm_tf_dnn:
             self.SS2=MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
-            self.SS2=QuantileTransformer()
+            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
             out_data_trans=self.SS2.fit_transform(out_data)
         else:
             out_data_trans=out_data
@@ -313,7 +315,6 @@ class interpm_tf_dnn:
             except Exception as e:
                 print('Exception in interpm_tf_dnn::set_data()',
                       'at min,max().',e)
-                pass
             
             for j in range(0,numpy.shape(out_data)[0]):
                 if out_data[j,0]<minv_old:
@@ -337,7 +338,6 @@ class interpm_tf_dnn:
             except Exception as e:
                 print('Exception in interpm_tf_dnn::set_data()',
                       'at test_train_split().',e)
-                pass
         else:
             x_train=in_data_trans
             y_train=out_data_trans
@@ -371,7 +371,6 @@ class interpm_tf_dnn:
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
                   'at model definition.',e)
-            pass
         
         if self.verbose>0:
             print('summary:',model.summary())
@@ -393,7 +392,6 @@ class interpm_tf_dnn:
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
                   'at model fitting.',e)
-            pass
 
         if evaluate==True:
             # Return loss value and metrics
@@ -454,7 +452,6 @@ class interpm_tf_dnn:
             except Exception as e:
                 print('Exception at input transformation in interpm_tf_dnn:',
                       e)
-                pass
         else:
             v_trans=v.reshape(1,-1)
 
@@ -462,14 +459,12 @@ class interpm_tf_dnn:
             pred=self.dnn.predict(v_trans, verbose=self.verbose)
         except Exception as e:
             print('Exception 4 in interpm_tf_dnn:',e)
-            pass
             
         if self.transform_out!='none':
             try:
                 pred_trans=self.SS2.inverse_transform(pred)
             except Exception as e:
                 print('Exception 5 in interpm_tf_dnn:',e)
-                pass
         else:
             pred_trans=pred
     
