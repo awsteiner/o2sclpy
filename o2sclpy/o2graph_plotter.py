@@ -1975,7 +1975,11 @@ class o2graph_plotter(td_plot_base):
             amt=acol_manager(amp)
             tab=amt.get_table_obj()
             
-            if len(args)<3:
+            if len(args)<2:
+                print("Not enough arguments for 'plot' command.")
+                print("  args:",args)
+                return
+            elif len(args)<3:
                 self.plot([tab,args[0],args[1]])
             else:
                 self.plot([tab,args[0],args[1]],**string_to_dict(args[2]))
