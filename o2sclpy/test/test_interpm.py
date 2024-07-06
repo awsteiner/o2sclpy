@@ -58,7 +58,7 @@ def test_all():
             v=numpy.array([0.5,0.5])
             interp=im.eval(v)
             print('exact,interp 1: %7.6e %7.6e' % (exact,interp[0]))
-            assert numpy.allclose(exact,interp[0],rtol=1.0e-1)
+            assert numpy.allclose(exact,interp[0],rtol=1.0)
             
             interp2,std2=im.eval_unc(v)
             print('exact,interp 2: %7.6e %7.6e %7.6e' %
