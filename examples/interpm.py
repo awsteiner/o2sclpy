@@ -83,8 +83,7 @@ print(' ')
 # Train the neural network, but capture the output
 
 with io.capture_output() as cap:
-    im2.set_data(x2,y2,verbose=1,epochs=2000,
-                 transform='none',test_size=0.0,
+    im2.set_data(x2,y2,verbose=1,epochs=2000,test_size=0.0,
                  activations=['relu','relu','relu','relu'],
                  hlayers=[256,128,64,16])
 

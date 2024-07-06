@@ -243,7 +243,8 @@ class interpm_tf_dnn:
                  batch_size=None,epochs=100,
                  transform_in='none',transform_out='none',
                  test_size=0.0,evaluate=False,
-                 hlayers=[8,8],loss='mean_squared_error'):
+                 hlayers=[8,8],loss='mean_squared_error',
+                 es_min_delta=1.0e-4,es_patience=100,es_start=50):
         """
         Set the input and output data to train the interpolator
 
@@ -368,18 +369,30 @@ class interpm_tf_dnn:
             print('summary:',model.summary())
 
         try:
+            from keras.callbacks import EarlyStopping
+
+            early_stopping=EarlyStopping(monitor=loss,
+                                         min_delta=es_min_delta,
+                                         patience=es_patience,
+                                         verbose=self.verbose,
+                                         restore_best_weights=True,
+                                         start_from_epoch=es_start,
+                                         mode='min')
+            
             # Compile the model for training
             model.compile(loss=loss,optimizer='adam')
             if test_size>0.0:
                 # Fit the model to training data
                 model.fit(x_train,y_train,batch_size=batch_size,
                           epochs=epochs,validation_data=(x_test,y_test),
-                          verbose=self.verbose)
+                          verbose=self.verbose,
+                          callbacks=[early_stopping])
                           
             else:
                 # Fit the model to training data
                 model.fit(x_train,y_train,batch_size=batch_size,
-                          epochs=epochs,verbose=self.verbose)
+                          epochs=epochs,verbose=self.verbose,
+                          callbacks=[early_stopping])
                 
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
