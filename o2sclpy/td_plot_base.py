@@ -1450,7 +1450,7 @@ class td_plot_base(yt_plot_base):
             from matplotlib.colors import Normalize
             import matplotlib.pyplot as plot
             
-            color_map=cm.get_cmap(cmap)
+            color_map=plot.get_cmap(cmap)
             norm=plot.Normalize(0,255)
             
             for i in range(0,256):
