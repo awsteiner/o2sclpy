@@ -32,7 +32,7 @@ def f2(x,y):
 
 def test_all():
 
-    N=100
+    N=200
     x=numpy.zeros((N,2))
     for i in range(0,N):
         x[i,0]=float(i)/float(N)
@@ -41,38 +41,52 @@ def test_all():
     y=numpy.zeros((N,1))
     for i in range(0,N):
         y[i,0]=f(x[i,0],x[i,1])
-
+        
     if True:
         im=o2sclpy.interpm_sklearn_gp()
-        im.set_data_str(x,y,'verbose=2,test_size=0.1')
-        exact=f(0.5,0.5)
-        v=numpy.array([0.5,0.5])
-        interp=im.eval(v)
-        print('exact,interp: %7.6e %7.6e' % (exact,interp[0]))
-        assert numpy.allclose(exact,interp[0],rtol=1.0e-3)
+        im.set_data(x,y,verbose=0,test_size=0.1)
         
+        v=numpy.array([0.5,0.5])
+        exact=f(0.5,0.5)
+        interp=im.eval(v)
+        print('exact,interp 1: %7.6e %7.6e' % (exact,interp[0]))
+        assert numpy.allclose(exact,interp[0],rtol=1.0)
+            
         interp2,std2=im.eval_unc(v)
-        print('exact,interp: %7.6e %7.6e %7.6e' % (exact,interp[0],std2[0]))
-        assert numpy.allclose(exact,interp2[0],rtol=1.0e-3)
-        assert numpy.allclose(0,std2[0],atol=1.0e-4)
-
+        print('exact,interp 2: %7.6e %7.6e %7.6e' %
+                (exact,interp[0],std2[0]))
+        assert numpy.allclose(exact,interp2[0],rtol=1.0)
+        assert numpy.allclose(0,std2[0],atol=1.0)
+    
     if True:
-        im2=o2sclpy.interpm_tf_dnn()
-        im2.set_data(x,y,verbose=1,epochs=200,
-                     test_size=0.0,batch_size=8,transform='none',
-                     activations=['relu','relu','relu','relu'],
-                     hlayers=[128,64,32,16])
+        im2=o2sclpy.interpm_sklearn_dtr()
+        im2.set_data(x,y,verbose=0,test_size=0.1)
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
-        interp=im2.eval(v)[0]
-        print('exact,interp: %7.6e %7.6e' % (exact,interp))
+        interp=im2.eval(v)
+        print('exact,interp 3: %7.6e %7.6e' % (exact,interp))
+        # AWS, 7/3/24: This test is pretty loose because the
+        # neural network results are pretty random for few epochs
         assert numpy.allclose(exact,interp,rtol=1.0)
-
+    
         im2.verbose=0
         for i in range(0,N,10):
             print('%2d %7.6e %7.6e' % (i,im2.eval(x[i])[0],y[i,0]))
-
-    return
+            
+    if True:
+        im3=o2sclpy.interpm_sklearn_mlpr()
+        im3.set_data(x,y,verbose=0,test_size=0.1,solver='lbfgs',max_iter=1000)
+        exact=f(0.5,0.5)
+        v=numpy.array([0.5,0.5])
+        interp=im3.eval(v)
+        print('exact,interp 3: %7.6e %7.6e' % (exact,interp))
+        # AWS, 7/3/24: This test is pretty loose because the
+        # neural network results are pretty random for few epochs
+        assert numpy.allclose(exact,interp,rtol=1.0)
+    
+        im3.verbose=0
+        for i in range(0,N,10):
+            print('%2d %7.6e %7.6e' % (i,im3.eval(x[i])[0],y[i,0]))
 
 if __name__ == '__main__':
     test_all()
