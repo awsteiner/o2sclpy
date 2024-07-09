@@ -32,7 +32,7 @@ def f2(x,y):
 
 def test_all():
 
-    N=200
+    N=100
     x=numpy.zeros((N,2))
     for i in range(0,N):
         x[i,0]=float(i)/float(N)

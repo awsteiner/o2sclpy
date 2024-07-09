@@ -153,7 +153,12 @@ class interpm_sklearn_dtr:
         
         return
     
-    def set_data(self,in_data,out_data,outformat='numpy',verbose=0,test_size=0.0):
+    def set_data(self,in_data,out_data,outformat='numpy',verbose=0,test_size=0.0,
+                 criterion='squared_error', splitter='best', max_depth=None, 
+                 min_samples_split=2, min_samples_leaf=1, 
+                 min_weight_fraction_leaf=0.0, max_features=None, 
+                 random_state=1, max_leaf_nodes=None, 
+                 min_impurity_decrease=0.0, ccp_alpha=0.0, monotonic_cst=None):
         """
         Set the input and output data to train the interpolator
         """
@@ -180,7 +185,16 @@ class interpm_sklearn_dtr:
             
         try:
             from sklearn.tree import DecisionTreeRegressor
-            model = DecisionTreeRegressor()
+            model = DecisionTreeRegressor(criterion=criterion, 
+                 splitter=splitter, max_depth=max_depth, 
+                 min_samples_split=min_samples_split, 
+                 min_samples_leaf=min_samples_leaf, 
+                 min_weight_fraction_leaf=min_weight_fraction_leaf, 
+                 max_features=max_features, 
+                 random_state=random_state, 
+                 max_leaf_nodes=max_leaf_nodes, 
+                 min_impurity_decrease=min_impurity_decrease, 
+                 ccp_alpha=ccp_alpha, monotonic_cst=monotonic_cst)
         except Exception as e:
             print('Exception in interpm_sklearn_dtr::set_data()',
                   'at model definition.',e)
