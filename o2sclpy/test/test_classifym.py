@@ -28,9 +28,8 @@ def test_all():
     # Note that classifiers will complain if the outputs have
     # decimals, meaning they are continuous. This is a problem 
     # with log_wgts and we have to process them differently.
-    y = numpy.array([[-840.678],[-600.58],[-840.99],[10],[45.8574]])
-    # For simplicity I will consider up to 2 decimal points 
-    # accurate enough and proceed with this trick 
+    y = numpy.array([[-840],[-600],[-840],[10],[45]])
+    # For float y the user can choose to use tricks like 
     # y_in*100->ftoint->train->predict->y_out/100->output
     
     if True:

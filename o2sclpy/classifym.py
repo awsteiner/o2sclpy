@@ -21,7 +21,7 @@
 #  ───────────────────────────────────────────────────────────────────
 
 import numpy
-from o2sclpy.utils import string_to_dict2
+from o2sclpy.utils import string_to_dict2 
 
 class classify_sklearn_dtc:
     """
@@ -54,6 +54,10 @@ class classify_sklearn_dtc:
             print('  outformat:',outformat)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
+           
+        # Here we are processing the continuous outputs to be
+        # ready for classification    
+        out_data=numpy.around(out_data)
 
         if test_size>0.0:
             try:
@@ -99,7 +103,7 @@ class classify_sklearn_dtc:
         """
 
         try:
-            pred=self.dtr.predict([v])#, verbose=0
+            pred=self.dtc.predict([v])#, verbose=0
         except Exception as e:
             print('Exception 4 in classify_sklearn_dtc:',e)
     
@@ -130,18 +134,17 @@ class classify_sklearn_mlpc:
         self.verbose=0
         self.outformat='numpy'
         self.SS1=0
-        self.SS2=0
         
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',test_size=0.0,
-                 hidden_layer_sizes=(100,), activation='relu',
+                 hidden_layer_sizes=(100,), activation='relu', *, 
                  solver='adam', alpha=0.0001, batch_size='auto', 
-                 learning_rate='adaptive', learning_rate_init=0.001, 
-                 power_t=0.5, max_iter=500, shuffle=True, 
-                 random_state=1, tol=0.0001, verbose=0, 
+                 learning_rate='constant', learning_rate_init=0.001, 
+                 power_t=0.5, max_iter=200, shuffle=True, 
+                 random_state=None, tol=0.0001, verbose=False, 
                  warm_start=False, momentum=0.9, nesterovs_momentum=True, 
-                 early_stopping=True, validation_fraction=0.1, 
+                 early_stopping=False, validation_fraction=0.1, 
                  beta_1=0.9, beta_2=0.999, epsilon=1e-08, 
                  n_iter_no_change=10, max_fun=15000):
         """
@@ -151,34 +154,35 @@ class classify_sklearn_mlpc:
         self.verbose=verbose
         
         if self.verbose>0:
-            print('interpm_sklearn_mlpr::set_data():')
+            print('classify_sklearn_mlpc::set_data():')
             print('  outformat:',outformat)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
             print('  solver:',solver)
-
+            
         from sklearn.preprocessing import StandardScaler
         
         self.SS1=StandardScaler()
-        self.SS2=StandardScaler()
         in_data_trans=self.SS1.fit_transform(in_data)
-        out_data_trans=self.SS2.fit_transform(out_data)
+        # Here we are processing the continuous outputs to be
+        # ready for classification    
+        out_data=numpy.around(out_data)
 
         if test_size>0.0:
             try:
                 from sklearn.model_selection import train_test_split
-                in_train,in_test,out_train,out_test=train_test_split(
-                    in_data_trans,out_data_trans,test_size=test_size,random_state=42)
+                x_train,x_test,y_train,y_test=train_test_split(
+                    in_data_trans,out_data,test_size=test_size,random_state=42)
             except Exception as e:
-                print('Exception in interpm_sklearn_mlpr::set_data()',
+                print('Exception in classify_sklearn_dtc::set_data()',
                       'at test_train_split().',e)
         else:
-            in_train=in_data_trans
-            out_train=out_data_trans
+            x_train=in_data_trans
+            y_train=out_data
             
         try:
-            from sklearn.neural_network import MLPRegressor
-            self.mlpr=MLPRegressor(hidden_layer_sizes=hidden_layer_sizes, 
+            from sklearn.neural_network import MLPClassifier
+            model=MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, 
                  activation=activation,solver=solver, 
                  alpha=alpha, batch_size=batch_size, 
                  learning_rate=learning_rate, shuffle=shuffle,
@@ -191,13 +195,18 @@ class classify_sklearn_mlpc:
                  validation_fraction=validation_fraction, 
                  beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, 
                  n_iter_no_change=n_iter_no_change, 
-                 max_fun=max_fun).fit(in_train,out_train)
+                 max_fun=max_fun)
         except Exception as e:
-            print('Exception in interpm_sklearn_mlpr::set_data()',
+            print('Exception in classify_sklearn_mlpc::set_data()',
+                  'at model().',e)
+        try:
+            self.mlpc=model.fit(x_train,y_train)
+        except Exception as e:
+            print('Exception in classify_sklearn_mlpc::set_data()',
                   'at fit().',e)
 
         if test_size>0.0:
-            print('score:',self.mlpr.score(in_test,out_test))
+            print('score:',self.mlpc.score(x_test,y_test))
 
         return
     
@@ -208,40 +217,108 @@ class classify_sklearn_mlpc:
 
         try:
             v_trans=self.SS1.transform(v.reshape(1,-1))
-            pred=self.mlpr.predict(v_trans)#, verbose=0
-            pred_trans=self.SS2.inverse_transform(pred.reshape(1,-1))
+            pred=self.mlpc.predict(v_trans)#, verbose=
         except Exception as e:
-            print('Exception 4 in interpm_sklearn_mlpr:',e)
+            print('Exception 4 in classify_sklearn_mlpc:',e)
     
         if self.outformat=='list':
             return pred.tolist()
 
-        if pred_trans.ndim==1:
-            
-            if self.verbose>1:
-                print('interpm_sklearn_mlpr::eval():',
-                      'type(pred),pred:',
-                      type(pred_trans),pred_trans)
-            # The output from tf.keras is float32, so we have to convert to
-            # float64 
-            n_out=numpy.shape(pred_trans)[0]
-            out_double=numpy.zeros((n_out))
-            for i in range(0,n_out):
-                out_double[i]=pred_trans[i]
-                    
-            return numpy.ascontiguousarray(out_double)
-        
         if self.verbose>1:
-            print('interpm_sklearn_mlpr::eval():',
-                  'type(pred_trans[0]),pred_trans[0]:',
-                  type(pred_trans[0]),pred_trans[0])
+            print('classify_sklearn_mlpc::eval():',
+                'type(pred),pred:',
+                type(pred),pred)
 
-        # The output from tf.keras is float32, so we have to convert to
-        # float64 
-        n_out=numpy.shape(pred_trans[0])[0]
+        n_out=numpy.shape(pred)[0]
         out_double=numpy.zeros((n_out))
         for i in range(0,n_out):
-            out_double[i]=pred_trans[0][i]
-            
+            out_double[i]=pred[i]
+                    
         return numpy.ascontiguousarray(out_double)
     
+    
+class classify_sklearn_gnb:
+    """
+    Interpolate one dimensional data sets using a 
+    Multi-layer Perceptron classifier scikit-learn
+    """
+
+    def __init__(self):
+        self.gnb=0
+        self.verbose=0
+        self.outformat='numpy'
+        
+        return
+    
+    def set_data(self,in_data,out_data,outformat='numpy',test_size=0.0,
+                 *, priors=None, var_smoothing=1e-09,verbose=0):
+        """
+        Set the input and output data to train the interpolator
+        """
+        self.outformat=outformat
+        self.verbose=verbose
+        
+        if self.verbose>0:
+            print('classify_sklearn_gnb::set_data():')
+            print('  outformat:',outformat)
+            print('  in_data shape:',numpy.shape(in_data))
+            print('  out_data shape:',numpy.shape(out_data))   
+            
+        # Here we are processing the continuous outputs to be
+        # ready for classification    
+        out_data=numpy.around(out_data)
+
+        if test_size>0.0:
+            try:
+                from sklearn.model_selection import train_test_split
+                x_train,x_test,y_train,y_test=train_test_split(
+                    in_data,out_data,test_size=test_size,random_state=42)
+            except Exception as e:
+                print('Exception in classify_sklearn_gnb::set_data()',
+                      'at test_train_split().',e)
+        else:
+            x_train=in_data
+            y_train=out_data
+            
+        try:
+            from sklearn.naive_bayes import GaussianNB
+            model=GaussianNB(priors=priors, var_smoothing=var_smoothing)
+        except Exception as e:
+            print('Exception in classify_sklearn_gnb::set_data()',
+                  'at model().',e)    
+            
+        try:
+            self.gnb=model.fit(x_train,y_train)
+        except Exception as e:
+            print('Exception in classify_sklearn_gnb::set_data()',
+                  'at fit().',e)
+        
+        if test_size>0.0:
+            print('score:',self.gnb.score(x_test,y_test))
+
+        return
+    
+    def eval(self,v):
+        """
+        Evaluate the NN at point ``v``.
+        """
+        
+        try:
+            pred=self.gnb.predict([v])#, verbose=
+        except Exception as e:
+            print('Exception 4 in classify_sklearn_gnb:',e)
+    
+        if self.outformat=='list':
+            return pred.tolist()
+
+        if self.verbose>1:
+            print('classify_sklearn_gnb::eval():',
+                'type(pred),pred:',
+                type(pred),pred)
+
+        n_out=numpy.shape(pred)[0]
+        out_double=numpy.zeros((n_out))
+        for i in range(0,n_out):
+            out_double[i]=pred[i]
+                    
+        return numpy.ascontiguousarray(out_double)
