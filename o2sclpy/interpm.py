@@ -266,7 +266,7 @@ class interpm_sklearn_dtr:
             try:
                 from sklearn.model_selection import train_test_split
                 x_train,x_test,y_train,y_test=train_test_split(
-                    in_data,out_data,test_size=test_size,random_state=42)
+                    in_data,out_data,test_size=test_size)
             except Exception as e:
                 print('Exception in interpm_sklearn_dtr::set_data()',
                       'at test_train_split().',e)
