@@ -120,6 +120,7 @@ class classify_sklearn_mlpc:
         self.verbose=0
         self.outformat='numpy'
         self.SS1=0
+        self.transform_in=0
         
         return
     
@@ -136,6 +137,7 @@ class classify_sklearn_mlpc:
         """
         self.outformat=outformat
         self.verbose=verbose
+        self.transform_in=transform_in
         
         if self.verbose>0:
             print('classify_sklearn_mlpc::set_data():')
@@ -194,6 +196,7 @@ class classify_sklearn_mlpc:
             print('Exception in classify_sklearn_mlpc::set_data()',
                   'at model().',e)
         try:
+            y_train=y_train.reshape(y_train.shape[0])
             self.mlpc=model.fit(x_train,y_train)
         except Exception as e:
             print('Exception in classify_sklearn_mlpc::set_data()',
@@ -209,11 +212,15 @@ class classify_sklearn_mlpc:
         Evaluate the classifier at point ``v``.
         """
 
-        try:
-            v_trans=self.SS1.transform(v.reshape(1,-1))
-            pred=self.mlpc.predict(v_trans)
-        except Exception as e:
-            print('Exception 4 in classify_sklearn_mlpc:',e)
+        pred=0
+        if self.transform_in!='none':
+            try:
+                v_trans=self.SS1.transform(v.reshape(1,-1))
+                pred=self.mlpc.predict(v_trans)
+            except Exception as e:
+                print('Exception 4 in classify_sklearn_mlpc:',e)
+        else:
+            v_trans=v.reshape(1,-1)
     
         if self.outformat=='list':
             return pred.tolist()
@@ -236,16 +243,19 @@ class classify_sklearn_gnb:
         self.verbose=0
         self.outformat='numpy'
         self.SS1=0
+        self.transform_in=0
         
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',test_size=0.0,
-                 priors=None,var_smoothing=1e-09,verbose=0):
+                 priors=None,var_smoothing=1e-09,verbose=0,
+                 transform_in='none'):
         """
         Set the input and output data to train the interpolator
         """
         self.outformat=outformat
         self.verbose=verbose
+        self.transform_in=transform_in
         
         if self.verbose>0:
             print('classify_sklearn_gnb::set_data():')
@@ -298,6 +308,7 @@ class classify_sklearn_gnb:
                   'at model().',e)    
             
         try:
+            y_train=y_train.reshape(y_train.shape[0])
             self.gnb=model.fit(x_train,y_train)
         except Exception as e:
             print('Exception in classify_sklearn_gnb::set_data()',
@@ -313,17 +324,21 @@ class classify_sklearn_gnb:
         Evaluate the classifier at point ``v``.
         """
 
-        try:
-            v_trans=self.SS1.transform(v.reshape(1,-1))
-            pred=self.gnb.predict(v_trans)
-        except Exception as e:
-            print('Exception 4 in classify_sklearn_mlpc:',e)
+        pred=0
+        if self.transform_in!='none':
+            try:
+                v_trans=self.SS1.transform(v.reshape(1,-1))
+                pred=self.gnb.predict(v_trans)
+            except Exception as e:
+                print('Exception 4 in classify_sklearn_gbn:',e)
+        else:
+            v_trans=v.reshape(1,-1)
     
         if self.outformat=='list':
             return pred.tolist()
 
         if self.verbose>1:
-            print('classify_sklearn_mlpc::eval():',
+            print('classify_sklearn_gbn::eval():',
                 'type(pred),pred:',
                 type(pred),pred)
 
