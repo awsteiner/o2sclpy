@@ -349,13 +349,16 @@ class interpm_sklearn_mlpr:
         self.mlpr=0
         self.verbose=0
         self.outformat='numpy'
+        self.transform_in=0
+        self.transform_out=0
         self.SS1=0
         self.SS2=0
         
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',test_size=0.0,
-                 hlayers=(100,),activation='relu',
+                 hlayers=(100,),activation='relu',transform_in='none',
+                 transform_out='none',
                  solver='adam',alpha=0.0001,batch_size='auto', 
                  learning_rate='adaptive',max_iter=500,
                  random_state=1,verbose=0,early_stopping=True,
@@ -365,6 +368,8 @@ class interpm_sklearn_mlpr:
         """
         self.outformat=outformat
         self.verbose=verbose
+        self.transform_in=transform_in
+        self.transform_out=transform_out
         
         if self.verbose>0:
             print('interpm_sklearn_mlpr::set_data():')
@@ -373,8 +378,6 @@ class interpm_sklearn_mlpr:
             print('  out_data shape:',numpy.shape(out_data))
             print('  solver:',solver)
 
-        from sklearn.preprocessing import StandardScaler
-        
         # ----------------------------------------------------------
         # Handle the data transformations
         
