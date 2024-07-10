@@ -212,16 +212,16 @@ class classify_sklearn_mlpc:
         Evaluate the classifier at point ``v``.
         """
 
-        pred=0
         if self.transform_in!='none':
             try:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
-                pred=self.mlpc.predict(v_trans)
             except Exception as e:
                 print('Exception 4 in classify_sklearn_mlpc:',e)
         else:
             v_trans=v.reshape(1,-1)
-    
+
+        pred=self.mlpc.predict(v_trans)
+            
         if self.outformat=='list':
             return pred.tolist()
 
@@ -324,16 +324,16 @@ class classify_sklearn_gnb:
         Evaluate the classifier at point ``v``.
         """
 
-        pred=0
         if self.transform_in!='none':
             try:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
-                pred=self.gnb.predict(v_trans)
             except Exception as e:
                 print('Exception 4 in classify_sklearn_gbn:',e)
         else:
             v_trans=v.reshape(1,-1)
     
+        pred=self.gnb.predict(v_trans)
+        
         if self.outformat=='list':
             return pred.tolist()
 

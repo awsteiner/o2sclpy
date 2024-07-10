@@ -87,7 +87,6 @@ testq:
 		examples/interpm.py \
 		-s -v
 
-
 mypy:
 	 mypy o2sclpy --ignore-missing-imports \
 		--exclude "o2sclpy/bl_gltf_six.py" \
