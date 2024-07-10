@@ -49,12 +49,11 @@ def test_all():
         v=numpy.array([0.5,0.5])
         exact=f(0.5,0.5)
         interp=im.eval(v)
-        print('exact,interp 1: %7.6e %7.6e' % (exact,interp[0]))
+        print('exact,interp 1:', exact,interp)
         assert numpy.allclose(exact,interp[0],rtol=1.0)
             
         interp2,std2=im.eval_unc(v)
-        print('exact,interp 2: %7.6e %7.6e %7.6e' %
-                (exact,interp[0],std2[0]))
+        print('exact,interp 2:', exact,interp)
         assert numpy.allclose(exact,interp2[0],rtol=1.0)
         assert numpy.allclose(0,std2[0],atol=1.0)
     
@@ -64,14 +63,12 @@ def test_all():
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
         interp=im2.eval(v)
-        print('exact,interp 3: %7.6e %7.6e' % (exact,interp))
-        # AWS, 7/3/24: This test is pretty loose because the
-        # neural network results are pretty random for few epochs
+        print('exact,interp 3:', exact,interp)
         assert numpy.allclose(exact,interp,rtol=1.0)
     
         im2.verbose=0
         for i in range(0,N,10):
-            print('%2d %7.6e %7.6e' % (i,im2.eval(x[i])[0],y[i,0]))
+            print(i,im2.eval(x[i])[0],y[i,0])
             
     if True:
         im3=o2sclpy.interpm_sklearn_mlpr()
@@ -79,14 +76,12 @@ def test_all():
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
         interp=im3.eval(v)
-        print('exact,interp 3: %7.6e %7.6e' % (exact,interp))
-        # AWS, 7/3/24: This test is pretty loose because the
-        # neural network results are pretty random for few epochs
+        print('exact,interp 4:', exact,interp)
         assert numpy.allclose(exact,interp,rtol=1.0)
     
         im3.verbose=0
         for i in range(0,N,10):
-            print('%2d %7.6e %7.6e' % (i,im3.eval(x[i])[0],y[i,0]))
+            print(i,im3.eval(x[i])[0],y[i,0])
 
 if __name__ == '__main__':
     test_all()

@@ -23,140 +23,26 @@
 import numpy
 from o2sclpy.utils import string_to_dict2
 
-class interpm_sklearn_gp:
+class classify_sklearn_dtc:
     """
-    Interpolate one or many multidimensional data sets using a 
-    Gaussian process from scikit-learn
-    """
-
-    def __init__(self):
-        self.gp=0
-        self.verbose=0
-        self.outformat='numpy'
-        self.SS1=0
-        
-        return
-
-    def set_data(self,in_data,out_data,
-                 kernel='1.0*RBF(1.0,(1e-2,1e2))',test_size=0.0,
-                 normalize_y=True,outformat='numpy',verbose=0):
-        """
-        Set the input and output data to train the interpolator
-        """
-        
-        self.outformat=outformat
-        self.verbose=verbose
-
-        if self.verbose>0:
-            print('interpm_sklearn_gp::set_data():')
-            print('  kernel:',kernel)
-            print('  normalize_y:',normalize_y)
-            print('  outformat:',outformat)
-            print('  in_data shape:',numpy.shape(in_data))
-            print('  out_data shape:',numpy.shape(out_data))
-
-        from sklearn.preprocessing import StandardScaler
-        
-        self.SS1=StandardScaler()
-        in_data_trans=self.SS1.fit_transform(in_data)
-
-        if test_size>0.0:
-            try:
-                from sklearn.model_selection import train_test_split
-                in_train,in_test,out_train,out_test=train_test_split(
-                    in_data_trans,out_data,test_size=test_size,random_state=42)
-            except Exception as e:
-                print('Exception in interpm_sklearn_gp::set_data()',
-                      'at test_train_split().',e)
-        else:
-            in_train=in_data_trans
-            out_train=out_data
-            
-        try:
-            from sklearn.gaussian_process import GaussianProcessRegressor
-            from sklearn.gaussian_process.kernels import RBF
-            kernel=eval(kernel)
-            self.gp=GaussianProcessRegressor(normalize_y=True,
-                         kernel=kernel).fit(in_train,out_train)
-        except Exception as e:
-            print('Exception in interpm_sklearn_gp::set_data()',
-                  'at fit().',e)
-
-        if test_size>0.0:
-            print('score:',self.gp.score(in_test,out_test))
-
-        return
-    
-    def eval(self,v):
-        """
-        Evaluate the GP at point ``v``.
-        """
-            
-        # AWS, 3/27/24: Keep in mind that o2scl::interpm_python.eval()
-        # expects the return type to be a numpy array. 
-        v_trans=self.SS1.transform(v.reshape(1,-1))
-        yp=self.gp.predict(v_trans)
-    
-        if self.outformat=='list':
-            if self.verbose>1:
-                print('interpm_sklearn_gp::eval(): list mode type(yp),v,yp:',
-                      type(yp),v,yp)
-            return yp[0].tolist()
-        if yp.ndim==1:
-            if self.verbose>1:
-                print('interpm_sklearn_gp::eval(): ndim=1 mode type(yp),v,yp:',
-                      type(yp),v,yp)
-            return numpy.ascontiguousarray(yp)
-        if self.verbose>1:
-            print('interpm_sklearn_gp::eval(): array mode type(yp[0]),v,yp[0]:',
-                  type(yp[0]),v,yp[0])
-        return numpy.ascontiguousarray(yp[0])
-
-    def eval_unc(self,v):
-        """
-        Evaluate the GP and its uncertainty at point ``v``.
-
-        # AWS, 3/27/24: Keep in mind that
-        # o2scl::interpm_python.eval_unc() expects the return type to
-        # be a tuple of numpy arrays. 
-        """
-         
-        v_trans=self.SS1.transform(v.reshape(1,-1))   
-        yp,std=self.gp.predict(v_trans,return_std=True)
-    
-        if self.outformat=='list':
-            return yp[0].tolist(),std[0].tolist()
-        if yp.ndim==1:
-            if self.verbose>1:
-                print('interpm_sklearn_gp::eval_unc(): type(yp),v,yp:',
-                      type(yp),v,yp)
-            return (numpy.ascontiguousarray(yp),
-                    numpy.ascontiguousarray(std))
-        if self.verbose>1:
-            print('interpm_sklearn_gp::eval_unc(): type(yp[0]),v,yp[0]:',
-                  type(yp[0]),v,yp[0])
-        return (numpy.ascontiguousarray(yp[0]),
-                numpy.ascontiguousarray(std[0]))
-
-class interpm_sklearn_dtr:
-    """
-    Interpolate one or many multidimensional data sets using 
-    a Decision tree regression from sklearn
+    Interpolate one dimensional data sets using 
+    a Decision tree classifier from sklearn
     """
 
     def __init__(self):
-        self.dtr=0
+        self.dtc=0
         self.verbose=0
         self.outformat='numpy'
         
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,test_size=0.0,
-                 criterion='squared_error', splitter='best', max_depth=None, 
+                 criterion='gini', splitter='best', max_depth=None, 
                  min_samples_split=2, min_samples_leaf=1, 
                  min_weight_fraction_leaf=0.0, max_features=None, 
-                 random_state=1, max_leaf_nodes=None, 
-                 min_impurity_decrease=0.0, ccp_alpha=0.0, monotonic_cst=None):
+                 random_state=None, max_leaf_nodes=None, 
+                 min_impurity_decrease=0.0, class_weight=None, 
+                 ccp_alpha=0.0, monotonic_cst=None):
         """
         Set the input and output data to train the interpolator
         """
@@ -164,7 +50,7 @@ class interpm_sklearn_dtr:
         self.verbose=verbose
         
         if self.verbose>0:
-            print('interpm_sklearn_dtr::set_data():')
+            print('classify_sklearn_dtc::set_data():')
             print('  outformat:',outformat)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
@@ -175,35 +61,35 @@ class interpm_sklearn_dtr:
                 x_train,x_test,y_train,y_test=train_test_split(
                     in_data,out_data,test_size=test_size,random_state=42)
             except Exception as e:
-                print('Exception in interpm_sklearn_dtr::set_data()',
+                print('Exception in classify_sklearn_dtc::set_data()',
                       'at test_train_split().',e)
         else:
             x_train=in_data
             y_train=out_data
             
         try:
-            from sklearn.tree import DecisionTreeRegressor
-            model = DecisionTreeRegressor(criterion=criterion, 
+            from sklearn.tree import DecisionTreeClassifier
+            model = DecisionTreeClassifier(criterion=criterion, 
                  splitter=splitter, max_depth=max_depth, 
                  min_samples_split=min_samples_split, 
                  min_samples_leaf=min_samples_leaf, 
                  min_weight_fraction_leaf=min_weight_fraction_leaf, 
-                 max_features=max_features, 
+                 max_features=max_features,class_weight=class_weight,  
                  random_state=random_state, 
                  max_leaf_nodes=max_leaf_nodes, 
                  min_impurity_decrease=min_impurity_decrease, 
                  ccp_alpha=ccp_alpha, monotonic_cst=monotonic_cst)
         except Exception as e:
-            print('Exception in interpm_sklearn_dtr::set_data()',
+            print('Exception in classify_sklearn_dtc::set_data()',
                   'at model definition.',e)
 
         try:
             model.fit(x_train,y_train)      
         except Exception as e:
-            print('Exception in interpm_sklearn_dtr::set_data()',
+            print('Exception in classify_sklearn_dtc::set_data()',
                   'at model fitting.',e)
             
-        self.dtr=model
+        self.dtc=model
 
         return
     
@@ -215,49 +101,32 @@ class interpm_sklearn_dtr:
         try:
             pred=self.dtr.predict([v])#, verbose=0
         except Exception as e:
-            print('Exception 4 in interpm_sklearn_dtr:',e)
+            print('Exception 4 in classify_sklearn_dtc:',e)
     
         if self.outformat=='list':
             return pred.tolist()
-
-        if pred.ndim==1:
-            
-            if self.verbose>1:
-                print('interpm_sklearn_dtr::eval():',
-                      'type(pred),pred:',
-                      type(pred),pred)
-            # The output from tf.keras is float32, so we have to convert to
-            # float64 
-            n_out=numpy.shape(pred)[0]
-            out_double=numpy.zeros((n_out))
-            for i in range(0,n_out):
-                out_double[i]=pred[i]
-                    
-            return numpy.ascontiguousarray(out_double)
-        
+   
         if self.verbose>1:
-            print('interpm_sklearn_dtr::eval():',
-                  'type(pred[0]),pred[0]:',
-                  type(pred[0]),pred[0])
-
+            print('classify_sklearn_dtc::eval():',
+                'type(pred),pred:',
+                type(pred),pred)
         # The output from tf.keras is float32, so we have to convert to
         # float64 
-        n_out=numpy.shape(pred[0])[0]
+        n_out=numpy.shape(pred)[0]
         out_double=numpy.zeros((n_out))
         for i in range(0,n_out):
-            out_double[i]=pred[0][i]
-            
-        return numpy.ascontiguousarray(out_double)
+            out_double[i]=pred[i]
+                    
+            return numpy.ascontiguousarray(out_double)
 
-
-class interpm_sklearn_mlpr:
+class classify_sklearn_mlpc:
     """
-    Interpolate one or many multidimensional data sets using a 
-    Multi-layer Perceptron regressor scikit-learn
+    Interpolate one dimensional data sets using a 
+    Multi-layer Perceptron classifier scikit-learn
     """
 
     def __init__(self):
-        self.mlpr=0
+        self.mlpc=0
         self.verbose=0
         self.outformat='numpy'
         self.SS1=0
@@ -375,3 +244,4 @@ class interpm_sklearn_mlpr:
             out_double[i]=pred_trans[0][i]
             
         return numpy.ascontiguousarray(out_double)
+    
