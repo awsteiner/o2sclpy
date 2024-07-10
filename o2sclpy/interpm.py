@@ -1,6 +1,6 @@
 #  ───────────────────────────────────────────────────────────────────
 #  
-#  Copyright (C) 2022-2024, Mahamudul Hasan Anik, Satyajit Roy, and
+#  Copyright (C) 2022-2024, Satyajit Roy, Mahamudul Hasan Anik, and
 #  Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
@@ -42,7 +42,8 @@ class interpm_sklearn_gp:
     def set_data(self,in_data,out_data,
                  kernel='1.0*RBF(1.0,(1e-2,1e2))',test_size=0.0,
                  normalize_y=True,transform_in='none',
-                 transform_out='none',outformat='numpy',verbose=0):
+                 transform_out='none',outformat='numpy',verbose=0,
+                 random_state=None):
         """
         Set the input and output data to train the interpolator
         """
@@ -68,14 +69,21 @@ class interpm_sklearn_gp:
         self.transform_in=transform_in
         self.transform_out=transform_out
 
+        # ----------------------------------------------------------
+        # Handle the data transformations
+        
         from sklearn.preprocessing import QuantileTransformer
         from sklearn.preprocessing import MinMaxScaler
+        from sklearn.preprocessing import StandardScaler
         
         if self.transform_in=='moto':
             self.SS1=MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
             self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            in_data_trans=self.SS1.fit_transform(in_data)
+        elif self.transform_in=='standard':
+            self.SS1=StandardScaler()
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
             in_data_trans=in_data
@@ -86,15 +94,18 @@ class interpm_sklearn_gp:
         elif self.transform_out=='quant':
             self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
             out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='standard':
+            self.SS2=StandardScaler()
+            out_data_trans=self.SS2.fit_transform(out_data)
         else:
             out_data_trans=out_data
-
 
         if test_size>0.0:
             try:
                 from sklearn.model_selection import train_test_split
                 in_train,in_test,out_train,out_test=train_test_split(
-                    in_data_trans,out_data_trans,test_size=test_size)
+                    in_data_trans,out_data_trans,test_size=test_size,
+                    random_state=random_state)
             except Exception as e:
                 print('Exception in interpm_sklearn_gp::set_data()',
                       'at test_train_split().',e)
@@ -105,7 +116,8 @@ class interpm_sklearn_gp:
         try:
             func=GaussianProcessRegressor
             self.gp=func(normalize_y=True,
-                         kernel=self.kernel).fit(in_train,out_train)
+                         kernel=self.kernel,
+                         random_state=random_state).fit(in_train,out_train)
         except Exception as e:
             print('Exception in interpm_sklearn_gp::set_data()',
                   'at fit().',e)
@@ -160,16 +172,19 @@ class interpm_sklearn_gp:
     
         if self.outformat=='list':
             if self.verbose>1:
-                print('interpm_sklearn_gp::eval(): list mode type(yp),v,yp:',
+                print('interpm_sklearn_gp::eval():',
+                      'list mode type(yp),v,yp:',
                       type(yp_trans),v,yp_trans)
             return yp_trans[0].tolist()
         if yp_trans.ndim==1:
             if self.verbose>1:
-                print('interpm_sklearn_gp::eval(): ndim=1 mode type(yp),v,yp:',
+                print('interpm_sklearn_gp::eval():',
+                      'ndim=1 mode type(yp),v,yp:',
                       type(yp_trans),v,yp_trans)
             return numpy.ascontiguousarray(yp_trans)
         if self.verbose>1:
-            print('interpm_sklearn_gp::eval(): array mode type(yp[0]),v,yp[0]:',
+            print('interpm_sklearn_gp::eval():',
+                  'array mode type(yp[0]),v,yp[0]:',
                   type(yp_trans[0]),v,yp_trans[0])
         return numpy.ascontiguousarray(yp_trans[0])
 
@@ -219,6 +234,280 @@ class interpm_sklearn_gp:
         return (numpy.ascontiguousarray(yp_trans[0]),
                 numpy.ascontiguousarray(std_trans[0]))
 
+class interpm_sklearn_dtr:
+    """
+    Interpolate one or many multidimensional data sets using
+    scikit-learn's decision tree regression.
+    """
+
+    def __init__(self):
+        self.dtr=0
+        self.verbose=0
+        self.outformat='numpy'
+        
+        return
+    
+    def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
+                 test_size=0.0,criterion='squared_error',splitter='best',
+                 max_depth=None,random_state=None):
+        """
+        Set the input and output data to train the interpolator
+        """
+        self.outformat=outformat
+        self.verbose=verbose
+        
+        if self.verbose>0:
+            print('interpm_sklearn_dtr::set_data():')
+            print('  outformat:',outformat)
+            print('  in_data shape:',numpy.shape(in_data))
+            print('  out_data shape:',numpy.shape(out_data))
+
+        if test_size>0.0:
+            try:
+                from sklearn.model_selection import train_test_split
+                x_train,x_test,y_train,y_test=train_test_split(
+                    in_data,out_data,test_size=test_size,random_state=42)
+            except Exception as e:
+                print('Exception in interpm_sklearn_dtr::set_data()',
+                      'at test_train_split().',e)
+        else:
+            x_train=in_data
+            y_train=out_data
+            
+        try:
+            from sklearn.tree import DecisionTreeRegressor
+            model=DecisionTreeRegressor(criterion=criterion, 
+                                        splitter=splitter,
+                                        max_depth=max_depth,
+                                        random_state=random_state)
+        except Exception as e:
+            print('Exception in interpm_sklearn_dtr::set_data()',
+                  'at model definition.',e)
+
+        try:
+            model.fit(x_train,y_train)      
+        except Exception as e:
+            print('Exception in interpm_sklearn_dtr::set_data()',
+                  'at model fitting.',e)
+            
+        self.dtr=model
+
+        return
+    
+    def set_data_str(self,in_data,out_data,options):
+        """
+        Set the input and output data to train the interpolator,
+        using a string to specify the keyword arguments.
+        """
+
+        dct=string_to_dict2(options,list_of_ints=['verbose',
+                                                  'random_state'],
+                            list_of_floats=['test_size'])
+        print('String:',options,'Dictionary:',dct)
+
+        self.set_data(in_data,out_data,**dct)
+
+        return
+    
+    def eval(self,v):
+        """
+        Evaluate the regression at point ``v``.
+        """
+
+        try:
+            pred=self.dtr.predict([v])
+        except Exception as e:
+            print('Exception 4 in interpm_sklearn_dtr:',e)
+    
+        if self.outformat=='list':
+            return pred.tolist()
+
+        if pred.ndim==1:
+            
+            if self.verbose>1:
+                print('interpm_sklearn_dtr::eval():',
+                      'type(pred),pred:',
+                      type(pred),pred)
+                    
+            return numpy.ascontiguousarray(pred)
+        
+        if self.verbose>1:
+            print('interpm_sklearn_dtr::eval():',
+                  'type(pred[0]),pred[0]:',
+                  type(pred[0]),pred[0])
+
+        return numpy.ascontiguousarray(pred)
+
+
+class interpm_sklearn_mlpr:
+    """
+    Interpolate one or many multidimensional data sets using
+    scikit-learn's multi-layer perceptron regressor.
+    """
+
+    def __init__(self):
+        self.mlpr=0
+        self.verbose=0
+        self.outformat='numpy'
+        self.SS1=0
+        self.SS2=0
+        
+        return
+    
+    def set_data(self,in_data,out_data,outformat='numpy',test_size=0.0,
+                 hlayers=(100,),activation='relu',
+                 solver='adam',alpha=0.0001,batch_size='auto', 
+                 learning_rate='adaptive',max_iter=500,
+                 random_state=1,verbose=0,early_stopping=True,
+                 n_iter_no_change=10):
+        """
+        Set the input and output data to train the interpolator
+        """
+        self.outformat=outformat
+        self.verbose=verbose
+        
+        if self.verbose>0:
+            print('interpm_sklearn_mlpr::set_data():')
+            print('  outformat:',outformat)
+            print('  in_data shape:',numpy.shape(in_data))
+            print('  out_data shape:',numpy.shape(out_data))
+            print('  solver:',solver)
+
+        from sklearn.preprocessing import StandardScaler
+        
+        # ----------------------------------------------------------
+        # Handle the data transformations
+        
+        from sklearn.preprocessing import QuantileTransformer
+        from sklearn.preprocessing import MinMaxScaler
+        from sklearn.preprocessing import StandardScaler
+        
+        if self.transform_in=='moto':
+            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            in_data_trans=self.SS1.fit_transform(in_data)
+        elif self.transform_in=='quant':
+            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            in_data_trans=self.SS1.fit_transform(in_data)
+        elif self.transform_in=='standard':
+            self.SS1=StandardScaler()
+            in_data_trans=self.SS1.fit_transform(in_data)
+        else:
+            in_data_trans=in_data
+            
+        if self.transform_out=='moto':
+            self.SS2=MinMaxScaler(feature_range=(-1,1))
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='quant':
+            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='standard':
+            self.SS2=StandardScaler()
+            out_data_trans=self.SS2.fit_transform(out_data)
+        else:
+            out_data_trans=out_data
+
+        if test_size>0.0:
+            try:
+                from sklearn.model_selection import train_test_split
+                in_train,in_test,out_train,out_test=train_test_split(
+                    in_data_trans,out_data_trans,test_size=test_size)
+            except Exception as e:
+                print('Exception in interpm_sklearn_mlpr::set_data()',
+                      'at test_train_split().',e)
+        else:
+            in_train=in_data_trans
+            out_train=out_data_trans
+            
+        try:
+            from sklearn.neural_network import MLPRegressor
+            self.mlpr=MLPRegressor(hidden_layer_sizes=hlayers, 
+                 activation=activation,solver=solver, 
+                 alpha=alpha,batch_size=batch_size, 
+                 learning_rate=learning_rate,max_iter=max_iter,  
+                 random_state=random_state,verbose=verbose, 
+                 early_stopping=early_stopping, 
+                 n_iter_no_change=n_iter_no_change).fit(in_train,out_train)
+        except Exception as e:
+            print('Exception in interpm_sklearn_mlpr::set_data()',
+                  'at fit().',e)
+
+        if test_size>0.0:
+            print('score:',self.mlpr.score(in_test,out_test))
+
+        return
+    
+    def set_data_str(self,in_data,out_data,options):
+        """
+        Set the input and output data to train the interpolator,
+        using a string to specify the keyword arguments.
+        """
+
+        dct=string_to_dict2(options,list_of_ints=['verbose',
+                                                  'random_state',
+                                                  'max_iter',
+                                                  'n_iter_no_change'],
+                            list_of_floats=['test_size','alpha'],
+                            list_of_bools=['early_stopping'])
+
+        if "hlayers" in dct:
+            htemp=dct["hlayers"]
+            htemp=htemp[1:-1]
+            htemp=htemp.split(',')
+            htemp2=[]
+            for i in range(0,len(htemp)):
+                htemp2.append(int(htemp[i]))
+            dct["hlayers"]=numpy.array(htemp2)
+
+        print('String:',options,'Dictionary:',dct)
+        
+        self.set_data(in_data,out_data,**dct)
+
+        return
+    
+    def eval(self,v):
+        """
+        Evaluate the MLP at point ``v``.
+        """
+
+        if self.transform_in!='none':
+            v_trans=0
+            try:
+                v_trans=self.SS1.transform(v.reshape(1,-1))
+            except Exception as e:
+                print(('Exception at input transformation '+
+                       'in interpm_sklearn_mlpr:'),
+                      e)
+        else:
+            v_trans=v.reshape(1,-1)
+            
+        yp=self.mlpr.predict(v_trans)
+        
+        if self.transform_out!='none':
+            try:
+                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+            except Exception as e:
+                print('Exception 5 in interpm_sklearn_mlpr:',e)
+        else:
+            yp_trans=yp
+    
+        if self.outformat=='list':
+            if self.verbose>1:
+                print('interpm_sklearn_mlpr::eval():',
+                      'list mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            return yp_trans[0].tolist()
+        if yp_trans.ndim==1:
+            if self.verbose>1:
+                print('interpm_sklearn_mlpr::eval():',
+                      'ndim=1 mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            return numpy.ascontiguousarray(yp_trans)
+        if self.verbose>1:
+            print('interpm_sklearn_mlpr::eval():',
+                  'array mode type(yp[0]),v,yp[0]:',
+                  type(yp_trans[0]),v,yp_trans[0])
+        return numpy.ascontiguousarray(yp_trans[0])
+    
 class interpm_tf_dnn:
     """
     Interpolate one or many multimensional data sets using 
@@ -279,6 +568,9 @@ class interpm_tf_dnn:
         self.transform_in=transform_in
         self.transform_out=transform_out
 
+        # ----------------------------------------------------------
+        # Handle the data transformations
+        
         from sklearn.preprocessing import QuantileTransformer
         from sklearn.preprocessing import MinMaxScaler
         if self.transform_in=='moto':
@@ -286,6 +578,9 @@ class interpm_tf_dnn:
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
             self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            in_data_trans=self.SS1.fit_transform(in_data)
+        elif self.transform_in=='standard':
+            self.SS1=StandardScaler()
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
             in_data_trans=in_data
@@ -295,6 +590,9 @@ class interpm_tf_dnn:
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
             self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='standard':
+            self.SS2=StandardScaler()
             out_data_trans=self.SS2.fit_transform(out_data)
         else:
             out_data_trans=out_data

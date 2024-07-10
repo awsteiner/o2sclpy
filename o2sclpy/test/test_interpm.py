@@ -1,6 +1,6 @@
 #  -------------------------------------------------------------------
 #  
-#  Copyright (C) 2022-2024, Mahamudul Hasan Anik, Satyajit Roy, and
+#  Copyright (C) 2022-2024, Satyajit Roy, Mahamudul Hasan Anik, and
 #  Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
@@ -99,6 +99,33 @@ def test_all():
             for i in range(0,N,10):
                 print('%2d %7.6e %7.6e' % (i,im2.eval(x[i])[0],y[i,0]))
 
+        if True:
+            im3=o2sclpy.interpm_sklearn_mlpr()
+            im3.set_data(x,y,verbose=0,test_size=0.1,solver='lbfgs',
+                         max_iter=1000)
+            exact=f(0.5,0.5)
+            v=numpy.array([0.5,0.5])
+            interp=im3.eval(v)
+            print('exact,interp 4:', exact,interp)
+            assert numpy.allclose(exact,interp,rtol=1.0)
+    
+            im3.verbose=0
+            for i in range(0,N,10):
+                print(i,im3.eval(x[i])[0],y[i,0])
+                
+    if True:
+        im2=o2sclpy.interpm_sklearn_dtr()
+        im2.set_data(x,y,verbose=0,test_size=0.1)
+        exact=f(0.5,0.5)
+        v=numpy.array([0.5,0.5])
+        interp=im2.eval(v)
+        print('exact,interp 3:', exact,interp)
+        assert numpy.allclose(exact,interp,rtol=1.0)
+    
+        im2.verbose=0
+        for i in range(0,N,10):
+            print(i,im2.eval(x[i])[0],y[i,0])
+            
 if __name__ == '__main__':
     test_all()
     print('All tests passed.')
