@@ -44,7 +44,7 @@ def test_all():
         
     if True:
         im=o2sclpy.interpm_sklearn_gp()
-        im.set_data(x,y,verbose=0,test_size=0.1)
+        im.set_data(x,y,verbose=0,test_size=0.1,alpha=1e-8)
         
         v=numpy.array([0.5,0.5])
         exact=f(0.5,0.5)
@@ -59,7 +59,7 @@ def test_all():
     
     if True:
         im2=o2sclpy.interpm_sklearn_dtr()
-        im2.set_data(x,y,verbose=0,test_size=0.1)
+        im2.set_data(x,y,verbose=0,test_size=0.1,random_state=42)
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
         interp=im2.eval(v)

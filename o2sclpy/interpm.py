@@ -39,7 +39,8 @@ class interpm_sklearn_gp:
 
     def set_data(self,in_data,out_data,
                  kernel='1.0*RBF(1.0,(1e-2,1e2))',test_size=0.0,
-                 normalize_y=True,outformat='numpy',verbose=0):
+                 normalize_y=True,outformat='numpy',verbose=0,
+                 alpha=1e-10):
         """
         Set the input and output data to train the interpolator
         """
@@ -77,7 +78,7 @@ class interpm_sklearn_gp:
             from sklearn.gaussian_process.kernels import RBF
             kernel=eval(kernel)
             self.gp=GaussianProcessRegressor(normalize_y=True,
-                         kernel=kernel).fit(in_train,out_train)
+                         kernel=kernel,alpha=alpha).fit(in_train,out_train)
         except Exception as e:
             print('Exception in interpm_sklearn_gp::set_data()',
                   'at fit().',e)
@@ -151,12 +152,9 @@ class interpm_sklearn_dtr:
         
         return
     
-    def set_data(self,in_data,out_data,outformat='numpy',verbose=0,test_size=0.0,
-                 criterion='squared_error', splitter='best', max_depth=None, 
-                 min_samples_split=2, min_samples_leaf=1, 
-                 min_weight_fraction_leaf=0.0, max_features=None, 
-                 random_state=1, max_leaf_nodes=None, 
-                 min_impurity_decrease=0.0, ccp_alpha=0.0, monotonic_cst=None):
+    def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
+                 test_size=0.0,criterion='squared_error',splitter='best',
+                 max_depth=None,random_state=None):
         """
         Set the input and output data to train the interpolator
         """
@@ -184,15 +182,9 @@ class interpm_sklearn_dtr:
         try:
             from sklearn.tree import DecisionTreeRegressor
             model = DecisionTreeRegressor(criterion=criterion, 
-                 splitter=splitter, max_depth=max_depth, 
-                 min_samples_split=min_samples_split, 
-                 min_samples_leaf=min_samples_leaf, 
-                 min_weight_fraction_leaf=min_weight_fraction_leaf, 
-                 max_features=max_features, 
-                 random_state=random_state, 
-                 max_leaf_nodes=max_leaf_nodes, 
-                 min_impurity_decrease=min_impurity_decrease, 
-                 ccp_alpha=ccp_alpha, monotonic_cst=monotonic_cst)
+                                        splitter=splitter,
+                                        max_depth=max_depth,
+                                        random_state=random_state)
         except Exception as e:
             print('Exception in interpm_sklearn_dtr::set_data()',
                   'at model definition.',e)
@@ -266,15 +258,12 @@ class interpm_sklearn_mlpr:
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',test_size=0.0,
-                 hidden_layer_sizes=(100,), activation='relu',
-                 solver='adam', alpha=0.0001, batch_size='auto', 
-                 learning_rate='adaptive', learning_rate_init=0.001, 
-                 power_t=0.5, max_iter=500, shuffle=True, 
-                 random_state=1, tol=0.0001, verbose=0, 
-                 warm_start=False, momentum=0.9, nesterovs_momentum=True, 
-                 early_stopping=True, validation_fraction=0.1, 
-                 beta_1=0.9, beta_2=0.999, epsilon=1e-08, 
-                 n_iter_no_change=10, max_fun=15000):
+                 hlayers=(100,),activation='relu',transform_in='none',
+                 transform_out='none',
+                 solver='adam',alpha=0.0001,batch_size='auto', 
+                 learning_rate='adaptive',max_iter=500,
+                 random_state=1,verbose=0,early_stopping=True,
+                 n_iter_no_change=10):
         """
         Set the input and output data to train the interpolator
         """
@@ -294,6 +283,7 @@ class interpm_sklearn_mlpr:
         self.SS2=StandardScaler()
         in_data_trans=self.SS1.fit_transform(in_data)
         out_data_trans=self.SS2.fit_transform(out_data)
+        out_data_trans=out_data_trans.ravel()
 
         if test_size>0.0:
             try:
@@ -309,20 +299,13 @@ class interpm_sklearn_mlpr:
             
         try:
             from sklearn.neural_network import MLPRegressor
-            self.mlpr=MLPRegressor(hidden_layer_sizes=hidden_layer_sizes, 
+            self.mlpr=MLPRegressor(hidden_layer_sizes=hlayers, 
                  activation=activation,solver=solver, 
-                 alpha=alpha, batch_size=batch_size, 
-                 learning_rate=learning_rate, shuffle=shuffle,
-                 learning_rate_init=learning_rate_init, 
-                 power_t=power_t, max_iter=max_iter,  
-                 random_state=random_state, tol=tol, verbose=verbose, 
-                 warm_start=warm_start, momentum=momentum, 
-                 nesterovs_momentum=nesterovs_momentum, 
+                 alpha=alpha,batch_size=batch_size, 
+                 learning_rate=learning_rate,max_iter=max_iter,  
+                 random_state=random_state,verbose=verbose, 
                  early_stopping=early_stopping, 
-                 validation_fraction=validation_fraction, 
-                 beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, 
-                 n_iter_no_change=n_iter_no_change, 
-                 max_fun=max_fun).fit(in_train,out_train)
+                 n_iter_no_change=n_iter_no_change).fit(in_train,out_train)
         except Exception as e:
             print('Exception in interpm_sklearn_mlpr::set_data()',
                   'at fit().',e)
