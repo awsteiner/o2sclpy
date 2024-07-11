@@ -207,6 +207,33 @@ class classify_sklearn_mlpc:
 
         return
     
+    def set_data_str(self,in_data,out_data,options):
+        """
+        Set the input and output data to train the interpolator,
+        using a string to specify the keyword arguments.
+        """
+
+        dct=string_to_dict2(options,list_of_ints=['verbose',
+                                                  'max_iter',
+                                                  'random_state'],
+                            list_of_floats=['test_size','alpha'],
+                            list_of_bools=['early_stopping'])
+        
+        if "hlayers" in dct:
+            htemp=dct["hlayers"]
+            htemp=htemp[1:-1]
+            htemp=htemp.split(',')
+            htemp2=[]
+            for i in range(0,len(htemp)):
+                htemp2.append(int(htemp[i]))
+            dct["hlayers"]=htemp2
+                
+        print('String:',options,'Dictionary:',dct)
+              
+        self.set_data(in_data,out_data,**dct)
+
+        return
+    
     def eval(self,v):
         """
         Evaluate the classifier at point ``v``.
