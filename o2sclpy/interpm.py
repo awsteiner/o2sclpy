@@ -62,8 +62,20 @@ class interpm_sklearn_gp:
         from sklearn.gaussian_process.kernels import RBF, DotProduct
         from sklearn.gaussian_process.kernels import RationalQuadratic
         from sklearn.gaussian_process.kernels import Matern, WhiteKernel
+        from sklearn.gaussian_process.kernels import PairwiseKernel
+        from sklearn.gaussian_process.kernels import CompoundKernel
+        from sklearn.gaussian_process.kernels import ConstantKernel
+        from sklearn.gaussian_process.kernels import ExpSineSquared
+        from sklearn.gaussian_process.kernels import Exponentiation
+        from sklearn.gaussian_process.kernels import Product
+        from sklearn.gaussian_process.kernels import Hyperparameter
+        from sklearn.gaussian_process.kernels import Sum, WhiteKernel
 
-        self.kernel=eval(kernel)
+        try:
+            self.kernel=eval(kernel)
+        except Exception as e:
+            print('Exception in interpm_sklearn_gp::set_data()',
+                  'at kernel eval.',e)
         self.outformat=outformat
         self.verbose=verbose
         self.transform_in=transform_in
@@ -133,10 +145,24 @@ class interpm_sklearn_gp:
         using a string to specify the keyword arguments.
         """
 
+        ktemp=''
+        if options.find('kernel=')!=-1:
+            #print('old options:',options)
+            ktemp=options[options.find('kernel=')+7:]
+            options=options[:options.find('kernel=')]
+            if options[-1:]==',':
+                options=options[:-1]
+            #print('new options:')
+            #print(' ',ktemp)
+            #print(' ',options)
         dct=string_to_dict2(options,list_of_ints=['verbose'],
                             list_of_floats=['test_size'],
                             list_of_bools=['normalize_y'])
-        print('String:',options,'Dictionary:',dct)
+        if ktemp!='':
+            dct["kernel"]=ktemp
+        print('interpm_sklearn_gp::set_data_str():')
+        print('  string:',options)
+        print('  dictionary:',dct)
               
         self.set_data(in_data,out_data,**dct)
 
