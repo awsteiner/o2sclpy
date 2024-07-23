@@ -38,10 +38,11 @@ class interpm_sklearn_gp:
         self.transform_out=0
         self.SS1=0
         self.SS2=0
+        self.alpha=0
 
     def set_data(self,in_data,out_data,
                  kernel='1.0*RBF(1.0,(1e-2,1e2))',test_size=0.0,
-                 normalize_y=True,transform_in='none',
+                 normalize_y=True,transform_in='none',alpha=1.0e-10,
                  transform_out='none',outformat='numpy',verbose=0,
                  random_state=None):
         """
@@ -55,6 +56,7 @@ class interpm_sklearn_gp:
             print('  transform_in:',transform_in)
             print('  transform_out:',transform_out)
             print('  outformat:',outformat)
+            print('  alpha:',alpha)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
 
@@ -77,6 +79,7 @@ class interpm_sklearn_gp:
             print('Exception in interpm_sklearn_gp::set_data()',
                   'at kernel eval.',e)
         self.outformat=outformat
+        self.alpha=alpha
         self.verbose=verbose
         self.transform_in=transform_in
         self.transform_out=transform_out
@@ -128,7 +131,7 @@ class interpm_sklearn_gp:
         try:
             func=GaussianProcessRegressor
             self.gp=func(normalize_y=True,
-                         kernel=self.kernel,
+                         kernel=self.kernel,alpha=self.alpha,
                          random_state=random_state).fit(in_train,out_train)
         except Exception as e:
             print('Exception in interpm_sklearn_gp::set_data()',
@@ -156,7 +159,7 @@ class interpm_sklearn_gp:
             #print(' ',ktemp)
             #print(' ',options)
         dct=string_to_dict2(options,list_of_ints=['verbose'],
-                            list_of_floats=['test_size'],
+                            list_of_floats=['test_size','alpha'],
                             list_of_bools=['normalize_y'])
         if ktemp!='':
             dct["kernel"]=ktemp
