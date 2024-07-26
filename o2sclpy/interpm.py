@@ -193,7 +193,7 @@ class interpm_sklearn_gp:
         
         if self.transform_out!='none':
             try:
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                yp_trans=self.SS2.inverse_transform(yp.reshape(1,-1))
             except Exception as e:
                 print('Exception 5 in interpm_sklearn_gp:',e)
         else:
@@ -241,8 +241,8 @@ class interpm_sklearn_gp:
         
         if self.transform_out!='none':
             try:
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
-                std_trans=self.SS2.inverse_transform(std.reshape(-1,1))
+                yp_trans=self.SS2.inverse_transform(yp.reshape(1,-1))
+                std_trans=self.SS2.inverse_transform(std.reshape(1,-1))
             except Exception as e:
                 print('Exception 6 in interpm_sklearn_gp:',e)
         else:
@@ -342,9 +342,9 @@ class interpm_sklearn_dtr:
         """
         Evaluate the regression at point ``v``.
         """
-
+        v=v.reshape(1,-1)
         try:
-            pred=self.dtr.predict([v])
+            pred=self.dtr.predict(v)
         except Exception as e:
             print('Exception 4 in interpm_sklearn_dtr:',e)
     
@@ -365,7 +365,7 @@ class interpm_sklearn_dtr:
                   'type(pred[0]),pred[0]:',
                   type(pred[0]),pred[0])
 
-        return numpy.ascontiguousarray(pred)
+        return numpy.ascontiguousarray(pred[0])
 
 
 class interpm_sklearn_mlpr:
@@ -516,7 +516,7 @@ class interpm_sklearn_mlpr:
         
         if self.transform_out!='none':
             try:
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                yp_trans=self.SS2.inverse_transform(yp.reshape(1,-1))
             except Exception as e:
                 print('Exception 5 in interpm_sklearn_mlpr:',e)
         else:
