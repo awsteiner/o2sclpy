@@ -176,28 +176,33 @@ class interpm_sklearn_gp:
         Evaluate the GP at point ``v``.
         """
 
-        if self.transform_in!='none':
-            v_trans=0
-            try:
+        v_trans=0
+        try:
+            if self.transform_in!='none':
                 v_trans=self.SS1.transform(v.reshape(1,-1))
-            except Exception as e:
-                print(('Exception at input transformation '+
-                       'in interpm_sklearn_gp:'),
-                      e)
-        else:
-            v_trans=v.reshape(1,-1)
-            
-        # AWS, 3/27/24: Keep in mind that o2scl::interpm_python.eval()
-        # expects the return type to be a numpy array. 
-        yp=self.gp.predict(v_trans)
-        
-        if self.transform_out!='none':
-            try:
+            else:
+                v_trans=v.reshape(1,-1)
+        except Exception as e:
+            print(('Exception at input transformation '+
+                   'in interpm_sklearn_gp::eval():'),e)
+
+        try:
+            # AWS, 3/27/24: Keep in mind that o2scl::interpm_python.eval()
+            # expects the return type to be a numpy array. 
+            yp=self.gp.predict(v_trans)
+        except Exception as e:
+            print(('Exception at prediction '+
+                   'in interpm_sklearn_gp::eval():'),e)
+
+        yp_trans=0
+        try:
+            if self.transform_out!='none':
                 yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
-            except Exception as e:
-                print('Exception 5 in interpm_sklearn_gp:',e)
-        else:
-            yp_trans=yp
+            else:
+                yp_trans=yp
+        except Exception as e:
+            print(('Exception at output transformation '+
+                   'in interpm_sklearn_gp::eval():'),e)
     
         if self.outformat=='list':
             if self.verbose>1:

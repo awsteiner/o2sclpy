@@ -2350,6 +2350,11 @@ class o2graph_plotter(td_plot_base):
 
             amt=acol_manager(amp)
             tab=amt.get_table_obj()
+
+            if tab.get_nlines()==0:
+                print('In o2graph_plotter::scatter(), table has zero lines.')
+                return 1
+                
             xv=tab[force_bytes(args[0])][0:tab.get_nlines()]
             yv=tab[force_bytes(args[1])][0:tab.get_nlines()]
 

@@ -1760,6 +1760,9 @@ class plot_base:
         plot.rc('font',family='serif')
         plot.rcParams['lines.linewidth']=0.5
         dct=string_to_dict(self.fig_dict)
+        if 'dpi' in dct.keys():
+            plot.rcParams['figure.dpi']=dct['dpi']
+            del dct['dpi']
         if not('fig_size_x' in dct):
             dct['fig_size_x']=6.0
         if not('fig_size_y' in dct):
