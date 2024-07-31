@@ -2260,26 +2260,23 @@ class plot_base:
         if len(sv)>0:
             if len(cv)>0:
                 if len(args)>4:
-                    self.last_image=ft(xv,yv,s=sv,c=cv,
-                                 **string_to_dict(args[4]))
+                    self.last_image=ft(xv,yv,s=sv,c=cv,**kwargs)
                 else:
                     self.last_image=ft(xv,yv,s=sv,c=cv)
             else:
                 if len(args)>4:
-                    self.last_image=ft(xv,yv,s=sv,
-                                 **string_to_dict(args[4]))
+                    self.last_image=ft(xv,yv,s=sv,**kwargs)
                 else:
                     self.last_image=ft(xv,yv,s=sv)
         else:
             if len(cv)>0:
                 if len(args)>4:
-                    self.last_image=ft(xv,yv,c=cv,
-                                 **string_to_dict(args[4]))
+                    self.last_image=ft(xv,yv,c=cv,**kwargs)
                 else:
                     self.last_image=ft(xv,yv,c=cv)
             else:
                 if len(args)>4:
-                    self.last_image=ft(xv,yv,**string_to_dict(args[4]))
+                    self.last_image=ft(xv,yv,**kwargs)
                 else:
                     self.last_image=ft(xv,yv)
 

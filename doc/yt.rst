@@ -42,10 +42,12 @@ yt scatter example
 yt multiple volume example
 --------------------------
 
-.. include:: ../examples/yt_tg_multvol.scr
-   :literal:	     
-.. image:: static/figures/yt_tg_multvol.png
-   :width: 70%
+..
+  x
+  .. include:: ../examples/yt_tg_multvol.scr
+     :literal:	     
+  .. image:: static/figures/yt_tg_multvol.png
+     :width: 70%
 
 .. raw:: html
 	 

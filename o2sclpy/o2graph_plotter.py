@@ -56,6 +56,7 @@ from yt.visualization._commons import get_canvas
 
 base_list=[
     ["addcbar",plot_base.addcbar.__doc__],
+    ["append-images",0],
     ["arrow",plot_base.arrow.__doc__],
     ["backend",
      ("Documentation for backend\n\n"+
@@ -667,6 +668,8 @@ class o2graph_plotter(td_plot_base):
                 line[1]=o2graph_plotter.yt_tf_func.__doc__
             elif line[0]=="bl-import":
                 line[1]=o2graph_plotter.bl_import.__doc__
+            elif line[0]=="append-images":
+                line[1]=o2graph_plotter.append_images.__doc__
             elif line[0]=="bl-six-mp4":
                 line[1]=o2graph_plotter.bl_six_mp4.__doc__
             elif line[0]=="bl-yaw-mp4":
@@ -2316,7 +2319,56 @@ class o2graph_plotter(td_plot_base):
         
         # End of function o2graph_plotter::rplot()
         return
-                                 
+
+    def append_images(self,args):
+        """
+        Documentation for o2graph command ``append-images``:
+
+        Combine two images side by side
+
+        Command-line arguments: ``<img1> <img2> <img out>``
+        """
+        if len(args)<3:
+            print("Command 'append-images' needs three arguments.")
+        
+        from PIL import Image
+    
+        img=Image.open(args[0])
+        img2=Image.open(args[1])
+        new_width=img.width+img2.width
+        new_height=img.height
+        if img2.height>new_height:
+            new_height=img2.height
+        print('Image 1:',img.width,img.height)
+        print('Image 2:',img2.width,img2.height)
+        print('New image:',new_width,new_height)
+        img3=Image.new('RGBA',(new_width,new_height))
+        dat=img.getdata()
+        dat2=img2.getdata()
+        dat3=[]
+        c1=0
+        c2=0
+        for j in range(0,new_height):
+            for i in range(0,new_width):
+
+                if i<img.width and j<img.height:
+                    ix=i+j*img.width
+                    px=(dat[ix][0],dat[ix][1],dat[ix][2],dat[ix][3])
+                    dat3.append(px)
+                    c1=c1+1
+                elif i>=img.width and j<img2.height:
+                    i2=i-img.width
+                    ix=i2+j*img2.width
+                    px=(dat2[ix][0],dat2[ix][1],dat2[ix][2],dat2[ix][3])
+                    dat3.append(px)
+                    c2=c2+1
+                else:
+                    dat3.append((0,0,0,0))
+
+        img3.putdata(dat3)
+        img3.save(args[2])
+        return
+    
     def scatter_o2graph(self,amp,args):
         """
         Documentation for o2graph command ``scatter``:
@@ -6036,7 +6088,7 @@ class o2graph_plotter(td_plot_base):
                         print('Process scatter.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.scatter(amp,strlist[ix+1:ix_next])
+                    self.scatter_o2graph(amp,strlist[ix+1:ix_next])
 
                 elif cmd_name=='hist-plot':
                     
@@ -6294,6 +6346,19 @@ class o2graph_plotter(td_plot_base):
                                      float(eval(strlist[ix+3])),
                                      float(eval(strlist[ix+4])),
                                      **string_to_dict(strlist[ix+5]))
+                        
+                elif cmd_name=='append-images':
+                    
+                    if self.verbose>5:
+                        print('Process append-images.')
+                        print('args:',strlist[ix:ix_next])
+                        
+                    if ix_next-ix<4:
+                        print('Not enough parameters for addcbar option.')
+                    else:
+                        self.append_images([strlist[ix+1],
+                                           strlist[ix+2],
+                                           strlist[ix+3]])
                         
                 elif cmd_name=='inset':
                     
