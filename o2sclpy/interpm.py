@@ -222,6 +222,49 @@ class interpm_sklearn_gp:
                   type(yp_trans[0]),v,yp_trans[0])
         return numpy.ascontiguousarray(yp_trans[0])
 
+    def eval_list(self,v):
+        """
+        Evaluate the GP at point ``v``.
+        """
+
+        v_trans=0
+        try:
+            if self.transform_in!='none':
+                v_trans=self.SS1.transform(v)
+            else:
+                v_trans=v
+        except Exception as e:
+            print(('Exception at input transformation '+
+                   'in interpm_sklearn_gp::eval_list():'),e)
+
+        try:
+            yp=self.gp.predict(v)
+        except Exception as e:
+            print(('Exception at prediction '+
+                   'in interpm_sklearn_gp::eval_list():'),e)
+
+        yp_trans=0
+        try:
+            if self.transform_out!='none':
+                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+            else:
+                yp_trans=yp
+        except Exception as e:
+            print(('Exception at output transformation '+
+                   'in interpm_sklearn_gp::eval_list():'),e)
+    
+        if self.outformat=='list':
+            if self.verbose>1:
+                print('interpm_sklearn_gp::eval_list():',
+                      'list mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            return yp_trans.tolist()
+        if self.verbose>1:
+            print('interpm_sklearn_gp::eval_list():',
+                  'array mode type(yp),v,yp:',
+                  type(yp_trans),v,yp_trans)
+        return numpy.ascontiguousarray(yp_trans)
+
     def eval_unc(self,v):
         """
         Evaluate the GP and its uncertainty at point ``v``.

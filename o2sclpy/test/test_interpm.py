@@ -22,6 +22,11 @@
 #
 import o2sclpy
 import numpy
+import sys
+
+plots=True
+if 'pytest' in sys.modules:
+    plots=False
 
 def f(x,y):
     return (numpy.sin(x*10)+2.0*numpy.tan(y))/5.0+0.14
@@ -32,7 +37,7 @@ def f2(x,y):
 
 def test_all():
 
-    N=100
+    N=1000
     x=numpy.zeros((N,2))
     for i in range(0,N):
         x[i,0]=float(i)/float(N)
@@ -41,6 +46,11 @@ def test_all():
     y=numpy.zeros((N,1))
     for i in range(0,N):
         y[i,0]=f(x[i,0],x[i,1])
+
+    if plots:
+        pb=o2sclpy.plot_base()
+        pb.scatter([x[:,0],x[:,1],None,y[:,0]])
+        pb.show()
 
     for ik in range(0,3):
         
@@ -59,6 +69,15 @@ def test_all():
             interp=im.eval(v)
             print('exact,interp 1: %7.6e %7.6e' % (exact,interp[0]))
             assert numpy.allclose(exact,interp[0],rtol=1.0)
+
+            v2=numpy.zeros((2,2))
+            v2[0,0]=0.5
+            v2[0,1]=0.5
+            v2[1,0]=0.6
+            v2[1,1]=0.6
+            interp2=im.eval_list(v2)
+            assert numpy.allclose(f(0.5,0.5),interp2[0],rtol=1.0)
+            assert numpy.allclose(f(0.6,0.6),interp2[1],rtol=1.0)
             
             interp2,std2=im.eval_unc(v)
             print('exact,interp 2: %7.6e %7.6e %7.6e' %
@@ -95,10 +114,6 @@ def test_all():
             # neural network results are pretty random for few epochs
             assert numpy.allclose(exact,interp,rtol=1.0)
     
-            im2.verbose=0
-            for i in range(0,N,10):
-                print('%2d %7.6e %7.6e' % (i,im2.eval(x[i])[0],y[i,0]))
-
         if True:
             im3=o2sclpy.interpm_sklearn_mlpr()
             im3.set_data(x,y,verbose=0,test_size=0.1,solver='lbfgs',

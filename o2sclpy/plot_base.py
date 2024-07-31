@@ -2176,6 +2176,132 @@ class plot_base:
     #     # End of function plot_base::move_labels()
     #     return
 
+    def scatter(self,args,**kwargs):
+        """
+        Documentation for o2graph command ``scatter``:
+
+        For objects of type ``table``:
+
+        Create a scatter plot from 2-4 columns.
+
+        Command-line arguments: ``<x> <y> [s] [c] [kwargs]``
+
+        This command creates a scatter plot form columns <x> and <y>,
+        optionally using column [s] to choose the marker size and
+        optionally using column [c] to choose the marker color. To
+        vary the marker colors while choosing the default marker size
+        just specify 'None' as the argument for [s]. Or, to specify
+        keyword arguments while using the default size and color,
+        specify 'None' as the argument for both [s] and [c].
+
+        """
+
+        if self.verbose>1:
+            print('In plot_base::scatter().')
+        
+        import matplotlib.pyplot as plot
+        
+        if len(args)<2:
+            print('Failed, not enough information for plot_base::scatter().')
+            return
+
+        sv=[]
+        cv=[]
+
+        failed=True
+            
+        if (str(type(args[0]))=='<class \'o2sclpy.base.table\'>' or
+            str(type(args[0]))=='<class \'o2sclpy.base.table_units\'>' or
+            str(type(args[0]))==
+            '<class \'o2sclpy.base.shared_ptr_table_units\'>'):
+            
+            failed=False
+
+            tab=args[0]
+            xv=tab[force_bytes(args[1])][0:tab.get_nlines()]
+            yv=tab[force_bytes(args[2])][0:tab.get_nlines()]
+            
+            if (len(args)>3 and force_bytes(args[3])!=b'None' and
+                force_bytes(args[3])!=b'none'):
+                sv=tab[force_bytes(args[3])][0:tab.get_nlines()]
+
+            if (len(args)>4 and force_bytes(args[4])!=b'None' and
+                force_bytes(args[4])!=b'none'):
+                cv=tab[force_bytes(args[4])][0:tab.get_nlines()]
+                
+        else:
+
+            failed=False
+            
+            xv=args[0]
+            yv=args[1]
+        
+            if (len(args)>2 and args[2]!=None):
+                sv=args[2]
+
+            if len(args)>3:
+                if (isinstance(args[3],list) or
+                    str(type(args[3]))=='<class \'numpy.ndarray\'>'):
+                    cv=args[3]
+                elif args[3]!=None:
+                    cv=args[3]
+                    
+
+        if failed:
+            print('Failed to interpret arguments in plot_base::plot().')
+            return
+        
+        if self.canvas_flag==False:
+            self.canvas()
+
+        # Function alias
+        ft=self.axes.scatter
+        
+        if len(sv)>0:
+            if len(cv)>0:
+                if len(args)>4:
+                    self.last_image=ft(xv,yv,s=sv,c=cv,
+                                 **string_to_dict(args[4]))
+                else:
+                    self.last_image=ft(xv,yv,s=sv,c=cv)
+            else:
+                if len(args)>4:
+                    self.last_image=ft(xv,yv,s=sv,
+                                 **string_to_dict(args[4]))
+                else:
+                    self.last_image=ft(xv,yv,s=sv)
+        else:
+            if len(cv)>0:
+                if len(args)>4:
+                    self.last_image=ft(xv,yv,c=cv,
+                                 **string_to_dict(args[4]))
+                else:
+                    self.last_image=ft(xv,yv,c=cv)
+            else:
+                if len(args)>4:
+                    self.last_image=ft(xv,yv,**string_to_dict(args[4]))
+                else:
+                    self.last_image=ft(xv,yv)
+
+        if self.logx==True:
+            self.axes.set_xscale('log')
+        if self.logy==True:
+            self.axes.set_yscale('log')
+                    
+        if self.xset==True:
+            self.axes.set_xlim(self.xlo,self.xhi)
+        if self.yset==True:
+            self.axes.set_ylim(self.ylo,self.yhi)
+            
+        if self.colbar==True and len(cv)>0:
+            cbar=plot.colorbar(self.last_image,ax=self.axes)
+            cbar.ax.tick_params('both',length=6,width=1,
+                                which='major')
+            cbar.ax.tick_params(labelsize=self.font*0.8)
+                
+        # End of function plot_base::scatter()
+        return
+                                 
     def plot(self,args,**kwargs):
         """Plot a two-dimensional set of data
         
@@ -2196,6 +2322,8 @@ class plot_base:
         if len(args)<2:
             print('Failed, not enough information to plot.')
             return
+
+        failed=True
 
         if (str(type(args[0]))=='<class \'o2sclpy.base.table\'>' or
             str(type(args[0]))=='<class \'o2sclpy.base.table_units\'>' or
@@ -2245,7 +2373,11 @@ class plot_base:
             
             xv=args[0]
             yv=args[1]
-            
+
+        if failed:
+            print('Failed to interpret arguments in plot_base::plot().')
+            return
+        
         if failed==False:
     
             if self.canvas_flag==False:

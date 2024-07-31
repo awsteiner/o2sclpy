@@ -697,7 +697,7 @@ class o2graph_plotter(td_plot_base):
             elif line[1]=="rplot":
                 line[2]=o2graph_plotter.rplot.__doc__
             elif line[1]=="scatter":
-                line[2]=o2graph_plotter.scatter.__doc__
+                line[2]=o2graph_plotter.scatter_o2graph.__doc__
             elif line[1]=="to-kde":
                 line[2]=o2graph_plotter.to_kde.__doc__
             elif line[1]=="yt-add-vol":
@@ -2317,7 +2317,7 @@ class o2graph_plotter(td_plot_base):
         # End of function o2graph_plotter::rplot()
         return
                                  
-    def scatter(self,amp,args):
+    def scatter_o2graph(self,amp,args):
         """
         Documentation for o2graph command ``scatter``:
 
@@ -2338,93 +2338,35 @@ class o2graph_plotter(td_plot_base):
         """
 
         if self.verbose>1:
-            print('In o2graph_plotter::scatter().')
+            print('In o2graph_plotter::scatter_o2graph().')
         
         import matplotlib.pyplot as plot
-        
+
         curr_type=o2scl_get_type(amp)
                         
         if curr_type==b'table':
-                            
-            failed=False
-
+            
             amt=acol_manager(amp)
             tab=amt.get_table_obj()
+            
+            if len(args)<2:
+                print("Not enough arguments for 'plot' command.")
+                print("  args:",args)
+                return
+            elif len(args)<3:
+                self.scatter([tab,args[0],args[1]])
+            elif len(args)<4:
+                self.scatter([tab,args[0],args[1],args[2]])
+            elif len(args)<5:
+                self.scatter([tab,args[0],args[1],args[2],args[3]])
+            else:
+                self.scatter([tab,args[0],args[1],args[2],args[3]],
+                             **string_to_dict(args[4]))
 
-            if tab.get_nlines()==0:
-                print('In o2graph_plotter::scatter(), table has zero lines.')
-                return 1
-                
-            xv=tab[force_bytes(args[0])][0:tab.get_nlines()]
-            yv=tab[force_bytes(args[1])][0:tab.get_nlines()]
-
-            sv=[]
-            cv=[]
-
-            if (len(args)>2 and force_bytes(args[2])!=b'None' and
-                force_bytes(args[2])!=b'none'):
-                sv=tab[force_bytes(args[2])][0:tab.get_nlines()]
-
-            if (len(args)>3 and force_bytes(args[3])!=b'None' and
-                force_bytes(args[3])!=b'none'):
-                cv=tab[force_bytes(args[3])][0:tab.get_nlines()]
-
-            if failed==False:
-                
-                if self.canvas_flag==False:
-                    self.canvas()
-                ft=self.axes.scatter
-                if len(sv)>0:
-                    if len(cv)>0:
-                        if len(args)>4:
-                            self.last_image=ft(xv,yv,s=sv,c=cv,
-                                         **string_to_dict(args[4]))
-                        else:
-                            self.last_image=ft(xv,yv,s=sv,c=cv)
-                    else:
-                        if len(args)>4:
-                            self.last_image=ft(xv,yv,s=sv,
-                                         **string_to_dict(args[4]))
-                        else:
-                            self.last_image=ft(xv,yv,s=sv)
-                else:
-                    if len(cv)>0:
-                        if len(args)>4:
-                            self.last_image=ft(xv,yv,c=cv,
-                                         **string_to_dict(args[4]))
-                        else:
-                            self.last_image=ft(xv,yv,c=cv)
-                    else:
-                        if len(args)>4:
-                            self.last_image=ft(xv,yv,**string_to_dict(args[4]))
-                        else:
-                            self.last_image=ft(xv,yv)
-
-                if self.logx==True:
-                    self.axes.set_xscale('log')
-                if self.logy==True:
-                    self.axes.set_yscale('log')
-                    
-                if self.xset==True:
-                    self.axes.set_xlim(self.xlo,self.xhi)
-                if self.yset==True:
-                    self.axes.set_ylim(self.ylo,self.yhi)
-                if self.colbar==True and len(cv)>0:
-                    cbar=plot.colorbar(self.last_image,ax=self.axes)
-                    cbar.ax.tick_params('both',length=6,width=1,
-                                        which='major')
-                    cbar.ax.tick_params(labelsize=self.font*0.8)
-                    
-            # End of section for 'table' type
         else:
             print("Command 'scatter' not supported for type",
                   curr_type,".")
             return
-        
-        if self.xset==True:
-            self.axes.set_xlim(self.xlo,self.xhi)
-        if self.yset==True:
-            self.axes.set_ylim(self.ylo,self.yhi)
                                  
         # End of function o2graph_plotter::scatter()
         return
