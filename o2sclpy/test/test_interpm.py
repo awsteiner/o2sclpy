@@ -124,10 +124,6 @@ def test_all():
             print('exact,interp 4:', exact,interp)
             assert numpy.allclose(exact,interp,rtol=1.0)
     
-            im3.verbose=0
-            for i in range(0,N,10):
-                print(i,im3.eval(x[i])[0],y[i,0])
-                
     if True:
         im2=o2sclpy.interpm_sklearn_dtr()
         im2.set_data(x,y,verbose=0,test_size=0.1)
@@ -137,10 +133,6 @@ def test_all():
         print('exact,interp 3:', exact,interp)
         assert numpy.allclose(exact,interp,rtol=1.0)
     
-        im2.verbose=0
-        for i in range(0,N,10):
-            print(i,im2.eval(x[i])[0],y[i,0])
-            
 if __name__ == '__main__':
     test_all()
     print('All tests passed.')
