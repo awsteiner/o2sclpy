@@ -6176,11 +6176,9 @@ class o2graph_plotter(td_plot_base):
                     if ix_next-ix<3:
                         print('Not enough parameters for yt-render.')
                     elif ix_next-ix<4:
-                        self.mp4(amp,[strlist[ix+1],
-                                                       strlist[ix+2]])
+                        self.mp4([strlist[ix+1],strlist[ix+2]])
                     else:
-                        self.mp4(amp,[strlist[ix+1],
-                                                       strlist[ix+2]],
+                        self.mp4([strlist[ix+1],strlist[ix+2]],
                                  string_to_dict2(strlist[ix+3:ix_next],
                                                  list_of_bools=['loop']))
                 
