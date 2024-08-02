@@ -842,9 +842,8 @@ class interpm_tf_dnn:
                                          restore_best_weights=True,
                                          start_from_epoch=es_start,
                                          mode='min')
-            
-            # Compile the model for training
             model.compile(loss=loss,optimizer='adam')
+                
             if test_size>0.0:
                 # Fit the model to training data
                 model.fit(x_train,y_train,batch_size=batch_size,
@@ -969,6 +968,9 @@ class interpm_tf_dnn:
             
         return numpy.ascontiguousarray(out_double)
 
+    def eval_unc(self,v):
+        return self.eval(v)
+        
     def eval_list(self,v):
         """
         Evaluate the GP at point ``v``.
