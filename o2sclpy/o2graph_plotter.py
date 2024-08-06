@@ -949,10 +949,16 @@ class o2graph_plotter(td_plot_base):
         if output[-4:]!='.mp4':
             output=output+'.mp4'
 
+        # See https://trac.ffmpeg.org/wiki/StreamingGuide. The x264
+        # video codec and yuv420p pixel format are recommended for
+        # wide compatibility.
+        
         # -y means overwrite output without asking
         # -r 10 means set the framerate to 10 frames per second
-        # -vcodec sets the video codec
-        # -pix_fmt sets the pixel format
+
+        # The Constant Rate Factor (CRF) is the default quality (and
+        # rate control) setting for the x264 and x265 encoders.
+        # See https://trac.ffmpeg.org/wiki/Encode/H.264
             
         cmd=('ffmpeg -y -r '+str(fps)+' -f image2 -i '+pattern+
              ' -vcodec libx264')
