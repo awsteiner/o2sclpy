@@ -22,7 +22,9 @@ cli = [
   "yt",
   "scikit-learn",
   "tensorflow",
-  "scipy"
+  "scipy",
+  "torch",
+  "normflows"
 ]
 
 [project.scripts]

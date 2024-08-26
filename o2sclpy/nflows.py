@@ -24,9 +24,12 @@ import numpy
 from o2sclpy.utils import string_to_dict2
 
 class nflows_nsf:
-    """
-    Neural spline flow probability density distribution
+    """Neural spline flow probability density distribution
     from normflows which uses pytorch
+
+    This code was originally based on
+    https://github.com/VincentStimper/normalizing-flows/blob/master/examples/circular_nsf.ipynb
+    .
     """
 
     def __init__(self):
@@ -42,13 +45,19 @@ class nflows_nsf:
         self.max_iter=0
         self.base=0
         self.device=0
+        self.adam_lr=0
+        self.adam_decay=0
 
     def set_data(self,in_data,verbose=0,
                  num_layers=20,num_hidden_channels=128,
-                 max_iter=20000,outformat='numpy'):
+                 max_iter=20000,outformat='numpy',adam_lr=1.0e-4,
+                 adam_decay=1.0e-4):
         """
         Fit the mixture model with the specified input data, 
         a numpy array of shape (n_samples,n_coordinates)
+
+        adam_lr is Adam learning rate (pytorch default is 1.0e-3)
+        adam_decay is the Adam weight decay (pytorch default is 0)
         """
 
         import torch
@@ -61,6 +70,8 @@ class nflows_nsf:
             print('  max_iter:',max_iter)
             print('  num_layers:',num_layers)
             print('  num_hidden_channels:',num_hidden_channels)
+            print('  adam_lr:',adam_lr)
+            print('  adam_decay:',adam_decay)
             print('')
 
         from sklearn.preprocessing import StandardScaler
@@ -79,6 +90,8 @@ class nflows_nsf:
         self.num_layers=num_layers
         self.max_iter=max_iter
         self.num_hidden_channels=num_hidden_channels
+        self.adam_lr=adam_lr
+        self.adam_decay=adam_decay
         
         try:
             self.SS1=StandardScaler()
@@ -114,7 +127,8 @@ class nflows_nsf:
             self.model.train()
 
             optimizer=torch.optim.Adam(self.model.parameters(),
-                                       lr=1e-4,weight_decay=1e-4)
+                                       lr=self.adam_lr,
+                                       weight_decay=self.adam_decay)
 
             for it in range(0,self.max_iter):
                 
@@ -145,7 +159,8 @@ class nflows_nsf:
             dct=string_to_dict2(options,list_of_ints=['verbose',
                                                       'num_layers',
                                                       'num_hidden_channels',
-                                                      'max_iter'])
+                                                      'max_iter'],
+                                list_of_floats=['adam_lr','adam_decay'])
             if self.verbose>1:
                 print('String:',options,'Dictionary:',dct)
                   
@@ -154,8 +169,6 @@ class nflows_nsf:
             print('Exception in nflows_nsf::set_data_str()',
                   'Failed.\n  ',e)
             raise
-
-        return
 
         return
 
