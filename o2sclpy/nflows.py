@@ -40,6 +40,8 @@ class nflows_nsf:
         self.num_hidden_channels=0
         self.num_layers=0
         self.max_iter=0
+        self.base=0
+        self.device=0
 
     def set_data(self,in_data,verbose=0,
                  num_layers=20,num_hidden_channels=128,
@@ -55,6 +57,10 @@ class nflows_nsf:
         if verbose>0:
             print('nflows_nsf::set_data():')
             print('  verbose:',verbose)
+            print('  outformat:',outformat)
+            print('  max_iter:',max_iter)
+            print('  num_layers:',num_layers)
+            print('  num_hidden_channels:',num_hidden_channels)
             print('')
 
         from sklearn.preprocessing import StandardScaler
@@ -92,7 +98,7 @@ class nflows_nsf:
             self.base=normflows.distributions.base.DiagGaussian(self.n_dim)
 
             # Create normalizing flow
-            layer_func=nf.flows.AutoregressiveRationalQuadraticSpline
+            layer_func=normflows.flows.AutoregressiveRationalQuadraticSpline
             
             flow_layers=[]
             for i in range(num_layers):
@@ -100,9 +106,9 @@ class nflows_nsf:
                                          self.num_hidden_channels,
                                          permute_mask=True)]
                 
-            self.model=nf.NormalizingFlow(base,flow_layers)
+            self.model=normflows.NormalizingFlow(self.base,flow_layers)
 
-            self.model=self.model.to(device)
+            self.model=self.model.to(self.device)
 
             self.model.eval()
             self.model.train()
@@ -111,19 +117,17 @@ class nflows_nsf:
                                        lr=1e-4,weight_decay=1e-4)
 
             for it in range(0,self.max_iter):
+                
                 optimizer.zero_grad()
-                loss=model.forward_kld(ten_in)
+                loss=self.model.forward_kld(ten_in)
 
                 if ~(torch.isnan(loss) | torch.isinf(loss)):
                     loss.backward()
                     optimizer.step()
 
-                print('loss',loss.to('cpu').data.numpy())
+                print('it,max_iter,loss: %d %d %7.6e' %
+                      (it,max_iter,loss.to('cpu').data.numpy()))
                 
-            
-            if self.verbose>0:
-                print('Bandwidth: ',self.kde.bandwidth_)
-            
         except Exception as e:
             print('Exception in nflows_nsf::set_data()',
                   'Train failed.\n  ',e)
@@ -159,23 +163,20 @@ class nflows_nsf:
         """
         Sample the distribution
         """
-
-        out=self.model.sample(n_samples).to('cpu')
-        print('out:',type(out),numpy.shape(out),out)
         
-        if self.transform!='none':
-            if n_samples==1:
-                out_trans=self.SS1.inverse_transform(out)[0]
-            else:
-                out_trans=self.SS1.inverse_transform(out)
+        out,out_prob=self.model.sample(n_samples)
+        if self.device!='cpu':
+            out=out.to('cpu')
+        out=out.detach().numpy()
+        
+        if n_samples==1:
+            out_trans=self.SS1.inverse_transform(out)[0]
         else:
-            if n_samples==1:
-                out_trans=out[0]
-            else:
-                out_trans=out
-            
-        print('out_trans:',type(out_trans),numpy.shape(out_trans),out_trans,
-              self.outformat)
+            out_trans=self.SS1.inverse_transform(out)
+
+        if self.verbose>2:
+            print('out_trans:',type(out_trans),numpy.shape(out_trans),
+                  out_trans,self.outformat)
 
         if self.outformat=='list':
             return out_trans.tolist()

@@ -2178,22 +2178,9 @@ class plot_base:
 
     def scatter(self,args,**kwargs):
         """
-        Documentation for o2graph command ``scatter``:
-
-        For objects of type ``table``:
-
-        Create a scatter plot from 2-4 columns.
-
-        Command-line arguments: ``<x> <y> [s] [c] [kwargs]``
-
-        This command creates a scatter plot form columns <x> and <y>,
-        optionally using column [s] to choose the marker size and
-        optionally using column [c] to choose the marker color. To
-        vary the marker colors while choosing the default marker size
-        just specify 'None' as the argument for [s]. Or, to specify
-        keyword arguments while using the default size and color,
-        specify 'None' as the argument for both [s] and [c].
-
+        Args either [table,xcol,ycol,...] or
+        [xarray,yarray,...]
+        
         """
 
         if self.verbose>1:

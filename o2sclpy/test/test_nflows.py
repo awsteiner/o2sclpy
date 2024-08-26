@@ -40,13 +40,24 @@ def test_all():
             x[i,0]=-0.7+0.1*random.random()
             x[i,1]=0.2+0.1*random.random()
 
-    #if plots:
-    #    pb=o2sclpy.plot_base()
-    #    pb.scatter([x[:,0],x[:,1],None,y[:,0]])
-    #    pb.show()
+    if plots:
+        pb=o2sclpy.plot_base()
+        pb.scatter([x[:,0],x[:,1]])
+        pb.show()
 
     nsf=o2sclpy.nflows_nsf()
-    nsf.set_data_str(x)
+    nsf.set_data_str(x,'max_iter=1000,verbose=2,outformat=list')
+
+    print('sampling')
+    out=[]
+    for i in range(0,300):
+        out.append(nsf.sample(1))
+
+    if plots:
+        pb=o2sclpy.plot_base()
+        pb.scatter([[out[i][0] for i in range(0,100)],
+                    [out[i][1] for i in range(0,100)]])
+        pb.show()
     
 if __name__ == '__main__':
     test_all()
