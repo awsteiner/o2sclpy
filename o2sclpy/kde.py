@@ -359,6 +359,7 @@ class kde_scipy:
             x_trans=[x]
         #print('x,x_trans:',x,x_trans)
         res=self.kde.logpdf(x_trans)[0]
+        
         return res
 
     def pdf(self,x):

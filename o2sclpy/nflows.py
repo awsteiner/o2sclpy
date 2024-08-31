@@ -27,6 +27,8 @@ class nflows_nsf:
     """Neural spline flow probability density distribution
     from normflows which uses pytorch
 
+    This class is experimental.
+    
     This code was originally based on
     https://github.com/VincentStimper/normalizing-flows/blob/master/examples/circular_nsf.ipynb
     .
@@ -80,7 +82,8 @@ class nflows_nsf:
         enable_cuda=True
         self.device=torch.device('cuda' if torch.cuda.is_available() and
                             enable_cuda else 'cpu')
-        print('device:',self.device)
+        if self.verbose>0:
+            print('device:',self.device)
 
         self.verbose=verbose
         self.outformat=outformat
@@ -97,7 +100,7 @@ class nflows_nsf:
             self.SS1=StandardScaler()
             in_data_trans=self.SS1.fit_transform(in_data)
         except Exception as e:
-            print('Exception 1',e)
+            print('Exception at transform in nflows_nsf::set_data().',e)
             raise
         
         try:
@@ -173,8 +176,11 @@ class nflows_nsf:
         return
 
     def sample(self,n_samples=1):
-        """
-        Sample the distribution
+        """Sample the distribution
+
+        The output is a list or numpy array, depending on which option
+        was specified to set_data() or set_data_str(). The list or
+        numpy array is only one-dimensional if ``n_samples`` is 1.
         """
         
         out,out_prob=self.model.sample(n_samples)
@@ -194,28 +200,79 @@ class nflows_nsf:
         if self.outformat=='list':
             return out_trans.tolist()
 
-        return numpy.ascontiguousarray(out_trans)
+        out_numpy=numpy.ascontiguousarray(out_trans)
+
+        return out_numpy
         
     def log_pdf(self,x):
-        """
-        Return the log likelihood 
+        """Return the log likelihood
+
+        The value ``x`` can be a single point, expressed as a
+        one-dimensional list or numpy array, or a series of
+        points specified as a numpy array.
+        
+        If ``x`` contains only one point, then only a single floating
+        point value is returned. Otherwise, the return type is a list
+        or numpy array, depending on the value of ``outformat``.
         """
         import torch
-        
-        x_trans=self.SS1.transform([x])
+
+        # Validate input
+        if isinstance(x,list):
+            if isinstance(x[0],list):
+                if len(x[0])!=self.n_dim:
+                    print('List does not have correct dimension',
+                          'in nflows_nsf::log_pdf().')
+                    raise ValueError(('List does not have correct '+
+                                      'dimension in nflows_nsf::log_pdf().'))
+                x_trans=self.SS1.transform(x)
+            else:
+                if len(x)!=self.n_dim:
+                    print('Single point (list) does not have correct',
+                          'dimension in nflows_nsf::log_pdf().')
+                    raise ValueError(('Single point (list) does not '+
+                                      'have correct dimension '+
+                                      'in nflows_nsf::log_pdf().'))
+                x_trans=self.SS1.transform([x])
+        else:
+            if len(x.shape)==2:
+                if x.shape[1]!=self.n_dim:
+                    print('Array does not have correct dimension',
+                          'in nflows_nsf::log_pdf().')
+                    raise ValueError(('Array does not have correct '+
+                                      'dimension in nflows_nsf::log_pdf().'))
+                x_trans=self.SS1.transform(x)
+            else:
+                if x.shape[0]!=self.n_dim:
+                    print('Single point (numpy) does not have correct',
+                          'dimension in nflows_nsf::log_pdf().')
+                    raise ValueError(('Single point (numpy) does not '+
+                                      'have correct dimension '+
+                                      'in nflows_nsf::log_pdf().'))
+                x_trans=self.SS1.transform([x])
+            
         if self.verbose>2:
-            print('x,x_trans:',x,x_trans)
-        x2=torch.zeros((1,self.n_dim),device=self.device)
-        for i in range(0,self.n_dim):
-            x2[0,i]=x_trans[0,i]
+            print('x,x_trans:',x,x_trans,type(x_trans))
+        x2=torch.zeros((x_trans.shape[0],
+                        self.n_dim),device=self.device)
+        for j in range(0,x_trans.shape[0]):
+            for i in range(0,self.n_dim):
+                x2[j,i]=x_trans[j,i]
             
         res=self.model.log_prob(x2)
         if self.device!='cpu':
             res=res.to('cpu')
         res=res.detach().numpy()
+        
         if self.verbose>2:
             print(type(res),res)
 
+        if len(res.shape)==1 and res.shape[0]==1:
+            return res[0]
+
+        if self.outformat=='list':
+            return res.tolist()
+        
         return res
 
     def pdf(self,x):
