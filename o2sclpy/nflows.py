@@ -200,11 +200,11 @@ class nflows_nsf:
         """
         Return the log likelihood 
         """
-        if self.transform!='none':
-            x_trans=self.SS1.transform([x])
-        else:
-            x_trans=[x]
-        print('x,x_trans:',x,x_trans)
+        import torch
+        
+        x_trans=self.SS1.transform([x])
+        if self.verbose>2:
+            print('x,x_trans:',x,x_trans)
         x2=torch.zeros((1,self.n_dim),device=self.device)
         for i in range(0,self.n_dim):
             x2[0,i]=x_trans[0,i]
@@ -212,7 +212,9 @@ class nflows_nsf:
         res=self.model.log_prob(x2)
         if self.device!='cpu':
             res=res.to('cpu')
-        print(type(res),res)
+        res=res.detach().numpy()
+        if self.verbose>2:
+            print(type(res),res)
 
         return res
 

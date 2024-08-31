@@ -40,6 +40,7 @@ class eos_base:
     _link=0
     _owner=True
 
+    @abstractmethod
     def __init__(self,pointer=0):
         """
         Init function for class eos_base
@@ -2505,6 +2506,7 @@ class eos_quark(eos_base):
     https://awsteiner.org/code/o2scl/html/class/eos_quark.html .
     """
 
+    @abstractmethod
     def __init__(self,pointer=0):
         """
         Init function for class eos_quark

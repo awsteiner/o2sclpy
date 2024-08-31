@@ -2503,9 +2503,9 @@ class plot_base:
 
             sl=args[0]
             sl=sl.transpose()
-            shap=sl.shape()
+            shap=sl.shape
             nxt=shap[0]
-            xyt=shap[1]
+            nyt=shap[1]
             xgrid=[i for i in range(0,nxt)]
             ygrid=[i for i in range(0,nyt)]
 

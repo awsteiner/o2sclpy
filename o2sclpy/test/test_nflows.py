@@ -42,22 +42,52 @@ def test_all():
 
     if plots:
         pb=o2sclpy.plot_base()
+        pb.xlimits(-1,1)
+        pb.ylimits(0,1)
         pb.scatter([x[:,0],x[:,1]])
         pb.show()
 
     nsf=o2sclpy.nflows_nsf()
     nsf.set_data_str(x,'max_iter=1000,verbose=2,outformat=list')
 
-    print('sampling')
+    print('Sampling')
     out=[]
     for i in range(0,300):
         out.append(nsf.sample(1))
 
     if plots:
         pb=o2sclpy.plot_base()
+        pb.xlimits(-1,1)
+        pb.ylimits(0,1)
         pb.scatter([[out[i][0] for i in range(0,100)],
                     [out[i][1] for i in range(0,100)]])
         pb.show()
+
+    xgrid=[]
+    ygrid=[]
+    for i in range(0,21):
+        xgrid.append(float(i)/10.0-1.0)
+    for j in range(0,21):
+        ygrid.append(float(j)/20.0)
+
+    nx=len(xgrid)
+    ny=len(ygrid)
+    ymat=numpy.zeros((nx,ny))
+    for i in range(0,nx):
+        for j in range(0,ny):
+            x=[xgrid[i],ygrid[j]]
+            y=nsf.log_pdf(x)
+            ymat[i,j]=numpy.exp(y[0])
+
+    print('Plotting density')
+    if plots:
+        pb=o2sclpy.plot_base()
+        pb.colbar=True
+        pb.xlimits(xgrid[0],xgrid[-1])
+        pb.ylimits(ygrid[0],ygrid[-1])
+        pb.den_plot([xgrid,ygrid,ymat])
+        pb.show()
+            
     
 if __name__ == '__main__':
     test_all()
