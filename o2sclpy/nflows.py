@@ -142,8 +142,9 @@ class nflows_nsf:
                     loss.backward()
                     optimizer.step()
 
-                print('it,max_iter,loss: %d %d %7.6e' %
-                      (it,max_iter,loss.to('cpu').data.numpy()))
+                if self.verbose>0:
+                    print('it,max_iter,loss: %d %d %7.6e' %
+                          (it,max_iter,loss.to('cpu').data.numpy()))
                 
         except Exception as e:
             print('Exception in nflows_nsf::set_data()',
@@ -200,9 +201,11 @@ class nflows_nsf:
         if self.outformat=='list':
             return out_trans.tolist()
 
-        out_numpy=numpy.ascontiguousarray(out_trans)
+        na=numpy.zeros(len(out_trans))
+        for i in range(0,len(na)):
+            na[i]=out_trans[i]
 
-        return out_numpy
+        return na
         
     def log_pdf(self,x):
         """Return the log likelihood
