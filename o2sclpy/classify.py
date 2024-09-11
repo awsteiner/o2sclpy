@@ -84,8 +84,30 @@ class classify_sklearn_dtc:
         except Exception as e:
             print('Exception in classify_sklearn_dtc::set_data()',
                   'at model fitting.',e)
+            raise
             
         self.dtc=model
+
+        return
+    
+    def set_data_str(self,in_data,out_data,options):
+        """
+        Set the input and output data to train the interpolator,
+        using a string to specify the keyword arguments.
+        """
+
+        dct=string_to_dict2(options,list_of_ints=['max_depth',
+                                                  'max_features',
+                                                  'verbose'],
+                            list_of_floats=['test_size','alpha'])
+        
+        print('String:',options,'Dictionary:',dct)
+              
+        try:
+            self.set_data(in_data,out_data,**dct)
+        except Exception as e:
+            print('Exception in classify_sklearn_dtc::set_data_str()',e)
+            raise
 
         return
     
