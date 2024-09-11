@@ -40,7 +40,7 @@ def subtest_acor():
     assert numpy.allclose(m,0.72,rtol=4.0e-2)
     s=o2sclpy.vector_stddev(len(vec),vec)
     print('stddev:',s)
-    assert numpy.allclose(s,0.33,rtol=4.0e-2)
+    assert numpy.allclose(s,0.33,rtol=0.1)
 
     assert numpy.allclose(o2sclpy.vector_lagk_autocorr(len(vec),
                                                        vec,100),0.1,

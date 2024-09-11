@@ -77,7 +77,7 @@ def test_all():
         for j in range(0,ny):
             x=[xgrid[i],ygrid[j]]
             y=nsf.log_pdf(x)
-            ymat[i,j]=numpy.exp(y[0])
+            ymat[i,j]=numpy.exp(y)
 
     print('Plotting density')
     if plots:
