@@ -44,6 +44,7 @@ from o2sclpy.interpm import *
 from o2sclpy.classify import *
 from o2sclpy.gmm import *
 from o2sclpy.kde import *
+from o2sclpy.gelman_rubin import *
 
 class todo_list:
     """
