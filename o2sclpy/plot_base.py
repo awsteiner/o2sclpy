@@ -1632,6 +1632,10 @@ class plot_base:
         linewidth (lw). The keyword arguments are for the text
         properties, and follow those of the text command.
 
+        To allow the user to easily put multiple lines of text on
+        the command line, any occurrence of "<endl>" is replaced
+        with a carriage return.
+
         For more information, see:
         https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.FancyBboxPatch.html
         """
@@ -1663,8 +1667,9 @@ class plot_base:
             tx=float(eval(tx))
         if isinstance(ty,str):
             ty=float(eval(ty))
-            
-        self.axes.text(tx,ty,strt,
+
+        strt2=strt.replace('<endl>','\n')
+        self.axes.text(tx,ty,strt2,
                        transform=self.axes.transAxes,
                        bbox=string_to_dict(boxprops),**kwargs)
         

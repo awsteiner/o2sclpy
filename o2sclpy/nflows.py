@@ -62,9 +62,6 @@ class nflows_nsf:
         adam_decay is the Adam weight decay (pytorch default is 0)
         """
 
-        import torch
-        import normflows
-        
         if verbose>0:
             print('nflows_nsf::set_data():')
             print('  verbose:',verbose)
@@ -75,15 +72,6 @@ class nflows_nsf:
             print('  adam_lr:',adam_lr)
             print('  adam_decay:',adam_decay)
             print('')
-
-        from sklearn.preprocessing import StandardScaler
-        
-        # Move model on GPU if available
-        enable_cuda=True
-        self.device=torch.device('cuda' if torch.cuda.is_available() and
-                            enable_cuda else 'cpu')
-        if self.verbose>0:
-            print('device:',self.device)
 
         self.verbose=verbose
         self.outformat=outformat
@@ -96,12 +84,25 @@ class nflows_nsf:
         self.adam_lr=adam_lr
         self.adam_decay=adam_decay
         
+        # Move model on GPU if available
+        import torch
+        
+        enable_cuda=True
+        self.device=torch.device('cuda' if torch.cuda.is_available() and
+                            enable_cuda else 'cpu')
+        if self.verbose>0:
+            print('nflows_nsf::set_data(): Device:',self.device)
+
+        from sklearn.preprocessing import StandardScaler
+        
         try:
             self.SS1=StandardScaler()
             in_data_trans=self.SS1.fit_transform(in_data)
         except Exception as e:
             print('Exception at transform in nflows_nsf::set_data().',e)
             raise
+        
+        import normflows
         
         try:
 
@@ -143,7 +144,8 @@ class nflows_nsf:
                     optimizer.step()
 
                 if self.verbose>0:
-                    print('it,max_iter,loss: %d %d %7.6e' %
+                    print(('nflows_nsf::set_data(): '+
+                           'it,max_iter,loss: %d %d %7.6e') %
                           (it,max_iter,loss.to('cpu').data.numpy()))
                 
         except Exception as e:

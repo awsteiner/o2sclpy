@@ -42,7 +42,8 @@ def test_all():
         
     if True:
         im2=o2sclpy.classify_sklearn_mlpc()
-        im2.set_data(x,y,verbose=0,solver='lbfgs',random_state=1)
+        im2.set_data_str(x,y,"verbose=2,solver=lbfgs,"+
+                         "random_state=1,hlayers=[100,100]")
         exact=y[1]
         interp=im2.eval(x[1])
         print('exact,interp 2:', exact,interp)
