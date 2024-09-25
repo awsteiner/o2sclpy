@@ -79,11 +79,23 @@ def test_all():
             assert numpy.allclose(f(0.5,0.5),interp2[0],rtol=1.0)
             assert numpy.allclose(f(0.6,0.6),interp2[1],rtol=1.0)
             
-            interp2,std2=im.eval_unc(v)
+            interp3,std3=im.eval_unc(v)
             print('exact,interp 2: %7.6e %7.6e %7.6e' %
-                  (exact,interp[0],std2[0]))
-            assert numpy.allclose(exact,interp2[0],rtol=1.0)
-            assert numpy.allclose(0,std2[0],atol=1.0)
+                  (exact,interp[0],std3[0]))
+            assert numpy.allclose(exact,interp3[0],rtol=1.0)
+            assert numpy.allclose(0,std3[0],atol=1.0)
+
+            print('saving')
+            save_str=im.save()
+            imx=o2sclpy.interpm_sklearn_gp()
+            print('loading')
+            imx.load(save_str)
+            
+            print('testing')
+            interp4=im.eval_list(v2)
+            print(interp2,interp4)
+            assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=1.0)
+            assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=1.0)
     
         if True:
             im2=o2sclpy.interpm_tf_dnn()

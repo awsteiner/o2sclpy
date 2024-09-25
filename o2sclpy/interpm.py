@@ -39,7 +39,53 @@ class interpm_sklearn_gp:
         self.SS1=0
         self.SS2=0
         self.alpha=0
+        self.random_state=0
 
+    def save(self):
+        """
+        Save the interpolation settings to a string and return it
+        """
+        import pickle
+        
+        loc_dct={"verbose": self.verbose,
+                 "kernel": self.kernel,
+                 "outformat": self.outformat,
+                 "transform_in": self.transform_in,
+                 "transform_out": self.transform_out,
+                 "SS1": self.SS1,
+                 "SS2": self.SS2,
+                 "alpha": self.alpha,
+                 "random_state": self.random_state}
+        params=self.gp.get_params(deep=True)
+        return pickle.dumps((loc_dct,params))
+
+    def load(self,s):
+        """
+        Load the interpolation settings from a string
+        """
+        import pickle
+        from sklearn.gaussian_process import GaussianProcessRegressor
+        
+        tup=pickle.loads(s)
+        loc_dct=tup[0]
+        self.verbose=loc_dct["verbose"]
+        self.kernel=loc_dct["kernel"]
+        self.outformat=loc_dct["outformat"]
+        self.transform_in=loc_dct["transform_in"]
+        self.transform_out=loc_dct["transform_out"]
+        self.SS1=loc_dct["SS1"]
+        self.SS2=loc_dct["SS2"]
+        self.alpha=loc_dct["alpha"]
+        self.random_state=loc_dct["random_state"]
+        
+        func=GaussianProcessRegressor
+        self.gp=func(normalize_y=True,
+                     kernel=self.kernel,alpha=self.alpha,
+                     random_state=self.random_state)
+        self.gp.set_params(**(tup[1]))
+        
+        return
+        
     def set_data(self,in_data,out_data,
                  kernel='1.0*RBF(1.0,(1e-2,1e2))',test_size=0.0,
                  normalize_y=True,transform_in='none',alpha=1.0e-10,
@@ -57,6 +103,7 @@ class interpm_sklearn_gp:
             print('  transform_out:',transform_out)
             print('  outformat:',outformat)
             print('  alpha:',alpha)
+            print('  random_state:',random_state)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
 
@@ -80,6 +127,7 @@ class interpm_sklearn_gp:
                   'at kernel eval.',e)
         self.outformat=outformat
         self.alpha=alpha
+        self.random_state=random_state
         self.verbose=verbose
         self.transform_in=transform_in
         self.transform_out=transform_out
@@ -120,7 +168,7 @@ class interpm_sklearn_gp:
                 from sklearn.model_selection import train_test_split
                 in_train,in_test,out_train,out_test=train_test_split(
                     in_data_trans,out_data_trans,test_size=test_size,
-                    random_state=random_state)
+                    random_state=self.random_state)
             except Exception as e:
                 print('Exception in interpm_sklearn_gp::set_data()',
                       'at test_train_split().',e)
@@ -132,7 +180,7 @@ class interpm_sklearn_gp:
             func=GaussianProcessRegressor
             self.gp=func(normalize_y=True,
                          kernel=self.kernel,alpha=self.alpha,
-                         random_state=random_state).fit(in_train,out_train)
+                         random_state=self.random_state).fit(in_train,out_train)
         except Exception as e:
             print('Exception in interpm_sklearn_gp::set_data()',
                   'at fit().',e)
