@@ -972,7 +972,13 @@ class interpm_tf_dnn:
             v_trans=v.reshape(1,-1)
 
         try:
-            pred=self.dnn.predict(v_trans, verbose=self.verbose)
+            # We don't want output at every point, even if verbose is
+            # 1, so we use self.verbose-1 here for the argument to
+            # the predict function.
+            if self.verbose>1:
+                pred=self.dnn.predict(v_trans, verbose=self.verbose-1)
+            else:
+                pred=self.dnn.predict(v_trans,verbose=0)
         except Exception as e:
             print('Exception 4 in interpm_tf_dnn:',e)
             
