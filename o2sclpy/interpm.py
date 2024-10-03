@@ -882,6 +882,14 @@ class interpm_tf_dnn:
 
         try:
             from keras.callbacks import EarlyStopping
+            import keras
+
+            class loss_history(keras.callbacks.Callback):
+                def on_train_begin(self,logs={}):
+                    self.losses=[]
+                def on_batch_end(self,batch,logs={}):
+                    self.losses.append(logs.get('loss'))
+            history=loss_history()
 
             early_stopping=EarlyStopping(monitor=loss,
                                          min_delta=es_min_delta,
@@ -897,17 +905,18 @@ class interpm_tf_dnn:
                 model.fit(x_train,y_train,batch_size=batch_size,
                           epochs=epochs,validation_data=(x_test,y_test),
                           verbose=self.verbose,
-                          callbacks=[early_stopping])
+                          callbacks=[history,early_stopping])
                           
             else:
                 # Fit the model to training data
                 model.fit(x_train,y_train,batch_size=batch_size,
                           epochs=epochs,verbose=self.verbose,
-                          callbacks=[early_stopping])
+                          callbacks=[history,early_stopping])
                 
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
                   'at model fitting.',e)
+            raise
 
         if evaluate==True:
             # Return loss value and metrics
