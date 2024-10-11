@@ -3670,7 +3670,7 @@ class o2graph_plotter(td_plot_base):
         # End of function o2graph_plotter::den_plot_anim()
         return
         
-    def font_summary(self,mode='',prefix='fonts_'):
+    def font_summary(self,mode='',prefix='fonts_',check_str='AabSZz09'):
         """Provide a summary of the available fonts.
 
         If the argument ``mode`` is not either 'pdf' or 'list', then a
@@ -3703,6 +3703,12 @@ class o2graph_plotter(td_plot_base):
         
         font_list_alnum=[]
         style_list_alnum=[]
+
+        if mode=='list':
+            print('%4s %40s %15s %1s %5s' %
+                  ('indx','family name','style name','n','glyph'))
+            print('    ','style list')
+        
         for i in range(0,len(font_list)):
             skip=True
             try:
@@ -3714,30 +3720,17 @@ class o2graph_plotter(td_plot_base):
                 font=FT2Font(path)
                 charmap=font.get_charmap()
                 if mode=='list':
-                    print(i,len(font_list),font_list[i],font.num_faces,
-                          font.num_glyphs,font.family_name,font.style_name)
+                    print('%4d %40s %15s %1d %5d' %
+                          (i,font.family_name,font.style_name,
+                           font.num_faces,font.num_glyphs,))
                 if charmap!={}:
                     max_indices_len = len(str(max(charmap.values())))
-                    found_a=False
-                    found_A=False
-                    found_z=False
-                    found_Z=False
-                    found_9=False
-                    found_b=False
+                    found_list=[0 for i in range(0,len(check_str))]
                     for char_code, glyph_index in charmap.items():
                         char=chr(char_code)
-                        if char=='a':
-                            found_a=True
-                        if char=='b':
-                            found_b=True
-                        if char=='A':
-                            found_A=True
-                        if char=='z':
-                            found_z=True
-                        if char=='Z':
-                            found_Z=True
-                        if char=='9':
-                            found_9=True
+                        for jk in range(0,len(check_str)):
+                            if char==check_str[jk]:
+                                found_list[jk]=1
                             
                         #name=unicodedata.name(
                         #    char,
@@ -3745,12 +3738,20 @@ class o2graph_plotter(td_plot_base):
                         #({font.get_glyph_name(glyph_index)})")
                         #print(f"{glyph_index:>{max_indices_len}}
                         #{char} {name}")
-                        
-                    if (found_a==False or found_A==False or found_z==False or
-                        found_Z==False or found_9==False or found_b==False):
+
+                    found_all=True
+                    for jk in range(0,len(check_str)):
+                        if found_list[jk]==0:
+                            found_all=False
+                            
+                    if found_all==False:
                         skip=True
                 else:
                     skip=True
+                    if mode!='pdf':
+                        print('%4d %40s %15s' %
+                              (i,font.family_name,font.style_name))
+                    
             if skip==False:
                 style_list=[]
 
@@ -3777,7 +3778,7 @@ class o2graph_plotter(td_plot_base):
                 font_list_alnum.append(font_list[i])
                 style_list_alnum.append(style_list)
                 if mode=='list':
-                    print(' ',style_list)
+                    print('    ',style_list)
 
         if mode=='pdf':
             npages=int(len(font_list_alnum)/60)+1
@@ -3803,7 +3804,7 @@ class o2graph_plotter(td_plot_base):
                             y=float(nrows-i)/float(nrows+1)
                             if j%2==1:
                                 y=y-0.5/float(nrows+1)
-                            p.text(x,y,font_list_alnum[index],
+                            p.text(x,y,'AbCdEfGhIjKlMnOpQrStUvWxYz',
                                    fontname=font_list_alnum[index],
                                    ha='left',va='center')
                             p.font=6
@@ -3948,7 +3949,10 @@ class o2graph_plotter(td_plot_base):
             if len(args)==2:
                 self.font_summary(mode=args[1])
             elif len(args)==3:
-                self.font_summary(mode=args[1],prefix=args[2])
+                if args[1]=='list':
+                    self.font_summary(mode=args[1],check_str=args[2])
+                else:
+                    self.font_summary(mode=args[1],prefix=args[2])
             else:
                 self.font_summary()
             match=True
