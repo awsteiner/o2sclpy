@@ -1536,7 +1536,7 @@ class plot_base:
         import matplotlib.pyplot as plot
         
         if self.verbose>0:
-            print('Saving as',filename,'.')
+            print('Saving as',(filename+'.'))
         plot.savefig(filename)
         # End of function plot_base::save()
         return
