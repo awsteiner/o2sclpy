@@ -1,10 +1,11 @@
 o2graph: A data viewing and processing program for O2scl.
-  Version: 0.930a1
+  Version: 0.930a2
  
 List of command-line options which do not require a current object:
 
   -addcbar         Add a color bar.
   -alias           Create a command alias.
+  -append-images   Combine two images side by side
   -arrow           Plot an arrow.
   -autocorr        Compute autocorrelation coefficients. 
   -backend         Select the matplotlib backend to use.
@@ -42,6 +43,7 @@ List of command-line options which do not require a current object:
   -line            Plot a line from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
   -modax           Modify current axes properties.
   -mp4             Create an mp4 file from a series of images.
+  -nderiv          Numerically differentiate a user-specified function. 
   -ninteg          Numerically integrate a user-specified function. 
   -no-intro        Do not print introductory text.
   -o2scl-addl-libs Specify a list of list of additional libraries to load.
@@ -100,5 +102,5 @@ List of command-line options which do not require a current object:
   -zlimits         Set the z-axis limits
 
 ------------------------------------------------------------------------------
-Additional help topics: functions, index-spec, markers, markers-plot,
+Additional help topics: fonts, functions, index-spec, markers, markers-plot,
 mult-vector-spec, strings-spec, types, value-spec, and vector-spec.

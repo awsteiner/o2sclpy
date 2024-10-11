@@ -46,11 +46,24 @@ e.g.
 Markers
 -------
 
-To obtain a quick summary of matplotlib markers, use `-help markers`
-for a list or `-help markers-plot [filename]` for a plot, e.g.
+To obtain a quick summary of matplotlib markers, use `o2graph -help
+markers` for a list or `o2graph -help markers-plot [filename]` for a
+plot, e.g.
 
 .. include:: ../examples/markers.scr
    :literal:
 .. image:: static/figures/markers.png
+   :width: 70%
+
+Fonts
+-----
+
+To obtain a summary of matplotlib fonts, use `o2graph -help fonts
+list` for a list or `o2graph -help fonts pdf` to generate one or more
+pdf files demonstrating the fonts available on your system. The font
+list depends on your system configuration, but the image below shows
+what one of the pdf files looks like.
+
+.. image:: static/figures/fonts_0.png
    :width: 70%
 

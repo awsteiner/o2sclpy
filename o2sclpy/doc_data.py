@@ -93,5 +93,5 @@ List of types which have additional plotting commands
 acol_help_topics=["functions","index-spec","mult-vector-spec","strings-spec",
                   "types","value-spec","vector-spec"]
 
-o2graph_help_topics=["markers","markers-plot"]
+o2graph_help_topics=["markers","markers-plot","fonts"]
 

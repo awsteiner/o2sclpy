@@ -3670,6 +3670,176 @@ class o2graph_plotter(td_plot_base):
         # End of function o2graph_plotter::den_plot_anim()
         return
         
+    def font_summary(self,mode='',prefix='fonts_'):
+        """Provide a summary of the available fonts.
+
+        If the argument ``mode`` is not either 'pdf' or 'list', then a
+        help message is output to the screen. The ``prefix`` argument
+        is the filename prefix for the pdf files when ``mode`` is
+        'pdf' and ignored otherwise.
+        """
+
+        if (mode!='pdf' and mode!='list'):
+            print('Fonts help for o2graph:')
+            print("  For a list of fonts, use 'o2graph -help fonts list'.")
+            print("  For a pdf summary of fonts, use",
+                  "'o2graph -help fonts pdf'.")
+            print("  To modify the prefix of the pdf files, use ",
+                  "'o2graph -help fonts pdf prefix'.")
+            return
+    
+        from matplotlib import font_manager
+        import o2sclpy
+        from matplotlib.ft2font import FT2Font
+        import unicodedata
+        import matplotlib.pyplot as plot
+        from matplotlib.font_manager import FontProperties
+        
+        font_list=sorted(font_manager.get_font_names())
+        
+        weight_list=['ultralight','light','normal','regular',
+                     'book','medium','roman','semibold','demibold',
+                     'demi','bold','heavy','extra bold','black']
+        
+        font_list_alnum=[]
+        style_list_alnum=[]
+        for i in range(0,len(font_list)):
+            skip=True
+            try:
+                path=font_manager.findfont(font_list[i])
+                skip=False
+            except Exception as e:
+                skip=True
+            if skip==False:
+                font=FT2Font(path)
+                charmap=font.get_charmap()
+                if mode=='list':
+                    print(i,len(font_list),font_list[i],font.num_faces,
+                          font.num_glyphs,font.family_name,font.style_name)
+                if charmap!={}:
+                    max_indices_len = len(str(max(charmap.values())))
+                    found_a=False
+                    found_A=False
+                    found_z=False
+                    found_Z=False
+                    found_9=False
+                    found_b=False
+                    for char_code, glyph_index in charmap.items():
+                        char=chr(char_code)
+                        if char=='a':
+                            found_a=True
+                        if char=='b':
+                            found_b=True
+                        if char=='A':
+                            found_A=True
+                        if char=='z':
+                            found_z=True
+                        if char=='Z':
+                            found_Z=True
+                        if char=='9':
+                            found_9=True
+                            
+                        #name=unicodedata.name(
+                        #    char,
+                        #    f"{char_code:#x}
+                        #({font.get_glyph_name(glyph_index)})")
+                        #print(f"{glyph_index:>{max_indices_len}}
+                        #{char} {name}")
+                        
+                    if (found_a==False or found_A==False or found_z==False or
+                        found_Z==False or found_9==False or found_b==False):
+                        skip=True
+                else:
+                    skip=True
+            if skip==False:
+                style_list=[]
+
+                # Search for possible weights and styles
+                for ik in range(0,len(weight_list)):
+                    fx=FontProperties(font_list[i],weight=weight_list[ik],
+                                      style='normal')
+                    fy=FT2Font(font_manager.findfont(fx))
+                    if fy.style_name not in style_list:
+                        style_list.append(fy.style_name)
+        
+                    fx=FontProperties(font_list[i],weight=weight_list[ik],
+                                      style='oblique')
+                    fy=FT2Font(font_manager.findfont(fx))
+                    if fy.style_name not in style_list:
+                        style_list.append(fy.style_name)
+        
+                    fx=FontProperties(font_list[i],weight=weight_list[ik],
+                                      style='italic')
+                    fy=FT2Font(font_manager.findfont(fx))
+                    if fy.style_name not in style_list:
+                        style_list.append(fy.style_name)
+                        
+                font_list_alnum.append(font_list[i])
+                style_list_alnum.append(style_list)
+                if mode=='list':
+                    print(' ',style_list)
+
+        if mode=='pdf':
+            npages=int(len(font_list_alnum)/60)+1
+            
+            for ip in range(0,npages):
+                p=o2sclpy.plot_base()
+                p.fig_dict=('dpi=250,left_margin=0.03,bottom_margin=0.03,'+
+                            'right_margin=0.03,top_margin=0.03,'+
+                            'fig_size_x=11.2,fig_size_y=6.3')
+                p.usetex=False
+                p.font=12
+                
+                p.canvas()
+                
+                ncols=4
+                nrows=15
+                
+                for i in range(0,nrows):
+                    for j in range(0,ncols):
+                        index=j*nrows+i+ip*60
+                        if index<len(font_list_alnum):
+                            x=float(j)/float(ncols)
+                            y=float(nrows-i)/float(nrows+1)
+                            if j%2==1:
+                                y=y-0.5/float(nrows+1)
+                            p.text(x,y,font_list_alnum[index],
+                                   fontname=font_list_alnum[index],
+                                   ha='left',va='center')
+                            p.font=6
+                            if len(style_list_alnum[index])==0:
+                                comment_str=font_list_alnum[index]
+                            elif len(style_list_alnum[index])==1:
+                                comment_str=(font_list_alnum[index]+' ('+
+                                             style_list_alnum[index][0]+')')
+                            elif len(style_list_alnum[index])==2:
+                                comment_str=(font_list_alnum[index]+' ('+
+                                             style_list_alnum[index][0]+
+                                             ' and '+
+                                             style_list_alnum[index][1]+')')
+                            elif len(style_list_alnum[index])>=3:
+                                comment_str=font_list_alnum[index]+' ('
+                                for k in range(0,
+                                               len(style_list_alnum[index])-1):
+                                    comment_str=(comment_str+
+                                                 style_list_alnum[index][k]+
+                                                 ', ')
+                                comment_str=(comment_str+'and '+
+                                             style_list_alnum[index]
+                                             [len(style_list_alnum[index])-1]+
+                                             ')')
+                            p.text(x,y-0.35/float(nrows+1),comment_str,
+                                   ha='left',va='center')
+                            p.font=12
+            
+                p.axes.set_axis_off()
+            
+                p.save(prefix+str(ip)+'.pdf')
+                plot.clf()
+            
+        # End of function o2graph_plotter::font_summary()
+        return
+
     def help_func(self,amp,args):
         """
         Function to process the help command.
@@ -3772,6 +3942,15 @@ class o2graph_plotter(td_plot_base):
                 markers_plot(args[1])
             else:
                 markers_plot()
+            match=True
+
+        if len(args)>=1 and args[0]=='fonts':
+            if len(args)==2:
+                self.font_summary(mode=args[1])
+            elif len(args)==3:
+                self.font_summary(mode=args[1],prefix=args[2])
+            else:
+                self.font_summary()
             match=True
 
         # Handle acol topics and types
