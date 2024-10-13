@@ -3710,22 +3710,22 @@ class o2graph_plotter(td_plot_base):
         if mode=='info' or mode=='full':
             fx=FontProperties(info_family,weight=info_weight,
                               style=info_style)
-            fy=FT2Font(font_manager.findfont(fx))
-            print('family',fx.get_family())
-            print('slant',fx.get_slant())
-            print('stretch',fx.get_stretch())
-            print('weight',fx.get_weight())
-            print('file',fx.get_file())
-            print('file2',font_manager.findfont(fx))
-            print('num_faces',fy.num_faces)
-            print('num_glyphs',fy.num_glyphs)
-            print('style_name',fy.style_name)
-            print('family_name',fy.family_name)
-            print('scalable',fy.scalable)
-            print('height',fy.height)
-            print('postscript_name',fy.postscript_name)
-            print(' ')
+            filename=font_manager.findfont(fx)
+            fy=FT2Font(filename)
+            print('Family:',fx.get_family())
+            print('Slant:',fx.get_slant())
+            print('Stretch:',fx.get_stretch())
+            print('Weight:',fx.get_weight())
+            print('File:',filename)
+            print('Num_faces:',fy.num_faces)
+            print('Num_glyphs:',fy.num_glyphs)
+            print('Style_name:',fy.style_name)
+            print('Family_name:',fy.family_name)
+            print('Scalable:',fy.scalable)
+            print('Height:',fy.height)
+            print('Postscript_name:',fy.postscript_name)
             charmap=fy.get_charmap()
+            
             if charmap!={} and mode=='info':
                 p=o2sclpy.plot_base()
                 p.fig_dict=('dpi=250,left_margin=0.03,bottom_margin=0.03,'+
@@ -3733,33 +3733,40 @@ class o2graph_plotter(td_plot_base):
                             'fig_size_x=11.2,fig_size_y=6.3')
                 p.usetex=False
                 p.font=16
-                
                 p.canvas()
+                p.axes.set_axis_off()
                 j=0
                 i=0
+                k=0
+                nstep=int(len(charmap.items())/100)
+                print('Size of character map:',len(charmap.items()))
                 for char_code, glyph_index in charmap.items():
-                    if i>int(len(charmap.items())/100):
+                    if (nstep==0 or i>nstep):
                         px=float(j%10)/10.0+0.05
                         py=int(j/10)/10.0+0.05
                         char=chr(char_code)
                         x=unicodedata.name
                         name=x(char,
                                (f"{char_code:#x}({fy.get_glyph_name(glyph_index)})"))
-                        print(f"{char_code} {glyph_index}  {char} {name}")
+                        hex_code=hex(char_code)
+                        print(f"{i} {j} {k} {hex_code} {glyph_index} {char} {name}")
                         p.text(px,py,char,fontfamily=fy.family_name,
                                fontweight=fx.get_weight(),
                                fontstyle=fx.get_slant(),
                                ha='center',va='center')
-                        p.text(px,py-0.030,char_code,fontsize=8,
+                        p.text(px,py-0.030,str(hex(char_code)),fontsize=8,
                                ha='center',va='center')
                         p.text(px,py-0.050,name[0:10],fontsize=8,
                                ha='center',va='center')
                         i=0
                         j=j+1
                     i=i+1
-                p.axes.set_axis_off()
-                p.show()
+                    k=k+1
+                    
+                p.save(prefix+'.pdf')
+                
             elif charmap!={} and mode=='full':
+                
                 p=o2sclpy.plot_base()
                 p.fig_dict=('dpi=250,left_margin=0.03,bottom_margin=0.03,'+
                             'right_margin=0.03,top_margin=0.03,'+
@@ -3779,12 +3786,13 @@ class o2graph_plotter(td_plot_base):
                     x=unicodedata.name
                     name=x(char,
                            (f"{char_code:#x}({fy.get_glyph_name(glyph_index)})"))
-                    print(f"{char_code} {glyph_index}  {char} {name}")
+                    hex_code=hex(char_code)
+                    print(f"{hex_code} {glyph_index}  {char} {name}")
                     p.text(px,py,char,fontfamily=fy.family_name,
                            fontweight=fx.get_weight(),
                            fontstyle=fx.get_slant(),
                            ha='center',va='center')
-                    p.text(px,py-0.030,char_code,fontsize=8,
+                    p.text(px,py-0.030,str(hex(char_code)),fontsize=8,
                            ha='center',va='center')
                     p.text(px,py-0.050,name[0:10],fontsize=8,
                            ha='center',va='center')
@@ -3798,14 +3806,14 @@ class o2graph_plotter(td_plot_base):
                         j=0
                 if j%100!=0:
                     p.save(prefix+'_'+str(ip)+'.pdf')
-
+                    
             return
             
         if mode=='list':
-            print('%4s %40s %15s %1s %5s' %
-                  ('indx','family name','style name','n','glyph'))
+            print('%4s %40s %15s %1s %5s %5s' %
+                  ('indx','family name','style name','n','glyph','nchar'))
             print('    ','style list')
-        
+            
         for i in range(0,len(font_list)):
             skip=True
             try:
@@ -3816,11 +3824,12 @@ class o2graph_plotter(td_plot_base):
             if skip==False:
                 font=FT2Font(path)
                 charmap=font.get_charmap()
-                if mode=='list':
-                    print('%4d %40s %15s %1d %5d' %
-                          (i,font.family_name,font.style_name,
-                           font.num_faces,font.num_glyphs,))
                 if charmap!={}:
+                    if mode=='list':
+                        print('%4d %40s %15s %1d %5d %5d' %
+                              (i,font.family_name,font.style_name,
+                               font.num_faces,font.num_glyphs,
+                               len(charmap.items())))
                     max_indices_len = len(str(max(charmap.values())))
                     found_list=[0 for i in range(0,len(check_str))]
                     for char_code, glyph_index in charmap.items():
@@ -3839,8 +3848,9 @@ class o2graph_plotter(td_plot_base):
                 else:
                     skip=True
                     if mode!='pdf':
-                        print('%4d %40s %15s' %
-                              (i,font.family_name,font.style_name))
+                        print('%4d %40s %15s %1d %5d %5d' %
+                              (i,font.family_name,font.style_name,
+                               font.num_faces,font.num_glyphs,0))
                     
             if skip==False:
                 style_list=[]
