@@ -3670,10 +3670,9 @@ class o2graph_plotter(td_plot_base):
         # End of function o2graph_plotter::den_plot_anim()
         return
         
-    def font_summary(self,mode='',prefix='fonts_',check_str='AabSZz09',
+    def font_summary(self,mode='',prefix='fonts',check_str='AabSZz09',
                      print_str='AbCdEfGhIjKlMnOpQrStUvWxYz',
-                     info_family='Noto Serif CJK JP',
-                     info_weight='normal',
+                     info_family='',info_weight='normal',
                      info_style='normal'):
         """Provide a summary of the available fonts.
 
@@ -3691,7 +3690,7 @@ class o2graph_plotter(td_plot_base):
             print("  To modify the prefix of the pdf files, use ",
                   "'o2graph -help fonts pdf prefix'.")
             return
-    
+
         from matplotlib import font_manager
         import o2sclpy
         from matplotlib.ft2font import FT2Font
@@ -3712,6 +3711,12 @@ class o2graph_plotter(td_plot_base):
             fx=FontProperties(info_family,weight=info_weight,
                               style=info_style)
             fy=FT2Font(font_manager.findfont(fx))
+            print('family',fx.get_family())
+            print('slant',fx.get_slant())
+            print('stretch',fx.get_stretch())
+            print('weight',fx.get_weight())
+            print('file',fx.get_file())
+            print('file2',font_manager.findfont(fx))
             print('num_faces',fy.num_faces)
             print('num_glyphs',fy.num_glyphs)
             print('style_name',fy.style_name)
@@ -3742,6 +3747,8 @@ class o2graph_plotter(td_plot_base):
                                (f"{char_code:#x}({fy.get_glyph_name(glyph_index)})"))
                         print(f"{char_code} {glyph_index}  {char} {name}")
                         p.text(px,py,char,fontfamily=fy.family_name,
+                               fontweight=fx.get_weight(),
+                               fontstyle=fx.get_slant(),
                                ha='center',va='center')
                         p.text(px,py-0.030,char_code,fontsize=8,
                                ha='center',va='center')
@@ -3774,6 +3781,8 @@ class o2graph_plotter(td_plot_base):
                            (f"{char_code:#x}({fy.get_glyph_name(glyph_index)})"))
                     print(f"{char_code} {glyph_index}  {char} {name}")
                     p.text(px,py,char,fontfamily=fy.family_name,
+                           fontweight=fx.get_weight(),
+                           fontstyle=fx.get_slant(),
                            ha='center',va='center')
                     p.text(px,py-0.030,char_code,fontsize=8,
                            ha='center',va='center')
@@ -3781,14 +3790,14 @@ class o2graph_plotter(td_plot_base):
                            ha='center',va='center')
                     j=j+1
                     if j%100==0:
-                        p.save('full_'+str(ip)+'.png')
+                        p.save(prefix+'_'+str(ip)+'.pdf')
                         ip=ip+1
                         plot.clf()
                         p.canvas()
                         p.axes.set_axis_off()
                         j=0
                 if j%100!=0:
-                    p.save('full_'+str(ip)+'.png')
+                    p.save(prefix+'_'+str(ip)+'.pdf')
 
             return
             
@@ -3916,7 +3925,7 @@ class o2graph_plotter(td_plot_base):
             
                 p.axes.set_axis_off()
             
-                p.save(prefix+str(ip)+'.pdf')
+                p.save(prefix+'_'+str(ip)+'.pdf')
                 plot.clf()
             
         # End of function o2graph_plotter::font_summary()
@@ -4030,10 +4039,8 @@ class o2graph_plotter(td_plot_base):
             if len(args)==2:
                 self.font_summary(mode=args[1])
             elif len(args)==3:
-                if args[1]=='list':
-                    self.font_summary(mode=args[1],check_str=args[2])
-                else:
-                    self.font_summary(mode=args[1],prefix=args[2])
+                self.font_summary(mode=args[1],
+                                  **string_to_dict2(args[2]))
             else:
                 self.font_summary()
             match=True
