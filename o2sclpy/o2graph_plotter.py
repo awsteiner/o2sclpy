@@ -3670,7 +3670,11 @@ class o2graph_plotter(td_plot_base):
         # End of function o2graph_plotter::den_plot_anim()
         return
         
-    def font_summary(self,mode='',prefix='fonts_',check_str='AabSZz09'):
+    def font_summary(self,mode='',prefix='fonts_',check_str='AabSZz09',
+                     print_str='AbCdEfGhIjKlMnOpQrStUvWxYz',
+                     info_family='Noto Serif CJK JP',
+                     info_weight='normal',
+                     info_style='normal'):
         """Provide a summary of the available fonts.
 
         If the argument ``mode`` is not either 'pdf' or 'list', then a
@@ -3679,7 +3683,7 @@ class o2graph_plotter(td_plot_base):
         'pdf' and ignored otherwise.
         """
 
-        if (mode!='pdf' and mode!='list'):
+        if (mode!='pdf' and mode!='list' and mode!='info' and mode!='full'):
             print('Fonts help for o2graph:')
             print("  For a list of fonts, use 'o2graph -help fonts list'.")
             print("  For a pdf summary of fonts, use",
@@ -3694,7 +3698,7 @@ class o2graph_plotter(td_plot_base):
         import unicodedata
         import matplotlib.pyplot as plot
         from matplotlib.font_manager import FontProperties
-        
+
         font_list=sorted(font_manager.get_font_names())
         
         weight_list=['ultralight','light','normal','regular',
@@ -3704,6 +3708,90 @@ class o2graph_plotter(td_plot_base):
         font_list_alnum=[]
         style_list_alnum=[]
 
+        if mode=='info' or mode=='full':
+            fx=FontProperties(info_family,weight=info_weight,
+                              style=info_style)
+            fy=FT2Font(font_manager.findfont(fx))
+            print('num_faces',fy.num_faces)
+            print('num_glyphs',fy.num_glyphs)
+            print('style_name',fy.style_name)
+            print('family_name',fy.family_name)
+            print('scalable',fy.scalable)
+            print('height',fy.height)
+            print('postscript_name',fy.postscript_name)
+            print(' ')
+            charmap=fy.get_charmap()
+            if charmap!={} and mode=='info':
+                p=o2sclpy.plot_base()
+                p.fig_dict=('dpi=250,left_margin=0.03,bottom_margin=0.03,'+
+                            'right_margin=0.03,top_margin=0.03,'+
+                            'fig_size_x=11.2,fig_size_y=6.3')
+                p.usetex=False
+                p.font=16
+                
+                p.canvas()
+                j=0
+                i=0
+                for char_code, glyph_index in charmap.items():
+                    if i>int(len(charmap.items())/100):
+                        px=float(j%10)/10.0+0.05
+                        py=int(j/10)/10.0+0.05
+                        char=chr(char_code)
+                        x=unicodedata.name
+                        name=x(char,
+                               (f"{char_code:#x}({fy.get_glyph_name(glyph_index)})"))
+                        print(f"{char_code} {glyph_index}  {char} {name}")
+                        p.text(px,py,char,fontfamily=fy.family_name,
+                               ha='center',va='center')
+                        p.text(px,py-0.030,char_code,fontsize=8,
+                               ha='center',va='center')
+                        p.text(px,py-0.050,name[0:10],fontsize=8,
+                               ha='center',va='center')
+                        i=0
+                        j=j+1
+                    i=i+1
+                p.axes.set_axis_off()
+                p.show()
+            elif charmap!={} and mode=='full':
+                p=o2sclpy.plot_base()
+                p.fig_dict=('dpi=250,left_margin=0.03,bottom_margin=0.03,'+
+                            'right_margin=0.03,top_margin=0.03,'+
+                            'fig_size_x=11.2,fig_size_y=6.3')
+                p.usetex=False
+                p.font=16
+                
+                npages=int((len(charmap.items())+99)/100)
+                p.canvas()
+                p.axes.set_axis_off()
+                j=0
+                ip=0
+                for char_code, glyph_index in charmap.items():
+                    px=float(j%10)/10.0+0.05
+                    py=(0.9-int(j/10)/10.0)+0.05
+                    char=chr(char_code)
+                    x=unicodedata.name
+                    name=x(char,
+                           (f"{char_code:#x}({fy.get_glyph_name(glyph_index)})"))
+                    print(f"{char_code} {glyph_index}  {char} {name}")
+                    p.text(px,py,char,fontfamily=fy.family_name,
+                           ha='center',va='center')
+                    p.text(px,py-0.030,char_code,fontsize=8,
+                           ha='center',va='center')
+                    p.text(px,py-0.050,name[0:10],fontsize=8,
+                           ha='center',va='center')
+                    j=j+1
+                    if j%100==0:
+                        p.save('full_'+str(ip)+'.png')
+                        ip=ip+1
+                        plot.clf()
+                        p.canvas()
+                        p.axes.set_axis_off()
+                        j=0
+                if j%100!=0:
+                    p.save('full_'+str(ip)+'.png')
+
+            return
+            
         if mode=='list':
             print('%4s %40s %15s %1s %5s' %
                   ('indx','family name','style name','n','glyph'))
@@ -3732,13 +3820,6 @@ class o2graph_plotter(td_plot_base):
                             if char==check_str[jk]:
                                 found_list[jk]=1
                             
-                        #name=unicodedata.name(
-                        #    char,
-                        #    f"{char_code:#x}
-                        #({font.get_glyph_name(glyph_index)})")
-                        #print(f"{glyph_index:>{max_indices_len}}
-                        #{char} {name}")
-
                     found_all=True
                     for jk in range(0,len(check_str)):
                         if found_list[jk]==0:
@@ -3804,7 +3885,7 @@ class o2graph_plotter(td_plot_base):
                             y=float(nrows-i)/float(nrows+1)
                             if j%2==1:
                                 y=y-0.5/float(nrows+1)
-                            p.text(x,y,'AbCdEfGhIjKlMnOpQrStUvWxYz',
+                            p.text(x,y,print_str,
                                    fontname=font_list_alnum[index],
                                    ha='left',va='center')
                             p.font=6
