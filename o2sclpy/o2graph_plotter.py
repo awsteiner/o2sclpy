@@ -6698,13 +6698,10 @@ class o2graph_plotter(td_plot_base):
                         print('Not enough parameters for xtitle option.')
                     elif ix_next-ix==2:
                         self.xtitle(strlist[ix+1])
-                    elif ix_next-ix>2 and ix_next-ix<5:
-                        print('All three location parameters (xtitle).')
-                    elif ix_next-ix==5:
+                    elif ix_next-ix>2:
                         self.xtitle(strlist[ix+1],
-                                    loc=[float(eval(strlist[ix+2])),
-                                         float(eval(strlist[ix+3])),
-                                         float(eval(strlist[ix+4]))])
+                                    **string_to_dict2(strlist[ix+2],
+                                                      list_of_bools=['usetex']))
                         
                 elif cmd_name=='ytitle':
                     
@@ -6716,13 +6713,10 @@ class o2graph_plotter(td_plot_base):
                         print('Not enough parameters for ytitle option.')
                     elif ix_next-ix==2:
                         self.ytitle(strlist[ix+1])
-                    elif ix_next-ix>2 and ix_next-ix<5:
-                        print('All three location parameters needed (ytitle).')
-                    elif ix_next-ix==5:
+                    elif ix_next-ix>2:
                         self.ytitle(strlist[ix+1],
-                                    loc=[float(eval(strlist[ix+2])),
-                                         float(eval(strlist[ix+3])),
-                                         float(eval(strlist[ix+4]))])
+                                    **string_to_dict2(strlist[ix+2],
+                                                      list_of_bools=['usetex']))
                         
                 # elif cmd_name=='ztitle':
                     

@@ -1819,26 +1819,63 @@ class plot_base:
         # End of function plot_base::subplots()
         return
 
-    def xtitle(self,textstr):
-        """
+    def xtitle(self,textstr,**kwargs):
+        """Documentation for o2graph command ``xtitle``:
+
         Add a title for the x-axis
+
+        Command-line arguments: ``<text string> [kwargs]``
+
+        If the ``fontsize`` keyword is not specified, then the
+        ``font`` class parameter is used for the fontsize. If
+        ``textstr`` is empty or "none", then this function does
+        nothing.
+
+        Valid keyword arguments are all those from the matplotlib Text
+        instance, e.g. as documented at
+        https://matplotlib.org/stable/api/text_api.html#matplotlib.text.Text
+        . Some particularly useful kwargs are fontfamily, fontsize,
+        fontstretch, fontstyle, fontweight, horizontalalignment
+        ('ha'), rotation, usetex, verticalalignment ('va'), visible,
+        and zorder.
+
         """
 
         # Note that this function no longer works inside of yt
         # visualizations because they need to be accessible for
         # annotations on top of yt
         
-        if textstr!='' and textstr!='none':
+        if textstr!='' and textstr!='none' and textstr!='None':
             if self.canvas_flag==False:
                 self.canvas()
-            self.axes.set_xlabel(textstr,fontsize=self.font)
+            if "fontsize" in kwargs:
+                self.axes.set_xlabel(textstr,**kwargs)
+            else:
+                self.axes.set_xlabel(textstr,fontsize=self.font,**kwargs)
             
         # End of function plot_base::xtitle()
         return
             
     def ytitle(self,textstr):
         """
+        Documentation for o2graph command ``ytitle``:
+        
         Add a title for the y-axis
+
+        Command-line arguments: ``<text string> [kwargs]``
+
+        If the ``fontsize`` keyword is not specified, then the
+        ``font`` class parameter is used for the fontsize. If
+        ``textstr`` is empty or "none", then this function does
+        nothing.
+
+        Valid keyword arguments are all those from the matplotlib Text
+        instance, e.g. as documented at
+        https://matplotlib.org/stable/api/text_api.html#matplotlib.text.Text
+        . Some particularly useful kwargs are fontfamily, fontsize,
+        fontstretch, fontstyle, fontweight, horizontalalignment
+        ('ha'), rotation, usetex, verticalalignment ('va'), visible,
+        and zorder.
         """
 
         # Note that this function no longer works inside of yt
