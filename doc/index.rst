@@ -1,6 +1,6 @@
 .. _o2sclpy:
 
-O₂sclpy: v0.930a4
+O₂sclpy: v0.930a5
 =================
 
 O₂sclpy is both a python interface to the C++ library, :ref:`O2scl

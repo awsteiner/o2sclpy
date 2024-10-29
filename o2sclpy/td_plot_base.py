@@ -2594,6 +2594,67 @@ class td_plot_base(yt_plot_base):
 
         return x1,y1,z1,x2,y2,z2,x3,y3,z3
 
+    def td_point(self,x1,y1,z1,
+                 name='point',mat='white',
+                 match_txt=False,coords='user'):
+        """Documentation for o2graph command ``td-point``:
+
+        Plot a 3D point (experimental)
+
+        Command-line arguments: ``<x1> <y1> <z1> [kwargs]``
+        
+        End of documentation for o2graph command ``td-point``.
+        """
+        uname=self.to.make_unique_name(name)
+
+        if coords=='user':
+            if self.xset==False or self.yset==False or self.zset==False:
+                print('xset:',self.xset)
+                print('yset:',self.yset)
+                print('zset:',self.zset)
+                raise ValueError("User coordinates not set in"+
+                                 " td_plot_base::td_point().")
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+
+        if self.to.is_mat(mat)==False:
+                
+            if mat=='white':
+                white=material(mat,[1,1,1])
+                self.to.add_mat(white)
+            else:
+                print('Material '+mat+' not found in td-point.')
+                return x1,y1,z1
+            
+        # Get the material info
+        m=self.to.get_mat(mat)
+        
+        if self.verbose>2:
+            print('td_point(): creating group named',uname,
+                  'with material',mat+'.')
+            
+        gf=mesh_object(uname,point_face,mat)
+        gf.vert_list=point_vert
+        gf.vn_list=point_norm
+
+        # If there is a texture, then add the texture coordinates
+        if m.txt!='':
+
+            import copy
+            
+            txt2=copy.deepcopy(point_txt)
+            for i in range(0,len(point_txt)):
+                txt2[i][0]=(point_txt[i][0]*m.txt_frac_w+
+                            (1.0-m.txt_frac_w)/2.0)
+                txt2[i][1]=(point_txt[i][1]*m.txt_frac_h+
+                            (1.0-m.txt_frac_h)/2.0)
+            gf.vt_list=txt2
+
+        self.to.add_object(gf)
+
+        return x1,y1,z1
+
     def td_axis_label(self, ldir : str, tex_label : str,
                       tex_mat_name : str = '', end_mat_name: str = 'white',
                       png_file : str = '', group_name : str = '',
