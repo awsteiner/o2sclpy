@@ -1634,9 +1634,11 @@ class o2graph_plotter(td_plot_base):
         correspond to ``xlo`` and ``xhi``). The number of points
         between x_min and x_max is determined by the n_points parameter. 
         The y vector is multiplied by y_mult before plotting. 
-        
-        Useful KDE kwargs are kernel='gaussian', metric='euclidean',
-        transform='unit', and bandwidth='none'.
+
+        The ``kde_sklearn`` object is used for the KDE. Useful KDE
+        kwargs are kernel='gaussian', metric='euclidean',
+        transform='unit', and bandwidth='none'. The bandwidth can be
+        either 'scott', 'silverman' or a floating point number.
 
         """
         curr_type=o2scl_get_type(amp)

@@ -94,6 +94,8 @@ class kde_sklearn:
                 grid.fit(in_data_trans)
                 self.kde=grid.best_estimator_
             else:
+                if bandwidth!='scott' and bandwidth!='silverman':
+                    bandwidth=float(bandwidth)
                 self.kde=KernelDensity(kernel=kernel,
                                        bandwidth=bandwidth).fit(in_data_trans)
             
