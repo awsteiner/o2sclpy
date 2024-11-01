@@ -139,7 +139,7 @@ class interpm_sklearn_gp:
         from sklearn.preprocessing import MinMaxScaler
         from sklearn.preprocessing import StandardScaler
         
-        if self.transform_in=='moto':
+        if self.transform_in=='minmax':
             self.SS1=MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
@@ -151,7 +151,7 @@ class interpm_sklearn_gp:
         else:
             in_data_trans=in_data
             
-        if self.transform_out=='moto':
+        if self.transform_out=='minmax':
             self.SS2=MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
@@ -553,7 +553,7 @@ class interpm_sklearn_mlpr:
         from sklearn.preprocessing import MinMaxScaler
         from sklearn.preprocessing import StandardScaler
         
-        if self.transform_in=='moto':
+        if self.transform_in=='minmax':
             self.SS1=MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
@@ -565,7 +565,7 @@ class interpm_sklearn_mlpr:
         else:
             in_data_trans=in_data
             
-        if self.transform_out=='moto':
+        if self.transform_out=='minmax':
             self.SS2=MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
@@ -742,12 +742,13 @@ class interpm_tf_dnn:
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
-                 activations=['relu','relu'],
-                 batch_size=None,epochs=100,
                  transform_in='none',transform_out='none',
                  test_size=0.0,evaluate=False,
-                 hlayers=[8,8],loss='mean_squared_error',
-                 es_min_delta=1.0e-4,es_patience=100,es_start=50):
+                 hlayers=[8,8],activations=['relu','relu'],
+                 out_act='linear',batch_size=32,epochs=100,
+                 loss='mean_squared_error',monitor='val_loss',
+                 ls_factor=0.5,ls_patience=10,ls_min_lr=1.0e-6,
+                 es_min_delta=1.0e-4,es_patience=100):
         """
         Set the input and output data to train the interpolator
 
@@ -787,7 +788,18 @@ class interpm_tf_dnn:
         
         from sklearn.preprocessing import QuantileTransformer
         from sklearn.preprocessing import MinMaxScaler
-        if self.transform_in=='moto':
+        from sklearn.preprocessing import StandardScaler
+        
+        if self.transform_in=='minmax_0':
+            self.SS1=MinMaxScaler(feature_range=(0,1))
+            i_nonzeros=in_data!=0
+            in_data_trans=numpy.copy(in_data)
+            in_data_trans[i_nonzeros]=self.SS1.fit_transform(
+                in_data[i_nonzeros].reshape(-1,1)).flatten()
+        elif self.transform_in=='minmax_1':
+            self.SS1=MinMaxScaler(feature_range=(0,1))        
+            in_data_trans=self.SS1.fit_transform(in_data)
+        elif self.transform_in=='minmax_pm':
             self.SS1=MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
@@ -798,8 +810,16 @@ class interpm_tf_dnn:
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
             in_data_trans=in_data
-            
-        if self.transform_out=='moto':
+        
+        if self.transform_out=='minmax_0':
+            i_nonzeros=out_data!=0
+            out_data_trans=numpy.copy(out_data)
+            out_data_trans[i_nonzeros]=self.SS1.fit_transform(
+                out_data[i_nonzeros].reshape(-1,1)).flatten()
+        elif self.transform_out=='minmax_1':
+            self.SS2=MinMaxScaler(feature_range=(0,1))
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='minmax_pm':
             self.SS2=MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
@@ -862,16 +882,17 @@ class interpm_tf_dnn:
                                               activation=activations[0])]
             if self.verbose>0:
                 print('Layer: dense',hlayers[0],nd_in,activations[0])
-            for i in range(1,nl):
-                act=activations[i%na]
-                layers.append(tf.keras.layers.Dense(hlayers[i],
-                                                    activation=act))
-                if self.verbose>0:
-                    print('Layer: dense',hlayers[i],act)
+            if nl>0:
+                for i in range(1,nl):
+                    act=activations[i%na]
+                    layers.append(tf.keras.layers.Dense(hlayers[i],
+                                                        activation=act))
+                    if self.verbose>0:
+                        print('Layer: dense',hlayers[i],act)
             layers.append(tf.keras.layers.Dense(nd_out,
-                                                activation='linear'))
+                                                activation=out_act))
             if self.verbose>0:
-                print('Layer: dense',nd_out,'linear')
+                print('Layer: dense',nd_out,out_act)
             model=tf.keras.Sequential(layers)
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
@@ -881,8 +902,9 @@ class interpm_tf_dnn:
             print('summary:',model.summary())
 
         try:
-            from keras.callbacks import EarlyStopping
             import keras
+            from keras.callbacks import EarlyStopping # type: ignore
+            from keras.callbacks import ReduceLROnPlateau # type: ignore
 
             class loss_history(keras.callbacks.Callback):
                 def on_train_begin(self,logs={}):
@@ -891,13 +913,16 @@ class interpm_tf_dnn:
                     self.losses.append(logs.get('loss'))
             history=loss_history()
 
-            early_stopping=EarlyStopping(monitor=loss,
+            early_stopping=EarlyStopping(monitor=monitor,
                                          min_delta=es_min_delta,
                                          patience=es_patience,
-                                         verbose=self.verbose,
                                          restore_best_weights=True,
-                                         start_from_epoch=es_start,
                                          mode='min')
+            lr_schedule=ReduceLROnPlateau(monitor=monitor,
+                                          factor=ls_factor,
+                                          patience=ls_patience,
+                                          min_lr=ls_min_lr)
+
             model.compile(loss=loss,optimizer='adam')
                 
             if test_size>0.0:
@@ -905,13 +930,13 @@ class interpm_tf_dnn:
                 model.fit(x_train,y_train,batch_size=batch_size,
                           epochs=epochs,validation_data=(x_test,y_test),
                           verbose=self.verbose,
-                          callbacks=[history,early_stopping])
+                          callbacks=[history,early_stopping,lr_schedule])
                           
             else:
                 # Fit the model to training data
                 model.fit(x_train,y_train,batch_size=batch_size,
                           epochs=epochs,verbose=self.verbose,
-                          callbacks=[history,early_stopping])
+                          callbacks=[history,early_stopping,lr_schedule])
                 
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
@@ -996,6 +1021,14 @@ class interpm_tf_dnn:
                 pred_trans=self.SS2.inverse_transform(pred)
             except Exception as e:
                 print('Exception 5 in interpm_tf_dnn:',e)
+        elif self.transform_in=='minmax_0':
+            try:
+                i_nonzeros=pred!=0
+                pred_trans=numpy.copy(pred)
+                pred_trans[i_nonzeros]=self.SS1.inverse_transform(
+                    pred[i_nonzeros].reshape(-1,1)).flatten()
+            except Exception as e:
+                print('Exception 6 in interpm_tf_dnn:',e)
         else:
             pred_trans=pred
     
