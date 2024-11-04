@@ -812,13 +812,16 @@ class interpm_tf_dnn:
             in_data_trans=in_data
         
         if self.transform_out=='minmax_0':
-            i_nonzeros=out_data!=0
-            out_data_trans=numpy.copy(out_data)
-            out_data_trans[i_nonzeros]=self.SS1.fit_transform(
-                out_data[i_nonzeros].reshape(-1,1)).flatten()
+            try:
+                i_nonzeros=out_data!=0
+                out_data_trans=numpy.copy(out_data)
+                out_data_trans[i_nonzeros]=self.SS1.fit_transform(
+                    out_data[i_nonzeros].reshape(-1,1)).flatten()
+            except:
+                out_data=numpy.array(out_data).reshape(-1,1)
+                out_data_trans=self.SS1.transform(out_data)
         elif self.transform_out=='minmax_1':
-            self.SS2=MinMaxScaler(feature_range=(0,1))
-            out_data_trans=self.SS2.fit_transform(out_data)
+            out_data_trans=self.SS1.fit_transform(out_data)
         elif self.transform_out=='minmax_pm':
             self.SS2=MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
