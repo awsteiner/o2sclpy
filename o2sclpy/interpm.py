@@ -744,7 +744,7 @@ class interpm_tf_dnn:
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  transform_in='none',transform_out='none',
                  test_size=0.0,evaluate=False,
-                 hlayers=[8,8],activations=['relu','relu'],
+                 hlayers=[],activations=[],
                  out_act='linear',batch_size=32,epochs=100,
                  loss='mean_squared_error',monitor='val_loss',
                  ls_factor=0.5,ls_patience=10,ls_min_lr=1.0e-6,
@@ -789,6 +789,8 @@ class interpm_tf_dnn:
         from sklearn.preprocessing import QuantileTransformer
         from sklearn.preprocessing import MinMaxScaler
         from sklearn.preprocessing import StandardScaler
+
+        print('shapes:', in_data.shape, out_data.shape)
         
         if self.transform_in=='minmax_0':
             self.SS1=MinMaxScaler(feature_range=(0,1))
@@ -812,16 +814,17 @@ class interpm_tf_dnn:
             in_data_trans=in_data
         
         if self.transform_out=='minmax_0':
+            self.SS2=MinMaxScaler(feature_range=(0,1))
             try:
                 i_nonzeros=out_data!=0
                 out_data_trans=numpy.copy(out_data)
-                out_data_trans[i_nonzeros]=self.SS1.fit_transform(
+                out_data_trans[i_nonzeros]=self.SS2.fit_transform(
                     out_data[i_nonzeros].reshape(-1,1)).flatten()
             except:
                 out_data=numpy.array(out_data).reshape(-1,1)
-                out_data_trans=self.SS1.transform(out_data)
+                out_data_trans=self.SS2.transform(out_data)
         elif self.transform_out=='minmax_1':
-            out_data_trans=self.SS1.fit_transform(out_data)
+            out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='minmax_pm':
             self.SS2=MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
@@ -885,13 +888,13 @@ class interpm_tf_dnn:
                                               activation=activations[0])]
             if self.verbose>0:
                 print('Layer: dense',hlayers[0],nd_in,activations[0])
-            if nl>0:
-                for i in range(1,nl):
-                    act=activations[i%na]
-                    layers.append(tf.keras.layers.Dense(hlayers[i],
-                                                        activation=act))
-                    if self.verbose>0:
-                        print('Layer: dense',hlayers[i],act)
+            
+            for i in range(1,nl):
+                act=activations[i%na]
+                layers.append(tf.keras.layers.Dense(hlayers[i],
+                                                    activation=act))
+                if self.verbose>0:
+                    print('Layer: dense',hlayers[i],act)
             layers.append(tf.keras.layers.Dense(nd_out,
                                                 activation=out_act))
             if self.verbose>0:
@@ -966,8 +969,13 @@ class interpm_tf_dnn:
         try:
             dct=string_to_dict2(options,list_of_ints=['verbose',
                                                       'batch_size',
-                                                      'epochs'],
-                                list_of_floats=['test_size'],
+                                                      'epochs',
+                                                      'ls_patience',
+                                                      'es_patience',],
+                                list_of_floats=['test_size',
+                                                'ls_factor',
+                                                'ls_min_lr',
+                                                'es_min_delta'],
                                 list_of_bools=['evaluate'])
             if "hlayers" in dct:
                 htemp=dct["hlayers"]
@@ -1007,7 +1015,7 @@ class interpm_tf_dnn:
                       e)
         else:
             v_trans=v.reshape(1,-1)
-
+        print('v_trans:', v_trans)
         try:
             # We don't want output at every point, even if verbose is
             # 1, so we use self.verbose-1 here for the argument to
@@ -1018,20 +1026,21 @@ class interpm_tf_dnn:
                 pred=self.dnn.predict(v_trans,verbose=0)
         except Exception as e:
             print('Exception 4 in interpm_tf_dnn:',e)
-            
+        print('pred:', pred)    
         if self.transform_out!='none':
             try:
                 pred_trans=self.SS2.inverse_transform(pred)
             except Exception as e:
                 print('Exception 5 in interpm_tf_dnn:',e)
-        elif self.transform_in=='minmax_0':
-            try:
-                i_nonzeros=pred!=0
-                pred_trans=numpy.copy(pred)
-                pred_trans[i_nonzeros]=self.SS1.inverse_transform(
-                    pred[i_nonzeros].reshape(-1,1)).flatten()
-            except Exception as e:
-                print('Exception 6 in interpm_tf_dnn:',e)
+            print('pred_trans:', pred_trans)
+        #elif self.transform_in=='minmax_0':
+        #    try:
+        #        i_nonzeros=pred!=0
+        #        pred_trans=numpy.copy(pred)
+        #        pred_trans[i_nonzeros]=self.SS1.inverse_transform(
+        #            pred[i_nonzeros].reshape(-1,1)).flatten()
+        #    except Exception as e:
+        #        print('Exception 6 in interpm_tf_dnn:',e)
         else:
             pred_trans=pred
     
