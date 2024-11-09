@@ -2345,8 +2345,11 @@ class plot_base:
         :py:func:`o2sclpy.o2graph_plotter.plot_o2graph()`.
         """
 
-        if len(args)<2:
-            print('Failed, not enough information to plot.')
+        if len(args)<1:
+            # Minimum number of arguments is 1, for an object
+            # of type 'hist'.
+            print('Failed, not enough information to plot in ',
+                  'plot_base::plot().')
             return
 
         failed=True

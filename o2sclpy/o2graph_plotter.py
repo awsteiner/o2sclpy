@@ -1882,11 +1882,11 @@ class o2graph_plotter(td_plot_base):
 
         Command-line arguments: ``<x> <y> [kwargs]``
 
-        Plot column <y> versus
-        column <x>. Some useful kwargs are color (c), dashes,
-        linestyle (ls), linewidth (lw), marker, markeredgecolor (mec),
-        markeredgewidth (mew), markerfacecolor (mfc),
-        markerfacecoloralt (mfcalt), markersize (ms). For example::
+        Plot column <y> versus column <x>. Some useful kwargs are
+        color (c), dashes, linestyle (ls), linewidth (lw), marker,
+        markeredgecolor (mec), markeredgewidth (mew), markerfacecolor
+        (mfc), markerfacecoloralt (mfcalt), markersize (ms), and
+        zorder. For example::
 
             o2graph -create table x grid:0,10,0.2 -function "sin(x)" y \\
             -plot x y "lw=0,marker=+" -show 
@@ -2432,8 +2432,7 @@ class o2graph_plotter(td_plot_base):
         return
                                  
     def hist_plot(self,amp,args):
-        """
-        Documentation for o2graph command ``hist-plot``:
+        """Documentation for o2graph command ``hist-plot``:
 
         For objects of type ``table``:
 
@@ -2444,9 +2443,15 @@ class o2graph_plotter(td_plot_base):
         For a table, create a histogram plot from the specified
         column. This command uses matplotlib to construct the
         histogram rather than using O2scl to create a histogram
-        object. This command uses the matplotlib hist() function, see
+        object. Some useful kwargs are bins, color, edgecolor(ec),
+        facecolor (fc), fill, hatch, and zorder. This command uses the
+        matplotlib hist() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
-        for information and keyword arguments.
+        for information and keyword arguments. For example::
+
+            o2graph -create table x grid:0,10,0.01 \\
+            -function "abs(sin(x))" y -hist-plot y \\
+            "bins=40,fc=red,ec=blue,hatch=---" -show
 
         For objects of type ``hist``:
 
@@ -2454,10 +2459,17 @@ class o2graph_plotter(td_plot_base):
         
         Command-line arguments: ``[kwargs]``
 
-        Create a histogram plot from the current histogram. This
+        Create a histogram plot from the current histogram.
+        Some useful kwargs are color, edgecolor(ec),
+        facecolor (fc), fill, hatch, and zorder. This
         command uses the matplotlib hist() function, see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
-        for information and keyword arguments.
+        for information and keyword arguments. For example::
+
+            o2graph -create table x grid:0,10,0.01 \\
+            -function "abs(sin(x))" y -to-hist y 40 \\
+            -hist-plot "fc=red,ec=blue,hatch=---" -show
+
         """
 
         curr_type=o2scl_get_type(amp)
@@ -2491,14 +2503,19 @@ class o2graph_plotter(td_plot_base):
             xv=reps.to_numpy()
             yv=wgts.to_numpy()
             zv=bins.to_numpy()
-            
+
             if self.canvas_flag==False:
                 self.canvas()
             if len(args)<1:
                 self.axes.hist(xv,weights=yv,bins=zv)
             else:
-                self.axes.hist(xv,weights=yv,bins=zv,
-                               **string_to_dict(args[0]))
+                dct=string_to_dict(args[0])
+                if "bins" in dct:
+                    print("Cannot specify bins in kwargs for objects",
+                          "of type 'hist' in o2graph_plotter::hist_plot().")
+                    return
+            
+                self.axes.hist(xv,weights=yv,bins=zv,**dct)
             
             # End of section for 'table' type
         else:
@@ -3684,13 +3701,37 @@ class o2graph_plotter(td_plot_base):
         'pdf' and ignored otherwise.
         """
 
-        if (mode!='pdf' and mode!='list' and mode!='info' and mode!='full'):
-            print('Fonts help for o2graph:')
-            print("  For a list of fonts, use 'o2graph -help fonts list'.")
-            print("  For a pdf summary of fonts, use",
-                  "'o2graph -help fonts pdf'.")
-            print("  To modify the prefix of the pdf files, use ",
-                  "'o2graph -help fonts pdf prefix'.")
+        if (mode!='pdf' and mode!='list' and mode!='info' and
+            mode!='full'):
+            print('Fonts help for o2graph:\n')
+            print("  For a list of fonts, use 'o2graph -help fonts list'.",
+                  "Note that all fonts\n    are listed, even those which",
+                  " only have a small set of glyphs. Note also\n    that",
+                  "matplotlib cannot currently handle color emoji.\n")
+            print("  For summary information on one font, use, e.g.")
+            print("    o2graph -help fonts info \\\n    \"info_family=geor"+
+                  "gia,info_weight=bold,info_style=italic\"")
+            print("    This will output about 100 of the glyphs to the",
+                  "screen and to a pdf \n    file. You can use the prefix"+
+                  " keyword to change the name of the pdf file.")
+            print("    Valid weights are 'ultralight', 'light', "+
+                  "'normal', 'regular', 'book',\n    'medium', "+
+                  "'roman', 'semibold', 'demibold', 'demi', "+
+                  "'bold', 'heavy',\n    'extra bold', and 'black'. "+
+                  "Valid styles are 'normal', 'italic', and\n"+
+                  "    'oblique'.\n")
+            print("  For a full list of glyphs from one font, use, e.g.")
+            print("    o2graph -help fonts full \\\n    \"info_family="+
+                  "georgia,info_weight=bold,info_style=italic\"")
+            print("    This will output all of the glyphs to the",
+                  "screen and to a pdf file.\n    You can use the prefix"+
+                  " keyword to change the name of the pdf file.\n") 
+            print("  For a pdf summary of fonts, use e.g.")
+            print("    o2graph -help fonts pdf \"check_str=Ab#$,print_"+
+                  "str=This is a test\"\n    The keyword 'check_str' "+
+                  "indicates the string of characters which is\n    "+
+                  "used to select the font and 'print_str' is the "+
+                  "string used to print\n    each font in the pdf file.")
             return
 
         from matplotlib import font_manager
