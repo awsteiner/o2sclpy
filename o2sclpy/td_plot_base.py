@@ -895,19 +895,21 @@ class threed_objects:
                           }]
               }
             
-        nodes_list=[]
+        # The list of objects which will be output in the "nodes"
+        # section of the GLTF file
+        nodes_json=[]
         for k in range(0,len(self.mesh_list)):
             if rotate_zup:
-                nodes_list.append({"mesh" : k,
+                nodes_json.append({"mesh" : k,
                                    "name" : self.mesh_list[k].name,
                                    "rotation": [0.7071068286895752,0,0,
                                                 -0.7071068286895752]
                                    })
             else:
-                nodes_list.append({"mesh" : k,
+                nodes_json.append({"mesh" : k,
                                    "name" : self.mesh_list[k].name})
                                    
-        jdat["nodes"]=nodes_list
+        jdat["nodes"]=nodes_json
 
         # The list of objects which will be output in the "meshes"
         # section of the GLTF file
@@ -1020,13 +1022,14 @@ class threed_objects:
                 print('Function write_gltf() using long integers',
                       'for mesh',self.mesh_list[i].name+'.')
 
+            # The dictionary of attributes for the current primitive
             att={}
             face_bin=[]
             norm_bin=[]
             txts_bin=[]
             vert_bin=[]
             vert_map = [-1] * len(self.mesh_list[i].vert_list)
-            prim_list=[]
+            prim_json=[]
 
             if False:
                 for j in range(0,len(self.mesh_list[i].vert_list)):
@@ -1254,10 +1257,10 @@ class threed_objects:
                     # future expansion to trangle strips and fans.
                     if self.mesh_list[i].obj_type=='triangles':
                         if mat1=='':
-                            prim_list.append({"attributes": att,
+                            prim_json.append({"attributes": att,
                                               "indices": acc_index})
                         else:
-                            prim_list.append({"attributes": att,
+                            prim_json.append({"attributes": att,
                                               "indices": acc_index,
                                               "material": mat_index})
                     else:
@@ -1272,18 +1275,18 @@ class threed_objects:
 
                         mode_num=4
                         if mat1=='':
-                            prim_list.append({"attributes": att,
+                            prim_json.append({"attributes": att,
                                               "indices": acc_index,
                                               "mode": mode_num})
                         else:
-                            prim_list.append({"attributes": att,
+                            prim_json.append({"attributes": att,
                                               "indices": acc_index,
                                               "material": mat_index,
                                               "mode": mode_num})
                             
                     if j==len(self.mesh_list[i].faces)-1:
                         mesh_json.append({"name": self.mesh_list[i].name,
-                                          "primitives": prim_list})
+                                          "primitives": prim_json})
                         
                     acc_index=acc_index+1
         
@@ -1347,10 +1350,12 @@ class threed_objects:
             if self.mesh_list[i].obj_type=='lines':
 
                 # Here
+                print('x')
                 
             elif self.mesh_list[i].obj_type=='points':
             
                 # Here
+                print('x')
                 
         # End of loop over mesh list
                     
