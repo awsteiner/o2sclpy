@@ -1776,7 +1776,7 @@ class td_plot_base(yt_plot_base):
 
         return
         
-    def td_scatter(self,amp,args,n_subdiv: int = 0, r: float = 0.04,
+    def td_scatter(self, amp, args, n_subdiv: int = 0, r: float = 0.04,
                    metal: str = '',rough: str = ''):
         """Documentation for o2graph command ``td-scatter``:
 
@@ -1790,7 +1790,9 @@ class td_plot_base(yt_plot_base):
         original icosahedron, ``r=0.04``, the radius of the icosphere
         in the internal coordinate system, ``metal=''``, the column
         which provides the metalness, ``rough=''``, the column which
-        describes the roughness.
+        describes the roughness. If the value of ``r`` is less than
+        or equal to zero, then the icospheres are written as simple
+        points.
         """
         curr_type=o2scl_get_type(amp)
         amt=acol_manager(amp)
@@ -1884,69 +1886,101 @@ class td_plot_base(yt_plot_base):
                 cro=table[col_ro][0:n]
                 rolo=numpy.min(cro)
                 rohi=numpy.max(cro)
-            
-        if colors==False:
 
-            gf=mesh_object('scatter',[])
-            
-            for i in range(0,n):
-                xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
-                ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
-                znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
-                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,r,
-                                              n_subdiv=n_subdiv)
-                lv=len(gf.vert_list)
-                for k in range(0,len(vtmp)):
-                    gf.vert_list.append(vtmp[k])
-                for k in range(0,len(ntmp)):
-                    gf.vn_list.append(ntmp[k])
-                for k in range(0,len(ftmp)):
-                    ftmp[k][0]=ftmp[k][0]+lv
-                    ftmp[k][1]=ftmp[k][1]+lv
-                    ftmp[k][2]=ftmp[k][2]+lv
-                    gf.faces.append(ftmp[k])
-                    
-        else:
+        if r<=0:
 
-            gf=mesh_object('scatter',[])
-            
-            for i in range(0,n):
-
-                if self.verbose>1 and i%100==99:
-                    print('td_scatter(): Adding point',i+1,'of',n)
+            if colors==False:
+    
+                gf=mesh_object('scatter',[],'',obj_type='points')
                 
-                xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
-                ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
-                znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
-                vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,r,
-                                              n_subdiv=n_subdiv)
-                lv=len(gf.vert_list)
-                for k in range(0,len(vtmp)):
-                    gf.vert_list.append(vtmp[k])
-                for k in range(0,len(ntmp)):
-                    gf.vn_list.append(ntmp[k])
-                for k in range(0,len(ftmp)):
-                    gf.faces.append([ftmp[k][0]+lv,ftmp[k][1]+lv,
-                                     ftmp[k][2]+lv,'mat_point_'+str(i)])
-
-                if metal=='':
-                    metal_float=0.0
-                elif col_m=='':
-                    metal_float=float(metal)
-                else:
-                    metal_float=(cm[i]-mlo)/(mhi-mlo)
-                if rough=='':
-                    rough_float=1.0
-                elif col_ro=='':
-                    rough_float=float(rough)
-                else:
-                    rough_float=(cro[i]-rolo)/(rohi-rolo)
-
-                mat=material('mat_point_'+str(i),[(cr[i]-rlo)/(rhi-rlo),
-                                                  (cg[i]-glo)/(ghi-glo),
-                                                  (cb[i]-blo)/(bhi-blo)],
-                             metal=metal_float,rough=rough_float)
-                self.to.add_mat(mat)
+                for i in range(0,n):
+                    
+                    if self.verbose>1 and i%100==99:
+                        print('td_scatter(): Adding point',i+1,'of',n)
+                        
+                    xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
+                    ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
+                    znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
+                    gf.vert_list.append([xnew,ynew,znew])
+                        
+            else:
+    
+                gf=mesh_object('scatter',[],'',obj_type='points')
+                
+                for i in range(0,n):
+    
+                    if self.verbose>1 and i%100==99:
+                        print('td_scatter(): Adding point',i+1,'of',n)
+                    
+                    xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
+                    ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
+                    znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
+                    gf.vert_list.append([xnew,ynew,znew])
+            
+        else:
+                
+            if colors==False:
+    
+                gf=mesh_object('scatter',[])
+                
+                for i in range(0,n):
+                    xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
+                    ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
+                    znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
+                    vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,r,
+                                                  n_subdiv=n_subdiv)
+                    lv=len(gf.vert_list)
+                    for k in range(0,len(vtmp)):
+                        gf.vert_list.append(vtmp[k])
+                    for k in range(0,len(ntmp)):
+                        gf.vn_list.append(ntmp[k])
+                    for k in range(0,len(ftmp)):
+                        ftmp[k][0]=ftmp[k][0]+lv
+                        ftmp[k][1]=ftmp[k][1]+lv
+                        ftmp[k][2]=ftmp[k][2]+lv
+                        gf.faces.append(ftmp[k])
+                        
+            else:
+    
+                gf=mesh_object('scatter',[])
+                
+                for i in range(0,n):
+    
+                    if self.verbose>1 and i%100==99:
+                        print('td_scatter(): Adding point',i+1,'of',n)
+                    
+                    xnew=(cx[i]-self.xlo)/(self.xhi-self.xlo)
+                    ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
+                    znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
+                    vtmp,ntmp,ftmp,ttmp=icosphere(xnew,ynew,znew,r,
+                                                  n_subdiv=n_subdiv)
+                    lv=len(gf.vert_list)
+                    for k in range(0,len(vtmp)):
+                        gf.vert_list.append(vtmp[k])
+                    for k in range(0,len(ntmp)):
+                        gf.vn_list.append(ntmp[k])
+                    for k in range(0,len(ftmp)):
+                        gf.faces.append([ftmp[k][0]+lv,ftmp[k][1]+lv,
+                                         ftmp[k][2]+lv,'mat_point_'+str(i)])
+    
+                    if metal=='':
+                        metal_float=0.0
+                    elif col_m=='':
+                        metal_float=float(metal)
+                    else:
+                        metal_float=(cm[i]-mlo)/(mhi-mlo)
+                    if rough=='':
+                        rough_float=1.0
+                    elif col_ro=='':
+                        rough_float=float(rough)
+                    else:
+                        rough_float=(cro[i]-rolo)/(rohi-rolo)
+    
+                    mat=material('mat_point_'+str(i),[(cr[i]-rlo)/(rhi-rlo),
+                                                      (cg[i]-glo)/(ghi-glo),
+                                                      (cb[i]-blo)/(bhi-blo)],
+                                 metal=metal_float,rough=rough_float)
+                    self.to.add_mat(mat)
             
         # Convert to GLTF
                 
@@ -2200,7 +2234,8 @@ class td_plot_base(yt_plot_base):
 
     def td_line(self,x1,y1,z1,x2,y2,z2,name='line',mat='white',
                 coords='user'):
-        """Documentation for o2graph command ``td-line``:
+        """
+        Documentation for o2graph command ``td-line``:
 
         Plot a line in a 3d visualization (experimental)
 
@@ -2244,7 +2279,7 @@ class td_plot_base(yt_plot_base):
             if self.verbose>2:
                 print('td_line(): creating group named',name,'with material',
                       mat+'.')
-            gf=mesh_object(uname,arr_face,mat=mat,obj_type='lines')
+            gf=mesh_object(uname,[],mat=mat,obj_type='lines')
             gf.vert_list=line_vert
             self.to.add_object(gf)
                                
@@ -2255,7 +2290,7 @@ class td_plot_base(yt_plot_base):
                       mat.name+'.')
             if not self.to.is_mat(mat.name):
                 self.to.add_mat(mat)
-            gf=mesh_object(uname,arr_face,mat=mat.name,obj_type='line')
+            gf=mesh_object(uname,[],mat=mat.name,obj_type='lines')
             gf.vert_list=line_vert
             self.to.add_object(gf)
             
@@ -2783,55 +2818,6 @@ class td_plot_base(yt_plot_base):
 
         return
 
-    def td_line(self,x1,y1,z1,x2,y2,z2,
-                 name='line',mat='white',
-                 match_txt=False,coords='user'):
-        """Documentation for o2graph command ``td-point``:
-
-        Plot a 3D point (experimental)
-
-        Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]``
-        
-        End of documentation for o2graph command ``td-line``.
-        """
-        uname=self.to.make_unique_name(name)
-
-        if coords=='user':
-            if self.xset==False or self.yset==False or self.zset==False:
-                print('xset:',self.xset)
-                print('yset:',self.yset)
-                print('zset:',self.zset)
-                raise ValueError("User coordinates not set in"+
-                                 " td_plot_base::td_point().")
-            x1=(x1-self.xlo)/(self.xhi-self.xlo)
-            y1=(y1-self.ylo)/(self.yhi-self.ylo)
-            z1=(z1-self.zlo)/(self.zhi-self.zlo)
-            x2=(x2-self.xlo)/(self.xhi-self.xlo)
-            y2=(y2-self.ylo)/(self.yhi-self.ylo)
-            z2=(z2-self.zlo)/(self.zhi-self.zlo)
-
-        if self.to.is_mat(mat)==False:
-                
-            if mat=='white':
-                white=material(mat,[1,1,1])
-                self.to.add_mat(white)
-            else:
-                print('Material '+mat+' not found in td-point.')
-            
-        # Get the material info
-        m=self.to.get_mat(mat)
-        
-        if self.verbose>2:
-            print('td_point(): creating group named',uname,
-                  'with material',mat+'.')
-            
-        gf=mesh_object(uname,[],mat,'lines')
-        gf.vert_list=[[x1,y1,z1],[x2,y2,z2]]
-
-        self.to.add_object(gf)
-
-        return
-
     def td_axis_label(self, ldir : str, tex_label : str,
                       tex_mat_name : str = '', end_mat_name: str = 'white',
                       png_file : str = '', group_name : str = '',
@@ -2841,7 +2827,7 @@ class td_plot_base(yt_plot_base):
 
         Create a 3D axis label (experimental).
 
-        Command-line arguments: ``<ldir> <tex_label> [kwargs]``
+        Command-lin<e arguments: ``<ldir> <tex_label> [kwargs]``
 
         Create an axis label in the direction ``ldir`` with label
         ``tex_label``.

@@ -1,5 +1,5 @@
 o2graph: A data viewing and processing program for O2scl.
-  Version: 0.930a4
+  Version: 0.930a5
  
 List of command-line options which do not require a current object:
 
@@ -71,8 +71,10 @@ List of command-line options which do not require a current object:
   -td-axis-label   Create a 3D axis label (experimental).
   -td-den-plot     Create a 3D density plot (experimental).
   -td-icos         Create a 3D icosphere (experimental).
+  -td-line         Plot a 3D point (experimental)
   -td-mat          Create a 3D material (experimental)
   -td-pgram        Plot a 3D parallelogram (experimental)
+  -td-point        Plot a 3D point (experimental)
   -td-scatter      Create a 3D scatter plot (experimental).
   -text            Plot text in the data coordinates.
   -textbox         Plot a box with text.
