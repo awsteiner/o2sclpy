@@ -199,7 +199,7 @@ class mesh_object:
 
     obj_type: str = 'triangles'
     """
-    Either 'triangles', 'lines', or 'points'
+    Only 'triangles', 'lines', and 'points' are supported at present.
     """
 
     def __init__(self, name: str, faces,
@@ -274,7 +274,7 @@ class mesh_object:
                     
             if base_name_added==False:
                 raise ValueError('In function sort_by_mat(): '+
-                                 '  A material named '+self.mat+
+                                 'A material named '+self.mat+
                                  ' was specified in "mat", but no face '+
                                  'uses that material.')
 
