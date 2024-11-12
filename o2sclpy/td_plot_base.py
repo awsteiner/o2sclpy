@@ -176,7 +176,7 @@ class mesh_object:
 
     faces=[]
     """
-    The list of faces
+    The list of faces. 
     """
 
     name: str = ''
@@ -717,7 +717,6 @@ class threed_objects:
         of triangular faces among those vertices.
 
         Optionally, also specify the vertex normals in ``normals``.
-
         """
 
         if len(mesh.vn_list)>0 and len(mesh.vn_list)!=len(mesh.vert_list):
@@ -749,7 +748,9 @@ class threed_objects:
         if verbose>0:
             print('threed_object::add_object():',
                   'Adjust faces for group',mesh.name,'and check.')
-        
+
+        # Note that for 'points' and 'lines' objects, there are no
+        # faces, so this loop does nothing
         for i in range(0,len(mesh.faces)):
 
             if verbose>1 and i%100==99:
@@ -882,7 +883,8 @@ class threed_objects:
             
         for k in range(0,len(self.mesh_list)):
             nodes_list.append(k)
-                
+
+        # The top-level JSON object for writing to the GLTF file
         jdat={"asset": {"generator": "o2sclpy v"+version,
                         "version": "2.0",
                         "copyright":
@@ -907,18 +909,31 @@ class threed_objects:
                                    
         jdat["nodes"]=nodes_list
 
-        mesh_list=[]
-        acc_list=[]
-        buf_list=[]
+        # The list of objects which will be output in the "meshes"
+        # section of the GLTF file
+        mesh_json=[]
+        # The list of objects which will be output in the "accessors"
+        # section of the GLTF file
+        acc_json=[]
+        # The list of objects which will be output in the "bufferViews"
+        # section of the GLTF file
+        buf_json=[]
+        # The list of objects which will be output in the "materials"
+        # section of the GLTF file
         mat_json=[]
-        txt_list=[]
-        img_list=[]
+        # The list of objects which will be output in the "textures"
+        # section of the GLTF file
+        txt_json=[]
+        # The list of objects which will be output in the "images"
+        # section of the GLTF file
+        img_json=[]
             
         f2=open(bin_file,'wb')
             
         texture_map=[-1]*len(self.mat_list)
         texture_index=0
-        
+
+        # Output all of the materials to the GLTF file
         for i in range(0,len(self.mat_list)):
 
             if verbose>1 and i%100==99:
@@ -934,8 +949,8 @@ class threed_objects:
             if this_mat.txt!='':
                 pbr_dict["baseColorTexture"]={"index":
                                               texture_index}
-                txt_list.append({"source": texture_index})
-                img_list.append({"mimeType": "image/png",
+                txt_json.append({"source": texture_index})
+                img_json.append({"mimeType": "image/png",
                                  "name": this_mat.name,
                                  "uri": this_mat.txt})
                 texture_map[i]=texture_index
@@ -1029,7 +1044,7 @@ class threed_objects:
                         for kk in range(0,2):
                             v0=float(self.mesh_list[i].vt_list[j][kk])
                             txts_bin.append(v0)
-                        
+
             for j in range(0,len(self.mesh_list[i].faces)):
 
                 # Determine the material for this face
@@ -1194,7 +1209,7 @@ class threed_objects:
                     # 5125 is unsigned int
                     # 5126 is signed float
                     
-                    acc_list.append({"bufferView": acc_index,
+                    acc_json.append({"bufferView": acc_index,
                                      "componentType": 5126,
                                      "count": int(len(vert_bin)/3),
                                      "max": max_v,
@@ -1204,7 +1219,7 @@ class threed_objects:
                     acc_index=acc_index+1
                     
                     if normals:
-                        acc_list.append({"bufferView": acc_index,
+                        acc_json.append({"bufferView": acc_index,
                                          "componentType": 5126,
                                          "count": int(len(norm_bin)/3),
                                          "type": "VEC3"})
@@ -1215,7 +1230,7 @@ class threed_objects:
                     # there's no texture, then there's no need to
                     # output them
                     if texcoords and self.mat_list[mat_index].txt!='':
-                        acc_list.append({"bufferView": acc_index,
+                        acc_json.append({"bufferView": acc_index,
                                          "componentType": 5126,
                                          "count": int(len(txts_bin)/2),
                                          "type": "VEC2"})
@@ -1223,15 +1238,20 @@ class threed_objects:
                         acc_index=acc_index+1
                         
                     if long_ints:
-                        acc_list.append({"bufferView": acc_index,
+                        acc_json.append({"bufferView": acc_index,
                                          "componentType": 5125,
                                          "count": int(len(face_bin)/1),
                                          "type": "SCALAR"})
                     else:
-                        acc_list.append({"bufferView": acc_index,
+                        acc_json.append({"bufferView": acc_index,
                                          "componentType": 5123,
                                          "count": int(len(face_bin)/1),
                                          "type": "SCALAR"})
+
+                    # AWS, 11/11/24: Lines and points don't have
+                    # faces, so they won't need this code, but we
+                    # probably need to keep an if statement here for
+                    # future expansion to trangle strips and fans.
                     if self.mesh_list[i].obj_type=='triangles':
                         if mat1=='':
                             prim_list.append({"attributes": att,
@@ -1251,10 +1271,6 @@ class threed_objects:
                         #6 TRIANGLE_FAN
 
                         mode_num=4
-                        if self.mesh_list[i].obj_type=='lines':
-                            mode_num=1
-                        elif self.mesh_list[i].obj_type=='points':
-                            mode_num=0
                         if mat1=='':
                             prim_list.append({"attributes": att,
                                               "indices": acc_index,
@@ -1264,8 +1280,9 @@ class threed_objects:
                                               "indices": acc_index,
                                               "material": mat_index,
                                               "mode": mode_num})
+                            
                     if j==len(self.mesh_list[i].faces)-1:
-                        mesh_list.append({"name": self.mesh_list[i].name,
+                        mesh_json.append({"name": self.mesh_list[i].name,
                                           "primitives": prim_list})
                         
                     acc_index=acc_index+1
@@ -1273,13 +1290,13 @@ class threed_objects:
                     # 34962 is "ARRAY_BUFFER"
                     # 34963 is "ELEMENT_ARRAY_BUFFER"
                     
-                    buf_list.append({"buffer": 0,
+                    buf_json.append({"buffer": 0,
                                      "byteLength": 4*len(vert_bin),
                                      "byteOffset": offset,
                                      "target": 34962})
                     offset+=4*len(vert_bin)
                     if normals:
-                        buf_list.append({"buffer": 0,
+                        buf_json.append({"buffer": 0,
                                          "byteLength": 4*len(norm_bin),
                                          "byteOffset": offset,
                                          "target": 34962})
@@ -1288,19 +1305,19 @@ class threed_objects:
                     # there's no texture, then there's no need to
                     # output them
                     if texcoords and self.mat_list[mat_index].txt!='':
-                        buf_list.append({"buffer": 0,
+                        buf_json.append({"buffer": 0,
                                          "byteLength": 4*len(txts_bin),
                                          "byteOffset": offset,
                                          "target": 34962})
                         offset+=4*len(txts_bin)
                     if long_ints==True:
-                        buf_list.append({"buffer": 0,
+                        buf_json.append({"buffer": 0,
                                          "byteLength": 4*len(face_bin),
                                          "byteOffset": offset,
                                          "target": 34963})
                         offset+=4*len(face_bin)
                     else:
-                        buf_list.append({"buffer": 0,
+                        buf_json.append({"buffer": 0,
                                          "byteLength": 2*len(face_bin),
                                          "byteOffset": offset,
                                          "target": 34963})
@@ -1323,27 +1340,41 @@ class threed_objects:
                     norm_bin=[]
                     vert_map = [-1] * len(self.mesh_list[i].vert_list)
 
+                # End of 'if (j==len(self.mesh_list[i].faces)-1...
+                
+            # End of loop over faces
+
+            if self.mesh_list[i].obj_type=='lines':
+
+                # Here
+                
+            elif self.mesh_list[i].obj_type=='points':
+            
+                # Here
+                
+        # End of loop over mesh list
+                    
         # Add the top-level data to the json object
         if verbose>2:
             print('Converting mesh list:')
-        jdat["meshes"]=mesh_list
+        jdat["meshes"]=mesh_json
         if verbose>2:
             print('Converting materials:')
         if len(mat_json)>0:
             jdat["materials"]=mat_json
         if verbose>2:
             print('Converting accessors:')
-        jdat["accessors"]=acc_list
+        jdat["accessors"]=acc_json
         if verbose>2:
             print('Converting buffers:')
-        jdat["bufferViews"]=buf_list
+        jdat["bufferViews"]=buf_json
         jdat["buffers"]=[{"byteLength": offset,
                           "uri": prefix+'.bin'}]
         if verbose>2:
             print('Converting textures:')
-        if len(txt_list)>0:
-            jdat["textures"]=txt_list
-            jdat["images"]=img_list
+        if len(txt_json)>0:
+            jdat["textures"]=txt_json
+            jdat["images"]=img_json
 
         # write the json file
         if verbose>2:
@@ -1362,7 +1393,8 @@ class threed_objects:
             for i in range(0,len(zip_list)):
                 zip_cmd=zip_cmd+' '+zip_list[i]
             os.system(zip_cmd)
-            
+
+        # End of function write_gltf()
         return
         
 class td_plot_base(yt_plot_base):
@@ -2634,26 +2666,12 @@ class td_plot_base(yt_plot_base):
             print('td_point(): creating group named',uname,
                   'with material',mat+'.')
             
-        gf=mesh_object(uname,point_face,mat)
-        gf.vert_list=point_vert
-        gf.vn_list=point_norm
-
-        # If there is a texture, then add the texture coordinates
-        if m.txt!='':
-
-            import copy
-            
-            txt2=copy.deepcopy(point_txt)
-            for i in range(0,len(point_txt)):
-                txt2[i][0]=(point_txt[i][0]*m.txt_frac_w+
-                            (1.0-m.txt_frac_w)/2.0)
-                txt2[i][1]=(point_txt[i][1]*m.txt_frac_h+
-                            (1.0-m.txt_frac_h)/2.0)
-            gf.vt_list=txt2
+        gf=mesh_object(uname,point_face,mat,'points')
+        gf.vert_list=[x1,y1,z1]
 
         self.to.add_object(gf)
 
-        return x1,y1,z1
+        return
 
     def td_axis_label(self, ldir : str, tex_label : str,
                       tex_mat_name : str = '', end_mat_name: str = 'white',
