@@ -1,0 +1,3 @@
+o2graph -set td_wdir gltf -set xlo 0 -set xhi 2 -set ylo 0 -set yhi 2 \
+-set zlo 0 -set zhi 2 -set verbose 3 \
+-td-point 1 1 1 -gltf point.gltf

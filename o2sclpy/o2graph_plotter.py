@@ -6256,6 +6256,48 @@ class o2graph_plotter(td_plot_base):
                     else:
                         print('Not enough arguments for td-pgram.')
 
+                elif cmd_name=='td-point':
+
+                    if self.verbose>2:
+                        print('Process td-point.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix==4:
+                        self.td_point(float(strlist[ix+1]),
+                                      float(strlist[ix+2]),
+                                      float(strlist[ix+3]))
+                    elif ix_next-ix>=5:
+                        self.td_point(float(strlist[ix+1]),
+                                      float(strlist[ix+2]),
+                                      float(strlist[ix+3]),
+                                      **string_to_dict2(strlist[ix+4]))
+                    else:
+                        print('Not enough arguments for td-point.')
+
+                elif cmd_name=='td-line':
+
+                    if self.verbose>2:
+                        print('Process td-line.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix==7:
+                        self.td_line(float(strlist[ix+1]),
+                                     float(strlist[ix+2]),
+                                     float(strlist[ix+3]),
+                                     float(strlist[ix+4]),
+                                     float(strlist[ix+5]),
+                                     float(strlist[ix+6]))
+                    elif ix_next-ix>=8:
+                        self.td_line(float(strlist[ix+1]),
+                                     float(strlist[ix+2]),
+                                     float(strlist[ix+3]),
+                                     float(strlist[ix+4]),
+                                     float(strlist[ix+5]),
+                                     float(strlist[ix+6]),
+                                     **string_to_dict2(strlist[ix+7]))
+                    else:
+                        print('Not enough arguments for td-line.')
+
                 elif cmd_name=='td-mat':
 
                     if self.verbose>2:

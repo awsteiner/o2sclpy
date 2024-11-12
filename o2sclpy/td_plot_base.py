@@ -1390,12 +1390,10 @@ class threed_objects:
                     
                 if mat1=='':
                     prim_json.append({"attributes": att,
-                                      "indices": acc_index,
                                       "mode": 1})
                 else:
                     mat_index=self.get_mat_index(mat1)
                     prim_json.append({"attributes": att,
-                                      "indices": acc_index,
                                       "material": mat_index,
                                       "mode": 1})
                     
@@ -1407,6 +1405,9 @@ class threed_objects:
                                  "byteOffset": offset,
                                  "target": 34962})
                 offset+=4*len(vert_bin)
+                
+                dat1=pack('<'+'f'*len(vert_bin),*vert_bin)
+                f2.write(dat1)
                 
             elif self.mesh_list[i].obj_type=='points':
             
@@ -1441,23 +1442,24 @@ class threed_objects:
                     
                 if mat1=='':
                     prim_json.append({"attributes": att,
-                                      "indices": acc_index,
                                       "mode": 0})
                 else:
                     mat_index=self.get_mat_index(mat1)
                     prim_json.append({"attributes": att,
-                                      "indices": acc_index,
                                       "material": mat_index,
                                       "mode": 0})
                     
                 mesh_json.append({"name": self.mesh_list[i].name,
                                   "primitives": prim_json})
-                
+
                 buf_json.append({"buffer": 0,
                                  "byteLength": 4*len(vert_bin),
                                  "byteOffset": offset,
                                  "target": 34962})
                 offset+=4*len(vert_bin)
+
+                dat1=pack('<'+'f'*len(vert_bin),*vert_bin)
+                f2.write(dat1)
                 
             # End of if statements for lines and points
             
@@ -2774,8 +2776,8 @@ class td_plot_base(yt_plot_base):
             print('td_point(): creating group named',uname,
                   'with material',mat+'.')
             
-        gf=mesh_object(uname,point_face,mat,'points')
-        gf.vert_list=[x1,y1,z1]
+        gf=mesh_object(uname,[],mat,'points')
+        gf.vert_list=[[x1,y1,z1]]
 
         self.to.add_object(gf)
 
@@ -2823,8 +2825,8 @@ class td_plot_base(yt_plot_base):
             print('td_point(): creating group named',uname,
                   'with material',mat+'.')
             
-        gf=mesh_object(uname,point_face,mat,'lines')
-        gf.vert_list=[x1,y1,z1,x2,y2,z2]
+        gf=mesh_object(uname,[],mat,'lines')
+        gf.vert_list=[[x1,y1,z1],[x2,y2,z2]]
 
         self.to.add_object(gf)
 
