@@ -153,6 +153,8 @@ base_list=[
     ["td-den-plot",td_plot_base.td_den_plot.__doc__],
     ["td-icos",td_plot_base.td_icos.__doc__],
     ["td-pgram",td_plot_base.td_pgram.__doc__],
+    ["td-point",td_plot_base.td_point.__doc__],
+    ["td-line",td_plot_base.td_line.__doc__],
     ["td-mat",td_plot_base.td_mat.__doc__],
     ["td-scatter",td_plot_base.td_scatter.__doc__],
     ["text",plot_base.text.__doc__],

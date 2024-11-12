@@ -865,22 +865,26 @@ class threed_objects:
         import json
         from struct import pack
 
-        zip_list=[]
-        
         # Remove suffix if it is present
         if prefix[-5:]=='.gltf':
             prefix=prefix[:-5]
         gltf_file=wdir+"/"+prefix+'.gltf'
         bin_file=wdir+"/"+prefix+'.bin'
 
+        # If a zip file is to be created, then this is the list of
+        # files which will need to be included in the zip archive.
+        zip_list=[]
+        
         if zip_file!='':
             if zip_file[-4:]!='.zip':
                 zip_file=zip_file+'.zip'
+            # Begin the list of files to be included by adding
+            # the base gltf and bin files. Texture files will be
+            # added later if necessary.
             zip_list.append(prefix+'.gltf')
             zip_list.append(prefix+'.bin')
         
         nodes_list=[]
-            
         for k in range(0,len(self.mesh_list)):
             nodes_list.append(k)
 
@@ -929,13 +933,14 @@ class threed_objects:
         # The list of objects which will be output in the "images"
         # section of the GLTF file
         img_json=[]
-            
+
+        # Binary objects are written to this object
         f2=open(bin_file,'wb')
             
         texture_map=[-1]*len(self.mat_list)
         texture_index=0
 
-        # Output all of the materials to the GLTF file
+        # Output all of the materials to the mat_json object
         for i in range(0,len(self.mat_list)):
 
             if verbose>1 and i%100==99:
@@ -992,7 +997,11 @@ class threed_objects:
             mat_json.append(mat_dict)
         
         # Add each set of faces as a group
+
+        # Accessor index
         acc_index=0
+
+        # Current byte offset
         offset=0
 
         for i in range(0,len(self.mesh_list)):
@@ -1024,6 +1033,7 @@ class threed_objects:
 
             # The dictionary of attributes for the current primitive
             att={}
+            
             face_bin=[]
             norm_bin=[]
             txts_bin=[]
@@ -1349,14 +1359,108 @@ class threed_objects:
 
             if self.mesh_list[i].obj_type=='lines':
 
-                # Here
-                print('x')
+                vert_bin=[]
+                for ii in range(0,len(self.mesh_list[i].vert_list)):
+                    v0=float(self.mesh_list[i].vert_list[ii][0])
+                    vert_bin.append(v0)
+                    v1=float(self.mesh_list[i].vert_list[ii][1])
+                    vert_bin.append(v1)
+                    v2=float(self.mesh_list[i].vert_list[ii][2])
+                    vert_bin.append(v2)
+                    
+                max_v=[0,0,0]
+                min_v=[0,0,0]
+                for ii in range(0,len(vert_bin),3):
+                    for jj in range(0,3):
+                        if ii==0 or vert_bin[ii+jj]<min_v[jj]:
+                            min_v[jj]=vert_bin[ii+jj]
+                        if ii==0 or vert_bin[ii+jj]>max_v[jj]:
+                            max_v[jj]=vert_bin[ii+jj]
+                            
+                acc_json.append({"bufferView": acc_index,
+                                 "componentType": 5126,
+                                 "count": int(len(vert_bin)/3),
+                                 "max": max_v,
+                                 "min": min_v,
+                                 "type": "VEC3"})
+                att["POSITION"]=acc_index
+                acc_index=acc_index+1
+
+                mat1=self.mesh_list[i].mat
+                    
+                if mat1=='':
+                    prim_json.append({"attributes": att,
+                                      "indices": acc_index,
+                                      "mode": 1})
+                else:
+                    mat_index=self.get_mat_index(mat1)
+                    prim_json.append({"attributes": att,
+                                      "indices": acc_index,
+                                      "material": mat_index,
+                                      "mode": 1})
+                    
+                mesh_json.append({"name": self.mesh_list[i].name,
+                                  "primitives": prim_json})
+                
+                buf_json.append({"buffer": 0,
+                                 "byteLength": 4*len(vert_bin),
+                                 "byteOffset": offset,
+                                 "target": 34962})
+                offset+=4*len(vert_bin)
                 
             elif self.mesh_list[i].obj_type=='points':
             
-                # Here
-                print('x')
+                vert_bin=[]
+                for ii in range(0,len(self.mesh_list[i].vert_list)):
+                    v0=float(self.mesh_list[i].vert_list[ii][0])
+                    vert_bin.append(v0)
+                    v1=float(self.mesh_list[i].vert_list[ii][1])
+                    vert_bin.append(v1)
+                    v2=float(self.mesh_list[i].vert_list[ii][2])
+                    vert_bin.append(v2)
+                    
+                max_v=[0,0,0]
+                min_v=[0,0,0]
+                for ii in range(0,len(vert_bin),3):
+                    for jj in range(0,3):
+                        if ii==0 or vert_bin[ii+jj]<min_v[jj]:
+                            min_v[jj]=vert_bin[ii+jj]
+                        if ii==0 or vert_bin[ii+jj]>max_v[jj]:
+                            max_v[jj]=vert_bin[ii+jj]
+                            
+                acc_json.append({"bufferView": acc_index,
+                                 "componentType": 5126,
+                                 "count": int(len(vert_bin)/3),
+                                 "max": max_v,
+                                 "min": min_v,
+                                 "type": "VEC3"})
+                att["POSITION"]=acc_index
+                acc_index=acc_index+1
+
+                mat1=self.mesh_list[i].mat
+                    
+                if mat1=='':
+                    prim_json.append({"attributes": att,
+                                      "indices": acc_index,
+                                      "mode": 0})
+                else:
+                    mat_index=self.get_mat_index(mat1)
+                    prim_json.append({"attributes": att,
+                                      "indices": acc_index,
+                                      "material": mat_index,
+                                      "mode": 0})
+                    
+                mesh_json.append({"name": self.mesh_list[i].name,
+                                  "primitives": prim_json})
                 
+                buf_json.append({"buffer": 0,
+                                 "byteLength": 4*len(vert_bin),
+                                 "byteOffset": offset,
+                                 "target": 34962})
+                offset+=4*len(vert_bin)
+                
+            # End of if statements for lines and points
+            
         # End of loop over mesh list
                     
         # Add the top-level data to the json object
@@ -2662,7 +2766,6 @@ class td_plot_base(yt_plot_base):
                 self.to.add_mat(white)
             else:
                 print('Material '+mat+' not found in td-point.')
-                return x1,y1,z1
             
         # Get the material info
         m=self.to.get_mat(mat)
@@ -2673,6 +2776,55 @@ class td_plot_base(yt_plot_base):
             
         gf=mesh_object(uname,point_face,mat,'points')
         gf.vert_list=[x1,y1,z1]
+
+        self.to.add_object(gf)
+
+        return
+
+    def td_line(self,x1,y1,z1,x2,y2,z2,
+                 name='line',mat='white',
+                 match_txt=False,coords='user'):
+        """Documentation for o2graph command ``td-point``:
+
+        Plot a 3D point (experimental)
+
+        Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> [kwargs]``
+        
+        End of documentation for o2graph command ``td-line``.
+        """
+        uname=self.to.make_unique_name(name)
+
+        if coords=='user':
+            if self.xset==False or self.yset==False or self.zset==False:
+                print('xset:',self.xset)
+                print('yset:',self.yset)
+                print('zset:',self.zset)
+                raise ValueError("User coordinates not set in"+
+                                 " td_plot_base::td_point().")
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+            x2=(x2-self.xlo)/(self.xhi-self.xlo)
+            y2=(y2-self.ylo)/(self.yhi-self.ylo)
+            z2=(z2-self.zlo)/(self.zhi-self.zlo)
+
+        if self.to.is_mat(mat)==False:
+                
+            if mat=='white':
+                white=material(mat,[1,1,1])
+                self.to.add_mat(white)
+            else:
+                print('Material '+mat+' not found in td-point.')
+            
+        # Get the material info
+        m=self.to.get_mat(mat)
+        
+        if self.verbose>2:
+            print('td_point(): creating group named',uname,
+                  'with material',mat+'.')
+            
+        gf=mesh_object(uname,point_face,mat,'lines')
+        gf.vert_list=[x1,y1,z1,x2,y2,z2]
 
         self.to.add_object(gf)
 
