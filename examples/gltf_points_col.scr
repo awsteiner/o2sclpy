@@ -1,0 +1,7 @@
+o2graph -set td_wdir gltf \
+-create table x grid:0,1,0.01 -function "x+0.1*sin(1.0e6*x)" y \
+-function "x+y+0.1*sin(1.0e6*y)" z \
+-index -select-rows "N<10" -function "x*20" x2 \
+-td-scatter x y z x2 y z "r=0" -td-axis "$ R~(\mathrm{km}) $" \
+"$ M~(\mathrm{M}_{\odot}) $" "Probability" points_col_ \
+-gltf points_col.gltf
