@@ -2726,7 +2726,7 @@ class td_plot_base(yt_plot_base):
         return
 
     def td_cyl(self,x1,y1,z1,x2,y2,z2,r,name='cyl',
-                 mat='white',n_theta=20,coords='internal',tex_ul=[0,0,0]):
+               mat='white',n_theta=20,coords='internal',tex_ul=[0,0,0]):
         """Documentation for o2graph command ``td-cyl``:
 
         Create a 3D cylinder (experimental)

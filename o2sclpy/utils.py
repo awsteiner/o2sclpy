@@ -360,7 +360,8 @@ def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20,tex_ul=[0,0,0]):
     tx=[]
 
     # Construct an arbitrary vector not along the cylinder's axis
-    if tex_ul[0]==0 and tex_ul[1]==0 and tex_ul[2]==0:
+    arb=[0,0,0]
+    if (tex_ul[0]==0 and tex_ul[1]==0 and tex_ul[2]==0):
         arb=[1,0,0]
         if y1==y2 and z1==z2:
             arb=[0,1,0]

@@ -6087,7 +6087,7 @@ class o2graph_plotter(td_plot_base):
                         print('Process td-arrow.')
                         print('args:',strlist[ix:ix_next])
 
-                    if ix_next-ix>=7:
+                    if ix_next-ix>=8:
                         self.td_arrow(float(strlist[ix+1]),
                                       float(strlist[ix+2]),
                                       float(strlist[ix+3]),
@@ -6095,7 +6095,7 @@ class o2graph_plotter(td_plot_base):
                                       float(strlist[ix+5]),
                                       float(strlist[ix+6]),
                                       **string_to_dict2(strlist[ix+7]))
-                    elif ix_next-ix>=6:
+                    elif ix_next-ix>=7:
                         self.td_arrow(float(strlist[ix+1]),
                                       float(strlist[ix+2]),
                                       float(strlist[ix+3]),
@@ -6111,25 +6111,23 @@ class o2graph_plotter(td_plot_base):
                         print('Process td-cyl.')
                         print('args:',strlist[ix:ix_next])
 
-                    if ix_next-ix>=10:
+                    if ix_next-ix>=9:
                         self.td_cyl(float(strlist[ix+1]),
-                                      float(strlist[ix+2]),
-                                      float(strlist[ix+3]),
-                                      float(strlist[ix+4]),
-                                      float(strlist[ix+5]),
-                                      float(strlist[ix+6]),
-                                      float(strlist[ix+7]),
-                                      strlist[ix+8],
-                                      mat=strlist[ix+9])
-                    elif ix_next-ix>=9:
+                                    float(strlist[ix+2]),
+                                    float(strlist[ix+3]),
+                                    float(strlist[ix+4]),
+                                    float(strlist[ix+5]),
+                                    float(strlist[ix+6]),
+                                    float(strlist[ix+7]),
+                                    **string_to_dict2(strlist[ix+8]))
+                    elif ix_next-ix>=8:
                         self.td_cyl(float(strlist[ix+1]),
-                                      float(strlist[ix+2]),
-                                      float(strlist[ix+3]),
-                                      float(strlist[ix+4]),
-                                      float(strlist[ix+5]),
-                                      float(strlist[ix+6]),
-                                      float(strlist[ix+7]),
-                                      strlist[ix+8])
+                                    float(strlist[ix+2]),
+                                    float(strlist[ix+3]),
+                                    float(strlist[ix+4]),
+                                    float(strlist[ix+5]),
+                                    float(strlist[ix+6]),
+                                    float(strlist[ix+7]))
                     else:
                         print('Not enough arguments for td-cyl.')
 
