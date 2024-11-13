@@ -1405,7 +1405,7 @@ class threed_objects:
                     vert_bin.append(v1)
                     v2=float(self.mesh_list[i].vert_list[ii][2])
                     vert_bin.append(v2)
-
+                    
                 if texcoords:
                     txts_bin=[]
                     for ix in range(0,len(self.mesh_list[i].vt_list)):
@@ -2336,8 +2336,7 @@ class td_plot_base(yt_plot_base):
 
     def td_line(self,x1,y1,z1,x2,y2,z2,name='line',mat='',
                 coords='user'):
-        """
-        Documentation for o2graph command ``td-line``:
+        """Documentation for o2graph command ``td-line``:
 
         Plot a line in a 3d visualization (experimental)
 
@@ -2354,6 +2353,10 @@ class td_plot_base(yt_plot_base):
         ``user``, then the coordinates are in the user coordinate
         system.
 
+        Note that lines are not supported by all 3D viewing engines.
+        They work on GLTF viewer and GLTF validator, but not on
+        3dviewer.net. I haven't figured out how to get Blender to
+        import GLTF lines yet. Points work better.
         """
         uname=self.to.make_unique_name(name)
 
