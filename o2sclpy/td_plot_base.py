@@ -40,6 +40,38 @@ from o2sclpy.kde import *
 
 from datetime import datetime
 
+def col_grid_256(c: float):
+    """Ensure a floating point color has a limited resolution of 256
+    colors.
+    """
+    if c<0.0:
+        c=0.0
+    if c>1.0:
+        c=1.0
+    return float(int(c*255.0))/255.0
+
+def color_norm(col_arr):
+    """
+    Normalize and standardize colors
+    """
+    lo=numpy.min(col_arr)
+    hi=numpy.max(col_arr)
+    if lo==hi:
+        hi=lo+0.1
+        lo=lo-0.1
+        if hi>1.0:
+            hi=1.0
+        if rlo<0.0:
+            lo=0.0
+    col_arr2=[]
+    if lo<0 or hi>1:
+        for i in range(0,len(col_arr)):
+            col_arr2.append(col_grid_256((col_arr[i]-lo)/(hi-lo)))
+    else:
+        for i in range(0,len(col_arr)):
+            col_arr2.append(col_grid_256(col_arr[i]))
+    return lo,hi,col_arr2
+    
 def o2scl_get_type(amp):
     """
     Get the type of the current object stored in the acol_manager
@@ -229,7 +261,7 @@ class mesh_object:
         for i in range(0,len(self.faces)):
             if len(self.faces[i])==4 or len(self.faces[i])==7:
                 found_four=True
-        if verbose>0:
+        if verbose>1:
             print('mesh_object::sort_by_mat(): found_four',found_four)
         if found_four==False:
             return
@@ -745,7 +777,7 @@ class threed_objects:
                                  str(mag)+' ['+str(mesh.vn_list[i])+'].')
         
         # Iterate over each face
-        if verbose>0:
+        if verbose>1:
             print('threed_object::add_object():',
                   'Adjust faces for group',mesh.name,'and check.')
 
@@ -789,7 +821,7 @@ class threed_objects:
                                  'materials.')
 
         # Sort the group of vertices by material for output later
-        if verbose>0:
+        if verbose>1:
             print('threed_object::add_object(): Sort group named',
                   mesh.name,'by material.')
         mesh.sort_by_mat(verbose=verbose)
@@ -1776,31 +1808,54 @@ class td_plot_base(yt_plot_base):
 
         return
         
-    def td_scatter(self, amp, args, n_subdiv: int = 0, r: float = 0.04,
+    def td_scatter(self, amp, args, mat_name: str = '',
+                   r: float = 0.04, n_subdiv: int = 0, 
                    metal: str = '',rough: str = ''):
+        
         """Documentation for o2graph command ``td-scatter``:
 
         Create a 3D scatter plot (experimental).
 
         Command-line arguments: ``<x column> <y column> <z column> 
-        [r column] [g column] [b column] [kwargs]``
+        [r column, g column, b column] [kwargs]``
 
-        Create a scatter plot from columns of a table object. Useful
+        Create a scatter plot from columns of a table object.
+        The red, green and blue columns, if specified, are
+        automatically no
+
+        Useful
         kwargs are ``n_subdiv=0``, the number of subdivisions of the
         original icosahedron, ``r=0.04``, the radius of the icosphere
-        in the internal coordinate system, ``metal=''``, the column
-        which provides the metalness, ``rough=''``, the column which
-        describes the roughness. If the value of ``r`` is less than
-        or equal to zero, then the icospheres are written as simple
-        points.
+        in the internal coordinate system. The argument ``metal=''``,
+        can either be a string containing a floating-point value
+        between 0 and 1 to indicate the metalness, or the previx
+        ``col:`` and then the name of the table column from which to
+        take the value of the metalness. Similarly, the keyword
+        ``rough=''`` can be either a float or a string beginning with
+        ``col:``. If the value of ``r`` is less than or equal to zero,
+        then the icospheres are written as points.
+
+        If the x-, y- and z-limits are not set, then ``td-scatter``
+        uses the minimum and maximum values from the scattered points
+        to set these limits so that the output will be normalized
+        to be between 0 and 1.
+
+        This function either creates all objects with the same
+        material (by specifying a value for mat_name) or creates a new
+        unique material for each point. You may need to create custom
+        Python code for more sophisticated handling of the materials
+        for the scatter plot.
+
         """
         curr_type=o2scl_get_type(amp)
         amt=acol_manager(amp)
 
         # If true, then a color map has been specified and we need
-        # to add materials for each face
+        # to add materials for each point or face
         colors=False
-        
+
+        # Determine if the current object is a table and if
+        # color columns were specified
         if curr_type==b'table':
             col_x=args[0]
             col_y=args[1]
@@ -1820,14 +1875,25 @@ class td_plot_base(yt_plot_base):
                   curr_type,".")
             return
 
+        # If neither colors nor a material was specified, then
+        # we'll use the default white
+        if colors==False and mat_name=='':
+            mat_name='white'
+            if self.to.is_mat('white')==False:
+                white=material('white',[1,1,1])
+                self.to.add_mat(white)
+
+        # Check for a metalness column
         if metal[0:4]=='col:':
             col_m=metal[4:]
             print('Setting metalness to value from column',col_m)
-            
+
+        # Check for a roughness column
         if rough[0:4]=='col:':
             col_ro=rough[4:]
             print('Setting roughness to value from column',col_ro)
-        
+
+        # Get table object and xyz information
         table=amt.get_table_obj()
         n=table.get_nlines()
         cx=table[col_x][0:n]
@@ -1863,21 +1929,9 @@ class td_plot_base(yt_plot_base):
             cr=table[col_r][0:n]
             cg=table[col_g][0:n]
             cb=table[col_b][0:n]
-            rlo=numpy.min(cr)
-            rhi=numpy.max(cr)
-            glo=numpy.min(cg)
-            ghi=numpy.max(cg)
-            blo=numpy.min(cb)
-            bhi=numpy.max(cb)
-            if rlo==rhi:
-                rlo=0.0
-                rhi=1.0
-            if glo==ghi:
-                glo=0.0
-                ghi=1.0
-            if blo==bhi:
-                blo=0.0
-                bhi=1.0
+            rlo,rhi,cr=color_norm(cr)
+            glo,ghi,cg=color_norm(cg)
+            blo,bhi,cb=color_norm(cb)
             if col_m!='':
                 cm=table[col_m][0:n]
                 mlo=numpy.min(cm)
@@ -1891,7 +1945,7 @@ class td_plot_base(yt_plot_base):
 
             if colors==False:
     
-                gf=mesh_object('scatter',[],'',obj_type='points')
+                gf=mesh_object('scatter',[],obj_type='points')
                 
                 for i in range(0,n):
                     
@@ -1902,13 +1956,16 @@ class td_plot_base(yt_plot_base):
                     ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
                     znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
                     gf.vert_list.append([xnew,ynew,znew])
-                        
+
+                gf.mat=mat_name
+                self.to.add_object(gf,verbose=self.verbose)
+                
             else:
     
-                gf=mesh_object('scatter',[],'',obj_type='points')
-                
                 for i in range(0,n):
     
+                    gf=mesh_object('scatter',[],obj_type='points')
+                
                     if self.verbose>1 and i%100==99:
                         print('td_scatter(): Adding point',i+1,'of',n)
                     
@@ -1916,7 +1973,26 @@ class td_plot_base(yt_plot_base):
                     ynew=(cy[i]-self.ylo)/(self.yhi-self.ylo)
                     znew=(cz[i]-self.zlo)/(self.zhi-self.zlo)
                     gf.vert_list.append([xnew,ynew,znew])
-            
+
+                    if metal=='':
+                        metal_float=0.0
+                    elif col_m=='':
+                        metal_float=float(metal)
+                    else:
+                        metal_float=(cm[i]-mlo)/(mhi-mlo)
+                    if rough=='':
+                        rough_float=1.0
+                    elif col_ro=='':
+                        rough_float=float(rough)
+                    else:
+                        rough_float=(cro[i]-rolo)/(rohi-rolo)
+                        
+                    mat=material('mat_point_'+str(i),[cr[i],cg[i],cb[i]],
+                                 metal=metal_float,rough=rough_float)
+                    self.to.add_mat(mat)
+                    gf.mat='mat_point_'+str(i)
+                    self.to.add_object(gf,verbose=self.verbose)
+                    
         else:
                 
             if colors==False:
@@ -1976,32 +2052,32 @@ class td_plot_base(yt_plot_base):
                     else:
                         rough_float=(cro[i]-rolo)/(rohi-rolo)
     
-                    mat=material('mat_point_'+str(i),[(cr[i]-rlo)/(rhi-rlo),
-                                                      (cg[i]-glo)/(ghi-glo),
-                                                      (cb[i]-blo)/(bhi-blo)],
+                    mat=material('mat_point_'+str(i),[cr[i],cg[i],cb[i]],
                                  metal=metal_float,rough=rough_float)
                     self.to.add_mat(mat)
             
         # Convert to GLTF
-                
-        vert2=[]
-        norms2=[]
-        
-        for i in range(0,len(gf.faces)):
 
-            if self.verbose>1 and i%10000==9999:
-                print('td_scatter(): convert',i+1,'of',len(gf.faces))
-                    
-            # Add the vertices to the new vertex array
-            vert2.append(gf.vert_list[gf.faces[i][0]])
-            vert2.append(gf.vert_list[gf.faces[i][1]])
-            vert2.append(gf.vert_list[gf.faces[i][2]])
+        if False:
+            
+            vert2=[]
+            norms2=[]
+            
+            for i in range(0,len(gf.faces)):
     
-            # Add the normals to the new normal array
-            norms2.append(gf.vn_list[gf.faces[i][0]])
-            norms2.append(gf.vn_list[gf.faces[i][1]])
-            norms2.append(gf.vn_list[gf.faces[i][2]])
-
+                if self.verbose>1 and i%10000==9999:
+                    print('td_scatter(): convert',i+1,'of',len(gf.faces))
+                        
+                # Add the vertices to the new vertex array
+                vert2.append(gf.vert_list[gf.faces[i][0]])
+                vert2.append(gf.vert_list[gf.faces[i][1]])
+                vert2.append(gf.vert_list[gf.faces[i][2]])
+        
+                # Add the normals to the new normal array
+                norms2.append(gf.vn_list[gf.faces[i][0]])
+                norms2.append(gf.vn_list[gf.faces[i][1]])
+                norms2.append(gf.vn_list[gf.faces[i][2]])
+                
         if False:
             print('td_scatter:')
             for ki in range(0,len(gf.faces)):
@@ -2028,12 +2104,8 @@ class td_plot_base(yt_plot_base):
             print(len(vert2),len(norms2),len(gf.faces))
             quit()
         
-        if self.to.is_mat('white')==False:
-            white=material('white',[1,1,1])
-            self.to.add_mat(white)
-            
-        gf.vert_list=vert2
-        gf.vn_list=norms2
+        #gf.vert_list=vert2
+        #gf.vn_list=norms2
         if colors==False:
             gf.mat='white'
         self.to.add_object(gf,verbose=self.verbose)
@@ -2232,7 +2304,7 @@ class td_plot_base(yt_plot_base):
 
         return
 
-    def td_line(self,x1,y1,z1,x2,y2,z2,name='line',mat='white',
+    def td_line(self,x1,y1,z1,x2,y2,z2,name='line',mat_name='',
                 coords='user'):
         """
         Documentation for o2graph command ``td-line``:
@@ -2258,7 +2330,7 @@ class td_plot_base(yt_plot_base):
         if coords=='user':
             if self.xset==False or self.yset==False or self.zset==False:
                 raise ValueError("User coordinates not set in"+
-                                 " 'td-arrow'.")
+                                 " 'td-line'.")
             x1=(x1-self.xlo)/(self.xhi-self.xlo)
             y1=(y1-self.ylo)/(self.yhi-self.ylo)
             z1=(z1-self.zlo)/(self.zhi-self.zlo)
@@ -2268,32 +2340,26 @@ class td_plot_base(yt_plot_base):
             
         line_vert=[[x1,y1,z1],[x2,y2,z2]]
     
-        if type(mat)==str:
-            if not self.to.is_mat(mat):
-                if mat=='white':
-                    white=material('white',[1,1,1])
-                    self.to.add_mat(white)
-                else:
-                    print('No material named',mat,'in td-line')
-                    return
-            if self.verbose>2:
-                print('td_line(): creating group named',name,'with material',
-                      mat+'.')
-            gf=mesh_object(uname,[],mat=mat,obj_type='lines')
-            gf.vert_list=line_vert
-            self.to.add_object(gf)
+        if mat_name=='':
+            mat_name='white'
+            if self.to.is_mat('white')==False:
+                white=material('white',[1,1,1])
+                self.to.add_mat(white)
+                
+        if self.verbose>2:
+            print('td_plot_base::td_line():',
+                  'creating group named',uname,'with material',
+                  mat_name+'.')
+            
+        gf=mesh_object(uname,[],mat=mat,obj_type='lines')
+        gf.vert_list=line_vert
+
+        m=self.to.get_mat(mat_name)
+        if m.txt!='':
+            gf.vt_list=[[0,0],[1,1]]
+        
+        self.to.add_object(gf)
                                
-        else:
-            
-            if self.verbose>2:
-                print('td_line(): creating group named',uname,'with material',
-                      mat.name+'.')
-            if not self.to.is_mat(mat.name):
-                self.to.add_mat(mat)
-            gf=mesh_object(uname,[],mat=mat.name,obj_type='lines')
-            gf.vert_list=line_vert
-            self.to.add_object(gf)
-            
         return
 
     def td_grid(self,n,name='grid',mat='white',auto_labels=False):
@@ -2773,7 +2839,7 @@ class td_plot_base(yt_plot_base):
         return x1,y1,z1,x2,y2,z2,x3,y3,z3
 
     def td_point(self,x1,y1,z1,
-                 name='point',mat='white',
+                 name='point',mat_name='white',
                  match_txt=False,coords='user'):
         """Documentation for o2graph command ``td-point``:
 
@@ -2796,22 +2862,19 @@ class td_plot_base(yt_plot_base):
             y1=(y1-self.ylo)/(self.yhi-self.ylo)
             z1=(z1-self.zlo)/(self.zhi-self.zlo)
 
-        if self.to.is_mat(mat)==False:
+        if self.to.is_mat(mat_name)==False:
                 
-            if mat=='white':
-                white=material(mat,[1,1,1])
+            if mat_name=='white':
+                white=material(mat_name,[1,1,1])
                 self.to.add_mat(white)
             else:
-                print('Material '+mat+' not found in td-point.')
+                print('Material '+mat_name+' not found in td-point.')
             
-        # Get the material info
-        m=self.to.get_mat(mat)
-        
         if self.verbose>2:
             print('td_point(): creating group named',uname,
-                  'with material',mat+'.')
+                  'with material',mat_name+'.')
             
-        gf=mesh_object(uname,[],mat,'points')
+        gf=mesh_object(uname,[],mat_name,'points')
         gf.vert_list=[[x1,y1,z1]]
 
         self.to.add_object(gf)
