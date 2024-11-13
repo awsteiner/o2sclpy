@@ -2739,6 +2739,67 @@ class td_plot_base(yt_plot_base):
 
         return
 
+    def td_cyl(self,x1,y1,z1,x2,y2,z2,r,name='cyl',
+                 mat='white',n_theta=20,coords='internal'):
+        """Documentation for o2graph command ``td-cyl``:
+
+        Create a 3D cylinder (experimental)
+
+        Command-line arguments: ``<x1> <y1> <z1> <x2> <y2> <z2> <r>
+        [kwargs]``
+
+        This command plots a cylinder from point (x1,y1,z1) to point
+        (x2,y2,z2) with radius r. The argument ``n_theta`` specifies
+        the number of vertices in the azimuthal direction.
+        """
+        uname=self.to.make_unique_name(name)
+
+        if coords=='user':
+            if self.xset==False or self.yset==False or self.zset==False:
+                raise ValueError("User coordinates not set in"+
+                                 " td_plot_base::td-arrow().")
+            x1=(x1-self.xlo)/(self.xhi-self.xlo)
+            y1=(y1-self.ylo)/(self.yhi-self.ylo)
+            z1=(z1-self.zlo)/(self.zhi-self.zlo)
+            x2=(x2-self.xlo)/(self.xhi-self.xlo)
+            y2=(y2-self.ylo)/(self.yhi-self.ylo)
+            z2=(z2-self.zlo)/(self.zhi-self.zlo)
+        
+        cyl_vert,cyl_norm,cyl_face=cylinder(x1,y1,z1,x2,y2,z2)
+
+        if type(mat)==str:
+            
+            if not self.to.is_mat(mat):
+                if mat=='white':
+                    white=material('white',[1,1,1])
+                    self.to.add_mat(white)
+                else:
+                    print('No material named',mat,
+                          'in td_plot_base::td_cyl().')
+                    return
+            if self.verbose>2:
+                print('td_plot_base::td_cyl(): creating group named',
+                      uname,'with material',mat+'.')
+                
+            gf=mesh_object(uname,cyl_face,mat)
+            gf.vert_list=cyl_vert
+            gf.vn_list=cyl_norm
+            self.to.add_object(gf)
+            
+        else:
+            
+            if self.verbose>2:
+                print('td_plot_base::td_cyl(): creating group named',
+                      uname,'with material',mat.name+'.')
+            if not self.to.is_mat(mat.name):
+                self.to.add_mat(mat)
+            gf=mesh_object(uname,cyl_face,mat.name)
+            gf.vert_list=cyl_vert
+            gf.vn_list=cyl_norm
+            self.to.add_object(gf)
+
+        return
+
     def td_pgram(self,x1,y1,z1,x2,y2,z2,x3,y3,z3,
                  name='pgram',mat='white',force_rect=False,
                  match_txt=False,coords='user'):

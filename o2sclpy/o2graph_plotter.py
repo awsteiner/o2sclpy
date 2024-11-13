@@ -150,6 +150,7 @@ base_list=[
      "coordinate system is always right-handed."],
     ["td-axis-label",td_plot_base.td_axis_label.__doc__],
     ["td-arrow",td_plot_base.td_arrow.__doc__],
+    ["td-cyl",td_plot_base.td_cyl.__doc__],
     ["td-den-plot",td_plot_base.td_den_plot.__doc__],
     ["td-icos",td_plot_base.td_icos.__doc__],
     ["td-pgram",td_plot_base.td_pgram.__doc__],
@@ -6074,7 +6075,8 @@ class o2graph_plotter(td_plot_base):
                             tstr=("<class 'yt.visualization.volume_"+
                                   "rendering.render_source.")
                             print('yt-source-list',icnt,key,
-                                  str(type(value)).replace(tstr,"<class '..."))
+                                  str(type(value)).replace(tstr,
+                                                           "<class '..."))
                             icnt=icnt+1
                         if icnt==0:
                             print('No yt sources.')
@@ -6085,25 +6087,51 @@ class o2graph_plotter(td_plot_base):
                         print('Process td-arrow.')
                         print('args:',strlist[ix:ix_next])
 
-                    if ix_next-ix>=9:
+                    if ix_next-ix>=7:
                         self.td_arrow(float(strlist[ix+1]),
                                       float(strlist[ix+2]),
                                       float(strlist[ix+3]),
                                       float(strlist[ix+4]),
                                       float(strlist[ix+5]),
                                       float(strlist[ix+6]),
-                                      strlist[ix+7],
-                                      mat=strlist[ix+8])
-                    elif ix_next-ix>=8:
+                                      **string_to_dict2(strlist[ix+7]))
+                    elif ix_next-ix>=6:
                         self.td_arrow(float(strlist[ix+1]),
                                       float(strlist[ix+2]),
                                       float(strlist[ix+3]),
                                       float(strlist[ix+4]),
                                       float(strlist[ix+5]),
-                                      float(strlist[ix+6]),
-                                      strlist[ix+7])
+                                      float(strlist[ix+6]))
                     else:
                         print('Not enough arguments for td-arrow.')
+
+                elif cmd_name=='td-cyl':
+
+                    if self.verbose>2:
+                        print('Process td-cyl.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix>=10:
+                        self.td_cyl(float(strlist[ix+1]),
+                                      float(strlist[ix+2]),
+                                      float(strlist[ix+3]),
+                                      float(strlist[ix+4]),
+                                      float(strlist[ix+5]),
+                                      float(strlist[ix+6]),
+                                      float(strlist[ix+7]),
+                                      strlist[ix+8],
+                                      mat=strlist[ix+9])
+                    elif ix_next-ix>=9:
+                        self.td_cyl(float(strlist[ix+1]),
+                                      float(strlist[ix+2]),
+                                      float(strlist[ix+3]),
+                                      float(strlist[ix+4]),
+                                      float(strlist[ix+5]),
+                                      float(strlist[ix+6]),
+                                      float(strlist[ix+7]),
+                                      strlist[ix+8])
+                    else:
+                        print('Not enough arguments for td-cyl.')
 
                 elif cmd_name=='td-axis-label':
 
