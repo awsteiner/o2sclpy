@@ -183,9 +183,10 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
         arb=[0,1,0]
 
     # Take the transverse component
-    arb=[arb[0]-arb[0]*(x2-x1),
-         arb[1]-arb[1]*(y2-y1),
-         arb[2]-arb[2]*(z2-z1)]
+    cost=(arb[0]*(x2-x1)+arb[1]*(y2-y1)+arb[2]*(z2-z1))/arrow_len
+    ux=[(x2-x1)/arrow_len,(y2-y1)/arrow_len,(z2-z1)/arrow_len]
+    aperp=[ux[0]*cost,ux[1]*cost,ux[2]*cost]
+    arb=[arb[0]-aperp[0],arb[1]-aperp[1],arb[2]-aperp[2]]
 
     # Renormalize to the correct length
     arb_norm=numpy.sqrt(arb[0]*arb[0]+arb[1]*arb[1]+arb[2]*arb[2])
@@ -351,7 +352,6 @@ def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20,tex_ul=[0,0,0]):
     This function returns a set of three lists, the first is the
     vertices, the second is the vertex normals, and the third are the
     faces. The normal vectors always point out away from the axis.
-
     """
     
     vert=[]
@@ -359,17 +359,20 @@ def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20,tex_ul=[0,0,0]):
     face=[]
     tx=[]
 
+    arrow_len=numpy.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)
+    
     # Construct an arbitrary vector not along the cylinder's axis
-    arb=[0,0,0]
     if (tex_ul[0]==0 and tex_ul[1]==0 and tex_ul[2]==0):
         arb=[1,0,0]
         if y1==y2 and z1==z2:
             arb=[0,1,0]
             
         # Take the transverse component
-        arb=[arb[0]-arb[0]*(x2-x1),
-             arb[1]-arb[1]*(y2-y1),
-             arb[2]-arb[2]*(z2-z1)]
+        cost=(arb[0]*(x2-x1)+arb[1]*(y2-y1)+arb[2]*(z2-z1))/arrow_len
+        ux=[(x2-x1)/arrow_len,(y2-y1)/arrow_len,(z2-z1)/arrow_len]
+        aperp=[ux[0]*cost,ux[1]*cost,ux[2]*cost]
+        arb=[arb[0]-aperp[0],arb[1]-aperp[1],arb[2]-aperp[2]]
+        
     else:
         arb[0]=tex_ul[0]
         arb[1]=tex_ul[1]
