@@ -1391,6 +1391,12 @@ class threed_objects:
 
             if self.mesh_list[i].obj_type=='lines':
 
+                mat1=self.get_mat(self.mesh_list[i].mat)
+
+                texcoords=False
+                if len(self.mesh_list[i].vt_list)>0 and mat1.txt!='':
+                    texcoords=True
+                    
                 vert_bin=[]
                 for ii in range(0,len(self.mesh_list[i].vert_list)):
                     v0=float(self.mesh_list[i].vert_list[ii][0])
@@ -1399,6 +1405,14 @@ class threed_objects:
                     vert_bin.append(v1)
                     v2=float(self.mesh_list[i].vert_list[ii][2])
                     vert_bin.append(v2)
+
+                if texcoords:
+                    txts_bin=[]
+                    for ix in range(0,len(self.mesh_list[i].vt_list)):
+                        v6=float(self.mesh_list[i].vt_list[ix][0])
+                        txts_bin.append(v6)
+                        v7=float(self.mesh_list[i].vt_list[ix][1])
+                        txts_bin.append(v7)
                     
                 max_v=[0,0,0]
                 min_v=[0,0,0]
@@ -1418,13 +1432,19 @@ class threed_objects:
                 att["POSITION"]=acc_index
                 acc_index=acc_index+1
 
-                mat1=self.mesh_list[i].mat
-                    
+                if texcoords:
+                    acc_json.append({"bufferView": acc_index,
+                                     "componentType": 5126,
+                                     "count": int(len(txts_bin)/2),
+                                     "type": "VEC2"})
+                    att["TEXCOORD_0"]=acc_index
+                    acc_index=acc_index+1
+                                    
                 if mat1=='':
                     prim_json.append({"attributes": att,
                                       "mode": 1})
                 else:
-                    mat_index=self.get_mat_index(mat1)
+                    mat_index=self.get_mat_index(mat1.name)
                     prim_json.append({"attributes": att,
                                       "material": mat_index,
                                       "mode": 1})
@@ -1438,8 +1458,18 @@ class threed_objects:
                                  "target": 34962})
                 offset+=4*len(vert_bin)
                 
+                if texcoords:
+                    buf_json.append({"buffer": 0,
+                                     "byteLength": 4*len(txts_bin),
+                                     "byteOffset": offset,
+                                     "target": 34962})
+                    offset+=4*len(txts_bin)
+                    
                 dat1=pack('<'+'f'*len(vert_bin),*vert_bin)
                 f2.write(dat1)
+                if texcoords:
+                    dat4=pack('<'+'f'*len(txts_bin),*txts_bin)
+                    f2.write(dat4)
                 
             elif self.mesh_list[i].obj_type=='points':
             
@@ -2304,7 +2334,7 @@ class td_plot_base(yt_plot_base):
 
         return
 
-    def td_line(self,x1,y1,z1,x2,y2,z2,name='line',mat_name='',
+    def td_line(self,x1,y1,z1,x2,y2,z2,name='line',mat='',
                 coords='user'):
         """
         Documentation for o2graph command ``td-line``:
@@ -2340,8 +2370,8 @@ class td_plot_base(yt_plot_base):
             
         line_vert=[[x1,y1,z1],[x2,y2,z2]]
     
-        if mat_name=='':
-            mat_name='white'
+        if mat=='':
+            mat='white'
             if self.to.is_mat('white')==False:
                 white=material('white',[1,1,1])
                 self.to.add_mat(white)
@@ -2349,12 +2379,12 @@ class td_plot_base(yt_plot_base):
         if self.verbose>2:
             print('td_plot_base::td_line():',
                   'creating group named',uname,'with material',
-                  mat_name+'.')
+                  mat+'.')
             
         gf=mesh_object(uname,[],mat=mat,obj_type='lines')
         gf.vert_list=line_vert
 
-        m=self.to.get_mat(mat_name)
+        m=self.to.get_mat(mat)
         if m.txt!='':
             gf.vt_list=[[0,0],[1,1]]
         
