@@ -30,7 +30,7 @@ from o2sclpy.utils import force_bytes, default_plot, cross
 from o2sclpy.utils import is_number, arrow, icosphere, png_power_two
 from o2sclpy.utils import length_without_colors, wrap_line, screenify_py
 from o2sclpy.utils import string_equal_dash, latex_to_png, cmap_to_png
-from o2sclpy.utils import force_string, remove_spaces, dist3
+from o2sclpy.utils import force_string, remove_spaces, dist3, cylinder
 from o2sclpy.plot_base import plot_base
 from o2sclpy.yt_plot_base import yt_plot_base
 from o2sclpy.doc_data import version
@@ -2706,41 +2706,27 @@ class td_plot_base(yt_plot_base):
         
         arr_vert,arr_norm,arr_face=arrow(x1,y1,z1,x2,y2,z2)
 
-        if type(mat)==str:
-            
-            if not self.to.is_mat(mat):
-                if mat=='white':
-                    white=material('white',[1,1,1])
-                    self.to.add_mat(white)
-                else:
-                    print('No material named',mat,
-                          'in td_plot_base::td_arrow().')
-                    return
-            if self.verbose>2:
-                print('td_plot_base::td_arrow(): creating group named',uname,
-                      'with material',mat+'.')
+        if not self.to.is_mat(mat):
+            if mat=='white':
+                white=material('white',[1,1,1])
+                self.to.add_mat(white)
+            else:
+                print('No material named',mat,
+                      'in td_plot_base::td_arrow().')
+                return
+        if self.verbose>2:
+            print('td_plot_base::td_arrow(): creating group named',uname,
+                  'with material',mat+'.')
                 
-            gf=mesh_object(uname,arr_face,mat)
-            gf.vert_list=arr_vert
-            gf.vn_list=arr_norm
-            self.to.add_object(gf)
+        gf=mesh_object(uname,arr_face,mat)
+        gf.vert_list=arr_vert
+        gf.vn_list=arr_norm
+        self.to.add_object(gf)
             
-        else:
-            
-            if self.verbose>2:
-                print('td_plot_base::td_arrow(): creating group named',
-                      uname,'with material',mat.name+'.')
-            if not self.to.is_mat(mat.name):
-                self.to.add_mat(mat)
-            gf=mesh_object(uname,arr_face,mat.name)
-            gf.vert_list=arr_vert
-            gf.vn_list=arr_norm
-            self.to.add_object(gf)
-
         return
 
     def td_cyl(self,x1,y1,z1,x2,y2,z2,r,name='cyl',
-                 mat='white',n_theta=20,coords='internal'):
+                 mat='white',n_theta=20,coords='internal',tex_ul=[0,0,0]):
         """Documentation for o2graph command ``td-cyl``:
 
         Create a 3D cylinder (experimental)
@@ -2765,39 +2751,30 @@ class td_plot_base(yt_plot_base):
             y2=(y2-self.ylo)/(self.yhi-self.ylo)
             z2=(z2-self.zlo)/(self.zhi-self.zlo)
         
-        cyl_vert,cyl_norm,cyl_face=cylinder(x1,y1,z1,x2,y2,z2)
+        cyl_vert,cyl_norm,cyl_face,cyl_tx=cylinder(x1,y1,z1,x2,y2,z2,r,
+                                                   n_theta=n_theta,
+                                                   tex_ul=tex_ul)
 
-        if type(mat)==str:
-            
-            if not self.to.is_mat(mat):
-                if mat=='white':
-                    white=material('white',[1,1,1])
-                    self.to.add_mat(white)
-                else:
-                    print('No material named',mat,
-                          'in td_plot_base::td_cyl().')
-                    return
-            if self.verbose>2:
-                print('td_plot_base::td_cyl(): creating group named',
-                      uname,'with material',mat+'.')
+        if not self.to.is_mat(mat):
+            if mat=='white':
+                white=material('white',[1,1,1])
+                self.to.add_mat(white)
+            else:
+                print('No material named',mat,
+                      'in td_plot_base::td_cyl().')
+                return
+        if self.verbose>2:
+            print('td_plot_base::td_cyl(): creating group named',
+                  uname,'with material',mat+'.')
                 
-            gf=mesh_object(uname,cyl_face,mat)
-            gf.vert_list=cyl_vert
-            gf.vn_list=cyl_norm
-            self.to.add_object(gf)
+        gf=mesh_object(uname,cyl_face,mat)
+        gf.vert_list=cyl_vert
+        gf.vn_list=cyl_norm
+        m=self.to.get_mat(mat)
+        if m.txt!='':
+            gf.vt_list=cyl_tx
+        self.to.add_object(gf)
             
-        else:
-            
-            if self.verbose>2:
-                print('td_plot_base::td_cyl(): creating group named',
-                      uname,'with material',mat.name+'.')
-            if not self.to.is_mat(mat.name):
-                self.to.add_mat(mat)
-            gf=mesh_object(uname,cyl_face,mat.name)
-            gf.vert_list=cyl_vert
-            gf.vn_list=cyl_norm
-            self.to.add_object(gf)
-
         return
 
     def td_pgram(self,x1,y1,z1,x2,y2,z2,x3,y3,z3,

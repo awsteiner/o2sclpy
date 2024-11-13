@@ -331,7 +331,7 @@ def arrow(x1,y1,z1,x2,y2,z2,r=0,tail_ratio=0.9,n_theta=20,
             
     return vert2,norms2,face2
 
-def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20):
+def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20,tex_ul=[0,0,0]):
     """Create a set of vertices and triangular faces for an
     cylinder
 
@@ -340,27 +340,39 @@ def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20):
     n_theta specifies the number of vertices in the azimuthal
     direction.
 
+    The keyword argument ``tex_ul`` specifies the location of the
+    upper-left corner of the texture. This point is automatically
+    renormalized to ensure that the distance between that point and
+    ``[x1,y1,z1]`` is exactly equal to the radius of the cylinder,
+    ``r`` (AWS, 11/13/24, I need to check this math). If the default
+    value of ``tex_ul`` is given, then this function chooses the
+    upper-left corner arbitrarily.
+
     This function returns a set of three lists, the first is the
     vertices, the second is the vertex normals, and the third are the
     faces. The normal vectors always point out away from the axis.
+
     """
     
-    # The length of the arrow
-    arrow_len=numpy.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)
-
     vert=[]
     vn=[]
     face=[]
+    tx=[]
 
-    # Construct an arbitrary vector not along the arrow's axis
-    arb=[1,0,0]
-    if y1==y2 and z1==z2:
-        arb=[0,1,0]
-
-    # Take the transverse component
-    arb=[arb[0]-arb[0]*(x2-x1),
-         arb[1]-arb[1]*(y2-y1),
-         arb[2]-arb[2]*(z2-z1)]
+    # Construct an arbitrary vector not along the cylinder's axis
+    if tex_ul[0]==0 and tex_ul[1]==0 and tex_ul[2]==0:
+        arb=[1,0,0]
+        if y1==y2 and z1==z2:
+            arb=[0,1,0]
+            
+        # Take the transverse component
+        arb=[arb[0]-arb[0]*(x2-x1),
+             arb[1]-arb[1]*(y2-y1),
+             arb[2]-arb[2]*(z2-z1)]
+    else:
+        arb[0]=tex_ul[0]
+        arb[1]=tex_ul[1]
+        arb[2]=tex_ul[2]
 
     # Renormalize to the correct length
     arb_norm=numpy.sqrt(arb[0]*arb[0]+arb[1]*arb[1]+arb[2]*arb[2])
@@ -377,8 +389,9 @@ def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20):
     for j in range(0,3):
         cross[j]=cross[j]/cross_norm*r
 
-    # Handle the tail
+    # Create the cylinder
     for i in range(0,n_theta):
+        
         theta=float(i)*numpy.pi*2/float(n_theta)
         vert.append([x1+arb[0]*numpy.cos(theta)+
                      cross[0]*numpy.sin(theta),
@@ -394,6 +407,8 @@ def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20):
                     cross[2]*numpy.sin(theta)]
         norm3(ntmp)
         vn.append(ntmp)
+        tx.append([0.0,float(i)/float(n_theta)])
+        
         vert.append([x2+arb[0]*numpy.cos(theta)+
                      cross[0]*numpy.sin(theta),
                      y2+arb[1]*numpy.cos(theta)+
@@ -408,6 +423,8 @@ def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20):
                    cross[2]*numpy.sin(theta)]
         norm3(ntmp)
         vn.append(ntmp)
+        tx.append([1.0,float(i)/float(n_theta)])
+        
         if i!=n_theta-1:
             face.append([2*i+1,2*i+3,2*i+2])
             face.append([2*i+2,2*i+3,2*i+4])
@@ -420,6 +437,7 @@ def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20):
     vert2=[]
     norms2=[]
     face2=[]
+    tx2=[]
 
     for i in range(0,len(face)):
 
@@ -432,6 +450,10 @@ def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20):
         norms2.append(vn[face[i][1]-1])
         norms2.append(vn[face[i][2]-1])
 
+        tx2.append(tx[face[i][0]-1])
+        tx2.append(tx[face[i][1]-1])
+        tx2.append(tx[face[i][2]-1])
+        
         face2.append([i*3,i*3+1,i*3+2])
 
     # Print out results
@@ -457,7 +479,7 @@ def cylinder(x1,y1,z1,x2,y2,z2,r,n_theta=20):
         print(len(vert2),len(norms2),len(face2))
         #quit()
             
-    return vert2,norms2,face2
+    return vert2,norms2,face2,tx2
 
 def icosphere(x,y,z,r,n_subdiv: int = 0, phi_cut=[0,0]):
     """Construct the vertices and faces of an icosphere centered at
