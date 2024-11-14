@@ -741,14 +741,14 @@ class interpm_tf_dnn:
         
         return
     
-    def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
-                 transform_in='none',transform_out='none',
-                 test_size=0.0,evaluate=False,
-                 hlayers=[],activations=[],
-                 out_act='linear',batch_size=32,epochs=100,
-                 loss='mean_squared_error',monitor='val_loss',
-                 ls_factor=0.5,ls_patience=10,ls_min_lr=1.0e-6,
-                 es_min_delta=1.0e-4,es_patience=100):
+    def set_data(self, in_data, out_data, outformat='numpy', verbose=0,
+                 transform_in='none', transform_out='none',
+                 test_size=0.0, evaluate=False,
+                 hlayers=[], activations=[],
+                 out_act='linear', batch_size=32, epochs=100,
+                 loss='mean_squared_error', monitor='val_loss',
+                 ls_factor=0.5, ls_patience=5, ls_min_lr=1.0e-6,
+                 es_min_delta=1.0e-6, es_patience=10):
         """
         Set the input and output data to train the interpolator
 
@@ -764,6 +764,16 @@ class interpm_tf_dnn:
 
         from sklearn.model_selection import train_test_split
         import tensorflow as tf
+
+        gpu = tf.config.experimental.list_physical_devices('GPU')
+        if gpu:
+            try:
+                tf.config.experimental.set_memory_growth(gpu[0], True)
+                print("GPU memory growth enabled.")
+            except RuntimeError as e:
+                print(f"Could not enable memory growth: {e}")
+        else:
+            print("No GPU found.")
         
         if verbose>0:
             print('interpm_tf_dnn::set_data():')
@@ -815,15 +825,14 @@ class interpm_tf_dnn:
         
         if self.transform_out=='minmax_0':
             self.SS2=MinMaxScaler(feature_range=(0,1))
-            try:
-                i_nonzeros=out_data!=0
-                out_data_trans=numpy.copy(out_data)
-                out_data_trans[i_nonzeros]=self.SS2.fit_transform(
-                    out_data[i_nonzeros].reshape(-1,1)).flatten()
-            except:
-                out_data=numpy.array(out_data).reshape(-1,1)
-                out_data_trans=self.SS2.transform(out_data)
+            i_nonzeros=out_data!=0
+            out_data_trans=numpy.copy(out_data)
+            out_data_trans[i_nonzeros]=self.SS2.fit_transform(
+                out_data[i_nonzeros].reshape(-1,1)).flatten()
+        elif self.transform_out=='minmax_x':
+            out_data_trans=self.SS1.transform(out_data.reshape(-1,1))
         elif self.transform_out=='minmax_1':
+            self.SS2=MinMaxScaler(feature_range=(0,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='minmax_pm':
             self.SS2=MinMaxScaler(feature_range=(-1,1))
@@ -1005,17 +1014,29 @@ class interpm_tf_dnn:
         """
         Evaluate the NN at point ``v``.
         """
-
-        if self.transform_in!='none':
-            v_trans=0
+        
+        v_trans=0
+        if self.transform_in=='none':
+            v_trans=v.reshape(1,-1)
+        elif self.transform_in=='minmax_0':    
             try:
-                v_trans=self.SS1.transform(v.reshape(1,-1))
+                i_nonzeros=v!=0
+                v_trans=numpy.copy(v)
+                v_trans[i_nonzeros]=self.SS1.transform(
+                    v[i_nonzeros].reshape(-1,1)).flatten()
             except Exception as e:
                 print('Exception at input transformation in interpm_tf_dnn:',
                       e)
         else:
-            v_trans=v.reshape(1,-1)
-        print('v_trans:', v_trans)
+            try:
+                v_trans=self.SS1.transform(v.reshape(1,-1))
+            except Exception as e:
+                print('Exception at input transformation in interpm_tf_dnn:',
+                        e)
+                
+        #print('v_trans:', v_trans)
+        #print('shape:', v_trans.shape)
+        
         try:
             # We don't want output at every point, even if verbose is
             # 1, so we use self.verbose-1 here for the argument to
@@ -1026,24 +1047,33 @@ class interpm_tf_dnn:
                 pred=self.dnn.predict(v_trans,verbose=0)
         except Exception as e:
             print('Exception 4 in interpm_tf_dnn:',e)
-        print('pred:', pred)    
-        if self.transform_out!='none':
+        
+        #print('pred:', pred)
+        #print('shape:', pred.shape)
+        
+        if self.transform_out=='none':
+            pred_trans=pred
+        elif self.transform_out=='minmax_x':
+            try:
+                pred_trans=self.SS1.inverse_transform(pred).flatten()
+            except Exception as e:
+                print('Exception 5 in interpm_tf_dnn:',e)
+        elif self.transform_out=='minmax_0':
+            try:
+                i_nonzeros=pred!=0
+                pred_trans=numpy.copy(pred)
+                pred_trans[i_nonzeros]=self.SS2.inverse_transform(
+                    pred[i_nonzeros].reshape(-1,1)).flatten()
+            except Exception as e:
+                print('Exception 6 in interpm_tf_dnn:',e)
+        else:
             try:
                 pred_trans=self.SS2.inverse_transform(pred)
             except Exception as e:
                 print('Exception 5 in interpm_tf_dnn:',e)
-            print('pred_trans:', pred_trans)
-        #elif self.transform_in=='minmax_0':
-        #    try:
-        #        i_nonzeros=pred!=0
-        #        pred_trans=numpy.copy(pred)
-        #        pred_trans[i_nonzeros]=self.SS1.inverse_transform(
-        #            pred[i_nonzeros].reshape(-1,1)).flatten()
-        #    except Exception as e:
-        #        print('Exception 6 in interpm_tf_dnn:',e)
-        else:
-            pred_trans=pred
-    
+
+        #print('pred_trans:', pred_trans)
+
         if self.outformat=='list':
             return pred_trans.tolist()
 
