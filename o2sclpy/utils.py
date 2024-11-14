@@ -83,7 +83,9 @@ def rect_to_spher(v):
 
 def spher_to_rect(v):
     """
-    Desc
+    The first element of v should be the radial coordinate, the second
+    element should be the polar angle, and the last argument should
+    be the azimuthal angle. The values ``x,y,z`` are returned. 
     """
     r=v[0]
     theta=v[1]

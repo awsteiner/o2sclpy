@@ -1,0 +1,9 @@
+# This example demonstrates various options for materials and the
+# associated latex or colormap texture files
+o2graph -set td_wdir gltf \
+-xlimits 0 1 -ylimits 0 1 -zlimits 0 1 \
+-td-mat grad 1 1 1 "txt=cmap:viridis,prefix=cyl_" \
+-td-mat red 1 0 0 \
+-td-cyl 0.1 0.2 0.3 0.1 0.2 0.9 0.05 "mat=grad" \
+-td-cyl 0.2 0.1 0.4 0.9 0.8 0.4 0.05 "mat=red" \
+-gltf cyl.gltf
