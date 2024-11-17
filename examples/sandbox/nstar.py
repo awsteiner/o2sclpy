@@ -32,10 +32,10 @@ og.zlimits(0,1)
 og.td_wdir='gltf'
 
 for i in range(0,20):
-    og.td_mat('lt_blue_'+str(i),0.8+0.2*float(i)/19.0,
-              0.8+0.2*float(i)/19.0,1.0,
+    og.td_mat('lt_blue_'+str(i),0.6+0.4*float(i)/19.0,
+              0.6+0.4*float(i)/19.0,1.0,
               alpha=1.0,metal=1.0,rough=1.0,
-              ds=True)
+              ds=True,efr=0.5,efg=0.5,efb=0.5)
 og.td_icos([0.5,0.5,0.5],n_subdiv=2,r=0.5,mat='lt_blue_0')
 dtheta=0.1
 
