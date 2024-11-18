@@ -47,18 +47,23 @@ print('Number of isotopes to fit:',N)
 
 for k in range(0,27):
 
+    # Different transformations
     if k%3==0:
         trans='none'
     elif k%3==1:
         trans='moto'
     else:
         trans='quant'
+
+    # Different activation functions
     if (k//3)%3==0:
         act='relu'
     elif (k//3)%3==1:
         act='sigmoid'
     else:
         act='tanh'
+
+    # Different network sizes
     if (k//9)%3==0:
         M=1
     elif (k//9)%3==1:
@@ -69,7 +74,9 @@ for k in range(0,27):
     avgs=0
     
     if True:
-        
+
+        # Try each configuration five times, and take the
+        # average of the 5 at the end
         for j in range(0,5):
         
             im2=o2sclpy.interpm_tf_dnn()
@@ -78,7 +85,7 @@ for k in range(0,27):
             
             #with io.capture_output() as cap:
             im2.set_data(x2,y2,verbose=0,epochs=800,
-                         transform=trans,test_size=0.1,
+                         transform_in=trans,test_size=0.1,
                          activations=[act,act,act,act],
                          hlayers=[240*M,120*M,60*M,40*M])
             

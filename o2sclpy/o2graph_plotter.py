@@ -6236,11 +6236,13 @@ class o2graph_plotter(td_plot_base):
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix==4:
-                        self.td_icos([strlist[ix+1],strlist[ix+2],
-                                      strlist[ix+3]])
+                        self.td_icos([float(eval(strlist[ix+1])),
+                                      float(eval(strlist[ix+2])),
+                                      float(eval(strlist[ix+3]))])
                     elif ix_next-ix>=5:
-                        self.td_icos([strlist[ix+1],strlist[ix+2],
-                                      strlist[ix+3]],
+                        self.td_icos([float(eval(strlist[ix+1])),
+                                      float(eval(strlist[ix+2])),
+                                      float(eval(strlist[ix+3]))],
                                      **string_to_dict2(strlist[ix+4],
                                                        list_of_ints=
                                                        ['n_subdiv'],

@@ -726,6 +726,14 @@ class threed_objects:
     """
     List of materials
     """
+    cam_list=[]
+    """
+    List of cameras
+    """
+    light_list=[]
+    """
+    List of light sources
+    """
 
     def make_unique_name(self, prefix : str):
         """Using the specified ``prefix``, create a unique name for a mesh
@@ -1587,6 +1595,40 @@ class td_plot_base(yt_plot_base):
         self.png_counter=0
         return
 
+    def td_light(self,ltype,loc=[0,0,0],ldir=[0,0,-1],
+                 color=[1,1,1],intensity=1.0,lrange=None,
+                 name='',ica=0,oca=numpy.pi/4.0):
+        """Documentation for o2graph command ``td-light``:
+
+        Create a 3D light source (experimental).
+
+        Command-line arguments: ``<type> [kwargs]``
+
+        Useful keyword arguments are loc=[0,0,0], ldir=[0,0,-1],
+        color=[1,1,1], intensity=1.0, lrange=None, name='', ica=0, and
+        oca=numpy.pi/4.0.
+
+        A light is just a python dictionary, with two additional
+        entries, "location" for location and "direction" for
+        direction.
+        """
+        dct={"location": loc, "direction": ldir,
+             "type": ltype, "color": color,
+             "intensity": intensity, "range": lrange}
+        if type=='spot':
+            dct["spot"]={"innerConeAngle": ica,
+                         "outerConeAngle": oca}
+        self.to.light_list.append(dct)
+        return
+    
+    def td_pcamera(self,aspect,yfov,zfar,znear,x,y,z):
+        """ Desc """
+        return
+    
+    def td_ocamera(self,xmag,ymag,zfar,znear,x,y,z):
+        """ Desc """
+        return
+    
     def td_den_plot(self,amp,args,cmap='',mat_name='white',
                     normals=False):
         """Documentation for o2graph command ``td-den-plot``:
