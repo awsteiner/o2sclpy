@@ -1621,12 +1621,25 @@ class td_plot_base(yt_plot_base):
         self.to.light_list.append(dct)
         return
     
-    def td_pcamera(self,aspect,yfov,zfar,znear,x,y,z):
+    def td_pcamera(self,loc,ldir,aspect=1.0,yfov=0.7,zfar=100,
+                   znear=0.01):
         """ Desc """
+        dct={"location", loc, "direction": ldir,
+             "type": "perspective",
+             "aspectRatio": aspect,
+             "yfov": yfov, "zfar": zfar,
+             "znear": znear}
+        self.to.cam_list.append(dct)
         return
     
-    def td_ocamera(self,xmag,ymag,zfar,znear,x,y,z):
+    def td_ocamera(self,xmag=1.0,ymag=1.0,zfar=100.0,znear=0.01):
         """ Desc """
+        dct={"location", loc, "direction": ldir,
+             "type": "orthographic",
+             "aspectRatio": aspect,
+             "yfov": yfov, "zfar": zfar,
+             "znear": znear}
+        self.to.cam_list.append(dct)
         return
     
     def td_den_plot(self,amp,args,cmap='',mat_name='white',
