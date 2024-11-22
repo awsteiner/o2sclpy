@@ -125,6 +125,7 @@ class interpm_sklearn_gp:
         except Exception as e:
             print('Exception in interpm_sklearn_gp::set_data()',
                   'at kernel eval.',e)
+            raise
         self.outformat=outformat
         self.alpha=alpha
         self.random_state=random_state
@@ -172,6 +173,7 @@ class interpm_sklearn_gp:
             except Exception as e:
                 print('Exception in interpm_sklearn_gp::set_data()',
                       'at test_train_split().',e)
+                raise
         else:
             in_train=in_data_trans
             out_train=out_data_trans
@@ -184,6 +186,7 @@ class interpm_sklearn_gp:
         except Exception as e:
             print('Exception in interpm_sklearn_gp::set_data()',
                   'at fit().',e)
+            raise
 
         if test_size>0.0:
             print('score:',self.gp.score(in_test,out_test))
@@ -233,6 +236,7 @@ class interpm_sklearn_gp:
         except Exception as e:
             print(('Exception at input transformation '+
                    'in interpm_sklearn_gp::eval():'),e)
+            raise
 
         try:
             # AWS, 3/27/24: Keep in mind that o2scl::interpm_python.eval()
@@ -241,6 +245,7 @@ class interpm_sklearn_gp:
         except Exception as e:
             print(('Exception at prediction '+
                    'in interpm_sklearn_gp::eval():'),e)
+            raise
 
         yp_trans=0
         try:
@@ -251,6 +256,7 @@ class interpm_sklearn_gp:
         except Exception as e:
             print(('Exception at output transformation '+
                    'in interpm_sklearn_gp::eval():'),e)
+            raise
     
         if self.outformat=='list':
             if self.verbose>1:
@@ -284,12 +290,14 @@ class interpm_sklearn_gp:
         except Exception as e:
             print(('Exception at input transformation '+
                    'in interpm_sklearn_gp::eval_list():'),e)
+            raise
 
         try:
             yp=self.gp.predict(v)
         except Exception as e:
             print(('Exception at prediction '+
                    'in interpm_sklearn_gp::eval_list():'),e)
+            raise
 
         yp_trans=0
         try:
@@ -300,6 +308,7 @@ class interpm_sklearn_gp:
         except Exception as e:
             print(('Exception at output transformation '+
                    'in interpm_sklearn_gp::eval_list():'),e)
+            raise
     
         if self.outformat=='list':
             if self.verbose>1:
@@ -330,6 +339,7 @@ class interpm_sklearn_gp:
                 print(('Exception at input transformation '+
                        'in interpm_sklearn_gp:'),
                       e)
+                raise
         else:
             v_trans=v.reshape(1,-1)
             
@@ -341,6 +351,7 @@ class interpm_sklearn_gp:
                 std_trans=self.SS2.inverse_transform(std.reshape(-1,1))
             except Exception as e:
                 print('Exception 6 in interpm_sklearn_gp:',e)
+                raise
         else:
             yp_trans=yp
             std_trans=std
@@ -395,6 +406,7 @@ class interpm_sklearn_dtr:
             except Exception as e:
                 print('Exception in interpm_sklearn_dtr::set_data()',
                       'at test_train_split().',e)
+                raise
         else:
             x_train=in_data
             y_train=out_data
@@ -408,12 +420,14 @@ class interpm_sklearn_dtr:
         except Exception as e:
             print('Exception in interpm_sklearn_dtr::set_data()',
                   'at model definition.',e)
+            raise
 
         try:
             model.fit(x_train,y_train)      
         except Exception as e:
             print('Exception in interpm_sklearn_dtr::set_data()',
                   'at model fitting.',e)
+            raise
             
         self.dtr=model
 
@@ -443,6 +457,7 @@ class interpm_sklearn_dtr:
             pred=self.dtr.predict([v])
         except Exception as e:
             print('Exception 4 in interpm_sklearn_dtr:',e)
+            raise
     
         if self.outformat=='list':
             return pred.tolist()
@@ -477,12 +492,14 @@ class interpm_sklearn_dtr:
         except Exception as e:
             print(('Exception at input transformation '+
                    'in interpm_sklearn_gp::eval_list():'),e)
+            raise
 
         try:
             yp=self.dtr.predict([v])
         except Exception as e:
             print(('Exception at prediction '+
                    'in interpm_sklearn_gp::eval_list():'),e)
+            raise
 
         yp_trans=0
         try:
@@ -493,6 +510,7 @@ class interpm_sklearn_dtr:
         except Exception as e:
             print(('Exception at output transformation '+
                    'in interpm_sklearn_gp::eval_list():'),e)
+            raise
     
         if self.outformat=='list':
             if self.verbose>1:
@@ -585,6 +603,7 @@ class interpm_sklearn_mlpr:
             except Exception as e:
                 print('Exception in interpm_sklearn_mlpr::set_data()',
                       'at test_train_split().',e)
+                raise
         else:
             in_train=in_data_trans
             out_train=out_data_trans
@@ -601,6 +620,7 @@ class interpm_sklearn_mlpr:
         except Exception as e:
             print('Exception in interpm_sklearn_mlpr::set_data()',
                   'at fit().',e)
+            raise
 
         if test_size>0.0:
             print('score:',self.mlpr.score(in_test,out_test))
@@ -648,6 +668,7 @@ class interpm_sklearn_mlpr:
                 print(('Exception at input transformation '+
                        'in interpm_sklearn_mlpr:'),
                       e)
+                raise
         else:
             v_trans=v.reshape(1,-1)
             
@@ -658,6 +679,7 @@ class interpm_sklearn_mlpr:
                 yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
             except Exception as e:
                 print('Exception 5 in interpm_sklearn_mlpr:',e)
+                raise
         else:
             yp_trans=yp
     
@@ -693,12 +715,14 @@ class interpm_sklearn_mlpr:
         except Exception as e:
             print(('Exception at input transformation '+
                    'in interpm_sklearn_gp::eval_list():'),e)
+            raise
 
         try:
             yp=self.mlpr.predict(v_trans)
         except Exception as e:
             print(('Exception at prediction '+
                    'in interpm_sklearn_gp::eval_list():'),e)
+            raise
 
         yp_trans=0
         try:
@@ -876,6 +900,7 @@ class interpm_tf_dnn:
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
                   'at model definition.',e)
+            raise
         
         if self.verbose>0:
             print('summary:',model.summary())

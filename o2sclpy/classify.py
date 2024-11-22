@@ -20,7 +20,8 @@
 #  ───────────────────────────────────────────────────────────────────
 
 import numpy
-from o2sclpy.utils import string_to_dict2 
+from o2sclpy.utils import string_to_dict2
+from o2sclpy.hdf import *
 
 class classify_sklearn_dtc:
     """
@@ -110,7 +111,7 @@ class classify_sklearn_dtc:
             raise
 
         return
-    
+
     def eval(self,v):
         """
         Evaluate the classifier at point ``v``.
@@ -152,7 +153,8 @@ class classify_sklearn_mlpc:
                  solver='adam',alpha=0.0001,batch_size='auto', 
                  learning_rate='constant',max_iter=200,
                  random_state=None,verbose=False, 
-                 early_stopping=False,n_iter_no_change=10):
+                 early_stopping=False,n_iter_no_change=10,
+                 tol=0.0001):
                  
         """
         Set the input and output data to train the interpolator
@@ -208,12 +210,14 @@ class classify_sklearn_mlpc:
         try:
             from sklearn.neural_network import MLPClassifier
             model=MLPClassifier(hidden_layer_sizes=hlayers, 
-                 activation=activation,solver=solver, 
-                 alpha=alpha,batch_size=batch_size, 
-                 learning_rate=learning_rate,max_iter=max_iter,  
-                 random_state=random_state,verbose=verbose, 
-                 early_stopping=early_stopping, 
-                 n_iter_no_change=n_iter_no_change)
+                                activation=activation,solver=solver, 
+                                alpha=alpha,batch_size=batch_size, 
+                                learning_rate=learning_rate,
+                                max_iter=max_iter,  
+                                random_state=random_state,verbose=verbose, 
+                                early_stopping=early_stopping, 
+                                n_iter_no_change=n_iter_no_change,
+                                tol=tol)
         except Exception as e:
             print('Exception in classify_sklearn_mlpc::set_data()',
                   'at model().',e)
@@ -237,8 +241,9 @@ class classify_sklearn_mlpc:
 
         dct=string_to_dict2(options,list_of_ints=['verbose',
                                                   'max_iter',
+                                                  'n_iter_no_change',
                                                   'random_state'],
-                            list_of_floats=['test_size','alpha'],
+                            list_of_floats=['test_size','alpha','tol'],
                             list_of_bools=['early_stopping'])
         
         if "hlayers" in dct:
@@ -280,6 +285,35 @@ class classify_sklearn_mlpc:
                 type(pred),pred)
 
         return numpy.ascontiguousarray(pred)
+
+    def save(self,filename,obj_name):
+        """
+        Desc
+        """
+        import pickle
+
+        byte_string=pickle.dumps(self.mlpc)
+        hf=o2sclpy.hdf_file()
+        hf.open_or_create(filename)
+        hf.sets(obj_name,byte_string)
+        hf.sets('test','test string')
+        hf.close()
+
+        return
+
+    def load(self,filename,obj_name):
+        """
+        Desc
+        """
+        import pickle
+
+        hf=o2sclpy.hdf_file()
+        hf.open(filename)
+        hf.gets(obj_name,byte_string)
+        hf.close()
+        self.mlpc=pickle.loads(byte_string)
+
+        return
     
 class classify_sklearn_gnb:
     """

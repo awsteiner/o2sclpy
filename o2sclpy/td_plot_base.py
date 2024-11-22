@@ -1624,7 +1624,7 @@ class td_plot_base(yt_plot_base):
     def td_pcamera(self,loc,ldir,aspect=1.0,yfov=0.7,zfar=100,
                    znear=0.01):
         """ Desc """
-        dct={"location", loc, "direction": ldir,
+        dct={"location": loc, "direction": ldir,
              "type": "perspective",
              "aspectRatio": aspect,
              "yfov": yfov, "zfar": zfar,
@@ -1634,7 +1634,7 @@ class td_plot_base(yt_plot_base):
     
     def td_ocamera(self,xmag=1.0,ymag=1.0,zfar=100.0,znear=0.01):
         """ Desc """
-        dct={"location", loc, "direction": ldir,
+        dct={"location": loc, "direction": ldir,
              "type": "orthographic",
              "aspectRatio": aspect,
              "yfov": yfov, "zfar": zfar,

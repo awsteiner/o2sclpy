@@ -46,6 +46,7 @@ def test_all():
                          "random_state=1,hlayers=[100,100]")
         exact=y[1]
         interp=im2.eval(x[1])
+        im2.save('tc.o2','tc')
         print('exact,interp 2:', exact,interp)
         assert numpy.allclose(exact,interp,rtol=1.0)
         
