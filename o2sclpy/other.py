@@ -104,7 +104,7 @@ class slack_messenger:
 
     def get_url(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_slack_messenger_get_url
         func.restype=ctypes.c_void_p
@@ -115,16 +115,18 @@ class slack_messenger:
 
     def set_url(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_slack_messenger_set_url
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_channel(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_slack_messenger_get_channel
         func.restype=ctypes.c_void_p
@@ -135,16 +137,18 @@ class slack_messenger:
 
     def set_channel(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_slack_messenger_set_channel
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_icon(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_slack_messenger_get_icon
         func.restype=ctypes.c_void_p
@@ -155,16 +159,18 @@ class slack_messenger:
 
     def set_icon(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_slack_messenger_set_icon
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_username(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_slack_messenger_get_username
         func.restype=ctypes.c_void_p
@@ -175,11 +181,13 @@ class slack_messenger:
 
     def set_username(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_slack_messenger_set_username
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     @property
@@ -205,54 +213,58 @@ class slack_messenger:
     def set_url_from_env(self,env_var):
         """
         | Parameters:
-        | *env_var*: string
+        | *env_var*: byte array
         | Returns: a Python boolean
         """
-        env_var_=ctypes.c_char_p(force_bytes(env_var))
+        s_env_var=o2sclpy.std_string()
+        s_env_var.init_bytes(env_var)
         func=self._link.o2scl.o2scl_slack_messenger_set_url_from_env
         func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,env_var_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_env_var._ptr)
         return ret
 
     def set_channel_from_env(self,env_var):
         """
         | Parameters:
-        | *env_var*: string
+        | *env_var*: byte array
         | Returns: a Python boolean
         """
-        env_var_=ctypes.c_char_p(force_bytes(env_var))
+        s_env_var=o2sclpy.std_string()
+        s_env_var.init_bytes(env_var)
         func=self._link.o2scl.o2scl_slack_messenger_set_channel_from_env
         func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,env_var_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_env_var._ptr)
         return ret
 
     def set_username_from_env(self,env_var):
         """
         | Parameters:
-        | *env_var*: string
+        | *env_var*: byte array
         | Returns: a Python boolean
         """
-        env_var_=ctypes.c_char_p(force_bytes(env_var))
+        s_env_var=o2sclpy.std_string()
+        s_env_var.init_bytes(env_var)
         func=self._link.o2scl.o2scl_slack_messenger_set_username_from_env
         func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,env_var_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_env_var._ptr)
         return ret
 
     def send(self,message,err_on_fail=True):
         """
         | Parameters:
-        | *message*: string
+        | *message*: byte array
         | *err_on_fail* =true: ``bool``
         | Returns: a Python int
         """
-        message_=ctypes.c_char_p(force_bytes(message))
+        s_message=o2sclpy.std_string()
+        s_message.init_bytes(message)
         func=self._link.o2scl.o2scl_slack_messenger_send
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
-        ret=func(self._ptr,message_,err_on_fail)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        ret=func(self._ptr,s_message._ptr,err_on_fail)
         return ret
 
     @classmethod
@@ -1070,28 +1082,31 @@ class hist:
         """
         | Parameters:
         | *t*: :class:`table<>` object
-        | *colx*: string
+        | *colx*: byte array
         | *n_bins*: ``size_t``
         """
-        colx_=ctypes.c_char_p(force_bytes(colx))
+        s_colx=o2sclpy.std_string()
+        s_colx.init_bytes(colx)
         func=self._link.o2scl.o2scl_hist_from_table
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
-        func(self._ptr,t._ptr,colx_,n_bins)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,t._ptr,s_colx._ptr,n_bins)
         return
 
     def from_table_twocol(self,t,colx,coly,n_bins):
         """
         | Parameters:
         | *t*: :class:`table<>` object
-        | *colx*: string
-        | *coly*: string
+        | *colx*: byte array
+        | *coly*: byte array
         | *n_bins*: ``size_t``
         """
-        colx_=ctypes.c_char_p(force_bytes(colx))
-        coly_=ctypes.c_char_p(force_bytes(coly))
+        s_colx=o2sclpy.std_string()
+        s_colx.init_bytes(colx)
+        s_coly=o2sclpy.std_string()
+        s_coly.init_bytes(coly)
         func=self._link.o2scl.o2scl_hist_from_table_twocol
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_size_t]
-        func(self._ptr,t._ptr,colx_,coly_,n_bins)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,t._ptr,s_colx._ptr,s_coly._ptr,n_bins)
         return
 
     def size(self):
@@ -1219,14 +1234,15 @@ class hist:
     def function(self,func):
         """
         | Parameters:
-        | *func*: string
+        | *func*: byte array
         | Returns: a Python int
         """
-        func_=ctypes.c_char_p(force_bytes(func))
+        s_func=o2sclpy.std_string()
+        s_func.init_bytes(func)
         func=self._link.o2scl.o2scl_hist_function
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,func_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_func._ptr)
         return ret
 
     def clear(self):
@@ -1369,34 +1385,39 @@ class hist_2d:
         """
         | Parameters:
         | *t*: :class:`table<>` object
-        | *colx*: string
-        | *coly*: string
+        | *colx*: byte array
+        | *coly*: byte array
         | *n_bins_x*: ``size_t``
         | *n_bins_y*: ``size_t``
         """
-        colx_=ctypes.c_char_p(force_bytes(colx))
-        coly_=ctypes.c_char_p(force_bytes(coly))
+        s_colx=o2sclpy.std_string()
+        s_colx.init_bytes(colx)
+        s_coly=o2sclpy.std_string()
+        s_coly.init_bytes(coly)
         func=self._link.o2scl.o2scl_hist_2d_from_table
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_size_t]
-        func(self._ptr,t._ptr,colx_,coly_,n_bins_x,n_bins_y)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        func(self._ptr,t._ptr,s_colx._ptr,s_coly._ptr,n_bins_x,n_bins_y)
         return
 
     def from_table_wgt(self,t,colx,coly,colz,n_bins_x,n_bins_y):
         """
         | Parameters:
         | *t*: :class:`table<>` object
-        | *colx*: string
-        | *coly*: string
-        | *colz*: string
+        | *colx*: byte array
+        | *coly*: byte array
+        | *colz*: byte array
         | *n_bins_x*: ``size_t``
         | *n_bins_y*: ``size_t``
         """
-        colx_=ctypes.c_char_p(force_bytes(colx))
-        coly_=ctypes.c_char_p(force_bytes(coly))
-        colz_=ctypes.c_char_p(force_bytes(colz))
+        s_colx=o2sclpy.std_string()
+        s_colx.init_bytes(colx)
+        s_coly=o2sclpy.std_string()
+        s_coly.init_bytes(coly)
+        s_colz=o2sclpy.std_string()
+        s_colz.init_bytes(colz)
         func=self._link.o2scl.o2scl_hist_2d_from_table_wgt
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_size_t]
-        func(self._ptr,t._ptr,colx_,coly_,colz_,n_bins_x,n_bins_y)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
+        func(self._ptr,t._ptr,s_colx._ptr,s_coly._ptr,s_colz._ptr,n_bins_x,n_bins_y)
         return
 
     def size_x(self):

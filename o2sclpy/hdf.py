@@ -136,25 +136,27 @@ class hdf_file:
     def open(self,fname,write_access=False,err_on_fail=True):
         """
         | Parameters:
-        | *fname*: string
+        | *fname*: byte array
         | *write_access* =false: ``bool``
         | *err_on_fail* =true: ``bool``
         """
-        fname_=ctypes.c_char_p(force_bytes(fname))
+        s_fname=o2sclpy.std_string()
+        s_fname.init_bytes(fname)
         func=self._link.o2scl.o2scl_hdf_hdf_file_open
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool,ctypes.c_bool]
-        func(self._ptr,fname_,write_access,err_on_fail)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_bool]
+        func(self._ptr,s_fname._ptr,write_access,err_on_fail)
         return
 
     def open_or_create(self,fname):
         """
         | Parameters:
-        | *fname*: string
+        | *fname*: byte array
         """
-        fname_=ctypes.c_char_p(force_bytes(fname))
+        s_fname=o2sclpy.std_string()
+        s_fname.init_bytes(fname)
         func=self._link.o2scl.o2scl_hdf_hdf_file_open_or_create
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,fname_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_fname._ptr)
         return
 
     def close(self):
@@ -168,573 +170,625 @@ class hdf_file:
     def getc(self,name):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python int, a Python obj
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_getc
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_char)]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_char)]
         c_conv=ctypes.c_char(0)
-        ret=func(self._ptr,name_,ctypes.byref(c_conv))
+        ret=func(self._ptr,s_name._ptr,ctypes.byref(c_conv))
         return ret,c_conv.value
 
     def getd(self,name):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python int, a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_getd
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_double)]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_double)]
         d_conv=ctypes.c_double(0)
-        ret=func(self._ptr,name_,ctypes.byref(d_conv))
+        ret=func(self._ptr,s_name._ptr,ctypes.byref(d_conv))
         return ret,d_conv.value
 
     def geti(self,name):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python int, a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_geti
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_int)]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_int)]
         i_conv=ctypes.c_int(0)
-        ret=func(self._ptr,name_,ctypes.byref(i_conv))
+        ret=func(self._ptr,s_name._ptr,ctypes.byref(i_conv))
         return ret,i_conv.value
 
     def get_szt(self,name):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python int, a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_size_t)]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_size_t)]
         u_conv=ctypes.c_size_t(0)
-        ret=func(self._ptr,name_,ctypes.byref(u_conv))
+        ret=func(self._ptr,s_name._ptr,ctypes.byref(u_conv))
         return ret,u_conv.value
 
     def gets(self,name,s):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *s*: :class:`std_string` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
-        s_=ctypes.c_char_p(force_bytes(s))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
+        s_s=o2sclpy.std_string()
+        s_s.init_bytes(s)
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,s._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,s._ptr)
         return ret
 
     def gets_var(self,name,s):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *s*: :class:`std_string` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
-        s_=ctypes.c_char_p(force_bytes(s))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
+        s_s=o2sclpy.std_string()
+        s_s.init_bytes(s)
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets_var
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,s._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,s._ptr)
         return ret
 
     def gets_fixed(self,name,s):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *s*: :class:`std_string` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
-        s_=ctypes.c_char_p(force_bytes(s))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
+        s_s=o2sclpy.std_string()
+        s_s.init_bytes(s)
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets_fixed
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,s._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,s._ptr)
         return ret
 
     def gets_def_fixed(self,name,deft,s):
         """
         | Parameters:
-        | *name*: string
-        | *deft*: string
+        | *name*: byte array
+        | *deft*: byte array
         | *s*: :class:`std_string` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
-        deft_=ctypes.c_char_p(force_bytes(deft))
-        s_=ctypes.c_char_p(force_bytes(s))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
+        s_deft=o2sclpy.std_string()
+        s_deft.init_bytes(deft)
+        s_s=o2sclpy.std_string()
+        s_s.init_bytes(s)
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets_def_fixed
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,deft_,s._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,s_deft._ptr,s._ptr)
         return ret
 
     def setc(self,name,c):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *c*: ``char``
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_setc
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char]
-        func(self._ptr,name_,c)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char]
+        func(self._ptr,s_name._ptr,c)
         return
 
     def setd(self,name,d):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *d*: ``double``
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_setd
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
-        func(self._ptr,name_,d)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,s_name._ptr,d)
         return
 
     def seti(self,name,i):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *i*: ``int``
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_seti
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int]
-        func(self._ptr,name_,i)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,s_name._ptr,i)
         return
 
     def set_szt(self,name,u):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *u*: ``size_t``
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_set_szt
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
-        func(self._ptr,name_,u)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,s_name._ptr,u)
         return
 
     def sets(self,name,s):
         """
         | Parameters:
-        | *name*: string
-        | *s*: string
+        | *name*: byte array
+        | *s*: byte array
         """
-        name_=ctypes.c_char_p(force_bytes(name))
-        s_=ctypes.c_char_p(force_bytes(s))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
+        s_s=o2sclpy.std_string()
+        s_s.init_bytes(s)
         func=self._link.o2scl.o2scl_hdf_hdf_file_sets
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,name_,s_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_name._ptr,s_s._ptr)
         return
 
     def sets_fixed(self,name,s):
         """
         | Parameters:
-        | *name*: string
-        | *s*: string
+        | *name*: byte array
+        | *s*: byte array
         """
-        name_=ctypes.c_char_p(force_bytes(name))
-        s_=ctypes.c_char_p(force_bytes(s))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
+        s_s=o2sclpy.std_string()
+        s_s.init_bytes(s)
         func=self._link.o2scl.o2scl_hdf_hdf_file_sets_fixed
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,name_,s_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_name._ptr,s_s._ptr)
         return
 
     def getd_vec(self,name,v):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *v*: :class:`std_vector` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_getd_vec
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,v._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,v._ptr)
         return ret
 
     def geti_vec(self,name,v):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *v*: :class:`std_vector_int` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_geti_vec
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,v._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,v._ptr)
         return ret
 
     def get_szt_vec(self,name,v):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *v*: :class:`std_vector_size_t` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt_vec
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,v._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,v._ptr)
         return ret
 
     def gets_vec_copy(self,name,s):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *s*: :class:`std_vector_string` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets_vec_copy
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,s._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,s._ptr)
         return ret
 
     def setd_vec(self,name,v):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *v*: :class:`std_vector` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_setd_vec
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,v._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,v._ptr)
         return ret
 
     def seti_vec(self,name,v):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *v*: :class:`std_vector_int` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_seti_vec
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,v._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,v._ptr)
         return ret
 
     def set_szt_vec(self,name,v):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *v*: :class:`std_vector_size_t` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_set_szt_vec
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,v._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,v._ptr)
         return ret
 
     def sets_vec_copy(self,name,s):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *s*: :class:`std_vector_string` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_sets_vec_copy
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,s._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,s._ptr)
         return ret
 
     def getd_mat_copy(self,name,m):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *m*: :class:`ublas_matrix` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_getd_mat_copy
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,m._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,m._ptr)
         return ret
 
     def geti_mat_copy(self,name,m):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *m*: :class:`ublas_matrix_int` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_geti_mat_copy
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,m._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,m._ptr)
         return ret
 
     def setd_mat_copy(self,name,m):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *m*: :class:`ublas_matrix` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_setd_mat_copy
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,m._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,m._ptr)
         return ret
 
     def seti_mat_copy(self,name,m):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *m*: :class:`ublas_matrix_int` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_seti_mat_copy
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,m._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,m._ptr)
         return ret
 
     def getd_ten(self,name,t):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *t*: :class:`tensor` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_getd_ten
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,t._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,t._ptr)
         return ret
 
     def geti_ten(self,name,t):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *t*: :class:`tensor_int` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_geti_ten
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,t._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,t._ptr)
         return ret
 
     def get_szt_ten(self,name,t):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *t*: :class:`tensor_size_t` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt_ten
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,t._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,t._ptr)
         return ret
 
     def setd_ten(self,name,t):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *t*: :class:`tensor` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_setd_ten
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,t._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,t._ptr)
         return ret
 
     def seti_ten(self,name,t):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *t*: :class:`tensor_int` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_seti_ten
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,t._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,t._ptr)
         return ret
 
     def set_szt_ten(self,name,t):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *t*: :class:`tensor_size_t` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_set_szt_ten
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,t._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,t._ptr)
         return ret
 
     def getc_def(self,name,deft):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *deft*: ``char``
         | Returns: a Python int, a Python obj
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_getc_def
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char,ctypes.POINTER(ctypes.c_char)]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char,ctypes.POINTER(ctypes.c_char)]
         c_conv=ctypes.c_char(0)
-        ret=func(self._ptr,name_,deft,ctypes.byref(c_conv))
+        ret=func(self._ptr,s_name._ptr,deft,ctypes.byref(c_conv))
         return ret,c_conv.value
 
     def getd_def(self,name,deft):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *deft*: ``double``
         | Returns: a Python int, a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_getd_def
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
         d_conv=ctypes.c_double(0)
-        ret=func(self._ptr,name_,deft,ctypes.byref(d_conv))
+        ret=func(self._ptr,s_name._ptr,deft,ctypes.byref(d_conv))
         return ret,d_conv.value
 
     def geti_def(self,name,deft):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *deft*: ``int``
         | Returns: a Python int, a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_geti_def
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int,ctypes.POINTER(ctypes.c_int)]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.POINTER(ctypes.c_int)]
         i_conv=ctypes.c_int(0)
-        ret=func(self._ptr,name_,deft,ctypes.byref(i_conv))
+        ret=func(self._ptr,s_name._ptr,deft,ctypes.byref(i_conv))
         return ret,i_conv.value
 
     def get_szt_def(self,name,deft):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *deft*: ``size_t``
         | Returns: a Python int, a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt_def
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.POINTER(ctypes.c_size_t)]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.POINTER(ctypes.c_size_t)]
         u_conv=ctypes.c_size_t(0)
-        ret=func(self._ptr,name_,deft,ctypes.byref(u_conv))
+        ret=func(self._ptr,s_name._ptr,deft,ctypes.byref(u_conv))
         return ret,u_conv.value
 
     def gets_def(self,name,deft,s):
         """
         | Parameters:
-        | *name*: string
-        | *deft*: string
+        | *name*: byte array
+        | *deft*: byte array
         | *s*: :class:`std_string` object
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
-        deft_=ctypes.c_char_p(force_bytes(deft))
-        s_=ctypes.c_char_p(force_bytes(s))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
+        s_deft=o2sclpy.std_string()
+        s_deft.init_bytes(deft)
+        s_s=o2sclpy.std_string()
+        s_s.init_bytes(s)
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets_def
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_void_p]
-        ret=func(self._ptr,name_,deft_,s._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr,s_deft._ptr,s._ptr)
         return ret
 
     def find_object_by_type(self,type,name,use_regex=False,verbose=0):
         """
         | Parameters:
-        | *type*: string
+        | *type*: byte array
         | *name*: :class:`std_string` object
         | *use_regex* =false: ``bool``
         | *verbose* =0: ``int``
         | Returns: a Python int
         """
-        type_=ctypes.c_char_p(force_bytes(type))
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_type=o2sclpy.std_string()
+        s_type.init_bytes(type)
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_type
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
-        ret=func(self._ptr,type_,name._ptr,use_regex,verbose)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
+        ret=func(self._ptr,s_type._ptr,name._ptr,use_regex,verbose)
         return ret
 
     def find_object_by_name(self,name,type,use_regex=False,verbose=0):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *type*: :class:`std_string` object
         | *use_regex* =false: ``bool``
         | *verbose* =0: ``int``
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
-        type_=ctypes.c_char_p(force_bytes(type))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
+        s_type=o2sclpy.std_string()
+        s_type.init_bytes(type)
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_name
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
-        ret=func(self._ptr,name_,type._ptr,use_regex,verbose)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
+        ret=func(self._ptr,s_name._ptr,type._ptr,use_regex,verbose)
         return ret
 
     def find_object_by_pattern(self,pattern,type,use_regex=False,verbose=0):
         """
         | Parameters:
-        | *pattern*: string
+        | *pattern*: byte array
         | *type*: :class:`std_string` object
         | *use_regex* =false: ``bool``
         | *verbose* =0: ``int``
         | Returns: a Python int
         """
-        pattern_=ctypes.c_char_p(force_bytes(pattern))
-        type_=ctypes.c_char_p(force_bytes(type))
+        s_pattern=o2sclpy.std_string()
+        s_pattern.init_bytes(pattern)
+        s_type=o2sclpy.std_string()
+        s_type.init_bytes(type)
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_pattern
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
-        ret=func(self._ptr,pattern_,type._ptr,use_regex,verbose)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
+        ret=func(self._ptr,s_pattern._ptr,type._ptr,use_regex,verbose)
         return ret
 
     def file_list(self,verbose):
@@ -815,7 +869,7 @@ class acol_manager:
 
     def get_env_var_name(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_env_var_name
         func.restype=ctypes.c_void_p
@@ -826,11 +880,13 @@ class acol_manager:
 
     def set_env_var_name(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_env_var_name
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_cl(self):
@@ -875,7 +931,7 @@ class acol_manager:
 
     def get_def_args(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_def_args
         func.restype=ctypes.c_void_p
@@ -886,16 +942,18 @@ class acol_manager:
 
     def set_def_args(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_def_args
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_type(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_type
         func.restype=ctypes.c_void_p
@@ -906,11 +964,13 @@ class acol_manager:
 
     def set_type(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_type
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_table_obj(self):
@@ -1075,7 +1135,7 @@ class acol_manager:
 
     def get_string_obj(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_string_obj
         func.restype=ctypes.c_void_p
@@ -1086,11 +1146,13 @@ class acol_manager:
 
     def set_string_obj(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_string_obj
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_cont_obj(self):
@@ -1375,7 +1437,7 @@ class acol_manager:
 
     def get_command_color(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_command_color
         func.restype=ctypes.c_void_p
@@ -1386,16 +1448,18 @@ class acol_manager:
 
     def set_command_color(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_command_color
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_type_color(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_type_color
         func.restype=ctypes.c_void_p
@@ -1406,16 +1470,18 @@ class acol_manager:
 
     def set_type_color(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_type_color
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_param_color(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_param_color
         func.restype=ctypes.c_void_p
@@ -1426,16 +1492,18 @@ class acol_manager:
 
     def set_param_color(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_param_color
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_help_color(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_help_color
         func.restype=ctypes.c_void_p
@@ -1446,16 +1514,18 @@ class acol_manager:
 
     def set_help_color(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_help_color
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_exec_color(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_exec_color
         func.restype=ctypes.c_void_p
@@ -1466,16 +1536,18 @@ class acol_manager:
 
     def set_exec_color(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_exec_color
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_url_color(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_url_color
         func.restype=ctypes.c_void_p
@@ -1486,16 +1558,18 @@ class acol_manager:
 
     def set_url_color(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_url_color
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_default_color(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_default_color
         func.restype=ctypes.c_void_p
@@ -1506,16 +1580,18 @@ class acol_manager:
 
     def set_default_color(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_default_color
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_color_spec(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_get_color_spec
         func.restype=ctypes.c_void_p
@@ -1526,26 +1602,30 @@ class acol_manager:
 
     def set_color_spec(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_hdf_acol_manager_set_color_spec
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def help_found(self,arg1,arg2):
         """
         | Parameters:
-        | *arg1*: string
-        | *arg2*: string
+        | *arg1*: byte array
+        | *arg2*: byte array
         | Returns: a Python boolean
         """
-        arg1_=ctypes.c_char_p(force_bytes(arg1))
-        arg2_=ctypes.c_char_p(force_bytes(arg2))
+        s_arg1=o2sclpy.std_string()
+        s_arg1.init_bytes(arg1)
+        s_arg2=o2sclpy.std_string()
+        s_arg2.init_bytes(arg2)
         func=self._link.o2scl.o2scl_hdf_acol_manager_help_found
         func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        ret=func(self._ptr,arg1_,arg2_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_arg1._ptr,s_arg2._ptr)
         return ret
 
     def run_empty(self):
@@ -1581,23 +1661,25 @@ class acol_manager:
     def command_add(self,new_type):
         """
         | Parameters:
-        | *new_type*: string
+        | *new_type*: byte array
         """
-        new_type_=ctypes.c_char_p(force_bytes(new_type))
+        s_new_type=o2sclpy.std_string()
+        s_new_type.init_bytes(new_type)
         func=self._link.o2scl.o2scl_hdf_acol_manager_command_add
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,new_type_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_new_type._ptr)
         return
 
     def command_del(self,ltype):
         """
         | Parameters:
-        | *ltype*: string
+        | *ltype*: byte array
         """
-        ltype_=ctypes.c_char_p(force_bytes(ltype))
+        s_ltype=o2sclpy.std_string()
+        s_ltype.init_bytes(ltype)
         func=self._link.o2scl.o2scl_hdf_acol_manager_command_del
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,ltype_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_ltype._ptr)
         return
 
 
@@ -1758,75 +1840,89 @@ class cloud_file:
     def get_file(self,file,url,dir=""):
         """
         | Parameters:
-        | *file*: string
-        | *url*: string
-        | *dir* ="": string
+        | *file*: byte array
+        | *url*: byte array
+        | *dir* ="": byte array
         | Returns: a Python int
         """
-        file_=ctypes.c_char_p(force_bytes(file))
-        url_=ctypes.c_char_p(force_bytes(url))
-        dir_=ctypes.c_char_p(force_bytes(dir))
+        s_file=o2sclpy.std_string()
+        s_file.init_bytes(file)
+        s_url=o2sclpy.std_string()
+        s_url.init_bytes(url)
+        s_dir=o2sclpy.std_string()
+        s_dir.init_bytes(dir)
         func=self._link.o2scl.o2scl_hdf_cloud_file_get_file
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        ret=func(self._ptr,file_,url_,dir_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_file._ptr,s_url._ptr,s_dir._ptr)
         return ret
 
     def get_file_hash(self,file,url,hash="",dir=""):
         """
         | Parameters:
-        | *file*: string
-        | *url*: string
-        | *hash* ="": string
-        | *dir* ="": string
+        | *file*: byte array
+        | *url*: byte array
+        | *hash* ="": byte array
+        | *dir* ="": byte array
         | Returns: a Python int
         """
-        file_=ctypes.c_char_p(force_bytes(file))
-        url_=ctypes.c_char_p(force_bytes(url))
-        hash_=ctypes.c_char_p(force_bytes(hash))
-        dir_=ctypes.c_char_p(force_bytes(dir))
+        s_file=o2sclpy.std_string()
+        s_file.init_bytes(file)
+        s_url=o2sclpy.std_string()
+        s_url.init_bytes(url)
+        s_hash=o2sclpy.std_string()
+        s_hash.init_bytes(hash)
+        s_dir=o2sclpy.std_string()
+        s_dir.init_bytes(dir)
         func=self._link.o2scl.o2scl_hdf_cloud_file_get_file_hash
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        ret=func(self._ptr,file_,url_,hash_,dir_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_file._ptr,s_url._ptr,s_hash._ptr,s_dir._ptr)
         return ret
 
     def hdf5_open(self,hf,file,url,dir=""):
         """
         | Parameters:
         | *hf*: :class:`hdf_file` object
-        | *file*: string
-        | *url*: string
-        | *dir* ="": string
+        | *file*: byte array
+        | *url*: byte array
+        | *dir* ="": byte array
         | Returns: a Python int
         """
-        file_=ctypes.c_char_p(force_bytes(file))
-        url_=ctypes.c_char_p(force_bytes(url))
-        dir_=ctypes.c_char_p(force_bytes(dir))
+        s_file=o2sclpy.std_string()
+        s_file.init_bytes(file)
+        s_url=o2sclpy.std_string()
+        s_url.init_bytes(url)
+        s_dir=o2sclpy.std_string()
+        s_dir.init_bytes(dir)
         func=self._link.o2scl.o2scl_hdf_cloud_file_hdf5_open
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        ret=func(self._ptr,hf._ptr,file_,url_,dir_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,hf._ptr,s_file._ptr,s_url._ptr,s_dir._ptr)
         return ret
 
     def hdf5_open_hash(self,hf,file,url,hash="",dir=""):
         """
         | Parameters:
         | *hf*: :class:`hdf_file` object
-        | *file*: string
-        | *url*: string
-        | *hash* ="": string
-        | *dir* ="": string
+        | *file*: byte array
+        | *url*: byte array
+        | *hash* ="": byte array
+        | *dir* ="": byte array
         | Returns: a Python int
         """
-        file_=ctypes.c_char_p(force_bytes(file))
-        url_=ctypes.c_char_p(force_bytes(url))
-        hash_=ctypes.c_char_p(force_bytes(hash))
-        dir_=ctypes.c_char_p(force_bytes(dir))
+        s_file=o2sclpy.std_string()
+        s_file.init_bytes(file)
+        s_url=o2sclpy.std_string()
+        s_url.init_bytes(url)
+        s_hash=o2sclpy.std_string()
+        s_hash.init_bytes(hash)
+        s_dir=o2sclpy.std_string()
+        s_dir.init_bytes(dir)
         func=self._link.o2scl.o2scl_hdf_cloud_file_hdf5_open_hash
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        ret=func(self._ptr,hf._ptr,file_,url_,hash_,dir_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,hf._ptr,s_file._ptr,s_url._ptr,s_hash._ptr,s_dir._ptr)
         return ret
 
 

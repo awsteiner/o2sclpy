@@ -236,30 +236,32 @@ class nucmass_info:
     def parse_elstring(self,ela):
         """
         | Parameters:
-        | *ela*: string
+        | *ela*: byte array
         | Returns: a Python int, a Python int, a Python int, a Python int
         """
-        ela_=ctypes.c_char_p(force_bytes(ela))
+        s_ela=o2sclpy.std_string()
+        s_ela.init_bytes(ela)
         func=self._link.o2scl.o2scl_nucmass_info_parse_elstring
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int)]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int)]
         Z_conv=ctypes.c_int(0)
         N_conv=ctypes.c_int(0)
         A_conv=ctypes.c_int(0)
-        ret=func(self._ptr,ela_,ctypes.byref(Z_conv),ctypes.byref(N_conv),ctypes.byref(A_conv))
+        ret=func(self._ptr,s_ela._ptr,ctypes.byref(Z_conv),ctypes.byref(N_conv),ctypes.byref(A_conv))
         return ret,Z_conv.value,N_conv.value,A_conv.value
 
     def eltoZ(self,el):
         """
         | Parameters:
-        | *el*: string
+        | *el*: byte array
         | Returns: a Python int
         """
-        el_=ctypes.c_char_p(force_bytes(el))
+        s_el=o2sclpy.std_string()
+        s_el.init_bytes(el)
         func=self._link.o2scl.o2scl_nucmass_info_eltoZ
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,el_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_el._ptr)
         return ret
 
     def Ztoel(self,Z):
@@ -322,14 +324,15 @@ class nucmass_info:
     def spinp_to_int(self,s):
         """
         | Parameters:
-        | *s*: string
+        | *s*: byte array
         | Returns: a Python int
         """
-        s_=ctypes.c_char_p(force_bytes(s))
+        s_s=o2sclpy.std_string()
+        s_s.init_bytes(s)
         func=self._link.o2scl.o2scl_nucmass_info_spinp_to_int
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,s_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_s._ptr)
         return ret
 
 
@@ -737,7 +740,7 @@ class nucmass_table(nucmass):
 
     def get_reference(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_nucmass_table_get_reference
         func.restype=ctypes.c_void_p
@@ -748,11 +751,13 @@ class nucmass_table(nucmass):
 
     def set_reference(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_nucmass_table_set_reference
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def is_loaded(self):

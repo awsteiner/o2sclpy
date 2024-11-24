@@ -1807,7 +1807,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
     def get_reference(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_eos_had_skyrme_get_reference
         func.restype=ctypes.c_void_p
@@ -1818,7 +1818,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
     def set_reference(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_eos_had_skyrme_set_reference
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -3390,16 +3390,19 @@ class eos_tov_interp(eos_tov):
         """
         | Parameters:
         | *eos*: :class:`table_units<>` object
-        | *s_cole*: string
-        | *s_colp*: string
-        | *s_colnb* ="": string
+        | *s_cole*: byte array
+        | *s_colp*: byte array
+        | *s_colnb* ="": byte array
         """
-        s_cole_=ctypes.c_char_p(force_bytes(s_cole))
-        s_colp_=ctypes.c_char_p(force_bytes(s_colp))
-        s_colnb_=ctypes.c_char_p(force_bytes(s_colnb))
+        s_s_cole=o2sclpy.std_string()
+        s_s_cole.init_bytes(s_cole)
+        s_s_colp=o2sclpy.std_string()
+        s_s_colp.init_bytes(s_colp)
+        s_s_colnb=o2sclpy.std_string()
+        s_s_colnb.init_bytes(s_colnb)
         func=self._link.o2scl.o2scl_eos_tov_interp_read_table
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,eos._ptr,s_cole_,s_colp_,s_colnb_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,eos._ptr,s_s_cole._ptr,s_s_colp._ptr,s_s_colnb._ptr)
         return
 
     def default_low_dens_eos(self):
@@ -3421,38 +3424,41 @@ class eos_tov_interp(eos_tov):
     def s12_low_dens_eos(self,model="SLy4",external=False):
         """
         | Parameters:
-        | *model* ="SLy4": string
+        | *model* ="SLy4": byte array
         | *external* =false: ``bool``
         """
-        model_=ctypes.c_char_p(force_bytes(model))
+        s_model=o2sclpy.std_string()
+        s_model.init_bytes(model)
         func=self._link.o2scl.o2scl_eos_tov_interp_s12_low_dens_eos
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
-        func(self._ptr,model_,external)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,s_model._ptr,external)
         return
 
     def gcp10_low_dens_eos(self,model="BSk20",external=False):
         """
         | Parameters:
-        | *model* ="BSk20": string
+        | *model* ="BSk20": byte array
         | *external* =false: ``bool``
         """
-        model_=ctypes.c_char_p(force_bytes(model))
+        s_model=o2sclpy.std_string()
+        s_model.init_bytes(model)
         func=self._link.o2scl.o2scl_eos_tov_interp_gcp10_low_dens_eos
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
-        func(self._ptr,model_,external)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,s_model._ptr,external)
         return
 
     def ngl13_low_dens_eos(self,L,model="PNM",external=False):
         """
         | Parameters:
         | *L*: ``double``
-        | *model* ="PNM": string
+        | *model* ="PNM": byte array
         | *external* =false: ``bool``
         """
-        model_=ctypes.c_char_p(force_bytes(model))
+        s_model=o2sclpy.std_string()
+        s_model.init_bytes(model)
         func=self._link.o2scl.o2scl_eos_tov_interp_ngl13_low_dens_eos
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_char_p,ctypes.c_bool]
-        func(self._ptr,L,model_,external)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,L,s_model._ptr,external)
         return
 
     def ngl13_low_dens_eos2(self,S,L,nt,fname=""):
@@ -3461,12 +3467,13 @@ class eos_tov_interp(eos_tov):
         | *S*: ``double``
         | *L*: ``double``
         | *nt*: ``double``
-        | *fname* ="": string
+        | *fname* ="": byte array
         """
-        fname_=ctypes.c_char_p(force_bytes(fname))
+        s_fname=o2sclpy.std_string()
+        s_fname.init_bytes(fname)
         func=self._link.o2scl.o2scl_eos_tov_interp_ngl13_low_dens_eos2
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
-        func(self._ptr,S,L,nt,fname_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        func(self._ptr,S,L,nt,s_fname._ptr)
         return
 
     def no_low_dens_eos(self):

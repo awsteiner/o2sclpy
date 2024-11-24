@@ -179,8 +179,8 @@ class std_string:
         n=ctypes.c_int(self.length())
                              
         # AWS, 11/23/24: The function create_string_buffer()
-        # is the special ctypes function to create
-        # a POINTER(char) object for use in ctypes. Note that, in ctypes,
+        # is the special ctypes function to create a POINTER(char) 
+        # object for use in ctypes. Note that, in ctypes,
         # POINTER(char) is not the same as char_p, which is a bit
         # confusing.
      
@@ -193,6 +193,9 @@ class std_string:
      
         # AWS, 11/23/24: In order to convert the ctypes POINTER(char)
         # to a bytearray, we use the ctypes string_at() function.
+        # I'm not quite sure if the string_at() function requires an
+        # additional copy or not. If it does, then there may be a
+        # better alternative.
      
         return ctypes.string_at(b)
 
@@ -724,12 +727,13 @@ class std_vector_string:
     def push_back(self,x):
         """
         | Parameters:
-        | *x*: string
+        | *x*: byte array
         """
-        x_=ctypes.c_char_p(force_bytes(x))
+        s_x=o2sclpy.std_string()
+        s_x.init_bytes(x)
         func=self._link.o2scl.o2scl_std_vector_std_string__push_back
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,x_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_x._ptr)
         return
 
     def __getitem__(self,n):
@@ -1730,14 +1734,15 @@ class lib_settings_class:
     def set_data_dir(self,dir):
         """
         | Parameters:
-        | *dir*: string
+        | *dir*: byte array
         | Returns: a Python int
         """
-        dir_=ctypes.c_char_p(force_bytes(dir))
+        s_dir=o2sclpy.std_string()
+        s_dir.init_bytes(dir)
         func=self._link.o2scl.o2scl_lib_settings_class_set_data_dir
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,dir_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_dir._ptr)
         return ret
 
     def get_doc_dir(self):
@@ -1755,14 +1760,15 @@ class lib_settings_class:
     def set_doc_dir(self,dir):
         """
         | Parameters:
-        | *dir*: string
+        | *dir*: byte array
         | Returns: a Python int
         """
-        dir_=ctypes.c_char_p(force_bytes(dir))
+        s_dir=o2sclpy.std_string()
+        s_dir.init_bytes(dir)
         func=self._link.o2scl.o2scl_lib_settings_class_set_doc_dir
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,dir_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_dir._ptr)
         return ret
 
     def openmp_support(self):
@@ -1983,44 +1989,47 @@ class table:
     def __getitem__(self,col):
         """
         | Parameters:
-        | *col*: string
+        | *col*: byte array
         | Returns: :class:`std_vector` object
         """
-        col_=ctypes.c_char_p(force_bytes(col))
+        s_col=o2sclpy.std_string()
+        s_col.init_bytes(col)
         func=self._link.o2scl.o2scl_table__getitem
         n_=ctypes.c_int(0)
         ptr_=ctypes.POINTER(ctypes.c_double)()
         func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
-        func(self._ptr,col_,ctypes.byref(ptr_),ctypes.byref(n_))
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.POINTER(ctypes.c_double)),ctypes.POINTER(ctypes.c_int)]
+        func(self._ptr,s_col._ptr,ctypes.byref(ptr_),ctypes.byref(n_))
         ret=numpy.ctypeslib.as_array(ptr_,shape=(n_.value,))
         return ret
 
     def set(self,col,row,val):
         """
         | Parameters:
-        | *col*: string
+        | *col*: byte array
         | *row*: ``size_t``
         | *val*: ``double``
         """
-        col_=ctypes.c_char_p(force_bytes(col))
+        s_col=o2sclpy.std_string()
+        s_col.init_bytes(col)
         func=self._link.o2scl.o2scl_table__set
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_double]
-        func(self._ptr,col_,row,val)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double]
+        func(self._ptr,s_col._ptr,row,val)
         return
 
     def get(self,col,row):
         """
         | Parameters:
-        | *col*: string
+        | *col*: byte array
         | *row*: ``size_t``
         | Returns: a Python float
         """
-        col_=ctypes.c_char_p(force_bytes(col))
+        s_col=o2sclpy.std_string()
+        s_col.init_bytes(col)
         func=self._link.o2scl.o2scl_table__get
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
-        ret=func(self._ptr,col_,row)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,s_col._ptr,row)
         return ret
 
     def get_ncolumns(self):
@@ -2096,12 +2105,13 @@ class table:
     def new_column(self,col):
         """
         | Parameters:
-        | *col*: string
+        | *col*: byte array
         """
-        col_=ctypes.c_char_p(force_bytes(col))
+        s_col=o2sclpy.std_string()
+        s_col.init_bytes(col)
         func=self._link.o2scl.o2scl_table__new_column
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,col_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_col._ptr)
         return
 
     def get_column_name(self,icol):
@@ -2121,25 +2131,28 @@ class table:
     def rename_column(self,src,dest):
         """
         | Parameters:
-        | *src*: string
-        | *dest*: string
+        | *src*: byte array
+        | *dest*: byte array
         """
-        src_=ctypes.c_char_p(force_bytes(src))
-        dest_=ctypes.c_char_p(force_bytes(dest))
+        s_src=o2sclpy.std_string()
+        s_src.init_bytes(src)
+        s_dest=o2sclpy.std_string()
+        s_dest.init_bytes(dest)
         func=self._link.o2scl.o2scl_table__rename_column
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,src_,dest_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_src._ptr,s_dest._ptr)
         return
 
     def delete_column(self,col):
         """
         | Parameters:
-        | *col*: string
+        | *col*: byte array
         """
-        col_=ctypes.c_char_p(force_bytes(col))
+        s_col=o2sclpy.std_string()
+        s_col.init_bytes(col)
         func=self._link.o2scl.o2scl_table__delete_column
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,col_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_col._ptr)
         return
 
     def get_sorted_name(self,icol):
@@ -2159,85 +2172,96 @@ class table:
     def init_column(self,scol,val):
         """
         | Parameters:
-        | *scol*: string
+        | *scol*: byte array
         | *val*: ``double``
         """
-        scol_=ctypes.c_char_p(force_bytes(scol))
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
         func=self._link.o2scl.o2scl_table__init_column
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
-        func(self._ptr,scol_,val)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,s_scol._ptr,val)
         return
 
     def is_column(self,scol):
         """
         | Parameters:
-        | *scol*: string
+        | *scol*: byte array
         | Returns: a Python boolean
         """
-        scol_=ctypes.c_char_p(force_bytes(scol))
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
         func=self._link.o2scl.o2scl_table__is_column
         func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,scol_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_scol._ptr)
         return ret
 
     def lookup_column(self,scol):
         """
         | Parameters:
-        | *scol*: string
+        | *scol*: byte array
         | Returns: a Python int
         """
-        scol_=ctypes.c_char_p(force_bytes(scol))
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
         func=self._link.o2scl.o2scl_table__lookup_column
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,scol_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_scol._ptr)
         return ret
 
     def copy_column(self,src,dest):
         """
         | Parameters:
-        | *src*: string
-        | *dest*: string
+        | *src*: byte array
+        | *dest*: byte array
         """
-        src_=ctypes.c_char_p(force_bytes(src))
-        dest_=ctypes.c_char_p(force_bytes(dest))
+        s_src=o2sclpy.std_string()
+        s_src.init_bytes(src)
+        s_dest=o2sclpy.std_string()
+        s_dest.init_bytes(dest)
         func=self._link.o2scl.o2scl_table__copy_column
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,src_,dest_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_src._ptr,s_dest._ptr)
         return
 
     def add_col_from_table(self,source,src_index,src_col,dest_index,dest_col):
         """
         | Parameters:
         | *source*: :class:`table<>` object
-        | *src_index*: string
-        | *src_col*: string
-        | *dest_index*: string
-        | *dest_col*: string
+        | *src_index*: byte array
+        | *src_col*: byte array
+        | *dest_index*: byte array
+        | *dest_col*: byte array
         """
-        src_index_=ctypes.c_char_p(force_bytes(src_index))
-        src_col_=ctypes.c_char_p(force_bytes(src_col))
-        dest_index_=ctypes.c_char_p(force_bytes(dest_index))
-        dest_col_=ctypes.c_char_p(force_bytes(dest_col))
+        s_src_index=o2sclpy.std_string()
+        s_src_index.init_bytes(src_index)
+        s_src_col=o2sclpy.std_string()
+        s_src_col.init_bytes(src_col)
+        s_dest_index=o2sclpy.std_string()
+        s_dest_index.init_bytes(dest_index)
+        s_dest_col=o2sclpy.std_string()
+        s_dest_col.init_bytes(dest_col)
         func=self._link.o2scl.o2scl_table__add_col_from_table
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,source._ptr,src_index_,src_col_,dest_index_,dest_col_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,source._ptr,s_src_index._ptr,s_src_col._ptr,s_dest_index._ptr,s_dest_col._ptr)
         return
 
     def insert_table(self,source,src_index,allow_extrap,dest_index):
         """
         | Parameters:
         | *source*: :class:`table<>` object
-        | *src_index*: string
+        | *src_index*: byte array
         | *allow_extrap*: ``bool``
-        | *dest_index*: string
+        | *dest_index*: byte array
         """
-        src_index_=ctypes.c_char_p(force_bytes(src_index))
-        dest_index_=ctypes.c_char_p(force_bytes(dest_index))
+        s_src_index=o2sclpy.std_string()
+        s_src_index.init_bytes(src_index)
+        s_dest_index=o2sclpy.std_string()
+        s_dest_index.init_bytes(dest_index)
         func=self._link.o2scl.o2scl_table__insert_table
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool,ctypes.c_char_p]
-        func(self._ptr,source._ptr,src_index_,allow_extrap,dest_index_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_void_p]
+        func(self._ptr,source._ptr,s_src_index._ptr,allow_extrap,s_dest_index._ptr)
         return
 
     def add_table(self,source):
@@ -2274,24 +2298,26 @@ class table:
     def delete_row(self,scol,val):
         """
         | Parameters:
-        | *scol*: string
+        | *scol*: byte array
         | *val*: ``double``
         """
-        scol_=ctypes.c_char_p(force_bytes(scol))
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
         func=self._link.o2scl.o2scl_table__delete_row
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
-        func(self._ptr,scol_,val)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,s_scol._ptr,val)
         return
 
     def delete_rows_func(self,func):
         """
         | Parameters:
-        | *func*: string
+        | *func*: byte array
         """
-        func_=ctypes.c_char_p(force_bytes(func))
+        s_func=o2sclpy.std_string()
+        s_func.init_bytes(func)
         func=self._link.o2scl.o2scl_table__delete_rows_func
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,func_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_func._ptr)
         return
 
     def delete_rows_ends(self,row_start,row_end):
@@ -2308,12 +2334,13 @@ class table:
     def line_of_names(self,names):
         """
         | Parameters:
-        | *names*: string
+        | *names*: byte array
         """
-        names_=ctypes.c_char_p(force_bytes(names))
+        s_names=o2sclpy.std_string()
+        s_names.init_bytes(names)
         func=self._link.o2scl.o2scl_table__line_of_names
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,names_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_names._ptr)
         return
 
     def line_of_data_vector(self,data):
@@ -2341,45 +2368,49 @@ class table:
     def ordered_lookup(self,scol,val):
         """
         | Parameters:
-        | *scol*: string
+        | *scol*: byte array
         | *val*: ``double``
         | Returns: a Python int
         """
-        scol_=ctypes.c_char_p(force_bytes(scol))
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
         func=self._link.o2scl.o2scl_table__ordered_lookup
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
-        ret=func(self._ptr,scol_,val)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,s_scol._ptr,val)
         return ret
 
     def lookup(self,scol,val):
         """
         | Parameters:
-        | *scol*: string
+        | *scol*: byte array
         | *val*: ``double``
         | Returns: a Python int
         """
-        scol_=ctypes.c_char_p(force_bytes(scol))
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
         func=self._link.o2scl.o2scl_table__lookup
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
-        ret=func(self._ptr,scol_,val)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,s_scol._ptr,val)
         return ret
 
     def lookup_val(self,scol,val,scol2):
         """
         | Parameters:
-        | *scol*: string
+        | *scol*: byte array
         | *val*: ``double``
-        | *scol2*: string
+        | *scol2*: byte array
         | Returns: a Python int
         """
-        scol_=ctypes.c_char_p(force_bytes(scol))
-        scol2_=ctypes.c_char_p(force_bytes(scol2))
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
+        s_scol2=o2sclpy.std_string()
+        s_scol2.init_bytes(scol2)
         func=self._link.o2scl.o2scl_table__lookup_val
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,scol_,val,scol2_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,s_scol._ptr,val,s_scol2._ptr)
         return ret
 
     def set_interp_type(self,interp_type):
@@ -2405,17 +2436,19 @@ class table:
     def interp(self,sx,x0,sy):
         """
         | Parameters:
-        | *sx*: string
+        | *sx*: byte array
         | *x0*: ``double``
-        | *sy*: string
+        | *sy*: byte array
         | Returns: a Python float
         """
-        sx_=ctypes.c_char_p(force_bytes(sx))
-        sy_=ctypes.c_char_p(force_bytes(sy))
+        s_sx=o2sclpy.std_string()
+        s_sx.init_bytes(sx)
+        s_sy=o2sclpy.std_string()
+        s_sy.init_bytes(sy)
         func=self._link.o2scl.o2scl_table__interp
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,sx_,x0,sy_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,s_sx._ptr,x0,s_sy._ptr)
         return ret
 
     def interp_index(self,ix,x0,iy):
@@ -2435,32 +2468,37 @@ class table:
     def deriv_col(self,x,y,yp):
         """
         | Parameters:
-        | *x*: string
-        | *y*: string
-        | *yp*: string
+        | *x*: byte array
+        | *y*: byte array
+        | *yp*: byte array
         """
-        x_=ctypes.c_char_p(force_bytes(x))
-        y_=ctypes.c_char_p(force_bytes(y))
-        yp_=ctypes.c_char_p(force_bytes(yp))
+        s_x=o2sclpy.std_string()
+        s_x.init_bytes(x)
+        s_y=o2sclpy.std_string()
+        s_y.init_bytes(y)
+        s_yp=o2sclpy.std_string()
+        s_yp.init_bytes(yp)
         func=self._link.o2scl.o2scl_table__deriv_col
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,x_,y_,yp_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_x._ptr,s_y._ptr,s_yp._ptr)
         return
 
     def deriv(self,sx,x0,sy):
         """
         | Parameters:
-        | *sx*: string
+        | *sx*: byte array
         | *x0*: ``double``
-        | *sy*: string
+        | *sy*: byte array
         | Returns: a Python float
         """
-        sx_=ctypes.c_char_p(force_bytes(sx))
-        sy_=ctypes.c_char_p(force_bytes(sy))
+        s_sx=o2sclpy.std_string()
+        s_sx.init_bytes(sx)
+        s_sy=o2sclpy.std_string()
+        s_sy.init_bytes(sy)
         func=self._link.o2scl.o2scl_table__deriv
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,sx_,x0,sy_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,s_sx._ptr,x0,s_sy._ptr)
         return ret
 
     def deriv_index(self,ix,x0,iy):
@@ -2480,32 +2518,37 @@ class table:
     def deriv2_col(self,x,y,yp):
         """
         | Parameters:
-        | *x*: string
-        | *y*: string
-        | *yp*: string
+        | *x*: byte array
+        | *y*: byte array
+        | *yp*: byte array
         """
-        x_=ctypes.c_char_p(force_bytes(x))
-        y_=ctypes.c_char_p(force_bytes(y))
-        yp_=ctypes.c_char_p(force_bytes(yp))
+        s_x=o2sclpy.std_string()
+        s_x.init_bytes(x)
+        s_y=o2sclpy.std_string()
+        s_y.init_bytes(y)
+        s_yp=o2sclpy.std_string()
+        s_yp.init_bytes(yp)
         func=self._link.o2scl.o2scl_table__deriv2_col
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,x_,y_,yp_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_x._ptr,s_y._ptr,s_yp._ptr)
         return
 
     def deriv2(self,sx,x0,sy):
         """
         | Parameters:
-        | *sx*: string
+        | *sx*: byte array
         | *x0*: ``double``
-        | *sy*: string
+        | *sy*: byte array
         | Returns: a Python float
         """
-        sx_=ctypes.c_char_p(force_bytes(sx))
-        sy_=ctypes.c_char_p(force_bytes(sy))
+        s_sx=o2sclpy.std_string()
+        s_sx.init_bytes(sx)
+        s_sy=o2sclpy.std_string()
+        s_sy.init_bytes(sy)
         func=self._link.o2scl.o2scl_table__deriv2
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,sx_,x0,sy_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,s_sx._ptr,x0,s_sy._ptr)
         return ret
 
     def deriv2_index(self,ix,x0,iy):
@@ -2525,18 +2568,20 @@ class table:
     def integ(self,sx,x1,x2,sy):
         """
         | Parameters:
-        | *sx*: string
+        | *sx*: byte array
         | *x1*: ``double``
         | *x2*: ``double``
-        | *sy*: string
+        | *sy*: byte array
         | Returns: a Python float
         """
-        sx_=ctypes.c_char_p(force_bytes(sx))
-        sy_=ctypes.c_char_p(force_bytes(sy))
+        s_sx=o2sclpy.std_string()
+        s_sx.init_bytes(sx)
+        s_sy=o2sclpy.std_string()
+        s_sy.init_bytes(sy)
         func=self._link.o2scl.o2scl_table__integ
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,sx_,x1,x2,sy_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,s_sx._ptr,x1,x2,s_sy._ptr)
         return ret
 
     def integ_index(self,ix,x1,x2,iy):
@@ -2557,42 +2602,47 @@ class table:
     def integ_col(self,x,y,yi):
         """
         | Parameters:
-        | *x*: string
-        | *y*: string
-        | *yi*: string
+        | *x*: byte array
+        | *y*: byte array
+        | *yi*: byte array
         """
-        x_=ctypes.c_char_p(force_bytes(x))
-        y_=ctypes.c_char_p(force_bytes(y))
-        yi_=ctypes.c_char_p(force_bytes(yi))
+        s_x=o2sclpy.std_string()
+        s_x.init_bytes(x)
+        s_y=o2sclpy.std_string()
+        s_y.init_bytes(y)
+        s_yi=o2sclpy.std_string()
+        s_yi.init_bytes(yi)
         func=self._link.o2scl.o2scl_table__integ_col
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,x_,y_,yi_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_x._ptr,s_y._ptr,s_yi._ptr)
         return
 
     def max(self,max):
         """
         | Parameters:
-        | *max*: string
+        | *max*: byte array
         | Returns: a Python float
         """
-        max_=ctypes.c_char_p(force_bytes(max))
+        s_max=o2sclpy.std_string()
+        s_max.init_bytes(max)
         func=self._link.o2scl.o2scl_table__max
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,max_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_max._ptr)
         return ret
 
     def min(self,min):
         """
         | Parameters:
-        | *min*: string
+        | *min*: byte array
         | Returns: a Python float
         """
-        min_=ctypes.c_char_p(force_bytes(min))
+        s_min=o2sclpy.std_string()
+        s_min.init_bytes(min)
         func=self._link.o2scl.o2scl_table__min
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,min_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_min._ptr)
         return ret
 
     def zero_table(self):
@@ -2638,35 +2688,38 @@ class table:
     def sort_table(self,scol):
         """
         | Parameters:
-        | *scol*: string
+        | *scol*: byte array
         """
-        scol_=ctypes.c_char_p(force_bytes(scol))
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
         func=self._link.o2scl.o2scl_table__sort_table
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,scol_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_scol._ptr)
         return
 
     def sort_column(self,scol):
         """
         | Parameters:
-        | *scol*: string
+        | *scol*: byte array
         """
-        scol_=ctypes.c_char_p(force_bytes(scol))
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
         func=self._link.o2scl.o2scl_table__sort_column
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,scol_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_scol._ptr)
         return
 
     def average_col_roll(self,col_name,window):
         """
         | Parameters:
-        | *col_name*: string
+        | *col_name*: byte array
         | *window*: ``size_t``
         """
-        col_name_=ctypes.c_char_p(force_bytes(col_name))
+        s_col_name=o2sclpy.std_string()
+        s_col_name.init_bytes(col_name)
         func=self._link.o2scl.o2scl_table__average_col_roll
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
-        func(self._ptr,col_name_,window)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,s_col_name._ptr,window)
         return
 
     def average_rows(self,window,rolling):
@@ -2691,52 +2744,57 @@ class table:
     def functions_columns(self,list):
         """
         | Parameters:
-        | *list*: string
+        | *list*: byte array
         """
-        list_=ctypes.c_char_p(force_bytes(list))
+        s_list=o2sclpy.std_string()
+        s_list.init_bytes(list)
         func=self._link.o2scl.o2scl_table__functions_columns
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,list_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_list._ptr)
         return
 
     def function_column(self,function,scol):
         """
         | Parameters:
-        | *function*: string
-        | *scol*: string
+        | *function*: byte array
+        | *scol*: byte array
         """
-        function_=ctypes.c_char_p(force_bytes(function))
-        scol_=ctypes.c_char_p(force_bytes(scol))
+        s_function=o2sclpy.std_string()
+        s_function.init_bytes(function)
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
         func=self._link.o2scl.o2scl_table__function_column
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,function_,scol_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_function._ptr,s_scol._ptr)
         return
 
     def row_function(self,scol,row):
         """
         | Parameters:
-        | *scol*: string
+        | *scol*: byte array
         | *row*: ``size_t``
         | Returns: a Python float
         """
-        scol_=ctypes.c_char_p(force_bytes(scol))
+        s_scol=o2sclpy.std_string()
+        s_scol.init_bytes(scol)
         func=self._link.o2scl.o2scl_table__row_function
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t]
-        ret=func(self._ptr,scol_,row)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,s_scol._ptr,row)
         return ret
 
     def function_find_row(self,function):
         """
         | Parameters:
-        | *function*: string
+        | *function*: byte array
         | Returns: a Python int
         """
-        function_=ctypes.c_char_p(force_bytes(function))
+        s_function=o2sclpy.std_string()
+        s_function.init_bytes(function)
         func=self._link.o2scl.o2scl_table__function_find_row
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,function_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_function._ptr)
         return ret
 
     def summary(self):
@@ -2836,27 +2894,30 @@ class table_units(table):
     def set_unit(self,col,unit):
         """
         | Parameters:
-        | *col*: string
-        | *unit*: string
+        | *col*: byte array
+        | *unit*: byte array
         """
-        col_=ctypes.c_char_p(force_bytes(col))
-        unit_=ctypes.c_char_p(force_bytes(unit))
+        s_col=o2sclpy.std_string()
+        s_col.init_bytes(col)
+        s_unit=o2sclpy.std_string()
+        s_unit.init_bytes(unit)
         func=self._link.o2scl.o2scl_table_units__set_unit
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,col_,unit_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_col._ptr,s_unit._ptr)
         return
 
     def get_unit(self,col):
         """
         | Parameters:
-        | *col*: string
+        | *col*: byte array
         | Returns: Python bytes object
         """
-        col_=ctypes.c_char_p(force_bytes(col))
+        s_col=o2sclpy.std_string()
+        s_col.init_bytes(col)
         func=self._link.o2scl.o2scl_table_units__get_unit
         func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,col_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_col._ptr)
         strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
@@ -2864,39 +2925,43 @@ class table_units(table):
     def line_of_units(self,unit_line):
         """
         | Parameters:
-        | *unit_line*: string
+        | *unit_line*: byte array
         """
-        unit_line_=ctypes.c_char_p(force_bytes(unit_line))
+        s_unit_line=o2sclpy.std_string()
+        s_unit_line.init_bytes(unit_line)
         func=self._link.o2scl.o2scl_table_units__line_of_units
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,unit_line_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_unit_line._ptr)
         return
 
     def remove_unit(self,col):
         """
         | Parameters:
-        | *col*: string
+        | *col*: byte array
         """
-        col_=ctypes.c_char_p(force_bytes(col))
+        s_col=o2sclpy.std_string()
+        s_col.init_bytes(col)
         func=self._link.o2scl.o2scl_table_units__remove_unit
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,col_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_col._ptr)
         return
 
     def convert_to_unit(self,col,unit,err_on_fail=True):
         """
         | Parameters:
-        | *col*: string
-        | *unit*: string
+        | *col*: byte array
+        | *unit*: byte array
         | *err_on_fail* =True: ``bool``
         | Returns: a Python int
         """
-        col_=ctypes.c_char_p(force_bytes(col))
-        unit_=ctypes.c_char_p(force_bytes(unit))
+        s_col=o2sclpy.std_string()
+        s_col.init_bytes(col)
+        s_unit=o2sclpy.std_string()
+        s_unit.init_bytes(unit)
         func=self._link.o2scl.o2scl_table_units__convert_to_unit
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_bool]
-        ret=func(self._ptr,col_,unit_,err_on_fail)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        ret=func(self._ptr,s_col._ptr,s_unit._ptr,err_on_fail)
         return ret
 
 
@@ -3520,33 +3585,37 @@ class table3d:
     def set_xy(self,x_name,nx,x,y_name,ny,y):
         """
         | Parameters:
-        | *x_name*: string
+        | *x_name*: byte array
         | *nx*: ``size_t``
         | *x*: :class:`std_vector` object
-        | *y_name*: string
+        | *y_name*: byte array
         | *ny*: ``size_t``
         | *y*: :class:`std_vector` object
         """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
+        s_x_name=o2sclpy.std_string()
+        s_x_name.init_bytes(x_name)
+        s_y_name=o2sclpy.std_string()
+        s_y_name.init_bytes(y_name)
         func=self._link.o2scl.o2scl_table3d_set_xy
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_void_p]
-        func(self._ptr,x_name_,nx,x._ptr,y_name_,ny,y._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,s_x_name._ptr,nx,x._ptr,s_y_name._ptr,ny,y._ptr)
         return
 
     def set_xy_grid(self,x_name,x_grid,y_name,y_grid):
         """
         | Parameters:
-        | *x_name*: string
+        | *x_name*: byte array
         | *x_grid*: :class:`uniform_grid<double>` object
-        | *y_name*: string
+        | *y_name*: byte array
         | *y_grid*: :class:`uniform_grid<double>` object
         """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
+        s_x_name=o2sclpy.std_string()
+        s_x_name.init_bytes(x_name)
+        s_y_name=o2sclpy.std_string()
+        s_y_name.init_bytes(y_name)
         func=self._link.o2scl.o2scl_table3d_set_xy_grid
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p]
-        func(self._ptr,x_name_,x_grid._ptr,y_name_,y_grid._ptr)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_x_name._ptr,x_grid._ptr,s_y_name._ptr,y_grid._ptr)
         return
 
     def set(self,ix,iy,name,val):
@@ -3554,13 +3623,14 @@ class table3d:
         | Parameters:
         | *ix*: ``size_t``
         | *iy*: ``size_t``
-        | *name*: string
+        | *name*: byte array
         | *val*: ``double``
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_set
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_char_p,ctypes.c_double]
-        func(self._ptr,ix,iy,name_,val)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,ix,iy,s_name._ptr,val)
         return
 
     def get(self,ix,iy,name):
@@ -3568,14 +3638,15 @@ class table3d:
         | Parameters:
         | *ix*: ``size_t``
         | *iy*: ``size_t``
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_get
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_char_p]
-        ret=func(self._ptr,ix,iy,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p]
+        ret=func(self._ptr,ix,iy,s_name._ptr)
         return ret
 
     def get_i(self,ix,iy,iz):
@@ -3610,13 +3681,14 @@ class table3d:
         | Parameters:
         | *x*: ``double``
         | *y*: ``double``
-        | *name*: string
+        | *name*: byte array
         | *val*: ``double``
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_set_val
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p,ctypes.c_double]
-        func(self._ptr,x,y,name_,val)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,x,y,s_name._ptr,val)
         return
 
     def get_val(self,x,y,name):
@@ -3624,14 +3696,15 @@ class table3d:
         | Parameters:
         | *x*: ``double``
         | *y*: ``double``
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_get_val
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,x,y,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,x,y,s_name._ptr)
         return ret
 
     def set_grid_x(self,ix,val):
@@ -3707,23 +3780,25 @@ class table3d:
     def set_x_name(self,name):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_set_x_name
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_name._ptr)
         return
 
     def set_y_name(self,name):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_set_y_name
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_name._ptr)
         return
 
     def get_size(self):
@@ -3805,104 +3880,114 @@ class table3d:
     def new_slice(self,slice):
         """
         | Parameters:
-        | *slice*: string
+        | *slice*: byte array
         """
-        slice_=ctypes.c_char_p(force_bytes(slice))
+        s_slice=o2sclpy.std_string()
+        s_slice.init_bytes(slice)
         func=self._link.o2scl.o2scl_table3d_new_slice
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,slice_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_slice._ptr)
         return
 
     def set_slice_all(self,name,val):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *val*: ``double``
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_set_slice_all
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
-        func(self._ptr,name_,val)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,s_name._ptr,val)
         return
 
     def lookup_slice(self,name):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_lookup_slice
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr)
         return ret
 
     def is_slice(self,name):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python boolean, a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_is_slice
         func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.POINTER(ctypes.c_size_t)]
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_size_t)]
         ix_conv=ctypes.c_size_t(0)
-        ret=func(self._ptr,name_,ctypes.byref(ix_conv))
+        ret=func(self._ptr,s_name._ptr,ctypes.byref(ix_conv))
         return ret,ix_conv.value
 
     def rename_slice(self,name1,name2):
         """
         | Parameters:
-        | *name1*: string
-        | *name2*: string
+        | *name1*: byte array
+        | *name2*: byte array
         """
-        name1_=ctypes.c_char_p(force_bytes(name1))
-        name2_=ctypes.c_char_p(force_bytes(name2))
+        s_name1=o2sclpy.std_string()
+        s_name1.init_bytes(name1)
+        s_name2=o2sclpy.std_string()
+        s_name2.init_bytes(name2)
         func=self._link.o2scl.o2scl_table3d_rename_slice
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,name1_,name2_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_name1._ptr,s_name2._ptr)
         return
 
     def copy_slice(self,name1,name2):
         """
         | Parameters:
-        | *name1*: string
-        | *name2*: string
+        | *name1*: byte array
+        | *name2*: byte array
         """
-        name1_=ctypes.c_char_p(force_bytes(name1))
-        name2_=ctypes.c_char_p(force_bytes(name2))
+        s_name1=o2sclpy.std_string()
+        s_name1.init_bytes(name1)
+        s_name2=o2sclpy.std_string()
+        s_name2.init_bytes(name2)
         func=self._link.o2scl.o2scl_table3d_copy_slice
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,name1_,name2_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_name1._ptr,s_name2._ptr)
         return
 
     def get_slice(self,slice):
         """
         | Parameters:
-        | *slice*: string
+        | *slice*: byte array
         | Returns: :class:`ublas_matrix` object
         """
-        slice_=ctypes.c_char_p(force_bytes(slice))
+        s_slice=o2sclpy.std_string()
+        s_slice.init_bytes(slice)
         func=self._link.o2scl.o2scl_table3d_get_slice
         func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,slice_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_slice._ptr)
         ret2=ublas_matrix(ret)
         return ret2
 
     def get_slice_i(self,slice):
         """
         | Parameters:
-        | *slice*: string
+        | *slice*: byte array
         | Returns: :class:`ublas_matrix` object
         """
-        slice_=ctypes.c_char_p(force_bytes(slice))
+        s_slice=o2sclpy.std_string()
+        s_slice.init_bytes(slice)
         func=self._link.o2scl.o2scl_table3d_get_slice_i
         func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,slice_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_slice._ptr)
         ret2=ublas_matrix(ret)
         return ret2
 
@@ -3933,14 +4018,15 @@ class table3d:
         | Parameters:
         | *x*: ``double``
         | *y*: ``double``
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_interp
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,x,y,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,x,y,s_name._ptr)
         return ret
 
     def deriv_x(self,x,y,name):
@@ -3948,14 +4034,15 @@ class table3d:
         | Parameters:
         | *x*: ``double``
         | *y*: ``double``
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_deriv_x
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,x,y,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,x,y,s_name._ptr)
         return ret
 
     def deriv_y(self,x,y,name):
@@ -3963,14 +4050,15 @@ class table3d:
         | Parameters:
         | *x*: ``double``
         | *y*: ``double``
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_deriv_y
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,x,y,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,x,y,s_name._ptr)
         return ret
 
     def deriv_xy(self,x,y,name):
@@ -3978,14 +4066,15 @@ class table3d:
         | Parameters:
         | *x*: ``double``
         | *y*: ``double``
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_deriv_xy
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,x,y,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,x,y,s_name._ptr)
         return ret
 
     def integ_x(self,x1,x2,y,name):
@@ -3994,14 +4083,15 @@ class table3d:
         | *x1*: ``double``
         | *x2*: ``double``
         | *y*: ``double``
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_integ_x
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,x1,x2,y,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,x1,x2,y,s_name._ptr)
         return ret
 
     def integ_y(self,x,y1,y2,name):
@@ -4010,14 +4100,15 @@ class table3d:
         | *x*: ``double``
         | *y1*: ``double``
         | *y2*: ``double``
-        | *name*: string
+        | *name*: byte array
         | Returns: a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_table3d_integ_y
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_char_p]
-        ret=func(self._ptr,x,y1,y2,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
+        ret=func(self._ptr,x,y1,y2,s_name._ptr)
         return ret
 
     def zero_table(self):
@@ -4039,29 +4130,32 @@ class table3d:
     def function_matrix(self,function,mat,throw_on_err):
         """
         | Parameters:
-        | *function*: string
+        | *function*: byte array
         | *mat*: :class:`ublas_matrix` object
         | *throw_on_err*: ``bool``
         | Returns: a Python int
         """
-        function_=ctypes.c_char_p(force_bytes(function))
+        s_function=o2sclpy.std_string()
+        s_function.init_bytes(function)
         func=self._link.o2scl.o2scl_table3d_function_matrix
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_void_p,ctypes.c_bool]
-        ret=func(self._ptr,function_,mat._ptr,throw_on_err)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        ret=func(self._ptr,s_function._ptr,mat._ptr,throw_on_err)
         return ret
 
     def function_slice(self,function,slice):
         """
         | Parameters:
-        | *function*: string
-        | *slice*: string
+        | *function*: byte array
+        | *slice*: byte array
         """
-        function_=ctypes.c_char_p(force_bytes(function))
-        slice_=ctypes.c_char_p(force_bytes(slice))
+        s_function=o2sclpy.std_string()
+        s_function.init_bytes(function)
+        s_slice=o2sclpy.std_string()
+        s_slice.init_bytes(slice)
         func=self._link.o2scl.o2scl_table3d_function_slice
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,function_,slice_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_function._ptr,s_slice._ptr)
         return
 
     def summary(self):
@@ -5240,16 +5334,19 @@ class tensor:
         | *ix_x*: ``size_t``
         | *ix_y*: ``size_t``
         | *tab*: :class:`table3d` object
-        | *x_name* ="x": string
-        | *y_name* ="y": string
-        | *slice_name* ="z": string
+        | *x_name* ="x": byte array
+        | *y_name* ="y": byte array
+        | *slice_name* ="z": byte array
         """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
-        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        s_x_name=o2sclpy.std_string()
+        s_x_name.init_bytes(x_name)
+        s_y_name=o2sclpy.std_string()
+        s_y_name.init_bytes(y_name)
+        s_slice_name=o2sclpy.std_string()
+        s_slice_name.init_bytes(slice_name)
         func=self._link.o2scl.o2scl_tensor__copy_table3d_sum
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ix_x,ix_y,tab._ptr,s_x_name._ptr,s_y_name._ptr,s_slice_name._ptr)
         return
 
     def copy_table3d(self,ix_x,ix_y,tab,x_name="x",y_name="y",slice_name="z"):
@@ -5258,16 +5355,19 @@ class tensor:
         | *ix_x*: ``size_t``
         | *ix_y*: ``size_t``
         | *tab*: :class:`table3d` object
-        | *x_name* ="x": string
-        | *y_name* ="y": string
-        | *slice_name* ="z": string
+        | *x_name* ="x": byte array
+        | *y_name* ="y": byte array
+        | *slice_name* ="z": byte array
         """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
-        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        s_x_name=o2sclpy.std_string()
+        s_x_name.init_bytes(x_name)
+        s_y_name=o2sclpy.std_string()
+        s_y_name.init_bytes(y_name)
+        s_slice_name=o2sclpy.std_string()
+        s_slice_name.init_bytes(slice_name)
         func=self._link.o2scl.o2scl_tensor__copy_table3d
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ix_x,ix_y,tab._ptr,s_x_name._ptr,s_y_name._ptr,s_slice_name._ptr)
         return
 
     @classmethod
@@ -5636,16 +5736,19 @@ class tensor_int:
         | *ix_x*: ``size_t``
         | *ix_y*: ``size_t``
         | *tab*: :class:`table3d` object
-        | *x_name* ="x": string
-        | *y_name* ="y": string
-        | *slice_name* ="z": string
+        | *x_name* ="x": byte array
+        | *y_name* ="y": byte array
+        | *slice_name* ="z": byte array
         """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
-        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        s_x_name=o2sclpy.std_string()
+        s_x_name.init_bytes(x_name)
+        s_y_name=o2sclpy.std_string()
+        s_y_name.init_bytes(y_name)
+        s_slice_name=o2sclpy.std_string()
+        s_slice_name.init_bytes(slice_name)
         func=self._link.o2scl.o2scl_tensor_int_std_vector_int__copy_table3d_sum
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ix_x,ix_y,tab._ptr,s_x_name._ptr,s_y_name._ptr,s_slice_name._ptr)
         return
 
     def copy_table3d(self,ix_x,ix_y,tab,x_name="x",y_name="y",slice_name="z"):
@@ -5654,16 +5757,19 @@ class tensor_int:
         | *ix_x*: ``size_t``
         | *ix_y*: ``size_t``
         | *tab*: :class:`table3d` object
-        | *x_name* ="x": string
-        | *y_name* ="y": string
-        | *slice_name* ="z": string
+        | *x_name* ="x": byte array
+        | *y_name* ="y": byte array
+        | *slice_name* ="z": byte array
         """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
-        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        s_x_name=o2sclpy.std_string()
+        s_x_name.init_bytes(x_name)
+        s_y_name=o2sclpy.std_string()
+        s_y_name.init_bytes(y_name)
+        s_slice_name=o2sclpy.std_string()
+        s_slice_name.init_bytes(slice_name)
         func=self._link.o2scl.o2scl_tensor_int_std_vector_int__copy_table3d
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ix_x,ix_y,tab._ptr,s_x_name._ptr,s_y_name._ptr,s_slice_name._ptr)
         return
 
     @classmethod
@@ -6009,16 +6115,19 @@ class tensor_size_t:
         | *ix_x*: ``size_t``
         | *ix_y*: ``size_t``
         | *tab*: :class:`table3d` object
-        | *x_name* ="x": string
-        | *y_name* ="y": string
-        | *slice_name* ="z": string
+        | *x_name* ="x": byte array
+        | *y_name* ="y": byte array
+        | *slice_name* ="z": byte array
         """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
-        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        s_x_name=o2sclpy.std_string()
+        s_x_name.init_bytes(x_name)
+        s_y_name=o2sclpy.std_string()
+        s_y_name.init_bytes(y_name)
+        s_slice_name=o2sclpy.std_string()
+        s_slice_name.init_bytes(slice_name)
         func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__copy_table3d_sum
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ix_x,ix_y,tab._ptr,s_x_name._ptr,s_y_name._ptr,s_slice_name._ptr)
         return
 
     def copy_table3d(self,ix_x,ix_y,tab,x_name="x",y_name="y",slice_name="z"):
@@ -6027,16 +6136,19 @@ class tensor_size_t:
         | *ix_x*: ``size_t``
         | *ix_y*: ``size_t``
         | *tab*: :class:`table3d` object
-        | *x_name* ="x": string
-        | *y_name* ="y": string
-        | *slice_name* ="z": string
+        | *x_name* ="x": byte array
+        | *y_name* ="y": byte array
+        | *slice_name* ="z": byte array
         """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
-        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        s_x_name=o2sclpy.std_string()
+        s_x_name.init_bytes(x_name)
+        s_y_name=o2sclpy.std_string()
+        s_y_name.init_bytes(y_name)
+        s_slice_name=o2sclpy.std_string()
+        s_slice_name.init_bytes(slice_name)
         func=self._link.o2scl.o2scl_tensor_size_t_std_vector_size_t__copy_table3d
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,tab._ptr,x_name_,y_name_,slice_name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ix_x,ix_y,tab._ptr,s_x_name._ptr,s_y_name._ptr,s_slice_name._ptr)
         return
 
     @classmethod
@@ -6253,12 +6365,13 @@ class tensor_grid(tensor):
         """
         | Parameters:
         | *ix*: ``size_t``
-        | *func*: string
+        | *func*: byte array
         """
-        func_=ctypes.c_char_p(force_bytes(func))
+        s_func=o2sclpy.std_string()
+        s_func.init_bytes(func)
         func=self._link.o2scl.o2scl_tensor_grid__set_grid_i_func
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char_p]
-        func(self._ptr,ix,func_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,ix,s_func._ptr)
         return
 
     def get_grid(self,i,j):
@@ -6333,12 +6446,13 @@ class tensor_grid(tensor):
         | *ix_y*: ``size_t``
         | *index*: :class:`vector<size_t>` object
         | *tab*: :class:`table3d` object
-        | *z_name* ="z": string
+        | *z_name* ="z": byte array
         """
-        z_name_=ctypes.c_char_p(force_bytes(z_name))
+        s_z_name=o2sclpy.std_string()
+        s_z_name.init_bytes(z_name)
         func=self._link.o2scl.o2scl_tensor_grid__copy_table3d_align
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,index._ptr,tab._ptr,z_name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ix_x,ix_y,index._ptr,tab._ptr,s_z_name._ptr)
         return
 
     def copy_table3d_align_setxy(self,ix_x,ix_y,index,tab,x_name="x",y_name="y",z_name="z"):
@@ -6348,16 +6462,19 @@ class tensor_grid(tensor):
         | *ix_y*: ``size_t``
         | *index*: :class:`vector<size_t>` object
         | *tab*: :class:`table3d` object
-        | *x_name* ="x": string
-        | *y_name* ="y": string
-        | *z_name* ="z": string
+        | *x_name* ="x": byte array
+        | *y_name* ="y": byte array
+        | *z_name* ="z": byte array
         """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
-        z_name_=ctypes.c_char_p(force_bytes(z_name))
+        s_x_name=o2sclpy.std_string()
+        s_x_name.init_bytes(x_name)
+        s_y_name=o2sclpy.std_string()
+        s_y_name.init_bytes(y_name)
+        s_z_name=o2sclpy.std_string()
+        s_z_name.init_bytes(z_name)
         func=self._link.o2scl.o2scl_tensor_grid__copy_table3d_align_setxy
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,index._ptr,tab._ptr,x_name_,y_name_,z_name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ix_x,ix_y,index._ptr,tab._ptr,s_x_name._ptr,s_y_name._ptr,s_z_name._ptr)
         return
 
     def copy_table3d_interp(self,ix_x,ix_y,index,tab,slice_name="z"):
@@ -6367,12 +6484,13 @@ class tensor_grid(tensor):
         | *ix_y*: ``size_t``
         | *index*: :class:`std_vector_size_t` object
         | *tab*: :class:`table3d` object
-        | *slice_name* ="z": string
+        | *slice_name* ="z": byte array
         """
-        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        s_slice_name=o2sclpy.std_string()
+        s_slice_name.init_bytes(slice_name)
         func=self._link.o2scl.o2scl_tensor_grid__copy_table3d_interp
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,index._ptr,tab._ptr,slice_name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ix_x,ix_y,index._ptr,tab._ptr,s_slice_name._ptr)
         return
 
     def copy_table3d_interp_values(self,ix_x,ix_y,values,tab,slice_name="z",verbose=0):
@@ -6382,13 +6500,14 @@ class tensor_grid(tensor):
         | *ix_y*: ``size_t``
         | *values*: :class:`std_vector` object
         | *tab*: :class:`table3d` object
-        | *slice_name* ="z": string
+        | *slice_name* ="z": byte array
         | *verbose* =0: ``int``
         """
-        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        s_slice_name=o2sclpy.std_string()
+        s_slice_name.init_bytes(slice_name)
         func=self._link.o2scl.o2scl_tensor_grid__copy_table3d_interp_values
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_int]
-        func(self._ptr,ix_x,ix_y,values._ptr,tab._ptr,slice_name_,verbose)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,ix_x,ix_y,values._ptr,tab._ptr,s_slice_name._ptr,verbose)
         return
 
     def copy_table3d_interp_values_setxy(self,ix_x,ix_y,values,tab,x_name="x",y_name="y",slice_name="z"):
@@ -6398,16 +6517,19 @@ class tensor_grid(tensor):
         | *ix_y*: ``size_t``
         | *values*: :class:`std_vector` object
         | *tab*: :class:`table3d` object
-        | *x_name* ="x": string
-        | *y_name* ="y": string
-        | *slice_name* ="z": string
+        | *x_name* ="x": byte array
+        | *y_name* ="y": byte array
+        | *slice_name* ="z": byte array
         """
-        x_name_=ctypes.c_char_p(force_bytes(x_name))
-        y_name_=ctypes.c_char_p(force_bytes(y_name))
-        slice_name_=ctypes.c_char_p(force_bytes(slice_name))
+        s_x_name=o2sclpy.std_string()
+        s_x_name.init_bytes(x_name)
+        s_y_name=o2sclpy.std_string()
+        s_y_name.init_bytes(y_name)
+        s_slice_name=o2sclpy.std_string()
+        s_slice_name.init_bytes(slice_name)
         func=self._link.o2scl.o2scl_tensor_grid__copy_table3d_interp_values_setxy
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-        func(self._ptr,ix_x,ix_y,values._ptr,tab._ptr,x_name_,y_name_,slice_name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,ix_x,ix_y,values._ptr,tab._ptr,s_x_name._ptr,s_y_name._ptr,s_slice_name._ptr)
         return
 
     def clear(self):
@@ -6458,16 +6580,17 @@ class tensor_grid(tensor):
         """
         | Parameters:
         | *t3d*: :class:`table3d` object
-        | *slice*: string
+        | *slice*: byte array
         | *n_points*: ``size_t``
         | *low* =0.0: ``double``
         | *high* =0.0: ``double``
         | *width* =0.0: ``double``
         """
-        slice_=ctypes.c_char_p(force_bytes(slice))
+        s_slice=o2sclpy.std_string()
+        s_slice.init_bytes(slice)
         func=self._link.o2scl.o2scl_tensor_grid__from_table3d_fermi
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_double]
-        func(self._ptr,t3d._ptr,slice_,n_points,low,high,width)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,t3d._ptr,s_slice._ptr,n_points,low,high,width)
         return
 
     def resize(self,index):
@@ -6557,7 +6680,7 @@ class find_constants_const_entry:
 
     def get_unit(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_find_constants_const_entry_get_unit
         func.restype=ctypes.c_void_p
@@ -6568,11 +6691,13 @@ class find_constants_const_entry:
 
     def set_unit(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_find_constants_const_entry_set_unit
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     @property
@@ -6617,7 +6742,7 @@ class find_constants_const_entry:
 
     def get_source(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_find_constants_const_entry_get_source
         func.restype=ctypes.c_void_p
@@ -6628,11 +6753,13 @@ class find_constants_const_entry:
 
     def set_source(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_find_constants_const_entry_set_source
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     @property
@@ -6856,7 +6983,8 @@ class find_constants:
         | *name*: :class:`std_string` object
         | *verbose* =0: ``int``
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_find_constants__del_constant
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,name._ptr,verbose)
@@ -6920,7 +7048,7 @@ class convert_units_der_unit:
 
     def get_label(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_convert_units_der_unit_get_label
         func.restype=ctypes.c_void_p
@@ -6931,11 +7059,13 @@ class convert_units_der_unit:
 
     def set_label(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_convert_units_der_unit_set_label
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     @property
@@ -7100,7 +7230,7 @@ class convert_units_der_unit:
 
     def get_name(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_convert_units_der_unit_get_name
         func.restype=ctypes.c_void_p
@@ -7111,11 +7241,13 @@ class convert_units_der_unit:
 
     def set_name(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_convert_units_der_unit_set_name
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def set(self,label,val,name='',m=0,k=0,s=0,K=0,A=0,mol=0,cd=0):
@@ -7256,34 +7388,38 @@ class convert_units:
     def convert(self,frm,to,val):
         """
         | Parameters:
-        | *frm*: string
-        | *to*: string
+        | *frm*: byte array
+        | *to*: byte array
         | *val*: ``double``
         | Returns: a Python float
         """
-        frm_=ctypes.c_char_p(force_bytes(frm))
-        to_=ctypes.c_char_p(force_bytes(to))
+        s_frm=o2sclpy.std_string()
+        s_frm.init_bytes(frm)
+        s_to=o2sclpy.std_string()
+        s_to.init_bytes(to)
         func=self._link.o2scl.o2scl_convert_units__convert
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_double]
-        ret=func(self._ptr,frm_,to_,val)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,s_frm._ptr,s_to._ptr,val)
         return ret
 
     def convert_ret(self,frm,to,val,converted):
         """
         | Parameters:
-        | *frm*: string
-        | *to*: string
+        | *frm*: byte array
+        | *to*: byte array
         | *val*: ``double``
         | *converted*: ``double``
         | Returns: a Python int
         """
-        frm_=ctypes.c_char_p(force_bytes(frm))
-        to_=ctypes.c_char_p(force_bytes(to))
+        s_frm=o2sclpy.std_string()
+        s_frm.init_bytes(frm)
+        s_to=o2sclpy.std_string()
+        s_to.init_bytes(to)
         func=self._link.o2scl.o2scl_convert_units__convert_ret
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_double,ctypes.c_double]
-        ret=func(self._ptr,frm_,to_,val,converted)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,s_frm._ptr,s_to._ptr,val,converted)
         return ret
 
     def del_unit(self,name):
@@ -7291,7 +7427,8 @@ class convert_units:
         | Parameters:
         | *name*: :class:`std_string` object
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_convert_units__del_unit
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,name._ptr)
@@ -7322,31 +7459,35 @@ class convert_units:
     def is_in_cache(self,frm,to):
         """
         | Parameters:
-        | *frm*: string
-        | *to*: string
+        | *frm*: byte array
+        | *to*: byte array
         | Returns: a Python int
         """
-        frm_=ctypes.c_char_p(force_bytes(frm))
-        to_=ctypes.c_char_p(force_bytes(to))
+        s_frm=o2sclpy.std_string()
+        s_frm.init_bytes(frm)
+        s_to=o2sclpy.std_string()
+        s_to.init_bytes(to)
         func=self._link.o2scl.o2scl_convert_units__is_in_cache
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        ret=func(self._ptr,frm_,to_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_frm._ptr,s_to._ptr)
         return ret
 
     def remove_cache(self,frm,to):
         """
         | Parameters:
-        | *frm*: string
-        | *to*: string
+        | *frm*: byte array
+        | *to*: byte array
         | Returns: a Python int
         """
-        frm_=ctypes.c_char_p(force_bytes(frm))
-        to_=ctypes.c_char_p(force_bytes(to))
+        s_frm=o2sclpy.std_string()
+        s_frm.init_bytes(frm)
+        s_to=o2sclpy.std_string()
+        s_to.init_bytes(to)
         func=self._link.o2scl.o2scl_convert_units__remove_cache
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-        ret=func(self._ptr,frm_,to_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_frm._ptr,s_to._ptr)
         return ret
 
     def clear_cache(self):
@@ -7384,32 +7525,36 @@ class convert_units:
     def find_print(self,name,unit,prec,use_regex):
         """
         | Parameters:
-        | *name*: string
-        | *unit*: string
+        | *name*: byte array
+        | *unit*: byte array
         | *prec*: ``size_t``
         | *use_regex*: ``bool``
         """
-        name_=ctypes.c_char_p(force_bytes(name))
-        unit_=ctypes.c_char_p(force_bytes(unit))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
+        s_unit=o2sclpy.std_string()
+        s_unit.init_bytes(unit)
         func=self._link.o2scl.o2scl_convert_units__find_print
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_size_t,ctypes.c_bool]
-        func(self._ptr,name_,unit_,prec,use_regex)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_bool]
+        func(self._ptr,s_name._ptr,s_unit._ptr,prec,use_regex)
         return
 
     def find_unique(self,name,unit,use_regex=False):
         """
         | Parameters:
-        | *name*: string
-        | *unit*: string
+        | *name*: byte array
+        | *unit*: byte array
         | *use_regex* =false: ``bool``
         | Returns: a Python float
         """
-        name_=ctypes.c_char_p(force_bytes(name))
-        unit_=ctypes.c_char_p(force_bytes(unit))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
+        s_unit=o2sclpy.std_string()
+        s_unit.init_bytes(unit)
         func=self._link.o2scl.o2scl_convert_units__find_unique
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_bool]
-        ret=func(self._ptr,name_,unit_,use_regex)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        ret=func(self._ptr,s_name._ptr,s_unit._ptr,use_regex)
         return ret
 
     def add_unit(self,label,val,name='',m=0,k=0,s=0,K=0,A=0,mol=0,cd=0):
@@ -7626,12 +7771,13 @@ class format_float:
     def set_dec_point(self,dec_point):
         """
         | Parameters:
-        | *dec_point*: string
+        | *dec_point*: byte array
         """
-        dec_point_=ctypes.c_char_p(force_bytes(dec_point))
+        s_dec_point=o2sclpy.std_string()
+        s_dec_point.init_bytes(dec_point)
         func=self._link.o2scl.o2scl_format_float_set_dec_point
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        func(self._ptr,dec_point_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,s_dec_point._ptr)
         return
 
     def set_exp_digits(self,d):
@@ -8087,14 +8233,15 @@ class terminal:
     def str_len(self,str):
         """
         | Parameters:
-        | *str*: string
+        | *str*: byte array
         | Returns: a Python int
         """
-        str_=ctypes.c_char_p(force_bytes(str))
+        s_str=o2sclpy.std_string()
+        s_str.init_bytes(str)
         func=self._link.o2scl.o2scl_terminal_str_len
         func.restype=ctypes.c_size_t
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,str_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_str._ptr)
         return ret
 
     def hrule(self,n=78):
@@ -8545,15 +8692,16 @@ class funct_string:
     def set_parm(self,name,val):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | *val*: ``double``
         | Returns: a Python int
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_funct_string_double__set_parm
         func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_double]
-        ret=func(self._ptr,name_,val)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,s_name._ptr,val)
         return ret
 
     def __getitem__(self,x):
@@ -8659,7 +8807,7 @@ class comm_option_s:
 
     def get_lng(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_comm_option_s_get_lng
         func.restype=ctypes.c_void_p
@@ -8670,16 +8818,18 @@ class comm_option_s:
 
     def set_lng(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_comm_option_s_set_lng
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_desc(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_comm_option_s_get_desc
         func.restype=ctypes.c_void_p
@@ -8690,11 +8840,13 @@ class comm_option_s:
 
     def set_desc(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_comm_option_s_set_desc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     @property
@@ -8739,7 +8891,7 @@ class comm_option_s:
 
     def get_parm_desc(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_comm_option_s_get_parm_desc
         func.restype=ctypes.c_void_p
@@ -8750,16 +8902,18 @@ class comm_option_s:
 
     def set_parm_desc(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_comm_option_s_set_parm_desc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_help(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_comm_option_s_get_help
         func.restype=ctypes.c_void_p
@@ -8770,11 +8924,13 @@ class comm_option_s:
 
     def set_help(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_comm_option_s_set_help
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     @property
@@ -8855,7 +9011,7 @@ class cmd_line_arg:
 
     def get_arg(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_cmd_line_arg_get_arg
         func.restype=ctypes.c_void_p
@@ -8866,11 +9022,13 @@ class cmd_line_arg:
 
     def set_arg(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_cmd_line_arg_set_arg
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     @property
@@ -9031,7 +9189,7 @@ class cli:
 
     def get_desc(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_cli_get_desc
         func.restype=ctypes.c_void_p
@@ -9042,16 +9200,18 @@ class cli:
 
     def set_desc(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_cli_set_desc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_cmd_name(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_cli_get_cmd_name
         func.restype=ctypes.c_void_p
@@ -9062,16 +9222,18 @@ class cli:
 
     def set_cmd_name(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_cli_set_cmd_name
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_addl_help_cmd(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_cli_get_addl_help_cmd
         func.restype=ctypes.c_void_p
@@ -9082,16 +9244,18 @@ class cli:
 
     def set_addl_help_cmd(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_cli_set_addl_help_cmd
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_addl_help_cli(self):
         """
-        Get object of type :class:`std::string`
+        Get byte array object.
         """
         func=self._link.o2scl.o2scl_cli_get_addl_help_cli
         func.restype=ctypes.c_void_p
@@ -9102,11 +9266,13 @@ class cli:
 
     def set_addl_help_cli(self,value):
         """
-        Set object of type :class:`std::string`
+        Set object from byte array
         """
         func=self._link.o2scl.o2scl_cli_set_addl_help_cli
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def set_verbose(self,v):
@@ -9163,14 +9329,15 @@ class cli:
     def parameter_desc(self,name):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | Returns: Python bytes object
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_cli_parameter_desc
         func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr)
         strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
@@ -9178,14 +9345,15 @@ class cli:
     def option_short_desc(self,name):
         """
         | Parameters:
-        | *name*: string
+        | *name*: byte array
         | Returns: Python bytes object
         """
-        name_=ctypes.c_char_p(force_bytes(name))
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(name)
         func=self._link.o2scl.o2scl_cli_option_short_desc
         func.restype=ctypes.c_void_p
-        func.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-        ret=func(self._ptr,name_)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,s_name._ptr)
         strt=std_string(ret)
         strt._owner=True
         return strt.to_bytes()
