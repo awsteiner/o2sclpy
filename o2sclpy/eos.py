@@ -1822,7 +1822,9 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         """
         func=self._link.o2scl.o2scl_eos_had_skyrme_set_reference
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,value._ptr)
+        s_=o2sclpy.std_string()
+        s_.init_bytes(value)
+        func(self._ptr,s_._ptr)
         return
 
     def get_nrfd(self):
