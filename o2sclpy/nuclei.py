@@ -240,7 +240,7 @@ class nucmass_info:
         | Returns: a Python int, a Python int, a Python int, a Python int
         """
         s_ela=o2sclpy.std_string()
-        s_ela.init_bytes(ela)
+        s_ela.init_bytes(force_bytes(ela))
         func=self._link.o2scl.o2scl_nucmass_info_parse_elstring
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int)]
@@ -257,7 +257,7 @@ class nucmass_info:
         | Returns: a Python int
         """
         s_el=o2sclpy.std_string()
-        s_el.init_bytes(el)
+        s_el.init_bytes(force_bytes(el))
         func=self._link.o2scl.o2scl_nucmass_info_eltoZ
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -328,7 +328,7 @@ class nucmass_info:
         | Returns: a Python int
         """
         s_s=o2sclpy.std_string()
-        s_s.init_bytes(s)
+        s_s.init_bytes(force_bytes(s))
         func=self._link.o2scl.o2scl_nucmass_info_spinp_to_int
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -756,7 +756,7 @@ class nucmass_table(nucmass):
         func=self._link.o2scl.o2scl_nucmass_table_set_reference
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         s_=o2sclpy.std_string()
-        s_.init_bytes(value)
+        s_.init_bytes(force_bytes(value))
         func(self._ptr,s_._ptr)
         return
 
@@ -2271,10 +2271,11 @@ def ame_load(ame,name,exp_only):
         | *name*: string
         | *exp_only*: ``bool``
     """
-    name_=ctypes.c_char_p(force_bytes(name))
+    s_name=o2sclpy.std_string()
+    s_name.init_bytes(force_bytes(name))
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_ame_load_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
-    func(ame._ptr,name_,exp_only)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+    func(ame._ptr,s_name._ptr,exp_only)
     return
 
 def ame_load_ext(ame,file_name,table_name,exp_only):
@@ -2285,11 +2286,13 @@ def ame_load_ext(ame,file_name,table_name,exp_only):
         | *table_name*: string
         | *exp_only*: ``bool``
     """
-    file_name_=ctypes.c_char_p(force_bytes(file_name))
-    table_name_=ctypes.c_char_p(force_bytes(table_name))
+    s_file_name=o2sclpy.std_string()
+    s_file_name.init_bytes(force_bytes(file_name))
+    s_table_name=o2sclpy.std_string()
+    s_table_name.init_bytes(force_bytes(table_name))
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_ame_load_ext_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_bool]
-    func(ame._ptr,file_name_,table_name_,exp_only)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+    func(ame._ptr,s_file_name._ptr,s_table_name._ptr,exp_only)
     return
 
 def mnmsk_load(mnmsk,model,filename):
@@ -2299,11 +2302,13 @@ def mnmsk_load(mnmsk,model,filename):
         | *model*: string
         | *filename*: string
     """
-    model_=ctypes.c_char_p(force_bytes(model))
-    filename_=ctypes.c_char_p(force_bytes(filename))
+    s_model=o2sclpy.std_string()
+    s_model.init_bytes(force_bytes(model))
+    s_filename=o2sclpy.std_string()
+    s_filename.init_bytes(force_bytes(filename))
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_mnmsk_load_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_char_p]
-    func(mnmsk._ptr,model_,filename_)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+    func(mnmsk._ptr,s_model._ptr,s_filename._ptr)
     return
 
 def hfb_load(hfb,model,filename):
@@ -2313,10 +2318,11 @@ def hfb_load(hfb,model,filename):
         | *model*: ``size_t``
         | *filename*: string
     """
-    filename_=ctypes.c_char_p(force_bytes(filename))
+    s_filename=o2sclpy.std_string()
+    s_filename.init_bytes(force_bytes(filename))
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hfb_load_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char_p]
-    func(hfb._ptr,model,filename_)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+    func(hfb._ptr,model,s_filename._ptr)
     return
 
 def hfb_sp_load(hfb,model,filename):
@@ -2326,9 +2332,10 @@ def hfb_sp_load(hfb,model,filename):
         | *model*: ``size_t``
         | *filename*: string
     """
-    filename_=ctypes.c_char_p(force_bytes(filename))
+    s_filename=o2sclpy.std_string()
+    s_filename.init_bytes(force_bytes(filename))
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hfb_sp_load_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_char_p]
-    func(hfb._ptr,model,filename_)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+    func(hfb._ptr,model,s_filename._ptr)
     return
 

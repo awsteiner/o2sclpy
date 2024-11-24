@@ -1823,7 +1823,7 @@ class eos_had_skyrme(eos_had_temp_eden_base):
         func=self._link.o2scl.o2scl_eos_had_skyrme_set_reference
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         s_=o2sclpy.std_string()
-        s_.init_bytes(value)
+        s_.init_bytes(force_bytes(value))
         func(self._ptr,s_._ptr)
         return
 
@@ -3395,11 +3395,11 @@ class eos_tov_interp(eos_tov):
         | *s_colnb* ="": byte array
         """
         s_s_cole=o2sclpy.std_string()
-        s_s_cole.init_bytes(s_cole)
+        s_s_cole.init_bytes(force_bytes(s_cole))
         s_s_colp=o2sclpy.std_string()
-        s_s_colp.init_bytes(s_colp)
+        s_s_colp.init_bytes(force_bytes(s_colp))
         s_s_colnb=o2sclpy.std_string()
-        s_s_colnb.init_bytes(s_colnb)
+        s_s_colnb.init_bytes(force_bytes(s_colnb))
         func=self._link.o2scl.o2scl_eos_tov_interp_read_table
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,eos._ptr,s_s_cole._ptr,s_s_colp._ptr,s_s_colnb._ptr)
@@ -3428,7 +3428,7 @@ class eos_tov_interp(eos_tov):
         | *external* =false: ``bool``
         """
         s_model=o2sclpy.std_string()
-        s_model.init_bytes(model)
+        s_model.init_bytes(force_bytes(model))
         func=self._link.o2scl.o2scl_eos_tov_interp_s12_low_dens_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,s_model._ptr,external)
@@ -3441,7 +3441,7 @@ class eos_tov_interp(eos_tov):
         | *external* =false: ``bool``
         """
         s_model=o2sclpy.std_string()
-        s_model.init_bytes(model)
+        s_model.init_bytes(force_bytes(model))
         func=self._link.o2scl.o2scl_eos_tov_interp_gcp10_low_dens_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,s_model._ptr,external)
@@ -3455,7 +3455,7 @@ class eos_tov_interp(eos_tov):
         | *external* =false: ``bool``
         """
         s_model=o2sclpy.std_string()
-        s_model.init_bytes(model)
+        s_model.init_bytes(force_bytes(model))
         func=self._link.o2scl.o2scl_eos_tov_interp_ngl13_low_dens_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,L,s_model._ptr,external)
@@ -3470,7 +3470,7 @@ class eos_tov_interp(eos_tov):
         | *fname* ="": byte array
         """
         s_fname=o2sclpy.std_string()
-        s_fname.init_bytes(fname)
+        s_fname.init_bytes(force_bytes(fname))
         func=self._link.o2scl.o2scl_eos_tov_interp_ngl13_low_dens_eos2
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
         func(self._ptr,S,L,nt,s_fname._ptr)
@@ -5099,10 +5099,11 @@ def skyrme_load(sk,model,external=False,verbose=0):
         | *external*: ``bool``
         | *verbose*: ``int``
     """
-    model_=ctypes.c_char_p(force_bytes(model))
+    s_model=o2sclpy.std_string()
+    s_model.init_bytes(force_bytes(model))
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_skyrme_load_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool,ctypes.c_int]
-    func(sk._ptr,model_,external,verbose)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
+    func(sk._ptr,s_model._ptr,external,verbose)
     return
 
 def rmf_load(rmf,model,external=False):
@@ -5112,9 +5113,10 @@ def rmf_load(rmf,model,external=False):
         | *model*: string
         | *external*: ``bool``
     """
-    model_=ctypes.c_char_p(force_bytes(model))
+    s_model=o2sclpy.std_string()
+    s_model.init_bytes(force_bytes(model))
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_rmf_load_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_bool]
-    func(rmf._ptr,model_,external)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+    func(rmf._ptr,s_model._ptr,external)
     return
 
