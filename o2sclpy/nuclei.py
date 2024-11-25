@@ -26,6 +26,7 @@ from abc import abstractmethod
 from o2sclpy.utils import force_bytes
 import o2sclpy.doc_data
 
+from o2sclpy.base import *
 from o2sclpy.part import *
 
 class nucleus(part):
