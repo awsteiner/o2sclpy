@@ -5,11 +5,9 @@ Base classes from O2scl
 
 :ref:`O2sclpy <o2sclpy>`
 
-Note that this python interface is not intended
-to provide the full functionality of the corresponding C++ 
-class.
+This python interface is not intended to provide the full 
+functionality of the corresponding C++ class.
 
-* :ref:`Class std_string`
 * :ref:`Class std_vector`
 * :ref:`Class std_vector_int`
 * :ref:`Class std_vector_size_t`
@@ -101,20 +99,6 @@ class.
 * :ref:`Function vector_refine`
 * :ref:`Function linear_or_log`
 * :ref:`Function get_screen_size_ioctl`
-
-Class std_string
-----------------
-
-.. autoclass:: o2sclpy.std_string
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-        .. automethod:: __deepcopy__
-        .. automethod:: __getitem__
-        .. automethod:: __setitem__
 
 Class std_vector
 ----------------
