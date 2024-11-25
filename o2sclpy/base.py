@@ -43,14 +43,12 @@ def force_bytes_string(obj):
     This function returns the bytes object corresponding to ``obj``
     in case it is a string using UTF-8. 
     """
+    if (isinstance(obj,numpy.bytes_)==True or
+        isinstance(obj,bytes)==True):
+        return obj
     if isinstance(obj,o2sclpy.base.std_string):
-        obj2=obj.to_bytes()
-    else:
-        obj2=obj
-    if (isinstance(obj2,numpy.bytes_)==False and
-        isinstance(obj2,bytes)==False):
-        return bytes(obj2,'utf-8')
-    return obj2
+        return obj.to_bytes()
+    return bytes(obj,'utf-8')
 
 class std_vector:
     """

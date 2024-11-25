@@ -27,12 +27,19 @@ print('Conversion from MeV to 1/fm: %7.6e' % val)
 
 # Add a new unit, a Bethe, defined to be $ 10^{51}~\mathrm{erg} $
 
+print('here')
+print(cu.convert('erg','kg*m^2/s^2',1.0e51))
+print('here0')
 cu.add_unit(b'Bethe',cu.convert('erg','kg*m^2/s^2',1.0e51),
             b'fifty one ergs',2,1,-2)
+print('here2')
+cu.print_cache()
+print('here4')
 
 # Now use the new unit conversion
 
 print(cu.convert('erg','Bethe',3.0e53))
+print('here3')
 
 # Unicode is supported. Set a unit named α to refer to 3 Newtons per Kelvin
 

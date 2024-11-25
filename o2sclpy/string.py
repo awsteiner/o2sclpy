@@ -190,5 +190,5 @@ class std_string:
                     ctypes.POINTER(ctypes.c_char)]
         f(self._ptr,ctypes.byref(n),b)
      
-        return str(b.value)
+        return b.value
 
