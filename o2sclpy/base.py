@@ -599,7 +599,7 @@ class std_vector_string:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -1580,7 +1580,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -1606,7 +1606,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -1702,7 +1702,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -1724,7 +1724,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -1736,7 +1736,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -1748,7 +1748,7 @@ class lib_settings_class:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -1977,7 +1977,7 @@ class table:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -2018,7 +2018,7 @@ class table:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,icol)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -2771,7 +2771,7 @@ class table_units(table):
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,s_col._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -3614,7 +3614,7 @@ class table3d:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -3626,7 +3626,7 @@ class table3d:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -3726,7 +3726,7 @@ class table3d:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,i)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -7678,7 +7678,7 @@ class format_float:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_bool]
         ret=func(self._ptr,x,debug)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8107,7 +8107,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,n)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8119,7 +8119,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8131,7 +8131,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8143,7 +8143,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8155,7 +8155,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8167,7 +8167,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8179,7 +8179,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8191,7 +8191,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8203,7 +8203,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8215,7 +8215,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8227,7 +8227,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8239,7 +8239,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8251,7 +8251,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8263,7 +8263,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8275,7 +8275,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8288,7 +8288,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_short]
         ret=func(self._ptr,col)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8301,7 +8301,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_short]
         ret=func(self._ptr,col)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8313,7 +8313,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8325,7 +8325,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8337,7 +8337,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8349,7 +8349,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8361,7 +8361,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8373,7 +8373,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8385,7 +8385,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -8397,7 +8397,7 @@ class terminal:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p]
         ret=func(self._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -9191,7 +9191,7 @@ class cli:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,s_name._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -9207,7 +9207,7 @@ class cli:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         ret=func(self._ptr,s_name._ptr)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 

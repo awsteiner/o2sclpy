@@ -3186,7 +3186,7 @@ class o2graph_plotter(td_plot_base):
                     strlist[0]='-'+strlist[0]
                     self.parse_string_list(strlist,amp)
         else:
-            
+
             vs=std_vector_string()
             vs.set_list(argv)
             cl.apply_aliases(vs,0,True)

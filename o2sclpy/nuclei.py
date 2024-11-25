@@ -275,7 +275,7 @@ class nucmass_info:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,Z)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -289,7 +289,7 @@ class nucmass_info:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
         ret=func(self._ptr,Z)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -304,7 +304,7 @@ class nucmass_info:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         ret=func(self._ptr,Z,N)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 
@@ -318,7 +318,7 @@ class nucmass_info:
         func.restype=ctypes.c_void_p
         func.argtypes=[ctypes.c_void_p,ctypes.c_int]
         ret=func(self._ptr,g)
-        strt=std_string(ret)
+        strt=std_string(ret) # tag 5
         strt._owner=True
         return strt.to_bytes()
 

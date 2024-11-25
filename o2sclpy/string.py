@@ -190,11 +190,5 @@ class std_string:
                     ctypes.POINTER(ctypes.c_char)]
         f(self._ptr,ctypes.byref(n),b)
      
-        # AWS, 11/23/24: In order to convert the ctypes POINTER(char)
-        # to a bytearray, we use the ctypes string_at() function.
-        # I'm not quite sure if the string_at() function requires an
-        # additional copy or not. If it does, then there may be a
-        # better alternative.
-     
-        return ctypes.string_at(b)
+        return str(b.value)
 
