@@ -46,9 +46,15 @@ def test_all():
                          "random_state=1,hlayers=[100,100]")
         exact=y[1]
         interp=im2.eval(x[1])
-        im2.save('tc.o2','tc')
         print('exact,interp 2:', exact,interp)
         assert numpy.allclose(exact,interp,rtol=1.0)
+        
+        im2.save('test_classify.o2','tc')
+        
+        im4=o2sclpy.classify_sklearn_mlpc()
+        im4.load('test_classify.o2','tc')
+        interp=im2.eval(x[1])
+        print('exact,interp 4:', exact,interp)
         
     if True:
         im3=o2sclpy.classify_sklearn_gnb()

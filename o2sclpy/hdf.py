@@ -236,8 +236,6 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
-        s_s=o2sclpy.std_string()
-        s_s.init_bytes(force_bytes_string(s))
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]

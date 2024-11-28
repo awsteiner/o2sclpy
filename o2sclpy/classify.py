@@ -309,9 +309,11 @@ class classify_sklearn_mlpc:
 
         hf=o2sclpy.hdf_file()
         hf.open(filename)
-        hf.gets(obj_name,byte_string)
+        s=o2sclpy.std_string()
+        hf.gets(obj_name,s)
         hf.close()
-        self.mlpc=pickle.loads(byte_string)
+        sb=s.to_bytes()
+        self.mlpc=pickle.loads(sb)
 
         return
     
