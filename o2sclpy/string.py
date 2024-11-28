@@ -189,9 +189,8 @@ class std_string:
                     ctypes.POINTER(ctypes.c_int),
                     ctypes.POINTER(ctypes.c_char)]
         f(self._ptr,ctypes.byref(n),b)
-
+     
         # It's important to use 'raw' here rather than 'value' which
         # interprets it as a null terminated string
         return b.raw
-    
 

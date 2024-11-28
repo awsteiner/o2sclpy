@@ -3396,10 +3396,13 @@ class eos_tov_interp(eos_tov):
         """
         s_s_cole=o2sclpy.std_string()
         s_s_cole.init_bytes(force_bytes_string(s_cole))
+        # tag 7
         s_s_colp=o2sclpy.std_string()
         s_s_colp.init_bytes(force_bytes_string(s_colp))
+        # tag 7
         s_s_colnb=o2sclpy.std_string()
         s_s_colnb.init_bytes(force_bytes_string(s_colnb))
+        # tag 7
         func=self._link.o2scl.o2scl_eos_tov_interp_read_table
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,eos._ptr,s_s_cole._ptr,s_s_colp._ptr,s_s_colnb._ptr)
@@ -3429,6 +3432,7 @@ class eos_tov_interp(eos_tov):
         """
         s_model=o2sclpy.std_string()
         s_model.init_bytes(force_bytes_string(model))
+        # tag 7
         func=self._link.o2scl.o2scl_eos_tov_interp_s12_low_dens_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,s_model._ptr,external)
@@ -3442,6 +3446,7 @@ class eos_tov_interp(eos_tov):
         """
         s_model=o2sclpy.std_string()
         s_model.init_bytes(force_bytes_string(model))
+        # tag 7
         func=self._link.o2scl.o2scl_eos_tov_interp_gcp10_low_dens_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,s_model._ptr,external)
@@ -3456,6 +3461,7 @@ class eos_tov_interp(eos_tov):
         """
         s_model=o2sclpy.std_string()
         s_model.init_bytes(force_bytes_string(model))
+        # tag 7
         func=self._link.o2scl.o2scl_eos_tov_interp_ngl13_low_dens_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_void_p,ctypes.c_bool]
         func(self._ptr,L,s_model._ptr,external)
@@ -3471,6 +3477,7 @@ class eos_tov_interp(eos_tov):
         """
         s_fname=o2sclpy.std_string()
         s_fname.init_bytes(force_bytes_string(fname))
+        # tag 7
         func=self._link.o2scl.o2scl_eos_tov_interp_ngl13_low_dens_eos2
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_void_p]
         func(self._ptr,S,L,nt,s_fname._ptr)

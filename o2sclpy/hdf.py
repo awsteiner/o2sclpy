@@ -142,6 +142,7 @@ class hdf_file:
         """
         s_fname=o2sclpy.std_string()
         s_fname.init_bytes(force_bytes_string(fname))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_open
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_bool]
         func(self._ptr,s_fname._ptr,write_access,err_on_fail)
@@ -154,6 +155,7 @@ class hdf_file:
         """
         s_fname=o2sclpy.std_string()
         s_fname.init_bytes(force_bytes_string(fname))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_open_or_create
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,s_fname._ptr)
@@ -175,6 +177,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_getc
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_char)]
@@ -190,6 +193,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_getd
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_double)]
@@ -205,6 +209,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_geti
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_int)]
@@ -220,6 +225,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_size_t)]
@@ -236,6 +242,8 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
+        # tag 6
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -251,8 +259,8 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
-        s_s=o2sclpy.std_string()
-        s_s.init_bytes(force_bytes_string(s))
+        # tag 7
+        # tag 6
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets_var
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -268,8 +276,8 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
-        s_s=o2sclpy.std_string()
-        s_s.init_bytes(force_bytes_string(s))
+        # tag 7
+        # tag 6
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets_fixed
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -286,10 +294,11 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         s_deft=o2sclpy.std_string()
         s_deft.init_bytes(force_bytes_string(deft))
-        s_s=o2sclpy.std_string()
-        s_s.init_bytes(force_bytes_string(s))
+        # tag 7
+        # tag 6
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets_def_fixed
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -304,6 +313,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_setc
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char]
         func(self._ptr,s_name._ptr,c)
@@ -317,6 +327,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_setd
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,s_name._ptr,d)
@@ -330,6 +341,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_seti
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int]
         func(self._ptr,s_name._ptr,i)
@@ -343,6 +355,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_set_szt
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,s_name._ptr,u)
@@ -356,8 +369,10 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         s_s=o2sclpy.std_string()
         s_s.init_bytes(force_bytes_string(s))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_sets
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,s_name._ptr,s_s._ptr)
@@ -371,8 +386,10 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         s_s=o2sclpy.std_string()
         s_s.init_bytes(force_bytes_string(s))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_sets_fixed
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,s_name._ptr,s_s._ptr)
@@ -387,6 +404,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_getd_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -402,6 +420,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_geti_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -417,6 +436,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -432,6 +452,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets_vec_copy
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -447,6 +468,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_setd_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -462,6 +484,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_seti_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -477,6 +500,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_set_szt_vec
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -492,6 +516,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_sets_vec_copy
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -507,6 +532,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_getd_mat_copy
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -522,6 +548,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_geti_mat_copy
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -537,6 +564,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_setd_mat_copy
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -552,6 +580,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_seti_mat_copy
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -567,6 +596,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_getd_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -582,6 +612,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_geti_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -597,6 +628,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -612,6 +644,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_setd_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -627,6 +660,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_seti_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -642,6 +676,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_set_szt_ten
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -657,6 +692,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_getc_def
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_char,ctypes.POINTER(ctypes.c_char)]
@@ -673,6 +709,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_getd_def
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.POINTER(ctypes.c_double)]
@@ -689,6 +726,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_geti_def
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.POINTER(ctypes.c_int)]
@@ -705,6 +743,7 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_hdf_file_get_szt_def
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.POINTER(ctypes.c_size_t)]
@@ -722,10 +761,11 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
+        # tag 7
         s_deft=o2sclpy.std_string()
         s_deft.init_bytes(force_bytes_string(deft))
-        s_s=o2sclpy.std_string()
-        s_s.init_bytes(force_bytes_string(s))
+        # tag 7
+        # tag 6
         func=self._link.o2scl.o2scl_hdf_hdf_file_gets_def
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -743,8 +783,8 @@ class hdf_file:
         """
         s_type=o2sclpy.std_string()
         s_type.init_bytes(force_bytes_string(type))
-        s_name=o2sclpy.std_string()
-        s_name.init_bytes(force_bytes_string(name))
+        # tag 7
+        # tag 6
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_type
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
@@ -762,8 +802,8 @@ class hdf_file:
         """
         s_name=o2sclpy.std_string()
         s_name.init_bytes(force_bytes_string(name))
-        s_type=o2sclpy.std_string()
-        s_type.init_bytes(force_bytes_string(type))
+        # tag 7
+        # tag 6
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_name
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
@@ -781,8 +821,8 @@ class hdf_file:
         """
         s_pattern=o2sclpy.std_string()
         s_pattern.init_bytes(force_bytes_string(pattern))
-        s_type=o2sclpy.std_string()
-        s_type.init_bytes(force_bytes_string(type))
+        # tag 7
+        # tag 6
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_pattern
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
@@ -1618,8 +1658,10 @@ class acol_manager:
         """
         s_arg1=o2sclpy.std_string()
         s_arg1.init_bytes(force_bytes_string(arg1))
+        # tag 7
         s_arg2=o2sclpy.std_string()
         s_arg2.init_bytes(force_bytes_string(arg2))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_acol_manager_help_found
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -1663,6 +1705,7 @@ class acol_manager:
         """
         s_new_type=o2sclpy.std_string()
         s_new_type.init_bytes(force_bytes_string(new_type))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_acol_manager_command_add
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,s_new_type._ptr)
@@ -1675,6 +1718,7 @@ class acol_manager:
         """
         s_ltype=o2sclpy.std_string()
         s_ltype.init_bytes(force_bytes_string(ltype))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_acol_manager_command_del
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
         func(self._ptr,s_ltype._ptr)
@@ -1845,10 +1889,13 @@ class cloud_file:
         """
         s_file=o2sclpy.std_string()
         s_file.init_bytes(force_bytes_string(file))
+        # tag 7
         s_url=o2sclpy.std_string()
         s_url.init_bytes(force_bytes_string(url))
+        # tag 7
         s_dir=o2sclpy.std_string()
         s_dir.init_bytes(force_bytes_string(dir))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_cloud_file_get_file
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -1866,12 +1913,16 @@ class cloud_file:
         """
         s_file=o2sclpy.std_string()
         s_file.init_bytes(force_bytes_string(file))
+        # tag 7
         s_url=o2sclpy.std_string()
         s_url.init_bytes(force_bytes_string(url))
+        # tag 7
         s_hash=o2sclpy.std_string()
         s_hash.init_bytes(force_bytes_string(hash))
+        # tag 7
         s_dir=o2sclpy.std_string()
         s_dir.init_bytes(force_bytes_string(dir))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_cloud_file_get_file_hash
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -1889,10 +1940,13 @@ class cloud_file:
         """
         s_file=o2sclpy.std_string()
         s_file.init_bytes(force_bytes_string(file))
+        # tag 7
         s_url=o2sclpy.std_string()
         s_url.init_bytes(force_bytes_string(url))
+        # tag 7
         s_dir=o2sclpy.std_string()
         s_dir.init_bytes(force_bytes_string(dir))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_cloud_file_hdf5_open
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
@@ -1911,12 +1965,16 @@ class cloud_file:
         """
         s_file=o2sclpy.std_string()
         s_file.init_bytes(force_bytes_string(file))
+        # tag 7
         s_url=o2sclpy.std_string()
         s_url.init_bytes(force_bytes_string(url))
+        # tag 7
         s_hash=o2sclpy.std_string()
         s_hash.init_bytes(force_bytes_string(hash))
+        # tag 7
         s_dir=o2sclpy.std_string()
         s_dir.init_bytes(force_bytes_string(dir))
+        # tag 7
         func=self._link.o2scl.o2scl_hdf_cloud_file_hdf5_open_hash
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]

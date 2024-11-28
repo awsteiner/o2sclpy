@@ -218,6 +218,7 @@ class slack_messenger:
         """
         s_env_var=o2sclpy.std_string()
         s_env_var.init_bytes(force_bytes_string(env_var))
+        # tag 7
         func=self._link.o2scl.o2scl_slack_messenger_set_url_from_env
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -232,6 +233,7 @@ class slack_messenger:
         """
         s_env_var=o2sclpy.std_string()
         s_env_var.init_bytes(force_bytes_string(env_var))
+        # tag 7
         func=self._link.o2scl.o2scl_slack_messenger_set_channel_from_env
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -246,6 +248,7 @@ class slack_messenger:
         """
         s_env_var=o2sclpy.std_string()
         s_env_var.init_bytes(force_bytes_string(env_var))
+        # tag 7
         func=self._link.o2scl.o2scl_slack_messenger_set_username_from_env
         func.restype=ctypes.c_bool
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -261,6 +264,7 @@ class slack_messenger:
         """
         s_message=o2sclpy.std_string()
         s_message.init_bytes(force_bytes_string(message))
+        # tag 7
         func=self._link.o2scl.o2scl_slack_messenger_send
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
@@ -1087,6 +1091,7 @@ class hist:
         """
         s_colx=o2sclpy.std_string()
         s_colx.init_bytes(force_bytes_string(colx))
+        # tag 7
         func=self._link.o2scl.o2scl_hist_from_table
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,t._ptr,s_colx._ptr,n_bins)
@@ -1102,8 +1107,10 @@ class hist:
         """
         s_colx=o2sclpy.std_string()
         s_colx.init_bytes(force_bytes_string(colx))
+        # tag 7
         s_coly=o2sclpy.std_string()
         s_coly.init_bytes(force_bytes_string(coly))
+        # tag 7
         func=self._link.o2scl.o2scl_hist_from_table_twocol
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t]
         func(self._ptr,t._ptr,s_colx._ptr,s_coly._ptr,n_bins)
@@ -1239,6 +1246,7 @@ class hist:
         """
         s_func=o2sclpy.std_string()
         s_func.init_bytes(force_bytes_string(func))
+        # tag 7
         func=self._link.o2scl.o2scl_hist_function
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -1392,8 +1400,10 @@ class hist_2d:
         """
         s_colx=o2sclpy.std_string()
         s_colx.init_bytes(force_bytes_string(colx))
+        # tag 7
         s_coly=o2sclpy.std_string()
         s_coly.init_bytes(force_bytes_string(coly))
+        # tag 7
         func=self._link.o2scl.o2scl_hist_2d_from_table
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         func(self._ptr,t._ptr,s_colx._ptr,s_coly._ptr,n_bins_x,n_bins_y)
@@ -1411,10 +1421,13 @@ class hist_2d:
         """
         s_colx=o2sclpy.std_string()
         s_colx.init_bytes(force_bytes_string(colx))
+        # tag 7
         s_coly=o2sclpy.std_string()
         s_coly.init_bytes(force_bytes_string(coly))
+        # tag 7
         s_colz=o2sclpy.std_string()
         s_colz.init_bytes(force_bytes_string(colz))
+        # tag 7
         func=self._link.o2scl.o2scl_hist_2d_from_table_wgt
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_size_t]
         func(self._ptr,t._ptr,s_colx._ptr,s_coly._ptr,s_colz._ptr,n_bins_x,n_bins_y)

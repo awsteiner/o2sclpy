@@ -242,6 +242,7 @@ class nucmass_info:
         """
         s_ela=o2sclpy.std_string()
         s_ela.init_bytes(force_bytes_string(ela))
+        # tag 7
         func=self._link.o2scl.o2scl_nucmass_info_parse_elstring
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_int)]
@@ -259,6 +260,7 @@ class nucmass_info:
         """
         s_el=o2sclpy.std_string()
         s_el.init_bytes(force_bytes_string(el))
+        # tag 7
         func=self._link.o2scl.o2scl_nucmass_info_eltoZ
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -330,6 +332,7 @@ class nucmass_info:
         """
         s_s=o2sclpy.std_string()
         s_s.init_bytes(force_bytes_string(s))
+        # tag 7
         func=self._link.o2scl.o2scl_nucmass_info_spinp_to_int
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
