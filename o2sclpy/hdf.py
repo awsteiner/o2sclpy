@@ -772,30 +772,30 @@ class hdf_file:
         ret=func(self._ptr,s_name._ptr,s_deft._ptr,s._ptr)
         return ret
 
-    def find_object_by_type(self,type,name,use_regex=False,verbose=0):
+    def find_object_by_type(self,otype,name,use_regex=False,verbose=0):
         """
         | Parameters:
-        | *type*: byte array
+        | *otype*: byte array
         | *name*: :class:`std_string` object
         | *use_regex* =false: ``bool``
         | *verbose* =0: ``int``
         | Returns: a Python int
         """
-        s_type=o2sclpy.std_string()
-        s_type.init_bytes(force_bytes_string(type))
+        s_otype=o2sclpy.std_string()
+        s_otype.init_bytes(force_bytes_string(otype))
         # tag 7
         # tag 6
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_type
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
-        ret=func(self._ptr,s_type._ptr,name._ptr,use_regex,verbose)
+        ret=func(self._ptr,s_otype._ptr,name._ptr,use_regex,verbose)
         return ret
 
-    def find_object_by_name(self,name,type,use_regex=False,verbose=0):
+    def find_object_by_name(self,name,otype,use_regex=False,verbose=0):
         """
         | Parameters:
         | *name*: byte array
-        | *type*: :class:`std_string` object
+        | *otype*: :class:`std_string` object
         | *use_regex* =false: ``bool``
         | *verbose* =0: ``int``
         | Returns: a Python int
@@ -807,14 +807,14 @@ class hdf_file:
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_name
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
-        ret=func(self._ptr,s_name._ptr,type._ptr,use_regex,verbose)
+        ret=func(self._ptr,s_name._ptr,otype._ptr,use_regex,verbose)
         return ret
 
-    def find_object_by_pattern(self,pattern,type,use_regex=False,verbose=0):
+    def find_object_by_pattern(self,pattern,otype,use_regex=False,verbose=0):
         """
         | Parameters:
         | *pattern*: byte array
-        | *type*: :class:`std_string` object
+        | *otype*: :class:`std_string` object
         | *use_regex* =false: ``bool``
         | *verbose* =0: ``int``
         | Returns: a Python int
@@ -826,7 +826,7 @@ class hdf_file:
         func=self._link.o2scl.o2scl_hdf_hdf_file_find_object_by_pattern
         func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
-        ret=func(self._ptr,s_pattern._ptr,type._ptr,use_regex,verbose)
+        ret=func(self._ptr,s_pattern._ptr,otype._ptr,use_regex,verbose)
         return ret
 
     def file_list(self,verbose):
