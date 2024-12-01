@@ -132,6 +132,38 @@ class classify_sklearn_dtc:
                     
         return numpy.ascontiguousarray(pred)
 
+    def save(self,filename,obj_name):
+        """
+        Save the classifer to an HDF5 file named ``filename`` as a
+        string array named ``obj_name``. 
+        """
+        import pickle
+
+        byte_string=pickle.dumps(self.dtc)
+        hf=o2sclpy.hdf_file()
+        hf.open_or_create(filename)
+        hf.sets(obj_name,byte_string)
+        hf.close()
+
+        return
+
+    def load(self,filename,obj_name):
+        """
+        Load the classifer from an HDF5 file named ``filename`` as a
+        string array named ``obj_name``. 
+        """
+        import pickle
+
+        hf=o2sclpy.hdf_file()
+        hf.open(filename)
+        s=o2sclpy.std_string()
+        hf.gets(obj_name,s)
+        hf.close()
+        sb=s.to_bytes()
+        self.dtc=pickle.loads(sb)
+
+        return
+    
 class classify_sklearn_mlpc:
     """
     Classify a data set using scikit-learn's multi-layer
@@ -288,7 +320,8 @@ class classify_sklearn_mlpc:
 
     def save(self,filename,obj_name):
         """
-        Desc
+        Save the classifer to an HDF5 file named ``filename`` as a
+        string array named ``obj_name``. 
         """
         import pickle
 
@@ -296,14 +329,14 @@ class classify_sklearn_mlpc:
         hf=o2sclpy.hdf_file()
         hf.open_or_create(filename)
         hf.sets(obj_name,byte_string)
-        hf.sets('test','test string')
         hf.close()
 
         return
 
     def load(self,filename,obj_name):
         """
-        Desc
+        Load the classifer from an HDF5 file named ``filename`` as a
+        string array named ``obj_name``. 
         """
         import pickle
 
@@ -428,3 +461,37 @@ class classify_sklearn_gnb:
                 type(pred),pred)
 
         return numpy.ascontiguousarray(pred)
+
+    def save(self,filename,obj_name):
+        """
+        Save the classifer to an HDF5 file named ``filename`` as a
+        string array named ``obj_name``. 
+        """
+        import pickle
+
+        byte_string=pickle.dumps(self.gnb)
+        hf=o2sclpy.hdf_file()
+        hf.open_or_create(filename)
+        hf.sets(obj_name,byte_string)
+        hf.close()
+
+        return
+
+    def load(self,filename,obj_name):
+        """
+        Load the classifer from an HDF5 file named ``filename`` as a
+        string array named ``obj_name``. 
+        """
+        import pickle
+
+        hf=o2sclpy.hdf_file()
+        hf.open(filename)
+        s=o2sclpy.std_string()
+        hf.gets(obj_name,s)
+        hf.close()
+        sb=s.to_bytes()
+        self.gnb=pickle.loads(sb)
+
+        return
+    
+    
