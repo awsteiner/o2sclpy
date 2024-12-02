@@ -23,6 +23,7 @@
 import numpy
 from o2sclpy.utils import string_to_dict2
 from o2sclpy.hdf import *
+from o2sclpy.doc_data import version
 
 class interpm_sklearn_gp:
     """
@@ -42,74 +43,6 @@ class interpm_sklearn_gp:
         self.alpha=0
         self.random_state=0
 
-    def save(self,filename,obj_name):
-        """
-        Save the interpolation settings to a string and return it
-        """
-        import pickle
-
-        # Construct string
-        loc_dct={"version": "1.0",
-                 "verbose": self.verbose,
-                 "kernel": self.kernel,
-                 "outformat": self.outformat,
-                 "transform_in": self.transform_in,
-                 "transform_out": self.transform_out,
-                 "SS1": self.SS1,
-                 "SS2": self.SS2,
-                 "alpha": self.alpha,
-                 "random_state": self.random_state}
-        params=self.gp.get_params(deep=True)
-        byte_string=pickle.dumps((loc_dct,params))
-
-        # Write to a file
-        hf=o2sclpy.hdf_file()
-        hf.open_or_create(filename)
-        hf.sets(obj_name,byte_string)
-        hf.close()
-
-        return
-
-    def load(self,filename,obj_name):
-        """
-        Load the interpolation settings from a string
-        """
-        import pickle
-        from sklearn.gaussian_process import GaussianProcessRegressor
-        
-        # Read string from file
-        hf=o2sclpy.hdf_file()
-        hf.open(filename)
-        s=o2sclpy.std_string()
-        hf.gets(obj_name,s)
-        hf.close()
-        sb=s.to_bytes()
-        self.dtc=pickle.loads(sb)
-
-        tup=pickle.loads(sb)
-        loc_dct=tup[0]
-        if loc_dct["version"]!="1.0":
-            raise ValueError("In function interpm_sklearn_gp::load() "+
-                             "Cannot read files with version "+
-                             loc_dct["version"])
-        self.verbose=loc_dct["verbose"]
-        self.kernel=loc_dct["kernel"]
-        self.outformat=loc_dct["outformat"]
-        self.transform_in=loc_dct["transform_in"]
-        self.transform_out=loc_dct["transform_out"]
-        self.SS1=loc_dct["SS1"]
-        self.SS2=loc_dct["SS2"]
-        self.alpha=loc_dct["alpha"]
-        self.random_state=loc_dct["random_state"]
-        
-        func=GaussianProcessRegressor
-        self.gp=func(normalize_y=True,
-                     kernel=self.kernel,alpha=self.alpha,
-                     random_state=self.random_state)
-        self.gp.set_params(**(tup[1]))
-
-        return
-        
     def set_data(self,in_data,out_data,
                  kernel='1.0*RBF(1.0,(1e-2,1e2))',test_size=0.0,
                  normalize_y=True,transform_in='none',alpha=1.0e-10,
@@ -394,6 +327,74 @@ class interpm_sklearn_gp:
         return (numpy.ascontiguousarray(yp_trans[0]),
                 numpy.ascontiguousarray(std_trans[0]))
 
+    def save(self,filename,obj_name):
+        """
+        Save the interpolation settings to a string and return it
+        """
+        import pickle
+
+        # Construct string
+        loc_dct={"version": version,
+                 "verbose": self.verbose,
+                 "kernel": self.kernel,
+                 "outformat": self.outformat,
+                 "transform_in": self.transform_in,
+                 "transform_out": self.transform_out,
+                 "SS1": self.SS1,
+                 "SS2": self.SS2,
+                 "alpha": self.alpha,
+                 "random_state": self.random_state}
+        params=self.gp.get_params(deep=True)
+        byte_string=pickle.dumps((loc_dct,params))
+
+        # Write to a file
+        hf=o2sclpy.hdf_file()
+        hf.open_or_create(filename)
+        hf.sets(obj_name,byte_string)
+        hf.close()
+
+        return
+    
+    def load(self,filename,obj_name):
+        """
+        Load the interpolation settings from a string
+        """
+        import pickle
+        from sklearn.gaussian_process import GaussianProcessRegressor
+        
+        # Read string from file
+        hf=o2sclpy.hdf_file()
+        hf.open(filename)
+        s=o2sclpy.std_string()
+        hf.gets(obj_name,s)
+        hf.close()
+        sb=s.to_bytes()
+        self.dtc=pickle.loads(sb)
+
+        tup=pickle.loads(sb)
+        loc_dct=tup[0]
+        if loc_dct["version"]!=version:
+            raise ValueError("In function interpm_sklearn_gp::load() "+
+                             "Cannot read files with version "+
+                             loc_dct["version"])
+        self.verbose=loc_dct["verbose"]
+        self.kernel=loc_dct["kernel"]
+        self.outformat=loc_dct["outformat"]
+        self.transform_in=loc_dct["transform_in"]
+        self.transform_out=loc_dct["transform_out"]
+        self.SS1=loc_dct["SS1"]
+        self.SS2=loc_dct["SS2"]
+        self.alpha=loc_dct["alpha"]
+        self.random_state=loc_dct["random_state"]
+        
+        func=GaussianProcessRegressor
+        self.gp=func(normalize_y=True,
+                     kernel=self.kernel,alpha=self.alpha,
+                     random_state=self.random_state)
+        self.gp.set_params(**(tup[1]))
+
+        return
+        
 class interpm_sklearn_dtr:
     """
     Interpolate one or many multidimensional data sets using
@@ -548,6 +549,74 @@ class interpm_sklearn_dtr:
                   type(yp_trans),v,yp_trans)
         return numpy.ascontiguousarray(yp_trans)
 
+    def save(self,filename,obj_name):
+        """
+        Save the interpolation settings to a string and return it
+        """
+        import pickle
+
+        # Construct string
+        loc_dct={"version": "1.0",
+                 "verbose": self.verbose,
+                 "kernel": self.kernel,
+                 "outformat": self.outformat,
+                 "transform_in": self.transform_in,
+                 "transform_out": self.transform_out,
+                 "SS1": self.SS1,
+                 "SS2": self.SS2,
+                 "alpha": self.alpha,
+                 "random_state": self.random_state}
+        params=self.dtr.get_params(deep=True)
+        byte_string=pickle.dumps((loc_dct,params))
+
+        # Write to a file
+        hf=o2sclpy.hdf_file()
+        hf.open_or_create(filename)
+        hf.sets(obj_name,byte_string)
+        hf.close()
+
+        return
+    
+    def load(self,filename,obj_name):
+        """
+        Load the interpolation settings from a string
+        """
+        import pickle
+        from sklearn.gaussian_process import GaussianProcessRegressor
+        
+        # Read string from file
+        hf=o2sclpy.hdf_file()
+        hf.open(filename)
+        s=o2sclpy.std_string()
+        hf.gets(obj_name,s)
+        hf.close()
+        sb=s.to_bytes()
+        self.dtc=pickle.loads(sb)
+
+        tup=pickle.loads(sb)
+        loc_dct=tup[0]
+        if loc_dct["version"]!="1.0":
+            raise ValueError("In function interpm_sklearn_gp::load() "+
+                             "Cannot read files with version "+
+                             loc_dct["version"])
+        self.verbose=loc_dct["verbose"]
+        self.kernel=loc_dct["kernel"]
+        self.outformat=loc_dct["outformat"]
+        self.transform_in=loc_dct["transform_in"]
+        self.transform_out=loc_dct["transform_out"]
+        self.SS1=loc_dct["SS1"]
+        self.SS2=loc_dct["SS2"]
+        self.alpha=loc_dct["alpha"]
+        self.random_state=loc_dct["random_state"]
+        
+        func=GaussianProcessRegressor
+        self.dtr=func(normalize_y=True,
+                      kernel=self.kernel,alpha=self.alpha,
+                      random_state=self.random_state)
+        self.dtr.set_params(**(tup[1]))
+
+        return
+        
 
 class interpm_sklearn_mlpr:
     """

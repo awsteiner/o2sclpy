@@ -22,6 +22,7 @@
 import numpy
 from o2sclpy.utils import string_to_dict2
 from o2sclpy.hdf import *
+from o2sclpy.doc_data import version
 
 class classify_sklearn_dtc:
     """
@@ -132,34 +133,50 @@ class classify_sklearn_dtc:
                     
         return numpy.ascontiguousarray(pred)
 
-    def save(self,filename,obj_name):
+    def save(self,filename,obj_prefix="classify_sklearn_dtc"):
         """
         Save the classifer to an HDF5 file named ``filename`` as a
-        string array named ``obj_name``. 
+        string named ``obj_prefix``. 
         """
         import pickle
 
+        if len(obj_prefix)==0:
+            raise ValueError("In classify_sklearn_dtc::save() "+
+                             "object prefix cannot be empty.")
+        
+        loc_dct={"version": version}
+        dct_string=pickle.dumps(loc_dct)
         byte_string=pickle.dumps(self.dtc)
         hf=o2sclpy.hdf_file()
         hf.open_or_create(filename)
-        hf.sets(obj_name,byte_string)
+        hf.sets(obj_prefix+'_dct',dct_string)
+        hf.sets(obj_prefix,byte_string)
         hf.close()
 
         return
 
-    def load(self,filename,obj_name):
+    def load(self,filename,obj_prefix):
         """
         Load the classifer from an HDF5 file named ``filename`` as a
-        string array named ``obj_name``. 
+        string named ``obj_prefix``. 
         """
         import pickle
 
         hf=o2sclpy.hdf_file()
         hf.open(filename)
         s=o2sclpy.std_string()
-        hf.gets(obj_name,s)
+        s2=o2sclpy.std_string()
+        hf.gets(obj_prefix,s)
+        hf.gets(obj_prefix+'_dct',s2)
         hf.close()
         sb=s.to_bytes()
+        sb2=s2.to_bytes()
+
+        loc_dct=pickle.loads(sb2)
+        if loc_dct["version"]!=version:
+            raise ValueError("In function classify_sklearn_dtc::load() "+
+                             "Cannot read files with version "+
+                             loc_dct["version"])
         self.dtc=pickle.loads(sb)
 
         return
@@ -318,34 +335,50 @@ class classify_sklearn_mlpc:
 
         return numpy.ascontiguousarray(pred)
 
-    def save(self,filename,obj_name):
+    def save(self,filename,obj_prefix="classify_sklearn_mlpc"):
         """
         Save the classifer to an HDF5 file named ``filename`` as a
-        string array named ``obj_name``. 
+        string named ``obj_prefix``. 
         """
         import pickle
 
+        if len(obj_prefix)==0:
+            raise ValueError("In classify_sklearn_mlpc::save() "+
+                             "object prefix cannot be empty.")
+        
+        loc_dct={"version": version}
+        dct_string=pickle.dumps(loc_dct)
         byte_string=pickle.dumps(self.mlpc)
         hf=o2sclpy.hdf_file()
         hf.open_or_create(filename)
-        hf.sets(obj_name,byte_string)
+        hf.sets(obj_prefix+'_dct',dct_string)
+        hf.sets(obj_prefix,byte_string)
         hf.close()
-
+        
         return
 
-    def load(self,filename,obj_name):
+    def load(self,filename,obj_prefix):
         """
         Load the classifer from an HDF5 file named ``filename`` as a
-        string array named ``obj_name``. 
+        string named ``obj_prefix``. 
         """
         import pickle
 
         hf=o2sclpy.hdf_file()
         hf.open(filename)
         s=o2sclpy.std_string()
-        hf.gets(obj_name,s)
+        s2=o2sclpy.std_string()
+        hf.gets(obj_prefix,s)
+        hf.gets(obj_prefix+'_dct',s2)
         hf.close()
         sb=s.to_bytes()
+        sb2=s2.to_bytes()
+
+        loc_dct=pickle.loads(sb2)
+        if loc_dct["version"]!=version:
+            raise ValueError("In function classify_sklearn_mlpc::load() "+
+                             "Cannot read files with version "+
+                             loc_dct["version"])
         self.mlpc=pickle.loads(sb)
 
         return
@@ -462,34 +495,50 @@ class classify_sklearn_gnb:
 
         return numpy.ascontiguousarray(pred)
 
-    def save(self,filename,obj_name):
+    def save(self,filename,obj_prefix="classify_sklearn_gnb"):
         """
         Save the classifer to an HDF5 file named ``filename`` as a
-        string array named ``obj_name``. 
+        string named ``obj_prefix``. 
         """
         import pickle
 
+        if len(obj_prefix)==0:
+            raise ValueError("In classify_sklearn_gnb::save() "+
+                             "object prefix cannot be empty.")
+        
+        loc_dct={"version": version}
+        dct_string=pickle.dumps(loc_dct)
         byte_string=pickle.dumps(self.gnb)
         hf=o2sclpy.hdf_file()
         hf.open_or_create(filename)
-        hf.sets(obj_name,byte_string)
+        hf.sets(obj_prefix+'_dct',dct_string)
+        hf.sets(obj_prefix,byte_string)
         hf.close()
-
+        
         return
 
-    def load(self,filename,obj_name):
+    def load(self,filename,obj_prefix="classify_sklearn_gnb"):
         """
         Load the classifer from an HDF5 file named ``filename`` as a
-        string array named ``obj_name``. 
+        string named ``obj_prefix``. 
         """
         import pickle
 
         hf=o2sclpy.hdf_file()
         hf.open(filename)
         s=o2sclpy.std_string()
-        hf.gets(obj_name,s)
+        s2=o2sclpy.std_string()
+        hf.gets(obj_prefix,s)
+        hf.gets(obj_prefix+'_dct',s2)
         hf.close()
         sb=s.to_bytes()
+        sb2=s2.to_bytes()
+
+        loc_dct=pickle.loads(sb2)
+        if loc_dct["version"]!=version:
+            raise ValueError("In function classify_sklearn_gnb::load() "+
+                             "Cannot read files with version "+
+                             loc_dct["version"])
         self.gnb=pickle.loads(sb)
 
         return
