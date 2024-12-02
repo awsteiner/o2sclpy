@@ -22,6 +22,7 @@
 
 import numpy
 from o2sclpy.utils import string_to_dict2
+from o2sclpy.hdf import *
 
 class interpm_sklearn_gp:
     """
@@ -41,13 +42,15 @@ class interpm_sklearn_gp:
         self.alpha=0
         self.random_state=0
 
-    def save(self):
+    def save(self,filename,obj_name):
         """
         Save the interpolation settings to a string and return it
         """
         import pickle
-        
-        loc_dct={"verbose": self.verbose,
+
+        # Construct string
+        loc_dct={"version": "1.0",
+                 "verbose": self.verbose,
                  "kernel": self.kernel,
                  "outformat": self.outformat,
                  "transform_in": self.transform_in,
@@ -57,17 +60,38 @@ class interpm_sklearn_gp:
                  "alpha": self.alpha,
                  "random_state": self.random_state}
         params=self.gp.get_params(deep=True)
-        return pickle.dumps((loc_dct,params))
+        byte_string=pickle.dumps((loc_dct,params))
 
-    def load(self,s):
+        # Write to a file
+        hf=o2sclpy.hdf_file()
+        hf.open_or_create(filename)
+        hf.sets(obj_name,byte_string)
+        hf.close()
+
+        return
+
+    def load(self,filename,obj_name):
         """
         Load the interpolation settings from a string
         """
         import pickle
         from sklearn.gaussian_process import GaussianProcessRegressor
         
-        tup=pickle.loads(s)
+        # Read string from file
+        hf=o2sclpy.hdf_file()
+        hf.open(filename)
+        s=o2sclpy.std_string()
+        hf.gets(obj_name,s)
+        hf.close()
+        sb=s.to_bytes()
+        self.dtc=pickle.loads(sb)
+
+        tup=pickle.loads(sb)
         loc_dct=tup[0]
+        if loc_dct["version"]!="1.0":
+            raise ValueError("In function interpm_sklearn_gp::load() "+
+                             "Cannot read files with version "+
+                             loc_dct["version"])
         self.verbose=loc_dct["verbose"]
         self.kernel=loc_dct["kernel"]
         self.outformat=loc_dct["outformat"]
@@ -83,7 +107,7 @@ class interpm_sklearn_gp:
                      kernel=self.kernel,alpha=self.alpha,
                      random_state=self.random_state)
         self.gp.set_params(**(tup[1]))
-        
+
         return
         
     def set_data(self,in_data,out_data,

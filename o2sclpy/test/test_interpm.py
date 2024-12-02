@@ -86,10 +86,11 @@ def test_all():
             assert numpy.allclose(0,std3[0],atol=1.0)
 
             print('saving')
-            save_str=im.save()
-            imx=o2sclpy.interpm_sklearn_gp()
+            save_str=im.save('test_interpm.o2','ti')
+            
             print('loading')
-            imx.load(save_str)
+            imx=o2sclpy.interpm_sklearn_gp()
+            imx.load('test_interpm.o2','ti')
             
             print('testing')
             interp4=im.eval_list(v2)
