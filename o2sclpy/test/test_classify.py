@@ -1,6 +1,6 @@
 #  ───────────────────────────────────────────────────────────────────
 #  
-#  Copyright (C) 2024, Satyajit Roy and Andrew W. Steiner
+#  Copyright (C) 2024-2025, Satyajit Roy and Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
 #  

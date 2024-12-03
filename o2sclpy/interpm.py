@@ -1,6 +1,6 @@
 #  ───────────────────────────────────────────────────────────────────
 #  
-#  Copyright (C) 2022-2024, Satyajit Roy, Mahamudul Hasan Anik, and
+#  Copyright (C) 2022-2025, Satyajit Roy, Mahamudul Hasan Anik, and
 #  Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
