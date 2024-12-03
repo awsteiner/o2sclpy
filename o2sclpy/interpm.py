@@ -329,7 +329,7 @@ class interpm_sklearn_gp:
 
     def save(self,filename,obj_name):
         """
-        Save the interpolation settings to a string and return it
+        Save the interpolation settings to an HDF5 file
         """
         import pickle
 
@@ -357,7 +357,7 @@ class interpm_sklearn_gp:
     
     def load(self,filename,obj_name):
         """
-        Load the interpolation settings from a string
+        Load the interpolation settings from a file
         """
         import pickle
         from sklearn.gaussian_process import GaussianProcessRegressor
@@ -550,7 +550,7 @@ class interpm_sklearn_dtr:
 
     def save(self,filename,obj_name):
         """
-        Save the interpolation settings to a string and return it
+        Save the interpolation settings to an HDF5 file
         """
         import pickle
 
@@ -571,7 +571,7 @@ class interpm_sklearn_dtr:
     
     def load(self,filename,obj_name):
         """
-        Load the interpolation settings from a string
+        Load the interpolation settings from a file
         """
         import pickle
         
@@ -588,7 +588,7 @@ class interpm_sklearn_dtr:
         tup=pickle.loads(sb)
         loc_dct=tup[0]
         if loc_dct["version"]!=version:
-            raise ValueError("In function interpm_sklearn_gp::load() "+
+            raise ValueError("In function interpm_sklearn_dtr::load() "+
                              "Cannot read files with version "+
                              loc_dct["version"])
         self.verbose=loc_dct["verbose"]
@@ -820,7 +820,7 @@ class interpm_sklearn_mlpr:
 
     def save(self,filename,obj_name):
         """
-        Save the interpolation settings to a string and return it
+        Save the interpolation settings to an HDF5 file
         """
         import pickle
 
@@ -848,10 +848,9 @@ class interpm_sklearn_mlpr:
     
     def load(self,filename,obj_name):
         """
-        Load the interpolation settings from a string
+        Load the interpolation settings from a file
         """
         import pickle
-        from sklearn.gaussian_process import GaussianProcessRegressor
         
         # Read string from file
         hf=o2sclpy.hdf_file()
@@ -865,7 +864,7 @@ class interpm_sklearn_mlpr:
         tup=pickle.loads(sb)
         loc_dct=tup[0]
         if loc_dct["version"]!=version:
-            raise ValueError("In function interpm_sklearn_gp::load() "+
+            raise ValueError("In function interpm_sklearn_mlpr::load() "+
                              "Cannot read files with version "+
                              loc_dct["version"])
         self.verbose=loc_dct["verbose"]
@@ -877,12 +876,14 @@ class interpm_sklearn_mlpr:
         self.SS2=loc_dct["SS2"]
         self.alpha=loc_dct["alpha"]
         self.random_state=loc_dct["random_state"]
+
+        # fix
         
-        func=GaussianProcessRegressor
-        self.gp=func(normalize_y=True,
-                     kernel=self.kernel,alpha=self.alpha,
-                     random_state=self.random_state)
-        self.gp.set_params(**(tup[1]))
+        #func=GaussianProcessRegressor
+        #self.gp=func(normalize_y=True,
+        #kernel=self.kernel,alpha=self.alpha,
+        #random_state=self.random_state)
+        #self.gp.set_params(**(tup[1]))
 
         return
         
@@ -1241,5 +1242,30 @@ class interpm_tf_dnn:
                   'array mode type(yp),v,yp:',
                   type(yp_trans),v,yp_trans)
         return numpy.ascontiguousarray(yp_trans)
-
     
+    def save(self,filename):
+        """
+        Save the interpolation settings to a file
+
+        (No custom object support)
+        """
+        if filename[-6:]!='.keras':
+            filename=filename+'.keras'
+        self.dnn.save(filename)
+
+        return
+    
+    def load(self,filename):
+        """
+        Load the interpolation settings from a file
+
+        (No custom object support)
+        """
+        import keras
+        
+        if filename[-6:]!='.keras':
+            filename=filename+'.keras'
+        self.dnn=keras.load.load_model(filename)
+
+        return
+        
