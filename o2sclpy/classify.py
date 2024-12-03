@@ -63,6 +63,7 @@ class classify_sklearn_dtc:
             except Exception as e:
                 print('Exception in classify_sklearn_dtc::set_data()',
                       'at test_train_split().',e)
+                raise
         else:
             x_train=in_data
             y_train=out_data
@@ -80,6 +81,7 @@ class classify_sklearn_dtc:
         except Exception as e:
             print('Exception in classify_sklearn_dtc::set_data()',
                   'at model definition.',e)
+            raise
 
         try:
             model.fit(x_train,y_train)      
@@ -122,6 +124,7 @@ class classify_sklearn_dtc:
             pred=self.dtc.predict([v])
         except Exception as e:
             print('Exception 4 in classify_sklearn_dtc:',e)
+            raise
     
         if self.outformat=='list':
             return pred.tolist()
@@ -147,6 +150,12 @@ class classify_sklearn_dtc:
         loc_dct={"version": version}
         dct_string=pickle.dumps(loc_dct)
         byte_string=pickle.dumps(self.dtc)
+
+        if self.verbose>2:
+            print('In classify_sklearn_dtc::save().')
+            print('  len(dct_string):',len(dct_string))
+            print('  len(byte_string):',len(byte_string))
+        
         hf=o2sclpy.hdf_file()
         hf.open_or_create(filename)
         hf.sets(obj_prefix+'_dct',dct_string)
@@ -172,6 +181,11 @@ class classify_sklearn_dtc:
         sb=s.to_bytes()
         sb2=s2.to_bytes()
 
+        if self.verbose>2:
+            print('In classify_sklearn_dtc::load().')
+            print('  len(sb):',len(sb))
+            print('  len(sb2):',len(sb2))
+            
         loc_dct=pickle.loads(sb2)
         if loc_dct["version"]!=version:
             raise ValueError("In function classify_sklearn_dtc::load() "+
@@ -192,7 +206,7 @@ class classify_sklearn_mlpc:
         self.verbose=0
         self.outformat='numpy'
         self.SS1=0
-        self.transform_in=0
+        self.transform_in='none'
         
         return
     
@@ -215,6 +229,7 @@ class classify_sklearn_mlpc:
         if self.verbose>0:
             print('classify_sklearn_mlpc::set_data():')
             print('  outformat:',outformat)
+            print('  transform_in:',transform_in)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
             print('  solver:',solver)
@@ -249,6 +264,7 @@ class classify_sklearn_mlpc:
             except Exception as e:
                 print('Exception in classify_sklearn_dtc::set_data()',
                       'at test_train_split().',e)
+                raise
         else:
             x_train=in_data_trans
             y_train=out_data
@@ -270,12 +286,14 @@ class classify_sklearn_mlpc:
         except Exception as e:
             print('Exception in classify_sklearn_mlpc::set_data()',
                   'at model().',e)
+            raise
         try:
             y_train=y_train.reshape(y_train.shape[0])
             self.mlpc=model.fit(x_train,y_train)
         except Exception as e:
             print('Exception in classify_sklearn_mlpc::set_data()',
                   'at fit().',e)
+            raise
 
         if test_size>0.0:
             print('score:',self.mlpc.score(x_test,y_test))
@@ -319,7 +337,9 @@ class classify_sklearn_mlpc:
             try:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
             except Exception as e:
+                print('hx',self.transform_in)
                 print('Exception 4 in classify_sklearn_mlpc:',e)
+                raise
         else:
             v_trans=v.reshape(1,-1)
 
@@ -349,6 +369,12 @@ class classify_sklearn_mlpc:
         loc_dct={"version": version}
         dct_string=pickle.dumps(loc_dct)
         byte_string=pickle.dumps(self.mlpc)
+
+        if self.verbose>2:
+            print('In classify_sklearn_mlpc::save().')
+            print('  len(dct_string):',len(dct_string))
+            print('  len(byte_string):',len(byte_string))
+        
         hf=o2sclpy.hdf_file()
         hf.open_or_create(filename)
         hf.sets(obj_prefix+'_dct',dct_string)
@@ -374,6 +400,11 @@ class classify_sklearn_mlpc:
         sb=s.to_bytes()
         sb2=s2.to_bytes()
 
+        if self.verbose>2:
+            print('In classify_sklearn_mlpc::load().')
+            print('  len(sb):',len(sb))
+            print('  len(sb2):',len(sb2))
+            
         loc_dct=pickle.loads(sb2)
         if loc_dct["version"]!=version:
             raise ValueError("In function classify_sklearn_mlpc::load() "+
@@ -394,7 +425,7 @@ class classify_sklearn_gnb:
         self.verbose=0
         self.outformat='numpy'
         self.SS1=0
-        self.transform_in=0
+        self.transform_in='none'
         
         return
     
@@ -444,6 +475,7 @@ class classify_sklearn_gnb:
             except Exception as e:
                 print('Exception in classify_sklearn_gnb::set_data()',
                       'at test_train_split().',e)
+                raise
         else:
             x_train=in_data
             y_train=out_data
@@ -457,6 +489,7 @@ class classify_sklearn_gnb:
         except Exception as e:
             print('Exception in classify_sklearn_gnb::set_data()',
                   'at model().',e)    
+            raise
             
         try:
             y_train=y_train.reshape(y_train.shape[0])
@@ -464,6 +497,7 @@ class classify_sklearn_gnb:
         except Exception as e:
             print('Exception in classify_sklearn_gnb::set_data()',
                   'at fit().',e)
+            raise
         
         if test_size>0.0:
             print('score:',self.gnb.score(x_test,y_test))
@@ -480,6 +514,7 @@ class classify_sklearn_gnb:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
             except Exception as e:
                 print('Exception 4 in classify_sklearn_gbn:',e)
+                raise
         else:
             v_trans=v.reshape(1,-1)
     

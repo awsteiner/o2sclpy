@@ -21,6 +21,7 @@
 #
 import o2sclpy
 import numpy
+import sys
 
 def test_all(tmp_path):
 
@@ -35,8 +36,11 @@ def test_all(tmp_path):
     assert len(v2)==5,'vector()+len()'
     numpy.testing.assert_array_equal(v2.to_numpy(),[1,2,3,4,5],'vector()')
 
-    p=tmp_path/"uniform_grid.o2"
-    filename=bytes(str(p),'utf-8')
+    # Handle the tmp_path fixture gracefully if we're not using pytest
+    if 'pytest' in sys.modules:
+        filename=bytes(str(tmp_path/"test_uniform_grid.o2"),'utf-8')
+    else:
+        filename=bytes(tmp_path+"test_uniform_grid.o2",'utf-8')
     
     # Write to a file
     hf=o2sclpy.hdf_file()
@@ -50,11 +54,18 @@ def test_all(tmp_path):
     ug=o2sclpy.uniform_grid()
     o2sclpy.hdf_input_n_uniform_grid(hf,ug,name)
     hf.close()
+
+    # Make sure they are equal
     assert name.to_bytes()==b'ug_end','name after hdf_input()'
     assert ug_end.get_end()==ug.get_end(),'get_end() after hdf_input()'
     
     return
 
 if __name__ == '__main__':
-    test_all()
+
+    # Handle the tmp_path fixture gracefully if we're not using pytest
+    if 'pytest' in sys.modules:
+        test_all()
+    else:
+        test_all('./')
     print('All tests passed.')

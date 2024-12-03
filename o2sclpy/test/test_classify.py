@@ -28,17 +28,24 @@ def test_all():
                      [5.0,7.3,0.0],
                      [3.0,5.0,4.2],
                      [6.9,9.0,1.0]])
-    # Note that classifiers will complain if the outputs have
-    # decimals, meaning they are continuous. 
+
+    # Note that classifiers will complain if the outputs are not integers
     y = numpy.array([[-840],[-600],[-840],[10],[45]])
     
     if True:
         im=o2sclpy.classify_sklearn_dtc()
-        im.set_data(x,y,verbose=0,random_state=0)
+        im.set_data(x,y,verbose=2,random_state=0)
         exact=y[0]
         interp=im.eval(x[0])
         print('exact,interp 1:', exact,interp)
         assert numpy.allclose(exact,interp,rtol=1.0)
+        
+        im.save('test_classify.o2','dtc')
+        
+        im4=o2sclpy.classify_sklearn_dtc()
+        im4.load('test_classify.o2','dtc')
+        interp=im4.eval(x[0])
+        print('exact,interp 4:', exact,interp)
         
     if True:
         im2=o2sclpy.classify_sklearn_mlpc()
@@ -49,12 +56,12 @@ def test_all():
         print('exact,interp 2:', exact,interp)
         assert numpy.allclose(exact,interp,rtol=1.0)
         
-        im2.save('test_classify.o2','tc')
-        
-        im4=o2sclpy.classify_sklearn_mlpc()
-        im4.load('test_classify.o2','tc')
-        interp=im2.eval(x[1])
-        print('exact,interp 4:', exact,interp)
+        im2.save('test_classify.o2','mlpc')
+
+        im5=o2sclpy.classify_sklearn_mlpc()
+        im5.load('test_classify.o2','mlpc')
+        interp=im5.eval(x[1])
+        print('exact,interp 5:', exact,interp)
         
     if True:
         im3=o2sclpy.classify_sklearn_gnb()
@@ -63,6 +70,13 @@ def test_all():
         interp=im3.eval(x[2])
         print('exact,interp 3:', exact,interp)
         assert numpy.allclose(exact,interp,rtol=1.0)
+        
+        im3.save('test_classify.o2','gnb')
+        
+        im6=o2sclpy.classify_sklearn_gnb()
+        im6.load('test_classify.o2','gnb')
+        interp=im6.eval(x[1])
+        print('exact,interp 6:', exact,interp)
         
 if __name__ == '__main__':
     test_all()
