@@ -33,6 +33,12 @@ class classify_sklearn_dtc:
         self.dtc=0
         self.verbose=0
         self.outformat='numpy'
+        self.criterion='gini'
+        self.splitter='best'
+        self.max_depth=None
+        self.max_features=None
+        self.random_state=None
+        self.test_size=0.0
         
         return
     
@@ -45,21 +51,34 @@ class classify_sklearn_dtc:
         """
         self.outformat=outformat
         self.verbose=verbose
+        self.criterion=criterion
+        self.splitter=splitter
+        self.max_depth=max_depth
+        self.max_features=max_features
+        self.random_state=random_state
+        self.test_size=test_size
         
         if self.verbose>0:
             print('classify_sklearn_dtc::set_data():')
             print('  outformat:',outformat)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
+            print('  verbose:',verbose)
+            print('  criterion:',criterion)
+            print('  splitter:',splitter)
+            print('  max_depth:',max_depth)
+            print('  max_features:',max_features)
+            print('  random_state:',random_state)
+            print('  test_size:',test_size)
            
         # ────────────────────────────────────────────────────────────
         # Perform the train/test split
         
-        if test_size>0.0:
+        if self.test_size>0.0:
             try:
                 from sklearn.model_selection import train_test_split
                 x_train,x_test,y_train,y_test=train_test_split(
-                    in_data,out_data,test_size=test_size)
+                    in_data,out_data,test_size=self.test_size)
             except Exception as e:
                 print('Exception in classify_sklearn_dtc::set_data()',
                       'at test_train_split().',e)
@@ -73,25 +92,23 @@ class classify_sklearn_dtc:
         
         try:
             from sklearn.tree import DecisionTreeClassifier
-            model = DecisionTreeClassifier(criterion=criterion, 
-                                           splitter=splitter,
-                                           max_depth=max_depth, 
-                                           max_features=max_features,
-                                           random_state=random_state)
+            model=DecisionTreeClassifier(criterion=self.criterion, 
+                                            splitter=self.splitter,
+                                            max_depth=self.max_depth, 
+                                            max_features=self.max_features,
+                                            random_state=self.random_state)
         except Exception as e:
             print('Exception in classify_sklearn_dtc::set_data()',
                   'at model definition.',e)
             raise
 
         try:
-            model.fit(x_train,y_train)      
+            self.dtc=model.fit(x_train,y_train)      
         except Exception as e:
             print('Exception in classify_sklearn_dtc::set_data()',
                   'at model fitting.',e)
             raise
             
-        self.dtc=model
-
         return
     
     def set_data_str(self,in_data,out_data,options):
@@ -104,8 +121,10 @@ class classify_sklearn_dtc:
                                                   'max_features',
                                                   'verbose'],
                             list_of_floats=['test_size','alpha'])
-        
-        print('String:',options,'Dictionary:',dct)
+
+        if self.verbose>2:
+            print('In classify_sklearn_dtc::set_data_str(): string:',
+                  options,'Dictionary:',dct)
               
         try:
             self.set_data(in_data,out_data,**dct)
@@ -116,14 +135,15 @@ class classify_sklearn_dtc:
         return
 
     def eval(self,v):
-        """
-        Evaluate the classifier at point ``v``.
+        """Evaluate the classifier at point ``v``. If
+        ``self.outformat`` is equal to ``list``, then the output is a
+        Python list, otherwise, the output is a numpy array.
         """
 
         try:
             pred=self.dtc.predict([v])
         except Exception as e:
-            print('Exception 4 in classify_sklearn_dtc:',e)
+            print('Exception in classify_sklearn_dtc::eval():',e)
             raise
     
         if self.outformat=='list':
@@ -131,6 +151,27 @@ class classify_sklearn_dtc:
    
         if self.verbose>1:
             print('classify_sklearn_dtc::eval():',
+                'type(pred),pred:',
+                type(pred),pred)
+                    
+        return numpy.ascontiguousarray(pred)
+
+    def eval_list(self,v):
+        """
+        Evaluate the classifier at the array of points stored in ``v``.
+        """
+
+        try:
+            pred=self.dtc.predict(v)
+        except Exception as e:
+            print('Exception in classify_sklearn_dtc::eval_list():',e)
+            raise
+    
+        if self.outformat=='list':
+            return pred.tolist()
+   
+        if self.verbose>1:
+            print('classify_sklearn_dtc::eval_list():',
                 'type(pred),pred:',
                 type(pred),pred)
                     
@@ -147,7 +188,17 @@ class classify_sklearn_dtc:
             raise ValueError("In classify_sklearn_dtc::save() "+
                              "object prefix cannot be empty.")
         
-        loc_dct={"version": version}
+        loc_dct={"version": version,
+                 "verbose": self.verbose,
+                 "outformat": self.outformat,
+                 "verbose": self.verbose,
+                 "criterion": self.criterion,
+                 "splitter": self.splitter,
+                 "max_depth": self.max_depth,
+                 "max_features": self.max_features,
+                 "random_state": self.random_state,
+                 "test_size": self.test_size}
+        
         dct_string=pickle.dumps(loc_dct)
         byte_string=pickle.dumps(self.dtc)
 
@@ -191,6 +242,17 @@ class classify_sklearn_dtc:
             raise ValueError("In function classify_sklearn_dtc::load() "+
                              "Cannot read files with version "+
                              loc_dct["version"])
+        
+        self.verbose=loc_dct["verbose"]
+        self.outformat=loc_dct["outformat"]
+        self.verbose=loc_dct["verbose"]
+        self.criterion=loc_dct["criterion"]
+        self.splitter=loc_dct["splitter"]
+        self.max_depth=loc_dct["max_depth"]
+        self.max_features=loc_dct["max_features"]
+        self.random_state=loc_dct["random_state"]
+        self.test_size=loc_dct["test_size"]
+        
         self.dtc=pickle.loads(sb)
 
         return
@@ -262,7 +324,7 @@ class classify_sklearn_mlpc:
                 x_train,x_test,y_train,y_test=train_test_split(
                     in_data_trans,out_data,test_size=test_size)
             except Exception as e:
-                print('Exception in classify_sklearn_dtc::set_data()',
+                print('Exception in classify_sklearn_mlpc::set_data()',
                       'at test_train_split().',e)
                 raise
         else:
@@ -274,7 +336,7 @@ class classify_sklearn_mlpc:
         
         try:
             from sklearn.neural_network import MLPClassifier
-            model=MLPClassifier(hidden_layer_sizes=hlayers, 
+            self.mlpc=MLPClassifier(hidden_layer_sizes=hlayers, 
                                 activation=activation,solver=solver, 
                                 alpha=alpha,batch_size=batch_size, 
                                 learning_rate=learning_rate,
@@ -289,7 +351,7 @@ class classify_sklearn_mlpc:
             raise
         try:
             y_train=y_train.reshape(y_train.shape[0])
-            self.mlpc=model.fit(x_train,y_train)
+            self.mlpc.fit(x_train,y_train)
         except Exception as e:
             print('Exception in classify_sklearn_mlpc::set_data()',
                   'at fit().',e)
@@ -322,7 +384,9 @@ class classify_sklearn_mlpc:
                 htemp2.append(int(htemp[i]))
             dct["hlayers"]=htemp2
                 
-        print('String:',options,'Dictionary:',dct)
+        if self.verbose>2:
+            print('In classify_sklearn_mlpc::set_data_str(): string:',
+                  options,'Dictionary:',dct)
               
         self.set_data(in_data,out_data,**dct)
 
@@ -353,6 +417,27 @@ class classify_sklearn_mlpc:
                 'type(pred),pred:',
                 type(pred),pred)
 
+        return numpy.ascontiguousarray(pred)
+
+    def eval_list(self,v):
+        """
+        Evaluate the classifier at the array of points stored in ``v``.
+        """
+
+        try:
+            pred=self.mlpc.predict(v)
+        except Exception as e:
+            print('Exception in classify_sklearn_mlpc::eval_list():',e)
+            raise
+    
+        if self.outformat=='list':
+            return pred.tolist()
+   
+        if self.verbose>1:
+            print('classify_sklearn_mlpc::eval_list():',
+                'type(pred),pred:',
+                type(pred),pred)
+                    
         return numpy.ascontiguousarray(pred)
 
     def save(self,filename,obj_prefix="classify_sklearn_mlpc"):
@@ -504,6 +589,23 @@ class classify_sklearn_gnb:
 
         return
     
+    def set_data_str(self,in_data,out_data,options):
+        """
+        Set the input and output data to train the interpolator,
+        using a string to specify the keyword arguments.
+        """
+
+        dct=string_to_dict2(options,list_of_ints=['verbose'],
+                            list_of_floats=['test_size','var_smoothing'])
+        
+        if self.verbose>2:
+            print('In classify_sklearn_gnb::set_data_str(): string:',
+                  options,'Dictionary:',dct)
+              
+        self.set_data(in_data,out_data,**dct)
+
+        return
+    
     def eval(self,v):
         """
         Evaluate the classifier at point ``v``.
@@ -528,6 +630,27 @@ class classify_sklearn_gnb:
                 'type(pred),pred:',
                 type(pred),pred)
 
+        return numpy.ascontiguousarray(pred)
+
+    def eval_list(self,v):
+        """
+        Evaluate the classifier at the array of points stored in ``v``.
+        """
+
+        try:
+            pred=self.gnb.predict(v)
+        except Exception as e:
+            print('Exception in classify_sklearn_gnb::eval_list():',e)
+            raise
+    
+        if self.outformat=='list':
+            return pred.tolist()
+   
+        if self.verbose>1:
+            print('classify_sklearn_gnb::eval_list():',
+                'type(pred),pred:',
+                type(pred),pred)
+                    
         return numpy.ascontiguousarray(pred)
 
     def save(self,filename,obj_prefix="classify_sklearn_gnb"):

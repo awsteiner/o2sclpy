@@ -20,21 +20,20 @@
 #  ───────────────────────────────────────────────────────────────────
 
 import sys
+import numpy
 
 # For os.getenv() and os.path.exists()
 import os
 
-# For numpy.bytes_
-import numpy
-
 def get_azi_angle(v):
-    """
-    Return the azimuthal angle in :math:`[0,\\pi]` for a three-element
-    vector in Cartesian coordinates.
+    """Return the azimuthal angle in :math:`[-\\pi,\\pi]` for a
+    two- or three-element vector in Cartesian coordinates (the third
+    element is ignored).
+
+    This function is in ``utils.py``.
     """
     x=v[0]
     y=v[1]
-    z=v[2]
     # arctan2 returns a number in [-pi,pi]
     phi=numpy.arctan2(y,x)
     return phi
@@ -42,7 +41,9 @@ def get_azi_angle(v):
 def change_phi(v,phi_new):
     """
     Modify the azimuthal angle of a Cartesian vector, effectively rotating
-    it around the z axis.
+    it around the z axis. The first two entries of ``v`` are modified.
+
+    This function is in ``utils.py``.
     """
     x=v[0]
     y=v[1]
@@ -56,12 +57,13 @@ def change_phi(v,phi_new):
     return
 
 def rect_to_spher(v):
-    """
-    Convert a three-element Cartesian vector to spherical coordinates 
-    and return a three-element vector containing the radius, the azimuthal
-    angle, and the polar angle (in that order). The azimuthal angle is 
-    always in the range :math:`[-\\pi,\\pi]` and the polar angle is 
-    always in the range :math:`[0,\\pi]`.
+    """Convert a three-element Cartesian vector to spherical
+    coordinates and return a three-element vector containing the
+    radius, the azimuthal angle, and the polar angle (in that order).
+    The azimuthal angle is always in the range :math:`[-\\pi,\\pi]`
+    and the polar angle is always in the range :math:`[0,\\pi]`.
+
+    This function is in ``utils.py``.
     """
     x=v[0]
     y=v[1]
@@ -75,9 +77,9 @@ def rect_to_spher(v):
     # AWS, 5/21/24: These are just for testing but I've never seen them
     # occur in practice.
     if phi<-numpy.pi or phi>numpy.pi:
-        raise ValueError('Problem 1')
+        raise ValueError('Problem one in o2sclpy.rect_to_sphere()')
     if theta<0 or theta>numpy.pi:
-        raise ValueError('Problem 2.')
+        raise ValueError('Problem two in o2sclpy.rect_to_sphere().')
     
     return [r,phi,theta]
 
@@ -85,7 +87,9 @@ def spher_to_rect(v):
     """
     The first element of v should be the radial coordinate, the second
     element should be the polar angle, and the last argument should
-    be the azimuthal angle. The values ``x,y,z`` are returned. 
+    be the azimuthal angle. The values ``x,y,z`` are returned.
+    
+    This function is in ``utils.py``.
     """
     r=v[0]
     theta=v[1]
@@ -102,6 +106,8 @@ def cross(x,y,norm=False):
 
     If ``norm`` is ``True``, then normalize the cross product to 
     unity before returning it.
+
+    This function is in ``utils.py``.
     """
     cross=[x[1]*y[2]-x[2]*y[1],x[2]*y[0]-x[0]*y[2],
            x[0]*y[1]-y[0]*x[1]]
@@ -114,7 +120,10 @@ def cross(x,y,norm=False):
     return cross
 
 def norm3(x):
-    """Normalize the three-element Cartesian vector ``x``."""
+    """Normalize the three-element Cartesian vector ``x``.
+
+    This function is in ``utils.py``.
+    """
     mag=numpy.sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2])
     x[0]=x[0]/mag
     x[1]=x[1]/mag
