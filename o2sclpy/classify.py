@@ -46,8 +46,14 @@ class classify_sklearn_dtc:
                  test_size=0.0,criterion='gini',splitter='best',
                  max_depth=None,max_features=None, 
                  random_state=None):
-        """
-        Set the input and output data to train the classifier
+        """Set the input and output data to train the classifier
+
+        The variable ``in_data`` should be an array of shape
+        ``(n_points,n_dim)``, and ``out_data`` can be of shape
+        ``(n_points)`` or ``(n_points,1)``.
+
+        AWS, 12/4/24: I'm not sure if this class works with more
+        than one output label.
         """
         self.outformat=outformat
         self.verbose=verbose
@@ -239,8 +245,8 @@ class classify_sklearn_dtc:
             
         loc_dct=pickle.loads(sb2)
         if loc_dct["version"]!=version:
-            raise ValueError("In function classify_sklearn_dtc::load() "+
-                             "Cannot read files with version "+
+            raise ValueError("In function classify_sklearn_dtc::"+
+                             "load(): Cannot read files with version "+
                              loc_dct["version"])
         
         self.verbose=loc_dct["verbose"]
@@ -283,6 +289,13 @@ class classify_sklearn_mlpc:
                  
         """
         Set the input and output data to train the interpolator
+
+        The variable ``in_data`` should be an array of shape
+        ``(n_points,n_dim)``, and ``out_data`` can be of shape
+        ``(n_points)`` or ``(n_points,1)``.
+
+        AWS, 12/4/24: I don't think this class works with
+        than one output label.
         """
         self.outformat=outformat
         self.verbose=verbose
@@ -402,7 +415,7 @@ class classify_sklearn_mlpc:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
             except Exception as e:
                 print('hx',self.transform_in)
-                print('Exception 4 in classify_sklearn_mlpc:',e)
+                print('Exception in classify_sklearn_mlpc::eval():',e)
                 raise
         else:
             v_trans=v.reshape(1,-1)
@@ -492,8 +505,8 @@ class classify_sklearn_mlpc:
             
         loc_dct=pickle.loads(sb2)
         if loc_dct["version"]!=version:
-            raise ValueError("In function classify_sklearn_mlpc::load() "+
-                             "Cannot read files with version "+
+            raise ValueError("In function classify_sklearn_mlpc::"+
+                             "load(): Cannot read files with version "+
                              loc_dct["version"])
         self.mlpc=pickle.loads(sb)
 
@@ -519,6 +532,13 @@ class classify_sklearn_gnb:
                  transform_in='none'):
         """
         Set the input and output data to train the interpolator
+
+        The variable ``in_data`` should be an array of shape
+        ``(n_points,n_dim)``, and ``out_data`` can be of shape
+        ``(n_points)`` or ``(n_points,1)``.
+
+        AWS, 12/4/24: I'm not sure if this class works with more
+        than one output label.
         """
         self.outformat=outformat
         self.verbose=verbose
@@ -615,7 +635,7 @@ class classify_sklearn_gnb:
             try:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
             except Exception as e:
-                print('Exception 4 in classify_sklearn_gbn:',e)
+                print('Exception in classify_sklearn_gbn::eval():',e)
                 raise
         else:
             v_trans=v.reshape(1,-1)
@@ -694,8 +714,8 @@ class classify_sklearn_gnb:
 
         loc_dct=pickle.loads(sb2)
         if loc_dct["version"]!=version:
-            raise ValueError("In function classify_sklearn_gnb::load() "+
-                             "Cannot read files with version "+
+            raise ValueError("In function classify_sklearn_gnb::"+
+                             "load(): Cannot read files with version "+
                              loc_dct["version"])
         self.gnb=pickle.loads(sb)
 
