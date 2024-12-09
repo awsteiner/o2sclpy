@@ -1057,7 +1057,7 @@ class interpm_tf_dnn:
                     self.losses.append(logs.get('loss'))
             history=loss_history()
 
-            early_stopping=EarlyStopping(monitor=loss,
+            early_stopping=EarlyStopping(monitor='val_loss',
                                          min_delta=es_min_delta,
                                          patience=es_patience,
                                          verbose=self.verbose,

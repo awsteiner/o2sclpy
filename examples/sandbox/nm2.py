@@ -92,11 +92,12 @@ for k in range(0,27):
             #v=numpy.array([x2[100,0],x2[100,1]])
             #print('%d %d %7.6e %7.6e' % (v[0],v[1],im2.eval(v)[0],y2[100,0]))
             
-            with io.capture_output() as cap:
-                sum=0
-                for i in range(0,N):
-                    v=numpy.array([x2[i,0],x2[i,1]])
-                    sum+=numpy.abs(im2.eval(v)[0]-y2[i,0])
+            #with io.capture_output() as cap:
+            sum=0
+            for i in range(0,N):
+                v=numpy.array([x2[i,0],x2[i,1]])
+                sum+=numpy.abs(im2.eval(v)[0]-y2[i,0])
+                
             avg=sum/N*197.33
             print('%d avg %7.6e MeV' % (j,avg))
             avgs=avgs+avg
