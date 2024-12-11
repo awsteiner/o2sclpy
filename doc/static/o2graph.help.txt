@@ -69,9 +69,10 @@ List of command-line options which do not require a current object:
   -td-arrow        Create a 3D arrow (experimental)
   -td-axis         Create a 3D axis (experimental).
   -td-axis-label   Create a 3D axis label (experimental).
+  -td-cyl          Create a 3D cylinder (experimental)
   -td-den-plot     Create a 3D density plot (experimental).
   -td-icos         Create a 3D icosphere (experimental).
-  -td-line         Plot a 3D point (experimental)
+  -td-line         Plot a line in a 3d visualization (experimental)
   -td-mat          Create a 3D material (experimental)
   -td-pgram        Plot a 3D parallelogram (experimental)
   -td-point        Plot a 3D point (experimental)

@@ -29,6 +29,8 @@ class interpm_sklearn_gp:
     """
     Interpolate one or many multimensional data sets using a 
     Gaussian process from scikit-learn
+
+    See https://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html .
     """
 
     def __init__(self):
@@ -398,6 +400,8 @@ class interpm_sklearn_dtr:
     """
     Interpolate one or many multidimensional data sets using
     scikit-learn's decision tree regression.
+
+    See https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html .
     """
 
     def __init__(self):

@@ -27,11 +27,19 @@ from o2sclpy.doc_data import version
 class classify_sklearn_dtc:
     """
     Classify a data set using scikit-learn's decision tree classifier.
+
+    See https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html .
+    """
+
+    verbose=0
+    """
+    Verbosity parameter (default 0)
     """
 
     def __init__(self):
+
         self.dtc=0
-        self.verbose=0
+
         self.outformat='numpy'
         self.criterion='gini'
         self.splitter='best'
@@ -265,8 +273,10 @@ class classify_sklearn_dtc:
     
 class classify_sklearn_mlpc:
     """
-    Classify a data set using scikit-learn's multi-layer
+    Classify a data set using scikit-learn's multi-layer    
     perceptron classifier.
+
+    See https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html .
     """
 
     def __init__(self):
@@ -516,6 +526,8 @@ class classify_sklearn_gnb:
     """
     Classify a data set using scikit-learn's Gaussian
     naive Bayes classifier.
+
+    See https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html .
     """
 
     def __init__(self):

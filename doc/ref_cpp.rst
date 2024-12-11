@@ -8,6 +8,7 @@ Reference for C++ interface
 .. toctree::
    :maxdepth: 3
 
+   string
    base
    other
    hdf

@@ -1,5 +1,21 @@
 # # Multi-dimensional interpolation example for O$_2$sclpy
 
+# 0 avg 1.064573e+00 MeV
+#1 avg 1.382027e+00 MeV
+#2 avg 9.551093e-01 MeV
+#3 avg 1.587466e+00 MeV
+#4 avg 9.933744e-01 MeV
+#1.1965099779501946
+#10 moto relu 2 1.1965099779501946
+
+#0 avg 1.192039e+00 MeV
+#1 avg 8.977399e-01 MeV
+#2 avg 8.968433e-01 MeV
+#3 avg 1.378074e+00 MeV
+#4 avg 1.645730e+00 MeV
+#1.202085270806319
+#19 moto relu 4 1.202085270806319
+
 # See the O$_2$sclpy documentation at https://awsteiner.org/code/o2sclpy for more information.
 
 # +
@@ -17,7 +33,9 @@ if 'pytest' in sys.modules:
 
 # Create the data set:
 
-# Instantiate and load the Atomic Mass Evaluation
+# Instantiate and load the Atomic Mass Evaluation. The third parameter
+# is False, to indicate that we include masses which are not solely
+# determined by experiment
 ame=o2sclpy.nucmass_ame()
 o2sclpy.ame_load(ame,'20',False)
 
@@ -45,7 +63,8 @@ print('Number of isotopes to fit:',N)
 
 # Create the neural network interpolation object
 
-for k in range(0,27):
+#for k in range(0,27):
+for k in range(19,20):
 
     # Different transformations
     if k%3==0:
@@ -77,14 +96,15 @@ for k in range(0,27):
 
         # Try each configuration five times, and take the
         # average of the 5 at the end
-        for j in range(0,5):
+        #for j in range(0,5):
+        for j in range(0,1):
         
             im2=o2sclpy.interpm_tf_dnn()
             
             # Train the neural network
             
             #with io.capture_output() as cap:
-            im2.set_data(x2,y2,verbose=0,epochs=800,
+            im2.set_data(x2,y2,verbose=1,epochs=800,
                          transform_in=trans,test_size=0.1,
                          activations=[act,act,act,act],
                          hlayers=[240*M,120*M,60*M,40*M])

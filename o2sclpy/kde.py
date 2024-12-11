@@ -35,7 +35,9 @@ class kde_sklearn:
        * Fix the comparison between sklearn and scipy, making
          sure they both produce the same log_pdf() in the 
          correct conditions. Ensure the integral is normalized
-         when appropriate. 
+         when appropriate.
+
+    See https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KernelDensity.html .
     
     """
 
