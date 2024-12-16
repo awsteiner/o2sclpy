@@ -42,6 +42,9 @@ o2sclpy.ame_load(ame,'20',False)
 # Print out the number of entries
 print('Number of isotopes in the AME list:',ame.get_nentries())
 
+dz=o2sclpy.nucmass_dz_fit_33()
+dist=o2sclpy.vector_nucleus()
+
 nuc=o2sclpy.nucleus()
 tab=o2sclpy.table()
 tab.line_of_names('Z N mex')

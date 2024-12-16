@@ -25,11 +25,15 @@ Nuclei and nuclear mass classes
 * :ref:`Class nucmass_ktuy`
 * :ref:`Class nucmass_sdnp`
 * :ref:`Class nucmass_wlw`
+* :ref:`Class nucmass_fit`
+* :ref:`Class std_vector_nucleus`
 * :ref:`Function ame_load`
 * :ref:`Function ame_load_ext`
 * :ref:`Function mnmsk_load`
 * :ref:`Function hfb_load`
 * :ref:`Function hfb_sp_load`
+* :ref:`Function nucdist_set`
+* :ref:`Function nucdist_pair_set`
 
 Class nucleus
 -------------
@@ -251,6 +255,31 @@ Class nucmass_wlw
         .. automethod:: __del__
         .. automethod:: __copy__
 
+Class nucmass_fit
+-----------------
+
+.. autoclass:: o2sclpy.nucmass_fit
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class std_vector_nucleus
+------------------------
+
+.. autoclass:: o2sclpy.std_vector_nucleus
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+        .. automethod:: __deepcopy__
+        .. automethod:: __getitem__
+        .. automethod:: __setitem__
+
 Function ame_load
 -----------------
 
@@ -275,4 +304,14 @@ Function hfb_sp_load
 --------------------
 
 .. autofunction:: o2sclpy.hfb_sp_load(hfb,model,filename)
+
+Function nucdist_set
+--------------------
+
+.. autofunction:: o2sclpy.nucdist_set(dist,nm,expr,maxA,include_neutron)
+
+Function nucdist_pair_set
+-------------------------
+
+.. autofunction:: o2sclpy.nucdist_pair_set(dist,nm,nm2,expr,maxA,include_neutron)
 

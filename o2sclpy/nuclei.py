@@ -2268,6 +2268,337 @@ class nucmass_wlw(nucmass_table):
         return new_obj
 
 
+class nucmass_fit:
+    """
+    Python interface for O2scl class ``nucmass_fit``,
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucmass_fit.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucmass_fit
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_fit
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_fit
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucmass_fit
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucmass_fit
+        
+        Returns: nucmass_fit object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    @property
+    def fit_method(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_get_fit_method
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @fit_method.setter
+    def fit_method(self,value):
+        """
+        Setter function for nucmass_fit::fit_method .
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_set_fit_method
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def rms_mass_excess(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_get_rms_mass_excess
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @property
+    def rms_binding_energy(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_get_rms_binding_energy
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @property
+    def chi_squared_me(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_get_chi_squared_me
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @property
+    def chi_squared_be(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_get_chi_squared_be
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @property
+    def even_even(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_get_even_even
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @even_even.setter
+    def even_even(self,value):
+        """
+        Setter function for nucmass_fit::even_even .
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_set_even_even
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def minZ(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_get_minZ
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @minZ.setter
+    def minZ(self,value):
+        """
+        Setter function for nucmass_fit::minZ .
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_set_minZ
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def minN(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_get_minN
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @minN.setter
+    def minN(self,value):
+        """
+        Setter function for nucmass_fit::minN .
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_set_minN
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    def fit(self,n):
+        """
+        | Parameters:
+        | *n*: :class:`nucmass_fit_base` object
+        | Returns: , a Python float
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_fit
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_double)]
+        res_conv=ctypes.c_double(0)
+        func(self._ptr,n._ptr,ctypes.byref(res_conv))
+        return res_conv.value
+
+    def eval(self,n):
+        """
+        | Parameters:
+        | *n*: :class:`nucmass` object
+        | Returns: , a Python float
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_eval
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_double)]
+        res_conv=ctypes.c_double(0)
+        func(self._ptr,n._ptr,ctypes.byref(res_conv))
+        return res_conv.value
+
+    def fit_covar(self,n,covar):
+        """
+        | Parameters:
+        | *n*: :class:`nucmass_fit_base` object
+        | *covar*: :class:`ubmatrix` object
+        | Returns: , a Python float
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_fit_covar
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.POINTER(ctypes.c_double),ctypes.c_void_p]
+        chi2_conv=ctypes.c_double(0)
+        func(self._ptr,n._ptr,ctypes.byref(chi2_conv),covar._ptr)
+        return chi2_conv.value
+
+
+class std_vector_nucleus:
+    """
+    Python interface for O2scl class ``std::vector<nucleus>``,
+    See
+    https://awsteiner.org/code/o2scl/html/class/std::vector<nucleus>.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class std_vector_nucleus
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_std_vector_nucleus_
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class std_vector_nucleus
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_std_vector_nucleus_
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class std_vector_nucleus
+        
+        Returns: std_vector_nucleus object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    def __deepcopy__(self,memo):
+        """
+        Deep copy function for class std_vector_nucleus
+        
+        Returns: new copy of the std_vector_nucleus object
+        """
+
+        new_obj=type(self)()
+        f2=self._link.o2scl.o2scl_copy_std_vector_nucleus_
+        f2.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        f2(self._ptr,new_obj._ptr)
+        return new_obj
+
+    def resize(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_std_vector_nucleus__resize
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        func(self._ptr,n)
+        return
+
+    def size(self):
+        """
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_std_vector_nucleus__size
+        func.restype=ctypes.c_size_t
+        func.argtypes=[ctypes.c_void_p]
+        ret=func(self._ptr)
+        return ret
+
+    def __getitem__(self,n):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | Returns: nucleus object
+        """
+        func=self._link.o2scl.o2scl_std_vector_nucleus__getitem
+        func.restype=ctypes.c_void_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
+        ret=func(self._ptr,n)
+        vcl=nucleus(ret)
+        return vcl
+
+    def __setitem__(self,i,value):
+        """
+        | Parameters:
+        | *i*: ``size_t``
+        | *value*: nucleus object
+        """
+        func=self._link.o2scl.o2scl_std_vector_nucleus__setitem
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        func(self._ptr,i,value._ptr)
+        return
+
+    def __len__(self):
+        """
+        Return the length of the vector
+    
+        Returns: a Python int
+        """
+        return self.size()
+
 def ame_load(ame,name,exp_only):
     """
         | Parameters:
@@ -2341,5 +2672,38 @@ def hfb_sp_load(hfb,model,filename):
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hfb_sp_load_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
     func(hfb._ptr,model,s_filename._ptr)
+    return
+
+def nucdist_set(dist,nm,expr="1",maxA=400,include_neutron=False):
+    """
+        | Parameters:
+        | *dist*: :class:`vector<nucleus>` object
+        | *nm*: :class:`nucmass` object
+        | *expr*: string
+        | *maxA*: ``int``
+        | *include_neutron*: ``bool``
+    """
+    s_expr=o2sclpy.std_string()
+    s_expr.init_bytes(force_bytes_string(expr))
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_nucdist_set_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
+    func(dist._ptr,nm._ptr,s_expr._ptr,maxA,include_neutron)
+    return
+
+def nucdist_pair_set(dist,nm,nm2,expr="1",maxA=400,include_neutron=False):
+    """
+        | Parameters:
+        | *dist*: :class:`vector<nucleus>` object
+        | *nm*: :class:`nucmass` object
+        | *nm2*: :class:`nucmass` object
+        | *expr*: string
+        | *maxA*: ``int``
+        | *include_neutron*: ``bool``
+    """
+    s_expr=o2sclpy.std_string()
+    s_expr.init_bytes(force_bytes_string(expr))
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_nucdist_pair_set_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
+    func(dist._ptr,nm._ptr,nm2._ptr,s_expr._ptr,maxA,include_neutron)
     return
 
