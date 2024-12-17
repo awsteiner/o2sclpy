@@ -856,6 +856,32 @@ class nucmass_fit_base(nucmass):
         func(self._ptr,value)
         return
 
+    def fit_fun(self,nv,x):
+        """
+        | Parameters:
+        | *nv*: ``size_t``
+        | *x*: :class:`ublas_vector` object
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_base_fit_fun
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        ret=func(self._ptr,nv,x._ptr)
+        return ret
+
+    def guess_fun(self,nv,x):
+        """
+        | Parameters:
+        | *nv*: ``size_t``
+        | *x*: :class:`ublas_vector` object
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_base_guess_fun
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+        ret=func(self._ptr,nv,x._ptr)
+        return ret
+
 
 class nucmass_semi_empirical(nucmass_fit_base):
     """
