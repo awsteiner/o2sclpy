@@ -118,8 +118,8 @@ print('Number of isotopes to fit:',N)
 
 # Create the neural network interpolation object
 
-for k in range(0,27):
-#for k in range(19,20):
+#for k in range(0,27):
+for k in range(19,20):
 
     # Different transformations
     if k%3==0:
@@ -151,8 +151,8 @@ for k in range(0,27):
 
         # Try each configuration five times, and take the
         # average of the 5 at the end
-        for j in range(0,5):
-        #for j in range(0,1):
+        #for j in range(0,5):
+        for j in range(0,1):
         
             im2=o2sclpy.interpm_tf_dnn()
             
@@ -180,8 +180,6 @@ for k in range(0,27):
         print(avgs/5.0)
 
     print(k,trans,act,M,avgs/5.0)
-    
-quit()
     
 
 
