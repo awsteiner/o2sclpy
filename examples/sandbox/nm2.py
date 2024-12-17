@@ -31,6 +31,8 @@ if 'pytest' in sys.modules:
     plots=False
 # -
 
+vary_nn_parms=True
+
 # Create the data set:
 
 # Instantiate and load the Atomic Mass Evaluation. The third parameter
@@ -42,12 +44,12 @@ o2sclpy.ame_load(ame,'20',False)
 # Print out the number of entries
 print('Number of isotopes in the AME list:',ame.get_nentries())
 
-dz=o2sclpy.nucmass_dz_fit_33()
 dist=o2sclpy.std_vector_nucleus()
-
 o2sclpy.nucdist_set(dist,ame)
-print(len(dist))
+print('Number of nuclei in dist:',len(dist))
 
+# Instantiate the Duflo-Zuker fit and set parameters from a recent fit
+dz=o2sclpy.nucmass_dz_fit_33()
 p=o2sclpy.ublas_vector()
 p.resize(33)
 p[0]=9.089056134746128e+00
@@ -86,6 +88,7 @@ p[32]=2.076508980189957e+01
 
 dz.fit_fun(33,p)
 
+# Create the initial table from which the neural network fit is based
 nuc=o2sclpy.nucleus()
 tab=o2sclpy.table()
 tab.line_of_names('Z N mex mex_th diff')
@@ -102,11 +105,13 @@ for Z in range(8,200):
                 print(line)
             tab.line_of_data(line)
 
+# Write the table to a file
 hf=o2sclpy.hdf_file()
 hf.open_or_create('nm2.o2')
 o2sclpy.hdf_output_table(hf,tab,b'table')
 hf.close()
-                
+
+# Reformat the table into a numpy array for the interpm class
 N=tab.get_nlines()
 x2=numpy.zeros((N,2))
 y2=numpy.zeros((N,1))
@@ -118,68 +123,66 @@ print('Number of isotopes to fit:',N)
 
 # Create the neural network interpolation object
 
-#for k in range(0,27):
-for k in range(19,20):
+for k in range(0,27):
 
-    # Different transformations
-    if k%3==0:
-        trans='none'
-    elif k%3==1:
-        trans='moto'
-    else:
-        trans='quant'
+    if vary_nn_parms==True or k==19:
 
-    # Different activation functions
-    if (k//3)%3==0:
-        act='relu'
-    elif (k//3)%3==1:
-        act='sigmoid'
-    else:
-        act='tanh'
-
-    # Different network sizes
-    if (k//9)%3==0:
-        M=1
-    elif (k//9)%3==1:
-        M=2
-    else:
-        M=4
-
-    avgs=0
+        # Different transformations
+        if k%3==0:
+            trans='none'
+        elif k%3==1:
+            trans='moto'
+        else:
+            trans='quant'
     
-    if True:
-
+        # Different activation functions
+        if (k//3)%3==0:
+            act='relu'
+        elif (k//3)%3==1:
+            act='sigmoid'
+        else:
+            act='tanh'
+    
+        # Different network sizes
+        if (k//9)%3==0:
+            M=1
+        elif (k//9)%3==1:
+            M=2
+        else:
+            M=4
+    
+        avgs=0
+        
         # Try each configuration five times, and take the
         # average of the 5 at the end
-        #for j in range(0,5):
-        for j in range(0,1):
+        n_fits=0
         
-            im2=o2sclpy.interpm_tf_dnn()
-            
-            # Train the neural network
-            
-            #with io.capture_output() as cap:
-            im2.set_data(x2,y2,verbose=1,epochs=800,
-                         transform_in=trans,test_size=0.1,
-                         activations=[act,act,act,act],
-                         hlayers=[240*M,120*M,60*M,40*M])
-            
-            #v=numpy.array([x2[100,0],x2[100,1]])
-            #print('%d %d %7.6e %7.6e' % (v[0],v[1],im2.eval(v)[0],y2[100,0]))
-            
-            #with io.capture_output() as cap:
-            sum=0
-            for i in range(0,N):
-                v=numpy.array([x2[i,0],x2[i,1]])
-                sum+=numpy.abs(im2.eval(v)[0]-y2[i,0])
-                
-            avg=sum/N
-            print('%d avg %7.6e MeV' % (j,avg))
-            avgs=avgs+avg
-            
-        print(avgs/5.0)
+        for j in range(0,5):
 
-    print(k,trans,act,M,avgs/5.0)
+            if vary_nn_parms==True or j==0:
+            
+                im2=o2sclpy.interpm_tf_dnn()
+                
+                # Train the neural network
+                
+                im2.set_data(x2,y2,verbose=1,epochs=800,
+                             transform_in=trans,test_size=0.1,
+                             activations=[act,act,act,act],
+                             hlayers=[240*M,120*M,60*M,40*M])
+                
+                sum=0
+                for i in range(0,N):
+                    v=numpy.array([x2[i,0],x2[i,1]])
+                    sum+=numpy.abs(im2.eval(v)[0]-y2[i,0])
+                    
+                avg=sum/N
+                print('%d avg %7.6e MeV' % (j,avg))
+                avgs=avgs+avg
+                n_fits=n_fits+1
+                
+        print(avgs/n_fits)
+    
+    print(k,trans,act,M,avgs/n_fits)
     
 
 
