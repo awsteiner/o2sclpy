@@ -2625,7 +2625,7 @@ class std_vector_nucleus:
         """
         return self.size()
 
-def ame_load(ame,name,exp_only):
+def ame_load(ame,name="20",exp_only=False):
     """
         | Parameters:
         | *ame*: :class:`nucmass_ame` object
@@ -2639,7 +2639,7 @@ def ame_load(ame,name,exp_only):
     func(ame._ptr,s_name._ptr,exp_only)
     return
 
-def ame_load_ext(ame,file_name,table_name,exp_only):
+def ame_load_ext(ame,file_name,table_name,exp_only=False):
     """
         | Parameters:
         | *ame*: :class:`nucmass_ame` object
@@ -2656,7 +2656,7 @@ def ame_load_ext(ame,file_name,table_name,exp_only):
     func(ame._ptr,s_file_name._ptr,s_table_name._ptr,exp_only)
     return
 
-def mnmsk_load(mnmsk,model,filename):
+def mnmsk_load(mnmsk,model="",filename=""):
     """
         | Parameters:
         | *mnmsk*: :class:`nucmass_mnmsk` object
