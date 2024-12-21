@@ -5098,6 +5098,1701 @@ class nucleus_rmf:
         return sp
 
 
+class nucmass_ldrop(nucmass_fit_base):
+    """
+    Python interface for O2scl class ``nucmass_ldrop``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucmass_ldrop.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucmass_ldrop
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_ldrop
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_ldrop
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucmass_ldrop
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucmass_ldrop
+        
+        Returns: nucmass_ldrop object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    @property
+    def n1(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_n1
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @n1.setter
+    def n1(self,value):
+        """
+        Setter function for nucmass_ldrop::n1 .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_n1
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def n0(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_n0
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @n0.setter
+    def n0(self,value):
+        """
+        Setter function for nucmass_ldrop::n0 .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_n0
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def surften(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_surften
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @surften.setter
+    def surften(self,value):
+        """
+        Setter function for nucmass_ldrop::surften .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_surften
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def coul_coeff(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_coul_coeff
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @coul_coeff.setter
+    def coul_coeff(self,value):
+        """
+        Setter function for nucmass_ldrop::coul_coeff .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_coul_coeff
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def nn(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_nn
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @nn.setter
+    def nn(self,value):
+        """
+        Setter function for nucmass_ldrop::nn .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_nn
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def np(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_np
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @np.setter
+    def np(self,value):
+        """
+        Setter function for nucmass_ldrop::np .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_np
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Rn(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_Rn
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Rn.setter
+    def Rn(self,value):
+        """
+        Setter function for nucmass_ldrop::Rn .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_Rn
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Rp(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_Rp
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Rp.setter
+    def Rp(self,value):
+        """
+        Setter function for nucmass_ldrop::Rp .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_Rp
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def surf(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_surf
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @surf.setter
+    def surf(self,value):
+        """
+        Setter function for nucmass_ldrop::surf .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_surf
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def bulk(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_bulk
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @bulk.setter
+    def bulk(self,value):
+        """
+        Setter function for nucmass_ldrop::bulk .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_bulk
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def coul(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_coul
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @coul.setter
+    def coul(self,value):
+        """
+        Setter function for nucmass_ldrop::coul .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_coul
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def large_vals_unphys(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_get_large_vals_unphys
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @large_vals_unphys.setter
+    def large_vals_unphys(self,value):
+        """
+        Setter function for nucmass_ldrop::large_vals_unphys .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_large_vals_unphys
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    def get_def_had_eos(self):
+        """
+        Get object of type :class:`eos_had_rmf`
+        """
+        func1=self._link.o2scl.o2scl_nucmass_ldrop_get_def_had_eos
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=eos_had_rmf(ptr)
+        return obj
+
+    def set_def_had_eos(self,value):
+        """
+        Set object of type :class:`eos_had_rmf`
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_def_had_eos
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_def_neutron(self):
+        """
+        Get object of type :class:`fermion`
+        """
+        func1=self._link.o2scl.o2scl_nucmass_ldrop_get_def_neutron
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=fermion(ptr)
+        return obj
+
+    def set_def_neutron(self,value):
+        """
+        Set object of type :class:`fermion`
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_def_neutron
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_def_proton(self):
+        """
+        Get object of type :class:`fermion`
+        """
+        func1=self._link.o2scl.o2scl_nucmass_ldrop_get_def_proton
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=fermion(ptr)
+        return obj
+
+    def set_def_proton(self,value):
+        """
+        Set object of type :class:`fermion`
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_def_proton
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_th(self):
+        """
+        Get object of type :class:`thermo`
+        """
+        func1=self._link.o2scl.o2scl_nucmass_ldrop_get_th
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=thermo(ptr)
+        return obj
+
+    def set_th(self,value):
+        """
+        Set object of type :class:`thermo`
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_th
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def mass_excess_d(self,Z,N):
+        """
+        | Parameters:
+        | *Z*: ``double``
+        | *N*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_mass_excess_d
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,Z,N)
+        return ret
+
+    def mass_excess(self,Z,N):
+        """
+        | Parameters:
+        | *Z*: ``int``
+        | *N*: ``int``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_mass_excess
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
+        ret=func(self._ptr,Z,N)
+        return ret
+
+    def drip_binding_energy_d(self,Z,N,npout,nnout,chi,dim,T):
+        """
+        | Parameters:
+        | *Z*: ``double``
+        | *N*: ``double``
+        | *npout*: ``double``
+        | *nnout*: ``double``
+        | *chi*: ``double``
+        | *dim*: ``double``
+        | *T*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_drip_binding_energy_d
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,Z,N,npout,nnout,chi,dim,T)
+        return ret
+
+    def set_n_and_p(self,un,up):
+        """
+        | Parameters:
+        | *un*: :class:`fermion` object
+        | *up*: :class:`fermion` object
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_n_and_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,un._ptr,up._ptr)
+        return
+
+    def set_eos_had_temp_base(self,uhe):
+        """
+        | Parameters:
+        | *uhe*: :class:`eos_had_temp_base` object
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_set_eos_had_temp_base
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        ret=func(self._ptr,uhe._ptr)
+        return ret
+
+
+class nucmass_ldrop_skin(nucmass_ldrop):
+    """
+    Python interface for O2scl class ``nucmass_ldrop_skin``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucmass_ldrop_skin.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucmass_ldrop_skin
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_ldrop_skin
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_ldrop_skin
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucmass_ldrop_skin
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucmass_ldrop_skin
+        
+        Returns: nucmass_ldrop_skin object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    @property
+    def full_surface(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_get_full_surface
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @full_surface.setter
+    def full_surface(self,value):
+        """
+        Setter function for nucmass_ldrop_skin::full_surface .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_set_full_surface
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def new_skin_mode(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_get_new_skin_mode
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @new_skin_mode.setter
+    def new_skin_mode(self,value):
+        """
+        Setter function for nucmass_ldrop_skin::new_skin_mode .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_set_new_skin_mode
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def doi(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_get_doi
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @doi.setter
+    def doi(self,value):
+        """
+        Setter function for nucmass_ldrop_skin::doi .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_set_doi
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def ss(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_get_ss
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @ss.setter
+    def ss(self,value):
+        """
+        Setter function for nucmass_ldrop_skin::ss .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_set_ss
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def pp(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_get_pp
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @pp.setter
+    def pp(self,value):
+        """
+        Setter function for nucmass_ldrop_skin::pp .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_set_pp
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def a0(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_get_a0
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @a0.setter
+    def a0(self,value):
+        """
+        Setter function for nucmass_ldrop_skin::a0 .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_set_a0
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def a2(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_get_a2
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @a2.setter
+    def a2(self,value):
+        """
+        Setter function for nucmass_ldrop_skin::a2 .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_set_a2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def a4(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_get_a4
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @a4.setter
+    def a4(self,value):
+        """
+        Setter function for nucmass_ldrop_skin::a4 .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_set_a4
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def rel_vacuum(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_get_rel_vacuum
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @rel_vacuum.setter
+    def rel_vacuum(self,value):
+        """
+        Setter function for nucmass_ldrop_skin::rel_vacuum .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_set_rel_vacuum
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Tchalf(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_get_Tchalf
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Tchalf.setter
+    def Tchalf(self,value):
+        """
+        Setter function for nucmass_ldrop_skin::Tchalf .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_skin_set_Tchalf
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+
+class nucmass_ldrop_pair(nucmass_ldrop_skin):
+    """
+    Python interface for O2scl class ``nucmass_ldrop_pair``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucmass_ldrop_pair.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucmass_ldrop_pair
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_ldrop_pair
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_ldrop_pair
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucmass_ldrop_pair
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucmass_ldrop_pair
+        
+        Returns: nucmass_ldrop_pair object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    @property
+    def Epair(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_pair_get_Epair
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Epair.setter
+    def Epair(self,value):
+        """
+        Setter function for nucmass_ldrop_pair::Epair .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_pair_set_Epair
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def pair(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_pair_get_pair
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @pair.setter
+    def pair(self,value):
+        """
+        Setter function for nucmass_ldrop_pair::pair .
+        """
+        func=self._link.o2scl.o2scl_nucmass_ldrop_pair_set_pair
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+
+class nucleus_bin:
+    """
+    Python interface for O2scl class ``nucleus_bin``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucleus_bin.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucleus_bin
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucleus_bin
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucleus_bin
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucleus_bin
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucleus_bin
+        
+        Returns: nucleus_bin object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    def get_ame16(self):
+        """
+        Get object of type :class:`nucmass_ame`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ame16
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_ame(ptr)
+        return obj
+
+    def set_ame16(self,value):
+        """
+        Set object of type :class:`nucmass_ame`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ame16
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ame20exp(self):
+        """
+        Get object of type :class:`nucmass_ame`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ame20exp
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_ame(ptr)
+        return obj
+
+    def set_ame20exp(self,value):
+        """
+        Set object of type :class:`nucmass_ame`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ame20exp
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ame20round(self):
+        """
+        Get object of type :class:`nucmass_ame`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ame20round
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_ame(ptr)
+        return obj
+
+    def set_ame20round(self,value):
+        """
+        Set object of type :class:`nucmass_ame`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ame20round
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ame95rmd(self):
+        """
+        Get object of type :class:`nucmass_ame`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ame95rmd
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_ame(ptr)
+        return obj
+
+    def set_ame95rmd(self,value):
+        """
+        Set object of type :class:`nucmass_ame`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ame95rmd
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ame03round(self):
+        """
+        Get object of type :class:`nucmass_ame`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ame03round
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_ame(ptr)
+        return obj
+
+    def set_ame03round(self,value):
+        """
+        Set object of type :class:`nucmass_ame`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ame03round
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ame03(self):
+        """
+        Get object of type :class:`nucmass_ame`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ame03
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_ame(ptr)
+        return obj
+
+    def set_ame03(self,value):
+        """
+        Set object of type :class:`nucmass_ame`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ame03
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ame95exp(self):
+        """
+        Get object of type :class:`nucmass_ame`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ame95exp
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_ame(ptr)
+        return obj
+
+    def set_ame95exp(self,value):
+        """
+        Set object of type :class:`nucmass_ame`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ame95exp
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ame12(self):
+        """
+        Get object of type :class:`nucmass_ame`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ame12
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_ame(ptr)
+        return obj
+
+    def set_ame12(self,value):
+        """
+        Set object of type :class:`nucmass_ame`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ame12
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ddme2(self):
+        """
+        Get object of type :class:`nucmass_gen`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ddme2
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_gen(ptr)
+        return obj
+
+    def set_ddme2(self,value):
+        """
+        Set object of type :class:`nucmass_gen`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ddme2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ddmed(self):
+        """
+        Get object of type :class:`nucmass_gen`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ddmed
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_gen(ptr)
+        return obj
+
+    def set_ddmed(self,value):
+        """
+        Set object of type :class:`nucmass_gen`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ddmed
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_ddpc1(self):
+        """
+        Get object of type :class:`nucmass_gen`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_ddpc1
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_gen(ptr)
+        return obj
+
+    def set_ddpc1(self,value):
+        """
+        Set object of type :class:`nucmass_gen`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_ddpc1
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_nl3s(self):
+        """
+        Get object of type :class:`nucmass_gen`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_nl3s
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_gen(ptr)
+        return obj
+
+    def set_nl3s(self,value):
+        """
+        Set object of type :class:`nucmass_gen`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_nl3s
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_sly4(self):
+        """
+        Get object of type :class:`nucmass_gen`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_sly4
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_gen(ptr)
+        return obj
+
+    def set_sly4(self,value):
+        """
+        Set object of type :class:`nucmass_gen`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_sly4
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_skms(self):
+        """
+        Get object of type :class:`nucmass_gen`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_skms
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_gen(ptr)
+        return obj
+
+    def set_skms(self,value):
+        """
+        Set object of type :class:`nucmass_gen`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_skms
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_skp(self):
+        """
+        Get object of type :class:`nucmass_gen`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_skp
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_gen(ptr)
+        return obj
+
+    def set_skp(self,value):
+        """
+        Set object of type :class:`nucmass_gen`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_skp
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_sv_min(self):
+        """
+        Get object of type :class:`nucmass_gen`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_sv_min
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_gen(ptr)
+        return obj
+
+    def set_sv_min(self,value):
+        """
+        Set object of type :class:`nucmass_gen`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_sv_min
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_unedf0(self):
+        """
+        Get object of type :class:`nucmass_gen`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_unedf0
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_gen(ptr)
+        return obj
+
+    def set_unedf0(self,value):
+        """
+        Set object of type :class:`nucmass_gen`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_unedf0
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_unedf1(self):
+        """
+        Get object of type :class:`nucmass_gen`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_unedf1
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_gen(ptr)
+        return obj
+
+    def set_unedf1(self,value):
+        """
+        Set object of type :class:`nucmass_gen`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_unedf1
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_m95(self):
+        """
+        Get object of type :class:`nucmass_mnmsk`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_m95
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_mnmsk(ptr)
+        return obj
+
+    def set_m95(self,value):
+        """
+        Set object of type :class:`nucmass_mnmsk`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_m95
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_m16(self):
+        """
+        Get object of type :class:`nucmass_mnmsk`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_m16
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_mnmsk(ptr)
+        return obj
+
+    def set_m16(self,value):
+        """
+        Set object of type :class:`nucmass_mnmsk`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_m16
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_kt(self):
+        """
+        Get object of type :class:`nucmass_ktuy`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_kt
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_ktuy(ptr)
+        return obj
+
+    def set_kt(self,value):
+        """
+        Set object of type :class:`nucmass_ktuy`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_kt
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_kt2(self):
+        """
+        Get object of type :class:`nucmass_ktuy`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_kt2
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_ktuy(ptr)
+        return obj
+
+    def set_kt2(self,value):
+        """
+        Set object of type :class:`nucmass_ktuy`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_kt2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_wlw1(self):
+        """
+        Get object of type :class:`nucmass_wlw`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_wlw1
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_wlw(ptr)
+        return obj
+
+    def set_wlw1(self,value):
+        """
+        Set object of type :class:`nucmass_wlw`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_wlw1
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_wlw2(self):
+        """
+        Get object of type :class:`nucmass_wlw`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_wlw2
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_wlw(ptr)
+        return obj
+
+    def set_wlw2(self,value):
+        """
+        Set object of type :class:`nucmass_wlw`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_wlw2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_wlw3(self):
+        """
+        Get object of type :class:`nucmass_wlw`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_wlw3
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_wlw(ptr)
+        return obj
+
+    def set_wlw3(self,value):
+        """
+        Set object of type :class:`nucmass_wlw`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_wlw3
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_wlw4(self):
+        """
+        Get object of type :class:`nucmass_wlw`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_wlw4
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_wlw(ptr)
+        return obj
+
+    def set_wlw4(self,value):
+        """
+        Set object of type :class:`nucmass_wlw`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_wlw4
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_wlw5(self):
+        """
+        Get object of type :class:`nucmass_wlw`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_wlw5
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_wlw(ptr)
+        return obj
+
+    def set_wlw5(self,value):
+        """
+        Set object of type :class:`nucmass_wlw`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_wlw5
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_sdnp1(self):
+        """
+        Get object of type :class:`nucmass_sdnp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_sdnp1
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_sdnp(ptr)
+        return obj
+
+    def set_sdnp1(self,value):
+        """
+        Set object of type :class:`nucmass_sdnp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_sdnp1
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_sdnp2(self):
+        """
+        Get object of type :class:`nucmass_sdnp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_sdnp2
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_sdnp(ptr)
+        return obj
+
+    def set_sdnp2(self,value):
+        """
+        Set object of type :class:`nucmass_sdnp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_sdnp2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_sdnp3(self):
+        """
+        Get object of type :class:`nucmass_sdnp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_sdnp3
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_sdnp(ptr)
+        return obj
+
+    def set_sdnp3(self,value):
+        """
+        Set object of type :class:`nucmass_sdnp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_sdnp3
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_dz(self):
+        """
+        Get object of type :class:`nucmass_dz_table`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_dz
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_dz_table(ptr)
+        return obj
+
+    def set_dz(self,value):
+        """
+        Set object of type :class:`nucmass_dz_table`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_dz
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb2(self):
+        """
+        Get object of type :class:`nucmass_hfb`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb2
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb(ptr)
+        return obj
+
+    def set_hfb2(self,value):
+        """
+        Set object of type :class:`nucmass_hfb`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb2
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb8(self):
+        """
+        Get object of type :class:`nucmass_hfb`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb8
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb(ptr)
+        return obj
+
+    def set_hfb8(self,value):
+        """
+        Set object of type :class:`nucmass_hfb`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb8
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb14(self):
+        """
+        Get object of type :class:`nucmass_hfb`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb14
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb(ptr)
+        return obj
+
+    def set_hfb14(self,value):
+        """
+        Set object of type :class:`nucmass_hfb`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb14
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb14_v0(self):
+        """
+        Get object of type :class:`nucmass_hfb`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb14_v0
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb(ptr)
+        return obj
+
+    def set_hfb14_v0(self,value):
+        """
+        Set object of type :class:`nucmass_hfb`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb14_v0
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb17(self):
+        """
+        Get object of type :class:`nucmass_hfb_sp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb17
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb_sp(ptr)
+        return obj
+
+    def set_hfb17(self,value):
+        """
+        Set object of type :class:`nucmass_hfb_sp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb17
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb21(self):
+        """
+        Get object of type :class:`nucmass_hfb_sp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb21
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb_sp(ptr)
+        return obj
+
+    def set_hfb21(self,value):
+        """
+        Set object of type :class:`nucmass_hfb_sp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb21
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb22(self):
+        """
+        Get object of type :class:`nucmass_hfb_sp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb22
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb_sp(ptr)
+        return obj
+
+    def set_hfb22(self,value):
+        """
+        Set object of type :class:`nucmass_hfb_sp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb22
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb23(self):
+        """
+        Get object of type :class:`nucmass_hfb_sp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb23
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb_sp(ptr)
+        return obj
+
+    def set_hfb23(self,value):
+        """
+        Set object of type :class:`nucmass_hfb_sp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb23
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb24(self):
+        """
+        Get object of type :class:`nucmass_hfb_sp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb24
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb_sp(ptr)
+        return obj
+
+    def set_hfb24(self,value):
+        """
+        Set object of type :class:`nucmass_hfb_sp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb24
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb25(self):
+        """
+        Get object of type :class:`nucmass_hfb_sp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb25
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb_sp(ptr)
+        return obj
+
+    def set_hfb25(self,value):
+        """
+        Set object of type :class:`nucmass_hfb_sp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb25
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb26(self):
+        """
+        Get object of type :class:`nucmass_hfb_sp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb26
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb_sp(ptr)
+        return obj
+
+    def set_hfb26(self,value):
+        """
+        Set object of type :class:`nucmass_hfb_sp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb26
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_hfb27(self):
+        """
+        Get object of type :class:`nucmass_hfb_sp`
+        """
+        func1=self._link.o2scl.o2scl_nucleus_bin_get_hfb27
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=nucmass_hfb_sp(ptr)
+        return obj
+
+    def set_hfb27(self,value):
+        """
+        Set object of type :class:`nucmass_hfb_sp`
+        """
+        func=self._link.o2scl.o2scl_nucleus_bin_set_hfb27
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+
 def skyrme_load(sk,model,external=False,verbose=0):
     """
         | Parameters:

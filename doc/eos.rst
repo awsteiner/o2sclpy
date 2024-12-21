@@ -28,6 +28,10 @@ EOS classes
 * :ref:`Class tov_love`
 * :ref:`Class nstar_cold`
 * :ref:`Class nucleus_rmf`
+* :ref:`Class nucmass_ldrop`
+* :ref:`Class nucmass_ldrop_skin`
+* :ref:`Class nucmass_ldrop_pair`
+* :ref:`Class nucleus_bin`
 * :ref:`Function skyrme_load`
 * :ref:`Function rmf_load`
 
@@ -277,6 +281,50 @@ Class nucleus_rmf
 -----------------
 
 .. autoclass:: o2sclpy.nucleus_rmf
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class nucmass_ldrop
+-------------------
+
+.. autoclass:: o2sclpy.nucmass_ldrop
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class nucmass_ldrop_skin
+------------------------
+
+.. autoclass:: o2sclpy.nucmass_ldrop_skin
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class nucmass_ldrop_pair
+------------------------
+
+.. autoclass:: o2sclpy.nucmass_ldrop_pair
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class nucleus_bin
+-----------------
+
+.. autoclass:: o2sclpy.nucleus_bin
         :members:
         :undoc-members:
 
