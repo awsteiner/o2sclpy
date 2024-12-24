@@ -28,6 +28,7 @@ import o2sclpy.doc_data
 
 from o2sclpy.base import *
 from o2sclpy.part import *
+from o2sclpy.nuclei import *
 
 class eos_base:
     """
@@ -5390,18 +5391,18 @@ class nucmass_ldrop(nucmass_fit_base):
 
     def get_def_had_eos(self):
         """
-        Get object of type :class:`eos_had_rmf`
+        Get object of type :class:`eos_had_skyrme`
         """
         func1=self._link.o2scl.o2scl_nucmass_ldrop_get_def_had_eos
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=eos_had_rmf(ptr)
+        obj=eos_had_skyrme(ptr)
         return obj
 
     def set_def_had_eos(self,value):
         """
-        Set object of type :class:`eos_had_rmf`
+        Set object of type :class:`eos_had_skyrme`
         """
         func=self._link.o2scl.o2scl_nucmass_ldrop_set_def_had_eos
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
