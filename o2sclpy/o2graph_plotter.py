@@ -52,7 +52,6 @@ from o2sclpy.doc_data import version
 from o2sclpy.hdf import *
 from o2sclpy.base import *
 from o2sclpy.kde import *
-from yt.visualization._commons import get_canvas
 
 base_list=[
     ["addcbar",plot_base.addcbar.__doc__],
@@ -5019,6 +5018,7 @@ class o2graph_plotter(td_plot_base):
         """
         
         import matplotlib.pyplot as plot
+        from yt.visualization._commons import get_canvas
         
         if len(self.yt_ann)==0:
             
