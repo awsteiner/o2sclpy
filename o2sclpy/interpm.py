@@ -777,6 +777,13 @@ class interpm_sklearn_mlpr:
                   type(yp_trans[0]),v,yp_trans[0])
         return numpy.ascontiguousarray(yp_trans[0])
     
+    def eval_unc(self,v):
+        """
+        Empty function because this interpolator does not currently
+        provide uncertainties
+        """
+        return self.eval(v)
+        
     def eval_list(self,v):
         """
         Evaluate the GP at point ``v``.
@@ -1202,6 +1209,10 @@ class interpm_tf_dnn:
         return numpy.ascontiguousarray(out_double)
 
     def eval_unc(self,v):
+        """
+        Empty function because this interpolator does not currently
+        provide uncertainties
+        """
         return self.eval(v)
         
     def eval_list(self,v):
