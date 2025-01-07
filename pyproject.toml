@@ -24,7 +24,8 @@ cli = [
   "tensorflow",
   "scipy",
   "torch",
-  "normflows"
+  "normflows",
+  "ipython"
 ]
 
 [project.scripts]
