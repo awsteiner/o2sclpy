@@ -15,6 +15,7 @@ Nuclei and nuclear mass classes
 * :ref:`Class nucmass_dz_table`
 * :ref:`Class nucmass_dz_fit`
 * :ref:`Class nucmass_dz_fit_33`
+* :ref:`Class nucmass_densmat`
 * :ref:`Class nucmass_frdm`
 * :ref:`Class nucmass_mnmsk`
 * :ref:`Class nucmass_mnmsk_exp`
@@ -138,6 +139,17 @@ Class nucmass_dz_fit_33
 -----------------------
 
 .. autoclass:: o2sclpy.nucmass_dz_fit_33
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class nucmass_densmat
+---------------------
+
+.. autoclass:: o2sclpy.nucmass_densmat
         :members:
         :undoc-members:
 

@@ -5495,22 +5495,21 @@ class nucmass_ldrop(nucmass_fit_base):
         ret=func(self._ptr,Z,N)
         return ret
 
-    def drip_binding_energy_d(self,Z,N,npout,nnout,chi,dim,T):
+    def binding_energy_densmat(self,Z,N,npout,nnout,neout,T):
         """
         | Parameters:
         | *Z*: ``double``
         | *N*: ``double``
         | *npout*: ``double``
         | *nnout*: ``double``
-        | *chi*: ``double``
-        | *dim*: ``double``
+        | *neout*: ``double``
         | *T*: ``double``
         | Returns: a Python float
         """
-        func=self._link.o2scl.o2scl_nucmass_ldrop_drip_binding_energy_d
+        func=self._link.o2scl.o2scl_nucmass_ldrop_binding_energy_densmat
         func.restype=ctypes.c_double
-        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
-        ret=func(self._ptr,Z,N,npout,nnout,chi,dim,T)
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,Z,N,npout,nnout,neout,T)
         return ret
 
     def set_n_and_p(self,un,up):

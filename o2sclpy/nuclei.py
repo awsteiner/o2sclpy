@@ -1264,7 +1264,59 @@ class nucmass_dz_fit_33(nucmass_fit_base):
         return new_obj
 
 
-class nucmass_frdm(nucmass_fit_base):
+class nucmass_densmat(nucmass_fit_base):
+    """
+    Python interface for O2scl class ``nucmass_densmat``,
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucmass_densmat.html .
+    """
+
+    @abstractmethod
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucmass_densmat
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_densmat
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_densmat
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucmass_densmat
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucmass_densmat
+        
+        Returns: nucmass_densmat object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+
+class nucmass_frdm(nucmass_densmat):
     """
     Python interface for O2scl class ``nucmass_frdm``,
     See
