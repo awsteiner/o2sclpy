@@ -1,5 +1,5 @@
 o2graph: A data viewing and processing program for O2scl.
-  Version: 0.930a5
+  Version: 0.930
  
 List of command-line options which do not require a current object:
 
@@ -22,7 +22,7 @@ List of command-line options which do not require a current object:
   -constant        Get or modify a physical or numerical constant. 
   -convert         Manipulate or use a unit conversion factor. 
   -create          Create an object. 
-  -docs            Open local HTML docs for O₂scl documentation. 
+  -docs            Open local O₂scl HTML documentation. 
   -download        Download a file from the specified URL. 
   -ellipse         Plot an ellipse.
   -error-point     Plot a single point with errorbars.
@@ -83,7 +83,7 @@ List of command-line options which do not require a current object:
   -type            Output the type of the current object. 
   -version         Print version information and O₂scl settings. 
   -warranty        Show warranty information.
-  -wdocs           Open remote HTML docs for acol or an O₂scl topic. 
+  -wdocs           Open remote HTML O₂scl or O₂sclpy docs. 
   -xlimits         Set the x-axis limits
   -xml-to-o2       Parse doxygen XML to generate runtime docs. 
   -xtitle          Add a title for the x-axis
