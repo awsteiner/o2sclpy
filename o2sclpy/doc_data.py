@@ -29,7 +29,7 @@ top_linker=linker()
 top_linker.link_o2scl()
 #print('Done linking O₂scl.')
 
-version='0.930a6'
+version='0.930'
 
 cmaps = [('Perceptually uniform sequential', [
             'viridis', 'plasma', 'inferno', 'magma', 'cividis']),
