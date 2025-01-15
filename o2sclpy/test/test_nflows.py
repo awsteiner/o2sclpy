@@ -48,7 +48,7 @@ def test_all():
         pb.show()
 
     nsf=o2sclpy.nflows_nsf()
-    nsf.set_data_str(x,'max_iter=1000,verbose=2,outformat=list')
+    nsf.set_data_str(x,'max_iter=200,verbose=2,outformat=list')
 
     print('Sampling')
     out=[]
