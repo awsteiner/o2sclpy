@@ -69,7 +69,6 @@ class eos_base:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_base
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -144,7 +143,6 @@ class eos_leptons:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_leptons
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -537,7 +535,6 @@ class eos_had_base(eos_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_had_base
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1201,7 +1198,6 @@ class eos_had_eden_base(eos_had_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_had_eden_base
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1253,7 +1249,6 @@ class eos_had_pres_base(eos_had_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_had_pres_base
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1305,7 +1300,6 @@ class eos_had_temp_base(eos_had_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_had_temp_base
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1387,7 +1381,6 @@ class eos_had_temp_eden_base(eos_had_temp_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_had_temp_eden_base
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1439,7 +1432,6 @@ class eos_had_temp_pres_base(eos_had_temp_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_had_temp_pres_base
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1490,7 +1482,6 @@ class eos_had_skyrme(eos_had_temp_eden_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_had_skyrme
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1883,7 +1874,6 @@ class eos_had_apr(eos_had_temp_eden_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_had_apr
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1974,7 +1964,6 @@ class eos_had_rmf(eos_had_temp_pres_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_had_rmf
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2537,7 +2526,6 @@ class eos_quark(eos_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_quark
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2588,7 +2576,6 @@ class eos_quark_bag(eos_quark):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_quark_bag
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2659,7 +2646,6 @@ class eos_quark_njl(eos_quark):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_quark_njl
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2835,7 +2821,6 @@ class eos_tov:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_tov
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3001,7 +2986,6 @@ class eos_tov_buchdahl(eos_tov):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_tov_buchdahl
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3167,7 +3151,6 @@ class eos_tov_polytrope(eos_tov):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_tov_polytrope
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3229,7 +3212,6 @@ class eos_tov_linear(eos_tov):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_tov_linear
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3291,7 +3273,6 @@ class eos_tov_interp(eos_tov):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_eos_tov_interp
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3531,7 +3512,6 @@ class tov_solve:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_tov_solve
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4232,7 +4212,6 @@ class tov_love:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_tov_love
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4477,7 +4456,6 @@ class nstar_cold:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nstar_cold
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4907,7 +4885,6 @@ class nucleus_rmf:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucleus_rmf
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -5133,7 +5110,6 @@ class nucmass_ldrop(nucmass_fit_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_ldrop
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -5570,7 +5546,6 @@ class nucmass_ldrop_skin(nucmass_ldrop):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_ldrop_skin
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -5821,7 +5796,6 @@ class nucmass_ldrop_pair(nucmass_ldrop_skin):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_ldrop_pair
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -5878,6 +5852,106 @@ class nucmass_ldrop_pair(nucmass_ldrop_skin):
         return
 
 
+class nucmass_ldrop_shell(nucmass_ldrop_pair):
+    """
+    Python interface for O2scl class ``nucmass_ldrop_shell``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucmass_ldrop_shell.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucmass_ldrop_shell
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_ldrop_shell
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_ldrop_shell
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucmass_ldrop_shell
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucmass_ldrop_shell
+        
+        Returns: nucmass_ldrop_shell object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+
+class nucmass_frdm_shell(nucmass_frdm):
+    """
+    Python interface for O2scl class ``nucmass_frdm_shell``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucmass_frdm_shell.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucmass_frdm_shell
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_frdm_shell
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_frdm_shell
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucmass_frdm_shell
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucmass_frdm_shell
+        
+        Returns: nucmass_frdm_shell object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+
 class nucleus_bin:
     """
     Python interface for O2scl class ``nucleus_bin``.
@@ -5916,7 +5990,6 @@ class nucleus_bin:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucleus_bin
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0

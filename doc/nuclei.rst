@@ -35,6 +35,7 @@ Nuclei and nuclear mass classes
 * :ref:`Function hfb_sp_load`
 * :ref:`Function nucdist_set`
 * :ref:`Function nucdist_pair_set`
+* :ref:`Function nucdist_set_ext`
 
 Class nucleus
 -------------
@@ -326,4 +327,9 @@ Function nucdist_pair_set
 -------------------------
 
 .. autofunction:: o2sclpy.nucdist_pair_set(dist,nm,nm2,expr,maxA,include_neutron)
+
+Function nucdist_set_ext
+------------------------
+
+.. autofunction:: o2sclpy.nucdist_set_ext(dist,dist_ext,nm,expr,maxA,n_chop)
 

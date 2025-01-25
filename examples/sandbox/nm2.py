@@ -44,14 +44,14 @@ print('Number of isotopes in the AME list:',ame.get_nentries())
 
 dist_exp=o2sclpy.std_vector_nucleus()
 o2sclpy.nucdist_set(dist_exp,ame)
-print('Number of nuclei in dist:',len(dist_exp))
+print('Number of nuclei in dist_exp:',len(dist_exp))
 
 msis=o2sclpy.nucmass_mnmsk()
 o2sclpy.mnmsk_load(msis,'msis16')
 
 dist_msis=o2sclpy.std_vector_nucleus()
 o2sclpy.nucdist_set(dist_msis,msis)
-print('Number of nuclei in dist:',len(dist_msis))
+print('Number of nuclei in dist_msis:',len(dist_msis))
 
 # Instantiate the Duflo-Zuker fit and set parameters from a recent fit
 dz=o2sclpy.nucmass_dz_fit_33()
@@ -127,23 +127,23 @@ p[13]=8.970261351311239e-02
 frdm_shell.fit_fun(14,p)
 
 # Instantiate the ldrop_shell fit and set parameters from a recent fit
-# ldrop_shell=o2sclpy.nucmass_ldrop_shell()
-# sk=o2sclpy.eos_had_skyrme()
-# o2sclpy.skyrme_load(sk,'SLy4')
-# ldrop_shell.set_eos_had_temp_base(sk)
-# p.resize(11)
-# p[0]=8.994776301007761e-01
-# p[1]=9.679865078598426e-01
-# p[2]=8.751369188587536e-01
-# p[3]=9.710432146736609e-01
-# p[4]=-9.041294789462331e-03
-# p[5]=1.390547985659261e-01
-# p[6]=1.246579548574642e+01
-# p[7]=-1.493972115439528e+00
-# p[8]=1.419539065031770e-02
-# p[9]=1.659654542326672e-03
-# p[10]=1.136613448382515e-01
-# ldrop_shell.fit_fun(11,p)
+ldrop_shell=o2sclpy.nucmass_ldrop_shell()
+sk=o2sclpy.eos_had_skyrme()
+o2sclpy.skyrme_load(sk,'SLy4')
+ldrop_shell.set_eos_had_temp_base(sk)
+p.resize(11)
+p[0]=8.994776301007761e-01
+p[1]=9.679865078598426e-01
+p[2]=8.751369188587536e-01
+p[3]=9.710432146736609e-01
+p[4]=-9.041294789462331e-03
+p[5]=1.390547985659261e-01
+p[6]=1.246579548574642e+01
+p[7]=-1.493972115439528e+00
+p[8]=1.419539065031770e-02
+p[9]=1.659654542326672e-03
+p[10]=1.136613448382515e-01
+ldrop_shell.fit_fun(11,p)
 
 # Instantiate tables
 wlw=o2sclpy.nucmass_wlw()

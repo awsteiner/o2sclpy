@@ -63,7 +63,6 @@ class nucleus(part):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucleus
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -218,7 +217,6 @@ class nucmass_info:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_info
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -379,7 +377,6 @@ class nucmass:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -706,7 +703,6 @@ class nucmass_table(nucmass):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_table
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -820,7 +816,6 @@ class nucmass_fit_base(nucmass):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_fit_base
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -917,7 +912,6 @@ class nucmass_semi_empirical(nucmass_fit_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_semi_empirical
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1094,7 +1088,6 @@ class nucmass_ame(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_ame
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1145,7 +1138,6 @@ class nucmass_dz_table(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_dz_table
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1196,7 +1188,6 @@ class nucmass_dz_fit(nucmass_fit_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_dz_fit
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1247,7 +1238,6 @@ class nucmass_dz_fit_33(nucmass_fit_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_dz_fit_33
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1299,7 +1289,6 @@ class nucmass_densmat(nucmass_fit_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_densmat
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1350,7 +1339,6 @@ class nucmass_frdm(nucmass_densmat):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_frdm
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1921,7 +1909,6 @@ class nucmass_mnmsk(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_mnmsk
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1972,7 +1959,6 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_mnmsk_exp
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2023,7 +2009,6 @@ class nucmass_gen(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_gen
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2074,7 +2059,6 @@ class nucmass_dglg(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_dglg
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2125,7 +2109,6 @@ class nucmass_hfb(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_hfb
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2176,7 +2159,6 @@ class nucmass_hfb_sp(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_hfb_sp
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2227,7 +2209,6 @@ class nucmass_ktuy(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_ktuy
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2278,7 +2259,6 @@ class nucmass_sdnp(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_sdnp
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2329,7 +2309,6 @@ class nucmass_wlw(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_wlw
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2344,6 +2323,22 @@ class nucmass_wlw(nucmass_table):
 
         new_obj=type(self)(self._ptr)
         return new_obj
+
+    def load(self,model="",external=False):
+        """
+        | Parameters:
+        | *model* ="": byte array
+        | *external* =false: ``bool``
+        | Returns: a Python int
+        """
+        s_model=o2sclpy.std_string()
+        s_model.init_bytes(force_bytes_string(model))
+        # tag 7
+        func=self._link.o2scl.o2scl_nucmass_wlw_load
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        ret=func(self._ptr,s_model._ptr,external)
+        return ret
 
 
 class nucmass_fit:
@@ -2384,7 +2379,6 @@ class nucmass_fit:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_fit
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2596,7 +2590,6 @@ class std_vector_nucleus:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_vector_nucleus_
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2783,5 +2776,22 @@ def nucdist_pair_set(dist,nm,nm2,expr="1",maxA=400,include_neutron=False):
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_nucdist_pair_set_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
     func(dist._ptr,nm._ptr,nm2._ptr,s_expr._ptr,maxA,include_neutron)
+    return
+
+def nucdist_set_ext(dist,dist_ext,nm,expr="1",maxA=400,n_chop=1):
+    """
+        | Parameters:
+        | *dist*: :class:`vector<nucleus>` object
+        | *dist_ext*: :class:`vector<nucleus>` object
+        | *nm*: :class:`nucmass` object
+        | *expr*: string
+        | *maxA*: ``int``
+        | *n_chop*: ``int``
+    """
+    s_expr=o2sclpy.std_string()
+    s_expr.init_bytes(force_bytes_string(expr))
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_nucdist_set_ext_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
+    func(dist._ptr,dist_ext._ptr,nm._ptr,s_expr._ptr,maxA,n_chop)
     return
 

@@ -31,6 +31,8 @@ EOS classes
 * :ref:`Class nucmass_ldrop`
 * :ref:`Class nucmass_ldrop_skin`
 * :ref:`Class nucmass_ldrop_pair`
+* :ref:`Class nucmass_ldrop_shell`
+* :ref:`Class nucmass_frdm_shell`
 * :ref:`Class nucleus_bin`
 * :ref:`Function skyrme_load`
 * :ref:`Function rmf_load`
@@ -314,6 +316,28 @@ Class nucmass_ldrop_pair
 ------------------------
 
 .. autoclass:: o2sclpy.nucmass_ldrop_pair
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class nucmass_ldrop_shell
+-------------------------
+
+.. autoclass:: o2sclpy.nucmass_ldrop_shell
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class nucmass_frdm_shell
+------------------------
+
+.. autoclass:: o2sclpy.nucmass_frdm_shell
         :members:
         :undoc-members:
 

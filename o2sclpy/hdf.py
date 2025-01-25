@@ -67,7 +67,6 @@ class hdf_file:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_hdf_free_hdf_file
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -889,7 +888,6 @@ class acol_manager:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_hdf_free_acol_manager
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1763,7 +1761,6 @@ class cloud_file:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_hdf_free_cloud_file
-            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
