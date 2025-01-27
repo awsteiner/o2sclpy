@@ -1104,6 +1104,56 @@ class nucmass_ame(nucmass_table):
         return new_obj
 
 
+class nucmass_ame2(nucmass_table):
+    """
+    Python interface for O2scl class ``nucmass_ame2``,
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucmass_ame2.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucmass_ame2
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_ame2
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_ame2
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucmass_ame2
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucmass_ame2
+        
+        Returns: nucmass_ame2 object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+
 class nucmass_dz_table(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_dz_table``,

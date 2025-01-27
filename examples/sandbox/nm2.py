@@ -43,8 +43,11 @@ o2sclpy.ame_load(ame,'20',False)
 print('Number of isotopes in the AME list:',ame.get_nentries())
 
 dist_exp=o2sclpy.std_vector_nucleus()
-o2sclpy.nucdist_set(dist_exp,ame)
+print('h1')
+o2sclpy.nucdist_set(dist_exp,ame,'')
+print('h2')
 print('Number of nuclei in dist_exp:',len(dist_exp))
+quit()
 
 msis=o2sclpy.nucmass_mnmsk()
 o2sclpy.mnmsk_load(msis,'msis16')

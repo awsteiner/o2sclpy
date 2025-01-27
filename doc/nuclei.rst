@@ -12,6 +12,7 @@ Nuclei and nuclear mass classes
 * :ref:`Class nucmass_fit_base`
 * :ref:`Class nucmass_semi_empirical`
 * :ref:`Class nucmass_ame`
+* :ref:`Class nucmass_ame2`
 * :ref:`Class nucmass_dz_table`
 * :ref:`Class nucmass_dz_fit`
 * :ref:`Class nucmass_dz_fit_33`
@@ -107,6 +108,17 @@ Class nucmass_ame
 -----------------
 
 .. autoclass:: o2sclpy.nucmass_ame
+        :members:
+        :undoc-members:
+
+        .. automethod:: __init__
+        .. automethod:: __del__
+        .. automethod:: __copy__
+
+Class nucmass_ame2
+------------------
+
+.. autoclass:: o2sclpy.nucmass_ame2
         :members:
         :undoc-members:
 
