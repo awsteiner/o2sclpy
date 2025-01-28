@@ -1104,56 +1104,6 @@ class nucmass_ame(nucmass_table):
         return new_obj
 
 
-class nucmass_ame2(nucmass_table):
-    """
-    Python interface for O2scl class ``nucmass_ame2``,
-    See
-    https://awsteiner.org/code/o2scl/html/class/nucmass_ame2.html .
-    """
-
-    def __init__(self,pointer=0):
-        """
-        Init function for class nucmass_ame2
-
-        | Parameters:
-        | *pointer* ``ctypes.c_void_p`` pointer
-
-        """
-
-        if pointer==0:
-            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_ame2
-            f.restype=ctypes.c_void_p
-            f.argtypes=[]
-            self._ptr=f()
-        else:
-            self._ptr=pointer
-            self._owner=False
-        self._link=o2sclpy.doc_data.top_linker
-        return
-
-    def __del__(self):
-        """
-        Delete function for class nucmass_ame2
-        """
-
-        if self._owner==True:
-            f=self._link.o2scl.o2scl_free_nucmass_ame2
-            f(self._ptr)
-            self._owner=False
-            self._ptr=0
-        return
-
-    def __copy__(self):
-        """
-        Shallow copy function for class nucmass_ame2
-        
-        Returns: nucmass_ame2 object
-        """
-
-        new_obj=type(self)(self._ptr)
-        return new_obj
-
-
 class nucmass_dz_table(nucmass_table):
     """
     Python interface for O2scl class ``nucmass_dz_table``,
@@ -2719,37 +2669,6 @@ class std_vector_nucleus:
         Returns: a Python int
         """
         return self.size()
-
-def ame_load(ame,name="20",exp_only=False):
-    """
-        | Parameters:
-        | *ame*: :class:`nucmass_ame` object
-        | *name*: string
-        | *exp_only*: ``bool``
-    """
-    s_name=o2sclpy.std_string()
-    s_name.init_bytes(force_bytes_string(name))
-    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_ame_load_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
-    func(ame._ptr,s_name._ptr,exp_only)
-    return
-
-def ame_load_ext(ame,file_name,table_name,exp_only=False):
-    """
-        | Parameters:
-        | *ame*: :class:`nucmass_ame` object
-        | *file_name*: string
-        | *table_name*: string
-        | *exp_only*: ``bool``
-    """
-    s_file_name=o2sclpy.std_string()
-    s_file_name.init_bytes(force_bytes_string(file_name))
-    s_table_name=o2sclpy.std_string()
-    s_table_name.init_bytes(force_bytes_string(table_name))
-    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_ame_load_ext_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
-    func(ame._ptr,s_file_name._ptr,s_table_name._ptr,exp_only)
-    return
 
 def mnmsk_load(mnmsk,model="",filename=""):
     """

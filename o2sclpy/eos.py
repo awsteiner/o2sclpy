@@ -6007,18 +6007,18 @@ class nucleus_bin:
 
     def get_ame16(self):
         """
-        Get object of type :class:`nucmass_ame2`
+        Get object of type :class:`nucmass_ame`
         """
         func1=self._link.o2scl.o2scl_nucleus_bin_get_ame16
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=nucmass_ame2(ptr)
+        obj=nucmass_ame(ptr)
         return obj
 
     def set_ame16(self,value):
         """
-        Set object of type :class:`nucmass_ame2`
+        Set object of type :class:`nucmass_ame`
         """
         func=self._link.o2scl.o2scl_nucleus_bin_set_ame16
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -6027,18 +6027,18 @@ class nucleus_bin:
 
     def get_ame20exp(self):
         """
-        Get object of type :class:`nucmass_ame2`
+        Get object of type :class:`nucmass_ame`
         """
         func1=self._link.o2scl.o2scl_nucleus_bin_get_ame20exp
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=nucmass_ame2(ptr)
+        obj=nucmass_ame(ptr)
         return obj
 
     def set_ame20exp(self,value):
         """
-        Set object of type :class:`nucmass_ame2`
+        Set object of type :class:`nucmass_ame`
         """
         func=self._link.o2scl.o2scl_nucleus_bin_set_ame20exp
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -6047,18 +6047,18 @@ class nucleus_bin:
 
     def get_ame20round(self):
         """
-        Get object of type :class:`nucmass_ame2`
+        Get object of type :class:`nucmass_ame`
         """
         func1=self._link.o2scl.o2scl_nucleus_bin_get_ame20round
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=nucmass_ame2(ptr)
+        obj=nucmass_ame(ptr)
         return obj
 
     def set_ame20round(self,value):
         """
-        Set object of type :class:`nucmass_ame2`
+        Set object of type :class:`nucmass_ame`
         """
         func=self._link.o2scl.o2scl_nucleus_bin_set_ame20round
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -6067,18 +6067,18 @@ class nucleus_bin:
 
     def get_ame95rmd(self):
         """
-        Get object of type :class:`nucmass_ame2`
+        Get object of type :class:`nucmass_ame`
         """
         func1=self._link.o2scl.o2scl_nucleus_bin_get_ame95rmd
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=nucmass_ame2(ptr)
+        obj=nucmass_ame(ptr)
         return obj
 
     def set_ame95rmd(self,value):
         """
-        Set object of type :class:`nucmass_ame2`
+        Set object of type :class:`nucmass_ame`
         """
         func=self._link.o2scl.o2scl_nucleus_bin_set_ame95rmd
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -6087,18 +6087,18 @@ class nucleus_bin:
 
     def get_ame03round(self):
         """
-        Get object of type :class:`nucmass_ame2`
+        Get object of type :class:`nucmass_ame`
         """
         func1=self._link.o2scl.o2scl_nucleus_bin_get_ame03round
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=nucmass_ame2(ptr)
+        obj=nucmass_ame(ptr)
         return obj
 
     def set_ame03round(self,value):
         """
-        Set object of type :class:`nucmass_ame2`
+        Set object of type :class:`nucmass_ame`
         """
         func=self._link.o2scl.o2scl_nucleus_bin_set_ame03round
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -6107,18 +6107,18 @@ class nucleus_bin:
 
     def get_ame03(self):
         """
-        Get object of type :class:`nucmass_ame2`
+        Get object of type :class:`nucmass_ame`
         """
         func1=self._link.o2scl.o2scl_nucleus_bin_get_ame03
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=nucmass_ame2(ptr)
+        obj=nucmass_ame(ptr)
         return obj
 
     def set_ame03(self,value):
         """
-        Set object of type :class:`nucmass_ame2`
+        Set object of type :class:`nucmass_ame`
         """
         func=self._link.o2scl.o2scl_nucleus_bin_set_ame03
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -6127,18 +6127,18 @@ class nucleus_bin:
 
     def get_ame95exp(self):
         """
-        Get object of type :class:`nucmass_ame2`
+        Get object of type :class:`nucmass_ame`
         """
         func1=self._link.o2scl.o2scl_nucleus_bin_get_ame95exp
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=nucmass_ame2(ptr)
+        obj=nucmass_ame(ptr)
         return obj
 
     def set_ame95exp(self,value):
         """
-        Set object of type :class:`nucmass_ame2`
+        Set object of type :class:`nucmass_ame`
         """
         func=self._link.o2scl.o2scl_nucleus_bin_set_ame95exp
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
@@ -6147,18 +6147,18 @@ class nucleus_bin:
 
     def get_ame12(self):
         """
-        Get object of type :class:`nucmass_ame2`
+        Get object of type :class:`nucmass_ame`
         """
         func1=self._link.o2scl.o2scl_nucleus_bin_get_ame12
         func1.restype=ctypes.c_void_p
         func1.argtypes=[ctypes.c_void_p]
         ptr=func1(self._ptr)
-        obj=nucmass_ame2(ptr)
+        obj=nucmass_ame(ptr)
         return obj
 
     def set_ame12(self,value):
         """
-        Set object of type :class:`nucmass_ame2`
+        Set object of type :class:`nucmass_ame`
         """
         func=self._link.o2scl.o2scl_nucleus_bin_set_ame12
         func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]

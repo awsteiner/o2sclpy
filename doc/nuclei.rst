@@ -12,7 +12,6 @@ Nuclei and nuclear mass classes
 * :ref:`Class nucmass_fit_base`
 * :ref:`Class nucmass_semi_empirical`
 * :ref:`Class nucmass_ame`
-* :ref:`Class nucmass_ame2`
 * :ref:`Class nucmass_dz_table`
 * :ref:`Class nucmass_dz_fit`
 * :ref:`Class nucmass_dz_fit_33`
@@ -29,8 +28,6 @@ Nuclei and nuclear mass classes
 * :ref:`Class nucmass_wlw`
 * :ref:`Class nucmass_fit`
 * :ref:`Class std_vector_nucleus`
-* :ref:`Function ame_load`
-* :ref:`Function ame_load_ext`
 * :ref:`Function mnmsk_load`
 * :ref:`Function hfb_load`
 * :ref:`Function hfb_sp_load`
@@ -108,17 +105,6 @@ Class nucmass_ame
 -----------------
 
 .. autoclass:: o2sclpy.nucmass_ame
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
-Class nucmass_ame2
-------------------
-
-.. autoclass:: o2sclpy.nucmass_ame2
         :members:
         :undoc-members:
 
@@ -304,16 +290,6 @@ Class std_vector_nucleus
         .. automethod:: __deepcopy__
         .. automethod:: __getitem__
         .. automethod:: __setitem__
-
-Function ame_load
------------------
-
-.. autofunction:: o2sclpy.ame_load(ame,name,exp_only)
-
-Function ame_load_ext
----------------------
-
-.. autofunction:: o2sclpy.ame_load_ext(ame,file_name,table_name,exp_only)
 
 Function mnmsk_load
 -------------------
