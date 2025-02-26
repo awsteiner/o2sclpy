@@ -776,21 +776,6 @@ class fermion_thermo(fermion_zerot):
         ret=func(self._ptr,f._ptr,T,prec)
         return ret
 
-    def calc_mu_ndeg(self,f,T,prec,inc_antip):
-        """
-        | Parameters:
-        | *f*: :class:`fermion` object
-        | *T*: ``double``
-        | *prec*: ``double``
-        | *inc_antip*: ``bool``
-        | Returns: a Python boolean
-        """
-        func=self._link.o2scl.o2scl_fermion_thermo_calc_mu_ndeg
-        func.restype=ctypes.c_bool
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
-        ret=func(self._ptr,f._ptr,T,prec,inc_antip)
-        return ret
-
     def massless_calc_mu(self,f,T):
         """
         | Parameters:
