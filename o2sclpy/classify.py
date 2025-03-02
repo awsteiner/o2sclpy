@@ -220,12 +220,16 @@ class classify_sklearn_dtc:
             print('In classify_sklearn_dtc::save().')
             print('  len(dct_string):',len(dct_string))
             print('  len(byte_string):',len(byte_string))
-        
-        hf=o2sclpy.hdf_file()
-        hf.open_or_create(filename)
-        hf.sets(obj_prefix+'_dct',dct_string)
-        hf.sets(obj_prefix,byte_string)
-        hf.close()
+
+        try:
+            hf=o2sclpy.hdf_file()
+            hf.open_or_create(filename)
+            hf.sets(obj_prefix+'_dct',dct_string)
+            hf.sets(obj_prefix,byte_string)
+            hf.close()
+        except Exception as e:
+            print('Exception in classify_sklearn_dtc::save()',e)
+            raise
 
         return
 
@@ -236,15 +240,19 @@ class classify_sklearn_dtc:
         """
         import pickle
 
-        hf=o2sclpy.hdf_file()
-        hf.open(filename)
-        s=o2sclpy.std_string()
-        s2=o2sclpy.std_string()
-        hf.gets(obj_prefix,s)
-        hf.gets(obj_prefix+'_dct',s2)
-        hf.close()
-        sb=s.to_bytes()
-        sb2=s2.to_bytes()
+        try:
+            hf=o2sclpy.hdf_file()
+            hf.open(filename)
+            s=o2sclpy.std_string()
+            s2=o2sclpy.std_string()
+            hf.gets(obj_prefix,s)
+            hf.gets(obj_prefix+'_dct',s2)
+            hf.close()
+            sb=s.to_bytes()
+            sb2=s2.to_bytes()
+        except Exception as e:
+            print('Exception in classify_sklearn_dtc::load()',e)
+            raise
 
         if self.verbose>2:
             print('In classify_sklearn_dtc::load().')
@@ -483,11 +491,15 @@ class classify_sklearn_mlpc:
             print('  len(dct_string):',len(dct_string))
             print('  len(byte_string):',len(byte_string))
         
-        hf=o2sclpy.hdf_file()
-        hf.open_or_create(filename)
-        hf.sets(obj_prefix+'_dct',dct_string)
-        hf.sets(obj_prefix,byte_string)
-        hf.close()
+        try:
+            hf=o2sclpy.hdf_file()
+            hf.open_or_create(filename)
+            hf.sets(obj_prefix+'_dct',dct_string)
+            hf.sets(obj_prefix,byte_string)
+            hf.close()
+        except Exception as e:
+            print('Exception in classify_sklearn_mlpc::save()',e)
+            raise
         
         return
 
@@ -498,15 +510,19 @@ class classify_sklearn_mlpc:
         """
         import pickle
 
-        hf=o2sclpy.hdf_file()
-        hf.open(filename)
-        s=o2sclpy.std_string()
-        s2=o2sclpy.std_string()
-        hf.gets(obj_prefix,s)
-        hf.gets(obj_prefix+'_dct',s2)
-        hf.close()
-        sb=s.to_bytes()
-        sb2=s2.to_bytes()
+        try:
+            hf=o2sclpy.hdf_file()
+            hf.open(filename)
+            s=o2sclpy.std_string()
+            s2=o2sclpy.std_string()
+            hf.gets(obj_prefix,s)
+            hf.gets(obj_prefix+'_dct',s2)
+            hf.close()
+            sb=s.to_bytes()
+            sb2=s2.to_bytes()
+        except Exception as e:
+            print('Exception in classify_sklearn_mlpc::load()',e)
+            raise
 
         if self.verbose>2:
             print('In classify_sklearn_mlpc::load().')
@@ -696,14 +712,18 @@ class classify_sklearn_gnb:
             raise ValueError("In classify_sklearn_gnb::save() "+
                              "object prefix cannot be empty.")
         
-        loc_dct={"version": version}
-        dct_string=pickle.dumps(loc_dct)
-        byte_string=pickle.dumps(self.gnb)
-        hf=o2sclpy.hdf_file()
-        hf.open_or_create(filename)
-        hf.sets(obj_prefix+'_dct',dct_string)
-        hf.sets(obj_prefix,byte_string)
-        hf.close()
+        try:
+            loc_dct={"version": version}
+            dct_string=pickle.dumps(loc_dct)
+            byte_string=pickle.dumps(self.gnb)
+            hf=o2sclpy.hdf_file()
+            hf.open_or_create(filename)
+            hf.sets(obj_prefix+'_dct',dct_string)
+            hf.sets(obj_prefix,byte_string)
+            hf.close()
+        except Exception as e:
+            print('Exception in classify_sklearn_gnb::save()',e)
+            raise
         
         return
 
@@ -714,15 +734,19 @@ class classify_sklearn_gnb:
         """
         import pickle
 
-        hf=o2sclpy.hdf_file()
-        hf.open(filename)
-        s=o2sclpy.std_string()
-        s2=o2sclpy.std_string()
-        hf.gets(obj_prefix,s)
-        hf.gets(obj_prefix+'_dct',s2)
-        hf.close()
-        sb=s.to_bytes()
-        sb2=s2.to_bytes()
+        try:
+            hf=o2sclpy.hdf_file()
+            hf.open(filename)
+            s=o2sclpy.std_string()
+            s2=o2sclpy.std_string()
+            hf.gets(obj_prefix,s)
+            hf.gets(obj_prefix+'_dct',s2)
+            hf.close()
+            sb=s.to_bytes()
+            sb2=s2.to_bytes()
+        except Exception as e:
+            print('Exception in classify_sklearn_gnb::load()',e)
+            raise
 
         loc_dct=pickle.loads(sb2)
         if loc_dct["version"]!=version:
