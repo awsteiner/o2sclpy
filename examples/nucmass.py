@@ -15,7 +15,7 @@ print('hbarc = %7.6e' % (hc))
 
 # Instantiate and load the Atomic Mass Evaluation
 ame=o2sclpy.nucmass_ame()
-o2sclpy.ame_load(ame,'16',False)
+ame.load('16')
 
 # Print out the number of entries
 print('Number of isotopes in the AME list:',ame.get_nentries())

@@ -1110,6 +1110,43 @@ class nucmass_ame(nucmass_table):
         new_obj=type(self)(self._ptr)
         return new_obj
 
+    def load(self,name="20",exp_only=False):
+        """
+        | Parameters:
+        | *name* ="20": byte array
+        | *exp_only* =False: ``bool``
+        """
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(force_bytes_string(name))
+        # tag 7
+        func=self._link.o2scl.o2scl_nucmass_ame_load
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,s_name._ptr,exp_only)
+        return
+
+    def load_ext(self,name,filename,nubase_file,exp_only=False,verbose=0):
+        """
+        | Parameters:
+        | *name*: byte array
+        | *filename*: byte array
+        | *nubase_file*: byte array
+        | *exp_only* =False: ``bool``
+        | *verbose* =0: ``int``
+        """
+        s_name=o2sclpy.std_string()
+        s_name.init_bytes(force_bytes_string(name))
+        # tag 7
+        s_filename=o2sclpy.std_string()
+        s_filename.init_bytes(force_bytes_string(filename))
+        # tag 7
+        s_nubase_file=o2sclpy.std_string()
+        s_nubase_file.init_bytes(force_bytes_string(nubase_file))
+        # tag 7
+        func=self._link.o2scl.o2scl_nucmass_ame_load_ext
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
+        func(self._ptr,s_name._ptr,s_filename._ptr,s_nubase_file._ptr,exp_only,verbose)
+        return
+
 
 class nucmass_dz_table(nucmass_table):
     """
