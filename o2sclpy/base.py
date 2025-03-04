@@ -86,6 +86,7 @@ class std_vector:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_vector_double_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -251,6 +252,7 @@ class std_vector_int:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_vector_int_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -376,6 +378,7 @@ class std_vector_size_t:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_vector_size_t_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -523,6 +526,7 @@ class std_vector_string:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_vector_std_string_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -680,6 +684,7 @@ class ublas_vector:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_boost_numeric_ublas_vector_double_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -805,6 +810,7 @@ class ublas_vector_int:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_boost_numeric_ublas_vector_int_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -930,6 +936,7 @@ class ublas_matrix:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_boost_numeric_ublas_matrix_double_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1058,6 +1065,7 @@ class ublas_matrix_int:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_boost_numeric_ublas_matrix_int_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1186,6 +1194,7 @@ class std_vector_vector:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_vector_std_vector_double_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1308,6 +1317,7 @@ class vec_vec_string:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_vector_std_vector_std_string_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1427,6 +1437,7 @@ class std_complex:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_complex_double_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1544,6 +1555,7 @@ class lib_settings_class:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_lib_settings_class
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1799,6 +1811,7 @@ class table:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_table_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2755,6 +2768,7 @@ class table_units(table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_table_units_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2902,6 +2916,7 @@ class uniform_grid:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_uniform_grid_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3045,6 +3060,7 @@ class uniform_grid_end(uniform_grid):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_uniform_grid_end_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3109,6 +3125,7 @@ class uniform_grid_width(uniform_grid):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_uniform_grid_width_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3173,6 +3190,7 @@ class uniform_grid_end_width(uniform_grid):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_uniform_grid_end_width_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3237,6 +3255,7 @@ class uniform_grid_log_end(uniform_grid):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_uniform_grid_log_end_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3301,6 +3320,7 @@ class uniform_grid_log_width(uniform_grid):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_uniform_grid_log_width_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3365,6 +3385,7 @@ class uniform_grid_log_end_width(uniform_grid):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_uniform_grid_log_end_width_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -3434,6 +3455,7 @@ class table3d:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_table3d
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4126,6 +4148,7 @@ class index_spec:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_index_spec
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4322,6 +4345,7 @@ class ix_index:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_ix_index
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4392,6 +4416,7 @@ class ix_fixed:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_ix_fixed
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4462,6 +4487,7 @@ class ix_sum:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_ix_sum
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4532,6 +4558,7 @@ class ix_trace:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_ix_trace
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4602,6 +4629,7 @@ class ix_reverse:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_ix_reverse
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4672,6 +4700,7 @@ class ix_range:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_ix_range
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4742,6 +4771,7 @@ class ix_interp:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_ix_interp
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4812,6 +4842,7 @@ class ix_grid:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_ix_grid
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4882,6 +4913,7 @@ class ix_gridw:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_ix_gridw
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -4950,6 +4982,7 @@ class tensor:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_tensor_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -5379,6 +5412,7 @@ class tensor_int:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_tensor_int_std_vector_int_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -5786,6 +5820,7 @@ class tensor_size_t:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_tensor_size_t_std_vector_size_t_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -6166,6 +6201,7 @@ class tensor_grid(tensor):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_tensor_grid_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -6577,6 +6613,7 @@ class find_constants_const_entry:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_find_constants_const_entry
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -6876,6 +6913,7 @@ class find_constants:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_find_constants_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -6964,6 +7002,7 @@ class convert_units_der_unit:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_convert_units_der_unit
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -7242,6 +7281,7 @@ class convert_units:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_convert_units_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -7550,6 +7590,7 @@ class columnify:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_columnify
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -7665,6 +7706,7 @@ class format_float:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_format_float
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -7813,6 +7855,7 @@ class interp_vec:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_interp_vec_std_vector_double_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -7938,6 +7981,7 @@ class interp_krige_optim_rbf_noise:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_interp_krige_optim_std_vector_double_std_vector_double_covar_funct_rbf_noise_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -8146,6 +8190,7 @@ class terminal:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_terminal
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -8530,6 +8575,7 @@ class gen_test_number:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_gen_test_number_double_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -8614,6 +8660,7 @@ class funct_string:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_funct_string_double_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -8710,6 +8757,7 @@ class comm_option_s:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_comm_option_s
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -8933,6 +8981,7 @@ class cmd_line_arg:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_cmd_line_arg
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -9070,6 +9119,7 @@ class cli:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_cli
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0

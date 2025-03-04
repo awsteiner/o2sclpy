@@ -63,6 +63,7 @@ class nucleus(part):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucleus
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -217,6 +218,7 @@ class nucmass_info:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_info
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -377,6 +379,7 @@ class nucmass:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -703,6 +706,7 @@ class nucmass_table(nucmass):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_table
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -816,6 +820,7 @@ class nucmass_fit_base(nucmass):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_fit_base
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -912,6 +917,7 @@ class nucmass_semi_empirical(nucmass_fit_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_semi_empirical
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1088,6 +1094,7 @@ class nucmass_ame(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_ame
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1138,6 +1145,7 @@ class nucmass_dz_table(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_dz_table
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1188,6 +1196,7 @@ class nucmass_dz_fit(nucmass_fit_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_dz_fit
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1238,6 +1247,7 @@ class nucmass_dz_fit_33(nucmass_fit_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_dz_fit_33
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1289,6 +1299,7 @@ class nucmass_densmat(nucmass_fit_base):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_densmat
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1339,6 +1350,7 @@ class nucmass_frdm(nucmass_densmat):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_frdm
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1909,6 +1921,7 @@ class nucmass_mnmsk(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_mnmsk
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1959,6 +1972,7 @@ class nucmass_mnmsk_exp(nucmass_mnmsk):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_mnmsk_exp
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2009,6 +2023,7 @@ class nucmass_gen(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_gen
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2059,6 +2074,7 @@ class nucmass_dglg(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_dglg
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2109,6 +2125,7 @@ class nucmass_hfb(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_hfb
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2159,6 +2176,7 @@ class nucmass_hfb_sp(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_hfb_sp
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2209,6 +2227,7 @@ class nucmass_ktuy(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_ktuy
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2259,6 +2278,7 @@ class nucmass_sdnp(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_sdnp
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2309,6 +2329,7 @@ class nucmass_wlw(nucmass_table):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_wlw
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2379,6 +2400,7 @@ class nucmass_fit:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_nucmass_fit
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2590,6 +2612,7 @@ class std_vector_nucleus:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_vector_nucleus_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0

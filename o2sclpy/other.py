@@ -66,6 +66,7 @@ class slack_messenger:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_slack_messenger
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -323,6 +324,7 @@ class quadratic_real_coeff_gsl:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_quadratic_real_coeff_gsl
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -409,6 +411,7 @@ class quadratic_real_coeff_gsl2:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_quadratic_real_coeff_gsl2_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -495,6 +498,7 @@ class cubic_real_coeff_cern:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_cubic_real_coeff_cern_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -585,6 +589,7 @@ class cubic_real_coeff_gsl:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_cubic_real_coeff_gsl
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -675,6 +680,7 @@ class quartic_real_coeff_cern:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_quartic_real_coeff_cern_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -769,6 +775,7 @@ class fermi_dirac_integ_gsl:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_fermi_dirac_integ_gsl
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -883,6 +890,7 @@ class bessel_K_exp_integ_gsl:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_bessel_K_exp_integ_gsl
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -973,6 +981,7 @@ class hist:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_hist
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1291,6 +1300,7 @@ class hist_2d:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_hist_2d
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1655,6 +1665,7 @@ class contour_line:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_contour_line
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1782,6 +1793,7 @@ class vector_contour_line:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_vector_contour_line_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1888,6 +1900,7 @@ class contour:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_contour
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2035,6 +2048,7 @@ class prob_dens_func:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_prob_dens_func
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2162,6 +2176,7 @@ class prob_dens_gaussian(prob_dens_func):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_prob_dens_gaussian
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2232,6 +2247,7 @@ class prob_dens_hist(prob_dens_func):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_prob_dens_hist
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2296,6 +2312,7 @@ class prob_dens_mdim:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_prob_dens_mdim_std_vector_double_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2391,6 +2408,7 @@ class prob_dens_mdim_biv_gaussian(prob_dens_mdim):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_prob_dens_mdim_biv_gaussian_std_vector_double_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2482,6 +2500,7 @@ class prob_dens_mdim_gaussian(prob_dens_mdim):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_prob_dens_mdim_gaussian_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2548,6 +2567,7 @@ class hypercube:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_prob_dens_mdim_amr_hypercube
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2722,6 +2742,7 @@ class std_vector_hypercube:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_vector_prob_dens_mdim_amr_hypercube_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2816,6 +2837,7 @@ class prob_dens_mdim_amr(prob_dens_mdim):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_prob_dens_mdim_amr_
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0

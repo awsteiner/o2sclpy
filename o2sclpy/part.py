@@ -62,6 +62,7 @@ class thermo:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_thermo
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -174,6 +175,7 @@ class part:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_part
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -466,6 +468,7 @@ class fermion(part):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_fermion
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -556,6 +559,7 @@ class quark(fermion):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_quark
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -648,6 +652,7 @@ class fermion_zerot:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_fermion_zerot
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -747,6 +752,7 @@ class fermion_thermo(fermion_zerot):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_fermion_thermo
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -839,6 +845,7 @@ class fermion_rel(fermion_thermo):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_fermion_rel
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1128,6 +1135,7 @@ class fermion_nonrel(fermion_zerot):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_fermion_nonrel
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1213,6 +1221,7 @@ class boson(part):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_boson
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1287,6 +1296,7 @@ class boson_rel:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_boson_rel
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1394,6 +1404,7 @@ class classical_thermo:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_classical_thermo
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1468,6 +1479,7 @@ class thermo_np_deriv_press:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_thermo_np_deriv_press
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1640,6 +1652,7 @@ class thermo_np_deriv_helm:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_thermo_np_deriv_helm
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1812,6 +1825,7 @@ class part_deriv_press:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_part_deriv_press
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1933,6 +1947,7 @@ class part_deriv(part):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_part_deriv
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -1981,6 +1996,7 @@ class fermion_deriv(fermion):
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_fermion_deriv
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2033,6 +2049,7 @@ class deriv_thermo_base:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_deriv_thermo_base
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2163,6 +2180,7 @@ class classical_deriv_thermo:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_classical_deriv_thermo
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
@@ -2239,6 +2257,7 @@ class fermion_mag_zerot:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_fermion_mag_zerot
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0

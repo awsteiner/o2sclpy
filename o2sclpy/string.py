@@ -72,6 +72,7 @@ class std_string:
 
         if self._owner==True:
             f=self._link.o2scl.o2scl_free_std_string
+            f.argtypes=[ctypes.c_void_p]
             f(self._ptr)
             self._owner=False
             self._ptr=0
