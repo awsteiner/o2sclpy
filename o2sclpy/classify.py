@@ -258,6 +258,10 @@ class classify_sklearn_dtc:
             print('In classify_sklearn_dtc::load().')
             print('  len(sb):',len(sb))
             print('  len(sb2):',len(sb2))
+            for i in range(0,len(sb),10):
+                print(i,int(sb[i]),int(s[i]))
+            for i in range(0,len(sb2),10):
+                print(i,int(sb2[i]),int(s2[i]))
             
         loc_dct=pickle.loads(sb2)
         if loc_dct["version"]!=version:
