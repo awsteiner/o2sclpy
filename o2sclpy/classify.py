@@ -196,35 +196,40 @@ class classify_sklearn_dtc:
         Save the classifer to an HDF5 file named ``filename`` as a
         string named ``obj_prefix``. 
         """
-        import pickle
-
-        if len(obj_prefix)==0:
-            raise ValueError("In classify_sklearn_dtc::save() "+
-                             "object prefix cannot be empty.")
-        
-        loc_dct={"version": version,
-                 "verbose": self.verbose,
-                 "outformat": self.outformat,
-                 "verbose": self.verbose,
-                 "criterion": self.criterion,
-                 "splitter": self.splitter,
-                 "max_depth": self.max_depth,
-                 "max_features": self.max_features,
-                 "random_state": self.random_state,
-                 "test_size": self.test_size}
-        
-        dct_string=pickle.dumps(loc_dct)
-        byte_string=pickle.dumps(self.dtc)
+        print('new save')
+        try:
+            import pickle
+    
+            if len(obj_prefix)==0:
+                raise ValueError("In classify_sklearn_dtc::save() "+
+                                 "object prefix cannot be empty.")
+            
+            loc_dct={"version": version,
+                     "verbose": self.verbose,
+                     "outformat": self.outformat,
+                     "verbose": self.verbose,
+                     "criterion": self.criterion,
+                     "splitter": self.splitter,
+                     "max_depth": self.max_depth,
+                     "max_features": self.max_features,
+                     "random_state": self.random_state,
+                     "test_size": self.test_size}
+            
+            dct_string=pickle.dumps(loc_dct)
+            byte_string=pickle.dumps(self.dtc)
+        except Exception as e:
+            print('Exception 3 in classify_sklearn_dtc::save()',e)
+            raise
 
         try:
             for i in range(0,len(byte_string),int(len(byte_string)/10)):
                 print('save',i,int(byte_string[i]))
             for i in range(0,len(dct_string),int(len(dct_string)/10)):
                 print('save',i,int(dct_string[i]))
-                
         except Exception as e:
-            print('Exception 2 in classify_sklearn_dtc::load()',e)
+            print('Exception 2 in classify_sklearn_dtc::save()',e)
             raise
+        
         if self.verbose>2:
             print('In classify_sklearn_dtc::save().')
             print('  len(dct_string):',len(dct_string))
@@ -277,23 +282,27 @@ class classify_sklearn_dtc:
             print('Exception 2 in classify_sklearn_dtc::load()',e)
             raise
             
-        loc_dct=pickle.loads(sb2)
-        if loc_dct["version"]!=version:
-            raise ValueError("In function classify_sklearn_dtc::"+
-                             "load(): Cannot read files with version "+
-                             loc_dct["version"])
-        
-        self.verbose=loc_dct["verbose"]
-        self.outformat=loc_dct["outformat"]
-        self.verbose=loc_dct["verbose"]
-        self.criterion=loc_dct["criterion"]
-        self.splitter=loc_dct["splitter"]
-        self.max_depth=loc_dct["max_depth"]
-        self.max_features=loc_dct["max_features"]
-        self.random_state=loc_dct["random_state"]
-        self.test_size=loc_dct["test_size"]
-        
-        self.dtc=pickle.loads(sb)
+        try:
+            loc_dct=pickle.loads(sb2)
+            if loc_dct["version"]!=version:
+                raise ValueError("In function classify_sklearn_dtc::"+
+                                 "load(): Cannot read files with version "+
+                                 loc_dct["version"])
+            
+            self.verbose=loc_dct["verbose"]
+            self.outformat=loc_dct["outformat"]
+            self.verbose=loc_dct["verbose"]
+            self.criterion=loc_dct["criterion"]
+            self.splitter=loc_dct["splitter"]
+            self.max_depth=loc_dct["max_depth"]
+            self.max_features=loc_dct["max_features"]
+            self.random_state=loc_dct["random_state"]
+            self.test_size=loc_dct["test_size"]
+            
+            self.dtc=pickle.loads(sb)
+        except Exception as e:
+            print('Exception 3 in classify_sklearn_dtc::load()',e)
+            raise
 
         return
     
