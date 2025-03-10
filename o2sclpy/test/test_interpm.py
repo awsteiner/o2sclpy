@@ -53,16 +53,19 @@ def test_all():
         pb.show()
 
     for ik in range(0,3):
-        
+
+        # I still periodically have problems with bfgs convergence.
         if True:
+            print('sklearn GP',ik+1,'of 3')
+            print('----------------------------------------------')
             im=o2sclpy.interpm_sklearn_gp()
             if ik==0:
-                im.set_data_str(x,y,'verbose=2,test_size=0.1')
+                im.set_data_str(x,y,'verbose=0,test_size=0.1')
             elif ik==1:
-                im.set_data_str(x,y,('verbose=2,test_size=0.1,trans'+
+                im.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
                                      'form_in=quant,transform_out=quant'))
             else:
-                im.set_data_str(x,y,('verbose=2,test_size=0.1,trans'+
+                im.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
                                      'form_in=moto,transform_out=moto'))
             exact=f(0.5,0.5)
             v=numpy.array([0.5,0.5])
@@ -85,35 +88,38 @@ def test_all():
             assert numpy.allclose(exact,interp3[0],rtol=1.0)
             assert numpy.allclose(0,std3[0],atol=1.0)
 
-            print('saving')
+            print('Saving:')
             save_str=im.save('test_interpm.o2','ti')
             
-            print('loading')
+            print('Loading:')
             imx=o2sclpy.interpm_sklearn_gp()
             imx.load('test_interpm.o2','ti')
             
-            print('testing')
+            print('Testing:')
             interp4=im.eval_list(v2)
-            print(interp2,interp4)
+            print('interp2,interp4:',interp2,interp4)
             assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=1.0)
             assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=1.0)
+            print(' ')
     
         if True:
+            print('TF DNN',ik+1,'of 3')
+            print('----------------------------------------------')
             im2=o2sclpy.interpm_tf_dnn()
             if ik==0:
-                im2.set_data(x,y,verbose=1,epochs=200,
+                im2.set_data(x,y,verbose=0,epochs=200,
                              test_size=0.0,batch_size=8,
                              activations=['relu','relu','relu','relu'],
                              hlayers=[128,64,32,16])
             elif ik==1:
-                im2.set_data(x,y,verbose=1,epochs=200,
+                im2.set_data(x,y,verbose=0,epochs=200,
                              test_size=0.0,batch_size=8,
                              activations=['relu','relu','relu','relu'],
                              hlayers=[128,64,32,16],
                              transform_in='quant',
                              transform_out='quant')
             else:
-                im2.set_data(x,y,verbose=1,epochs=200,
+                im2.set_data(x,y,verbose=0,epochs=200,
                              test_size=0.0,batch_size=8,
                              activations=['relu','relu','relu','relu'],
                              hlayers=[128,64,32,16],
@@ -126,24 +132,30 @@ def test_all():
             # AWS, 7/3/24: This test is pretty loose because the
             # neural network results are pretty random for few epochs
             assert numpy.allclose(exact,interp,rtol=1.0)
-    
-        if True:
-            im3=o2sclpy.interpm_sklearn_mlpr()
-            im3.set_data(x,y,verbose=0,test_size=0.1,solver='lbfgs',
-                         max_iter=1000)
-            exact=f(0.5,0.5)
-            v=numpy.array([0.5,0.5])
-            interp=im3.eval(v)
-            print('exact,interp 4:', exact,interp)
-            assert numpy.allclose(exact,interp,rtol=1.0)
+            print(' ')
     
     if True:
+        print('sklearn MLPR')
+        print('----------------------------------------------')
+        im3=o2sclpy.interpm_sklearn_mlpr()
+        im3.set_data(x,y,verbose=0,test_size=0.1,solver='lbfgs',
+                     max_iter=1000)
+        exact=f(0.5,0.5)
+        v=numpy.array([0.5,0.5])
+        interp=im3.eval(v)
+        print('exact,interp 4: %7.6e %7.6e' % (exact,interp[0]))
+        assert numpy.allclose(exact,interp,rtol=1.0)
+        print(' ')
+    
+    if True:
+        print('sklearn DTR')
+        print('----------------------------------------------')
         im2=o2sclpy.interpm_sklearn_dtr()
         im2.set_data(x,y,verbose=0,test_size=0.1)
         exact=f(0.5,0.5)
         v=numpy.array([0.5,0.5])
         interp=im2.eval(v)
-        print('exact,interp 3:', exact,interp)
+        print('exact,interp 5: %7.6e %7.6e' % (exact,interp[0]))
         assert numpy.allclose(exact,interp,rtol=1.0)
     
 if __name__ == '__main__':
