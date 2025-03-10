@@ -47,11 +47,23 @@ def test_all():
     for i in range(0,N):
         y[i,0]=f(x[i,0],x[i,1])
 
-    if plots:
+    if False and plots:
         pb=o2sclpy.plot_base()
         pb.scatter([x[:,0],x[:,1],None,y[:,0]])
         pb.show()
 
+    if True:
+        print('torch')
+        print('----------------------------------------------')
+        imx=o2sclpy.interpm_torch_dnn()
+        imx.set_data(x,y,verbose=0,test_size=0.1)
+        exact=f(0.5,0.5)
+        v=numpy.array([0.5,0.5])
+        interp=imx.eval(v)
+        print('exact,interp 10: %7.6e %7.6e' % (exact,interp[0]))
+        assert numpy.allclose(exact,interp,rtol=1.0)
+        print(' ')
+        
     for ik in range(0,3):
 
         # I still periodically have problems with bfgs convergence.

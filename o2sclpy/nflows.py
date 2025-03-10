@@ -106,11 +106,16 @@ class nflows_nsf:
         
         try:
 
-            # Convert numpy to torch, there's probably a better way...
-            ten_in=torch.zeros((self.n_pts,self.n_dim),device=self.device)
-            for i in range(0,self.n_pts):
-                for j in range(0,self.n_dim):
-                    ten_in[i,j]=in_data_trans[i,j]
+            if False:
+                #ten_in=torch.from_numpy(in_data_trans).float()
+                ten_in=torch.tensor(in_data_trans,dtype=torch.float32)
+                ten_in.to(self.device)
+            else:
+                # Convert numpy to torch, there's probably a better way...
+                ten_in=torch.zeros((self.n_pts,self.n_dim),device=self.device)
+                for i in range(0,self.n_pts):
+                    for j in range(0,self.n_dim):
+                        ten_in[i,j]=in_data_trans[i,j]
                     
             self.base=normflows.distributions.base.DiagGaussian(self.n_dim)
 

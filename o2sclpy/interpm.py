@@ -928,6 +928,7 @@ class interpm_torch_dnn:
         self.SS2=0
         self.transform_in=0
         self.transform_out=0
+        self.nd_in=0
         return
 
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
@@ -949,8 +950,8 @@ class interpm_torch_dnn:
 
         self.outformat=outformat
         self.verbose=verbose
-        self.transform_in=transform_in
-        self.transform_out=transform_out
+        self.transform_in='none'#transform_in
+        self.transform_out='none'#transform_out
 
         # ----------------------------------------------------------
         # Handle the data transformations
@@ -1017,16 +1018,17 @@ class interpm_torch_dnn:
             x_train=in_data_trans
             y_train=out_data_trans
 
-        nd_in=numpy.shape(in_data)[1]
-        nd_out=numpy.shape(out_data)[1]
+        n_pts=numpy.shape(x_train)[0]
+        self.nd_in=numpy.shape(x_train)[1]
+        nd_out=numpy.shape(y_train)[1]
         
         if self.verbose>0:
-            print('nd_in,nd_out:',nd_in,nd_out)
+            print('nd_in,nd_out:',self.nd_in,nd_out)
             print('  Training DNN model.')
 
         class function_approx(nn.Module):
             
-            def __init__(self):
+            def __init__(self,nd_in):
                 super(function_approx,self).__init__()
                 self.model=nn.Sequential(
                     nn.Linear(nd_in,hlayers[0]),
@@ -1039,14 +1041,23 @@ class interpm_torch_dnn:
             def forward(self,x):
                 return self.model(x)
 
-        self.dnn=function_approx()
+        # Convert numpy to torch, there's probably a better way...
+        ten_in=torch.zeros((n_pts,self.nd_in))
+        ten_out=torch.zeros((n_pts,nd_out))
+        for i in range(0,n_pts):
+            for j in range(0,self.nd_in):
+                ten_in[i,j]=x_train[i,j]
+            for j in range(0,nd_out):
+                ten_out[i,j]=y_train[i,j]
+                        
+        self.dnn=function_approx(self.nd_in)
         crit=nn.MSELoss()
-        opt=optim.Adam(model.parameters(),lr=0.01)
+        opt=optim.Adam(self.dnn.parameters(),lr=0.01)
 
         for epoch in range(0,epochs):
             opt.zero_grad()
-            pred=model(x_train)
-            loss=crit(pred,y_train)
+            pred=self.dnn(ten_in)
+            loss=crit(pred,ten_out)
             loss.backward()
             opt.step()
 
@@ -1064,13 +1075,17 @@ class interpm_torch_dnn:
             try:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
             except Exception as e:
-                print('Exception at input transformation in interpm_torch_dnn:',
-                      e)
+                print('Exception at input transformation ',
+                      'in interpm_torch_dnn:',e)
         else:
             v_trans=v.reshape(1,-1)
 
         try:
-            pred=self.dnn(v_trans)
+            import torch
+            ten_in=torch.zeros((1,self.nd_in))
+            for j in range(0,self.nd_in):
+                ten_in[0,j]=v[j]
+            pred=self.dnn(ten_in)
         except Exception as e:
             print('Exception 4 in interpm_torch_dnn:',e)
             
