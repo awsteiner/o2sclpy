@@ -44,16 +44,17 @@ class interpm_sklearn_gp:
         self.SS2=0
         self.alpha=0
         self.random_state=0
+        self.normalize_y=True
 
-    def set_data(self,in_data,out_data,
-                 kernel='1.0*RBF(1.0,(1e-2,1e2))',test_size=0.0,
+    def set_data(self,in_data,out_data,kernel=None,test_size=0.0,
                  normalize_y=True,transform_in='none',alpha=1.0e-10,
                  transform_out='none',outformat='numpy',verbose=0,
                  random_state=None):
-        """
-        Set the input and output data to train the interpolator
-        """
+        """Set the input and output data to train the interpolator.
 
+        If kernel is ``None``, then the default kernel,
+        ``1.0*RBF(1.0,(1e-2,1e2))`` is used.
+        """
         if verbose>0:
             print('interpm_sklearn_gp::set_data():')
             print('  kernel:',kernel)
@@ -67,30 +68,19 @@ class interpm_sklearn_gp:
             print('  out_data shape:',numpy.shape(out_data))
 
         from sklearn.gaussian_process import GaussianProcessRegressor
-        from sklearn.gaussian_process.kernels import RBF, DotProduct
-        from sklearn.gaussian_process.kernels import RationalQuadratic
-        from sklearn.gaussian_process.kernels import Matern, WhiteKernel
-        from sklearn.gaussian_process.kernels import PairwiseKernel
-        from sklearn.gaussian_process.kernels import CompoundKernel
-        from sklearn.gaussian_process.kernels import ConstantKernel
-        from sklearn.gaussian_process.kernels import ExpSineSquared
-        from sklearn.gaussian_process.kernels import Exponentiation
-        from sklearn.gaussian_process.kernels import Product
-        from sklearn.gaussian_process.kernels import Hyperparameter
-        from sklearn.gaussian_process.kernels import Sum, WhiteKernel
+        from sklearn.gaussian_process.kernels import RBF
 
-        try:
-            self.kernel=eval(kernel)
-        except Exception as e:
-            print('Exception in interpm_sklearn_gp::set_data()',
-                  'at kernel eval.',e)
-            raise
+        if kernel==None:
+            self.kernel=1.0*RBF(1.0,(1e-2,1e2))
+        else:
+            self.kernel=kernel
         self.outformat=outformat
         self.alpha=alpha
         self.random_state=random_state
         self.verbose=verbose
         self.transform_in=transform_in
         self.transform_out=transform_out
+        self.normalize_y=normalize_y
 
         # ----------------------------------------------------------
         # Handle the data transformations
@@ -151,9 +141,10 @@ class interpm_sklearn_gp:
         
         try:
             func=GaussianProcessRegressor
-            self.gp=func(normalize_y=True,#optimizer=optimizer,
+            self.gp=func(normalize_y=self.normalize_y,
                          kernel=self.kernel,alpha=self.alpha,
-                         random_state=self.random_state).fit(in_train,out_train)
+                         random_state=self.random_state)
+            self.gp.fit(in_train,out_train)
         except Exception as e:
             print('Exception in interpm_sklearn_gp::set_data()',
                   'at fit().',e)
@@ -166,26 +157,28 @@ class interpm_sklearn_gp:
         return
     
     def set_data_str(self,in_data,out_data,options):
-        """
-        Set the input and output data to train the interpolator,
+        """Set the input and output data to train the interpolator,
         using a string to specify the keyword arguments.
-        """
 
+        The GP kernel, if specified, should be the last option
+        specified in the string (this enables easier parsing of the
+        option string). The eval() function is used to convert the
+        string to a sklearn kernel.
+
+        """
         ktemp=''
         if options.find('kernel=')!=-1:
-            #print('old options:',options)
+            # Extract the kernel from the string to process it
+            # separately
             ktemp=options[options.find('kernel=')+7:]
             options=options[:options.find('kernel=')]
             if options[-1:]==',':
                 options=options[:-1]
-            #print('new options:')
-            #print(' ',ktemp)
-            #print(' ',options)
         dct=string_to_dict2(options,list_of_ints=['verbose'],
                             list_of_floats=['test_size','alpha'],
                             list_of_bools=['normalize_y'])
         if ktemp!='':
-            dct["kernel"]=ktemp
+            dct["kernel"]=eval(ktemp)
         if "verbose" in dct and dct["verbose"]>0:
             print('interpm_sklearn_gp::set_data_str():')
             print('  string:',options)
@@ -212,7 +205,8 @@ class interpm_sklearn_gp:
             raise
 
         try:
-            # AWS, 3/27/24: Keep in mind that o2scl::interpm_python.eval()
+            # AWS, 3/27/24: Keep in mind that
+            # o2scl::interpm_python.eval()
             # expects the return type to be a numpy array. 
             yp=self.gp.predict(v_trans)
         except Exception as e:
@@ -344,13 +338,19 @@ class interpm_sklearn_gp:
                 numpy.ascontiguousarray(std_trans[0]))
 
     def save(self,filename,obj_name):
-        """
-        Save the interpolation settings to an HDF5 file
+        """Save the interpolation settings to an HDF5 file.
+
+        This function uses the sklearn get_params() function to obtain
+        the sklearn parameters. A tuple is created using the class
+        parameters and the sklearn parameters and this tuple is
+        pickled to a string. Finally, this function stores that string
+        with name ``obj_name`` to the HDF5 file named ``filename``.
+
         """
         import pickle
 
         # Construct string
-        loc_dct={"version": version,
+        loc_dct={"o2sclpy_version": version,
                  "verbose": self.verbose,
                  "kernel": self.kernel,
                  "outformat": self.outformat,
@@ -359,9 +359,16 @@ class interpm_sklearn_gp:
                  "SS1": self.SS1,
                  "SS2": self.SS2,
                  "alpha": self.alpha,
-                 "random_state": self.random_state}
-        params=self.gp.get_params(deep=True)
-        byte_string=pickle.dumps((loc_dct,params))
+                 "random_state": self.random_state,
+                 "normalize_y": self.normalize_y}
+        
+        # AWS, 3/10/25: get_params() appears not to get, for example,
+        # the kernel hyperparameters, so we pickle the entire
+        # sklearn GaussianProcessRegressor object.
+        
+        #params=self.gp.get_params(deep=True)
+        
+        byte_string=pickle.dumps((loc_dct,self.gp))
 
         # Write to a file
         hf=o2sclpy.hdf_file()
@@ -372,8 +379,9 @@ class interpm_sklearn_gp:
         return
     
     def load(self,filename,obj_name):
-        """
-        Load the interpolation settings from a file
+        """Load the interpolation settings from a string named
+        ``obj_name`` stored in an HDF5 file named ``filename``.
+
         """
         import pickle
         from sklearn.gaussian_process import GaussianProcessRegressor
@@ -387,11 +395,12 @@ class interpm_sklearn_gp:
         sb=s.to_bytes()
 
         tup=pickle.loads(sb)
+        
         loc_dct=tup[0]
-        if loc_dct["version"]!=version:
+        if loc_dct["o2sclpy_version"]!=version:
             raise ValueError("In function interpm_sklearn_gp::load() "+
                              "Cannot read files with version "+
-                             loc_dct["version"])
+                             loc_dct["o2sclpy_version"])
         self.verbose=loc_dct["verbose"]
         self.kernel=loc_dct["kernel"]
         self.outformat=loc_dct["outformat"]
@@ -401,12 +410,15 @@ class interpm_sklearn_gp:
         self.SS2=loc_dct["SS2"]
         self.alpha=loc_dct["alpha"]
         self.random_state=loc_dct["random_state"]
+        self.normalize_y=loc_dct["normalize_y"]
         
-        func=GaussianProcessRegressor
-        self.gp=func(normalize_y=True,
-                     kernel=self.kernel,alpha=self.alpha,
-                     random_state=self.random_state)
-        self.gp.set_params(**(tup[1]))
+        #func=GaussianProcessRegressor
+        #self.gp=func(normalize_y=self.normalize_y,
+        #             kernel=self.kernel,alpha=self.alpha,
+        #             random_state=self.random_state)
+        #self.gp.set_params(**(tup[1]))
+        
+        self.gp=tup[1]
 
         return
         
@@ -455,7 +467,7 @@ class interpm_sklearn_dtr:
             
         try:
             from sklearn.tree import DecisionTreeRegressor
-            model=DecisionTreeRegressor(criterion=criterion, 
+            self.dtr=DecisionTreeRegressor(criterion=criterion, 
                                         splitter=splitter,
                                         max_depth=max_depth,
                                         random_state=random_state)
@@ -465,14 +477,12 @@ class interpm_sklearn_dtr:
             raise
 
         try:
-            model.fit(x_train,y_train)      
+            self.dtr.fit(x_train,y_train)      
         except Exception as e:
             print('Exception in interpm_sklearn_dtr::set_data()',
                   'at model fitting.',e)
             raise
             
-        self.dtr=model
-
         return
     
     def set_data_str(self,in_data,out_data,options):
@@ -573,11 +583,10 @@ class interpm_sklearn_dtr:
         import pickle
 
         # Construct string
-        loc_dct={"version": version,
+        loc_dct={"o2sclpy_version": version,
                  "verbose": self.verbose,
                  "outformat": self.outformat}
-        params=self.dtr.get_params(deep=True)
-        byte_string=pickle.dumps((loc_dct,params))
+        byte_string=pickle.dumps((loc_dct,self.dtr))
 
         # Write to a file
         hf=o2sclpy.hdf_file()
@@ -601,16 +610,17 @@ class interpm_sklearn_dtr:
         hf.close()
         sb=s.to_bytes()
 
-        self.dtc=pickle.loads(sb)
-
         tup=pickle.loads(sb)
+
         loc_dct=tup[0]
-        if loc_dct["version"]!=version:
+        if loc_dct["o2sclpy_version"]!=version:
             raise ValueError("In function interpm_sklearn_dtr::load() "+
                              "Cannot read files with version "+
-                             loc_dct["version"])
+                             loc_dct["o2sclpy_version"])
         self.verbose=loc_dct["verbose"]
         self.outformat=loc_dct["outformat"]
+
+        self.dtr=tup[1]
         
         return
         
@@ -709,7 +719,8 @@ class interpm_sklearn_mlpr:
                                    verbose=verbose, 
                                    early_stopping=early_stopping, 
                                    n_iter_no_change=n_iter_no_change,
-                                   alpha=alpha).fit(in_train,out_train.ravel())
+                                   alpha=alpha)
+            self.mlpr.fit(in_train,out_train.ravel())
                                                         
         except Exception as e:
             print('Exception in interpm_sklearn_mlpr::set_data()',
@@ -856,18 +867,14 @@ class interpm_sklearn_mlpr:
         import pickle
 
         # Construct string
-        loc_dct={"version": version,
+        loc_dct={"o2sclpy_version": version,
                  "verbose": self.verbose,
-                 "kernel": self.kernel,
                  "outformat": self.outformat,
                  "transform_in": self.transform_in,
                  "transform_out": self.transform_out,
                  "SS1": self.SS1,
-                 "SS2": self.SS2,
-                 "alpha": self.alpha,
-                 "random_state": self.random_state}
-        params=self.gp.get_params(deep=True)
-        byte_string=pickle.dumps((loc_dct,params))
+                 "SS2": self.SS2}
+        byte_string=pickle.dumps((loc_dct,self.mlpr))
 
         # Write to a file
         hf=o2sclpy.hdf_file()
@@ -890,31 +897,22 @@ class interpm_sklearn_mlpr:
         hf.gets(obj_name,s)
         hf.close()
         sb=s.to_bytes()
-        self.mlpr=pickle.loads(sb)
 
         tup=pickle.loads(sb)
+        
         loc_dct=tup[0]
-        if loc_dct["version"]!=version:
+        if loc_dct["o2sclpy_version"]!=version:
             raise ValueError("In function interpm_sklearn_mlpr::load() "+
                              "Cannot read files with version "+
-                             loc_dct["version"])
+                             loc_dct["o2sclpy_version"])
         self.verbose=loc_dct["verbose"]
-        self.kernel=loc_dct["kernel"]
         self.outformat=loc_dct["outformat"]
         self.transform_in=loc_dct["transform_in"]
         self.transform_out=loc_dct["transform_out"]
         self.SS1=loc_dct["SS1"]
         self.SS2=loc_dct["SS2"]
-        self.alpha=loc_dct["alpha"]
-        self.random_state=loc_dct["random_state"]
-
-        # fix
         
-        #func=GaussianProcessRegressor
-        #self.gp=func(normalize_y=True,
-        #kernel=self.kernel,alpha=self.alpha,
-        #random_state=self.random_state)
-        #self.gp.set_params(**(tup[1]))
+        self.mlpr=tup[1]
 
         return
         
@@ -932,7 +930,8 @@ class interpm_torch_dnn:
         return
 
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
-                 hlayers=[8,8],epochs=100,test_size=0.0):
+                 hlayers=[8,8],epochs=100,transform_in='none',
+                 transform_out='none',test_size=0.0):
 
         from sklearn.model_selection import train_test_split
         import torch
@@ -950,8 +949,8 @@ class interpm_torch_dnn:
 
         self.outformat=outformat
         self.verbose=verbose
-        self.transform_in='none'#transform_in
-        self.transform_out='none'#transform_out
+        self.transform_in=transform_in
+        self.transform_out=transform_out
 
         # ----------------------------------------------------------
         # Handle the data transformations
@@ -1030,14 +1029,18 @@ class interpm_torch_dnn:
             
             def __init__(self,nd_in):
                 super(function_approx,self).__init__()
-                self.model=nn.Sequential(
-                    nn.Linear(nd_in,hlayers[0]),
-                    nn.Tanh(),
-                    nn.Linear(hlayers[0],hlayers[1]),
-                    nn.Tanh(),
-                    nn.Linear(hlayers[1],nd_out)
-                )
+
+                layers=[]
+                layers.append(nn.Linear(nd_in,hlayers[0]))
+                layers.append(nn.Tanh())
+                for k in range(0,len(hlayers)-1):
+                    layers.append(nn.Linear(hlayers[k],hlayers[k+1]))
+                    layers.append(nn.Tanh())
+                layers.append(nn.Linear(hlayers[len(hlayers)-1],nd_out))
+                self.model=nn.Sequential(*layers)
+                
                 return
+            
             def forward(self,x):
                 return self.model(x)
 
@@ -1061,8 +1064,9 @@ class interpm_torch_dnn:
             loss.backward()
             opt.step()
 
-            print('Epoch',epoch,'loss',loss)
-
+            print('Epoch',str(epoch+1)+'/'+str(epochs),
+                  'loss %7.6e' % (loss.item()))
+            
         return
     
     def eval(self,v):
@@ -1070,6 +1074,8 @@ class interpm_torch_dnn:
         Evaluate the NN at point ``v``.
         """
 
+        print('hereb1',self.transform_in,
+              self.transform_out)
         if self.transform_in!='none':
             v_trans=0
             try:
@@ -1078,17 +1084,22 @@ class interpm_torch_dnn:
                 print('Exception at input transformation ',
                       'in interpm_torch_dnn:',e)
         else:
-            v_trans=v.reshape(1,-1)
+            v_trans=v
+        print('herebx',numpy.shape(v_trans))
 
         try:
             import torch
             ten_in=torch.zeros((1,self.nd_in))
+            print('hereb2')
             for j in range(0,self.nd_in):
-                ten_in[0,j]=v[j]
+                ten_in[0,j]=v_trans[j]
+            print('hereb3')
             pred=self.dnn(ten_in)
+            print('hereb4')
         except Exception as e:
             print('Exception 4 in interpm_torch_dnn:',e)
             
+        print('hereb5')
         if self.transform_out!='none':
             try:
                 pred_trans=self.SS2.inverse_transform(pred)
@@ -1096,17 +1107,19 @@ class interpm_torch_dnn:
                 print('Exception 5 in interpm_torch_dnn:',e)
         else:
             pred_trans=pred
+        print('hereb6')
     
         if self.outformat=='list':
             return pred_trans.tolist()
 
+        print('hereb7')
         if pred_trans.ndim==1:
             
             if self.verbose>1:
                 print('interpm_torch_dnn::eval():',
                       'type(pred_trans),pred_trans:',
                       type(pred_trans),pred_trans)
-            # The output from tf.keras is float32, so we have to convert to
+            # The output from torch is float32, so we have to convert to
             # float64 
             n_out=numpy.shape(pred_trans[0])[0]
             out_double=numpy.zeros((n_out))
@@ -1114,13 +1127,14 @@ class interpm_torch_dnn:
                 out_double[i]=pred_trans[i]
                     
             return numpy.ascontiguousarray(out_double)
+        print('hereb8')
         
         if self.verbose>1:
             print('interpm_torch_dnn::eval():',
                   'type(pred_trans[0]),pred_trans[0]:',
                   type(pred_trans[0]),pred_trans[0])
 
-        # The output from tf.keras is float32, so we have to convert to
+        # The output from torch is float32, so we have to convert to
         # float64 
         n_out=numpy.shape(pred_trans[0])[0]
         out_double=numpy.zeros((n_out))
@@ -1136,9 +1150,10 @@ class interpm_torch_dnn:
         """
         return self.eval(v)
         
-    def deriv(self,v):
+    def deriv(self,v,i):
         """
-        Evaluate the derivative of the NN at point ``v``.
+        Evaluate the derivative of the NN at point ``v`` with
+        respect to the variable with index ``i``
         """
 
         if self.transform_in!='none':
@@ -1152,50 +1167,57 @@ class interpm_torch_dnn:
             v_trans=v.reshape(1,-1)
 
         try:
-            # Here, convert v_trans to torch format?
-            x.requires_grad_(True)
-            #dy_dx=torch.autograd.grad(y,x)
-            pred=self.dnn(v_trans)
+            
+            import torch
+            ten_in=torch.zeros((1,self.nd_in))
+            for j in range(0,self.nd_in):
+                ten_in[0,j]=v_trans[j]
+                
+            ten_in.requires_grad_(True)
+            pred=self.dnn(ten_in)
+            pgrad=torch.autograd.grad(pred,ten_in,
+                                      grad_outputs=torch.ones_like(y),
+                                      create_graph=True)[0][i]
         except Exception as e:
-            print('Exception 4 in interpm_torch_dnn:',e)
+            print('Exception 4 in interpm_torch_dnn::deriv():',e)
             
         if self.transform_out!='none':
             try:
-                pred_trans=self.SS2.inverse_transform(pred)
+                pgrad_trans=self.SS2.inverse_transform(pgrad)
             except Exception as e:
-                print('Exception 5 in interpm_torch_dnn:',e)
+                print('Exception 5 in interpm_torch_dnn::deriv():',e)
         else:
-            pred_trans=pred
+            pgrad_trans=pgrad
     
         if self.outformat=='list':
-            return pred_trans.tolist()
+            return pgrad_trans.tolist()
 
-        if pred_trans.ndim==1:
+        if pgrad_trans.ndim==1:
             
             if self.verbose>1:
                 print('interpm_torch_dnn::eval():',
-                      'type(pred_trans),pred_trans:',
-                      type(pred_trans),pred_trans)
+                      'type(pgrad_trans),pgrad_trans:',
+                      type(pgrad_trans),pgrad_trans)
             # The output from tf.keras is float32, so we have to convert to
             # float64 
-            n_out=numpy.shape(pred_trans[0])[0]
+            n_out=numpy.shape(pgrad_trans[0])[0]
             out_double=numpy.zeros((n_out))
             for i in range(0,n_out):
-                out_double[i]=pred_trans[i]
+                out_double[i]=pgrad_trans[i]
                     
             return numpy.ascontiguousarray(out_double)
         
         if self.verbose>1:
             print('interpm_torch_dnn::eval():',
-                  'type(pred_trans[0]),pred_trans[0]:',
-                  type(pred_trans[0]),pred_trans[0])
+                  'type(pgrad_trans[0]),pgrad_trans[0]:',
+                  type(pgrad_trans[0]),pgrad_trans[0])
 
         # The output from tf.keras is float32, so we have to convert to
         # float64 
-        n_out=numpy.shape(pred_trans[0])[0]
+        n_out=numpy.shape(pgrad_trans[0])[0]
         out_double=numpy.zeros((n_out))
         for i in range(0,n_out):
-            out_double[i]=pred_trans[0][i]
+            out_double[i]=pgrad_trans[0][i]
             
         return numpy.ascontiguousarray(out_double)
 
@@ -1471,7 +1493,7 @@ class interpm_tf_dnn:
             # 1, so we use self.verbose-1 here for the argument to
             # the predict function.
             if self.verbose>1:
-                pred=self.dnn.predict(v_trans, verbose=self.verbose-1)
+                pred=self.dnn.predict(v_trans,verbose=self.verbose-1)
             else:
                 pred=self.dnn.predict(v_trans,verbose=0)
         except Exception as e:
