@@ -6,31 +6,44 @@ Machine learning classes
    quantile transforms to [0,1]
    MinMaxScaler transforms to [a,b]
 
-Gaussian mixture models
------------------------
-
-See :class:`o2sclpy.gmm_sklearn` and :class:`o2sclpy.bgmm_sklearn`.
-
-Kernel density estimators
--------------------------
-
-See :class:`o2sclpy.kde_sklearn` and :class:`o2sclpy.kde_scipy`.
-
+These classes are simple wrappers around machine learning classes to
+perform basic tasks. While they are also designed to be accessed in
+C++ by O₂scl, they do not require the installation of O₂scl to be
+functional.
+   
 Interpolators
 -------------
 
-* :class:`o2sclpy.interpm_sklearn_gp`
-* :class:`o2sclpy.interpm_sklearn_mlpr`
-* :class:`o2sclpy.interpm_sklearn_dtr`
-* :class:`o2sclpy.interpm_tf_dnn`
-* :class:`o2sclpy.interpm_torch_dnn`
+* :class:`o2sclpy.interpm_sklearn_gp`: Gaussian process interpolation
+  from scikit-learn
+* :class:`o2sclpy.interpm_sklearn_mlpr`: Multilayer perceptron
+  regression from scikit-learn
+* :class:`o2sclpy.interpm_sklearn_dtr`: Decision-tree regression
+  from scikit-learn
+* :class:`o2sclpy.interpm_tf_dnn`: Regression using a simple
+  Tensorflow neural network
+* :class:`o2sclpy.interpm_torch_dnn` Regression using a simple
+  Torch neural network
 
 Classifiers
 -----------
 
-* :class:`o2sclpy.classify_sklearn_gnb`
-* :class:`o2sclpy.classify_sklearn_mlpc`
-* :class:`o2sclpy.classify_sklearn_dtc`
+* :class:`o2sclpy.classify_sklearn_gnb` Gaussian naive Bayes
+  classifier from scikit-learn
+* :class:`o2sclpy.classify_sklearn_mlpc` Multilayer perceptron
+  classifier from scikit-learn
+* :class:`o2sclpy.classify_sklearn_dtc` Decision-tree classification
+  from scikit-learn
+
+Probability density functions
+-----------------------------
+
+* Gaussian mixture model in :class:`o2sclpy.gmm_sklearn` and
+  Bayesian Gaussian mixture model in :class:`o2sclpy.bgmm_sklearn`.
+* Kernel density estimators: :class:`o2sclpy.kde_sklearn` and
+  :class:`o2sclpy.kde_scipy`.
+* Normalizing flows using Torch and the ``nflows`` package:
+  :class:`o2sclpy.nflows_nsf`.
 
 Class documentation
 -------------------
