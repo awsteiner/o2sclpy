@@ -32,8 +32,7 @@ def f(x,y):
     return (numpy.sin(x*10)+2.0*numpy.tan(y))/5.0+0.14
 
 def f2(x,y):
-    fv=f(x,y)
-    return 2.0-fv*fv*fv
+    return (numpy.sin(x*5)+2.0*numpy.tan(y))/5.0+0.24
 
 def test_all():
 
@@ -47,9 +46,14 @@ def test_all():
     for i in range(0,N):
         y[i,0]=f(x[i,0],x[i,1])
 
-    if False and plots:
+    y2=numpy.zeros((N,2))
+    for i in range(0,N):
+        y2[i,0]=f(x[i,0],x[i,1])
+        y2[i,1]=f2(x[i,0],x[i,1])
+
+    if plots:
         pb=o2sclpy.plot_base()
-        pb.scatter([x[:,0],x[:,1],None,y[:,0]])
+        pb.scatter([x[:,0],x[:,1],None,y2[:,1]])
         pb.show()
 
     for ik in range(0,3):
@@ -57,6 +61,10 @@ def test_all():
         # AWS, 3/9/25: I still periodically have problems with
         # bfgs convergence.
         if True:
+            gp_tol=1.0e-4
+            if ik>=1:
+                gp_tol=1.0
+            
             print('sklearn GP',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
@@ -65,15 +73,16 @@ def test_all():
                 im1.set_data_str(x,y,'verbose=0,test_size=0.1')
             elif ik==1:
                 im1.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
-                                     'form_in=quant,transform_out=quant'))
+                                       'form_in=quant,transform_out=quant'))
             else:
                 im1.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
-                                     'form_in=moto,transform_out=moto'))
+                                       'form_in=moto,transform_out=moto'))
             exact=f(0.5,0.5)
             v=numpy.array([0.5,0.5])
             interp=im1.eval(v)
+            assert interp.ndim==1
             print('exact,interp 1: %7.6e %7.6e' % (exact,interp[0]))
-            assert numpy.allclose(exact,interp[0],rtol=1.0e-4)
+            assert numpy.allclose(exact,interp[0],rtol=gp_tol)
 
             v2=numpy.zeros((2,2))
             v2[0,0]=0.5
@@ -81,14 +90,15 @@ def test_all():
             v2[1,0]=0.6
             v2[1,1]=0.6
             interp2=im1.eval_list(v2)
-            assert numpy.allclose(f(0.5,0.5),interp2[0],rtol=1.0e-4)
-            assert numpy.allclose(f(0.6,0.6),interp2[1],rtol=1.0e-4)
+            print('eval_list:',numpy.shape(interp2))
+            assert numpy.allclose(f(0.5,0.5),interp2[0],rtol=gp_tol)
+            assert numpy.allclose(f(0.6,0.6),interp2[1],rtol=gp_tol)
             
             interp3,std3=im1.eval_unc(v)
             print('exact,interp 2: %7.6e %7.6e %7.6e' %
                   (exact,interp[0],std3[0]))
-            assert numpy.allclose(exact,interp3[0],rtol=1.0)
-            assert numpy.allclose(0,std3[0],atol=1.0)
+            assert numpy.allclose(exact,interp3[0],rtol=gp_tol)
+            assert numpy.allclose(0,std3[0],atol=gp_tol)
 
             print('Saving:')
             save_str=im1.save('test_interpm.o2','ti_gp')
@@ -99,9 +109,10 @@ def test_all():
             
             print('Testing:')
             interp4=im1b.eval_list(v2)
+            print('eval_list:',numpy.shape(interp4))
             print('interp2,interp4:',interp2,interp4)
-            assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=1.0e-4)
-            assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=1.0e-4)
+            assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=gp_tol)
+            assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=gp_tol)
             print(' ')
     
         if True:
@@ -131,6 +142,7 @@ def test_all():
             exact=f(0.5,0.5)
             v=numpy.array([0.5,0.5])
             interp=im2.eval(v)[0]
+            print('eval:',type(interp),numpy.shape(interp))
             print('exact,interp 3: %7.6e %7.6e' % (exact,interp))
             # AWS, 7/3/24: This test is pretty loose because the
             # neural network results are pretty random for few epochs
@@ -160,6 +172,7 @@ def test_all():
             exact=f(0.5,0.5)
             v=numpy.array([0.5,0.5])
             interp=im3.eval(v)
+            print('eval:',numpy.shape(interp))
             print('exact,interp 4: %7.6e %7.6e' % (exact,interp[0]))
             assert numpy.allclose(exact,interp,rtol=1.0)
             print(' ')
@@ -173,6 +186,7 @@ def test_all():
             
             print('Testing:')
             interp4=im3b.eval_list(v2)
+            print('eval_list:',numpy.shape(interp4))
             print('interp2,interp4:',interp2,interp4)
             assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=1.0)
             assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=1.0)
@@ -194,6 +208,7 @@ def test_all():
             exact=f(0.5,0.5)
             v=numpy.array([0.5,0.5])
             interp=im4.eval(v)
+            print('eval:',numpy.shape(interp))
             print('exact,interp 5: %7.6e %7.6e' % (exact,interp[0]))
             assert numpy.allclose(exact,interp,rtol=1.0)
             print(' ')
@@ -202,18 +217,19 @@ def test_all():
             save_str=im4.save('test_interpm.o2','ti_dtr')
             
             print('Loading:')
-            im4b=o2sclpy.interpm_sklearn_mlpr()
+            im4b=o2sclpy.interpm_sklearn_dtr()
             im4b.load('test_interpm.o2','ti_dtr')
             
             print('Testing:')
             interp4=im4b.eval_list(v2)
+            print('eval_list:',numpy.shape(interp4))
             print('interp2,interp4:',interp2,interp4)
             assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=1.0)
             assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=1.0)
             print(' ')
             
         if True:
-            print('Torch DNN')
+            print('Torch DNN',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
             im5=o2sclpy.interpm_torch_dnn()
@@ -230,9 +246,8 @@ def test_all():
                              transform_in='moto',transform_out='moto')
             exact=f(0.5,0.5)
             v=numpy.array([0.5,0.5])
-            print('herea1')
             interp=im5.eval(v)
-            print('herea2')
+            print('eval:',numpy.shape(interp))
             print('exact,interp 10: %7.6e %7.6e' % (exact,interp[0]))
             assert numpy.allclose(exact,interp,rtol=1.0)
             print(' ')

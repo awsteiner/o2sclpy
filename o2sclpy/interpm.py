@@ -31,13 +31,35 @@ class interpm_sklearn_gp:
     Gaussian process from scikit-learn
 
     See https://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html .
+
+    The variables ``verbose`` and ``outformat`` can be changed
+    at any time.
+    
+    .. todo:: * Explain the interaction of normalize_y with
+                transform_out
+              * Calculate derivatives
+              * Allow sampling, as done in interpm_krige
+              * Allow different minimizers?
+
+    """
+
+    verbose=0
+    """
+    Verbosity parameter (default 0)
+    """
+    outformat='numpy'
+    """
+    Output format, either 'numpy' or 'list' (default 'numpy')
+    """
+    score=0.0
+    """
+    The most recent score value given a non-zero test size
+    returned by set_data()
     """
 
     def __init__(self):
         self.gp=0
-        self.verbose=0
         self.kernel=0
-        self.outformat='numpy'
         self.transform_in=0
         self.transform_out=0
         self.SS1=0
@@ -50,10 +72,17 @@ class interpm_sklearn_gp:
                  normalize_y=True,transform_in='none',alpha=1.0e-10,
                  transform_out='none',outformat='numpy',verbose=0,
                  random_state=None):
-        """Set the input and output data to train the interpolator.
+        """Set the input and output data to train the Gaussian
+        process. The variable in_data should be a numpy array with
+        shape ``(n_points,in_dim)`` and out_data should be a numpy
+        array with shape ``(n_points,out_dim)``.
 
         If kernel is ``None``, then the default kernel,
         ``1.0*RBF(1.0,(1e-2,1e2))`` is used.
+
+        The value ``alpha`` is added to the diagonal elements of the
+        covariance matrix?
+
         """
         if verbose>0:
             print('interpm_sklearn_gp::set_data():')
@@ -151,8 +180,8 @@ class interpm_sklearn_gp:
             raise
 
         if test_size>0.0:
-            print('interpm_sklearn_gp::set_data(): score: %7.6e' %
-                  (self.gp.score(in_test,out_test)))
+            self.score=self.gp.score(in_test,out_test)
+            return self.score
 
         return
     
@@ -184,9 +213,7 @@ class interpm_sklearn_gp:
             print('  string:',options)
             print('  dictionary:',dct)
               
-        self.set_data(in_data,out_data,**dct)
-
-        return
+        return self.set_data(in_data,out_data,**dct)
     
     def eval(self,v):
         """
@@ -434,36 +461,76 @@ class interpm_sklearn_dtr:
         self.dtr=0
         self.verbose=0
         self.outformat='numpy'
+        self.transform_in=0
+        self.transform_out=0
+        self.SS1=0
+        self.SS2=0
         
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  test_size=0.0,criterion='squared_error',splitter='best',
+                 transform_in='none',transform_out='none',
                  max_depth=None,random_state=None):
         """
         Set the input and output data to train the interpolator
         """
         self.outformat=outformat
         self.verbose=verbose
+        self.transform_in=transform_in
+        self.transform_out=transform_out
         
         if self.verbose>0:
             print('interpm_sklearn_dtr::set_data():')
             print('  outformat:',outformat)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
+            print('  transform_in:',transform_in)
+            print('  transform_out:',transform_out)
+
+        # ----------------------------------------------------------
+        # Handle the data transformations
+        
+        from sklearn.preprocessing import QuantileTransformer
+        from sklearn.preprocessing import MinMaxScaler
+        from sklearn.preprocessing import StandardScaler
+        
+        if self.transform_in=='moto':
+            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            in_data_trans=self.SS1.fit_transform(in_data)
+        elif self.transform_in=='quant':
+            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            in_data_trans=self.SS1.fit_transform(in_data)
+        elif self.transform_in=='standard':
+            self.SS1=StandardScaler()
+            in_data_trans=self.SS1.fit_transform(in_data)
+        else:
+            in_data_trans=in_data
+            
+        if self.transform_out=='moto':
+            self.SS2=MinMaxScaler(feature_range=(-1,1))
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='quant':
+            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='standard':
+            self.SS2=StandardScaler()
+            out_data_trans=self.SS2.fit_transform(out_data)
+        else:
+            out_data_trans=out_data
 
         if test_size>0.0:
             try:
                 from sklearn.model_selection import train_test_split
                 x_train,x_test,y_train,y_test=train_test_split(
-                    in_data,out_data,test_size=test_size)
+                    in_data_trans,out_data_trans,test_size=test_size)
             except Exception as e:
                 print('Exception in interpm_sklearn_dtr::set_data()',
                       'at test_train_split().',e)
                 raise
         else:
-            x_train=in_data
-            y_train=out_data
+            x_train=in_data_trans
+            y_train=out_data_trans
             
         try:
             from sklearn.tree import DecisionTreeRegressor
@@ -547,7 +614,7 @@ class interpm_sklearn_dtr:
             raise
 
         try:
-            yp=self.dtr.predict([v])
+            yp=self.dtr.predict(v)
         except Exception as e:
             print(('Exception at prediction '+
                    'in interpm_sklearn_gp::eval_list():'),e)
@@ -585,6 +652,10 @@ class interpm_sklearn_dtr:
         # Construct string
         loc_dct={"o2sclpy_version": version,
                  "verbose": self.verbose,
+                 "transform_in": self.transform_in,
+                 "transform_out": self.transform_out,
+                 "SS1": self.SS1,
+                 "SS2": self.SS2,
                  "outformat": self.outformat}
         byte_string=pickle.dumps((loc_dct,self.dtr))
 
@@ -618,7 +689,11 @@ class interpm_sklearn_dtr:
                              "Cannot read files with version "+
                              loc_dct["o2sclpy_version"])
         self.verbose=loc_dct["verbose"]
+        self.transform_in=loc_dct["transform_in"]
+        self.transform_out=loc_dct["transform_out"]
         self.outformat=loc_dct["outformat"]
+        self.SS1=loc_dct["SS1"]
+        self.SS2=loc_dct["SS2"]
 
         self.dtr=tup[1]
         
@@ -1064,8 +1139,9 @@ class interpm_torch_dnn:
             loss.backward()
             opt.step()
 
-            print('Epoch',str(epoch+1)+'/'+str(epochs),
-                  'loss %7.6e' % (loss.item()))
+            if self.verbose>0:
+                print('Epoch',str(epoch+1)+'/'+str(epochs),
+                      'loss %7.6e' % (loss.item()))
             
         return
     
@@ -1074,74 +1150,51 @@ class interpm_torch_dnn:
         Evaluate the NN at point ``v``.
         """
 
-        print('hereb1',self.transform_in,
-              self.transform_out)
         if self.transform_in!='none':
             v_trans=0
             try:
-                v_trans=self.SS1.transform(v.reshape(1,-1))
+                v_trans=self.SS1.transform(v.reshape(1,-1))[0]
             except Exception as e:
                 print('Exception at input transformation ',
                       'in interpm_torch_dnn:',e)
         else:
             v_trans=v
-        print('herebx',numpy.shape(v_trans))
 
         try:
             import torch
             ten_in=torch.zeros((1,self.nd_in))
-            print('hereb2')
             for j in range(0,self.nd_in):
                 ten_in[0,j]=v_trans[j]
-            print('hereb3')
             pred=self.dnn(ten_in)
-            print('hereb4')
         except Exception as e:
             print('Exception 4 in interpm_torch_dnn:',e)
             
-        print('hereb5')
         if self.transform_out!='none':
             try:
-                pred_trans=self.SS2.inverse_transform(pred)
+                pred_trans=self.SS2.inverse_transform(pred.detach().numpy())
             except Exception as e:
                 print('Exception 5 in interpm_torch_dnn:',e)
         else:
-            pred_trans=pred
-        print('hereb6')
+            pred_trans=pred.detach().numpy()
     
         if self.outformat=='list':
             return pred_trans.tolist()
 
-        print('hereb7')
         if pred_trans.ndim==1:
             
             if self.verbose>1:
                 print('interpm_torch_dnn::eval():',
                       'type(pred_trans),pred_trans:',
                       type(pred_trans),pred_trans)
-            # The output from torch is float32, so we have to convert to
-            # float64 
-            n_out=numpy.shape(pred_trans[0])[0]
-            out_double=numpy.zeros((n_out))
-            for i in range(0,n_out):
-                out_double[i]=pred_trans[i]
-                    
-            return numpy.ascontiguousarray(out_double)
-        print('hereb8')
+                
+            return numpy.ascontiguousarray(pred_trans)
         
         if self.verbose>1:
             print('interpm_torch_dnn::eval():',
                   'type(pred_trans[0]),pred_trans[0]:',
                   type(pred_trans[0]),pred_trans[0])
 
-        # The output from torch is float32, so we have to convert to
-        # float64 
-        n_out=numpy.shape(pred_trans[0])[0]
-        out_double=numpy.zeros((n_out))
-        for i in range(0,n_out):
-            out_double[i]=pred_trans[0][i]
-            
-        return numpy.ascontiguousarray(out_double)
+        return numpy.ascontiguousarray(pred_trans[0])
 
     def eval_unc(self,v):
         """
@@ -1222,16 +1275,27 @@ class interpm_torch_dnn:
         return numpy.ascontiguousarray(out_double)
 
 class interpm_tf_dnn:
+    """Interpolate one or many multimensional data sets using a
+    neural network from TensorFlow
+
+    This is a simple implementation of a neural network with
+    early stopping. 
+
+    The variables ``verbose`` and ``outformat`` can be changed
+    at any time.
+    
     """
-    Interpolate one or many multimensional data sets using 
-    a deep neural network from TensorFlow
+    verbose=0
+    """
+    Verbosity parameter (default 0)
+    """
+    outformat='numpy'
+    """
+    Output format, either 'numpy' or 'list' (default 'numpy')
     """
 
     def __init__(self):
         
-        self.verbose=0
-        self.kernel=0
-        self.outformat='numpy'
         self.dnn=0
         self.SS1=0
         self.SS2=0
@@ -1241,24 +1305,22 @@ class interpm_tf_dnn:
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
-                 activations=['relu','relu'],
-                 batch_size=None,epochs=100,
+                 activations=['relu'],batch_size=None,epochs=100,
                  transform_in='none',transform_out='none',
                  test_size=0.0,evaluate=False,
                  hlayers=[8,8],loss='mean_squared_error',
                  es_min_delta=1.0e-4,es_patience=100,es_start=50,
                  tf_logs='1'):
-        """
-        Set the input and output data to train the interpolator
+        """Set the input and output data to train the interpolator
 
-        some activation functions: 
-        relu [0,\\infty]
-        sigmoid [0,1]
-        tanh [-1,1]
+        Some activation functions: 'relu', 'sigmoid', 'tanh'. If the
+        number of activation functions specified in ``activations`` is
+        smaller than the number of layers, then the activation
+        function list is reused using the modulus operator.
 
-        transformations:
-        quantile transforms to [0,1]
-        MinMaxScaler transforms to [a,b]
+        The keyword argument ``tf_logs`` specifies the value of
+        the environment variable ``TF_CPP_MIN_LOG_LEVEL``.
+
         """
 
         from sklearn.model_selection import train_test_split

@@ -140,8 +140,6 @@ class kde_sklearn:
 
         return
 
-        return
-
     def sample(self,n_samples=1):
         """
         Sample the Gaussian mixture model

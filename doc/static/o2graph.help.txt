@@ -1,5 +1,5 @@
 o2graph: A data viewing and processing program for O2scl.
-  Version: 0.930
+  Version: 0.931a1
  
 List of command-line options which do not require a current object:
 
