@@ -10,7 +10,6 @@ Reference for Python objects
 
    plot_ref
    class_cap_cout
-   class_ml
    class_o2graph_plotter
    class_plot_base
    class_material

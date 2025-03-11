@@ -1,7 +1,7 @@
 .. _ref:
 
-Examples
-========
+C++ interface Examples
+======================
 
 :ref:`O2sclpy <o2sclpy>`
 

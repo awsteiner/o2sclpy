@@ -252,6 +252,25 @@ def test_all():
             assert numpy.allclose(exact,interp,rtol=1.0)
             print(' ')
 
+            # AWS, 3/11/25: this doesn't work. Something about
+            # pickling local objects.
+            if False:
+                print('Saving:')
+                im5.save('test_interpm_'+str(ik)+'.pt')
+            
+                print('Loading:')
+                im5b=o2sclpy.interpm_sklearn_mlpr()
+                im5b.load('test_interpm_'+str(ik)+'.pt')
+            
+                print('Testing:')
+                interp4=im5b.eval_list(v2)
+                print('eval_list:',numpy.shape(interp4))
+                print('interp2,interp4:',interp2,interp4)
+                assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=1.0)
+                assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=1.0)
+                print(' ')
+            
+            
     quit()
         
 if __name__ == '__main__':

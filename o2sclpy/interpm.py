@@ -1274,6 +1274,34 @@ class interpm_torch_dnn:
             
         return numpy.ascontiguousarray(out_double)
 
+    def save(self,filename):
+        """
+        Save the interpolation settings to a file
+
+        (No custom object support)
+        """
+        if filename[-3:]!='.pt':
+            filename=filename+'.pt'
+        import torch
+        torch.save(self.dnn,filename)
+
+        return
+    
+    def load(self,filename):
+        """
+        Load the interpolation settings from a file
+
+        (No custom object support)
+        """
+        import keras
+        
+        if filename[-3:]!='.pt':
+            filename=filename+'.pt'
+        import torch
+        torch.load(self.dnn,filename)
+
+        return
+        
 class interpm_tf_dnn:
     """Interpolate one or many multimensional data sets using a
     neural network from TensorFlow

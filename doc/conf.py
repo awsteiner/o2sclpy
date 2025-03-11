@@ -85,7 +85,7 @@ pygments_style = 'sphinx'
 todo_include_todos = True
 
 intersphinx_mapping = {'o2scl':
-                       ('https://neutronstars.utk.edu/code/o2scl-dev/html/',
+                       ('https://awsteiner.org/code/o2scl-dev/html/',
                         '../../../wcs/o2scl/doc/o2scl/html/objects.inv')}
 
 # -- Options for HTML output ----------------------------------------------
