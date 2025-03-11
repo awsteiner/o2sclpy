@@ -195,23 +195,40 @@ class interpm_sklearn_gp:
         string to a sklearn kernel.
 
         """
-        ktemp=''
-        if options.find('kernel=')!=-1:
-            # Extract the kernel from the string to process it
-            # separately
-            ktemp=options[options.find('kernel=')+7:]
-            options=options[:options.find('kernel=')]
-            if options[-1:]==',':
-                options=options[:-1]
-        dct=string_to_dict2(options,list_of_ints=['verbose'],
-                            list_of_floats=['test_size','alpha'],
-                            list_of_bools=['normalize_y'])
-        if ktemp!='':
-            dct["kernel"]=eval(ktemp)
-        if "verbose" in dct and dct["verbose"]>0:
-            print('interpm_sklearn_gp::set_data_str():')
-            print('  string:',options)
-            print('  dictionary:',dct)
+        from sklearn.gaussian_process.kernels import RBF, DotProduct
+        from sklearn.gaussian_process.kernels import RationalQuadratic
+        from sklearn.gaussian_process.kernels import Matern, WhiteKernel
+        from sklearn.gaussian_process.kernels import PairwiseKernel
+        from sklearn.gaussian_process.kernels import CompoundKernel
+        from sklearn.gaussian_process.kernels import ConstantKernel
+        from sklearn.gaussian_process.kernels import ExpSineSquared
+        from sklearn.gaussian_process.kernels import Exponentiation
+        from sklearn.gaussian_process.kernels import Product
+        from sklearn.gaussian_process.kernels import Hyperparameter
+        from sklearn.gaussian_process.kernels import Sum
+        
+        try:
+            ktemp=''
+            if options.find('kernel=')!=-1:
+                # Extract the kernel from the string to process it
+                # separately
+                ktemp=options[options.find('kernel=')+7:]
+                options=options[:options.find('kernel=')]
+                if options[-1:]==',':
+                    options=options[:-1]
+            dct=string_to_dict2(options,list_of_ints=['verbose'],
+                                list_of_floats=['test_size','alpha'],
+                                list_of_bools=['normalize_y'])
+            if ktemp!='':
+                dct["kernel"]=eval(ktemp)
+            if "verbose" in dct and dct["verbose"]>0:
+                print('interpm_sklearn_gp::set_data_str():')
+                print('  string:',options)
+                print('  dictionary:',dct)
+        except Exception as e:
+            print('Exception in interpm_sklearn_gp::set_data_str()',
+                  'at fit().',e)
+            raise
               
         return self.set_data(in_data,out_data,**dct)
     
