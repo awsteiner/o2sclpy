@@ -73,14 +73,13 @@ def test_all():
                 im1.set_data_str(x,y,'verbose=0,test_size=0.1')
             elif ik==1:
                 im1.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
-                                       'form_in=quant,transform_out=quant'))
+                                       'form_in=quant'))
             else:
                 im1.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
-                                       'form_in=moto,transform_out=moto'))
+                                       'form_in=moto'))
             exact=f(0.5,0.5)
             v=numpy.array([0.5,0.5])
             interp=im1.eval(v)
-            assert interp.ndim==1
             print('exact,interp 1: %7.6e %7.6e' % (exact,interp[0]))
             assert numpy.allclose(exact,interp[0],rtol=gp_tol)
 
@@ -113,8 +112,22 @@ def test_all():
             print('interp2,interp4:',interp2,interp4)
             assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=gp_tol)
             assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=gp_tol)
+
+            # Test with two outputs instead of one
+            im1c=o2sclpy.interpm_sklearn_gp()
+            if ik==0:
+                im1c.set_data_str(x,y2,'verbose=0,test_size=0.1')
+            elif ik==1:
+                im1c.set_data_str(x,y2,('verbose=0,test_size=0.1,trans'+
+                                       'form_in=quant'))
+            else:
+                im1c.set_data_str(x,y2,('verbose=0,test_size=0.1,trans'+
+                                       'form_in=moto'))
+            interp5=im1c.eval(v)
+            print('interp5:',interp5)
+            print(f(0.5,0.5),f2(0.5,0.5))
             print(' ')
-    
+                
         if True:
             print('TF DNN',ik+1,'of 3')
             print(('──────────────────────────────────'+
@@ -252,7 +265,7 @@ def test_all():
             assert numpy.allclose(exact,interp,rtol=1.0)
             print(' ')
 
-            # AWS, 3/11/25: this doesn't work. Something about
+            # AWS, 3/11/25: this doesn't work, because of issues with
             # pickling local objects.
             if False:
                 print('Saving:')

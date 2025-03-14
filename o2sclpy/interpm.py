@@ -32,12 +32,13 @@ class interpm_sklearn_gp:
 
     See https://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html .
 
+    AWS, 3/12/25: I think sklearn uses the log of the
+    marginal likelihood as the optimization function.
+
     The variables ``verbose`` and ``outformat`` can be changed
     at any time.
     
-    .. todo:: * Explain the interaction of normalize_y with
-                transform_out
-              * Calculate derivatives
+    .. todo:: * Calculate derivatives
               * Allow sampling, as done in interpm_krige
               * Allow different minimizers?
 
@@ -47,9 +48,9 @@ class interpm_sklearn_gp:
     """
     Verbosity parameter (default 0)
     """
-    outformat='numpy'
+    outformat='native'
     """
-    Output format, either 'numpy' or 'list' (default 'numpy')
+    Output format, either 'native', 'c++', or 'list' (default 'native')
     """
     score=0.0
     """
@@ -61,17 +62,15 @@ class interpm_sklearn_gp:
         self.gp=0
         self.kernel=0
         self.transform_in=0
-        self.transform_out=0
         self.SS1=0
-        self.SS2=0
         self.alpha=0
         self.random_state=0
         self.normalize_y=True
 
     def set_data(self,in_data,out_data,kernel=None,test_size=0.0,
                  normalize_y=True,transform_in='none',alpha=1.0e-10,
-                 transform_out='none',outformat='numpy',verbose=0,
-                 random_state=None):
+                 outformat='native',verbose=0,random_state=None):
+                 
         """Set the input and output data to train the Gaussian
         process. The variable in_data should be a numpy array with
         shape ``(n_points,in_dim)`` and out_data should be a numpy
@@ -81,7 +80,7 @@ class interpm_sklearn_gp:
         ``1.0*RBF(1.0,(1e-2,1e2))`` is used.
 
         The value ``alpha`` is added to the diagonal elements of the
-        covariance matrix?
+        kernel matrix during fitting.
 
         """
         if verbose>0:
@@ -89,7 +88,6 @@ class interpm_sklearn_gp:
             print('  kernel:',kernel)
             print('  normalize_y:',normalize_y)
             print('  transform_in:',transform_in)
-            print('  transform_out:',transform_out)
             print('  outformat:',outformat)
             print('  alpha:',alpha)
             print('  random_state:',random_state)
@@ -108,7 +106,6 @@ class interpm_sklearn_gp:
         self.random_state=random_state
         self.verbose=verbose
         self.transform_in=transform_in
-        self.transform_out=transform_out
         self.normalize_y=normalize_y
 
         # ----------------------------------------------------------
@@ -130,23 +127,11 @@ class interpm_sklearn_gp:
         else:
             in_data_trans=in_data
             
-        if self.transform_out=='moto':
-            self.SS2=MinMaxScaler(feature_range=(-1,1))
-            out_data_trans=self.SS2.fit_transform(out_data)
-        elif self.transform_out=='quant':
-            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
-            out_data_trans=self.SS2.fit_transform(out_data)
-        elif self.transform_out=='standard':
-            self.SS2=StandardScaler()
-            out_data_trans=self.SS2.fit_transform(out_data)
-        else:
-            out_data_trans=out_data
-
         if test_size>0.0:
             try:
                 from sklearn.model_selection import train_test_split
                 in_train,in_test,out_train,out_test=train_test_split(
-                    in_data_trans,out_data_trans,test_size=test_size,
+                    in_data_trans,out_data,test_size=test_size,
                     random_state=self.random_state)
             except Exception as e:
                 print('Exception in interpm_sklearn_gp::set_data()',
@@ -154,7 +139,7 @@ class interpm_sklearn_gp:
                 raise
         else:
             in_train=in_data_trans
-            out_train=out_data_trans
+            out_train=out_data
 
         # AWS 3/9/25: This is an alternative to the sklearn
         # optimizer which allows for some configuration,
@@ -203,9 +188,8 @@ class interpm_sklearn_gp:
         from sklearn.gaussian_process.kernels import ConstantKernel
         from sklearn.gaussian_process.kernels import ExpSineSquared
         from sklearn.gaussian_process.kernels import Exponentiation
-        from sklearn.gaussian_process.kernels import Product
+        from sklearn.gaussian_process.kernels import Product, Sum
         from sklearn.gaussian_process.kernels import Hyperparameter
-        from sklearn.gaussian_process.kernels import Sum
         
         try:
             ktemp=''
@@ -216,7 +200,8 @@ class interpm_sklearn_gp:
                 options=options[:options.find('kernel=')]
                 if options[-1:]==',':
                     options=options[:-1]
-            dct=string_to_dict2(options,list_of_ints=['verbose'],
+            dct=string_to_dict2(options,list_of_ints=['verbose',
+                                                      'random_state'],
                                 list_of_floats=['test_size','alpha'],
                                 list_of_bools=['normalize_y'])
             if ktemp!='':
@@ -235,8 +220,20 @@ class interpm_sklearn_gp:
     def eval(self,v):
         """
         Evaluate the GP at point ``v``.
+
+        The input ``v`` should be a one-dimensional numpy array
+        and the output is a one-dimensional numpy array, unless
+        outformat is ``list``, in which case the output is a
+        Python list.
+        
         """
 
+        # The sklearn GPR object expects the input to be a
+        # two-dimensional numpy array. The output of the sklearn GPR
+        # object is either one- or two-dimensional, depending on the
+        # number of outputs. However, the sklearn transformers require
+        # two-dimensional arrays as inputs and outputs.
+        
         v_trans=0
         try:
             if self.transform_in!='none':
@@ -249,47 +246,45 @@ class interpm_sklearn_gp:
             raise
 
         try:
-            # AWS, 3/27/24: Keep in mind that
-            # o2scl::interpm_python.eval()
-            # expects the return type to be a numpy array. 
             yp=self.gp.predict(v_trans)
         except Exception as e:
             print(('Exception at prediction '+
                    'in interpm_sklearn_gp::eval():'),e)
             raise
 
-        yp_trans=0
-        try:
-            if self.transform_out!='none':
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
-            else:
-                yp_trans=yp
-        except Exception as e:
-            print(('Exception at output transformation '+
-                   'in interpm_sklearn_gp::eval():'),e)
-            raise
+        yp_trans=yp
     
         if self.outformat=='list':
             if self.verbose>1:
                 print('interpm_sklearn_gp::eval():',
                       'list mode type(yp),v,yp:',
                       type(yp_trans),v,yp_trans)
+            if yp_trans.ndim==1:
+                return yp_trans.tolist()
             return yp_trans[0].tolist()
+        # Return a one-dimensional numpy array in either case
         if yp_trans.ndim==1:
             if self.verbose>1:
                 print('interpm_sklearn_gp::eval():',
                       'ndim=1 mode type(yp),v,yp:',
                       type(yp_trans),v,yp_trans)
-            return numpy.ascontiguousarray(yp_trans)
+            return yp_trans
         if self.verbose>1:
             print('interpm_sklearn_gp::eval():',
                   'array mode type(yp[0]),v,yp[0]:',
                   type(yp_trans[0]),v,yp_trans[0])
-        return numpy.ascontiguousarray(yp_trans[0])
+        return yp_trans[0]
 
     def eval_list(self,v):
-        """
-        Evaluate the GP at point ``v``.
+        """Evaluate the GP at the list of points given in ``v``.
+        The input ``v`` should be a two-dimensional numpy
+        array of size ``(n_points,n_inputs)``.
+
+        If ``outformat`` is ``native``, then the output is a
+        two-dimensional numpy array. If ``outformat`` is ``list``,
+        then the output is a list. If ``outformat`` is ``c++``, then
+        the output is a continuous one-dimensional numpy array.
+        
         """
 
         v_trans=0
@@ -310,16 +305,7 @@ class interpm_sklearn_gp:
                    'in interpm_sklearn_gp::eval_list():'),e)
             raise
 
-        yp_trans=0
-        try:
-            if self.transform_out!='none':
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
-            else:
-                yp_trans=yp
-        except Exception as e:
-            print(('Exception at output transformation '+
-                   'in interpm_sklearn_gp::eval_list():'),e)
-            raise
+        yp_trans=yp
     
         if self.outformat=='list':
             if self.verbose>1:
@@ -327,11 +313,13 @@ class interpm_sklearn_gp:
                       'list mode type(yp),v,yp:',
                       type(yp_trans),v,yp_trans)
             return yp_trans.tolist()
-        if self.verbose>1:
-            print('interpm_sklearn_gp::eval_list():',
-                  'array mode type(yp),v,yp:',
-                  type(yp_trans),v,yp_trans)
-        return numpy.ascontiguousarray(yp_trans)
+        elif self.outformat=='c++':
+            if self.verbose>1:
+                print('interpm_sklearn_gp::eval_list():',
+                      'array mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            return numpy.ascontiguousarray(yp_trans)
+        return yp_trans
 
     def eval_unc(self,v):
         """
@@ -356,16 +344,8 @@ class interpm_sklearn_gp:
             
         yp,std=self.gp.predict(v_trans,return_std=True)
         
-        if self.transform_out!='none':
-            try:
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
-                std_trans=self.SS2.inverse_transform(std.reshape(-1,1))
-            except Exception as e:
-                print('Exception 6 in interpm_sklearn_gp:',e)
-                raise
-        else:
-            yp_trans=yp
-            std_trans=std
+        yp_trans=yp
+        std_trans=std
     
         if self.outformat=='list':
             return yp_trans[0].tolist(),std_trans[0].tolist()
@@ -393,28 +373,22 @@ class interpm_sklearn_gp:
         """
         import pickle
 
-        # Construct string
+        # Construct dictionary of class data
         loc_dct={"o2sclpy_version": version,
                  "verbose": self.verbose,
                  "kernel": self.kernel,
                  "outformat": self.outformat,
                  "transform_in": self.transform_in,
-                 "transform_out": self.transform_out,
                  "SS1": self.SS1,
-                 "SS2": self.SS2,
                  "alpha": self.alpha,
                  "random_state": self.random_state,
                  "normalize_y": self.normalize_y}
-        
-        # AWS, 3/10/25: get_params() appears not to get, for example,
-        # the kernel hyperparameters, so we pickle the entire
-        # sklearn GaussianProcessRegressor object.
-        
-        #params=self.gp.get_params(deep=True)
-        
+
+        # Create a string from a tuple of the dictionary and the GPR
+        # object
         byte_string=pickle.dumps((loc_dct,self.gp))
 
-        # Write to a file
+        # Write string to an HDF5 file
         hf=o2sclpy.hdf_file()
         hf.open_or_create(filename)
         hf.sets(obj_name,byte_string)
@@ -436,10 +410,13 @@ class interpm_sklearn_gp:
         s=o2sclpy.std_string()
         hf.gets(obj_name,s)
         hf.close()
+        # Convert to a Python bytes object
         sb=s.to_bytes()
 
+        # Extract the tuple
         tup=pickle.loads(sb)
-        
+
+        # Set the class data
         loc_dct=tup[0]
         if loc_dct["o2sclpy_version"]!=version:
             raise ValueError("In function interpm_sklearn_gp::load() "+
@@ -449,19 +426,12 @@ class interpm_sklearn_gp:
         self.kernel=loc_dct["kernel"]
         self.outformat=loc_dct["outformat"]
         self.transform_in=loc_dct["transform_in"]
-        self.transform_out=loc_dct["transform_out"]
         self.SS1=loc_dct["SS1"]
-        self.SS2=loc_dct["SS2"]
         self.alpha=loc_dct["alpha"]
         self.random_state=loc_dct["random_state"]
         self.normalize_y=loc_dct["normalize_y"]
-        
-        #func=GaussianProcessRegressor
-        #self.gp=func(normalize_y=self.normalize_y,
-        #             kernel=self.kernel,alpha=self.alpha,
-        #             random_state=self.random_state)
-        #self.gp.set_params(**(tup[1]))
-        
+
+        # Set the GPR object
         self.gp=tup[1]
 
         return
@@ -474,10 +444,22 @@ class interpm_sklearn_dtr:
     See https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html .
     """
 
+    verbose=0
+    """
+    Verbosity parameter (default 0)
+    """
+    outformat='numpy'
+    """
+    Output format, either 'native', 'c++', or 'list' (default 'native')
+    """
+    score=0.0
+    """
+    The most recent score value given a non-zero test size
+    returned by set_data()
+    """
+    
     def __init__(self):
         self.dtr=0
-        self.verbose=0
-        self.outformat='numpy'
         self.transform_in=0
         self.transform_out=0
         self.SS1=0
@@ -562,11 +544,17 @@ class interpm_sklearn_dtr:
 
         try:
             self.dtr.fit(x_train,y_train)      
+
+            if test_size>0.0:
+                self.score=self.dtr.score(x_test,y_test)
+
         except Exception as e:
             print('Exception in interpm_sklearn_dtr::set_data()',
                   'at model fitting.',e)
             raise
-            
+
+        if test_size>0.0:
+            return self.score
         return
     
     def set_data_str(self,in_data,out_data,options):
@@ -723,10 +711,22 @@ class interpm_sklearn_mlpr:
     scikit-learn's multi-layer perceptron regressor.
     """
 
+    verbose=0
+    """
+    Verbosity parameter (default 0)
+    """
+    outformat='numpy'
+    """
+    Output format, either 'native', 'c++', or 'list' (default 'native')
+    """
+    score=0.0
+    """
+    The most recent score value given a non-zero test size
+    returned by set_data()
+    """
+    
     def __init__(self):
         self.mlpr=0
-        self.verbose=0
-        self.outformat='numpy'
         self.transform_in=0
         self.transform_out=0
         self.SS1=0
@@ -814,14 +814,19 @@ class interpm_sklearn_mlpr:
                                    alpha=alpha)
             self.mlpr.fit(in_train,out_train.ravel())
                                                         
+            if test_size>0.0:
+                self.score=self.mlpr.score(in_test,out_test)
+
         except Exception as e:
             print('Exception in interpm_sklearn_mlpr::set_data()',
                   'at fit().',e)
             raise
 
         if test_size>0.0:
-            print('interpm_sklearn_mlpr::set_data(): score: %7.6e' %
-                  (self.mlpr.score(in_test,out_test)))
+            if self.verbose>0:
+                print('interpm_sklearn_mlpr::set_data(): score: %7.6e' %
+                      (self.mlpr.score(in_test,out_test)))
+            return self.score
 
         return
     
@@ -1010,9 +1015,16 @@ class interpm_sklearn_mlpr:
         
 class interpm_torch_dnn:
 
+    verbose=0
+    """
+    Verbosity parameter (default 0)
+    """
+    outformat='numpy'
+    """
+    Output format, either 'native', 'c++', or 'list' (default 'native')
+    """
+    
     def __init__(self):
-        self.verbose=0
-        self.outformat='numpy'
         self.dnn=0
         self.SS1=0
         self.SS2=0
@@ -1309,16 +1321,14 @@ class interpm_torch_dnn:
         Load the interpolation settings from a file
 
         (No custom object support)
-        """
-        import keras
-        
+        """        
         if filename[-3:]!='.pt':
             filename=filename+'.pt'
         import torch
         torch.load(self.dnn,filename)
 
         return
-        
+
 class interpm_tf_dnn:
     """Interpolate one or many multimensional data sets using a
     neural network from TensorFlow

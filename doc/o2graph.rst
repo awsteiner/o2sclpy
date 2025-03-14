@@ -36,7 +36,7 @@ which shows how to plot columns from ``table`` objects.
    :literal:
 
 Integration with O₂scl
----------------------------------
+----------------------
 
 The ``o2graph`` script implements all of the commands from the
 ``acol`` executable in O₂scl documented at
