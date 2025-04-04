@@ -4869,6 +4869,394 @@ class nstar_cold:
         return sp
 
 
+class eos_nstar_rot(eos_tov):
+    """
+    Python interface for O2scl class ``eos_nstar_rot``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/eos_nstar_rot.html .
+    """
+
+    @abstractmethod
+    def __init__(self,pointer=0):
+        """
+        Init function for class eos_nstar_rot
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_nstar_rot
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_nstar_rot
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_eos_nstar_rot
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class eos_nstar_rot
+        
+        Returns: eos_nstar_rot object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    def enth_from_pr(self,pr):
+        """
+        | Parameters:
+        | *pr*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_enth_from_pr
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,pr)
+        return ret
+
+    def pr_from_enth(self,pr):
+        """
+        | Parameters:
+        | *pr*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_pr_from_enth
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,pr)
+        return ret
+
+    def enth_from_nb(self,pr):
+        """
+        | Parameters:
+        | *pr*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_enth_from_nb
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,pr)
+        return ret
+
+
+class eos_nstar_rot_interp(eos_nstar_rot):
+    """
+    Python interface for O2scl class ``eos_nstar_rot_interp``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/eos_nstar_rot_interp.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class eos_nstar_rot_interp
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_nstar_rot_interp
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_nstar_rot_interp
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_eos_nstar_rot_interp
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class eos_nstar_rot_interp
+        
+        Returns: eos_nstar_rot_interp object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    def set_eos_fm(self,n,eden,pres,nb):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_interp_set_eos_fm
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_std::vector<double>,ctypes.c_std::vector<double>,ctypes.c_std::vector<double>]
+        func(self._ptr,n,eden,pres,nb)
+        return
+
+
+class eos_nstar_rot_C(eos_nstar_rot_interp):
+    """
+    Python interface for O2scl class ``eos_nstar_rot_C``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/eos_nstar_rot_C.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class eos_nstar_rot_C
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_nstar_rot_C
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_nstar_rot_C
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_eos_nstar_rot_C
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class eos_nstar_rot_C
+        
+        Returns: eos_nstar_rot_C object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    def set(self,rns_constants=False):
+        """
+        | Parameters:
+        | *rns_constants* =false: ``bool``
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_C_set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,rns_constants)
+        return
+
+
+class eos_nstar_rot_L(eos_nstar_rot_interp):
+    """
+    Python interface for O2scl class ``eos_nstar_rot_L``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/eos_nstar_rot_L.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class eos_nstar_rot_L
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_nstar_rot_L
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_nstar_rot_L
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_eos_nstar_rot_L
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class eos_nstar_rot_L
+        
+        Returns: eos_nstar_rot_L object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    def set(self,rns_constants=False):
+        """
+        | Parameters:
+        | *rns_constants* =false: ``bool``
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_L_set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,rns_constants)
+        return
+
+
+class nstar_rot:
+    """
+    Python interface for O2scl class ``nstar_rot``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/nstar_rot.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nstar_rot
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nstar_rot
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nstar_rot
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nstar_rot
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nstar_rot
+        
+        Returns: nstar_rot object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    @property
+    def verbose(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for nstar_rot::verbose .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    def output_table(self,t):
+        """
+        | Parameters:
+        | *t*: :class:`table3d` object
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_output_table
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,t._ptr)
+        return
+
+    def set_eos(self,eos):
+        """
+        | Parameters:
+        | *eos*: :class:`eos_nstar_rot` object
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_eos
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,eos._ptr)
+        return
+
+    def polytrope_eos(self,index):
+        """
+        | Parameters:
+        | *index*: ``double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_polytrope_eos
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,index)
+        return
+
+    def fix_cent_eden_axis_rat(self,cent_eden,axis_rat,use_guess=False):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *axis_rat*: ``double``
+        | *use_guess* =false: ``bool``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_axis_rat
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
+        func(self._ptr,cent_eden,axis_rat,use_guess)
+        return
+
+
 class nucleus_rmf:
     """
     Python interface for O2scl class ``nucleus_rmf``.
