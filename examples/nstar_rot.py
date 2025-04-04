@@ -46,7 +46,7 @@ if len(sys.argv)<2:
     
     # Print out the gravitational mass
         
-    print('%7.6e' % (nr.Mass/nr.MSUN))
+    print('Mass: %7.6e' % (nr.Mass/nr.MSUN))
 
     # The the log carefully so we can plot
     
@@ -96,4 +96,94 @@ if len(sys.argv)<2:
         plot.close()
 
 elif sys.argv[1]=='p':
+    
+    # Set up the EOS
+
+    a=13
+    alpha=0.49
+    S=32
+    L=44
+    b=S-16-a
+    beta=(L-3*a*alpha)/b/3
+    n0=0.16
+    print('b,beta:',b,beta)
+
+    tab=o2sclpy.table_units()
+    tab.line_of_names('nb ed pr')
+    tab.line_of_units('1/fm^3 1/fm^4 1/fm^4')
+    tab.set_nlines(25)
+    for i in range(0,25):
+        print('i',i)
+        nb=0.08+i*0.01
+        tab.set('nb',i,nb)
+        tab.set('ed',i,939.0/197.33*nb+(nb*a*(nb/n0)**alpha+
+                                        nb*b*(nb/n0)**beta)/197.33)
+        tab.set('pr',i,(n0*a*alpha*(nb/n0)**(1.0+alpha)+
+                        n0*b*beta*(nb/n0)**(1.0+beta))/197.33)
+
+    ed32=tab.get('ed',tab.get_nlines()-1)
+    pr32=tab.get('pr',tab.get_nlines()-1)
+
+    n1=0.8
+    coeff1=pr32/ed32**(1.0+1.0/n1)
+    p1=o2sclpy.eos_tov_polytrope()
+    p1.set_coeff_index(coeff1,n1)
+    p1.set_baryon_density(0.32,ed32)
+
+    nbtrans=0.64
+
+    for i in range(1,33):
+        nb=0.32+i*(nbtrans-0.32)/32
+        tab.line_of_data([nb,p1.ed_from_nb(nb),p1.pr_from_nb(nb)])
+
+    edlast=tab.get('ed',tab.get_nlines()-1)
+    prlast=tab.get('pr',tab.get_nlines()-1)
+
+    n2=0.7
+    coeff2=prlast/edlast**(1.0+1.0/n2)
+    p2=o2sclpy.eos_tov_polytrope()
+    p2.set_coeff_index(coeff2,n2)
+    p2.set_baryon_density(nbtrans,edlast)
+    
+    for i in range(1,33):
+        nb=nbtrans+i*(1.5-nbtrans)/32
+        tab.line_of_data([nb,p2.ed_from_nb(nb),p2.pr_from_nb(nb)])
+        
+    for i in range(0,tab.get_nlines()):
+        print('%7.6e %7.6e %7.6e' % (tab.get('nb',i),tab.get('ed',i),
+                                     tab.get('pr',i)))
+
+    eti=o2sclpy.eos_tov_interp()
+    eti.default_low_dens_eos()
+    eti.read_table(tab,'ed','pr','nb')
+    ts=o2sclpy.tov_solve()
+    ts.set_eos(eti)
+    ts.verbose=1
+    ts.mvsr()
+
+    enri=o2sclpy.eos_nstar_rot_interp()
+    edv=o2sclpy.std_vector()    
+    prv=o2sclpy.std_vector()    
+    nbv=o2sclpy.std_vector()
+    for i in range(0,tab.get_nlines()):
+        edv.push_back(tab.get('ed',i))
+        prv.push_back(tab.get('pr',i))
+        nbv.push_back(tab.get('nb',i))
+    enri.set_eos_fm(tab.get_nlines(),edv,prv,nbv)
+    
+    # Construct a configuration with a specified central energy density
+    # and axis ratio
+    
+    nr=o2sclpy.nstar_rot()
+    nr.verbose=1
+    nr.set_eos(enri)
+    nr.fix_cent_eden_axis_rat(2.0e15,0.59)
+        
+    print('Mass: %7.6e' % (nr.Mass/nr.MSUN))
+    
+    quit()
+        
+
+    
+    
     

@@ -3194,6 +3194,17 @@ class eos_tov_polytrope(eos_tov):
         func(self._ptr,coeff,index)
         return
 
+    def set_baryon_density(self,nb,ed):
+        """
+        | Parameters:
+        | *nb*: ``double``
+        | *ed*: ``double``
+        """
+        func=self._link.o2scl.o2scl_eos_tov_polytrope_set_baryon_density
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,nb,ed)
+        return
+
 
 class eos_tov_linear(eos_tov):
     """
