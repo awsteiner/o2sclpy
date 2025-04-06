@@ -161,6 +161,27 @@ elif sys.argv[1]=='p':
     ts.verbose=1
     ts.mvsr()
 
+    # Delete table rows larger than the maximum mass
+    nonrot=ts.get_results()
+    prmax=nonrot.get('pr',nonrot.lookup('gm',nonrot.max('gm')))
+    nonrot.delete_rows_func('pr>'+str(prmax))
+
+    edmax=nonrot.max('ed')
+    print('edmax',edmax,nonrot.get_unit('ed'))
+    edmax2=cu.convert('Msun/km^3','1/fm^4',edmax)
+    print('edmax2',edmax2,'1/fm^4')
+    tab.deriv_col('ed','pr','cs2')
+    cs2_max=0
+    for i in range(0,tab.get_nlines()):
+        print(i,tab.get('ed',i),edmax2,tab.get('cs2',i))
+        if tab.get('ed',i)<edmax2 and tab.get('cs2',i)>cs2_max:
+            cs2_max=tab.get('cs2',i)
+    print('cs2_max',cs2_max)
+
+    # The radius of a 1.4 solar mass neutron star
+    rad14=nonrot.interp('gm',1.4,'r')
+    print('rad14 %7.6e' % (rad14))
+
     enri=o2sclpy.eos_nstar_rot_interp()
     edv=o2sclpy.std_vector()    
     prv=o2sclpy.std_vector()    
