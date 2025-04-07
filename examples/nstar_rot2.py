@@ -5,6 +5,7 @@ import matplotlib.pyplot as plot
 import numpy
 import sys
 import random
+import math
 from mpi4py import MPI
 
 class bayes_nstar_rot:
@@ -61,7 +62,8 @@ class bayes_nstar_rot:
         beta=(L-3*a*alpha)/b/3
         n0=0.16
         if verbose>0:
-            output.write('b,beta: %7.6e %7.6e' % (b,beta))
+            output.write('params: %7.6e %7.6e %7.6e\n' % (n1,nbtrans,n2))
+            print('params: %7.6e %7.6e %7.6e' % (n1,nbtrans,n2))
 
         tab=o2sclpy.table_units()
         tab.line_of_names('nb ed pr')
@@ -69,14 +71,21 @@ class bayes_nstar_rot:
         tab.set_nlines(25)
         for i in range(0,25):
             if self.verbose>1:
-                output.write('i',i)
+                output.write('i\n',i)
             nb=0.08+i*0.01
             tab.set('nb',i,nb)
             tab.set('ed',i,939.0/197.33*nb+(nb*a*(nb/n0)**alpha+
                                             nb*b*(nb/n0)**beta)/197.33)
             tab.set('pr',i,(n0*a*alpha*(nb/n0)**(1.0+alpha)+
                             n0*b*beta*(nb/n0)**(1.0+beta))/197.33)
-            
+            print('1: %7.6e %7.6e %7.6e' %
+                  (tab.get('nb',i),tab.get('ed',i),
+                   tab.get('pr',i)))
+            output.write('1: %7.6e %7.6e %7.6e\n' %
+                         (tab.get('nb',i),tab.get('ed',i),
+                          tab.get('pr',i)))
+        output.flush()
+        
         ed32=tab.get('ed',tab.get_nlines()-1)
         pr32=tab.get('pr',tab.get_nlines()-1)
         
@@ -88,7 +97,12 @@ class bayes_nstar_rot:
         for i in range(1,33):
             nb=0.32+i*(nbtrans-0.32)/32
             tab.line_of_data([nb,p1.ed_from_nb(nb),p1.pr_from_nb(nb)])
-
+            output.write('2: %7.6e %7.6e %7.6e\n' %
+                         (nb,p1.ed_from_nb(nb),p1.pr_from_nb(nb)))
+            print('2: %7.6e %7.6e %7.6e' %
+                  (nb,p1.ed_from_nb(nb),p1.pr_from_nb(nb)))
+        output.flush()
+        
         edlast=tab.get('ed',tab.get_nlines()-1)
         prlast=tab.get('pr',tab.get_nlines()-1)
 
@@ -99,21 +113,42 @@ class bayes_nstar_rot:
     
         for i in range(1,33):
             nb=nbtrans+i*(1.5-nbtrans)/32
+            if not math.isfinite(p2.ed_from_nb(nb)):
+                print('nb,n2,coeff2,edlast,prlast: ',
+                      nb,n2,coeff2,edlast,prlast)
+                quit()
             tab.line_of_data([nb,p2.ed_from_nb(nb),p2.pr_from_nb(nb)])
+            output.write('3: %7.6e %7.6e %7.6e\n' %
+                         (nb,p2.ed_from_nb(nb),p2.pr_from_nb(nb)))
+            print('3: %7.6e %7.6e %7.6e' %
+                  (nb,p2.ed_from_nb(nb),p2.pr_from_nb(nb)))
+        output.flush()
 
         if self.verbose>1:
             for i in range(0,tab.get_nlines()):
-                output.write('%7.6e %7.6e %7.6e' %
+                print('4: %7.6e %7.6e %7.6e' %
                              (tab.get('nb',i),tab.get('ed',i),
                               tab.get('pr',i)))
+                output.write('4: %7.6e %7.6e %7.6e\n' %
+                             (tab.get('nb',i),tab.get('ed',i),
+                              tab.get('pr',i)))
+            output.flush()
 
+        print('h1')
         eti=o2sclpy.eos_tov_interp()
+        print('h2')
         eti.default_low_dens_eos()
+        print('h3')
         eti.read_table(tab,'ed','pr','nb')
+        print('h4')
         ts=o2sclpy.tov_solve()
+        print('h5')
         ts.set_eos(eti)
+        print('h6')
         ts.verbose=self.verbose
+        print('h7')
         ts.mvsr()
+        print('h8')
 
         # Delete table rows larger than the maximum mass
         nonrot=ts.get_results()
@@ -123,27 +158,29 @@ class bayes_nstar_rot:
         # Compute the maximum speed of sound only below
         # the maximum energy density
 
+        print('h9')
         edmax=nonrot.max('ed')
         if self.verbose>0:
-            output.write('edmax %7.6e %s' % (edmax,nonrot.get_unit('ed')))
+            output.write('edmax %7.6e %s\n' % (edmax,nonrot.get_unit('ed')))
         edmax2=self.cu.convert('Msun/km^3','1/fm^4',edmax)
         if self.verbose>0:
-            output.write('edmax2 %s 1/fm^4' % (edmax2))
+            output.write('edmax2 %s 1/fm^4\n' % (edmax2))
         tab.deriv_col('ed','pr','cs2')
         cs2_max=0
         for i in range(0,tab.get_nlines()):
             if verbose>1:
-                output.write(i,tab.get('ed',i),edmax2,tab.get('cs2',i))
+                output.write(str(i)+' '+str(tab.get('ed',i))+' '+
+                             str(edmax2)+' '+str(tab.get('cs2',i))+'\n')
             if tab.get('ed',i)<edmax2 and tab.get('cs2',i)>cs2_max:
                 cs2_max=tab.get('cs2',i)
         if verbose>0:
-            output.write('cs2_max: %7.6e' % (cs2_max))
+            output.write('cs2_max: %7.6e\n' % (cs2_max))
 
         # The radius of a 1.4 solar mass neutron star
         rad14=nonrot.interp('gm',1.4,'r')
 
         if verbose>0:
-            output.write('rad14: %7.6e' % (rad14))
+            output.write('rad14: %7.6e\n' % (rad14))
 
         enri=o2sclpy.eos_nstar_rot_interp()
         edv=o2sclpy.std_vector()    
@@ -164,19 +201,21 @@ class bayes_nstar_rot:
         nr.set_eos(enri)
         last_mass=0
         for i in range(0,30):
+            print('h10')
             rho_cent=4.0e14*(10**float(i/29))
             ret=nr.fix_cent_eden_with_kepler(rho_cent)
 
-            output.write('ret',ret)
+            output.write('ret'+str(ret)+'\n')
 
-            output.write('%d %7.6e %7.6e %7.6e %7.6e %7.6e %7.6e' %
+            output.write('%d %7.6e %7.6e %7.6e %7.6e %7.6e %7.6e\n' %
                   (i,rho_cent,nr.Mass/nr.MSUN,nr.R_e/1.0e5,
                    nr.r_p/nr.r_e,nr.Omega,nr.r_ratio))
             
             if i>0 and nr.Mass/nr.MSUN<last_mass:
                 i=30
-                output.write('stopping early')
+                output.write('stopping early\n')
             last_mass=nr.Mass/nr.MSUN
+        print('h11')
 
         return
 
@@ -192,15 +231,19 @@ class bayes_nstar_rot:
             start_time=MPI.Wtime()
 
             N=100
-            for i in range(0,N):
+            i=0
+            done=False
+            while done==False and i<N:
                 n1=random.random()*4.0+0.01
                 n2=random.random()*4.0+0.01
                 nbtrans=random.random()*0.66+0.33
-                b.one_point(n1,nbtrans,n2,f)
+                print('Going to one_point()',rank,n1,nbtrans,n2)
+                b.one_point(n1,nbtrans,n2,f,verbose=2)
                 elapsed=MPI.Wtime()
 
+                i=i+1
                 if elapsed-start_time>rtime:
-                    i=N:
+                    done=True
                 
         f.close()
 
