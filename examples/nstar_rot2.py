@@ -4,6 +4,7 @@ import o2sclpy
 import matplotlib.pyplot as plot
 import numpy
 import sys
+from multiprocessing import Pool
 
 class bayes_nstar_rot:
     """
@@ -18,10 +19,18 @@ class bayes_nstar_rot:
         # Get a copy (a pointer to) the O$_2$scl unit conversion object,
         # which also allows access to the constant library
 
-        o2scl_settings=o2sclpy.lib_settings_class()
-        self.cu=o2scl_settings.get_convert_units()
+        self.o2scl_settings=o2sclpy.lib_settings_class()
+        self.cu=self.o2scl_settings.get_convert_units()
         self.hc=self.cu.find_unique('hbarc','MeV*fm')
         self.verbose=0
+        self.low=[-2.0,0.33,-2.0]
+        self.high=[4.0,0.8,4.0]
+
+        # Output file handle
+        self.f=0
+
+        # Total runtime
+        self.runtime=0.0
 
     def initial_point(self):
         """
@@ -37,11 +46,11 @@ class bayes_nstar_rot:
         nbtrans=0.64
         n2=0.7
 
-        self.one_point(a,alpha,S,L,n1,nbtrans,n2)
+        self.one_point(n1,nbtrans,n2)
 
         return
 
-    def one_point(self,a,alpha,S,L,n1,nbtrans,n2,verbose=0):
+    def one_point(self,n1,nbtrans,n2,a=13,alpha=0.49,S=32,L=44,verbose=1):
         """
         Desc
         """
@@ -50,7 +59,7 @@ class bayes_nstar_rot:
         beta=(L-3*a*alpha)/b/3
         n0=0.16
         if verbose>0:
-            print('b,beta:',b,beta)
+            print('b,beta: %7.6e %7.6e' % (b,beta))
 
         tab=o2sclpy.table_units()
         tab.line_of_names('nb ed pr')
@@ -110,12 +119,13 @@ class bayes_nstar_rot:
 
         # Compute the maximum speed of sound only below
         # the maximum energy density
-        
+
         edmax=nonrot.max('ed')
-        print('edmax',edmax,nonrot.get_unit('ed'))
+        if self.verbose>0:
+            print('edmax %7.6e %s' % (edmax,nonrot.get_unit('ed')))
         edmax2=self.cu.convert('Msun/km^3','1/fm^4',edmax)
-        print('here2')
-        print('edmax2',edmax2,'1/fm^4')
+        if self.verbose>0:
+            print('edmax2 %s 1/fm^4' % (edmax2))
         tab.deriv_col('ed','pr','cs2')
         cs2_max=0
         for i in range(0,tab.get_nlines()):
@@ -124,13 +134,13 @@ class bayes_nstar_rot:
             if tab.get('ed',i)<edmax2 and tab.get('cs2',i)>cs2_max:
                 cs2_max=tab.get('cs2',i)
         if verbose>0:
-            print('cs2_max',cs2_max)
+            print('cs2_max: %7.6e' % (cs2_max))
 
         # The radius of a 1.4 solar mass neutron star
         rad14=nonrot.interp('gm',1.4,'r')
 
         if verbose>0:
-            print('rad14 %7.6e' % (rad14))
+            print('rad14: %7.6e' % (rad14))
 
         enri=o2sclpy.eos_nstar_rot_interp()
         edv=o2sclpy.std_vector()    
@@ -146,21 +156,52 @@ class bayes_nstar_rot:
         # and axis ratio
         
         nr=o2sclpy.nstar_rot()
+        nr.err_nonconv=False
         nr.verbose=1
         nr.set_eos(enri)
-        for i in range(0,10):
-            rho_cent=4.0e14*(10**float(i/9))
-            nr.fix_cent_eden_with_kepler(rho_cent)
-            print('%7.6e Mass: %7.6e' % (rho_cent,nr.Mass/nr.MSUN))
+        last_mass=0
+        for i in range(0,30):
+            rho_cent=4.0e14*(10**float(i/29))
+            ret=nr.fix_cent_eden_with_kepler(rho_cent)
+
+            print('ret',ret)
+
+            print('%d %7.6e %7.6e %7.6e %7.6e %7.6e %7.6e' %
+                  (i,rho_cent,nr.Mass/nr.MSUN,nr.R_e/1.0e5,
+                   nr.r_p/nr.r_e,nr.Omega,nr.r_ratio))
+            
+            if i>0 and nr.Mass/nr.MSUN<last_mass:
+                i=30
+                print('stopping early')
+            last_mass=nr.Mass/nr.MSUN
 
         return
+
+    def loop_time(self,index):
+        return
+    
+    def __call__(self,index):
+        with open(('nstar_rot2_'+str(index))+'.txt','w') as f:
+            self.output=f
+            self.loop_time(index)
+            f.close()
     
 if __name__ == '__main__':
 
-    b=bayes_nstar_rot()
     if len(sys.argv)<2:
         print('Argument required.')
         quit()
     if sys.argv[1]=='test':
+        b=bayes_nstar_rot()
         b.initial_point()
+    if sys.argv[1]=='production':
+        if len(sys.argv)<4:
+            print('Production needs number and time')
+            quit()
+        b=bayes_nstar_rot()
+        n=int(sys.argv[2])
+        b.runtime=float(sys.argv[3])
+        with Pool(n) as pool:
+            rank=[i for i in range(0,n)]
+            result=pool.map(f,numbers)
     

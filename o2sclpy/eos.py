@@ -5209,6 +5209,26 @@ class nstar_rot:
         return new_obj
 
     @property
+    def err_nonconv(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_err_nonconv
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @err_nonconv.setter
+    def err_nonconv(self,value):
+        """
+        Setter function for nstar_rot::err_nonconv .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_err_nonconv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
     def eq_radius_tol_rel(self):
         """
         Property of type ``ctypes.c_double``
@@ -6076,54 +6096,64 @@ class nstar_rot:
         """
         | Parameters:
         | *cent_eden*: ``double``
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_with_kepler
+        func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
-        func(self._ptr,cent_eden)
-        return
+        ret=func(self._ptr,cent_eden)
+        return ret
 
     def fix_cent_eden_ang_vel(self,cent_eden,ang_vel):
         """
         | Parameters:
         | *cent_eden*: ``double``
         | *ang_vel*: ``double``
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_ang_vel
+        func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
-        func(self._ptr,cent_eden,ang_vel)
-        return
+        ret=func(self._ptr,cent_eden,ang_vel)
+        return ret
 
     def fix_cent_eden_ang_mom(self,cent_eden,ang_mom):
         """
         | Parameters:
         | *cent_eden*: ``double``
         | *ang_mom*: ``double``
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_ang_mom
+        func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
-        func(self._ptr,cent_eden,ang_mom)
-        return
+        ret=func(self._ptr,cent_eden,ang_mom)
+        return ret
 
     def fix_cent_eden_non_rot(self,cent_eden):
         """
         | Parameters:
         | *cent_eden*: ``double``
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_non_rot
+        func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
-        func(self._ptr,cent_eden)
-        return
+        ret=func(self._ptr,cent_eden)
+        return ret
 
     def fix_cent_eden_with_kepler_alt(self,cent_eden,use_guess=False):
         """
         | Parameters:
         | *cent_eden*: ``double``
         | *use_guess* =false: ``bool``
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_with_kepler_alt
+        func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_bool]
-        func(self._ptr,cent_eden,use_guess)
-        return
+        ret=func(self._ptr,cent_eden,use_guess)
+        return ret
 
     def fix_cent_eden_grav_mass_alt(self,cent_eden,grav_mass,use_guess=False):
         """
@@ -6131,11 +6161,13 @@ class nstar_rot:
         | *cent_eden*: ``double``
         | *grav_mass*: ``double``
         | *use_guess* =false: ``bool``
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_grav_mass_alt
+        func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
-        func(self._ptr,cent_eden,grav_mass,use_guess)
-        return
+        ret=func(self._ptr,cent_eden,grav_mass,use_guess)
+        return ret
 
     def fix_cent_eden_bar_mass_alt(self,cent_eden,bar_mass,use_guess=False):
         """
@@ -6143,11 +6175,13 @@ class nstar_rot:
         | *cent_eden*: ``double``
         | *bar_mass*: ``double``
         | *use_guess* =false: ``bool``
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_bar_mass_alt
+        func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
-        func(self._ptr,cent_eden,bar_mass,use_guess)
-        return
+        ret=func(self._ptr,cent_eden,bar_mass,use_guess)
+        return ret
 
     def fix_cent_eden_ang_vel_alt(self,cent_eden,ang_vel,use_guess=False):
         """
@@ -6155,11 +6189,13 @@ class nstar_rot:
         | *cent_eden*: ``double``
         | *ang_vel*: ``double``
         | *use_guess* =false: ``bool``
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_ang_vel_alt
+        func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
-        func(self._ptr,cent_eden,ang_vel,use_guess)
-        return
+        ret=func(self._ptr,cent_eden,ang_vel,use_guess)
+        return ret
 
     def fix_cent_eden_ang_mom_alt(self,cent_eden,ang_mom,use_guess=False):
         """
@@ -6167,11 +6203,13 @@ class nstar_rot:
         | *cent_eden*: ``double``
         | *ang_mom*: ``double``
         | *use_guess* =false: ``bool``
+        | Returns: a Python int
         """
         func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_ang_mom_alt
+        func.restype=ctypes.c_int
         func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
-        func(self._ptr,cent_eden,ang_mom,use_guess)
-        return
+        ret=func(self._ptr,cent_eden,ang_mom,use_guess)
+        return ret
 
     def constants_rns(self):
         """
