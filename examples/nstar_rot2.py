@@ -4,7 +4,8 @@ import o2sclpy
 import matplotlib.pyplot as plot
 import numpy
 import sys
-from multiprocessing import Pool
+import random
+from mpi4py import MPI
 
 class bayes_nstar_rot:
     """
@@ -50,7 +51,8 @@ class bayes_nstar_rot:
 
         return
 
-    def one_point(self,n1,nbtrans,n2,a=13,alpha=0.49,S=32,L=44,verbose=1):
+    def one_point(self,n1,nbtrans,n2,output,
+                  a=13,alpha=0.49,S=32,L=44,verbose=1):
         """
         Desc
         """
@@ -59,7 +61,7 @@ class bayes_nstar_rot:
         beta=(L-3*a*alpha)/b/3
         n0=0.16
         if verbose>0:
-            print('b,beta: %7.6e %7.6e' % (b,beta))
+            output.write('b,beta: %7.6e %7.6e' % (b,beta))
 
         tab=o2sclpy.table_units()
         tab.line_of_names('nb ed pr')
@@ -67,7 +69,7 @@ class bayes_nstar_rot:
         tab.set_nlines(25)
         for i in range(0,25):
             if self.verbose>1:
-                print('i',i)
+                output.write('i',i)
             nb=0.08+i*0.01
             tab.set('nb',i,nb)
             tab.set('ed',i,939.0/197.33*nb+(nb*a*(nb/n0)**alpha+
@@ -101,8 +103,9 @@ class bayes_nstar_rot:
 
         if self.verbose>1:
             for i in range(0,tab.get_nlines()):
-                print('%7.6e %7.6e %7.6e' % (tab.get('nb',i),tab.get('ed',i),
-                                             tab.get('pr',i)))
+                output.write('%7.6e %7.6e %7.6e' %
+                             (tab.get('nb',i),tab.get('ed',i),
+                              tab.get('pr',i)))
 
         eti=o2sclpy.eos_tov_interp()
         eti.default_low_dens_eos()
@@ -122,25 +125,25 @@ class bayes_nstar_rot:
 
         edmax=nonrot.max('ed')
         if self.verbose>0:
-            print('edmax %7.6e %s' % (edmax,nonrot.get_unit('ed')))
+            output.write('edmax %7.6e %s' % (edmax,nonrot.get_unit('ed')))
         edmax2=self.cu.convert('Msun/km^3','1/fm^4',edmax)
         if self.verbose>0:
-            print('edmax2 %s 1/fm^4' % (edmax2))
+            output.write('edmax2 %s 1/fm^4' % (edmax2))
         tab.deriv_col('ed','pr','cs2')
         cs2_max=0
         for i in range(0,tab.get_nlines()):
             if verbose>1:
-                print(i,tab.get('ed',i),edmax2,tab.get('cs2',i))
+                output.write(i,tab.get('ed',i),edmax2,tab.get('cs2',i))
             if tab.get('ed',i)<edmax2 and tab.get('cs2',i)>cs2_max:
                 cs2_max=tab.get('cs2',i)
         if verbose>0:
-            print('cs2_max: %7.6e' % (cs2_max))
+            output.write('cs2_max: %7.6e' % (cs2_max))
 
         # The radius of a 1.4 solar mass neutron star
         rad14=nonrot.interp('gm',1.4,'r')
 
         if verbose>0:
-            print('rad14: %7.6e' % (rad14))
+            output.write('rad14: %7.6e' % (rad14))
 
         enri=o2sclpy.eos_nstar_rot_interp()
         edv=o2sclpy.std_vector()    
@@ -164,27 +167,44 @@ class bayes_nstar_rot:
             rho_cent=4.0e14*(10**float(i/29))
             ret=nr.fix_cent_eden_with_kepler(rho_cent)
 
-            print('ret',ret)
+            output.write('ret',ret)
 
-            print('%d %7.6e %7.6e %7.6e %7.6e %7.6e %7.6e' %
+            output.write('%d %7.6e %7.6e %7.6e %7.6e %7.6e %7.6e' %
                   (i,rho_cent,nr.Mass/nr.MSUN,nr.R_e/1.0e5,
                    nr.r_p/nr.r_e,nr.Omega,nr.r_ratio))
             
             if i>0 and nr.Mass/nr.MSUN<last_mass:
                 i=30
-                print('stopping early')
+                output.write('stopping early')
             last_mass=nr.Mass/nr.MSUN
 
         return
 
-    def loop_time(self,index):
+    def loop_time(self,rank,size,rtime):
+        """
+        Desc
+        """
+
+        with open(('nstar_rot2_'+str(rank))+'.txt','w') as f:
+            print('Starting run on rank',rank,'of',size,'with time',
+                  rtime)
+
+            start_time=MPI.Wtime()
+
+            N=100
+            for i in range(0,N):
+                n1=random.random()*4.0+0.01
+                n2=random.random()*4.0+0.01
+                nbtrans=random.random()*0.66+0.33
+                b.one_point(n1,nbtrans,n2,f)
+                elapsed=MPI.Wtime()
+
+                if elapsed-start_time>rtime:
+                    i=N:
+                
+        f.close()
+
         return
-    
-    def __call__(self,index):
-        with open(('nstar_rot2_'+str(index))+'.txt','w') as f:
-            self.output=f
-            self.loop_time(index)
-            f.close()
     
 if __name__ == '__main__':
 
@@ -195,13 +215,20 @@ if __name__ == '__main__':
         b=bayes_nstar_rot()
         b.initial_point()
     if sys.argv[1]=='production':
-        if len(sys.argv)<4:
-            print('Production needs number and time')
+        if len(sys.argv)<3:
+            print('Production needs time')
             quit()
+            
+        comm=MPI.COMM_WORLD
+        rank=comm.Get_rank()
+        size=comm.Get_size()
+
+        if rank==0:
+            print('Beginning production run.')
+        
         b=bayes_nstar_rot()
-        n=int(sys.argv[2])
-        b.runtime=float(sys.argv[3])
-        with Pool(n) as pool:
-            rank=[i for i in range(0,n)]
-            result=pool.map(f,numbers)
+        b.loop_time(rank,size,float(sys.argv[2]))
+
+        
+
     
