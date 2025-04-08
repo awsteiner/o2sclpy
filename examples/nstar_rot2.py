@@ -18,10 +18,11 @@ class bayes_nstar_rot:
 
         # Get a copy (a pointer to) the O$_2$scl unit conversion object,
         # which also allows access to the constant library
-
         self.o2scl_settings=o2sclpy.lib_settings_class()
         self.cu=self.o2scl_settings.get_convert_units()
         self.hc=self.cu.find_unique('hbarc','MeV*fm')
+
+        # Verbosity parameter
         self.verbose=0
 
         # Output file handle
@@ -36,10 +37,6 @@ class bayes_nstar_rot:
         """
         
         # Initial guess
-        a=13
-        alpha=0.49
-        S=32
-        L=44
         n1=0.8
         nbtrans=0.64
         n2=0.7
@@ -61,7 +58,8 @@ class bayes_nstar_rot:
         beta=(L-3*a*alpha)/b/3
         n0=0.16
         if self.verbose>0:
-            output.write('params: %7.6e %7.6e %7.6e\n' % (n1,nbtrans,n2))
+            output.write('params: %7.6e %7.6e %7.6e\n' %
+                         (n1,nbtrans,n2))
 
         # Create the table to store the equation of state. The column
         # ``nb`` is the baryon number density, ``ed`` is the energy
@@ -81,10 +79,12 @@ class bayes_nstar_rot:
                                             nb*b*(nb/n0)**beta)/self.hc)
             tab.set('pr',i,(n0*a*alpha*(nb/n0)**(1.0+alpha)+
                             n0*b*beta*(nb/n0)**(1.0+beta))/self.hc)
-            output.write('1: %7.6e %7.6e %7.6e\n' %
-                         (tab.get('nb',i),tab.get('ed',i),
-                          tab.get('pr',i)))
-        output.flush()
+            if self.verbose>1:
+                output.write('1: %7.6e %7.6e %7.6e\n' %
+                             (tab.get('nb',i),tab.get('ed',i),
+                              tab.get('pr',i)))
+        if self.verbose>1:
+            output.flush()
 
         # The energy density and pressure at a baryon density of 0.32
         # fm^{-3}
@@ -106,9 +106,11 @@ class bayes_nstar_rot:
                              (nb,n1,coeff1,ed32,pr32))
                 return (1,0)
             tab.line_of_data([nb,p1.ed_from_nb(nb),p1.pr_from_nb(nb)])
-            output.write('2: %7.6e %7.6e %7.6e\n' %
-                         (nb,p1.ed_from_nb(nb),p1.pr_from_nb(nb)))
-        output.flush()
+            if self.verbose>1:
+                output.write('2: %7.6e %7.6e %7.6e\n' %
+                             (nb,p1.ed_from_nb(nb),p1.pr_from_nb(nb)))
+        if self.verbose>1:
+            output.flush()
 
         # The energy density and pressure at density ``nbtrans``
         edlast=tab.get('ed',tab.get_nlines()-1)
@@ -129,12 +131,14 @@ class bayes_nstar_rot:
                              (nb,n2,coeff2,edlast,prlast))
                 return (2,0)
             tab.line_of_data([nb,p2.ed_from_nb(nb),p2.pr_from_nb(nb)])
-            output.write('3: %7.6e %7.6e %7.6e\n' %
-                         (nb,p2.ed_from_nb(nb),p2.pr_from_nb(nb)))
-        output.flush()
+            if self.verbose>1:
+                output.write('3: %7.6e %7.6e %7.6e\n' %
+                             (nb,p2.ed_from_nb(nb),p2.pr_from_nb(nb)))
+        if self.verbose>1:
+            output.flush()
 
         # Output the entire table if verbose is larger than 1
-        if self.verbose>1:
+        if self.verbose>0:
             for i in range(0,tab.get_nlines()):
                 output.write('4: %7.6e %7.6e %7.6e\n' %
                              (tab.get('nb',i),tab.get('ed',i),
@@ -162,7 +166,8 @@ class bayes_nstar_rot:
 
         edmax=nonrot.max('ed')
         if self.verbose>0:
-            output.write('edmax %7.6e %s\n' % (edmax,nonrot.get_unit('ed')))
+            output.write('edmax %7.6e %s\n' %
+                         (edmax,o2sclpy.force_string(nonrot.get_unit('ed'))))
         edmax2=self.cu.convert('Msun/km^3','1/fm^4',edmax)
         if self.verbose>0:
             output.write('edmax2 %s 1/fm^4\n' % (edmax2))
