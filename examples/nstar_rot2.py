@@ -1,6 +1,4 @@
 import o2sclpy
-import matplotlib.pyplot as plot
-import numpy
 import sys
 import random
 import math
@@ -58,7 +56,8 @@ class bayes_nstar_rot:
         beta=(L-3*a*alpha)/b/3
         n0=0.16
         if self.verbose>0:
-            output.write('params: %7.6e %7.6e %7.6e\n' %
+            output.write('----------------------------------------------')
+            output.write('params (n1,nbtrans,n2): %7.6e %7.6e %7.6e\n' %
                          (n1,nbtrans,n2))
 
         # Create the table to store the equation of state. The column
@@ -139,6 +138,7 @@ class bayes_nstar_rot:
 
         # Output the entire table if verbose is larger than 1
         if self.verbose>0:
+            output.write('4: nb [1/fm^3] ed [1/fm^4] pr [1/fm^4]\n')
             for i in range(0,tab.get_nlines()):
                 output.write('4: %7.6e %7.6e %7.6e\n' %
                              (tab.get('nb',i),tab.get('ed',i),
@@ -166,11 +166,11 @@ class bayes_nstar_rot:
 
         edmax=nonrot.max('ed')
         if self.verbose>0:
-            output.write('edmax %7.6e %s\n' %
+            output.write('edmax: %7.6e %s\n' %
                          (edmax,o2sclpy.force_string(nonrot.get_unit('ed'))))
         edmax2=self.cu.convert('Msun/km^3','1/fm^4',edmax)
         if self.verbose>0:
-            output.write('edmax2 %s 1/fm^4\n' % (edmax2))
+            output.write('edmax2: %7.6e 1/fm^4\n' % (edmax2))
         tab.deriv_col('ed','pr','cs2')
         cs2_max=0
         for i in range(0,tab.get_nlines()):
@@ -186,7 +186,7 @@ class bayes_nstar_rot:
         rad14=nonrot.interp('gm',1.4,'r')
 
         if self.verbose>0:
-            output.write('rad14: %7.6e\n' % (rad14))
+            output.write('rad14: %7.6e km\n' % (rad14))
 
         # Construct the EOS object for the rotating neutron star class
         enri=o2sclpy.eos_nstar_rot_interp()
@@ -210,6 +210,8 @@ class bayes_nstar_rot:
         last_mass=0
         i=0
         done=False
+        output.write('i,ret,rho_cent[g/cm^3],grav. mass[Msun],'+
+                     'R_e[km],axis rat.,Omega[Hz],axis rat.')
         while i<30 and done==False:
             rho_cent=4.0e14*(10**float(i/29))
             ret=nr.fix_cent_eden_with_kepler(rho_cent)
@@ -221,7 +223,7 @@ class bayes_nstar_rot:
 
             # If the gravitational mass drops, stop early
             if i>0 and nr.Mass/nr.MSUN<last_mass:
-                output.write('rank %d stopping early\n' % (rank))
+                output.write('Rank %d stopping early.\n' % (rank))
                 done=True
             last_mass=nr.Mass/nr.MSUN
             i=i+1
@@ -253,7 +255,7 @@ class bayes_nstar_rot:
                 # Evaluate the point
                 print('Going to one_point(): %d %7.6e %7.6e %7.6e' %
                       (rank,n1,nbtrans,n2))
-                b.verbose=2
+                b.verbose=1
                 b.one_point(n1,nbtrans,n2,f)
 
                 # Check to see if the elapsed time is greater
