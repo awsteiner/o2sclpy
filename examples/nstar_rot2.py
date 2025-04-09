@@ -1,3 +1,9 @@
+"""
+Notes:
+
+Built on O2scl commit:
+https://github.com/awsteiner/o2scl/tree/08b62033ef84be35e0e330445ac1bf1e02e17b16
+"""
 import o2sclpy
 import sys
 import random
@@ -14,7 +20,7 @@ class bayes_nstar_rot:
         Initialize class data members 
         """
 
-        # Get a copy (a pointer to) the O$_2$scl unit conversion object,
+        # Get a copy (a pointer to) the O₂scl unit conversion object,
         # which also allows access to the constant library
         self.o2scl_settings=o2sclpy.lib_settings_class()
         self.cu=self.o2scl_settings.get_convert_units()
@@ -22,9 +28,6 @@ class bayes_nstar_rot:
 
         # Verbosity parameter
         self.verbose=0
-
-        # Output file handle
-        self.f=0
 
         # Total runtime
         self.runtime=0.0
@@ -35,15 +38,25 @@ class bayes_nstar_rot:
         """
         
         # Initial guess
-        n1=0.8
-        nbtrans=0.64
-        n2=0.7
+        #n1=0.8
+        #nbtrans=0.64
+        #n2=0.7
 
-        self.one_point(n1,nbtrans,n2)
+        n1=3.11681476319e-01
+        nbtrans=4.31297304991e-01
+        n2=3.61608550927e+00
+
+        with open('nstar_rot2_0.txt','w') as f:
+            self.verbose=2
+            (ret,data)=self.one_point(n1,nbtrans,n2,f,0)
+        f.close()
+
+        print('ret:',ret)
+        print('data:',data)
 
         return
 
-    def one_point(self,n1,nbtrans,n2,output,
+    def one_point(self,n1,nbtrans,n2,output,rank,
                   a=13,alpha=0.49,S=32,L=44):
         """
         Compute the likelihood function from the three parameters,
@@ -51,12 +64,19 @@ class bayes_nstar_rot:
         handle ``output``.
         """
 
+        # Collect the output data here
+        data={}
+
+        data["n1"]=n1
+        data["n2"]=n2
+        data["nbtrans"]=nbtrans
+        
         # Set up numerical parameters for low-density equation of state
         b=S-16-a
         beta=(L-3*a*alpha)/b/3
         n0=0.16
         if self.verbose>0:
-            output.write('----------------------------------------------')
+            output.write('----------------------------------------------\n')
             output.write('params (n1,nbtrans,n2): %7.6e %7.6e %7.6e\n' %
                          (n1,nbtrans,n2))
 
@@ -103,7 +123,7 @@ class bayes_nstar_rot:
                 output.write(('nb,n1,coeff1,edlast,prlast: '+
                               '%7.6e %7.6e %7.6e %7.6e %7.6e\n') % 
                              (nb,n1,coeff1,ed32,pr32))
-                return (1,0)
+                return (1,data)
             tab.line_of_data([nb,p1.ed_from_nb(nb),p1.pr_from_nb(nb)])
             if self.verbose>1:
                 output.write('2: %7.6e %7.6e %7.6e\n' %
@@ -128,7 +148,7 @@ class bayes_nstar_rot:
                 output.write(('nb,n2,coeff2,edlast,prlast: '+
                               '%7.6e %7.6e %7.6e %7.6e %7.6e\n') % 
                              (nb,n2,coeff2,edlast,prlast))
-                return (2,0)
+                return (2,data)
             tab.line_of_data([nb,p2.ed_from_nb(nb),p2.pr_from_nb(nb)])
             if self.verbose>1:
                 output.write('3: %7.6e %7.6e %7.6e\n' %
@@ -150,21 +170,31 @@ class bayes_nstar_rot:
         eti=o2sclpy.eos_tov_interp()
         eti.default_low_dens_eos()
         eti.read_table(tab,'ed','pr','nb')
+        
         ts=o2sclpy.tov_solve()
         ts.set_eos(eti)
         #ts.verbose=self.verbose
         ts.verbose=0
         ts.mvsr()
 
-        # Delete table rows beyond the maximum mass configuration
+        # Get results and compute maximum mass
         nonrot=ts.get_results()
+        if nonrot.max('gm')<2.0:
+            return (3,data)
+        
+        # Delete table rows beyond the maximum mass configuration
         prmax=nonrot.get('pr',nonrot.lookup('gm',nonrot.max('gm')))
         nonrot.delete_rows_func('pr>'+str(prmax))
+        edmax=nonrot.max('ed')
+
+        # Collect non-rotating data
+        data["M_max_nonrot"]=nonrot.max('gm')
+        data["pr_max_nonrot"]=prmax
+        data["ed_max_nonrot"]=edmax
 
         # Compute the maximum speed of sound only below
         # the maximum energy density
 
-        edmax=nonrot.max('ed')
         if self.verbose>0:
             output.write('edmax: %7.6e %s\n' %
                          (edmax,o2sclpy.force_string(nonrot.get_unit('ed'))))
@@ -182,12 +212,22 @@ class bayes_nstar_rot:
         if self.verbose>0:
             output.write('cs2_max: %7.6e\n' % (cs2_max))
 
+        if cs2_max>1.0:
+            return (4,data)
+        data["cs2_max_nonrot"]=cs2_max
+
         # The radius of a 1.4 solar mass neutron star
         rad14=nonrot.interp('gm',1.4,'r')
+        data["rad_14_nonrot"]=rad14
 
         if self.verbose>0:
             output.write('rad14: %7.6e km\n' % (rad14))
 
+        # The likelihood
+            
+        like=math.exp(-(rad14-11.93)**2/0.32**2)
+        data["like"]=like
+            
         # Construct the EOS object for the rotating neutron star class
         enri=o2sclpy.eos_nstar_rot_interp()
         edv=o2sclpy.std_vector()    
@@ -211,11 +251,17 @@ class bayes_nstar_rot:
         i=0
         done=False
         output.write('i,ret,rho_cent[g/cm^3],grav. mass[Msun],'+
-                     'R_e[km],axis rat.,Omega[Hz],axis rat.')
+                     'R_e[km],axis rat.,Omega[Hz],axis rat.\n')
         while i<30 and done==False:
             rho_cent=4.0e14*(10**float(i/29))
             ret=nr.fix_cent_eden_with_kepler(rho_cent)
 
+            data["rc_"+str(i)]=rho_cent
+            data["gm_"+str(i)]=nr.Mass/nr.MSUN
+            data["Re_"+str(i)]=nr.R_e/1.0e5
+            data["om_"+str(i)]=nr.Omega
+            data["ar_"+str(i)]=nr.r_ratio
+            
             output.write('%d %d %7.6e %7.6e %7.6e %7.6e %7.6e %7.6e\n' %
                   (i,ret,rho_cent,nr.Mass/nr.MSUN,nr.R_e/1.0e5,
                    nr.r_p/nr.r_e,nr.Omega,nr.r_ratio))
@@ -228,7 +274,7 @@ class bayes_nstar_rot:
             last_mass=nr.Mass/nr.MSUN
             i=i+1
 
-        return (0,0)
+        return (0,data)
 
     def loop_time(self,rank,size,rtime):
         """
@@ -242,21 +288,41 @@ class bayes_nstar_rot:
 
             start_time=MPI.Wtime()
 
-            N=100
+            N=10000
             i=0
             done=False
+
+            n1_old=3.11681476319e-01
+            nbtrans_old=4.31297304991e-01
+            n2_old=3.61608550927e+00
+            (ret_old,data_old)=self.one_point(n1_old,nbtrans_old,
+                                          n2_old,f,rank)
+            print('ret,data["like"]',ret_old,data_old["like"])
+            
             while done==False and i<N:
 
-                # Randomize the parameters
-                n1=random.random()*4.0+0.01
-                n2=random.random()*4.0+0.01
-                nbtrans=random.random()*0.66+0.33
+                n1_new=n1_old+random.random()*0.2-0.1
+                nbtrans_new=nbtrans_old+random.random()*0.08-0.04
+                n2_new=n2_old+random.random()*0.4-0.2
 
                 # Evaluate the point
                 print('Going to one_point(): %d %7.6e %7.6e %7.6e' %
-                      (rank,n1,nbtrans,n2))
-                b.verbose=1
-                b.one_point(n1,nbtrans,n2,f)
+                      (rank,n1_new,nbtrans_new,n2_new))
+                self.verbose=1
+                (ret_new,data_new)=self.one_point(n1_new,nbtrans_new,
+                                                  n2_new,f,rank)
+
+                print('ret',ret_new)
+                if ret_new==0:
+                    print('ret,data["like"]',ret_new,data_new["like"])
+
+                    ratio=data_new["like"]/data_old["like"]
+                    if random.random()<ratio:
+                        data_old=data_new
+                        ret_old=ret_new
+                        print('Accept')
+                    else:
+                        print('Reject')
 
                 # Check to see if the elapsed time is greater
                 # than the request runtime
