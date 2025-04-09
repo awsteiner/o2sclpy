@@ -271,6 +271,13 @@ class bayes_nstar_rot:
             if i>0 and nr.Mass/nr.MSUN<last_mass:
                 output.write('Rank %d stopping early.\n' % (rank))
                 done=True
+                for j in range(i+1,30):
+                    data["rc_"+str(j)]=0.0
+                    data["gm_"+str(j)]=0.0
+                    data["Re_"+str(j)]=0.0
+                    data["om_"+str(j)]=0.0
+                    data["ar_"+str(j)]=0.0
+                
             last_mass=nr.Mass/nr.MSUN
             i=i+1
 
@@ -282,6 +289,22 @@ class bayes_nstar_rot:
         is greater than the runtime specified in ``rtime``. 
         """
 
+        tab=o2sclpy.table_units()
+        tab.line_of_names('M_max_nonrot ed_max_nonrot pr_max_nonrot ')
+        tab.line_of_units('Msun 1/fm^4 1/fm^4')
+        tab.line_of_names('cs2_max_nonrot rad_14_nonrot')
+        tab.line_of_units('. km')
+        tab.line_of_names('like n1 nbtrans n2')
+        tab.line_of_units('. . 1/fm^3 .')
+
+        for i in range(0,30):
+            tab.line_of_names('rc_'+str(i)+' '+
+                              'gm_'+str(i)+' '+
+                              'Re_'+str(i)+' '+
+                              'om_'+str(i)+' '+
+                              'ar_'+str(i)+' ')
+            tab.line_of_units('g/cm^3 Msun km Hz .')
+        
         with open(('nstar_rot2_'+str(rank))+'.txt','w') as f:
             print('Starting run on rank',rank,'of',size,'with time',
                   rtime)
@@ -317,16 +340,27 @@ class bayes_nstar_rot:
                     print('ret,data["like"]',ret_new,data_new["like"])
 
                     ratio=data_new["like"]/data_old["like"]
-                    if random.random()<ratio:
+                    r=random.random()
+                    if r<ratio:
                         data_old=data_new
                         ret_old=ret_new
-                        print('Accept')
+                        print('Accept',r,data_old["like"],data_new["like"])
                     else:
-                        print('Reject')
+                        print('Reject',r,data_old["like"],data_new["like"])
+                else:
+                    print('Skip (reject)')
+
+                # Copy the dictionary entries to the last row of the table
+                nlast=tab.get_nlines()
+                tab.set_nlines(nlast+1)
+                print('data_old',data_old)
+                for key,value in data_old.items():
+                    tab.set(key,nlast,value)
 
                 # Check to see if the elapsed time is greater
                 # than the request runtime
                 elapsed=MPI.Wtime()-start_time
+                print('elapsed,rtime',elapsed,rtime)
                 if elapsed>rtime:
                     print('Rank',rank,'elapsed',elapsed,
                           'greater than rtime',rtime,'.')
@@ -337,7 +371,15 @@ class bayes_nstar_rot:
                 
         f.close()
 
+        # Output table to file
+        filename='nstar_rot2_'+str(rank)+'.o2'
+        hf=o2sclpy.hdf_file()
+        hf.open_or_create(filename)
+        o2sclpy.hdf_output_table(hf,tab,'nstar_rot2')
+        hf.close()
+
         return
+    
     
 if __name__ == '__main__':
 
