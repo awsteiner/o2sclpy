@@ -1,6 +1,8 @@
 """
 Notes:
 
+* See also https://awsteiner.org/code/o2scl/html/class/nstar_rot.html
+
 Built on O2scl commit:
 https://github.com/awsteiner/o2scl/tree/08b62033ef84be35e0e330445ac1bf1e02e17b16
 """
@@ -58,13 +60,13 @@ class bayes_nstar_rot:
 
     def one_point(self,n1,nbtrans,n2,output,rank,
                   a=13,alpha=0.49,S=32,L=44):
-        """
-        Compute the likelihood function from the three parameters,
-        ``n1``, ``nbtrans``, and ``n2`` and place output in file
-        handle ``output``.
+        """Compute the likelihood function from the three parameters,
+        ``n1``, the index of the first polytrope, ``nbtrans``, the
+        transition density, and ``n2`` the index of the second
+        polytrope, and place output in file handle ``output``.
         """
 
-        # Collect the output data here
+        # Collect the output data in this dictionary
         data={}
 
         data["n1"]=n1
@@ -72,6 +74,7 @@ class bayes_nstar_rot:
         data["nbtrans"]=nbtrans
         
         # Set up numerical parameters for low-density equation of state
+        # from Gandolfi et al. (2014).
         b=S-16-a
         beta=(L-3*a*alpha)/b/3
         n0=0.16
@@ -251,7 +254,7 @@ class bayes_nstar_rot:
         i=0
         done=False
         output.write('i,ret,rho_cent[g/cm^3],grav. mass[Msun],'+
-                     'R_e[km],axis rat.,Omega[Hz],axis rat.\n')
+                     'R_e[km],axis rat.,Omega[radians/s],axis rat.\n')
         while i<30 and done==False:
             rho_cent=4.0e14*(10**float(i/29))
             ret=nr.fix_cent_eden_with_kepler(rho_cent)
@@ -303,7 +306,7 @@ class bayes_nstar_rot:
                               'Re_'+str(i)+' '+
                               'om_'+str(i)+' '+
                               'ar_'+str(i)+' ')
-            tab.line_of_units('g/cm^3 Msun km Hz .')
+            tab.line_of_units('g/cm^3 Msun km radians/s .')
         
         with open(('nstar_rot2_'+str(rank))+'.txt','w') as f:
             print('Starting run on rank',rank,'of',size,'with time',
