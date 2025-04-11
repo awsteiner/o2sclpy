@@ -71,7 +71,10 @@ def test_all():
         pb.scatter([x[:,0],x[:,1],None,y2[:,1]])
         pb.show()
 
+    # A point for testing
     v=numpy.array([0.5,0.5])
+
+    # Two points for testing
     v2=numpy.zeros((2,2))
     v2[0,0]=0.5
     v2[0,1]=0.5
@@ -90,6 +93,7 @@ def test_all():
             print('sklearn GP',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
+            
             im1=o2sclpy.interpm_sklearn_gp()
             if ik==0:
                 im1.set_data_str(x,y,'verbose=0,test_size=0.1')
@@ -99,6 +103,7 @@ def test_all():
             else:
                 im1.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
                                        'form_in=moto'))
+                
             exact=f(v[0],v[1])
             interp1a=im1.eval(v)
             print('exact:',exact)
@@ -162,6 +167,7 @@ def test_all():
             print('TF DNN',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
+            
             im2=o2sclpy.interpm_tf_dnn()
             if ik==0:
                 im2.set_data(x,y,verbose=0,epochs=200,
@@ -182,7 +188,8 @@ def test_all():
                              hlayers=[128,64,32,16],
                              transform_in='moto',
                              transform_out='moto')
-            exact=f(0.5,0.5)
+                
+            exact=f(v[0],v[1])
             interp2a=im2.eval(v)[0]
             print('eval:',type(interp2a),numpy.shape(interp2a))
             print('exact,interp 3: %7.6e %7.6e' % (exact,interp2a))
@@ -211,7 +218,7 @@ def test_all():
                 im3.set_data(x,y,verbose=0,test_size=0.1,solver='lbfgs',
                              max_iter=1000,transform_in='moto',
                              transform_out='moto')
-            exact=f(0.5,0.5)
+            exact=f(v[0],v[1])
             interp3a=im3.eval(v)
             print('eval:',numpy.shape(interp3a))
             print('exact,interp3a 4: %7.6e %7.6e' % (exact,interp3a[0]))
@@ -251,7 +258,8 @@ def test_all():
             else:
                 im4.set_data(x,y,verbose=0,test_size=0.1,
                              transform_in='moto',transform_out='moto')
-            exact=f(0.5,0.5)
+                
+            exact=f(v[0],v[1])
             interp4a=im4.eval(v)
             print('eval:',numpy.shape(interp4a))
             print('exact,interp 5: %7.6e %7.6e' % (exact,interp4a[0]))
@@ -295,7 +303,7 @@ def test_all():
                              hlayers=[128,64,32,16],
                              transform_in='moto',transform_out='moto')
                 
-            exact=f(0.5,0.5)
+            exact=f(v[0],v[1])
             interp5a=im5.eval(v)
             print('eval:',numpy.shape(interp5a))
             print('exact,interp5a: %7.6e %7.6e' % (exact,interp5a[0]))

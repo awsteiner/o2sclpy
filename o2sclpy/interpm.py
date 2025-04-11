@@ -228,11 +228,8 @@ class interpm_sklearn_gp:
         
         """
 
-        # The sklearn GPR object expects the input to be a
-        # two-dimensional numpy array. The output of the sklearn GPR
-        # object is either one- or two-dimensional, depending on the
-        # number of outputs. However, the sklearn transformers require
-        # two-dimensional arrays as inputs and outputs.
+        # The sklearn transformers require two-dimensional
+        # arrays as inputs and outputs.
         
         v_trans=0
         try:
@@ -245,6 +242,9 @@ class interpm_sklearn_gp:
                    'in interpm_sklearn_gp::eval():'),e)
             raise
 
+        # The sklearn GPR object expects the input to be a
+        # two-dimensional numpy array.
+        
         try:
             yp=self.gp.predict(v_trans)
         except Exception as e:
@@ -252,7 +252,21 @@ class interpm_sklearn_gp:
                    'in interpm_sklearn_gp::eval():'),e)
             raise
 
-        yp_trans=yp
+        # The output of the sklearn GPR object is either one- or
+        # two-dimensional, depending on the number of outputs.
+        # The sklearn transformers require two-dimensional
+        # arrays as inputs and outputs.
+
+        yp_trans=0
+        try:
+            if self.transform_out!='none':
+                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+            else:
+                yp_trans=yp
+        except Exception as e:
+            print(('Exception at output transformation '+
+                   'in interpm_sklearn_dtr::eval_list():'),e)
+            raise
     
         if self.outformat=='list':
             if self.verbose>1:
