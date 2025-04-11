@@ -31,8 +31,23 @@ if 'pytest' in sys.modules:
 def f(x,y):
     return (numpy.sin(x*10)+2.0*numpy.tan(y))/5.0+0.14
 
-def f2(x,y):
+def dfdx(x,y):
+    return (10.0*numpy.cos(x*10)+2.0*numpy.tan(y))/5.0
+
+def dfdy(x,y):
+    return (numpy.sin(x*10)+(2.0/numpy.cos(y))**2)/5.0
+
+def d2fdx2(x,y):
+    return (-100.0*numpy.sin(x*10)+2.0*numpy.tan(y))/5.0
+
+def g(x,y):
     return (numpy.sin(x*5)+2.0*numpy.tan(y))/5.0+0.24
+
+def dgdx(x,y):
+    return (4.0*numpy.cos(x*5)+2.0*numpy.tan(y))/5.0
+
+def dgdy(x,y):
+    return (numpy.sin(x*5)+2.0/(numpy.cos(y))**2)/5.0
 
 def test_all():
 
@@ -49,13 +64,20 @@ def test_all():
     y2=numpy.zeros((N,2))
     for i in range(0,N):
         y2[i,0]=f(x[i,0],x[i,1])
-        y2[i,1]=f2(x[i,0],x[i,1])
+        y2[i,1]=g(x[i,0],x[i,1])
 
-    if plots:
+    if False and plots:
         pb=o2sclpy.plot_base()
         pb.scatter([x[:,0],x[:,1],None,y2[:,1]])
         pb.show()
 
+    v=numpy.array([0.5,0.5])
+    v2=numpy.zeros((2,2))
+    v2[0,0]=0.5
+    v2[0,1]=0.5
+    v2[1,0]=0.6
+    v2[1,1]=0.6
+    
     for ik in range(0,3):
 
         # AWS, 3/9/25: I still periodically have problems with
@@ -77,41 +99,36 @@ def test_all():
             else:
                 im1.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
                                        'form_in=moto'))
-            exact=f(0.5,0.5)
-            v=numpy.array([0.5,0.5])
-            interp=im1.eval(v)
-            print('exact,interp 1: %7.6e %7.6e' % (exact,interp[0]))
-            assert numpy.allclose(exact,interp[0],rtol=gp_tol)
+            exact=f(v[0],v[1])
+            interp1a=im1.eval(v)
+            print('exact:',exact)
+            print('interp1a:',interp1a)
+            assert numpy.allclose(exact,interp1a[0],rtol=gp_tol)
 
-            v2=numpy.zeros((2,2))
-            v2[0,0]=0.5
-            v2[0,1]=0.5
-            v2[1,0]=0.6
-            v2[1,1]=0.6
-            interp2=im1.eval_list(v2)
-            print('eval_list:',numpy.shape(interp2))
-            assert numpy.allclose(f(0.5,0.5),interp2[0],rtol=gp_tol)
-            assert numpy.allclose(f(0.6,0.6),interp2[1],rtol=gp_tol)
+            exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
+            interp1b=im1.eval_list(v2)
+            print('exact:',exact)
+            print('interp1b:',interp1b)
+            assert numpy.allclose(exact,interp1b,rtol=gp_tol)
             
-            interp3,std3=im1.eval_unc(v)
-            print('exact,interp 2: %7.6e %7.6e %7.6e' %
-                  (exact,interp[0],std3[0]))
-            assert numpy.allclose(exact,interp3[0],rtol=gp_tol)
-            assert numpy.allclose(0,std3[0],atol=gp_tol)
+            exact=[f(v[0],v[1]),0.0]
+            interp1c,std1c=im1.eval_unc(v)
+            print('exact:',exact)
+            print('interp1c,std1c:',interp1c,std1c)
+            assert numpy.allclose(exact[0],interp1c,rtol=gp_tol)
+            assert numpy.allclose(exact[1],std1c,atol=gp_tol)
 
-            print('Saving:')
+            # Saving
             save_str=im1.save('test_interpm.o2','ti_gp')
-            
-            print('Loading:')
+            # Loading
             im1b=o2sclpy.interpm_sklearn_gp()
             im1b.load('test_interpm.o2','ti_gp')
             
-            print('Testing:')
-            interp4=im1b.eval_list(v2)
-            print('eval_list:',numpy.shape(interp4))
-            print('interp2,interp4:',interp2,interp4)
-            assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=gp_tol)
-            assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=gp_tol)
+            exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
+            interp1d=im1b.eval_list(v2)
+            print('exact:',exact)
+            print('interp1d:',interp1d)
+            assert numpy.allclose(exact,interp1d,rtol=gp_tol)
 
             # Test with two outputs instead of one
             im1c=o2sclpy.interpm_sklearn_gp()
@@ -123,9 +140,22 @@ def test_all():
             else:
                 im1c.set_data_str(x,y2,('verbose=0,test_size=0.1,trans'+
                                        'form_in=moto'))
-            interp5=im1c.eval(v)
-            print('interp5:',interp5)
-            print(f(0.5,0.5),f2(0.5,0.5))
+
+            # Test eval()
+            interp1e=im1c.eval(v)
+            exact=[f(v[0],v[1]),g(v[0],v[1])]
+            print('exact:',exact)
+            print('interp1e:',interp1e)
+            assert numpy.allclose(exact,interp1e,rtol=gp_tol)
+
+            # Test eval_list()
+            interp1f=im1c.eval_list(v2)
+            exact=[[f(v2[0,0],v2[0,1]),g(v2[0,0],v2[0,1])],
+                   [f(v2[1,0],v2[1,1]),g(v2[1,0],v2[1,1])]]
+            print('exact:',exact)
+            print('interp1f:',interp1f)
+            assert numpy.allclose(exact,interp1f,rtol=gp_tol)
+            
             print(' ')
                 
         if True:
@@ -153,13 +183,12 @@ def test_all():
                              transform_in='moto',
                              transform_out='moto')
             exact=f(0.5,0.5)
-            v=numpy.array([0.5,0.5])
-            interp=im2.eval(v)[0]
-            print('eval:',type(interp),numpy.shape(interp))
-            print('exact,interp 3: %7.6e %7.6e' % (exact,interp))
+            interp2a=im2.eval(v)[0]
+            print('eval:',type(interp2a),numpy.shape(interp2a))
+            print('exact,interp 3: %7.6e %7.6e' % (exact,interp2a))
             # AWS, 7/3/24: This test is pretty loose because the
             # neural network results are pretty random for few epochs
-            assert numpy.allclose(exact,interp,rtol=1.0)
+            assert numpy.allclose(exact,interp2a,rtol=1.0)
     
             print('Saving:')
             save_str=im2.save(('test_interpm_tf_'+str(ik)+'.keras'))
@@ -183,13 +212,17 @@ def test_all():
                              max_iter=1000,transform_in='moto',
                              transform_out='moto')
             exact=f(0.5,0.5)
-            v=numpy.array([0.5,0.5])
-            interp=im3.eval(v)
-            print('eval:',numpy.shape(interp))
-            print('exact,interp 4: %7.6e %7.6e' % (exact,interp[0]))
-            assert numpy.allclose(exact,interp,rtol=1.0)
+            interp3a=im3.eval(v)
+            print('eval:',numpy.shape(interp3a))
+            print('exact,interp3a 4: %7.6e %7.6e' % (exact,interp3a[0]))
+            assert numpy.allclose(exact,interp3a,rtol=1.0)
             print(' ')
     
+            interp3b=im3.eval_list(v2)
+            print('eval_list:',numpy.shape(interp3b))
+            assert numpy.allclose(f(0.5,0.5),interp3b[0],rtol=1.0)
+            assert numpy.allclose(f(0.6,0.6),interp3b[1],rtol=1.0)
+            
             print('Saving:')
             save_str=im3.save('test_interpm.o2','ti_mlpr')
             
@@ -198,11 +231,11 @@ def test_all():
             im3b.load('test_interpm.o2','ti_mlpr')
             
             print('Testing:')
-            interp4=im3b.eval_list(v2)
-            print('eval_list:',numpy.shape(interp4))
-            print('interp2,interp4:',interp2,interp4)
-            assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=1.0)
-            assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=1.0)
+            interp3c=im3b.eval_list(v2)
+            print('eval_list:',numpy.shape(interp3c))
+            print('interp3b,interp3c:',interp3b,interp3c)
+            assert numpy.allclose(f(0.5,0.5),interp3c[0],rtol=1.0)
+            assert numpy.allclose(f(0.6,0.6),interp3c[1],rtol=1.0)
             print(' ')
             
         if True:
@@ -219,13 +252,17 @@ def test_all():
                 im4.set_data(x,y,verbose=0,test_size=0.1,
                              transform_in='moto',transform_out='moto')
             exact=f(0.5,0.5)
-            v=numpy.array([0.5,0.5])
-            interp=im4.eval(v)
-            print('eval:',numpy.shape(interp))
-            print('exact,interp 5: %7.6e %7.6e' % (exact,interp[0]))
-            assert numpy.allclose(exact,interp,rtol=1.0)
+            interp4a=im4.eval(v)
+            print('eval:',numpy.shape(interp4a))
+            print('exact,interp 5: %7.6e %7.6e' % (exact,interp4a[0]))
+            assert numpy.allclose(exact,interp4a,rtol=1.0)
             print(' ')
     
+            interp4b=im4.eval_list(v2)
+            print('eval_list:',numpy.shape(interp4b))
+            assert numpy.allclose(f(0.5,0.5),interp4b[0],rtol=1.0)
+            assert numpy.allclose(f(0.6,0.6),interp4b[1],rtol=1.0)
+            
             print('Saving:')
             save_str=im4.save('test_interpm.o2','ti_dtr')
             
@@ -234,11 +271,11 @@ def test_all():
             im4b.load('test_interpm.o2','ti_dtr')
             
             print('Testing:')
-            interp4=im4b.eval_list(v2)
-            print('eval_list:',numpy.shape(interp4))
-            print('interp2,interp4:',interp2,interp4)
-            assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=1.0)
-            assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=1.0)
+            interp4c=im4b.eval_list(v2)
+            print('eval_list:',numpy.shape(interp4c))
+            print('interp4b,interp4:',interp4b,interp4c)
+            assert numpy.allclose(f(0.5,0.5),interp4c[0],rtol=1.0)
+            assert numpy.allclose(f(0.6,0.6),interp4c[1],rtol=1.0)
             print(' ')
             
         if True:
@@ -257,14 +294,30 @@ def test_all():
                 im5.set_data(x,y,verbose=0,test_size=0.1,
                              hlayers=[128,64,32,16],
                              transform_in='moto',transform_out='moto')
+                
             exact=f(0.5,0.5)
-            v=numpy.array([0.5,0.5])
-            interp=im5.eval(v)
-            print('eval:',numpy.shape(interp))
-            print('exact,interp 10: %7.6e %7.6e' % (exact,interp[0]))
-            assert numpy.allclose(exact,interp,rtol=1.0)
+            interp5a=im5.eval(v)
+            print('eval:',numpy.shape(interp5a))
+            print('exact,interp5a: %7.6e %7.6e' % (exact,interp5a[0]))
+            assert numpy.allclose(exact,interp5a,rtol=1.0)
             print(' ')
 
+            interp5b=im5.eval_list(v2)
+            print('eval_list:',numpy.shape(interp5b))
+            assert numpy.allclose(f(0.5,0.5),interp5b[0],rtol=1.0)
+            assert numpy.allclose(f(0.6,0.6),interp5b[1],rtol=1.0)
+
+            exact=dfdx(0.5,0.5)
+            interp5c=im5.deriv(v,0)
+            print('eval:',numpy.shape(interp5c))
+            print('exact,interp5c: %7.6e %7.6e' % (exact,interp5c[0]))
+            print(' ')
+            exact=dfdy(0.5,0.5)
+            interp5d=im5.deriv(v,1)
+            print('eval:',numpy.shape(interp5d))
+            print('exact,interp5a 10: %7.6e %7.6e' % (exact,interp5d[0]))
+            print(' ')
+            
             # AWS, 3/11/25: this doesn't work, because of issues with
             # pickling local objects.
             if False:
@@ -276,15 +329,15 @@ def test_all():
                 im5b.load('test_interpm_'+str(ik)+'.pt')
             
                 print('Testing:')
-                interp4=im5b.eval_list(v2)
-                print('eval_list:',numpy.shape(interp4))
-                print('interp2,interp4:',interp2,interp4)
-                assert numpy.allclose(f(0.5,0.5),interp4[0],rtol=1.0)
-                assert numpy.allclose(f(0.6,0.6),interp4[1],rtol=1.0)
+                interp5c=im5b.eval_list(v2)
+                print('eval_list:',numpy.shape(interp5c))
+                print('interp5b,interp5c:',interp5b,interp5c)
+                assert numpy.allclose(f(0.5,0.5),interp5c[0],rtol=1.0)
+                assert numpy.allclose(f(0.6,0.6),interp5c[1],rtol=1.0)
                 print(' ')
             
-            
-    quit()
+
+    return
         
 if __name__ == '__main__':
     test_all()

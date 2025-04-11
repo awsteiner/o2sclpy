@@ -615,14 +615,14 @@ class interpm_sklearn_dtr:
                 v_trans=v
         except Exception as e:
             print(('Exception at input transformation '+
-                   'in interpm_sklearn_gp::eval_list():'),e)
+                   'in interpm_sklearn_dtr::eval_list():'),e)
             raise
 
         try:
             yp=self.dtr.predict(v)
         except Exception as e:
             print(('Exception at prediction '+
-                   'in interpm_sklearn_gp::eval_list():'),e)
+                   'in interpm_sklearn_dtr::eval_list():'),e)
             raise
 
         yp_trans=0
@@ -633,17 +633,17 @@ class interpm_sklearn_dtr:
                 yp_trans=yp
         except Exception as e:
             print(('Exception at output transformation '+
-                   'in interpm_sklearn_gp::eval_list():'),e)
+                   'in interpm_sklearn_dtr::eval_list():'),e)
             raise
     
         if self.outformat=='list':
             if self.verbose>1:
-                print('interpm_sklearn_gp::eval_list():',
+                print('interpm_sklearn_dtr::eval_list():',
                       'list mode type(yp),v,yp:',
                       type(yp_trans),v,yp_trans)
             return yp_trans.tolist()
         if self.verbose>1:
-            print('interpm_sklearn_gp::eval_list():',
+            print('interpm_sklearn_dtr::eval_list():',
                   'array mode type(yp),v,yp:',
                   type(yp_trans),v,yp_trans)
         return numpy.ascontiguousarray(yp_trans)
@@ -925,14 +925,14 @@ class interpm_sklearn_mlpr:
                 v_trans=v
         except Exception as e:
             print(('Exception at input transformation '+
-                   'in interpm_sklearn_gp::eval_list():'),e)
+                   'in interpm_sklearn_mlpr::eval_list():'),e)
             raise
 
         try:
             yp=self.mlpr.predict(v_trans)
         except Exception as e:
             print(('Exception at prediction '+
-                   'in interpm_sklearn_gp::eval_list():'),e)
+                   'in interpm_sklearn_mlpr::eval_list():'),e)
             raise
 
         yp_trans=0
@@ -943,16 +943,17 @@ class interpm_sklearn_mlpr:
                 yp_trans=yp
         except Exception as e:
             print(('Exception at output transformation '+
-                   'in interpm_sklearn_gp::eval_list():'),e)
+                   'in interpm_sklearn_mlpr::eval_list():'),e)
+            raise
     
         if self.outformat=='list':
             if self.verbose>1:
-                print('interpm_sklearn_gp::eval_list():',
+                print('interpm_sklearn_mlpr::eval_list():',
                       'list mode type(yp),v,yp:',
                       type(yp_trans),v,yp_trans)
             return yp_trans.tolist()
         if self.verbose>1:
-            print('interpm_sklearn_gp::eval_list():',
+            print('interpm_sklearn_mlpr::eval_list():',
                   'array mode type(yp),v,yp:',
                   type(yp_trans),v,yp_trans)
         return numpy.ascontiguousarray(yp_trans)
@@ -1094,6 +1095,7 @@ class interpm_torch_dnn:
             except Exception as e:
                 print('Exception in interpm_torch_dnn::set_data()',
                       'at min,max().',e)
+                raise
             
             for j in range(0,numpy.shape(out_data)[0]):
                 if out_data[j,0]<minv_old:
@@ -1117,6 +1119,7 @@ class interpm_torch_dnn:
             except Exception as e:
                 print('Exception in interpm_torch_dnn::set_data()',
                       'at test_train_split().',e)
+                raise
         else:
             x_train=in_data_trans
             y_train=out_data_trans
@@ -1186,6 +1189,7 @@ class interpm_torch_dnn:
             except Exception as e:
                 print('Exception at input transformation ',
                       'in interpm_torch_dnn:',e)
+                raise
         else:
             v_trans=v
 
@@ -1197,12 +1201,14 @@ class interpm_torch_dnn:
             pred=self.dnn(ten_in)
         except Exception as e:
             print('Exception 4 in interpm_torch_dnn:',e)
+            raise
             
         if self.transform_out!='none':
             try:
                 pred_trans=self.SS2.inverse_transform(pred.detach().numpy())
             except Exception as e:
                 print('Exception 5 in interpm_torch_dnn:',e)
+                raise
         else:
             pred_trans=pred.detach().numpy()
     
@@ -1225,6 +1231,54 @@ class interpm_torch_dnn:
 
         return numpy.ascontiguousarray(pred_trans[0])
 
+    def eval_list(self,v):
+        """
+        Evaluate the NN at the list of points given in ``v``.
+        """
+
+        v_trans=0
+        try:
+            if self.transform_in!='none':
+                v_trans=self.SS1.transform(v)
+            else:
+                v_trans=v
+        except Exception as e:
+            print('Exception at input transformation ',
+                  'in interpm_torch_dnn::eval_list():',e)
+            raise
+
+        try:
+            import torch
+            ten_in=torch.zeros((len(v),self.nd_in))
+            for k in range(0,len(v)):
+                for j in range(0,self.nd_in):
+                    ten_in[k,j]=v_trans[k][j]
+            pred=self.dnn(ten_in)
+        except Exception as e:
+            print('Exception at evaluation in '+
+                  'interpm_torch_dnn::eval_list():',e)
+            raise
+
+        pred_trans=0
+        try:
+            if self.transform_out!='none':
+                pred_trans=self.SS2.inverse_transform(pred.detach().numpy())
+            else:
+                pred_trans=pred.detach().numpy()
+        except Exception as e:
+            print('Exception at output transformation '+
+                  'in interpm_torch_dnn::eval_list():',e)
+            raise
+    
+        if self.outformat=='list':
+            return pred_trans.tolist()
+        if self.verbose>1:
+            print('interpm_torch_dnn::eval_list():',
+                  'type(pred_trans),pred_trans:',
+                  type(pred_trans),pred_trans)
+            
+        return numpy.ascontiguousarray(pred_trans)
+
     def eval_unc(self,v):
         """
         Empty function because this interpolator does not currently
@@ -1241,12 +1295,13 @@ class interpm_torch_dnn:
         if self.transform_in!='none':
             v_trans=0
             try:
-                v_trans=self.SS1.transform(v.reshape(1,-1))
+                v_trans=self.SS1.transform(v.reshape(1,-1))[0]
             except Exception as e:
                 print('Exception at input transformation in ',
                       'interpm_torch_dnn:',e)
+                raise
         else:
-            v_trans=v.reshape(1,-1)
+            v_trans=v
 
         try:
             
@@ -1258,18 +1313,25 @@ class interpm_torch_dnn:
             ten_in.requires_grad_(True)
             pred=self.dnn(ten_in)
             pgrad=torch.autograd.grad(pred,ten_in,
-                                      grad_outputs=torch.ones_like(y),
-                                      create_graph=True)[0][i]
+                                      grad_outputs=torch.ones_like(pred),
+                                      create_graph=True)
+            # The grad function returns a tuple, and the gradient
+            # is the first entry of that tuple.
+            pgrad=pgrad[0][0][i]
+            print('pgrad',pgrad,type(pgrad))
+            
         except Exception as e:
             print('Exception 4 in interpm_torch_dnn::deriv():',e)
+            raise
             
         if self.transform_out!='none':
             try:
-                pgrad_trans=self.SS2.inverse_transform(pgrad)
+                pgrad_trans=self.SS2.inverse_transform(pgrad.detach().numpy())
             except Exception as e:
                 print('Exception 5 in interpm_torch_dnn::deriv():',e)
+                raise
         else:
-            pgrad_trans=pgrad
+            pgrad_trans=pgrad.detach().numpy()
     
         if self.outformat=='list':
             return pgrad_trans.tolist()
@@ -1280,28 +1342,15 @@ class interpm_torch_dnn:
                 print('interpm_torch_dnn::eval():',
                       'type(pgrad_trans),pgrad_trans:',
                       type(pgrad_trans),pgrad_trans)
-            # The output from tf.keras is float32, so we have to convert to
-            # float64 
-            n_out=numpy.shape(pgrad_trans[0])[0]
-            out_double=numpy.zeros((n_out))
-            for i in range(0,n_out):
-                out_double[i]=pgrad_trans[i]
                     
-            return numpy.ascontiguousarray(out_double)
+            return numpy.ascontiguousarray(pgrad_trans)
         
         if self.verbose>1:
             print('interpm_torch_dnn::eval():',
-                  'type(pgrad_trans[0]),pgrad_trans[0]:',
-                  type(pgrad_trans[0]),pgrad_trans[0])
+                  'type(pgrad_trans),pgrad_trans:',
+                  type(pgrad_trans),pgrad_trans)
 
-        # The output from tf.keras is float32, so we have to convert to
-        # float64 
-        n_out=numpy.shape(pgrad_trans[0])[0]
-        out_double=numpy.zeros((n_out))
-        for i in range(0,n_out):
-            out_double[i]=pgrad_trans[0][i]
-            
-        return numpy.ascontiguousarray(out_double)
+        return numpy.ascontiguousarray(pgrad_trans)
 
     def save(self,filename):
         """
@@ -1440,6 +1489,7 @@ class interpm_tf_dnn:
             except Exception as e:
                 print('Exception in interpm_tf_dnn::set_data()',
                       'at min,max().',e)
+                raise
             
             for j in range(0,numpy.shape(out_data)[0]):
                 if out_data[j,0]<minv_old:
@@ -1463,6 +1513,7 @@ class interpm_tf_dnn:
             except Exception as e:
                 print('Exception in interpm_tf_dnn::set_data()',
                       'at test_train_split().',e)
+                raise
         else:
             x_train=in_data_trans
             y_train=out_data_trans
@@ -1587,6 +1638,7 @@ class interpm_tf_dnn:
             self.set_data(in_data,out_data,**dct)
         except Exception as e:
             print('Calls in interpm_tf_dnn::set_data_str() failed.',e)
+            raise
 
         return
     
@@ -1602,6 +1654,7 @@ class interpm_tf_dnn:
             except Exception as e:
                 print('Exception at input transformation in interpm_tf_dnn:',
                       e)
+                raise
         else:
             v_trans=v.reshape(1,-1)
 
@@ -1615,12 +1668,14 @@ class interpm_tf_dnn:
                 pred=self.dnn.predict(v_trans,verbose=0)
         except Exception as e:
             print('Exception 4 in interpm_tf_dnn:',e)
+            raise
             
         if self.transform_out!='none':
             try:
                 pred_trans=self.SS2.inverse_transform(pred)
             except Exception as e:
                 print('Exception 5 in interpm_tf_dnn:',e)
+                raise
         else:
             pred_trans=pred
     
@@ -1665,7 +1720,8 @@ class interpm_tf_dnn:
         
     def eval_list(self,v):
         """
-        Evaluate the GP at point ``v``.
+        Evaluate the neural network at the list of points given
+        in ``v``.
         """
 
         v_trans=0
@@ -1676,13 +1732,15 @@ class interpm_tf_dnn:
                 v_trans=v
         except Exception as e:
             print(('Exception at input transformation '+
-                   'in interpm_sklearn_gp::eval_list():'),e)
+                   'in interpm_tf_dnn::eval_list():'),e)
+            raise
 
         try:
             yp=self.dnn.predict(v_trans, verbose=self.verbose)
         except Exception as e:
             print(('Exception at prediction '+
-                   'in interpm_sklearn_gp::eval_list():'),e)
+                   'in interpm_tf_dnn::eval_list():'),e)
+            raise
 
         yp_trans=0
         try:
@@ -1692,16 +1750,17 @@ class interpm_tf_dnn:
                 yp_trans=yp
         except Exception as e:
             print(('Exception at output transformation '+
-                   'in interpm_sklearn_gp::eval_list():'),e)
+                   'in interpm_tf_dnn::eval_list():'),e)
+            raise
     
         if self.outformat=='list':
             if self.verbose>1:
-                print('interpm_sklearn_gp::eval_list():',
+                print('interpm_tf_dnn::eval_list():',
                       'list mode type(yp),v,yp:',
                       type(yp_trans),v,yp_trans)
             return yp_trans.tolist()
         if self.verbose>1:
-            print('interpm_sklearn_gp::eval_list():',
+            print('interpm_tf_dnn::eval_list():',
                   'array mode type(yp),v,yp:',
                   type(yp_trans),v,yp_trans)
         return numpy.ascontiguousarray(yp_trans)
