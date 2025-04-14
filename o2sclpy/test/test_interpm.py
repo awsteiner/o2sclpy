@@ -104,7 +104,7 @@ def test_all():
                 im1.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
                                        'form_in=moto'))
                 
-            exact=f(v[0],v[1])
+            exact=[f(v[0],v[1])]
             interp1a=im1.eval(v)
             print('exact:',exact)
             print('interp1a:',interp1a)
@@ -189,18 +189,71 @@ def test_all():
                              transform_in='moto',
                              transform_out='moto')
                 
-            exact=f(v[0],v[1])
-            interp2a=im2.eval(v)[0]
-            print('eval:',type(interp2a),numpy.shape(interp2a))
-            print('exact,interp 3: %7.6e %7.6e' % (exact,interp2a))
+            exact=[f(v[0],v[1])]
+            interp2a=im2.eval(v)
+            print('exact:',exact);
+            print('interp2a:',interp2a);
             # AWS, 7/3/24: This test is pretty loose because the
             # neural network results are pretty random for few epochs
             assert numpy.allclose(exact,interp2a,rtol=1.0)
     
-            print('Saving:')
-            save_str=im2.save(('test_interpm_tf_'+str(ik)+'.keras'))
-            print(' ')
+            exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
+            interp2b=im1.eval_list(v2)
+            print('exact:',exact)
+            print('interp2b:',interp2b)
+            assert numpy.allclose(exact,interp2b,rtol=gp_tol)
+
+            im2.save(('test_interpm_tf_'+str(ik)+'.keras'))
+            im2b=o2sclpy.interpm_tf_dnn()
+            im2b.load(('test_interpm_tf_'+str(ik)+'.keras'))
+
+            if False:
+                # This doesn't work yet because we need to store
+                # the class data members in addition to the TF model
+                exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
+                interp2e=im2b.eval_list(v2)
+                print('exact:',exact)
+                print('interp2e:',interp2e)
+                assert numpy.allclose(exact,interp2e,rtol=gp_tol)
+
+            # Test with two outputs instead of one
+            if ik==0:
+                im2.set_data(x,y2,verbose=0,epochs=200,
+                             test_size=0.0,batch_size=8,
+                             activations=['relu','relu','relu','relu'],
+                             hlayers=[128,64,32,16])
+            elif ik==1:
+                im2.set_data(x,y2,verbose=0,epochs=200,
+                             test_size=0.0,batch_size=8,
+                             activations=['relu','relu','relu','relu'],
+                             hlayers=[128,64,32,16],
+                             transform_in='quant',
+                             transform_out='quant')
+            else:
+                im2.set_data(x,y2,verbose=0,epochs=200,
+                             test_size=0.0,batch_size=8,
+                             activations=['relu','relu','relu','relu'],
+                             hlayers=[128,64,32,16],
+                             transform_in='moto',
+                             transform_out='moto')
+
+            # Test eval()
+            interp2c=im1c.eval(v)
+            exact=[f(v[0],v[1]),g(v[0],v[1])]
+            print('exact:',exact)
+            print('interp2c:',interp2c)
+            assert numpy.allclose(exact,interp2c,rtol=gp_tol)
+
+            # Test eval_list()
+            interp2d=im1c.eval_list(v2)
+            exact=[[f(v2[0,0],v2[0,1]),g(v2[0,0],v2[0,1])],
+                   [f(v2[1,0],v2[1,1]),g(v2[1,0],v2[1,1])]]
+            print('exact:',exact)
+            print('interp2d:',interp2d)
+            assert numpy.allclose(exact,interp2d,rtol=gp_tol)
             
+            print(' ')
+                
         if True:
             print('sklearn MLPR',ik+1,'of 3')
             print(('──────────────────────────────────'+
@@ -218,17 +271,19 @@ def test_all():
                 im3.set_data(x,y,verbose=0,test_size=0.1,solver='lbfgs',
                              max_iter=1000,transform_in='moto',
                              transform_out='moto')
-            exact=f(v[0],v[1])
+                
+            exact=[f(v[0],v[1])]
             interp3a=im3.eval(v)
-            print('eval:',numpy.shape(interp3a))
-            print('exact,interp3a 4: %7.6e %7.6e' % (exact,interp3a[0]))
+            print('exact:',exact)
+            print('interp3a:',interp3a)
             assert numpy.allclose(exact,interp3a,rtol=1.0)
             print(' ')
     
+            exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp3b=im3.eval_list(v2)
-            print('eval_list:',numpy.shape(interp3b))
-            assert numpy.allclose(f(0.5,0.5),interp3b[0],rtol=1.0)
-            assert numpy.allclose(f(0.6,0.6),interp3b[1],rtol=1.0)
+            print('exact:',exact)
+            print('interp3b:',interp3b)
+            assert numpy.allclose(exact,interp3b,rtol=1.0)
             
             print('Saving:')
             save_str=im3.save('test_interpm.o2','ti_mlpr')
@@ -237,15 +292,45 @@ def test_all():
             im3b=o2sclpy.interpm_sklearn_mlpr()
             im3b.load('test_interpm.o2','ti_mlpr')
             
-            print('Testing:')
+            exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp3c=im3b.eval_list(v2)
-            print('eval_list:',numpy.shape(interp3c))
-            print('interp3b,interp3c:',interp3b,interp3c)
-            assert numpy.allclose(f(0.5,0.5),interp3c[0],rtol=1.0)
-            assert numpy.allclose(f(0.6,0.6),interp3c[1],rtol=1.0)
+            print('exact:',exact)
+            print('interp3c:',interp3c)
+            assert numpy.allclose(exact,interp3c,rtol=1.0)
+
+            # Test with two outputs instead of one
+            if ik==0:
+                im3.set_data(x,y2,verbose=0,test_size=0.1,solver='lbfgs',
+                             max_iter=1000)
+            elif ik==1:
+                im3.set_data(x,y2,verbose=0,test_size=0.1,solver='lbfgs',
+                             max_iter=1000,transform_in='quant',
+                             transform_out='quant')
+    
+            else:
+                im3.set_data(x,y2,verbose=0,test_size=0.1,solver='lbfgs',
+                             max_iter=1000,transform_in='moto',
+                             transform_out='moto')
+            
+            # Test eval()
+            interp3d=im1c.eval(v)
+            exact=[f(v[0],v[1]),g(v[0],v[1])]
+            print('exact:',exact)
+            print('interp3d:',interp3d)
+            assert numpy.allclose(exact,interp3d,rtol=gp_tol)
+
+            # Test eval_list()
+            interp3e=im1c.eval_list(v2)
+            exact=[[f(v2[0,0],v2[0,1]),g(v2[0,0],v2[0,1])],
+                   [f(v2[1,0],v2[1,1]),g(v2[1,0],v2[1,1])]]
+            print('exact:',exact)
+            print('interp3e:',interp3e)
+            assert numpy.allclose(exact,interp3e,rtol=gp_tol)
+            
             print(' ')
             
         if True:
+            
             print('sklearn DTR',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
@@ -259,31 +344,53 @@ def test_all():
                 im4.set_data(x,y,verbose=0,test_size=0.1,
                              transform_in='moto',transform_out='moto')
                 
-            exact=f(v[0],v[1])
+            exact=[f(v[0],v[1])]
             interp4a=im4.eval(v)
-            print('eval:',numpy.shape(interp4a))
-            print('exact,interp 5: %7.6e %7.6e' % (exact,interp4a[0]))
+            print('exact:',exact)
+            print('interp4a:',interp4a)
             assert numpy.allclose(exact,interp4a,rtol=1.0)
-            print(' ')
     
+            exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp4b=im4.eval_list(v2)
-            print('eval_list:',numpy.shape(interp4b))
-            assert numpy.allclose(f(0.5,0.5),interp4b[0],rtol=1.0)
-            assert numpy.allclose(f(0.6,0.6),interp4b[1],rtol=1.0)
+            print('exact:',exact)
+            print('interp4b:',interp4b)
+            assert numpy.allclose(exact,interp4b,rtol=1.0)
             
-            print('Saving:')
             save_str=im4.save('test_interpm.o2','ti_dtr')
-            
-            print('Loading:')
             im4b=o2sclpy.interpm_sklearn_dtr()
             im4b.load('test_interpm.o2','ti_dtr')
             
-            print('Testing:')
+            exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp4c=im4b.eval_list(v2)
-            print('eval_list:',numpy.shape(interp4c))
-            print('interp4b,interp4:',interp4b,interp4c)
-            assert numpy.allclose(f(0.5,0.5),interp4c[0],rtol=1.0)
-            assert numpy.allclose(f(0.6,0.6),interp4c[1],rtol=1.0)
+            print('exact:',exact)
+            print('interp4c:',interp4c)
+            assert numpy.allclose(exact,interp4c,rtol=1.0)
+
+            # Test with two outputs instead of one
+            if ik==0:
+                im4.set_data(x,y2,verbose=0,test_size=0.1)
+            elif ik==1:
+                im4.set_data(x,y2,verbose=0,test_size=0.1,
+                             transform_in='quant',transform_out='quant')
+            else:
+                im4.set_data(x,y2,verbose=0,test_size=0.1,
+                             transform_in='moto',transform_out='moto')
+            
+            # Test eval()
+            interp4d=im1c.eval(v)
+            exact=[f(v[0],v[1]),g(v[0],v[1])]
+            print('exact:',exact)
+            print('interp4d:',interp4d)
+            assert numpy.allclose(exact,interp4d,rtol=gp_tol)
+
+            # Test eval_list()
+            interp4e=im1c.eval_list(v2)
+            exact=[[f(v2[0,0],v2[0,1]),g(v2[0,0],v2[0,1])],
+                   [f(v2[1,0],v2[1,1]),g(v2[1,0],v2[1,1])]]
+            print('exact:',exact)
+            print('interp4e:',interp4e)
+            assert numpy.allclose(exact,interp4e,rtol=gp_tol)
+            
             print(' ')
             
         if True:
@@ -303,27 +410,26 @@ def test_all():
                              hlayers=[128,64,32,16],
                              transform_in='moto',transform_out='moto')
                 
-            exact=f(v[0],v[1])
+            exact=[f(v[0],v[1])]
             interp5a=im5.eval(v)
-            print('eval:',numpy.shape(interp5a))
-            print('exact,interp5a: %7.6e %7.6e' % (exact,interp5a[0]))
+            print('exact:',exact)
+            print('interp5a:',interp5a)
             assert numpy.allclose(exact,interp5a,rtol=1.0)
-            print(' ')
 
             interp5b=im5.eval_list(v2)
-            print('eval_list:',numpy.shape(interp5b))
-            assert numpy.allclose(f(0.5,0.5),interp5b[0],rtol=1.0)
-            assert numpy.allclose(f(0.6,0.6),interp5b[1],rtol=1.0)
+            print('exact:',exact)
+            print('interp5b:',interp5b)
+            assert numpy.allclose(exact,interp5b,rtol=1.0)
 
             exact=dfdx(0.5,0.5)
             interp5c=im5.deriv(v,0)
-            print('eval:',numpy.shape(interp5c))
-            print('exact,interp5c: %7.6e %7.6e' % (exact,interp5c[0]))
-            print(' ')
+            print('exact:',exact)
+            print('interp5c:',interp5c)
+
             exact=dfdy(0.5,0.5)
             interp5d=im5.deriv(v,1)
-            print('eval:',numpy.shape(interp5d))
-            print('exact,interp5a 10: %7.6e %7.6e' % (exact,interp5d[0]))
+            print('exact:',exact)
+            print('interp5d:',interp5d)
             print(' ')
             
             # AWS, 3/11/25: this doesn't work, because of issues with
@@ -342,8 +448,6 @@ def test_all():
                 print('interp5b,interp5c:',interp5b,interp5c)
                 assert numpy.allclose(f(0.5,0.5),interp5c[0],rtol=1.0)
                 assert numpy.allclose(f(0.6,0.6),interp5c[1],rtol=1.0)
-                print(' ')
-            
 
     return
         

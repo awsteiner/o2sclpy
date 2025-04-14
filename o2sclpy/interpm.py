@@ -254,19 +254,10 @@ class interpm_sklearn_gp:
 
         # The output of the sklearn GPR object is either one- or
         # two-dimensional, depending on the number of outputs.
-        # The sklearn transformers require two-dimensional
-        # arrays as inputs and outputs.
+        # We don't include a 'transform_out' option since the
+        # GPR class already has a 'normalize_y' option.
 
-        yp_trans=0
-        try:
-            if self.transform_out!='none':
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
-            else:
-                yp_trans=yp
-        except Exception as e:
-            print(('Exception at output transformation '+
-                   'in interpm_sklearn_dtr::eval_list():'),e)
-            raise
+        yp_trans=yp
     
         if self.outformat=='list':
             if self.verbose>1:
@@ -826,8 +817,11 @@ class interpm_sklearn_mlpr:
                                    early_stopping=early_stopping, 
                                    n_iter_no_change=n_iter_no_change,
                                    alpha=alpha)
-            self.mlpr.fit(in_train,out_train.ravel())
-                                                        
+            if len(out_train[0])==1:
+                self.mlpr.fit(in_train,out_train.ravel())
+            else:
+                self.mlpr.fit(in_train,out_train)
+                
             if test_size>0.0:
                 self.score=self.mlpr.score(in_test,out_test)
 
@@ -1659,6 +1653,12 @@ class interpm_tf_dnn:
     def eval(self,v):
         """
         Evaluate the NN at point ``v``.
+
+        The input ``v`` should be a one-dimensional numpy array
+        and the output is a one-dimensional numpy array, unless
+        outformat is ``list``, in which case the output is a
+        Python list.
+        
         """
 
         if self.transform_in!='none':
@@ -1801,7 +1801,7 @@ class interpm_tf_dnn:
         
         if filename[-6:]!='.keras':
             filename=filename+'.keras'
-        self.dnn=keras.load.load_model(filename)
+        self.dnn=keras.saving.load_model(filename)
 
         return
         
