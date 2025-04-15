@@ -1,7 +1,7 @@
 #  ───────────────────────────────────────────────────────────────────
 #  
-#  Copyright (C) 2022-2025, Satyajit Roy, Mahamudul Hasan Anik, and
-#  Andrew W. Steiner
+#  Copyright (C) 2022-2025, Andrew W. Steiner, Satyajit Roy, and
+#  Mahamudul Hasan Anik
 #  
 #  This file is part of O2sclpy.
 #  
@@ -291,7 +291,8 @@ class interpm_sklearn_gp:
         the output is a continuous one-dimensional numpy array.
         
         """
-
+        print('gp')
+        
         v_trans=0
         try:
             if self.transform_in!='none':
@@ -304,7 +305,7 @@ class interpm_sklearn_gp:
             raise
 
         try:
-            yp=self.gp.predict(v)
+            yp=self.gp.predict(v_trans)
         except Exception as e:
             print(('Exception at prediction '+
                    'in interpm_sklearn_gp::eval_list():'),e)
@@ -611,6 +612,7 @@ class interpm_sklearn_dtr:
         """
         Evaluate the GP at point ``v``.
         """
+        print('dtr')
 
         v_trans=0
         try:
@@ -624,7 +626,7 @@ class interpm_sklearn_dtr:
             raise
 
         try:
-            yp=self.dtr.predict(v)
+            yp=self.dtr.predict(v_trans)
         except Exception as e:
             print(('Exception at prediction '+
                    'in interpm_sklearn_dtr::eval_list():'),e)
@@ -634,6 +636,8 @@ class interpm_sklearn_dtr:
         try:
             if self.transform_out!='none':
                 yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                if yp_trans.ndim==2 and len(yp_trans[0])==1:
+                    yp_trans=yp_trans.reshape(1,-1)[0]
             else:
                 yp_trans=yp
         except Exception as e:
@@ -893,6 +897,8 @@ class interpm_sklearn_mlpr:
                 raise
         else:
             yp_trans=yp
+
+        print('here',numpy.shape(yp_trans),yp_trans.ndim)
     
         if self.outformat=='list':
             if self.verbose>1:
@@ -947,6 +953,8 @@ class interpm_sklearn_mlpr:
         try:
             if self.transform_out!='none':
                 yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                if yp_trans.ndim==2 and len(yp_trans[0])==1:
+                    yp_trans=yp_trans.reshape(1,-1)[0]
             else:
                 yp_trans=yp
         except Exception as e:
@@ -1228,14 +1236,16 @@ class interpm_torch_dnn:
             if self.verbose>1:
                 print('interpm_torch_dnn::eval():',
                       'type(pred_trans),pred_trans:',
-                      type(pred_trans),pred_trans)
+                      type(pred_trans),pred_trans,pred_trans.ndim,
+                      numpy.shape(pred_trans))
                 
             return numpy.ascontiguousarray(pred_trans)
         
         if self.verbose>1:
             print('interpm_torch_dnn::eval():',
                   'type(pred_trans[0]),pred_trans[0]:',
-                  type(pred_trans[0]),pred_trans[0])
+                  type(pred_trans[0]),pred_trans[0],pred_trans.ndim,
+                      numpy.shape(pred_trans))
 
         return numpy.ascontiguousarray(pred_trans[0])
 
@@ -1280,12 +1290,20 @@ class interpm_torch_dnn:
     
         if self.outformat=='list':
             return pred_trans.tolist()
+
+        # For a single output, torch outputs them in a column
+        # vector, so we switch to a row vector.
+        if pred_trans.ndim==2 and len(pred_trans[0])==1:
+            pred_trans2=pred_trans.reshape(1,-1)[0]
+        else:
+            pred_trans2=pred_trans
+        
         if self.verbose>1:
             print('interpm_torch_dnn::eval_list():',
-                  'type(pred_trans),pred_trans:',
-                  type(pred_trans),pred_trans)
+                  'type(pred_trans2),pred_trans2:',
+                  type(pred_trans2),pred_trans2)
             
-        return numpy.ascontiguousarray(pred_trans)
+        return numpy.ascontiguousarray(pred_trans2)
 
     def eval_unc(self,v):
         """
@@ -1306,7 +1324,7 @@ class interpm_torch_dnn:
                 v_trans=self.SS1.transform(v.reshape(1,-1))[0]
             except Exception as e:
                 print('Exception at input transformation in ',
-                      'interpm_torch_dnn:',e)
+                      'interpm_torch_dnn::deriv():',e)
                 raise
         else:
             v_trans=v
@@ -1329,14 +1347,21 @@ class interpm_torch_dnn:
             print('pgrad',pgrad,type(pgrad))
             
         except Exception as e:
-            print('Exception 4 in interpm_torch_dnn::deriv():',e)
+            print('Exception at model training',
+                  'in interpm_torch_dnn::deriv():',e)
             raise
             
         if self.transform_out!='none':
             try:
-                pgrad_trans=self.SS2.inverse_transform(pgrad.detach().numpy())
+                pgrad2=pgrad.detach().numpy()
+                print('hx',pgrad2,type(pgrad2),pgrad2.ndim,numpy.shape(pgrad2))
+                if pgrad2.ndim==1:
+                    pgrad2=pgrad2.reshape(-1,1)
+                print('hy',pgrad2,type(pgrad2),pgrad2.ndim,numpy.shape(pgrad2))
+                pgrad_trans=self.SS2.inverse_transform(pgrad2)
             except Exception as e:
-                print('Exception 5 in interpm_torch_dnn::deriv():',e)
+                print('Exception at inverse transformation',
+                      'in interpm_torch_dnn::deriv():',e)
                 raise
         else:
             pgrad_trans=pgrad.detach().numpy()
@@ -1347,14 +1372,14 @@ class interpm_torch_dnn:
         if pgrad_trans.ndim==1:
             
             if self.verbose>1:
-                print('interpm_torch_dnn::eval():',
+                print('interpm_torch_dnn::deriv():',
                       'type(pgrad_trans),pgrad_trans:',
                       type(pgrad_trans),pgrad_trans)
                     
             return numpy.ascontiguousarray(pgrad_trans)
         
         if self.verbose>1:
-            print('interpm_torch_dnn::eval():',
+            print('interpm_torch_dnn::deriv():',
                   'type(pgrad_trans),pgrad_trans:',
                   type(pgrad_trans),pgrad_trans)
 
@@ -1407,12 +1432,13 @@ class interpm_tf_dnn:
     """
 
     def __init__(self):
-        
+
         self.dnn=0
         self.SS1=0
         self.SS2=0
         self.transform_in=0
         self.transform_out=0
+        self.outformat='numpy'
         
         return
     
@@ -1766,6 +1792,8 @@ class interpm_tf_dnn:
             print(('Exception at output transformation '+
                    'in interpm_tf_dnn::eval_list():'),e)
             raise
+        if yp_trans.ndim==2 and len(yp_trans[0])==1:
+            yp_trans=yp_trans.reshape(1,-1)[0]
     
         if self.outformat=='list':
             if self.verbose>1:
@@ -1781,27 +1809,72 @@ class interpm_tf_dnn:
     
     def save(self,filename):
         """
-        Save the interpolation settings to a file
-
-        (No custom object support)
+        Save the interpolation settings to a pair of files. A
+        ``.keras`` file for the TensorFlow model and a ``.o2``
+        file for additional data.
         """
-        if filename[-6:]!='.keras':
-            filename=filename+'.keras'
-        self.dnn.save(filename)
+        if filename[-6:]=='.keras':
+            filename=filename[:-6]
+        self.dnn.save(filename+'.keras')
 
+        import pickle
+
+        # Construct dictionary of class data
+        loc_dct={"o2sclpy_version": version,
+                 "verbose": self.verbose,
+                 "outformat": self.outformat,
+                 "transform_in": self.transform_in,
+                 "transform_out": self.transform_out,
+                 "SS1": self.SS1,
+                 "SS2": self.SS2}
+
+        # Create a string from a tuple of the dictionary and the GPR
+        # object
+        byte_string=pickle.dumps(loc_dct)
+
+        # Write string to an HDF5 file
+        hf=o2sclpy.hdf_file()
+        hf.open_or_create(filename+'.o2')
+        hf.sets('interpm_tf_dnn',byte_string)
+        hf.close()
+        
         return
     
     def load(self,filename):
         """
-        Load the interpolation settings from a file
-
-        (No custom object support)
+        Load interpolator from a pair of ``.keras`` and ``.o2`` files.
         """
         import keras
         
-        if filename[-6:]!='.keras':
-            filename=filename+'.keras'
-        self.dnn=keras.saving.load_model(filename)
+        if filename[-6:]=='.keras':
+            filename=filename[:-6]
+        self.dnn=keras.saving.load_model(filename+'.keras')
+
+        import pickle
+        from sklearn.gaussian_process import GaussianProcessRegressor
+        
+        # Read string from file
+        hf=o2sclpy.hdf_file()
+        hf.open(filename+'.o2')
+        s=o2sclpy.std_string()
+        hf.gets('interpm_tf_dnn',s)
+        hf.close()
+        # Convert to a Python bytes object
+        sb=s.to_bytes()
+        
+        # Extract the class data
+        loc_dct=pickle.loads(sb)
+
+        if loc_dct["o2sclpy_version"]!=version:
+            raise ValueError("In function interpm_tf_dnn::load() "+
+                             "Cannot read files with version "+
+                             loc_dct["o2sclpy_version"])
+        self.verbose=loc_dct["verbose"]
+        self.outformat=loc_dct["outformat"]
+        self.transform_in=loc_dct["transform_in"]
+        self.transform_out=loc_dct["transform_out"]
+        self.SS1=loc_dct["SS1"]
+        self.SS2=loc_dct["SS2"]
 
         return
         

@@ -1,7 +1,7 @@
 #  ───────────────────────────────────────────────────────────────────
 #  
-#  Copyright (C) 2022-2025, Satyajit Roy, Mahamudul Hasan Anik, and
-#  Andrew W. Steiner
+#  Copyright (C) 2022-2025, Andrew W. Steiner, Satyajit Roy, and
+#  Mahamudul Hasan Anik
 #  
 #  This file is part of O2sclpy.
 #  
@@ -198,10 +198,10 @@ def test_all():
             assert numpy.allclose(exact,interp2a,rtol=1.0)
     
             exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
-            interp2b=im1.eval_list(v2)
+            interp2b=im2.eval_list(v2)
             print('exact:',exact)
             print('interp2b:',interp2b)
-            assert numpy.allclose(exact,interp2b,rtol=gp_tol)
+            assert numpy.allclose(exact,interp2b,rtol=1.0)
 
             im2.save(('test_interpm_tf_'+str(ik)+'.keras'))
             im2b=o2sclpy.interpm_tf_dnn()
@@ -214,7 +214,7 @@ def test_all():
                 interp2e=im2b.eval_list(v2)
                 print('exact:',exact)
                 print('interp2e:',interp2e)
-                assert numpy.allclose(exact,interp2e,rtol=gp_tol)
+                assert numpy.allclose(exact,interp2e,rtol=1.0)
 
             # Test with two outputs instead of one
             if ik==0:
@@ -238,19 +238,19 @@ def test_all():
                              transform_out='moto')
 
             # Test eval()
-            interp2c=im1c.eval(v)
+            interp2c=im2.eval(v)
             exact=[f(v[0],v[1]),g(v[0],v[1])]
             print('exact:',exact)
             print('interp2c:',interp2c)
-            assert numpy.allclose(exact,interp2c,rtol=gp_tol)
+            assert numpy.allclose(exact,interp2c,rtol=1.0)
 
             # Test eval_list()
-            interp2d=im1c.eval_list(v2)
+            interp2d=im2.eval_list(v2)
             exact=[[f(v2[0,0],v2[0,1]),g(v2[0,0],v2[0,1])],
                    [f(v2[1,0],v2[1,1]),g(v2[1,0],v2[1,1])]]
             print('exact:',exact)
             print('interp2d:',interp2d)
-            assert numpy.allclose(exact,interp2d,rtol=gp_tol)
+            assert numpy.allclose(exact,interp2d,rtol=1.0)
             
             print(' ')
                 
@@ -285,10 +285,7 @@ def test_all():
             print('interp3b:',interp3b)
             assert numpy.allclose(exact,interp3b,rtol=1.0)
             
-            print('Saving:')
             save_str=im3.save('test_interpm.o2','ti_mlpr')
-            
-            print('Loading:')
             im3b=o2sclpy.interpm_sklearn_mlpr()
             im3b.load('test_interpm.o2','ti_mlpr')
             
@@ -313,19 +310,19 @@ def test_all():
                              transform_out='moto')
             
             # Test eval()
-            interp3d=im1c.eval(v)
+            interp3d=im3.eval(v)
             exact=[f(v[0],v[1]),g(v[0],v[1])]
             print('exact:',exact)
             print('interp3d:',interp3d)
-            assert numpy.allclose(exact,interp3d,rtol=gp_tol)
+            assert numpy.allclose(exact,interp3d,rtol=1.0)
 
             # Test eval_list()
-            interp3e=im1c.eval_list(v2)
+            interp3e=im3.eval_list(v2)
             exact=[[f(v2[0,0],v2[0,1]),g(v2[0,0],v2[0,1])],
                    [f(v2[1,0],v2[1,1]),g(v2[1,0],v2[1,1])]]
             print('exact:',exact)
             print('interp3e:',interp3e)
-            assert numpy.allclose(exact,interp3e,rtol=gp_tol)
+            assert numpy.allclose(exact,interp3e,rtol=1.0)
             
             print(' ')
             
@@ -377,19 +374,19 @@ def test_all():
                              transform_in='moto',transform_out='moto')
             
             # Test eval()
-            interp4d=im1c.eval(v)
+            interp4d=im4.eval(v)
             exact=[f(v[0],v[1]),g(v[0],v[1])]
             print('exact:',exact)
             print('interp4d:',interp4d)
-            assert numpy.allclose(exact,interp4d,rtol=gp_tol)
+            assert numpy.allclose(exact,interp4d,rtol=1.0)
 
             # Test eval_list()
-            interp4e=im1c.eval_list(v2)
+            interp4e=im4.eval_list(v2)
             exact=[[f(v2[0,0],v2[0,1]),g(v2[0,0],v2[0,1])],
                    [f(v2[1,0],v2[1,1]),g(v2[1,0],v2[1,1])]]
             print('exact:',exact)
             print('interp4e:',interp4e)
-            assert numpy.allclose(exact,interp4e,rtol=gp_tol)
+            assert numpy.allclose(exact,interp4e,rtol=1.0)
             
             print(' ')
             
@@ -400,15 +397,17 @@ def test_all():
             im5=o2sclpy.interpm_torch_dnn()
             if ik==0:
                 im5.set_data(x,y,verbose=0,test_size=0.1,
-                             hlayers=[128,64,32,16])
+                             hlayers=[128,64,32,16],epochs=300)
             elif ik==1:
                 im5.set_data(x,y,verbose=0,test_size=0.1,
                              hlayers=[128,64,32,16],
-                             transform_in='quant',transform_out='quant')
+                             transform_in='quant',transform_out='quant',
+                             epochs=300)
             else:
                 im5.set_data(x,y,verbose=0,test_size=0.1,
                              hlayers=[128,64,32,16],
-                             transform_in='moto',transform_out='moto')
+                             transform_in='moto',transform_out='moto',
+                             epochs=300)
                 
             exact=[f(v[0],v[1])]
             interp5a=im5.eval(v)
@@ -416,17 +415,18 @@ def test_all():
             print('interp5a:',interp5a)
             assert numpy.allclose(exact,interp5a,rtol=1.0)
 
+            exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp5b=im5.eval_list(v2)
             print('exact:',exact)
             print('interp5b:',interp5b)
             assert numpy.allclose(exact,interp5b,rtol=1.0)
-
-            exact=dfdx(0.5,0.5)
+            
+            exact=[dfdx(0.5,0.5)]
             interp5c=im5.deriv(v,0)
             print('exact:',exact)
             print('interp5c:',interp5c)
 
-            exact=dfdy(0.5,0.5)
+            exact=[dfdy(0.5,0.5)]
             interp5d=im5.deriv(v,1)
             print('exact:',exact)
             print('interp5d:',interp5d)
