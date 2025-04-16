@@ -51,6 +51,8 @@ def dgdy(x,y):
 
 def test_all():
 
+    o2sclpy.check_tf_gpus()
+    
     N=1000
     x=numpy.zeros((N,2))
     for i in range(0,N):
@@ -169,6 +171,7 @@ def test_all():
                    '─────────────────────────────────'))
             
             im2=o2sclpy.interpm_tf_dnn()
+            print('gpu:',im2.check_gpu())
             if ik==0:
                 im2.set_data(x,y,verbose=0,epochs=200,
                              test_size=0.0,batch_size=8,

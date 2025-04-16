@@ -291,7 +291,6 @@ class interpm_sklearn_gp:
         the output is a continuous one-dimensional numpy array.
         
         """
-        print('gp')
         
         v_trans=0
         try:
@@ -470,6 +469,8 @@ class interpm_sklearn_dtr:
         self.transform_out=0
         self.SS1=0
         self.SS2=0
+        self.nd_in=0
+        self.nd_out=0
         
         return
     
@@ -484,6 +485,8 @@ class interpm_sklearn_dtr:
         self.verbose=verbose
         self.transform_in=transform_in
         self.transform_out=transform_out
+        self.nd_in=numpy.shape(in_data)[1]
+        self.nd_out=numpy.shape(out_data)[1]
         
         if self.verbose>0:
             print('interpm_sklearn_dtr::set_data():')
@@ -583,36 +586,55 @@ class interpm_sklearn_dtr:
         Evaluate the regression at point ``v``.
         """
 
-        try:
-            pred=self.dtr.predict([v])
-        except Exception as e:
-            print('Exception 4 in interpm_sklearn_dtr:',e)
-            raise
-    
-        if self.outformat=='list':
-            return pred.tolist()
+        if self.transform_in!='none':
+            v_trans=0
+            try:
+                v_trans=self.SS1.transform(v.reshape(1,-1))
+            except Exception as e:
+                print(('Exception at input transformation '+
+                       'in interpm_sklearn_dtr:'),
+                      e)
+                raise
+        else:
+            v_trans=v.reshape(1,-1)
 
-        if pred.ndim==1:
-            
+        yp=self.dtr.predict(v_trans)
+        
+        if self.transform_out!='none':
+            try:
+                if yp.ndim==1:
+                    yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                else:
+                    yp_trans=self.SS2.inverse_transform(yp)
+            except Exception as e:
+                print('Exception 5 in interpm_sklearn_dtr:',e)
+                raise
+        else:
+            yp_trans=yp
+
+        if self.outformat=='list':
             if self.verbose>1:
                 print('interpm_sklearn_dtr::eval():',
-                      'type(pred),pred:',
-                      type(pred),pred)
-                    
-            return numpy.ascontiguousarray(pred)
-        
+                      'list mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            return yp_trans[0].tolist()
+        if yp_trans.ndim==1:
+            if self.verbose>1:
+                print('interpm_sklearn_dtr::eval():',
+                      'ndim=1 mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            return numpy.ascontiguousarray(yp_trans)
+            #return numpy.array(yp_trans)
         if self.verbose>1:
             print('interpm_sklearn_dtr::eval():',
-                  'type(pred[0]),pred[0]:',
-                  type(pred[0]),pred[0])
-
-        return numpy.ascontiguousarray(pred)
+                  'array mode type(yp[0]),v,yp[0]:',
+                  type(yp_trans[0]),v,yp_trans[0])
+        return numpy.ascontiguousarray(yp_trans[0])
 
     def eval_list(self,v):
         """
         Evaluate the GP at point ``v``.
         """
-        print('dtr')
 
         v_trans=0
         try:
@@ -635,7 +657,10 @@ class interpm_sklearn_dtr:
         yp_trans=0
         try:
             if self.transform_out!='none':
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                if yp.ndim==1:
+                    yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                else:
+                    yp_trans=self.SS2.inverse_transform(yp)
                 if yp_trans.ndim==2 and len(yp_trans[0])==1:
                     yp_trans=yp_trans.reshape(1,-1)[0]
             else:
@@ -740,6 +765,8 @@ class interpm_sklearn_mlpr:
         self.transform_out=0
         self.SS1=0
         self.SS2=0
+        self.nd_in=0
+        self.nd_out=0
         
         return
     
@@ -757,6 +784,8 @@ class interpm_sklearn_mlpr:
         self.verbose=verbose
         self.transform_in=transform_in
         self.transform_out=transform_out
+        self.nd_in=numpy.shape(in_data)[1]
+        self.nd_out=numpy.shape(out_data)[1]
         
         if self.verbose>0:
             print('interpm_sklearn_mlpr::set_data():')
@@ -891,15 +920,16 @@ class interpm_sklearn_mlpr:
         
         if self.transform_out!='none':
             try:
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                if yp.ndim==1:
+                    yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                else:
+                    yp_trans=self.SS2.inverse_transform(yp)
             except Exception as e:
                 print('Exception 5 in interpm_sklearn_mlpr:',e)
                 raise
         else:
             yp_trans=yp
 
-        print('here',numpy.shape(yp_trans),yp_trans.ndim)
-    
         if self.outformat=='list':
             if self.verbose>1:
                 print('interpm_sklearn_mlpr::eval():',
@@ -952,7 +982,10 @@ class interpm_sklearn_mlpr:
         yp_trans=0
         try:
             if self.transform_out!='none':
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                if yp.ndim==1:
+                    yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                else:
+                    yp_trans=self.SS2.inverse_transform(yp)
                 if yp_trans.ndim==2 and len(yp_trans[0])==1:
                     yp_trans=yp_trans.reshape(1,-1)[0]
             else:
@@ -1344,7 +1377,7 @@ class interpm_torch_dnn:
             # The grad function returns a tuple, and the gradient
             # is the first entry of that tuple.
             pgrad=pgrad[0][0][i]
-            print('pgrad',pgrad,type(pgrad))
+            #print('pgrad',pgrad,type(pgrad))
             
         except Exception as e:
             print('Exception at model training',
@@ -1354,10 +1387,12 @@ class interpm_torch_dnn:
         if self.transform_out!='none':
             try:
                 pgrad2=pgrad.detach().numpy()
-                print('hx',pgrad2,type(pgrad2),pgrad2.ndim,numpy.shape(pgrad2))
-                if pgrad2.ndim==1:
+                #print('hx',pgrad2,type(pgrad2),pgrad2.ndim,
+                #numpy.shape(pgrad2))
+                if pgrad2.ndim<=1:
                     pgrad2=pgrad2.reshape(-1,1)
-                print('hy',pgrad2,type(pgrad2),pgrad2.ndim,numpy.shape(pgrad2))
+                #print('hy',pgrad2,type(pgrad2),pgrad2.ndim,
+                #numpy.shape(pgrad2))
                 pgrad_trans=self.SS2.inverse_transform(pgrad2)
             except Exception as e:
                 print('Exception at inverse transformation',
@@ -1439,8 +1474,24 @@ class interpm_tf_dnn:
         self.transform_in=0
         self.transform_out=0
         self.outformat='numpy'
+        self.nd_in=0
+        self.nd_out=0
         
         return
+
+    def check_gpu(self):
+        """
+        Check if Tensorflow is likely to use the GPU
+        """
+        import tensorflow as tf
+        try:
+            with tf.device('/GPU:0'):
+                a = tf.constant([[1.0, 2.0]])
+                b = tf.constant([[3.0], [4.0]])
+                c = tf.matmul(a, b)
+        except:
+            return False
+        return True
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  activations=['relu'],batch_size=None,epochs=100,
@@ -1448,7 +1499,7 @@ class interpm_tf_dnn:
                  test_size=0.0,evaluate=False,
                  hlayers=[8,8],loss='mean_squared_error',
                  es_min_delta=1.0e-4,es_patience=100,es_start=50,
-                 tf_logs='1'):
+                 tf_logs='1',tf_onednn_opts='1'):
         """Set the input and output data to train the interpolator
 
         Some activation functions: 'relu', 'sigmoid', 'tanh'. If the
@@ -1463,7 +1514,7 @@ class interpm_tf_dnn:
 
         from sklearn.model_selection import train_test_split
         import os
-        os.environ['TF_ENABLE_ONEDNN_OPTS']='1'
+        os.environ['TF_ENABLE_ONEDNN_OPTS']=tf_onednn_opts
         os.environ['TF_CPP_MIN_LOG_LEVEL']=tf_logs
         import tensorflow as tf
         
@@ -1484,6 +1535,9 @@ class interpm_tf_dnn:
         self.verbose=verbose
         self.transform_in=transform_in
         self.transform_out=transform_out
+        
+        self.nd_in=numpy.shape(in_data)[1]
+        self.nd_out=numpy.shape(out_data)[1]
 
         # ----------------------------------------------------------
         # Handle the data transformations
@@ -1609,17 +1663,21 @@ class interpm_tf_dnn:
                                          start_from_epoch=es_start,
                                          mode='min')
             model.compile(loss=loss,optimizer='adam')
-                
+
+            # Convert numpy array to TensorFlow tensor
+            x_tf=tf.convert_to_tensor(x_train)
+            y_tf=tf.convert_to_tensor(y_train)
+            
             if test_size>0.0:
                 # Fit the model to training data
-                model.fit(x_train,y_train,batch_size=batch_size,
+                model.fit(x_tf,y_tf,batch_size=batch_size,
                           epochs=epochs,validation_data=(x_test,y_test),
                           verbose=self.verbose,
                           callbacks=[history,early_stopping])
                           
             else:
                 # Fit the model to training data
-                model.fit(x_train,y_train,batch_size=batch_size,
+                model.fit(x_tf,y_tf,batch_size=batch_size,
                           epochs=epochs,verbose=self.verbose,
                           callbacks=[history,early_stopping])
                 
@@ -1686,35 +1744,42 @@ class interpm_tf_dnn:
         Python list.
         
         """
+        import tensorflow as tf
 
         if self.transform_in!='none':
             v_trans=0
             try:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
             except Exception as e:
-                print('Exception at input transformation in interpm_tf_dnn:',
+                print('Exception at input transformation',
+                      'in interpm_tf_dnn::eval()',
                       e)
                 raise
         else:
             v_trans=v.reshape(1,-1)
 
         try:
+            # Convert numpy array to TensorFlow tensor
+            v_tf=tf.convert_to_tensor(v_trans)
+                
             # We don't want output at every point, even if verbose is
             # 1, so we use self.verbose-1 here for the argument to
             # the predict function.
             if self.verbose>1:
-                pred=self.dnn.predict(v_trans,verbose=self.verbose-1)
+                pred=self.dnn.predict(v_tf,verbose=self.verbose-1)
             else:
-                pred=self.dnn.predict(v_trans,verbose=0)
+                pred=self.dnn.predict(v_tf,verbose=0)
         except Exception as e:
-            print('Exception 4 in interpm_tf_dnn:',e)
+            print('Exception at prediction in',
+                  'interpm_tf_dnn::eval().',e)
             raise
             
         if self.transform_out!='none':
             try:
                 pred_trans=self.SS2.inverse_transform(pred)
             except Exception as e:
-                print('Exception 5 in interpm_tf_dnn:',e)
+                print('Exception in output transformation in',
+                      'interpm_tf_dnn::eval().',e)
                 raise
         else:
             pred_trans=pred
@@ -1763,6 +1828,7 @@ class interpm_tf_dnn:
         Evaluate the neural network at the list of points given
         in ``v``.
         """
+        import tensorflow as tf
 
         v_trans=0
         try:
@@ -1776,7 +1842,10 @@ class interpm_tf_dnn:
             raise
 
         try:
-            yp=self.dnn.predict(v_trans, verbose=self.verbose)
+            # Convert numpy array to TensorFlow tensor
+            v_tf=tf.convert_to_tensor(v_trans)
+            
+            yp=self.dnn.predict(v_tf, verbose=self.verbose)
         except Exception as e:
             print(('Exception at prediction '+
                    'in interpm_tf_dnn::eval_list():'),e)
@@ -1785,7 +1854,10 @@ class interpm_tf_dnn:
         yp_trans=0
         try:
             if self.transform_out!='none':
-                yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                if self.nd_out==1:
+                    yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                else:
+                    yp_trans=self.SS2.inverse_transform(yp)
             else:
                 yp_trans=yp
         except Exception as e:

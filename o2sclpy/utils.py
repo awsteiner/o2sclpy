@@ -25,6 +25,53 @@ import numpy
 # For os.getenv() and os.path.exists()
 import os
 
+def print_cudnn_version():
+    print('Exhaustive search for cudnn_version.h.')
+    os.system('cat `find /usr -name cudnn_version.h` | grep CUDNN_MAJOR -A 2')
+    return
+
+def print_cuda_version():
+    os.system('nvcc --version')
+    return
+
+def check_tf_gpus():
+    """
+    Experimental detection of TF/cudnn/cuda version compatibility
+
+    I've had problems because not all cuda versions have support
+    for Ubuntu 24.04. Cuda 12.8 is supported on Ubuntu 24.04.
+    
+    Version Python version Compiler Build tools cuDNN CUDA
+    tensorflow-2.19.0 3.9-3.12 Clang 18.1.8 Bazel 6.5.0 9.3 12.5
+    tensorflow-2.18.0 3.9-3.12 Clang 17.0.6 Bazel 6.5.0 9.3 12.5
+    tensorflow-2.17.0 3.9-3.12 Clang 17.0.6 Bazel 6.5.0 8.9 12.3
+    tensorflow-2.16.1 3.9-3.12 Clang 17.0.6 Bazel 6.5.0 8.9 12.3
+    tensorflow-2.15.0 3.9-3.11 Clang 16.0.0 Bazel 6.1.0 8.9 12.2
+    tensorflow-2.14.0 3.9-3.11 Clang 16.0.0 Bazel 6.1.0 8.7 11.8
+    """
+    print('Output of nvidia-smi:')
+    os.system('nvidia-smi')
+    print('Determining cuda version.')
+    import tensorflow as tf
+    try:
+        print('cuda_version:',tf.sysconfig.get_build_info()["cuda_version"])
+    except:
+        print("Couldn't find cuda version from build_info.",
+              "Using 'nvcc --version'.")
+        print(print_cuda_version())
+    print('Determining cuDNN version.')
+    try:
+        from tensorflow.python.platform import build_info as tf_build_info
+        print('cudnn version:',tf_build_info.cudnn_version_number)
+    except:
+        print("Couldn't find cudnn version from tf_build_info.")
+        print_cudnn_version()
+    print('tf version:',tf.__version__)
+    print('GPU list:')
+    print(tf.config.list_physical_devices('GPU'))
+    print('Done with GPU list:')
+    return
+
 def get_azi_angle(v):
     """Return the azimuthal angle in :math:`[-\\pi,\\pi]` for a
     two- or three-element vector in Cartesian coordinates (the third
