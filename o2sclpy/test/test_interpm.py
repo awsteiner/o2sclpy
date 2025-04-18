@@ -51,7 +51,8 @@ def dgdy(x,y):
 
 def test_all():
 
-    o2sclpy.check_tf_gpus()
+    o2sclpy.check_cuda()
+    print(' ')
     
     N=1000
     x=numpy.zeros((N,2))
