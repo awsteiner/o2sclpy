@@ -1085,7 +1085,7 @@ class interpm_torch_dnn:
 
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  hlayers=[8,8],epochs=100,transform_in='none',
-                 transform_out='none',test_size=0.0):
+                 transform_out='none',test_size=0.0,activation='relu'):
 
         from sklearn.model_selection import train_test_split
         import torch
@@ -1188,10 +1188,16 @@ class interpm_torch_dnn:
 
                 layers=[]
                 layers.append(nn.Linear(nd_in,hlayers[0]))
-                layers.append(nn.Tanh())
+                if activation=='relu':
+                    layers.append(nn.Relu())
+                elif activation=='tanh':
+                    layers.append(nn.Tanh())
                 for k in range(0,len(hlayers)-1):
                     layers.append(nn.Linear(hlayers[k],hlayers[k+1]))
-                    layers.append(nn.Tanh())
+                    if activation=='relu':
+                        layers.append(nn.Relu())
+                    elif activation=='tanh':
+                        layers.append(nn.Tanh())
                 layers.append(nn.Linear(hlayers[len(hlayers)-1],nd_out))
                 self.model=nn.Sequential(*layers)
                 

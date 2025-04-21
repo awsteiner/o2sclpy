@@ -51,7 +51,13 @@ def dgdy(x,y):
 
 def test_all():
 
-    o2sclpy.check_cuda()
+    mode='all'
+    if len(sys.argv)>=2:
+        mode=sys.argv[1]
+    print('Mode is',mode)
+
+    if mode=='all':
+        o2sclpy.check_cuda()
     
     N=1000
     x=numpy.zeros((N,2))
@@ -87,7 +93,7 @@ def test_all():
 
         # AWS, 3/9/25: I still periodically have problems with
         # bfgs convergence.
-        if True:
+        if mode=='sklearn' or mode=='all':
             gp_tol=1.0e-4
             if ik>=1:
                 gp_tol=1.0
@@ -165,7 +171,7 @@ def test_all():
             
             print(' ')
                 
-        if True:
+        if mode=='tf' or mode=='all':
             print('TF DNN',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
@@ -256,7 +262,7 @@ def test_all():
             
             print(' ')
                 
-        if True:
+        if mode=='sklearn' or mode=='all':
             print('sklearn MLPR',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
@@ -328,7 +334,7 @@ def test_all():
             
             print(' ')
             
-        if True:
+        if mode=='sklearn' or mode=='all':
             
             print('sklearn DTR',ik+1,'of 3')
             print(('──────────────────────────────────'+
@@ -392,21 +398,22 @@ def test_all():
             
             print(' ')
             
-        if True:
+        if ik==2 and mode=='torch' or mode=='all':
+            
             print('Torch DNN',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
             im5=o2sclpy.interpm_torch_dnn()
             if ik==0:
-                im5.set_data(x,y,verbose=0,test_size=0.1,
-                             hlayers=[128,64,32,16],epochs=300)
+                im5.set_data(x,y,verbose=1,test_size=0.1,
+                             hlayers=[128,64,32,16],epochs=500)
             elif ik==1:
                 im5.set_data(x,y,verbose=0,test_size=0.1,
                              hlayers=[128,64,32,16],
                              transform_in='quant',transform_out='quant',
                              epochs=300)
             else:
-                im5.set_data(x,y,verbose=0,test_size=0.1,
+                im5.set_data(x,y,verbose=1,test_size=0.1,
                              hlayers=[128,64,32,16],
                              transform_in='moto',transform_out='moto',
                              epochs=300)
