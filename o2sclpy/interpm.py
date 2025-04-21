@@ -1064,6 +1064,14 @@ class interpm_sklearn_mlpr:
         return
         
 class interpm_torch_dnn:
+    """
+    Interpolate one or many multidimensional data sets using
+    PyTorch.
+
+    todos: more activation functions, move function_approx class
+    outside of function, better handling of torch tensors ensuring
+    elegant torch native I/O, fix saving and loading.
+    """
 
     verbose=0
     """
@@ -1085,7 +1093,8 @@ class interpm_torch_dnn:
 
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  hlayers=[8,8],epochs=100,transform_in='none',
-                 transform_out='none',test_size=0.0,activation='relu'):
+                 transform_out='none',test_size=0.0,activation='relu',
+                 patience=20):
 
         from sklearn.model_selection import train_test_split
         import torch
@@ -1156,9 +1165,10 @@ class interpm_torch_dnn:
                 if out_data_trans[j,0]>maxv:
                     maxv=out_data_trans[j,0]
 
-            print('min,max before transformation: %7.6e %7.6e' %
+            print('interpm_torch_dnn::set_data():')
+            print('  min,max before transformation: %7.6e %7.6e' %
                   (minv_old,maxv_old))
-            print('min,max after transformation : %7.6e %7.6e' %
+            print('  min,max after transformation : %7.6e %7.6e' %
                   (minv,maxv))
             
         if test_size>0.0:
@@ -1177,10 +1187,6 @@ class interpm_torch_dnn:
         self.nd_in=numpy.shape(x_train)[1]
         nd_out=numpy.shape(y_train)[1]
         
-        if self.verbose>0:
-            print('nd_in,nd_out:',self.nd_in,nd_out)
-            print('  Training DNN model.')
-
         class function_approx(nn.Module):
             
             def __init__(self,nd_in):
@@ -1188,14 +1194,15 @@ class interpm_torch_dnn:
 
                 layers=[]
                 layers.append(nn.Linear(nd_in,hlayers[0]))
+                # also ReLU6, LeakyReLU, Sigmoid, Softmax, 
                 if activation=='relu':
-                    layers.append(nn.Relu())
+                    layers.append(nn.ReLU())
                 elif activation=='tanh':
                     layers.append(nn.Tanh())
                 for k in range(0,len(hlayers)-1):
                     layers.append(nn.Linear(hlayers[k],hlayers[k+1]))
                     if activation=='relu':
-                        layers.append(nn.Relu())
+                        layers.append(nn.ReLU())
                     elif activation=='tanh':
                         layers.append(nn.Tanh())
                 layers.append(nn.Linear(hlayers[len(hlayers)-1],nd_out))
@@ -1207,28 +1214,68 @@ class interpm_torch_dnn:
                 return self.model(x)
 
         # Convert numpy to torch, there's probably a better way...
-        ten_in=torch.zeros((n_pts,self.nd_in))
-        ten_out=torch.zeros((n_pts,nd_out))
-        for i in range(0,n_pts):
-            for j in range(0,self.nd_in):
-                ten_in[i,j]=x_train[i,j]
-            for j in range(0,nd_out):
-                ten_out[i,j]=y_train[i,j]
-                        
+        ten_in=torch.from_numpy(x_train).float()
+        ten_out=torch.from_numpy(y_train).float()
+        test_in=torch.from_numpy(x_test).float()
+        test_out=torch.from_numpy(y_test).float()
+        
         self.dnn=function_approx(self.nd_in)
         crit=nn.MSELoss()
         opt=optim.Adam(self.dnn.parameters(),lr=0.01)
+        
+        best_loss=0
+        trigger=0
+        best_model=0
+        done=False
+        epoch=0
 
-        for epoch in range(0,epochs):
+        print('interpm_torch_dnn::set_data():')
+        
+        while done==False and epoch<epochs:
+            
+            self.dnn.train()
             opt.zero_grad()
             pred=self.dnn(ten_in)
             loss=crit(pred,ten_out)
             loss.backward()
             opt.step()
 
+            self.dnn.eval()
+
+            if test_size>0.0:
+                with torch.no_grad():
+                    test_pred=self.dnn(test_in)
+                    test_loss=crit(test_pred,test_out)
+            else:
+                test_loss=loss
+                
             if self.verbose>0:
-                print('Epoch',str(epoch+1)+'/'+str(epochs),
-                      'loss %7.6e' % (loss.item()))
+                if test_size>0.0:
+                    print('Epoch:',str(epoch+1)+'/'+str(epochs),
+                          'loss: %7.6e, best_loss: %7.6e, test_loss: %7.6e' %
+                          (loss.item(),best_loss,test_loss))
+                           
+                else:
+                    print('Epoch',str(epoch+1)+'/'+str(epochs),
+                          'loss %7.6e, best_loss: %7.6e' %
+                          (loss.item(),best_loss))
+                    
+            if epoch==0 or test_loss<best_loss:
+                best_loss=test_loss
+                best_model=self.dnn.state_dict()
+                trigger=0
+            elif patience>0:
+                # (Disable early stopping if patience is 0)
+                trigger+=1
+                if trigger>=patience:
+                    if self.verbose>0:
+                        print('Stopping early.')
+                    done=True
+                    
+            
+            epoch+=1
+
+        self.dnn.load_state_dict(best_model)
             
         return
     
@@ -1249,10 +1296,9 @@ class interpm_torch_dnn:
             v_trans=v
 
         try:
+
             import torch
-            ten_in=torch.zeros((1,self.nd_in))
-            for j in range(0,self.nd_in):
-                ten_in[0,j]=v_trans[j]
+            ten_in=torch.from_numpy(v_trans).float()
             pred=self.dnn(ten_in)
         except Exception as e:
             print('Exception 4 in interpm_torch_dnn:',e)
@@ -1260,7 +1306,10 @@ class interpm_torch_dnn:
             
         if self.transform_out!='none':
             try:
-                pred_trans=self.SS2.inverse_transform(pred.detach().numpy())
+                predx=pred.detach().numpy()
+                if predx.ndim==1:
+                    predx=predx.reshape(-1,1)
+                pred_trans=self.SS2.inverse_transform(predx)
             except Exception as e:
                 print('Exception 5 in interpm_torch_dnn:',e)
                 raise
@@ -1306,10 +1355,7 @@ class interpm_torch_dnn:
 
         try:
             import torch
-            ten_in=torch.zeros((len(v),self.nd_in))
-            for k in range(0,len(v)):
-                for j in range(0,self.nd_in):
-                    ten_in[k,j]=v_trans[k][j]
+            ten_in=torch.from_numpy(v).float()
             pred=self.dnn(ten_in)
         except Exception as e:
             print('Exception at evaluation in '+
@@ -1371,9 +1417,7 @@ class interpm_torch_dnn:
         try:
             
             import torch
-            ten_in=torch.zeros((1,self.nd_in))
-            for j in range(0,self.nd_in):
-                ten_in[0,j]=v_trans[j]
+            ten_in=torch.from_numpy(v_trans).float()
                 
             ten_in.requires_grad_(True)
             pred=self.dnn(ten_in)
@@ -1382,8 +1426,7 @@ class interpm_torch_dnn:
                                       create_graph=True)
             # The grad function returns a tuple, and the gradient
             # is the first entry of that tuple.
-            pgrad=pgrad[0][0][i]
-            #print('pgrad',pgrad,type(pgrad))
+            pgrad=pgrad[0][i]
             
         except Exception as e:
             print('Exception at model training',

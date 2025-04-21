@@ -398,25 +398,26 @@ def test_all():
             
             print(' ')
             
-        if ik==2 and mode=='torch' or mode=='all':
+        if mode=='torch' or mode=='all':
             
             print('Torch DNN',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
             im5=o2sclpy.interpm_torch_dnn()
             if ik==0:
-                im5.set_data(x,y,verbose=1,test_size=0.1,
-                             hlayers=[128,64,32,16],epochs=500)
+                im5.set_data(x,y,verbose=0,test_size=0.1,
+                             hlayers=[60,60],
+                             epochs=500,patience=50)
             elif ik==1:
                 im5.set_data(x,y,verbose=0,test_size=0.1,
-                             hlayers=[128,64,32,16],
+                             hlayers=[60,60],
                              transform_in='quant',transform_out='quant',
-                             epochs=300)
+                             epochs=500,patience=50)
             else:
-                im5.set_data(x,y,verbose=1,test_size=0.1,
-                             hlayers=[128,64,32,16],
+                im5.set_data(x,y,verbose=0,test_size=0.1,
+                             hlayers=[60,60],
                              transform_in='moto',transform_out='moto',
-                             epochs=300)
+                             epochs=500,patience=50)
                 
             exact=[f(v[0],v[1])]
             interp5a=im5.eval(v)
