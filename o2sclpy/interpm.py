@@ -1064,13 +1064,17 @@ class interpm_sklearn_mlpr:
         return
         
 class interpm_torch_dnn:
-    """
-    Interpolate one or many multidimensional data sets using
+    """Interpolate one or many multidimensional data sets using
     PyTorch.
 
-    todos: more activation functions, move function_approx class
-    outside of function, better handling of torch tensors ensuring
-    elegant torch native I/O, fix saving and loading.
+    .. todo:: * Calculate second derivatives
+              * More activation functions
+              * move function_approx class outside of function
+              * better handling of torch tensors as input and output
+              * 'native' output format
+              * partial derivatives inefficient because always computes
+                gradient
+              * add_data() for successive improvements
     """
 
     verbose=0
@@ -1095,6 +1099,9 @@ class interpm_torch_dnn:
                  hlayers=[8,8],epochs=100,transform_in='none',
                  transform_out='none',test_size=0.0,activation='relu',
                  patience=20):
+        """Early stopping is set with patience, and if patience is 0
+        then the training never stops early.
+        """
 
         from sklearn.model_selection import train_test_split
         import torch
@@ -1436,12 +1443,8 @@ class interpm_torch_dnn:
         if self.transform_out!='none':
             try:
                 pgrad2=pgrad.detach().numpy()
-                #print('hx',pgrad2,type(pgrad2),pgrad2.ndim,
-                #numpy.shape(pgrad2))
                 if pgrad2.ndim<=1:
                     pgrad2=pgrad2.reshape(-1,1)
-                #print('hy',pgrad2,type(pgrad2),pgrad2.ndim,
-                #numpy.shape(pgrad2))
                 pgrad_trans=self.SS2.inverse_transform(pgrad2)
             except Exception as e:
                 print('Exception at inverse transformation',

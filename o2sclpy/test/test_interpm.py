@@ -405,16 +405,16 @@ def test_all():
                    '─────────────────────────────────'))
             im5=o2sclpy.interpm_torch_dnn()
             if ik==0:
-                im5.set_data(x,y,verbose=0,test_size=0.1,
+                im5.set_data(x,y,verbose=0,test_size=0.4,
                              hlayers=[60,60],
                              epochs=500,patience=50)
             elif ik==1:
-                im5.set_data(x,y,verbose=0,test_size=0.1,
+                im5.set_data(x,y,verbose=0,test_size=0.4,
                              hlayers=[60,60],
                              transform_in='quant',transform_out='quant',
                              epochs=500,patience=50)
             else:
-                im5.set_data(x,y,verbose=0,test_size=0.1,
+                im5.set_data(x,y,verbose=0,test_size=0.4,
                              hlayers=[60,60],
                              transform_in='moto',transform_out='moto',
                              epochs=500,patience=50)
