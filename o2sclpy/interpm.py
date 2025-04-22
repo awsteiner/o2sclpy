@@ -280,6 +280,67 @@ class interpm_sklearn_gp:
                   type(yp_trans[0]),v,yp_trans[0])
         return yp_trans[0]
 
+    def apply(self,v,f):
+        """
+        Apply the kernel-like function ``f`` to the training data
+        and return the result
+        
+        """
+
+        # The sklearn transformers require two-dimensional
+        # arrays as inputs and outputs.
+        
+        v_trans=0
+        try:
+            if self.transform_in!='none':
+                v_trans=self.SS1.transform(v.reshape(1,-1))
+            else:
+                v_trans=v.reshape(1,-1)
+        except Exception as e:
+            print(('Exception at input transformation '+
+                   'in interpm_sklearn_gp::eval():'),e)
+            raise
+
+        # The sklearn GPR object expects the input to be a
+        # two-dimensional numpy array.
+        
+        try:
+            x_train=self.gp.X_train_
+            alpha=self.gp.alpha_
+            yp=f(v_trans,x_train) @ alpha
+        except Exception as e:
+            print(('Exception at prediction '+
+                   'in interpm_sklearn_gp::eval():'),e)
+            raise
+
+        # The output of the sklearn GPR object is either one- or
+        # two-dimensional, depending on the number of outputs.
+        # We don't include a 'transform_out' option since the
+        # GPR class already has a 'normalize_y' option.
+
+        yp_trans=yp
+    
+        if self.outformat=='list':
+            if self.verbose>1:
+                print('interpm_sklearn_gp::eval():',
+                      'list mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            if yp_trans.ndim==1:
+                return yp_trans.tolist()
+            return yp_trans[0].tolist()
+        # Return a one-dimensional numpy array in either case
+        if yp_trans.ndim==1:
+            if self.verbose>1:
+                print('interpm_sklearn_gp::eval():',
+                      'ndim=1 mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            return yp_trans
+        if self.verbose>1:
+            print('interpm_sklearn_gp::eval():',
+                  'array mode type(yp[0]),v,yp[0]:',
+                  type(yp_trans[0]),v,yp_trans[0])
+        return yp_trans[0]
+
     def eval_list(self,v):
         """Evaluate the GP at the list of points given in ``v``.
         The input ``v`` should be a two-dimensional numpy
@@ -1075,6 +1136,7 @@ class interpm_torch_dnn:
               * partial derivatives inefficient because always computes
                 gradient
               * add_data() for successive improvements
+              * Allow user to control CPU vs. GPU
     """
 
     verbose=0

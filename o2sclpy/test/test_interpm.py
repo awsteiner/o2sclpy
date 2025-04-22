@@ -93,10 +93,10 @@ def test_all():
 
         # AWS, 3/9/25: I still periodically have problems with
         # bfgs convergence.
-        if mode=='sklearn' or mode=='all':
+        if mode=='sklearn_gp' or mode=='sklearn' or mode=='all':
             gp_tol=1.0e-4
-            if ik>=1:
-                gp_tol=1.0
+            if ik==1:
+                gp_tol=1.0e-1
             
             print('sklearn GP',ik+1,'of 3')
             print(('──────────────────────────────────'+
@@ -106,11 +106,11 @@ def test_all():
             if ik==0:
                 im1.set_data_str(x,y,'verbose=0,test_size=0.1')
             elif ik==1:
-                im1.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
-                                       'form_in=quant'))
+                im1.set_data_str(x,y,('verbose=0,test_size=0.1,'+
+                                      'transform_in=quant'))
             else:
-                im1.set_data_str(x,y,('verbose=0,test_size=0.1,trans'+
-                                       'form_in=moto'))
+                im1.set_data_str(x,y,('verbose=0,test_size=0.1,'+
+                                      'transform_in=moto'))
                 
             exact=[f(v[0],v[1])]
             interp1a=im1.eval(v)
@@ -405,16 +405,16 @@ def test_all():
                    '─────────────────────────────────'))
             im5=o2sclpy.interpm_torch_dnn()
             if ik==0:
-                im5.set_data(x,y,verbose=0,test_size=0.4,
+                im5.set_data(x,y,verbose=0,test_size=0.1,
                              hlayers=[60,60],
                              epochs=500,patience=50)
             elif ik==1:
-                im5.set_data(x,y,verbose=0,test_size=0.4,
+                im5.set_data(x,y,verbose=0,test_size=0.1,
                              hlayers=[60,60],
                              transform_in='quant',transform_out='quant',
                              epochs=500,patience=50)
             else:
-                im5.set_data(x,y,verbose=0,test_size=0.4,
+                im5.set_data(x,y,verbose=0,test_size=0.1,
                              hlayers=[60,60],
                              transform_in='moto',transform_out='moto',
                              epochs=500,patience=50)
@@ -446,11 +446,11 @@ def test_all():
             # pickling local objects.
             if False:
                 print('Saving:')
-                im5.save('test_interpm_'+str(ik)+'.pt')
+                im5.save('test_interpm_torch_'+str(ik)+'.pt')
             
                 print('Loading:')
-                im5b=o2sclpy.interpm_sklearn_mlpr()
-                im5b.load('test_interpm_'+str(ik)+'.pt')
+                im5b=o2sclpy.interpm_torch_dnn()
+                im5b.load('test_interpm_torch_'+str(ik)+'.pt')
             
                 print('Testing:')
                 interp5c=im5b.eval_list(v2)
