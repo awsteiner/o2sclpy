@@ -74,7 +74,9 @@ class interpm_sklearn_gp:
         """Set the input and output data to train the Gaussian
         process. The variable in_data should be a numpy array with
         shape ``(n_points,in_dim)`` and out_data should be a numpy
-        array with shape ``(n_points,out_dim)``.
+        array with shape ``(n_points,out_dim)``. (Sklearn calls
+        these shapes ``(n_samples,n_features)`` and
+        ``(n_samples,n_targets)``).
 
         If kernel is ``None``, then the default kernel,
         ``1.0*RBF(1.0,(1e-2,1e2))`` is used.
@@ -283,7 +285,7 @@ class interpm_sklearn_gp:
     def apply(self,v,f):
         """
         Apply the kernel-like function ``f`` to the training data
-        and return the result
+        and return the result (doesn't work yet).
         
         """
 
@@ -306,8 +308,17 @@ class interpm_sklearn_gp:
         
         try:
             x_train=self.gp.X_train_
+            # x_train is size (n_samples,n_features)
+            print('here',numpy.shape(x_train),type(x_train))
+            # Alpha is the vector of weights, K^{-1} y
             alpha=self.gp.alpha_
+            print('here2',numpy.shape(alpha),type(alpha))
+            quit()
+            # The function f should return a matrix (n_features,n_samples),
+            # then the vector has size (n_samples,n_targets) so that
+            # yp is (n_features,n_targets)?
             yp=f(v_trans,x_train) @ alpha
+            print('here3',yp,type(yp))
         except Exception as e:
             print(('Exception at prediction '+
                    'in interpm_sklearn_gp::eval():'),e)

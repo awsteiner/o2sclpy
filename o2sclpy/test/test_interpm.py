@@ -118,6 +118,23 @@ def test_all():
             print('interp1a:',interp1a)
             assert numpy.allclose(exact,interp1a[0],rtol=gp_tol)
 
+            if False:
+                # This doesn't work yet because of the product of
+                # the RBF with the constant parameter
+                length_scale=im1.gp.kernel_.length_scale
+                
+                def grad(x_star,x_train):
+                    """Compute the gradient of the RBF kernel w.r.t. x_star"""
+                    # Ensure x_star has shape (1, n_features)
+                    x_star=np.atleast_2d(x_star)
+                    K_gradient=((x_train-x_star)*np.exp(
+                        -np.sum((x_train-x_star)**2,axis=1)[:,None]/
+                        (2*length_scale**2))/
+                                (length_scale**2))
+                    return K_gradient.T
+                
+                interp1a=im1.apply(v,grad)
+                
             exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp1b=im1.eval_list(v2)
             print('exact:',exact)
