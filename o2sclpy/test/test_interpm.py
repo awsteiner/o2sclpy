@@ -195,13 +195,16 @@ def test_all():
             
             im2=o2sclpy.interpm_tf_dnn()
             if ik==0:
+                print('Value of check_gpu() is:',im2.check_gpu())
                 im2.set_data(x,y,verbose=0,epochs=200,
                              test_size=0.0,batch_size=8,
                              activations=['relu','relu','relu','relu'],
                              hlayers=[128,64,32,16])
             elif ik==1:
+                # For ik==1, we use test_size=0.1 to test non-zero
+                # values of that parameter
                 im2.set_data(x,y,verbose=0,epochs=200,
-                             test_size=0.0,batch_size=8,
+                             test_size=0.1,batch_size=8,
                              activations=['relu','relu','relu','relu'],
                              hlayers=[128,64,32,16],
                              transform_in='quant',
@@ -232,7 +235,7 @@ def test_all():
             im2b=o2sclpy.interpm_tf_dnn()
             im2b.load(('test_interpm_tf_'+str(ik)+'.keras'))
 
-            if False:
+            if True:
                 # This doesn't work yet because we need to store
                 # the class data members in addition to the TF model
                 exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
@@ -249,7 +252,7 @@ def test_all():
                              hlayers=[128,64,32,16])
             elif ik==1:
                 im2.set_data(x,y2,verbose=0,epochs=200,
-                             test_size=0.0,batch_size=8,
+                             test_size=0.1,batch_size=8,
                              activations=['relu','relu','relu','relu'],
                              hlayers=[128,64,32,16],
                              transform_in='quant',
@@ -279,30 +282,31 @@ def test_all():
             
             print(' ')
                 
-        if mode=='sklearn' or mode=='all':
+        if mode=='sklearn_mlpr' or mode=='sklearn' or mode=='all':
+            
             print('sklearn MLPR',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
             im3=o2sclpy.interpm_sklearn_mlpr()
             if ik==0:
-                im3.set_data(x,y,verbose=0,test_size=0.1,solver='lbfgs',
-                             max_iter=1000)
+                im3.set_data(x,y,verbose=0,test_size=0.0,
+                             max_iter=1000,hlayers=[60,60])
+
             elif ik==1:
-                im3.set_data(x,y,verbose=0,test_size=0.1,solver='lbfgs',
+                im3.set_data(x,y,verbose=0,test_size=0.1,
                              max_iter=1000,transform_in='quant',
-                             transform_out='quant')
+                             transform_out='quant',hlayers=[60,60])
     
             else:
-                im3.set_data(x,y,verbose=0,test_size=0.1,solver='lbfgs',
+                im3.set_data(x,y,verbose=0,test_size=0.1,
                              max_iter=1000,transform_in='moto',
-                             transform_out='moto')
+                             transform_out='moto',hlayers=[60,60])
                 
             exact=[f(v[0],v[1])]
             interp3a=im3.eval(v)
             print('exact:',exact)
             print('interp3a:',interp3a)
             assert numpy.allclose(exact,interp3a,rtol=1.0)
-            print(' ')
     
             exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp3b=im3.eval_list(v2)
@@ -351,14 +355,14 @@ def test_all():
             
             print(' ')
             
-        if mode=='sklearn' or mode=='all':
+        if mode=='sklearn_dtr' or mode=='sklearn' or mode=='all':
             
             print('sklearn DTR',ik+1,'of 3')
             print(('──────────────────────────────────'+
                    '─────────────────────────────────'))
             im4=o2sclpy.interpm_sklearn_dtr()
             if ik==0:
-                im4.set_data(x,y,verbose=0,test_size=0.1)
+                im4.set_data(x,y,verbose=0,test_size=0.0)
             elif ik==1:
                 im4.set_data(x,y,verbose=0,test_size=0.1,
                              transform_in='quant',transform_out='quant')

@@ -844,13 +844,15 @@ class interpm_sklearn_mlpr:
     
     def set_data(self,in_data,out_data,outformat='numpy',test_size=0.0,
                  hlayers=(100,),activation='relu',transform_in='none',
-                 transform_out='none',
-                 solver='adam',alpha=0.0001,batch_size='auto', 
-                 learning_rate='adaptive',max_iter=500,
-                 random_state=1,verbose=0,early_stopping=True,
+                 transform_out='none',solver='adam',alpha=0.0001,
+                 batch_size='auto',learning_rate='adaptive',max_iter=500,
+                 random_state=1,verbose=0,early_stopping=True,tol=1.0e-4,
                  n_iter_no_change=10):
         """
-        Set the input and output data to train the interpolator
+        Set the input and output data to train the interpolator.
+
+        Activation functions are 'identity', 'logistic', 'tanh',
+        or 'relu'.
         """
         self.outformat=outformat
         self.verbose=verbose
@@ -862,6 +864,7 @@ class interpm_sklearn_mlpr:
         if self.verbose>0:
             print('interpm_sklearn_mlpr::set_data():')
             print('  outformat:',outformat)
+            print('  verbose:',verbose)
             print('  in_data shape:',numpy.shape(in_data))
             print('  out_data shape:',numpy.shape(out_data))
             print('  solver:',solver)
@@ -919,7 +922,8 @@ class interpm_sklearn_mlpr:
                                    max_iter=max_iter,  
                                    random_state=random_state,
                                    verbose=verbose, 
-                                   early_stopping=early_stopping, 
+                                   early_stopping=early_stopping,
+                                   tol=tol,
                                    n_iter_no_change=n_iter_no_change,
                                    alpha=alpha)
             if len(out_train[0])==1:
@@ -982,8 +986,7 @@ class interpm_sklearn_mlpr:
                 v_trans=self.SS1.transform(v.reshape(1,-1))
             except Exception as e:
                 print(('Exception at input transformation '+
-                       'in interpm_sklearn_mlpr:'),
-                      e)
+                       'in interpm_sklearn_mlpr:'),e)
                 raise
         else:
             v_trans=v.reshape(1,-1)
@@ -1580,6 +1583,12 @@ class interpm_tf_dnn:
 
     The variables ``verbose`` and ``outformat`` can be changed
     at any time.
+
+    .. todo:: * Calculate derivatives
+              * 'native' output format?
+              * add_data() for successive improvements
+              * Allow user to control CPU vs. GPU
+              * Allow user to control early stopping monitor
     
     """
     verbose=0
@@ -1611,9 +1620,9 @@ class interpm_tf_dnn:
         import tensorflow as tf
         try:
             with tf.device('/GPU:0'):
-                a = tf.constant([[1.0, 2.0]])
-                b = tf.constant([[3.0], [4.0]])
-                c = tf.matmul(a, b)
+                a=tf.constant([[1.0,2.0]])
+                b=tf.constant([[3.0],[4.0]])
+                c=tf.matmul(a,b)
         except:
             return False
         return True
@@ -1627,10 +1636,10 @@ class interpm_tf_dnn:
                  tf_logs='1',tf_onednn_opts='1'):
         """Set the input and output data to train the interpolator
 
-        Some activation functions: 'relu', 'sigmoid', 'tanh'. If the
-        number of activation functions specified in ``activations`` is
-        smaller than the number of layers, then the activation
-        function list is reused using the modulus operator.
+        Some activation functions are: 'relu', 'sigmoid', 'tanh'. If
+        the number of activation functions specified in
+        ``activations`` is smaller than the number of layers, then the
+        activation function list is reused using the modulus operator.
 
         The keyword argument ``tf_logs`` specifies the value of
         the environment variable ``TF_CPP_MIN_LOG_LEVEL``.
@@ -2022,6 +2031,8 @@ class interpm_tf_dnn:
                  "outformat": self.outformat,
                  "transform_in": self.transform_in,
                  "transform_out": self.transform_out,
+                 "nd_in": self.nd_in,
+                 "nd_out": self.nd_out,
                  "SS1": self.SS1,
                  "SS2": self.SS2}
 
@@ -2070,6 +2081,8 @@ class interpm_tf_dnn:
         self.outformat=loc_dct["outformat"]
         self.transform_in=loc_dct["transform_in"]
         self.transform_out=loc_dct["transform_out"]
+        self.nd_in=loc_dct["nd_in"]
+        self.nd_out=loc_dct["nd_out"]
         self.SS1=loc_dct["SS1"]
         self.SS2=loc_dct["SS2"]
 
