@@ -1,6 +1,6 @@
 [project]
 name = "o2sclpy"
-version = "0.931a1"
+version = "0.931a2"
 authors = [
   { name="Andrew W. Steiner", email="awsteiner0@protonmail.com" },
 ]
