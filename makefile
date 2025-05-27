@@ -60,31 +60,33 @@ test-sync:
 
 test:
 	pytest o2sclpy/test \
-		examples/link_o2scl.py \
-		examples/table.py \
-		examples/unit_conv.py \
-		examples/SFHo_SFHx.py \
 		examples/buchdahl.py \
-		examples/tov.py \
-		examples/skyrme.py \
-		examples/nucmass.py \
-		examples/test_examples.py \
 		examples/interpm.py \
+		examples/link_o2scl.py \
+		examples/nstar_rot.py \
+		examples/nucmass.py \
+		examples/SFHo_SFHx.py \
+		examples/skyrme.py \
+		examples/table.py \
+		examples/test_examples.py \
+		examples/tov.py \
+		examples/unit_conv.py \
 		-s -v > test.out 2>&1 &
 
 # This target is used by cron scripts to redirect the testing output
 testq:
 	pytest o2sclpy/test \
-		examples/link_o2scl.py \
-		examples/table.py \
-		examples/unit_conv.py \
-		examples/SFHo_SFHx.py \
 		examples/buchdahl.py \
-		examples/tov.py \
-		examples/skyrme.py \
-		examples/nucmass.py \
-		examples/test_examples.py \
 		examples/interpm.py \
+		examples/link_o2scl.py \
+		examples/nstar_rot.py \
+		examples/nucmass.py \
+		examples/SFHo_SFHx.py \
+		examples/skyrme.py \
+		examples/table.py \
+		examples/test_examples.py \
+		examples/tov.py \
+		examples/unit_conv.py \
 		-s -v
 
 mypy:

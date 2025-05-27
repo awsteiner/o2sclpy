@@ -3,43 +3,10 @@ help:
 	@echo "Makefile for example scripts and documentation figures"
 	@echo "------------------------------------------------------"
 	@echo ""
-	@echo "The 'make all' target creates all figures and compares the "
-	@echo "output images with their currently stored versions."
+	@echo "make targets     descriptions"
+	@echo "--------------   ------------"
+	@echo "help             output this makefile information"
 	@echo ""
-	@echo "The current figure list along with the documentation "
-	@echo "file where they are found is:"
-	@echo ""
-	@echo "------------------------- -----------"
-	@echo "cmaps.scr                 plot_ref.rst"
-	@echo "colors_near.scr           plot_ref.rst"
-	@echo "markers.scr               plot_ref.rst"
-	@echo ""
-	@echo "arrows.scr                o2graph.rst"
-	@echo "backend.scr               o2graph.rst"
-	@echo "cmap_den_plot.scr         o2graph.rst"
-	@echo "kde_plot.scr              o2graph.rst"
-	@echo "modax.scr                 o2graph.rst"
-	@echo "obj_props.scr             o2graph.rst"
-	@echo "subplots1.scr             o2graph.rst"
-	@echo "subplots2.scr             o2graph.rst"
-	@echo "subplots3.scr             o2graph.rst"
-	@echo "table_errorbar.scr        o2graph.rst"
-	@echo "table_plot_color.scr      o2graph.rst"
-	@echo "table_plot.scr            o2graph.rst"
-	@echo "table_plotv.scr           o2graph.rst"
-	@echo "table_rplot.scr           o2graph.rst"
-	@echo "table_scatter.scr         o2graph.rst"
-	@echo "table3d_den_plot.scr      o2graph.rst"
-	@echo "textbox.scr               o2graph.rst"
-	@echo ""
-	@echo "yt_scatter.scr            yt.rst"
-	@echo "yt_tg_multvol.scr         yt.rst"
-	@echo ""
-	@echo "gltf_den_plot_col.scr     gltf.rst"
-	@echo "gltf_scatter_col.scr      gltf.rst"
-	@echo "bl_den_plot_yaw.scr       gltf.rst"
-	@echo ""
-	@echo "The script 'backend.scr' does not generate any figures."
 
 UNAME := $(shell uname -s)
 
@@ -50,6 +17,9 @@ else
 VIEW_COMMAND = open
 VIEW_SUFFIX = 
 endif
+
+make_readme:
+	$(MAKE) help > README.md
 
 # The yt_scatter script is included here but the other yt plots are
 # not because they are more time-consuming.

@@ -1,4 +1,4 @@
-#  -------------------------------------------------------------------
+#  ───────────────────────────────────────────────────────────────────
 #  
 #  Copyright (C) 2023-2025, Andrew W. Steiner
 #  
@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with O2sclpy. If not, see <http://www.gnu.org/licenses/>.
 #  
-#  -------------------------------------------------------------------
+#  ───────────────────────────────────────────────────────────────────
 #
 import math
 from PIL import Image
@@ -25,6 +25,11 @@ from PIL import ImageChops
 import operator
 import functools
 import os
+
+# This script compares the outputs from the o2graph scripts to the
+# benchmark versions in ../doc/static to ensure that the output images
+# haven't changed. This script is designed to be used by the "test"
+# and "testq" makefile target in the root o2sclpy directory.
 
 def compare_images(name,diff=200):
     """
