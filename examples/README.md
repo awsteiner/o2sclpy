@@ -27,7 +27,8 @@ tested when one runs "make test" or "make testq" in the root o2sclpy
 directory. The Jupyter notebook "plot_info.ipynb" has no corresponding
 Python script and is also not run by the testing makefile targets.
 There is a Python script called 'test_examples.py' which is used by
-pytest to test the o2graph scripts.
+pytest to test the o2graph scripts. The testing target also uses
+the scripts in the o2sclpy/test directory for testing.
 
 The current figure list along with the documentation file where they
 are found (in the ../doc folder) is:

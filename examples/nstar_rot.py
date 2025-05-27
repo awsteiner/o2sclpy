@@ -294,5 +294,8 @@ nr.fix_cent_eden_axis_rat(2.0e15,0.59)
 
 print('Mass: %7.6e' % (nr.Mass/nr.MSUN))
 
+# For testing using ``pytest``:
 
-
+def test_fun():
+    assert numpy.allclose(nr.Mass/nr.MSUN,2.485506,rtol=1.0e-6)
+    return
