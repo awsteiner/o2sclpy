@@ -1138,6 +1138,325 @@ class interpm_sklearn_mlpr:
 
         return
         
+class interpm_sklearn_adaboost:
+    """
+    Interpolate one or many multidimensional data sets using
+    scikit-learn's AdaBoost regressor
+    """
+
+    verbose=0
+    """
+    Verbosity parameter (default 0)
+    """
+    outformat='numpy'
+    """
+    Output format, either 'native', 'c++', or 'list' (default 'native')
+    """
+    score=0.0
+    """
+    The most recent score value given a non-zero test size
+    returned by set_data()
+    """
+    
+    def __init__(self):
+        self.ab=0
+        self.transform_in=0
+        self.transform_out=0
+        self.SS1=0
+        self.SS2=0
+        self.nd_in=0
+        self.nd_out=0
+        
+        return
+    
+    def set_data(self,in_data,out_data,outformat='numpy',test_size=0.0,
+                 transform_in='none',transform_out='none',
+                 n_estimators=50,learning_rate=1.0,loss='linear',
+                 random_state=1,verbose=0):
+        
+        """
+        Set the input and output data to train the interpolator.
+
+        Activation functions are 'identity', 'logistic', 'tanh',
+        or 'relu'.
+        """
+        self.outformat=outformat
+        self.verbose=verbose
+        self.transform_in=transform_in
+        self.transform_out=transform_out
+        self.nd_in=numpy.shape(in_data)[1]
+        self.nd_out=numpy.shape(out_data)[1]
+        
+        if self.verbose>0:
+            print('interpm_sklearn_adaboost::set_data():')
+            print('  outformat:',outformat)
+            print('  verbose:',verbose)
+            print('  in_data shape:',numpy.shape(in_data))
+            print('  out_data shape:',numpy.shape(out_data))
+            print('  solver:',solver)
+
+        # ----------------------------------------------------------
+        # Handle the data transformations
+        
+        from sklearn.preprocessing import QuantileTransformer
+        from sklearn.preprocessing import MinMaxScaler
+        from sklearn.preprocessing import StandardScaler
+        
+        if self.transform_in=='moto':
+            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            in_data_trans=self.SS1.fit_transform(in_data)
+        elif self.transform_in=='quant':
+            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            in_data_trans=self.SS1.fit_transform(in_data)
+        elif self.transform_in=='standard':
+            self.SS1=StandardScaler()
+            in_data_trans=self.SS1.fit_transform(in_data)
+        else:
+            in_data_trans=in_data
+            
+        if self.transform_out=='moto':
+            self.SS2=MinMaxScaler(feature_range=(-1,1))
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='quant':
+            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
+            out_data_trans=self.SS2.fit_transform(out_data)
+        elif self.transform_out=='standard':
+            self.SS2=StandardScaler()
+            out_data_trans=self.SS2.fit_transform(out_data)
+        else:
+            out_data_trans=out_data
+
+        if test_size>0.0:
+            try:
+                from sklearn.model_selection import train_test_split
+                in_train,in_test,out_train,out_test=train_test_split(
+                    in_data_trans,out_data_trans,test_size=test_size)
+            except Exception as e:
+                print('Exception in interpm_sklearn_adaboost::set_data()',
+                      'at test_train_split().',e)
+                raise
+        else:
+            in_train=in_data_trans
+            out_train=out_data_trans
+            
+        try:
+            from sklearn.ensemble import AdaBoostRegressor
+            self.ab=AdaBoostRegressor(n_estimators=n_estimators,
+                                      learning_rate=learning_rate,
+                                      loss=loss,random_state=random_state)
+                                      
+            if len(out_train[0])==1:
+                self.ab.fit(in_train,out_train.ravel())
+            else:
+                self.ab.fit(in_train,out_train)
+                
+            if test_size>0.0:
+                self.score=self.ab.score(in_test,out_test)
+
+        except Exception as e:
+            print('Exception in interpm_sklearn_adaboost::set_data()',
+                  'at fit().',e)
+            raise
+
+        if test_size>0.0:
+            if self.verbose>0:
+                print('interpm_sklearn_adaboost::set_data(): score: %7.6e' %
+                      (self.ab.score(in_test,out_test)))
+            return self.score
+
+        return
+    
+    def set_data_str(self,in_data,out_data,options):
+        """
+        Set the input and output data to train the interpolator,
+        using a string to specify the keyword arguments.
+        """
+
+        dct=string_to_dict2(options,list_of_ints=['verbose',
+                                                  'random_state',
+                                                  'max_iter',
+                                                  'n_iter_no_change'],
+                            list_of_floats=['test_size','alpha'],
+                            list_of_bools=['early_stopping'])
+
+        if "hlayers" in dct:
+            htemp=dct["hlayers"]
+            htemp=htemp[1:-1]
+            htemp=htemp.split(',')
+            htemp2=[]
+            for i in range(0,len(htemp)):
+                htemp2.append(int(htemp[i]))
+            dct["hlayers"]=numpy.array(htemp2)
+
+        print('String:',options,'Dictionary:',dct)
+        
+        self.set_data(in_data,out_data,**dct)
+
+        return
+    
+    def eval(self,v):
+        """
+        Evaluate the MLP at point ``v``.
+        """
+
+        if self.transform_in!='none':
+            v_trans=0
+            try:
+                v_trans=self.SS1.transform(v.reshape(1,-1))
+            except Exception as e:
+                print(('Exception at input transformation '+
+                       'in interpm_sklearn_adaboost:'),e)
+                raise
+        else:
+            v_trans=v.reshape(1,-1)
+
+        yp=self.ab.predict(v_trans)
+        
+        if self.transform_out!='none':
+            try:
+                if yp.ndim==1:
+                    yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                else:
+                    yp_trans=self.SS2.inverse_transform(yp)
+            except Exception as e:
+                print('Exception 5 in interpm_sklearn_adaboost:',e)
+                raise
+        else:
+            yp_trans=yp
+
+        if self.outformat=='list':
+            if self.verbose>1:
+                print('interpm_sklearn_adaboost::eval():',
+                      'list mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            return yp_trans[0].tolist()
+        if yp_trans.ndim==1:
+            if self.verbose>1:
+                print('interpm_sklearn_adaboost::eval():',
+                      'ndim=1 mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            return numpy.ascontiguousarray(yp_trans)
+            #return numpy.array(yp_trans)
+        if self.verbose>1:
+            print('interpm_sklearn_adaboost::eval():',
+                  'array mode type(yp[0]),v,yp[0]:',
+                  type(yp_trans[0]),v,yp_trans[0])
+        return numpy.ascontiguousarray(yp_trans[0])
+    
+    def eval_unc(self,v):
+        """
+        Empty function because this interpolator does not currently
+        provide uncertainties
+        """
+        return self.eval(v)
+        
+    def eval_list(self,v):
+        """
+        Evaluate the GP at point ``v``.
+        """
+
+        v_trans=0
+        try:
+            if self.transform_in!='none':
+                v_trans=self.SS1.transform(v)
+            else:
+                v_trans=v
+        except Exception as e:
+            print(('Exception at input transformation '+
+                   'in interpm_sklearn_adaboost::eval_list():'),e)
+            raise
+
+        try:
+            yp=self.ab.predict(v_trans)
+        except Exception as e:
+            print(('Exception at prediction '+
+                   'in interpm_sklearn_adaboost::eval_list():'),e)
+            raise
+
+        yp_trans=0
+        try:
+            if self.transform_out!='none':
+                if yp.ndim==1:
+                    yp_trans=self.SS2.inverse_transform(yp.reshape(-1,1))
+                else:
+                    yp_trans=self.SS2.inverse_transform(yp)
+                if yp_trans.ndim==2 and len(yp_trans[0])==1:
+                    yp_trans=yp_trans.reshape(1,-1)[0]
+            else:
+                yp_trans=yp
+        except Exception as e:
+            print(('Exception at output transformation '+
+                   'in interpm_sklearn_adaboost::eval_list():'),e)
+            raise
+    
+        if self.outformat=='list':
+            if self.verbose>1:
+                print('interpm_sklearn_adaboost::eval_list():',
+                      'list mode type(yp),v,yp:',
+                      type(yp_trans),v,yp_trans)
+            return yp_trans.tolist()
+        if self.verbose>1:
+            print('interpm_sklearn_adaboost::eval_list():',
+                  'array mode type(yp),v,yp:',
+                  type(yp_trans),v,yp_trans)
+        return numpy.ascontiguousarray(yp_trans)
+
+    def save(self,filename,obj_name):
+        """
+        Save the interpolation settings to an HDF5 file
+        """
+        import pickle
+
+        # Construct string
+        loc_dct={"o2sclpy_version": version,
+                 "verbose": self.verbose,
+                 "outformat": self.outformat,
+                 "transform_in": self.transform_in,
+                 "transform_out": self.transform_out,
+                 "SS1": self.SS1,
+                 "SS2": self.SS2}
+        byte_string=pickle.dumps((loc_dct,self.ab))
+
+        # Write to a file
+        hf=o2sclpy.hdf_file()
+        hf.open_or_create(filename)
+        hf.sets(obj_name,byte_string)
+        hf.close()
+
+        return
+    
+    def load(self,filename,obj_name):
+        """
+        Load the interpolation settings from a file
+        """
+        import pickle
+        
+        # Read string from file
+        hf=o2sclpy.hdf_file()
+        hf.open(filename)
+        s=o2sclpy.std_string()
+        hf.gets(obj_name,s)
+        hf.close()
+        sb=s.to_bytes()
+
+        tup=pickle.loads(sb)
+        
+        loc_dct=tup[0]
+        if loc_dct["o2sclpy_version"]!=version:
+            raise ValueError("In function interpm_sklearn_adaboost::load() "+
+                             "Cannot read files with version "+
+                             loc_dct["o2sclpy_version"])
+        self.verbose=loc_dct["verbose"]
+        self.outformat=loc_dct["outformat"]
+        self.transform_in=loc_dct["transform_in"]
+        self.transform_out=loc_dct["transform_out"]
+        self.SS1=loc_dct["SS1"]
+        self.SS2=loc_dct["SS2"]
+        
+        self.ab=tup[1]
+
+        return
+        
 class interpm_torch_dnn:
     """Interpolate one or many multidimensional data sets using
     PyTorch.

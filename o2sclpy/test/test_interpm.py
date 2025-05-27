@@ -419,6 +419,45 @@ def test_all():
             
             print(' ')
             
+        if mode=='sklearn_ab' or mode=='sklearn' or mode=='all':
+            
+            print('sklearn AB',ik+1,'of 3')
+            print(('──────────────────────────────────'+
+                   '─────────────────────────────────'))
+            im4=o2sclpy.interpm_sklearn_adaboost()
+            if ik==0:
+                im4.set_data(x,y,verbose=0,test_size=0.0)
+            elif ik==1:
+                im4.set_data(x,y,verbose=0,test_size=0.1,
+                             transform_in='quant',transform_out='quant')
+            else:
+                im4.set_data(x,y,verbose=0,test_size=0.1,
+                             transform_in='moto',transform_out='moto')
+                
+            exact=[f(v[0],v[1])]
+            interp4a=im4.eval(v)
+            print('exact:',exact)
+            print('interp4a:',interp4a)
+            assert numpy.allclose(exact,interp4a,rtol=1.0)
+    
+            exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
+            interp4b=im4.eval_list(v2)
+            print('exact:',exact)
+            print('interp4b:',interp4b)
+            assert numpy.allclose(exact,interp4b,rtol=1.0)
+            
+            save_str=im4.save('test_interpm.o2','ti_ab')
+            im4b=o2sclpy.interpm_sklearn_adaboost()
+            im4b.load('test_interpm.o2','ti_ab')
+            
+            exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
+            interp4c=im4b.eval_list(v2)
+            print('exact:',exact)
+            print('interp4c:',interp4c)
+            assert numpy.allclose(exact,interp4c,rtol=1.0)
+
+            print(' ')
+            
         if mode=='torch' or mode=='all':
             
             print('Torch DNN',ik+1,'of 3')
