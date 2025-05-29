@@ -309,7 +309,7 @@ Function hfb_sp_load
 Function nucdist_set
 --------------------
 
-.. autofunction:: o2sclpy.nucdist_set(dist,nm,expr,maxA,include_neutron)
+.. autofunction:: o2sclpy.nucdist_set(dist,nm,expr,maxA,include_neutron,verbose)
 
 Function nucdist_pair_set
 -------------------------

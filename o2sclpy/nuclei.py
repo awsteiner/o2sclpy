@@ -2774,7 +2774,7 @@ def hfb_sp_load(hfb,model,filename):
     func(hfb._ptr,model,s_filename._ptr)
     return
 
-def nucdist_set(dist,nm,expr="1",maxA=400,include_neutron=False):
+def nucdist_set(dist,nm,expr="1",maxA=400,include_neutron=False,verbose=0):
     """
         | Parameters:
         | *dist*: :class:`vector<nucleus>` object
@@ -2782,12 +2782,13 @@ def nucdist_set(dist,nm,expr="1",maxA=400,include_neutron=False):
         | *expr*: string
         | *maxA*: ``int``
         | *include_neutron*: ``bool``
+        | *verbose*: ``int``
     """
     s_expr=o2sclpy.std_string()
     s_expr.init_bytes(force_bytes_string(expr))
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_nucdist_set_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
-    func(dist._ptr,nm._ptr,s_expr._ptr,maxA,include_neutron)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool,ctypes.c_int]
+    func(dist._ptr,nm._ptr,s_expr._ptr,maxA,include_neutron,verbose)
     return
 
 def nucdist_pair_set(dist,nm,nm2,expr="1",maxA=400,include_neutron=False):

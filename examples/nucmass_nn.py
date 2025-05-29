@@ -3,29 +3,25 @@
 # +
 import o2sclpy
 import matplotlib.pyplot as plot
-import random
 import numpy
 import sys
-from IPython.utils import io
 
 plots=True
 if 'pytest' in sys.modules:
     plots=False
 # -
 
-vary_nn_parms=False
-
-# Create the data set:
+# Load the data sets of nuclei
 
 # Instantiate and load the Atomic Mass Evaluation. The third parameter
 # is False, to indicate that we include masses which are not solely
 # determined by experiment
 ame=o2sclpy.nucmass_ame()
-o2sclpy.ame_load(ame,'20',False)
+ame.load('20',False)
 print('Number of isotopes in the AME list:',ame.get_nentries())
 
 dist_exp=o2sclpy.std_vector_nucleus()
-o2sclpy.nucdist_set(dist_exp,ame,'')
+o2sclpy.nucdist_set(dist_exp,ame)
 print('Number of nuclei in dist_exp:',len(dist_exp))
 
 msis=o2sclpy.nucmass_mnmsk()
@@ -89,49 +85,12 @@ p[8]=1.284100176024626e+00
 p[9]=2.660955290904157e-01
 frdm.fit_fun(10,p)
 
-# Instantiate the FRDM-shell fit and set parameters from a recent fit
-frdm_shell=o2sclpy.nucmass_frdm_shell()
-p.resize(14)
-p[0]=2.657399203505667e+00
-p[1]=1.136316849511381e+00
-p[2]=3.548541967676024e+01
-p[3]=1.649009712939987e+01
-p[4]=2.331520244072635e+01
-p[5]=3.437294342444157e+01
-p[6]=2.660294896136239e+01
-p[7]=4.409661805078772e-01
-p[8]=2.501490274580595e+01
-p[9]=1.897879047364143e+00
-p[10]=-1.460475719478483e+00
-p[11]=1.928679183044334e-02
-p[12]=1.901033655300475e-03
-p[13]=8.970261351311239e-02
-frdm_shell.fit_fun(14,p)
-
-# Instantiate the ldrop_shell fit and set parameters from a recent fit
-ldrop_shell=o2sclpy.nucmass_ldrop_shell()
-sk=o2sclpy.eos_had_skyrme()
-o2sclpy.skyrme_load(sk,'SLy4')
-ldrop_shell.set_eos_had_temp_base(sk)
-p.resize(11)
-p[0]=8.994776301007761e-01
-p[1]=9.679865078598426e-01
-p[2]=8.751369188587536e-01
-p[3]=9.710432146736609e-01
-p[4]=-9.041294789462331e-03
-p[5]=1.390547985659261e-01
-p[6]=1.246579548574642e+01
-p[7]=-1.493972115439528e+00
-p[8]=1.419539065031770e-02
-p[9]=1.659654542326672e-03
-p[10]=1.136613448382515e-01
-ldrop_shell.fit_fun(11,p)
-
 # Instantiate tables
 wlw=o2sclpy.nucmass_wlw()
 wlw.load("WS4_RBF")
 
 # Create the initial table from which the neural network fit is based
+# We fit the deviation in the mass excess.
 nuc=o2sclpy.nucleus()
 tab=o2sclpy.table()
 tab.line_of_names('Z N mex mex_th diff')
@@ -144,7 +103,7 @@ for Z in range(8,200):
             dz.get_nucleus(Z,N,nuc)
             line[3]=nuc.mex*197.33
             line[4]=line[2]-line[3]
-            if Z==82 and N==126:
+            if Z==50:
                 print(line)
             tab.line_of_data(line)
 
@@ -164,70 +123,87 @@ for i in range(0,N):
     y2[i,0]=tab["diff"][i]
 print('Number of isotopes to fit:',N)
 
+# The input transformation
+
+trans='moto'
+
+# The activation function
+
+act='relu'
+
+# The neural network size parameter
+
+M=4
+
 # Create the neural network interpolation object
 
-for k in range(0,27):
+im2=o2sclpy.interpm_tf_dnn()
 
-    if vary_nn_parms==True or k==19:
+# Train the neural network or load a previous training
 
-        # Different transformations
-        if k%3==0:
-            trans='none'
-        elif k%3==1:
-            trans='moto'
-        else:
-            trans='quant'
+if True:
+    im2.set_data(x2,y2,verbose=1,epochs=800,
+                 transform_in=trans,test_size=0.1,
+                 activations=[act,act,act,act],
+                 hlayers=[240*M,120*M,60*M,40*M])
+else:
+    im2.load('nucmass_nn')
+
+# Print the absolute deviation
+
+sum=0
+for i in range(0,N):
+    v=numpy.array([x2[i,0],x2[i,1]])
+    sum+=numpy.abs(im2.eval(v)[0]-y2[i,0])
+qual=sum/N
+print('Quality: %7.6e' %(qual))
+
+# Save the result in a file
+
+im2.save('nucmass_nn')
+
+# Plot the loss and the validation loss
+
+if plots:
+    index=[i for i in range(0,len(im2.loss))]
+    pb=o2sclpy.plot_base()
+    pb.fig_dict='fig_size_x=6,fig_size_y=6,dpi=250'
+    pb.plot([index,im2.loss])
+    pb.plot([index,im2.val_loss])
+    pb.show()
+    plot.close()
     
-        # Different activation functions
-        if (k//3)%3==0:
-            act='relu'
-        elif (k//3)%3==1:
-            act='sigmoid'
-        else:
-            act='tanh'
+# Compute Tin isotopes
+
+Z=50
+sn=o2sclpy.table()
+sn.line_of_names('N ame dz msis dz_nn')
+for N in range(50,100):
+    if ame.is_included(Z,N):
+        ame.get_nucleus(Z,N,nuc)
+        ame_mex=nuc.mex
+    else:
+        ame_mex=0.0
+    dz.get_nucleus(Z,N,nuc)
+    dz_mex=nuc.mex
+    msis.get_nucleus(Z,N,nuc)
+    msis_mex=nuc.mex
+    # diff is ame-dz, so ame is diff+dz
+    ii=numpy.array([50,N])
+    line=[N,ame_mex*197.33,dz_mex*197.33,msis_mex*197.33,
+          dz_mex*197.33+im2.eval(ii)[0]]
+    sn.line_of_data(line)
+
+# Plot Sn isotopes
+
+if plots:
+    pb=o2sclpy.plot_base()
+    pb.fig_dict='fig_size_x=6,fig_size_y=6,dpi=250'
+    pb.plot([sn,'N','ame'])
+    pb.plot([sn,'N','dz'])
+    pb.plot([sn,'N','msis'])
+    pb.plot([sn,'N','dz_nn'])
+    pb.show()
+    plot.close()
     
-        # Different network sizes
-        if (k//9)%3==0:
-            M=1
-        elif (k//9)%3==1:
-            M=2
-        else:
-            M=4
     
-        avgs=0
-        
-        # Try each configuration five times, and take the
-        # average of the 5 at the end
-        n_fits=0
-        
-        for j in range(0,5):
-
-            if vary_nn_parms==True or j==0:
-            
-                im2=o2sclpy.interpm_tf_dnn()
-                
-                # Train the neural network
-                
-                im2.set_data(x2,y2,verbose=1,epochs=800,
-                             transform_in=trans,test_size=0.1,
-                             activations=[act,act,act,act],
-                             hlayers=[240*M,120*M,60*M,40*M])
-                im2.save('nm2.keras')
-                
-                sum=0
-                for i in range(0,N):
-                    v=numpy.array([x2[i,0],x2[i,1]])
-                    sum+=numpy.abs(im2.eval(v)[0]-y2[i,0])
-                    
-                avg=sum/N
-                print('%d avg %7.6e MeV' % (j,avg))
-                avgs=avgs+avg
-                n_fits=n_fits+1
-                
-        print(avgs/n_fits)
-    
-    print(k,trans,act,M,avgs/n_fits)
-
-# Plot Tin isotopes    
-
-

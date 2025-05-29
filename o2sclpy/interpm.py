@@ -1929,6 +1929,8 @@ class interpm_tf_dnn:
         self.outformat='numpy'
         self.nd_in=0
         self.nd_out=0
+        self.loss=[]
+        self.val_loss=[]
         
         return
 
@@ -2097,18 +2099,24 @@ class interpm_tf_dnn:
             from keras.callbacks import EarlyStopping
             import keras
 
-            class loss_history(keras.callbacks.Callback):
-                def on_train_begin(self,logs={}):
-                    self.losses=[]
-                def on_batch_end(self,batch,logs={}):
-                    self.losses.append(logs.get('loss'))
-            history=loss_history()
+            #class loss_history(keras.callbacks.Callback):
+            #    def on_train_begin(self,logs={}):
+            #        self.loss=[]
+            #        self.val_loss=[]
+            #    def on_batch_end(self,batch,logs={}):
+            #        self.loss.append(logs.get('loss'))
+            #        self.val_loss.append(logs.get('val_loss'))
+            #        print('here',self.loss,self.val_loss)
+            #        quit()
+            #history=loss_history()
 
-            # AWS, 3/9/25, changed from 'val_loss' to 'loss'
-            # to fix warnings on stellar.
-            #
-            #early_stopping=EarlyStopping(monitor='val_loss',
-            early_stopping=EarlyStopping(monitor='loss',
+            # Use the validation loss if we have testing data
+            if test_size>0.0:
+                mon_string='val_loss'
+            else:
+                mon_string='loss'
+            
+            early_stopping=EarlyStopping(monitor=mon_string,
                                          min_delta=es_min_delta,
                                          patience=es_patience,
                                          verbose=self.verbose,
@@ -2123,16 +2131,20 @@ class interpm_tf_dnn:
             
             if test_size>0.0:
                 # Fit the model to training data
-                model.fit(x_tf,y_tf,batch_size=batch_size,
+                hist2=model.fit(x_tf,y_tf,batch_size=batch_size,
                           epochs=epochs,validation_data=(x_test,y_test),
                           verbose=self.verbose,
-                          callbacks=[history,early_stopping])
+                          callbacks=[early_stopping])
+                self.loss=hist2.history['loss']
+                self.val_loss=hist2.history['val_loss']
                           
             else:
                 # Fit the model to training data
                 model.fit(x_tf,y_tf,batch_size=batch_size,
                           epochs=epochs,verbose=self.verbose,
-                          callbacks=[history,early_stopping])
+                          callbacks=[early_stopping])
+                self.loss=hist2.history['loss']
+                self.val_loss=[]
                 
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
