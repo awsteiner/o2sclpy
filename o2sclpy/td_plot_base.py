@@ -270,7 +270,7 @@ class mesh_object:
         two_mats=False
         for i in range(0,len(self.faces)):
             if verbose>1 and i%100==99:
-                print('td_plot_base::sort_by_mat(): find two mats',
+                print('mesh_object::sort_by_mat(): find two mats',
                       i+1,'of',len(self.faces))
             if (len(self.faces[i])==4 and
                 self.faces[i][3]!=self.mat):
