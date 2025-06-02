@@ -802,6 +802,10 @@ class threed_objects:
             if len(mesh.faces[i])>4:
                 raise ValueError('Face '+str(i)+' has more than 4 '+
                                  'elements.')
+
+            for jjj in range(0,3):
+                if mesh.faces[i][jjj]>=len_lv:
+                    raise ValueError('Face '+str(i)+' out of range.')
             
             # Check if there is an undefined material in this face
             if len(mesh.faces[i])==4:

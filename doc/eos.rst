@@ -27,17 +27,10 @@ EOS classes
 * :ref:`Class tov_solve`
 * :ref:`Class tov_love`
 * :ref:`Class nstar_cold`
-* :ref:`Class eos_nstar_rot`
-* :ref:`Class eos_nstar_rot_interp`
-* :ref:`Class eos_nstar_rot_C`
-* :ref:`Class eos_nstar_rot_L`
-* :ref:`Class nstar_rot`
 * :ref:`Class nucleus_rmf`
 * :ref:`Class nucmass_ldrop`
 * :ref:`Class nucmass_ldrop_skin`
 * :ref:`Class nucmass_ldrop_pair`
-* :ref:`Class nucmass_ldrop_shell`
-* :ref:`Class nucmass_frdm_shell`
 * :ref:`Class nucleus_bin`
 * :ref:`Function skyrme_load`
 * :ref:`Function rmf_load`
@@ -284,61 +277,6 @@ Class nstar_cold
         .. automethod:: __del__
         .. automethod:: __copy__
 
-Class eos_nstar_rot
--------------------
-
-.. autoclass:: o2sclpy.eos_nstar_rot
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
-Class eos_nstar_rot_interp
---------------------------
-
-.. autoclass:: o2sclpy.eos_nstar_rot_interp
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
-Class eos_nstar_rot_C
----------------------
-
-.. autoclass:: o2sclpy.eos_nstar_rot_C
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
-Class eos_nstar_rot_L
----------------------
-
-.. autoclass:: o2sclpy.eos_nstar_rot_L
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
-Class nstar_rot
----------------
-
-.. autoclass:: o2sclpy.nstar_rot
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
 Class nucleus_rmf
 -----------------
 
@@ -376,28 +314,6 @@ Class nucmass_ldrop_pair
 ------------------------
 
 .. autoclass:: o2sclpy.nucmass_ldrop_pair
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
-Class nucmass_ldrop_shell
--------------------------
-
-.. autoclass:: o2sclpy.nucmass_ldrop_shell
-        :members:
-        :undoc-members:
-
-        .. automethod:: __init__
-        .. automethod:: __del__
-        .. automethod:: __copy__
-
-Class nucmass_frdm_shell
-------------------------
-
-.. autoclass:: o2sclpy.nucmass_frdm_shell
         :members:
         :undoc-members:
 

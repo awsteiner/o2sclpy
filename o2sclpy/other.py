@@ -3027,7 +3027,7 @@ def vector_mean(n,v):
         | *v*: :class:`vector<double>` object
         | Returns: ``ctypes.c_double`` object
     """
-    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_mean_std_vector_double_double__wrapper
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_vector_mean_std_vector_double__wrapper
     func.restype=ctypes.c_double
     func.argtypes=[ctypes.c_size_t,ctypes.c_void_p]
     ret=func(n,v._ptr)

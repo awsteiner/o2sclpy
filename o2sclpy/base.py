@@ -3535,29 +3535,6 @@ class table3d:
         func(self._ptr,s_x_name._ptr,x_grid._ptr,s_y_name._ptr,y_grid._ptr)
         return
 
-    def set_interp_type(self,interp_type):
-        """
-        | Parameters:
-        | *interp_type*: ``size_t``
-        """
-        func=self._link.o2scl.o2scl_table3d_set_interp_type
-        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t]
-        func(self._ptr,interp_type)
-        return
-
-    def line_of_names(self,names):
-        """
-        | Parameters:
-        | *names*: byte array
-        """
-        s_names=o2sclpy.std_string()
-        s_names.init_bytes(force_bytes_string(names))
-        # tag 7
-        func=self._link.o2scl.o2scl_table3d_line_of_names
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
-        func(self._ptr,s_names._ptr)
-        return
-
     def set(self,ix,iy,name,val):
         """
         | Parameters:

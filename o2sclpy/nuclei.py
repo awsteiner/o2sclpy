@@ -1110,43 +1110,6 @@ class nucmass_ame(nucmass_table):
         new_obj=type(self)(self._ptr)
         return new_obj
 
-    def load(self,name="20",exp_only=False):
-        """
-        | Parameters:
-        | *name* ="20": byte array
-        | *exp_only* =False: ``bool``
-        """
-        s_name=o2sclpy.std_string()
-        s_name.init_bytes(force_bytes_string(name))
-        # tag 7
-        func=self._link.o2scl.o2scl_nucmass_ame_load
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
-        func(self._ptr,s_name._ptr,exp_only)
-        return
-
-    def load_ext(self,name,filename,nubase_file,exp_only=False,verbose=0):
-        """
-        | Parameters:
-        | *name*: byte array
-        | *filename*: byte array
-        | *nubase_file*: byte array
-        | *exp_only* =False: ``bool``
-        | *verbose* =0: ``int``
-        """
-        s_name=o2sclpy.std_string()
-        s_name.init_bytes(force_bytes_string(name))
-        # tag 7
-        s_filename=o2sclpy.std_string()
-        s_filename.init_bytes(force_bytes_string(filename))
-        # tag 7
-        s_nubase_file=o2sclpy.std_string()
-        s_nubase_file.init_bytes(force_bytes_string(nubase_file))
-        # tag 7
-        func=self._link.o2scl.o2scl_nucmass_ame_load_ext
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool,ctypes.c_int]
-        func(self._ptr,s_name._ptr,s_filename._ptr,s_nubase_file._ptr,exp_only,verbose)
-        return
-
 
 class nucmass_dz_table(nucmass_table):
     """
@@ -2382,22 +2345,6 @@ class nucmass_wlw(nucmass_table):
         new_obj=type(self)(self._ptr)
         return new_obj
 
-    def load(self,model="",external=False):
-        """
-        | Parameters:
-        | *model* ="": byte array
-        | *external* =false: ``bool``
-        | Returns: a Python int
-        """
-        s_model=o2sclpy.std_string()
-        s_model.init_bytes(force_bytes_string(model))
-        # tag 7
-        func=self._link.o2scl.o2scl_nucmass_wlw_load
-        func.restype=ctypes.c_int
-        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
-        ret=func(self._ptr,s_model._ptr,external)
-        return ret
-
 
 class nucmass_fit:
     """
@@ -2730,6 +2677,37 @@ class std_vector_nucleus:
         """
         return self.size()
 
+def ame_load(ame,name="20",exp_only=False):
+    """
+        | Parameters:
+        | *ame*: :class:`nucmass_ame` object
+        | *name*: string
+        | *exp_only*: ``bool``
+    """
+    s_name=o2sclpy.std_string()
+    s_name.init_bytes(force_bytes_string(name))
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_ame_load_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+    func(ame._ptr,s_name._ptr,exp_only)
+    return
+
+def ame_load_ext(ame,file_name,table_name,exp_only=False):
+    """
+        | Parameters:
+        | *ame*: :class:`nucmass_ame` object
+        | *file_name*: string
+        | *table_name*: string
+        | *exp_only*: ``bool``
+    """
+    s_file_name=o2sclpy.std_string()
+    s_file_name.init_bytes(force_bytes_string(file_name))
+    s_table_name=o2sclpy.std_string()
+    s_table_name.init_bytes(force_bytes_string(table_name))
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_ame_load_ext_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_bool]
+    func(ame._ptr,s_file_name._ptr,s_table_name._ptr,exp_only)
+    return
+
 def mnmsk_load(mnmsk,model="",filename=""):
     """
         | Parameters:
@@ -2774,7 +2752,7 @@ def hfb_sp_load(hfb,model,filename):
     func(hfb._ptr,model,s_filename._ptr)
     return
 
-def nucdist_set(dist,nm,expr="1",maxA=400,include_neutron=False,verbose=0):
+def nucdist_set(dist,nm,expr="1",maxA=400,include_neutron=False):
     """
         | Parameters:
         | *dist*: :class:`vector<nucleus>` object
@@ -2782,13 +2760,12 @@ def nucdist_set(dist,nm,expr="1",maxA=400,include_neutron=False,verbose=0):
         | *expr*: string
         | *maxA*: ``int``
         | *include_neutron*: ``bool``
-        | *verbose*: ``int``
     """
     s_expr=o2sclpy.std_string()
     s_expr.init_bytes(force_bytes_string(expr))
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_nucdist_set_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool,ctypes.c_int]
-    func(dist._ptr,nm._ptr,s_expr._ptr,maxA,include_neutron,verbose)
+    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
+    func(dist._ptr,nm._ptr,s_expr._ptr,maxA,include_neutron)
     return
 
 def nucdist_pair_set(dist,nm,nm2,expr="1",maxA=400,include_neutron=False):
@@ -2806,22 +2783,5 @@ def nucdist_pair_set(dist,nm,nm2,expr="1",maxA=400,include_neutron=False):
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_nucdist_pair_set_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_bool]
     func(dist._ptr,nm._ptr,nm2._ptr,s_expr._ptr,maxA,include_neutron)
-    return
-
-def nucdist_set_ext(dist,dist_ext,nm,expr="1",maxA=400,n_chop=1):
-    """
-        | Parameters:
-        | *dist*: :class:`vector<nucleus>` object
-        | *dist_ext*: :class:`vector<nucleus>` object
-        | *nm*: :class:`nucmass` object
-        | *expr*: string
-        | *maxA*: ``int``
-        | *n_chop*: ``int``
-    """
-    s_expr=o2sclpy.std_string()
-    s_expr.init_bytes(force_bytes_string(expr))
-    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_nucdist_set_ext_wrapper
-    func.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
-    func(dist._ptr,dist_ext._ptr,nm._ptr,s_expr._ptr,maxA,n_chop)
     return
 
