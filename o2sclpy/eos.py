@@ -3194,6 +3194,17 @@ class eos_tov_polytrope(eos_tov):
         func(self._ptr,coeff,index)
         return
 
+    def set_baryon_density(self,nb,ed):
+        """
+        | Parameters:
+        | *nb*: ``double``
+        | *ed*: ``double``
+        """
+        func=self._link.o2scl.o2scl_eos_tov_polytrope_set_baryon_density
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,nb,ed)
+        return
+
 
 class eos_tov_linear(eos_tov):
     """
@@ -4869,6 +4880,1354 @@ class nstar_cold:
         return sp
 
 
+class eos_nstar_rot(eos_tov):
+    """
+    Python interface for O2scl class ``eos_nstar_rot``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/eos_nstar_rot.html .
+    """
+
+    @abstractmethod
+    def __init__(self,pointer=0):
+        """
+        Init function for class eos_nstar_rot
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_nstar_rot
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_nstar_rot
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_eos_nstar_rot
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class eos_nstar_rot
+        
+        Returns: eos_nstar_rot object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    def enth_from_pr(self,pr):
+        """
+        | Parameters:
+        | *pr*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_enth_from_pr
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,pr)
+        return ret
+
+    def pr_from_enth(self,pr):
+        """
+        | Parameters:
+        | *pr*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_pr_from_enth
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,pr)
+        return ret
+
+    def enth_from_nb(self,pr):
+        """
+        | Parameters:
+        | *pr*: ``double``
+        | Returns: a Python float
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_enth_from_nb
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,pr)
+        return ret
+
+
+class eos_nstar_rot_interp(eos_nstar_rot):
+    """
+    Python interface for O2scl class ``eos_nstar_rot_interp``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/eos_nstar_rot_interp.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class eos_nstar_rot_interp
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_nstar_rot_interp
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_nstar_rot_interp
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_eos_nstar_rot_interp
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class eos_nstar_rot_interp
+        
+        Returns: eos_nstar_rot_interp object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    def set_eos_fm(self,n,eden,pres,nb):
+        """
+        | Parameters:
+        | *n*: ``size_t``
+        | *eden*: :class:`vector<double>` object
+        | *pres*: :class:`vector<double>` object
+        | *nb*: :class:`vector<double>` object
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_interp_set_eos_fm
+        func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,n,eden._ptr,pres._ptr,nb._ptr)
+        return
+
+
+class eos_nstar_rot_C(eos_nstar_rot_interp):
+    """
+    Python interface for O2scl class ``eos_nstar_rot_C``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/eos_nstar_rot_C.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class eos_nstar_rot_C
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_nstar_rot_C
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_nstar_rot_C
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_eos_nstar_rot_C
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class eos_nstar_rot_C
+        
+        Returns: eos_nstar_rot_C object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    def set(self,rns_constants=False):
+        """
+        | Parameters:
+        | *rns_constants* =false: ``bool``
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_C_set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,rns_constants)
+        return
+
+
+class eos_nstar_rot_L(eos_nstar_rot_interp):
+    """
+    Python interface for O2scl class ``eos_nstar_rot_L``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/eos_nstar_rot_L.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class eos_nstar_rot_L
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_eos_nstar_rot_L
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class eos_nstar_rot_L
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_eos_nstar_rot_L
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class eos_nstar_rot_L
+        
+        Returns: eos_nstar_rot_L object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    def set(self,rns_constants=False):
+        """
+        | Parameters:
+        | *rns_constants* =false: ``bool``
+        """
+        func=self._link.o2scl.o2scl_eos_nstar_rot_L_set
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,rns_constants)
+        return
+
+
+class nstar_rot:
+    """
+    Python interface for O2scl class ``nstar_rot``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/nstar_rot.html .
+    """
+
+    _ptr=0
+    _link=0
+    _owner=True
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nstar_rot
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nstar_rot
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nstar_rot
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nstar_rot
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nstar_rot
+        
+        Returns: nstar_rot object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+    @property
+    def err_nonconv(self):
+        """
+        Property of type ``ctypes.c_bool``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_err_nonconv
+        func.restype=ctypes.c_bool
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @err_nonconv.setter
+    def err_nonconv(self,value):
+        """
+        Setter function for nstar_rot::err_nonconv .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_err_nonconv
+        func.argtypes=[ctypes.c_void_p,ctypes.c_bool]
+        func(self._ptr,value)
+        return
+
+    @property
+    def eq_radius_tol_rel(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_eq_radius_tol_rel
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @eq_radius_tol_rel.setter
+    def eq_radius_tol_rel(self,value):
+        """
+        Setter function for nstar_rot::eq_radius_tol_rel .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_eq_radius_tol_rel
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def alt_tol_rel(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_alt_tol_rel
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @alt_tol_rel.setter
+    def alt_tol_rel(self,value):
+        """
+        Setter function for nstar_rot::alt_tol_rel .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_alt_tol_rel
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def verbose(self):
+        """
+        Property of type ``ctypes.c_int``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_verbose
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @verbose.setter
+    def verbose(self,value):
+        """
+        Setter function for nstar_rot::verbose .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_verbose
+        func.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        func(self._ptr,value)
+        return
+
+    @property
+    def e_center(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_e_center
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @e_center.setter
+    def e_center(self,value):
+        """
+        Setter function for nstar_rot::e_center .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_e_center
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def r_ratio(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_r_ratio
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @r_ratio.setter
+    def r_ratio(self,value):
+        """
+        Setter function for nstar_rot::r_ratio .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_r_ratio
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def r_e(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_r_e
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @r_e.setter
+    def r_e(self,value):
+        """
+        Setter function for nstar_rot::r_e .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_r_e
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def r_p(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_r_p
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @r_p.setter
+    def r_p(self,value):
+        """
+        Setter function for nstar_rot::r_p .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_r_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def s_p(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_s_p
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @s_p.setter
+    def s_p(self,value):
+        """
+        Setter function for nstar_rot::s_p .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_s_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def s_e(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_s_e
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @s_e.setter
+    def s_e(self,value):
+        """
+        Setter function for nstar_rot::s_e .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_s_e
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def R_e(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_R_e
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @R_e.setter
+    def R_e(self,value):
+        """
+        Setter function for nstar_rot::R_e .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_R_e
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Mass_p(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_Mass_p
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Mass_p.setter
+    def Mass_p(self,value):
+        """
+        Setter function for nstar_rot::Mass_p .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_Mass_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Mass(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_Mass
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Mass.setter
+    def Mass(self,value):
+        """
+        Setter function for nstar_rot::Mass .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_Mass
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Mass_0(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_Mass_0
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Mass_0.setter
+    def Mass_0(self,value):
+        """
+        Setter function for nstar_rot::Mass_0 .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_Mass_0
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def J(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_J
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @J.setter
+    def J(self,value):
+        """
+        Setter function for nstar_rot::J .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_J
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Omega(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_Omega
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Omega.setter
+    def Omega(self,value):
+        """
+        Setter function for nstar_rot::Omega .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_Omega
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def T(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_T
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @T.setter
+    def T(self,value):
+        """
+        Setter function for nstar_rot::T .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_T
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def I(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_I
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @I.setter
+    def I(self,value):
+        """
+        Setter function for nstar_rot::I .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_I
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def W(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_W
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @W.setter
+    def W(self,value):
+        """
+        Setter function for nstar_rot::W .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_W
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Z_p(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_Z_p
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Z_p.setter
+    def Z_p(self,value):
+        """
+        Setter function for nstar_rot::Z_p .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_Z_p
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Z_f(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_Z_f
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Z_f.setter
+    def Z_f(self,value):
+        """
+        Setter function for nstar_rot::Z_f .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_Z_f
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Z_b(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_Z_b
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Z_b.setter
+    def Z_b(self,value):
+        """
+        Setter function for nstar_rot::Z_b .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_Z_b
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Omega_K(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_Omega_K
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Omega_K.setter
+    def Omega_K(self,value):
+        """
+        Setter function for nstar_rot::Omega_K .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_Omega_K
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def eccentricity(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_eccentricity
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @eccentricity.setter
+    def eccentricity(self,value):
+        """
+        Setter function for nstar_rot::eccentricity .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_eccentricity
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    def get_v_plus(self):
+        """
+        Get object of type :class:`ubvector`
+        """
+        func1=self._link.o2scl.o2scl_nstar_rot_get_v_plus
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=ubvector(ptr)
+        return obj
+
+    def set_v_plus(self,value):
+        """
+        Set object of type :class:`ubvector`
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_v_plus
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_v_minus(self):
+        """
+        Get object of type :class:`ubvector`
+        """
+        func1=self._link.o2scl.o2scl_nstar_rot_get_v_minus
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=ubvector(ptr)
+        return obj
+
+    def set_v_minus(self,value):
+        """
+        Set object of type :class:`ubvector`
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_v_minus
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    @property
+    def vel_plus(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_vel_plus
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @vel_plus.setter
+    def vel_plus(self,value):
+        """
+        Setter function for nstar_rot::vel_plus .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_vel_plus
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def vel_minus(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_vel_minus
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @vel_minus.setter
+    def vel_minus(self,value):
+        """
+        Setter function for nstar_rot::vel_minus .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_vel_minus
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def h_plus(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_h_plus
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @h_plus.setter
+    def h_plus(self,value):
+        """
+        Setter function for nstar_rot::h_plus .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_h_plus
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def h_minus(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_h_minus
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @h_minus.setter
+    def h_minus(self,value):
+        """
+        Setter function for nstar_rot::h_minus .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_h_minus
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def Omega_plus(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_Omega_plus
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @Omega_plus.setter
+    def Omega_plus(self,value):
+        """
+        Setter function for nstar_rot::Omega_plus .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_Omega_plus
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def om_over_Om(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_om_over_Om
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @om_over_Om.setter
+    def om_over_Om(self,value):
+        """
+        Setter function for nstar_rot::om_over_Om .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_om_over_Om
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def mass_quadrupole(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_mass_quadrupole
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @mass_quadrupole.setter
+    def mass_quadrupole(self,value):
+        """
+        Setter function for nstar_rot::mass_quadrupole .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_mass_quadrupole
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def cf(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_cf
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @cf.setter
+    def cf(self,value):
+        """
+        Setter function for nstar_rot::cf .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_cf
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def C(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_C
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @C.setter
+    def C(self,value):
+        """
+        Setter function for nstar_rot::C .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_C
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def G(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_G
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @G.setter
+    def G(self,value):
+        """
+        Setter function for nstar_rot::G .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_G
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def MSUN(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_MSUN
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @MSUN.setter
+    def MSUN(self,value):
+        """
+        Setter function for nstar_rot::MSUN .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_MSUN
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def KAPPA(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_KAPPA
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @KAPPA.setter
+    def KAPPA(self,value):
+        """
+        Setter function for nstar_rot::KAPPA .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_KAPPA
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def MB(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_MB
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @MB.setter
+    def MB(self,value):
+        """
+        Setter function for nstar_rot::MB .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_MB
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def KSCALE(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_KSCALE
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @KSCALE.setter
+    def KSCALE(self,value):
+        """
+        Setter function for nstar_rot::KSCALE .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_KSCALE
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    @property
+    def PI(self):
+        """
+        Property of type ``ctypes.c_double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_get_PI
+        func.restype=ctypes.c_double
+        func.argtypes=[ctypes.c_void_p]
+        return func(self._ptr)
+
+    @PI.setter
+    def PI(self,value):
+        """
+        Setter function for nstar_rot::PI .
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_PI
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,value)
+        return
+
+    def output_table(self,t):
+        """
+        | Parameters:
+        | *t*: :class:`table3d` object
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_output_table
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,t._ptr)
+        return
+
+    def set_eos(self,eos):
+        """
+        | Parameters:
+        | *eos*: :class:`eos_nstar_rot` object
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_set_eos
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,eos._ptr)
+        return
+
+    def polytrope_eos(self,index):
+        """
+        | Parameters:
+        | *index*: ``double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_polytrope_eos
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        func(self._ptr,index)
+        return
+
+    def fix_cent_eden_axis_rat(self,cent_eden,axis_rat,use_guess=False):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *axis_rat*: ``double``
+        | *use_guess* =false: ``bool``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_axis_rat
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
+        func(self._ptr,cent_eden,axis_rat,use_guess)
+        return
+
+    def fix_cent_eden_grav_mass(self,cent_eden,grav_mass):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *grav_mass*: ``double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_grav_mass
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,cent_eden,grav_mass)
+        return
+
+    def fix_cent_eden_bar_mass(self,cent_eden,bar_mass):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *bar_mass*: ``double``
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_bar_mass
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        func(self._ptr,cent_eden,bar_mass)
+        return
+
+    def fix_cent_eden_with_kepler(self,cent_eden):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_with_kepler
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,cent_eden)
+        return ret
+
+    def fix_cent_eden_ang_vel(self,cent_eden,ang_vel):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *ang_vel*: ``double``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_ang_vel
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,cent_eden,ang_vel)
+        return ret
+
+    def fix_cent_eden_ang_mom(self,cent_eden,ang_mom):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *ang_mom*: ``double``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_ang_mom
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double]
+        ret=func(self._ptr,cent_eden,ang_mom)
+        return ret
+
+    def fix_cent_eden_non_rot(self,cent_eden):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_non_rot
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double]
+        ret=func(self._ptr,cent_eden)
+        return ret
+
+    def fix_cent_eden_with_kepler_alt(self,cent_eden,use_guess=False):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *use_guess* =false: ``bool``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_with_kepler_alt
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_bool]
+        ret=func(self._ptr,cent_eden,use_guess)
+        return ret
+
+    def fix_cent_eden_grav_mass_alt(self,cent_eden,grav_mass,use_guess=False):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *grav_mass*: ``double``
+        | *use_guess* =false: ``bool``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_grav_mass_alt
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
+        ret=func(self._ptr,cent_eden,grav_mass,use_guess)
+        return ret
+
+    def fix_cent_eden_bar_mass_alt(self,cent_eden,bar_mass,use_guess=False):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *bar_mass*: ``double``
+        | *use_guess* =false: ``bool``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_bar_mass_alt
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
+        ret=func(self._ptr,cent_eden,bar_mass,use_guess)
+        return ret
+
+    def fix_cent_eden_ang_vel_alt(self,cent_eden,ang_vel,use_guess=False):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *ang_vel*: ``double``
+        | *use_guess* =false: ``bool``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_ang_vel_alt
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
+        ret=func(self._ptr,cent_eden,ang_vel,use_guess)
+        return ret
+
+    def fix_cent_eden_ang_mom_alt(self,cent_eden,ang_mom,use_guess=False):
+        """
+        | Parameters:
+        | *cent_eden*: ``double``
+        | *ang_mom*: ``double``
+        | *use_guess* =false: ``bool``
+        | Returns: a Python int
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_fix_cent_eden_ang_mom_alt
+        func.restype=ctypes.c_int
+        func.argtypes=[ctypes.c_void_p,ctypes.c_double,ctypes.c_double,ctypes.c_bool]
+        ret=func(self._ptr,cent_eden,ang_mom,use_guess)
+        return ret
+
+    def constants_rns(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_constants_rns
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+    def constants_o2scl(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_nstar_rot_constants_o2scl
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
+
 class nucleus_rmf:
     """
     Python interface for O2scl class ``nucleus_rmf``.
@@ -5876,6 +7235,108 @@ class nucmass_ldrop_pair(nucmass_ldrop_skin):
         func.argtypes=[ctypes.c_void_p,ctypes.c_double]
         func(self._ptr,value)
         return
+
+
+class nucmass_ldrop_shell(nucmass_ldrop_pair):
+    """
+    Python interface for O2scl class ``nucmass_ldrop_shell``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucmass_ldrop_shell.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucmass_ldrop_shell
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_ldrop_shell
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_ldrop_shell
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucmass_ldrop_shell
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucmass_ldrop_shell
+        
+        Returns: nucmass_ldrop_shell object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
+
+
+class nucmass_frdm_shell(nucmass_frdm):
+    """
+    Python interface for O2scl class ``nucmass_frdm_shell``.
+    See
+    https://awsteiner.org/code/o2scl/html/class/nucmass_frdm_shell.html .
+    """
+
+    def __init__(self,pointer=0):
+        """
+        Init function for class nucmass_frdm_shell
+
+        | Parameters:
+        | *pointer* ``ctypes.c_void_p`` pointer
+
+        """
+
+        if pointer==0:
+            f=o2sclpy.doc_data.top_linker.o2scl.o2scl_create_nucmass_frdm_shell
+            f.restype=ctypes.c_void_p
+            f.argtypes=[]
+            self._ptr=f()
+        else:
+            self._ptr=pointer
+            self._owner=False
+        self._link=o2sclpy.doc_data.top_linker
+        return
+
+    def __del__(self):
+        """
+        Delete function for class nucmass_frdm_shell
+        """
+
+        if self._owner==True:
+            f=self._link.o2scl.o2scl_free_nucmass_frdm_shell
+            f.argtypes=[ctypes.c_void_p]
+            f(self._ptr)
+            self._owner=False
+            self._ptr=0
+        return
+
+    def __copy__(self):
+        """
+        Shallow copy function for class nucmass_frdm_shell
+        
+        Returns: nucmass_frdm_shell object
+        """
+
+        new_obj=type(self)(self._ptr)
+        return new_obj
 
 
 class nucleus_bin:
