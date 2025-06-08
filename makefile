@@ -44,6 +44,7 @@ doc: .empty
 	cd examples; $(MAKE) skyrme.ipynb
 	cd examples; $(MAKE) interpm.ipynb
 	cd examples; $(MAKE) nucmass.ipynb
+	cd examples; $(MAKE) nucmass_nn.ipynb
 	cd examples; $(MAKE) SFHo_SFHx.ipynb
 	cd examples; $(MAKE) DSH.ipynb
 	cd examples; $(MAKE) buchdahl.ipynb
@@ -65,6 +66,7 @@ test:
 		examples/link_o2scl.py \
 		examples/nstar_rot.py \
 		examples/nucmass.py \
+		examples/nucmass_nn.py \
 		examples/SFHo_SFHx.py \
 		examples/skyrme.py \
 		examples/table.py \
@@ -81,6 +83,7 @@ testq:
 		examples/link_o2scl.py \
 		examples/nstar_rot.py \
 		examples/nucmass.py \
+		examples/nucmass_nn.py \
 		examples/SFHo_SFHx.py \
 		examples/skyrme.py \
 		examples/table.py \

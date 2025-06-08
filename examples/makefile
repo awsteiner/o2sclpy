@@ -52,6 +52,9 @@ link_o2scl.ipynb: empty
 nucmass.ipynb: empty
 	jupytext --to ipynb --update nucmass.py 
 
+nucmass_nn.ipynb: empty
+	jupytext --to ipynb --update nucmass_nn.py 
+
 SFHo_SFHx.ipynb: empty
 	jupytext --to ipynb --update SFHo_SFHx.py 
 
