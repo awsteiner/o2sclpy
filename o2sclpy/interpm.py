@@ -2140,9 +2140,9 @@ class interpm_tf_dnn:
                           
             else:
                 # Fit the model to training data
-                model.fit(x_tf,y_tf,batch_size=batch_size,
-                          epochs=epochs,verbose=self.verbose,
-                          callbacks=[early_stopping])
+                hist2=model.fit(x_tf,y_tf,batch_size=batch_size,
+                                epochs=epochs,verbose=self.verbose,
+                                callbacks=[early_stopping])
                 self.loss=hist2.history['loss']
                 self.val_loss=[]
                 
