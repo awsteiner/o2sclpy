@@ -16,6 +16,7 @@ if 'pytest' in sys.modules:
 # Instantiate and load the Atomic Mass Evaluation. The third parameter
 # is False, to indicate that we include masses which are not solely
 # determined by experiment
+
 ame=o2sclpy.nucmass_ame()
 ame.load('20',False)
 print('Number of isotopes in the AME list:',ame.get_nentries())
@@ -31,7 +32,10 @@ dist_msis=o2sclpy.std_vector_nucleus()
 o2sclpy.nucdist_set(dist_msis,msis)
 print('Number of nuclei in dist_msis:',len(dist_msis))
 
-# Instantiate the Duflo-Zuker fit and set parameters from a recent fit
+# Instantiate the Duflo-Zuker (DZ) fit and set parameters from a
+# recent fit. Note that this isn't the original DZ table, but rather a
+# new fit of the 33-parameter DZ model to the 2020 AME.
+
 dz=o2sclpy.nucmass_dz_fit_33()
 p=o2sclpy.ublas_vector()
 p.resize(33)
@@ -71,6 +75,7 @@ p[32]=2.076508980189957e+01
 dz.fit_fun(33,p)
 
 # Instantiate the FRDM fit and set parameters from a recent fit
+
 frdm=o2sclpy.nucmass_frdm()
 p.resize(10)
 p[0]=1.470521168091704e+00
@@ -86,18 +91,23 @@ p[9]=2.660955290904157e-01
 frdm.fit_fun(10,p)
 
 # Instantiate tables
+
 wlw=o2sclpy.nucmass_wlw()
 wlw.load("WS4_RBF")
 
 # Create the initial table from which the neural network fit is based
-# We fit the deviation in the mass excess.
+# We fit the deviation in the mass excess. We also remove the
+# most neutron-rich isotopes of Sn by hand, so we can see how good
+# the neural network is doing later.
+
 nuc=o2sclpy.nucleus()
 tab=o2sclpy.table()
 tab.line_of_names('Z N mex mex_th diff')
 for Z in range(8,200):
     for N in range(8,250):
         line=[Z,N,0,0,0]
-        if ame.is_included(Z,N) and dz.is_included(Z,N):
+        if (ame.is_included(Z,N) and dz.is_included(Z,N) and
+            (Z!=50 or N<=80)):
             ame.get_nucleus(Z,N,nuc)
             line[2]=nuc.mex*197.33
             dz.get_nucleus(Z,N,nuc)
@@ -108,12 +118,14 @@ for Z in range(8,200):
             tab.line_of_data(line)
 
 # Write the table to a file
+
 hf=o2sclpy.hdf_file()
 hf.open_or_create('nm2.o2')
 o2sclpy.hdf_output_table(hf,tab,b'table')
 hf.close()
 
 # Reformat the table into a numpy array for the interpm class
+
 N=tab.get_nlines()
 x2=numpy.zeros((N,2))
 y2=numpy.zeros((N,1))
@@ -177,7 +189,7 @@ if plots:
 
 Z=50
 sn=o2sclpy.table()
-sn.line_of_names('N ame dz msis dz_nn')
+sn.line_of_names('N ame dz msis dz_nn dz_ame dz_nn_ame')
 for N in range(50,100):
     if ame.is_included(Z,N):
         ame.get_nucleus(Z,N,nuc)
@@ -190,8 +202,15 @@ for N in range(50,100):
     msis_mex=nuc.mex
     # diff is ame-dz, so ame is diff+dz
     ii=numpy.array([50,N])
-    line=[N,ame_mex*197.33,dz_mex*197.33,msis_mex*197.33,
-          dz_mex*197.33+im2.eval(ii)[0]]
+    if ame.is_included(Z,N):
+        line=[N,ame_mex*197.33,dz_mex*197.33,msis_mex*197.33,
+              dz_mex*197.33+im2.eval(ii)[0],
+              (dz_mex-ame_mex)*197.33,
+              dz_mex*197.33+im2.eval(ii)[0]-ame_mex*197.33]
+              
+    else:
+        line=[N,ame_mex*197.33,dz_mex*197.33,msis_mex*197.33,
+              dz_mex*197.33+im2.eval(ii)[0],1.0,1.0]
     sn.line_of_data(line)
 
 # Plot Sn isotopes
@@ -203,6 +222,16 @@ if plots:
     pb.plot([sn,'N','dz'])
     pb.plot([sn,'N','msis'])
     pb.plot([sn,'N','dz_nn'])
+    pb.show()
+    plot.close()
+
+# Plot theory minus experiment
+    
+if plots:
+    pb=o2sclpy.plot_base()
+    pb.fig_dict='fig_size_x=6,fig_size_y=6,dpi=250'
+    pb.plot([sn,'N','dz_ame'])
+    pb.plot([sn,'N','dz_nn_ame'])
     pb.show()
     plot.close()
     
