@@ -120,10 +120,28 @@ class linker:
                                          mode=ctypes.RTLD_GLOBAL)
                 if self.verbose>0:
                     print('Finished loading C++ library.')
-        
+
             if (len(self.o2scl_addl_libs)==0 and
-                os.getenv('O2SCL_ADDL_LIBS') is not None
-                and force_bytes(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
+                os.getenv('O2SCL_ADDL_LIBS') is None):
+                
+                try:
+                    import distro
+                    print("Linux distribution:",distro.name(),distro.version())
+                    if (distro.name()=="Ubuntu" and
+                        distro.version()=="24.04"):
+                        self.o2scl_addl_libs=('/usr/lib/gcc/x86_64-'+
+                                              'linux-gnu/13/libgomp.so')
+                    elif distro.name()=="Arch Linux":
+                        self.o2scl_addl_libs='/usr/lib/libgomp.so'
+                        
+                except Exception as e:
+                    if self.verbose>0:
+                        print('Failed to get distribution from distro.')
+
+            if (len(self.o2scl_addl_libs)==0 and
+                  os.getenv('O2SCL_ADDL_LIBS') is not None and 
+                  force_bytes(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
+                
                 self.o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS').split(',')
                 if self.verbose>0:
                     print('Set o2scl_addl_libs from environment',
