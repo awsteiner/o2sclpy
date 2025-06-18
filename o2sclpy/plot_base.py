@@ -880,6 +880,8 @@ class plot_base:
             print('Line',x1,y1,x2,y1)
         if self.canvas_flag==False:
             self.canvas()
+
+        coords=kwargs.pop('coords','user')
             
         if isinstance(x1,str):
             x1=float(eval(x1))
@@ -890,6 +892,14 @@ class plot_base:
         if isinstance(y2,str):
             y2=float(eval(y2))
 
+        if coords=='internal':
+            xloloc,xhiloc=self.axes.get_xlim()
+            x1=x1*(xhiloc-xloloc)+xloloc
+            x2=x2*(xhiloc-xloloc)+xloloc
+            yloloc,yhiloc=self.ayes.get_ylim()
+            y1=y1*(yhiloc-yloloc)+yloloc
+            y2=y2*(yhiloc-yloloc)+yloloc
+            
         self.axes.plot([x1,x2],[y1,y2],**kwargs)
         # End of function plot_base::line()
         return
