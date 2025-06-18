@@ -115,28 +115,13 @@ class linker:
         
             if self.o2scl_cpp_lib!='':
                 if self.verbose>0:
-                    print("Loading C++ library '"+self.o2scl_cpp_lib+"'.")
+                    print("linker::link_o2scl():",
+                          "'Loading C++ library '"+self.o2scl_cpp_lib+"'.")
                 self.systcpp=ctypes.CDLL(self.o2scl_cpp_lib,
                                          mode=ctypes.RTLD_GLOBAL)
                 if self.verbose>0:
-                    print('Finished loading C++ library.')
-
-            if (len(self.o2scl_addl_libs)==0 and
-                os.getenv('O2SCL_ADDL_LIBS') is None):
-                
-                try:
-                    import distro
-                    print("Linux distribution:",distro.name(),distro.version())
-                    if (distro.name()=="Ubuntu" and
-                        distro.version()=="24.04"):
-                        self.o2scl_addl_libs=('/usr/lib/gcc/x86_64-'+
-                                              'linux-gnu/13/libgomp.so')
-                    elif distro.name()=="Arch Linux":
-                        self.o2scl_addl_libs='/usr/lib/libgomp.so'
-                        
-                except Exception as e:
-                    if self.verbose>0:
-                        print('Failed to get distribution from distro.')
+                    print('linker::link_o2scl():',
+                          'Finished loading C++ library.')
 
             if (len(self.o2scl_addl_libs)==0 and
                   os.getenv('O2SCL_ADDL_LIBS') is not None and 
@@ -188,12 +173,37 @@ class linker:
         else:
         
             if self.verbose>0:
-                print('Loading C++ library.')
+                print("linker::link_o2scl():",
+                      'Loading C++ library.')
             stdcpp=ctypes.CDLL(find_library("stdc++"),
                                mode=ctypes.RTLD_GLOBAL)
             if self.verbose>0:
-                print('Finished loading C++ library.')
+                print("linker::link_o2scl():",
+                      'Finished loading C++ library.')
           
+            if (len(self.o2scl_addl_libs)==0 and
+                os.getenv('O2SCL_ADDL_LIBS') is None):
+                
+                try:
+                    import distro
+                    
+                    if self.verbose>0:
+                        print("linker::link_o2scl():",
+                              "Linux distribution:",
+                              distro.name(),distro.version())
+                    if (distro.name()=="Ubuntu" and
+                        distro.version()=="24.04"):
+                        self.o2scl_addl_libs=['/usr/lib/gcc/x86_64-'+
+                                              'linux-gnu/13/libgomp.so']
+                    elif distro.name()=="Arch Linux":
+                        self.o2scl_addl_libs=['/usr/lib/libgomp.so']
+                        
+                except Exception as e:
+                    
+                    if self.verbose>0:
+                        print("linker::link_o2scl(): Failed to ",
+                              'get distribution from distro module.')
+
             if (len(self.o2scl_addl_libs)==0 and
                 os.getenv('O2SCL_ADDL_LIBS') is not None
                 and force_bytes(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
@@ -204,14 +214,17 @@ class linker:
                           self.o2scl_addl_libs)
         
             if len(self.o2scl_addl_libs)>0:
+                          
                 for i in range(0,len(self.o2scl_addl_libs)):
                     if self.verbose>0:
-                        print('Loading additional library',
+                        print("linker::link_o2scl():",
+                              'Loading additional library',
                               self.o2scl_addl_libs[i],'.')
                     self.o2scl_addl.append(ctypes.CDLL(self.o2scl_addl_libs[i],
                                                   mode=ctypes.RTLD_GLOBAL))
                 if self.verbose>0:
-                    print('Finished loading additional libraries.')
+                    print("linker::link_o2scl():",
+                          'Finished loading additional libraries.')
             
             # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
             # the former is a more common notation for library directories
@@ -220,29 +233,34 @@ class linker:
                 force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
                 self.o2scl_lib_dir=os.getenv('O2SCL_LIB')
                 if self.verbose>0:
-                    print('Set o2scl_lib_dir from environment',
+                    print("linker::link_o2scl():",
+                          'Set o2scl_lib_dir from environment',
                           'variable to\n  ',
                           self.o2scl_lib_dir)
             
             if self.o2scl_lib_dir=='':
                 if self.verbose>0:
-                    print('Loading o2scl.')
+                    print("linker::link_o2scl():",
+                          'Loading o2scl.')
                 self.o2scl=ctypes.CDLL(find_library("o2scl"),
                                   mode=ctypes.RTLD_GLOBAL)
                 
             else:
                 if self.verbose>0:
-                    print('Loading',self.o2scl_lib_dir+'/libo2scl.so .')
+                    print("linker::link_o2scl():",
+                          'Loading',self.o2scl_lib_dir+'/libo2scl.so .')
                 self.o2scl=ctypes.CDLL(self.o2scl_lib_dir+'/libo2scl.so',
                                   mode=ctypes.RTLD_GLOBAL)
         
             if self.verbose>0:
-                print('Done loading o2scl libraries.')
+                print("linker::link_o2scl():",
+                      'Done loading o2scl libraries.')
 
         # This is necessary even if we're only including o2scl because
         # the o2scl error handler is sometimes used by GSL functions
         if self.verbose>0:
-            print('Setting alternate error handler.')
+            print("linker::link_o2scl():",
+                  'Setting alternate error handler.')
         self.o2scl.o2scl_python_prep()
 
         # Get the global library settings pointer
