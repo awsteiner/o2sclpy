@@ -1,10 +1,6 @@
 [project]
 name = "o2sclpy"
-<<<<<<< HEAD
-version = "0.931a2"
-=======
-version = "0.930.1"
->>>>>>> main
+version = "0.931"
 authors = [
   { name="Andrew W. Steiner", email="awsteiner0@protonmail.com" },
 ]
