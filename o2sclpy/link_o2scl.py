@@ -135,8 +135,9 @@ class linker:
                           'Finished loading C++ library.')
         
             if (len(self.o2scl_addl_libs)==0 and
-                os.getenv('O2SCL_ADDL_LIBS') is not None
-                and force_bytes(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
+                  os.getenv('O2SCL_ADDL_LIBS') is not None and 
+                  force_bytes(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
+                
                 self.o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS').split(',')
                 if loc_verbose>0:
                     print("linker::link_o2scl():",
@@ -199,6 +200,29 @@ class linker:
                       'Finished loading C++ library.')
           
             if (len(self.o2scl_addl_libs)==0 and
+                os.getenv('O2SCL_ADDL_LIBS') is None):
+                
+                try:
+                    import distro
+                    
+                    if self.verbose>0:
+                        print("linker::link_o2scl():",
+                              "Linux distribution:",
+                              distro.name(),distro.version())
+                    if (distro.name()=="Ubuntu" and
+                        distro.version()=="24.04"):
+                        self.o2scl_addl_libs=['/usr/lib/gcc/x86_64-'+
+                                              'linux-gnu/13/libgomp.so']
+                    elif distro.name()=="Arch Linux":
+                        self.o2scl_addl_libs=['/usr/lib/libgomp.so']
+                        
+                except Exception as e:
+                    
+                    if self.verbose>0:
+                        print("linker::link_o2scl(): Failed to ",
+                              'get distribution from distro module.')
+
+            if (len(self.o2scl_addl_libs)==0 and
                 os.getenv('O2SCL_ADDL_LIBS') is not None
                 and force_bytes(os.getenv('O2SCL_ADDL_LIBS'))!=b'None'):
                 self.o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS').split(',')
@@ -209,6 +233,7 @@ class linker:
                           self.o2scl_addl_libs)
         
             if len(self.o2scl_addl_libs)>0:
+                          
                 for i in range(0,len(self.o2scl_addl_libs)):
                     if loc_verbose>0:
                         print("linker::link_o2scl():",
@@ -256,6 +281,9 @@ class linker:
             if loc_verbose>0:
                 print('linker::link_o2scl(): Calling o2scl_python_prep().')
             self.o2scl.o2scl_python_prep()
+            print("linker::link_o2scl():",
+                  'Setting alternate error handler.')
+        self.o2scl.o2scl_python_prep()
 
             # Get the global library settings pointer
             #if loc_verbose>0:

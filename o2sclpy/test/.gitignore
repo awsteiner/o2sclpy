@@ -1,3 +1,5 @@
+*.pt
+*.keras
 *.o2
 *.pt
 *.keras

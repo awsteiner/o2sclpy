@@ -1,6 +1,10 @@
 [project]
 name = "o2sclpy"
+<<<<<<< HEAD
 version = "0.931a2"
+=======
+version = "0.930.1"
+>>>>>>> main
 authors = [
   { name="Andrew W. Steiner", email="awsteiner0@protonmail.com" },
 ]
@@ -25,7 +29,8 @@ cli = [
   "scipy",
   "torch",
   "normflows",
-  "ipython"
+  "ipython",
+  "distro"
 ]
 
 [project.scripts]
