@@ -1,7 +1,7 @@
 .. _o2sclpy:
 
-O₂sclpy: v0.931a1
-=================
+O₂sclpy: v0.931
+===============
 
 O₂sclpy is a combination of three things:
 

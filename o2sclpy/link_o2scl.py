@@ -281,9 +281,6 @@ class linker:
             if loc_verbose>0:
                 print('linker::link_o2scl(): Calling o2scl_python_prep().')
             self.o2scl.o2scl_python_prep()
-            print("linker::link_o2scl():",
-                  'Setting alternate error handler.')
-        self.o2scl.o2scl_python_prep()
 
             # Get the global library settings pointer
             #if loc_verbose>0:
