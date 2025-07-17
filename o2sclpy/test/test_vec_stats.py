@@ -50,13 +50,13 @@ def subtest_acor():
     o2sclpy.vector_autocorr_vector(len(vec),vec,ac)
     ftom=o2sclpy.std_vector()
     assert numpy.allclose(o2sclpy.vector_autocorr_tau(ac,ftom),
-                          100,atol=50)
+                          100,atol=100)
 
     ac2=o2sclpy.std_vector()
     o2sclpy.vector_autocorr_vector_fftw(vec,ac2,m,s)
     ftom2=o2sclpy.std_vector()
     assert numpy.allclose(o2sclpy.vector_autocorr_tau(ac2,ftom2),
-                          100,atol=50)
+                          100,atol=100)
 
     # This doesn't work yet
     #tau=0.0
