@@ -24,7 +24,7 @@ from o2sclpy.utils import string_to_dict2
 from o2sclpy.doc_data import version
 from o2sclpy.base import *
 
-class dimred_PCA:
+class dimred_sklearn_pca:
     """
     """
 
@@ -38,11 +38,16 @@ class dimred_PCA:
         self.verbose=0
         self.random_state=None
         self.n_components=0
+        self.whiten=False
+        self.tol=0.0
+        self.svn_solver='auto'
+        self.pca=0
         
         return
     
-    def run(self,in_data,n_components,verbose=0,
-                 random_state=None):
+    def run(self,in_data,n_components=None,verbose=0,
+            svd_solver='auto',tol=0.0,random_state=None,
+            whiten=False):
         """Set the input and output data to train the classifier
 
         The variable ``in_data`` should be an array of shape
@@ -51,19 +56,27 @@ class dimred_PCA:
         self.verbose=verbose
         self.n_components=n_components
         self.random_state=random_state
+        self.whiten=whiten
+        self.svd_solver=svd_solver
+        self.tol=tol
         
         if self.verbose>0:
-            print('classify_sklearn_dtc::set_data():')
+            print('dimred_sklearn_pca::set_data():')
             print('  in_data shape:',numpy.shape(in_data))
             print('  verbose:',verbose)
             print('  n_components:',n_components)
             print('  random_state:',random_state)
+            print('  tol:',tol)
+            print('  whiten:',whiten)
+            print('  svd_solver:',svd_solver)
 
         try:
             from sklearn.decomposition import PCA
-            out_data=PCA(n_components=self.n_components,
-                         random_state=self.random_state).fit_transform(
-                             in_data)
+            self.pca=PCA(n_components=self.n_components,
+                         random_state=self.random_state,
+                         whiten=self.whiten,tol=self.tol,
+                         svd_solver=self.svd_solver)
+            out_data=self.pca.fit_transform(in_data)
             
         except Exception as e:
             print('Exception in dimred_PCA::run()',
@@ -72,8 +85,10 @@ class dimred_PCA:
 
         return out_data
 
-    def run_table(self,tab,in_cols,n_components,verbose=0,replace=False,
-                  out_prefix='pca_',out_cols=[],random_state=None):
+    def run_table(self,tab,in_cols,n_components=None,verbose=0,
+                  replace=False,out_prefix='pca_',out_cols=[],
+                  random_state=None,svd_solver='auto',whiten=False,
+                  tol=0.0):
 
         # First check that all columns specified in 'in_cols' are
         # actually in the table.
@@ -90,7 +105,7 @@ class dimred_PCA:
             if i<len(out_cols):
                 out_cols_loc.append(out_cols[i])
             else:
-                out_cols_loc.append(out_prefix+int(i))
+                out_cols_loc.append(out_prefix+str(i))
 
         # Construct the input data matrix (brute force)
         in_data=numpy.zeros((tab.get_nlines(),len(in_cols)))
@@ -100,7 +115,9 @@ class dimred_PCA:
 
         # Perform the dimensional reduction
         out_data=self.run(in_data,n_components,verbose=verbose,
-                          random_state=random_state)
+                          random_state=random_state,
+                          tol=tol,whiten=whiten,
+                          svd_solver=svd_solver)
 
         # Remove the old columns if requested
         if replace==True:
@@ -116,7 +133,7 @@ class dimred_PCA:
                 
         return
     
-    def run_curr_table_str(self,tab,options)
+    def run_curr_table_str(self,tab,options):
         """
         Set the input and output data to train the interpolator,
         using a string to specify the keyword arguments.
@@ -128,7 +145,7 @@ class dimred_PCA:
                             list_of_bools=['replace'])
 
         if self.verbose>2:
-            print('In classify_sklearn_dtc::set_data_str(): string:',
+            print('In dimred_sklearn_pca::set_data_str(): string:',
                   options,'Dictionary:',dct)
 
         out_col_arr=dct.pop("out_cols",'').split(' ')
@@ -140,7 +157,7 @@ class dimred_PCA:
             else:
                 self.run_table(tab,0,**dct)
         except Exception as e:
-            print('Exception in classify_sklearn_dtc::set_data_str()',e)
+            print('Exception in dimred_sklearn_pca::set_data_str()',e)
             raise
 
         return

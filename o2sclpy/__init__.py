@@ -45,6 +45,7 @@ from o2sclpy.classify import *
 from o2sclpy.gmm import *
 from o2sclpy.kde import *
 from o2sclpy.nflows import *
+from o2sclpy.dimred import *
 
 class todo_list:
     """
