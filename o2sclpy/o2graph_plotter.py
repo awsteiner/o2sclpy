@@ -52,6 +52,7 @@ from o2sclpy.doc_data import version
 from o2sclpy.hdf import *
 from o2sclpy.base import *
 from o2sclpy.kde import *
+from o2sclpy.dimred import *
 
 base_list=[
     ["addcbar",plot_base.addcbar.__doc__],
@@ -201,6 +202,8 @@ extra_list=[
     ["table","scatter",0],
     ["table","yt-scatter",0],
     ["table","yt-vertex-list",0],
+    ["table","pca",0],
+    ["table","tsne",0],
     ["table3d","den-plot",0],
     ["table3d","den-plot-rgb",0],
     ["tensor","den-plot",0],
@@ -695,6 +698,10 @@ class o2graph_plotter(td_plot_base):
                 line[2]=o2graph_plotter.kde_2d_plot.__doc__
             elif line[1]=="plot":
                 line[2]=o2graph_plotter.plot_o2graph.__doc__
+            elif line[1]=="pca":
+                line[2]=o2graph_plotter.pca.__doc__
+            elif line[1]=="tsne":
+                line[2]=o2graph_plotter.tsne.__doc__
             elif line[1]=="plot1":
                 line[2]=o2graph_plotter.plot1.__doc__
             elif line[1]=="plot-color":
@@ -1612,6 +1619,94 @@ class o2graph_plotter(td_plot_base):
                   'and file',prefix+'.')
         self.to.write_gltf(self.td_wdir,prefix,verbose=self.verbose)
 
+        return
+    
+    def pca(self,amp,n_components,input_col_patterns,kwarg_str):
+        """Documentation for o2graph command ``pca``:
+
+        For objects of type ``table``:
+
+        Command-line arguments: ``<n_components> <col. specs.>
+        <kwargs or "None">``
+
+        """
+        curr_type=o2scl_get_type(amp)
+
+        if curr_type==b'table':
+            
+            amt=acol_manager(amp)
+            tab=amt.get_table_obj()
+
+            if kwarg_str.find('verbose')==-1:
+                if kwarg_str=='':
+                    kwarg_str='verbose='+str(self.verbose)
+                else:
+                    kwarg_str=kwarg_str+',verbose='+str(self.verbose)
+            
+            import fnmatch
+            
+            in_cols=[]
+            for i in range(0,tab.get_ncolumns()):
+                found=False
+                for j in range(0,len(input_col_patterns)):
+                    if fnmatch.fnmatch(tab.get_column_name(i),
+                                       force_bytes(input_col_patterns[j])):
+                        found=True
+                if found==True:
+                    in_cols.append(tab.get_column_name(i))
+
+            pca=dimred_sklearn_pca()
+            pca.run_table_str(tab,n_components,in_cols,kwarg_str)
+
+        else:
+            print("Command 'pca' not supported for type",
+                  curr_type,".")
+            return
+        
+        # End of function o2graph_plotter::pca()
+        return
+    
+    def tsne(self,amp,args):
+        """Documentation for o2graph command ``tsne``:
+
+        For objects of type ``table``:
+
+        Command-line arguments: ``<n_components> <col. specs.>
+        <kwargs or "None">``
+
+        """
+        curr_type=o2scl_get_type(amp)
+
+        if curr_type==b'table':
+            
+            amt=acol_manager(amp)
+            tab=amt.get_table_obj()
+
+            n_components=args[0]
+            kwarg_str=args[-1]
+            col_patterns=args[1:-2]
+            
+            import fnmatch
+            
+            in_cols=[]
+            for i in range(0,tab.get_ncolumns()):
+                found=False
+                for j in range(0,len(col_patterns)):
+                    if fnmatch.fnmatch(tab.get_column_name(i),
+                                       col_patterns[j]):
+                        found=True
+                if found==True:
+                    in_cols.append(tab.get_column_name(i))
+
+            tsne=dimred_sklearn_tsne()
+            tsne.run(tab,in_cols,kwarg_str)
+
+        else:
+            print("Command 'tsne' not supported for type",
+                  curr_type,".")
+            return
+        
+        # End of function o2graph_plotter::tsne()
         return
     
     def kde_plot(self,amp,args):
@@ -5759,7 +5854,8 @@ class o2graph_plotter(td_plot_base):
                 if cmd_name=='set':
 
                     if self.verbose>2:
-                        print('Process set.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process set.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
@@ -5770,7 +5866,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='wdocs':
 
                     if self.verbose>2:
-                        print('Process wdocs.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process wdocs.')
                         print('args:',strlist[ix:ix_next])
                         
                     self.wdocs_wrapper(amp,strlist[ix+1:ix_next])
@@ -5778,7 +5875,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='ell-max':
 
                     if self.verbose>2:
-                        print('Process ell-max.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process ell-max.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<1:
@@ -5789,7 +5887,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='colors':
 
                     if self.verbose>2:
-                        print('Process colors.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process colors.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<1:
@@ -5800,7 +5899,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='cmap':
 
                     if self.verbose>2:
-                        print('Process cmap.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process cmap.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
@@ -5813,7 +5913,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='get':
                     
                     if self.verbose>2:
-                        print('Process get.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process get.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
@@ -5824,7 +5925,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='commands':
                     
                     if self.verbose>2:
-                        print('Process commands.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process commands.')
                         print('args:',strlist[ix:ix_next])
 
                     self.commands(amp,
@@ -5833,7 +5935,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-add-vol':
 
                     if self.verbose>2:
-                        print('Process yt-add-vol.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-add-vol.')
                         print('args:',strlist[ix:ix_next])
                         
                     self.yt_add_vol(amp,
@@ -5842,7 +5945,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-scatter':
 
                     if self.verbose>2:
-                        print('Process yt-scatter.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-scatter.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<4:
@@ -5850,10 +5954,43 @@ class o2graph_plotter(td_plot_base):
                     else:
                         self.yt_scatter(amp,strlist[ix+1:ix_next])
                                                     
+                elif cmd_name=='pca':
+
+                    if self.verbose>2:
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process pca.')
+                        print('  args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<4:
+                        print('Not enough parameters for pca.')
+                    else:
+                        #n_components=args[0]
+                        #kwarg_str=args[-1]
+                        #col_patterns=args[1:-2]
+                        if (strlist[ix_next-1]=="None" or
+                            strlist[ix_next-1]=="none"):
+                            strlist[ix_next-1]=""
+                        self.pca(amp,int(strlist[ix+1]),
+                                 strlist[ix+2:ix_next-1],
+                                 strlist[ix_next-1])
+                                                    
+                elif cmd_name=='tsne':
+
+                    if self.verbose>2:
+                        print('o2graph_plotter::parse_string_list():',
+                              '  Process tsne.')
+                        print('args:',strlist[ix:ix_next])
+
+                    if ix_next-ix<4:
+                        print('Not enough parameters for tsne.')
+                    else:
+                        self.tsne(amp,strlist[ix+1:ix_next])
+                                                    
                 elif cmd_name=='yt-path':
 
                     if self.verbose>2:
-                        print('Process yt-path.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-path.')
                         print('args:',strlist[ix:ix_next])
 
                     if strlist[ix+1]=='reset':
@@ -5867,7 +6004,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-ann':
 
                     if self.verbose>2:
-                        print('Process yt-ann.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-ann.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<4:
@@ -5878,7 +6016,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-text':
 
                     if self.verbose>2:
-                        print('Process yt-text.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-text.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<5:
@@ -5898,7 +6037,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-xtitle':
 
                     if self.verbose>2:
-                        print('Process yt-text.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-text.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
@@ -5912,7 +6052,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-ytitle':
 
                     if self.verbose>2:
-                        print('Process yt-text.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-text.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
@@ -5926,7 +6067,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-ztitle':
 
                     if self.verbose>2:
-                        print('Process yt-text.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-text.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
@@ -5940,7 +6082,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-line':
 
                     if self.verbose>2:
-                        print('Process yt-line.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-line.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<7:
@@ -5966,7 +6109,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-point':
 
                     if self.verbose>2:
-                        print('Process yt-point.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-point.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<5:
@@ -5988,7 +6132,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-box':
 
                     if self.verbose>2:
-                        print('Process yt-box.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-box.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<7:
@@ -6014,7 +6159,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-arrow':
 
                     if self.verbose>2:
-                        print('Process yt-arrow.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-arrow.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<6:
@@ -6040,7 +6186,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-vertex-list':
 
                     if self.verbose>2:
-                        print('Process yt-vertex-list.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-vertex-list.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<4:
@@ -6052,7 +6199,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-mesh':
 
                     if self.verbose>2:
-                        print('Process yt-mesh.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-mesh.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
@@ -6064,7 +6212,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-source-list':
 
                     if self.verbose>2:
-                        print('Process yt-source-list.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-source-list.')
                         print('args:',strlist[ix:ix_next])
                         
                     icnt=0
@@ -6084,7 +6233,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-arrow':
 
                     if self.verbose>2:
-                        print('Process td-arrow.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-arrow.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix>=8:
@@ -6108,7 +6258,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-cyl':
 
                     if self.verbose>2:
-                        print('Process td-cyl.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-cyl.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix>=9:
@@ -6134,7 +6285,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-axis-label':
 
                     if self.verbose>2:
-                        print('Process td-axis-label.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-axis-label.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix>=4:
@@ -6152,7 +6304,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-axis':
 
                     if self.verbose>2:
-                        print('Process td-axis.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-axis.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix>=5:
@@ -6179,7 +6332,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-den-plot':
 
                     if self.verbose>2:
-                        print('Process td-den-plot.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-den-plot.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix==2:
@@ -6193,7 +6347,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-scatter':
 
                     if self.verbose>2:
-                        print('Process td-scatter.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-scatter.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix==4:
@@ -6232,7 +6387,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-icos':
 
                     if self.verbose>2:
-                        print('Process td-icos.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-icos.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix==4:
@@ -6254,7 +6410,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-pgram':
 
                     if self.verbose>2:
-                        print('Process td-pgram.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-pgram.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix==10:
@@ -6287,7 +6444,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-point':
 
                     if self.verbose>2:
-                        print('Process td-point.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-point.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix==4:
@@ -6305,7 +6463,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-line':
 
                     if self.verbose>2:
-                        print('Process td-line.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-line.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix==7:
@@ -6329,7 +6488,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='td-mat':
 
                     if self.verbose>2:
-                        print('Process td-mat.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process td-mat.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix==5:
@@ -6355,7 +6515,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='bl-yaw-mp4':
 
                     if self.verbose>2:
-                        print('Process bl-yaw-mp4.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process bl-yaw-mp4.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix>=4:
@@ -6378,7 +6539,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='bl-import':
 
                     if self.verbose>2:
-                        print('Process bl-import.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process bl-import.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix>=3:
@@ -6399,7 +6561,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='bl-six-mp4':
 
                     if self.verbose>2:
-                        print('Process bl-six-mp4.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process bl-six-mp4.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix>=4:
@@ -6422,7 +6585,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-axis':
 
                     if self.verbose>2:
-                        print('Process yt-axis.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-axis.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
@@ -6433,7 +6597,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-render':
 
                     if self.verbose>2:
-                        print('Process render.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process render.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
@@ -6447,7 +6612,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='yt-tf':
 
                     if self.verbose>2:
-                        print('Process yt-tf.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process yt-tf.')
                         print('args:',strlist[ix:ix_next])
 
                     self.yt_tf_func(strlist[ix+1:ix_next])
@@ -6455,7 +6621,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='help' or cmd_name=='h':
                     
                     if self.verbose>2:
-                        print('Process help.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process help.')
                         print('args:',strlist[ix:ix_next])
 
                     self.help_func(amp,strlist[ix+1:ix_next])
@@ -6463,7 +6630,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='plot':
                     
                     if self.verbose>2:
-                        print('Process plot.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process plot.')
                         print('args:',strlist[ix:ix_next])
 
                     self.plot_o2graph(amp,strlist[ix+1:ix_next])
@@ -6471,7 +6639,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='plot-color':
                     
                     if self.verbose>2:
-                        print('Process plot-color.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process plot-color.')
                         print('args:',strlist[ix:ix_next])
 
                     self.plot_color(amp,strlist[ix+1:ix_next])
@@ -6479,7 +6648,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='rplot':
                     
                     if self.verbose>2:
-                        print('Process rplot.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process rplot.')
                         print('args:',strlist[ix:ix_next])
 
                     self.rplot(amp,strlist[ix+1:ix_next])
@@ -6487,7 +6657,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='scatter':
                     
                     if self.verbose>2:
-                        print('Process scatter.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process scatter.')
                         print('args:',strlist[ix:ix_next])
 
                     self.scatter_o2graph(amp,strlist[ix+1:ix_next])
@@ -6495,7 +6666,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='hist-plot':
                     
                     if self.verbose>2:
-                        print('Process hist-plot.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process hist-plot.')
                         print('args:',strlist[ix:ix_next])
 
                     self.hist_plot(amp,strlist[ix+1:ix_next])
@@ -6503,7 +6675,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='errorbar':
                     
                     if self.verbose>2:
-                        print('Process errorbar.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process errorbar.')
                         print('args:',strlist[ix:ix_next])
 
                     self.errorbar(amp,strlist[ix+1:ix_next])
@@ -6511,7 +6684,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='hist2d-plot':
                     
                     if self.verbose>2:
-                        print('Process hist2d-plot.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process hist2d-plot.')
                         print('args:',strlist[ix:ix_next])
                         
                     self.hist2d_plot(amp,
@@ -6520,7 +6694,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='den-plot':
                     
                     if self.verbose>2:
-                        print('Process den-plot.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process den-plot.')
                         print('args:',strlist[ix:ix_next])
 
                     self.den_plot_o2graph(amp,
@@ -6529,7 +6704,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='den-plot-anim':
                     
                     if self.verbose>2:
-                        print('Process den-plot-anim.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process den-plot-anim.')
                         print('args:',strlist[ix:ix_next])
 
                     self.den_plot_anim(amp,
@@ -6538,7 +6714,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='den-plot-rgb':
                     
                     if self.verbose>2:
-                        print('Process den-plot-rgb.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process den-plot-rgb.')
                         print('args:',strlist[ix:ix_next])
 
                     self.den_plot_rgb_o2graph(amp,
@@ -6547,7 +6724,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='gltf':
 
                     if self.verbose>2:
-                        print('Process gltf.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process gltf.')
                         print('args:',strlist[ix:ix_next])
 
                     self.gltf_o2graph(amp,
@@ -6556,7 +6734,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='kde-plot':
                     
                     if self.verbose>2:
-                        print('Process kde-plot.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process kde-plot.')
                         print('args:',strlist[ix:ix_next])
 
                     self.kde_plot(amp,strlist[ix+1:ix_next])
@@ -6564,7 +6743,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='kde-2d-plot':
                     
                     if self.verbose>2:
-                        print('Process kde-2d-plot.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process kde-2d-plot.')
                         print('args:',strlist[ix:ix_next])
 
                     self.kde_2d_plot(amp,strlist[ix+1:ix_next])
@@ -6572,7 +6752,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='mp4':
                     
                     if self.verbose>2:
-                        print('Process mp4.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process mp4.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<3:
@@ -6587,7 +6768,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='plot1':
                     
                     if self.verbose>2:
-                        print('Process plot1.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process plot1.')
                         print('args:',strlist[ix:ix_next])
                         
                     self.plot1(amp,strlist[ix+1:ix_next])
@@ -6595,7 +6777,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='plotv':
                     
                     if self.verbose>2:
-                        print('Process plotv.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process plotv.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
@@ -6606,7 +6789,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='text':
                     
                     if self.verbose>2:
-                        print('Process text.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process text.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
@@ -6633,7 +6817,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='to-kde':
                     
                     if self.verbose>2:
-                        print('Process to-kde.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process to-kde.')
                         print('args:',strlist[ix:ix_next])
 
                     self.to_kde(amp,strlist[ix+1:ix_next])
@@ -6641,7 +6826,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='ttext':
                     
                     if self.verbose>2:
-                        print('Process ttext.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process ttext.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<4:
@@ -6655,7 +6841,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='xlimits':
                     
                     if self.verbose>2:
-                        print('Process xlimits.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process xlimits.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
@@ -6667,7 +6854,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='ylimits':
                     
                     if self.verbose>2:
-                        print('Process ylimits.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process ylimits.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
@@ -6679,7 +6867,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='zlimits':
                     
                     if self.verbose>2:
-                        print('Process zlimits.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process zlimits.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
@@ -6691,7 +6880,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='save':
                     
                     if self.verbose>2:
-                        print('Process save.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process save.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
@@ -6703,7 +6893,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='subplots':
                     
                     if self.verbose>2:
-                        print('Process subplots.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process subplots.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
@@ -6719,7 +6910,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='selax':
                     
                     if self.verbose>2:
-                        print('Process selax.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process selax.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
@@ -6730,7 +6922,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='addcbar':
                     
                     if self.verbose>5:
-                        print('Process addcbar.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process addcbar.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
@@ -6750,7 +6943,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='append-images':
                     
                     if self.verbose>5:
-                        print('Process append-images.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process append-images.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<4:
@@ -6763,7 +6957,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='inset':
                     
                     if self.verbose>5:
-                        print('Process inset.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process inset.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
@@ -6783,7 +6978,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='modax':
                     
                     if self.verbose>1:
-                        print('Process modax.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process modax.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<2:
@@ -6794,7 +6990,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='subadj':
                     
                     if self.verbose>2:
-                        print('Process subadj.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process subadj.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
@@ -6806,7 +7003,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='xtitle':
 
                     if self.verbose>2:
-                        print('Process xtitle.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process xtitle.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
@@ -6821,7 +7019,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='ytitle':
                     
                     if self.verbose>2:
-                        print('Process ytitle.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process ytitle.')
                         print('args:',strlist[ix:ix_next])
 
                     if ix_next-ix<2:
@@ -6836,7 +7035,8 @@ class o2graph_plotter(td_plot_base):
                 # elif cmd_name=='ztitle':
                     
                 #     if self.verbose>2:
-                #         print('Process ztitle.')
+                #         print('o2graph_plotter::parse_string_list():',
+                #'Process ztitle.')
 
                 #     if ix_next-ix<2:
                 #         print('Not enough parameters for ztitle option.')
@@ -6853,7 +7053,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='line':
                     
                     if self.verbose>2:
-                        print('Process line.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process line.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
@@ -6869,31 +7070,36 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='o2scl-cpp-lib':
                     
                     if self.verbose>2:
-                        print('Process o2scl-cpp-lib.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process o2scl-cpp-lib.')
                         print('args:',strlist[ix:ix_next])
                         
                 elif cmd_name=='o2scl-lib-dir':
                     
                     if self.verbose>2:
-                        print('Process o2scl-lib-dir.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process o2scl-lib-dir.')
                         print('args:',strlist[ix:ix_next])
                     
                 elif cmd_name=='o2scl-addl-libs':
                     
                     if self.verbose>2:
-                        print('Process o2scl-addl-libs.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process o2scl-addl-libs.')
                         print('args:',strlist[ix:ix_next])
                     
                 elif cmd_name=='debug-first-pass':
                     
                     if self.verbose>2:
-                        print('Process debug-first-pass.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process debug-first-pass.')
                         print('args:',strlist[ix:ix_next])
                     
                 elif cmd_name=='textbox':
                     
                     if self.verbose>2:
-                        print('Process textbox.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process textbox.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<4:
@@ -6912,7 +7118,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='arrow':
                     
                     if self.verbose>2:
-                        print('Process arrow.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process arrow.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<6:
@@ -6930,7 +7137,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='point':
                     
                     if self.verbose>2:
-                        print('Process point.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process point.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<3:
@@ -6944,7 +7152,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='error-point':
                     
                     if self.verbose>2:
-                        print('Process point.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process point.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
@@ -6969,7 +7178,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='python':
                     
                     if self.verbose>2:
-                        print('Process python.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process python.')
                         print('args:',strlist[ix:ix_next])
 
                     print("The o2graph_plotter() object is named 'self'.")
@@ -6981,7 +7191,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='eval':
                     
                     if self.verbose>2:
-                        print('Process eval.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process eval.')
                         print('args:',strlist[ix:ix_next])
 
                     eval(strlist[ix+1],None,locals())
@@ -6989,7 +7200,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='exec':
                     
                     if self.verbose>2:
-                        print('Process exec.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process exec.')
                         print('args:',strlist[ix:ix_next])
 
                     exec(open(strlist[ix+1]).read(),None,locals())
@@ -6997,7 +7209,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='image':
                     
                     if self.verbose>2:
-                        print('Process image.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process image.')
                         print('args:',strlist[ix:ix_next])
 
                     import matplotlib.image as img
@@ -7023,7 +7236,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='rect':
                     
                     if self.verbose>2:
-                        print('Process rect.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process rect.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
@@ -7044,7 +7258,8 @@ class o2graph_plotter(td_plot_base):
                 elif cmd_name=='ellipse':
                     
                     if self.verbose>2:
-                        print('Process ellipse.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process ellipse.')
                         print('args:',strlist[ix:ix_next])
                         
                     if ix_next-ix<5:
@@ -7064,33 +7279,39 @@ class o2graph_plotter(td_plot_base):
                         
                 elif cmd_name=='show':
                     if self.verbose>2:
-                        print('Process show.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process show.')
                         print('args:',strlist[ix:ix_next])
                     self.show()
                 elif cmd_name=='move-labels':
                     if self.verbose>2:
-                        print('Process move-labels.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process move-labels.')
                         print('args:',strlist[ix:ix_next])
                     self.move_labels()
                 elif cmd_name=='canvas':
                     if self.verbose>2:
-                        print('Process canvas.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process canvas.')
                         print('args:',strlist[ix:ix_next])
                     self.canvas()
                 elif cmd_name=='clf':
                     if self.verbose>2:
-                        print('Process clf.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process clf.')
                         print('args:',strlist[ix:ix_next])
                     import matplotlib.pyplot as plot
                     plot.clf()
                     self.canvas_flag=False
                 elif cmd_name=='backend':
                     if self.verbose>2:
-                        print('Process backend in __init__.py.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process backend in __init__.py.')
                         print('args:',strlist[ix:ix_next])
                 else:
                     if self.verbose>2:
-                        print('Process acol command '+cmd_name+'.')
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process acol command '+cmd_name+'.')
                         print('args:',strlist[ix:ix_next])
                     self.gen_acol(amp,cmd_name,
                                   strlist[ix+1:ix_next])
