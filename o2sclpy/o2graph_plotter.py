@@ -1626,7 +1626,7 @@ class o2graph_plotter(td_plot_base):
 
         For objects of type ``table``:
 
-        Command-line arguments: ``<n_components> <col. specs.>
+        Command-line arguments: ``<n_components> <column patterns>
         <kwargs or "None">``
 
         """
@@ -1666,12 +1666,12 @@ class o2graph_plotter(td_plot_base):
         # End of function o2graph_plotter::pca()
         return
     
-    def tsne(self,amp,args):
+    def tsne(self,amp,input_col_patterns,kwarg_str):
         """Documentation for o2graph command ``tsne``:
 
         For objects of type ``table``:
 
-        Command-line arguments: ``<n_components> <col. specs.>
+        Command-line arguments: ``<column patterns>
         <kwargs or "None">``
 
         """
@@ -1682,24 +1682,30 @@ class o2graph_plotter(td_plot_base):
             amt=acol_manager(amp)
             tab=amt.get_table_obj()
 
-            n_components=args[0]
-            kwarg_str=args[-1]
-            col_patterns=args[1:-2]
+            print('kwarg_str0',kwarg_str)
+            if kwarg_str.find('verbose')==-1:
+                if kwarg_str=='':
+                    kwarg_str='verbose='+str(self.verbose)
+                else:
+                    kwarg_str=kwarg_str+',verbose='+str(self.verbose)
+            print('kwarg_str1',kwarg_str)
             
             import fnmatch
             
             in_cols=[]
             for i in range(0,tab.get_ncolumns()):
                 found=False
-                for j in range(0,len(col_patterns)):
+                for j in range(0,len(input_col_patterns)):
                     if fnmatch.fnmatch(tab.get_column_name(i),
-                                       col_patterns[j]):
+                                       force_bytes(input_col_patterns[j])):
                         found=True
                 if found==True:
                     in_cols.append(tab.get_column_name(i))
 
+            print('I1')
             tsne=dimred_sklearn_tsne()
-            tsne.run(tab,in_cols,kwarg_str)
+            print('I2',in_cols,kwarg_str)
+            tsne.run_table_str(tab,in_cols,kwarg_str)
 
         else:
             print("Command 'tsne' not supported for type",
@@ -5964,9 +5970,6 @@ class o2graph_plotter(td_plot_base):
                     if ix_next-ix<4:
                         print('Not enough parameters for pca.')
                     else:
-                        #n_components=args[0]
-                        #kwarg_str=args[-1]
-                        #col_patterns=args[1:-2]
                         if (strlist[ix_next-1]=="None" or
                             strlist[ix_next-1]=="none"):
                             strlist[ix_next-1]=""
@@ -5978,13 +5981,17 @@ class o2graph_plotter(td_plot_base):
 
                     if self.verbose>2:
                         print('o2graph_plotter::parse_string_list():',
-                              '  Process tsne.')
-                        print('args:',strlist[ix:ix_next])
+                              'Process tsne.')
+                        print('  args:',strlist[ix:ix_next])
 
-                    if ix_next-ix<4:
+                    if ix_next-ix<3:
                         print('Not enough parameters for tsne.')
                     else:
-                        self.tsne(amp,strlist[ix+1:ix_next])
+                        if (strlist[ix_next-1]=="None" or
+                            strlist[ix_next-1]=="none"):
+                            strlist[ix_next-1]=""
+                        self.tsne(amp,strlist[ix+2:ix_next-1],
+                                 strlist[ix_next-1])
                                                     
                 elif cmd_name=='yt-path':
 
