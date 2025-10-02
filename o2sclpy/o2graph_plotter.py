@@ -1638,10 +1638,15 @@ class o2graph_plotter(td_plot_base):
             tab=amt.get_table_obj()
 
             if kwarg_str.find('verbose')==-1:
+                loc_verbose=self.verbose
                 if kwarg_str=='':
                     kwarg_str='verbose='+str(self.verbose)
                 else:
                     kwarg_str=kwarg_str+',verbose='+str(self.verbose)
+            else:
+                loc_verbose=string_to_dict2(kwarg_str,
+                                            list_of_ints=
+                                            ['verbose'])["verbose"]
             
             import fnmatch
             
@@ -1651,6 +1656,10 @@ class o2graph_plotter(td_plot_base):
                 for j in range(0,len(input_col_patterns)):
                     if fnmatch.fnmatch(tab.get_column_name(i),
                                        force_bytes(input_col_patterns[j])):
+                        if loc_verbose>2:
+                            print('o2graph_plotter::pca(): Column',
+                                  tab.get_column_name(i),
+                                  'matched pattern',input_col_patterns[j])
                         found=True
                 if found==True:
                     in_cols.append(tab.get_column_name(i))
@@ -1676,20 +1685,26 @@ class o2graph_plotter(td_plot_base):
 
         """
         curr_type=o2scl_get_type(amp)
-
+        
         if curr_type==b'table':
             
             amt=acol_manager(amp)
             tab=amt.get_table_obj()
 
-            print('kwarg_str0',kwarg_str)
+            # If 'verbose' is specified, we pass the value
+            # on to the dimred_sklearn_tsne object. Otherwise,
+            # we use the value of self.verbose.
             if kwarg_str.find('verbose')==-1:
+                loc_verbose=self.verbose
                 if kwarg_str=='':
                     kwarg_str='verbose='+str(self.verbose)
                 else:
                     kwarg_str=kwarg_str+',verbose='+str(self.verbose)
-            print('kwarg_str1',kwarg_str)
-            
+            else:
+                loc_verbose=string_to_dict2(kwarg_str,
+                                            list_of_ints=
+                                            ['verbose'])["verbose"]
+
             import fnmatch
             
             in_cols=[]
@@ -1698,13 +1713,15 @@ class o2graph_plotter(td_plot_base):
                 for j in range(0,len(input_col_patterns)):
                     if fnmatch.fnmatch(tab.get_column_name(i),
                                        force_bytes(input_col_patterns[j])):
+                        if loc_verbose>2:
+                            print('o2graph_plotter::tsne(): Column',
+                                  tab.get_column_name(i),
+                                  'matched pattern',input_col_patterns[j])
                         found=True
                 if found==True:
                     in_cols.append(tab.get_column_name(i))
 
-            print('I1')
             tsne=dimred_sklearn_tsne()
-            print('I2',in_cols,kwarg_str)
             tsne.run_table_str(tab,in_cols,kwarg_str)
 
         else:

@@ -357,7 +357,6 @@ class dimred_sklearn_tsne:
                             list_of_floats=['min_grad_norm'],
                             list_of_bools=['replace'])
 
-        print('Herex')
         if self.verbose>2:
             print('In dimred_sklearn_tsne::set_data_str(): string:',
                   options,'Dictionary:',dct)
