@@ -136,7 +136,8 @@ class dimred_sklearn_pca:
             print("dimred_sklearn_pca::run_table():")
             print("  Input columns:",in_cols)
             print("  Output columns:",out_cols_loc)
-            print("  Components:",n_components)
+            print("  n_components:",n_components)
+            print("  replace:",replace)
 
         # Construct the input data matrix (brute force)
         in_data=numpy.zeros((tab.get_nlines(),len(in_cols)))

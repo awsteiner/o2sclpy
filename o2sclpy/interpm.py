@@ -24,6 +24,8 @@ import numpy
 from o2sclpy.utils import string_to_dict2
 from o2sclpy.hdf import *
 from o2sclpy.doc_data import version
+# for deepcopy
+import copy
 
 class interpm_sklearn_gp:
     """
@@ -1482,27 +1484,52 @@ class interpm_torch_dnn:
     """
     
     def __init__(self):
-        self.dnn=0
-        self.SS1=0
-        self.SS2=0
-        self.transform_in=0
-        self.transform_out=0
-        self.nd_in=0
+        self.dnn=None
+        self.SS1=None
+        self.SS2=None
+        self.transform_in=None
+        self.transform_out=None
+        self.nd_in=None
+        self.device=None
+
+        # Import torch only once
+        import torch
+        
+        self.torch=torch
+        self.nn=torch.nn
+        self.optim=torch.optim
+
+        # sklearn imports
+        
+        import sklearn.preprocessing as preprocessing
+        self.pp=preprocessing
+        
+        from sklearn.model_selection import train_test_split
+        self.tts=train_test_split
+        
         return
+
+    def _string_to_activation(self, name):
+        """
+        Convert a string to an activation function
+        """
+        name = (name or 'relu').lower()
+        if name == 'relu':
+            return self.nn.ReLU()
+        if name == 'tanh':
+            return self.nn.Tanh()
+        if name == 'gelu':
+            return self.nn.GELU()
+        return self.nn.ReLU()
 
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  hlayers=[8,8],epochs=100,transform_in='none',
                  transform_out='none',test_size=0.0,activation='relu',
-                 patience=20):
+                 patience=20,device=None,seed=None):
         """Early stopping is set with patience, and if patience is 0
         then the training never stops early.
         """
 
-        from sklearn.model_selection import train_test_split
-        import torch
-        import torch.nn as nn
-        import torch.optim as optim
-        
         if verbose>0:
             print('interpm_torch_dnn::set_data():')
             print('  outformat:',outformat)
@@ -1511,37 +1538,49 @@ class interpm_torch_dnn:
             print('  transform_in:',transform_in)
             print('  transform_out:',transform_out)
             print('  test_size:',test_size)
+            print('  device:',device)
 
         self.outformat=outformat
         self.verbose=verbose
         self.transform_in=transform_in
         self.transform_out=transform_out
+        self.device=device
 
+        # ----------------------------------------------------------
+        
+        if seed is not None:
+            numpy.random.seed(seed)
+            self.torch.manual_seed(seed)
+
+        if device is None:
+            self.device=self.torch('cuda' if torch.cuda.is_available()
+                                   else 'cpu')
+        else:
+            self.device=self.torch.device(device)
+        
         # ----------------------------------------------------------
         # Handle the data transformations
         
-        from sklearn.preprocessing import QuantileTransformer
-        from sklearn.preprocessing import MinMaxScaler
         if self.transform_in=='moto':
-            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            self.SS1=self.pp.MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
-            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            self.SS1=self.pp.QuantileTransformer(n_quantiles=in_data.shape[0])
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='standard':
-            self.SS1=StandardScaler()
+            self.SS1=self.pp.StandardScaler()
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
             in_data_trans=in_data
             
         if self.transform_out=='moto':
-            self.SS2=MinMaxScaler(feature_range=(-1,1))
+            self.SS2=self.pp.MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
-            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
+            self.SS2=self.pp.QuantileTransformer(n_quantiles=out_data.shape[0])
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='standard':
-            self.SS2=StandardScaler()
+            self.SS2=self.pp.StandardScaler()
             out_data_trans=self.SS2.fit_transform(out_data)
         else:
             out_data_trans=out_data
@@ -1575,7 +1614,7 @@ class interpm_torch_dnn:
             
         if test_size>0.0:
             try:
-                x_train,x_test,y_train,y_test=train_test_split(
+                x_train,x_test,y_train,y_test=self.tts(
                     in_data_trans,out_data_trans,test_size=test_size)
             except Exception as e:
                 print('Exception in interpm_torch_dnn::set_data()',
@@ -1588,42 +1627,26 @@ class interpm_torch_dnn:
         n_pts=numpy.shape(x_train)[0]
         self.nd_in=numpy.shape(x_train)[1]
         nd_out=numpy.shape(y_train)[1]
+
+        act=self._string_to_activation(activation)
         
-        class function_approx(nn.Module):
-            
-            def __init__(self,nd_in):
-                super(function_approx,self).__init__()
-
-                layers=[]
-                layers.append(nn.Linear(nd_in,hlayers[0]))
-                # also ReLU6, LeakyReLU, Sigmoid, Softmax, 
-                if activation=='relu':
-                    layers.append(nn.ReLU())
-                elif activation=='tanh':
-                    layers.append(nn.Tanh())
-                for k in range(0,len(hlayers)-1):
-                    layers.append(nn.Linear(hlayers[k],hlayers[k+1]))
-                    if activation=='relu':
-                        layers.append(nn.ReLU())
-                    elif activation=='tanh':
-                        layers.append(nn.Tanh())
-                layers.append(nn.Linear(hlayers[len(hlayers)-1],nd_out))
-                self.model=nn.Sequential(*layers)
-                
-                return
-            
-            def forward(self,x):
-                return self.model(x)
-
+        layers2=[]
+        layers2.append(self.nn.Linear(self.nd_in,hlayers[0]))
+        layers2.append(act)
+        for k in range(0,len(hlayers)-1):
+            layers2.append(self.nn.Linear(hlayers[k],hlayers[k+1]))
+            layers2.append(act)
+        layers2.append(self.nn.Linear(hlayers[len(hlayers)-1],nd_out))
+        self.dnn=self.nn.Sequential(*layers2).to(self.device)
+        
         # Convert numpy to torch, there's probably a better way...
-        ten_in=torch.from_numpy(x_train).float()
-        ten_out=torch.from_numpy(y_train).float()
-        test_in=torch.from_numpy(x_test).float()
-        test_out=torch.from_numpy(y_test).float()
-        
-        self.dnn=function_approx(self.nd_in)
-        crit=nn.MSELoss()
-        opt=optim.Adam(self.dnn.parameters(),lr=0.01)
+        ten_in=self.torch.from_numpy(x_train).float().to(self.device)
+        ten_out=self.torch.from_numpy(y_train).float().to(self.device)
+        test_in=self.torch.from_numpy(x_test).float().to(self.device)
+        test_out=self.torch.from_numpy(y_test).float().to(self.device)
+
+        crit=self.nn.MSELoss()
+        opt=self.optim.Adam(self.dnn.parameters(),lr=0.01)
         
         best_loss=0
         trigger=0
@@ -1645,7 +1668,7 @@ class interpm_torch_dnn:
             self.dnn.eval()
 
             if test_size>0.0:
-                with torch.no_grad():
+                with self.torch.no_grad():
                     test_pred=self.dnn(test_in)
                     test_loss=crit(test_pred,test_out)
             else:
@@ -1664,7 +1687,7 @@ class interpm_torch_dnn:
                     
             if epoch==0 or test_loss<best_loss:
                 best_loss=test_loss
-                best_model=self.dnn.state_dict()
+                best_model=copy.deepcopy(self.dnn.state_dict())
                 trigger=0
             elif patience>0:
                 # (Disable early stopping if patience is 0)
@@ -1673,7 +1696,6 @@ class interpm_torch_dnn:
                     if self.verbose>0:
                         print('Stopping early.')
                     done=True
-                    
             
             epoch+=1
 
@@ -1699,8 +1721,7 @@ class interpm_torch_dnn:
 
         try:
 
-            import torch
-            ten_in=torch.from_numpy(v_trans).float()
+            ten_in=self.torch.from_numpy(v_trans).float()
             pred=self.dnn(ten_in)
         except Exception as e:
             print('Exception 4 in interpm_torch_dnn:',e)
@@ -1756,8 +1777,7 @@ class interpm_torch_dnn:
             raise
 
         try:
-            import torch
-            ten_in=torch.from_numpy(v).float()
+            ten_in=self.torch.from_numpy(v).float()
             pred=self.dnn(ten_in)
         except Exception as e:
             print('Exception at evaluation in '+
@@ -1818,14 +1838,14 @@ class interpm_torch_dnn:
 
         try:
             
-            import torch
-            ten_in=torch.from_numpy(v_trans).float()
+            ten_in=self.torch.from_numpy(v_trans).float()
                 
             ten_in.requires_grad_(True)
             pred=self.dnn(ten_in)
-            pgrad=torch.autograd.grad(pred,ten_in,
-                                      grad_outputs=torch.ones_like(pred),
-                                      create_graph=True)
+            pgrad=self.torch.autograd.grad(pred,ten_in,
+                                           grad_outputs=
+                                           self.torch.ones_like(pred),
+                                           create_graph=True)
             # The grad function returns a tuple, and the gradient
             # is the first entry of that tuple.
             pgrad=pgrad[0][i]
@@ -1875,8 +1895,7 @@ class interpm_torch_dnn:
         """
         if filename[-3:]!='.pt':
             filename=filename+'.pt'
-        import torch
-        torch.save(self.dnn,filename)
+        self.torch.save(self.dnn,filename)
 
         return
     
@@ -1888,8 +1907,7 @@ class interpm_torch_dnn:
         """        
         if filename[-3:]!='.pt':
             filename=filename+'.pt'
-        import torch
-        torch.load(self.dnn,filename)
+        self.torch.load(self.dnn,filename)
 
         return
 
