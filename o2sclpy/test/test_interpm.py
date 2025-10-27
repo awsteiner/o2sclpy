@@ -305,13 +305,13 @@ def test_all():
             exact=[f(v[0],v[1])]
             interp3a=im3.eval(v)
             print('exact:',exact)
-            print('interp3a:',interp3a)
+            print('eval():',interp3a)
             assert numpy.allclose(exact,interp3a,rtol=1.0)
     
             exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp3b=im3.eval_list(v2)
             print('exact:',exact)
-            print('interp3b:',interp3b)
+            print('eval_list():',interp3b)
             assert numpy.allclose(exact,interp3b,rtol=1.0)
             
             save_str=im3.save('test_interpm.o2','ti_mlpr')
@@ -321,7 +321,7 @@ def test_all():
             exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp3c=im3b.eval_list(v2)
             print('exact:',exact)
-            print('interp3c:',interp3c)
+            print('eval_list():',interp3c)
             assert numpy.allclose(exact,interp3c,rtol=1.0)
 
             # Test with two outputs instead of one
@@ -342,7 +342,7 @@ def test_all():
             interp3d=im3.eval(v)
             exact=[f(v[0],v[1]),g(v[0],v[1])]
             print('exact:',exact)
-            print('interp3d:',interp3d)
+            print('eval():',interp3d)
             assert numpy.allclose(exact,interp3d,rtol=1.0)
 
             # Test eval_list()
@@ -350,7 +350,7 @@ def test_all():
             exact=[[f(v2[0,0],v2[0,1]),g(v2[0,0],v2[0,1])],
                    [f(v2[1,0],v2[1,1]),g(v2[1,0],v2[1,1])]]
             print('exact:',exact)
-            print('interp3e:',interp3e)
+            print('eval_list():',interp3e)
             assert numpy.allclose(exact,interp3e,rtol=1.0)
             
             print(' ')
@@ -471,7 +471,7 @@ def test_all():
             elif ik==1:
                 im5.set_data(x,y,verbose=0,test_size=0.1,
                              hlayers=[60,60],
-                             transform_in='quant',transform_out='quant',
+                             transform_in='quant',transform_out='standard',
                              epochs=500,patience=50,device='cpu')
             else:
                 im5.set_data(x,y,verbose=0,test_size=0.1,
@@ -482,28 +482,27 @@ def test_all():
             exact=[f(v[0],v[1])]
             interp5a=im5.eval(v)
             print('exact:',exact)
-            print('interp5a:',interp5a)
-            assert numpy.allclose(exact,interp5a,rtol=1.0)
+            print('eval():',interp5a)
+            assert numpy.allclose(exact,interp5a,rtol=0.1)
 
             exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp5b=im5.eval_list(v2)
             print('exact:',exact)
-            print('interp5b:',interp5b)
+            print('eval_list():',interp5b)
             assert numpy.allclose(exact,interp5b,rtol=1.0)
             
             exact=[dfdx(0.5,0.5)]
             interp5c=im5.deriv(v,0)
             print('exact:',exact)
-            print('interp5c:',interp5c)
+            print('deriv(0):',interp5c)
 
             exact=[dfdy(0.5,0.5)]
             interp5d=im5.deriv(v,1)
             print('exact:',exact)
-            print('interp5d:',interp5d)
+            print('deriv(1):',interp5d)
             print(' ')
             
-            # AWS, 3/11/25: this doesn't work, because of issues with
-            # pickling local objects.
+            # AWS, 3/11/25: this doesn't work yet
             if False:
                 print('Saving:')
                 im5.save('test_interpm_torch_'+str(ik)+'.pt')
@@ -514,7 +513,7 @@ def test_all():
             
                 print('Testing:')
                 interp5c=im5b.eval_list(v2)
-                print('eval_list:',numpy.shape(interp5c))
+                print('eval_list():',numpy.shape(interp5c))
                 print('interp5b,interp5c:',interp5b,interp5c)
                 assert numpy.allclose(f(0.5,0.5),interp5c[0],rtol=1.0)
                 assert numpy.allclose(f(0.6,0.6),interp5c[1],rtol=1.0)

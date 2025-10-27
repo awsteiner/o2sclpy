@@ -1490,7 +1490,11 @@ class interpm_torch_dnn:
         self.transform_in=None
         self.transform_out=None
         self.nd_in=None
+        self.nd_out=None
         self.device=None
+        self.activation=None
+        self.hlayers=None
+        self.layer_norm=None
 
         # Import torch only once
         import torch
@@ -1525,7 +1529,8 @@ class interpm_torch_dnn:
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
                  hlayers=[8,8],epochs=100,transform_in='none',
                  transform_out='none',test_size=0.0,activation='relu',
-                 patience=20,device=None,seed=None):
+                 patience=20,device=None,seed=None,
+                 layer_norm=True):
         """Early stopping is set with patience, and if patience is 0
         then the training never stops early.
         """
@@ -1539,12 +1544,18 @@ class interpm_torch_dnn:
             print('  transform_out:',transform_out)
             print('  test_size:',test_size)
             print('  device:',device)
+            print('  activation:',activation)
+            print('  hlayers:',hlayers)
+            print('  layer_norm:',layer_norm)
 
         self.outformat=outformat
         self.verbose=verbose
         self.transform_in=transform_in
         self.transform_out=transform_out
         self.device=device
+        self.hlayers=hlayers
+        self.activation=activation
+        self.layer_norm=layer_norm
 
         # ----------------------------------------------------------
         
@@ -1553,8 +1564,9 @@ class interpm_torch_dnn:
             self.torch.manual_seed(seed)
 
         if device is None:
-            self.device=self.torch('cuda' if torch.cuda.is_available()
-                                   else 'cpu')
+            self.device=self.torch.device('cuda'
+                                          if self.torch.cuda.is_available()
+                                          else 'cpu')
         else:
             self.device=self.torch.device(device)
         
@@ -1565,7 +1577,8 @@ class interpm_torch_dnn:
             self.SS1=self.pp.MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
-            self.SS1=self.pp.QuantileTransformer(n_quantiles=in_data.shape[0])
+            self.SS1=self.pp.QuantileTransformer(n_quantiles=
+                                                 in_data.shape[0])
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='standard':
             self.SS1=self.pp.StandardScaler()
@@ -1577,7 +1590,8 @@ class interpm_torch_dnn:
             self.SS2=self.pp.MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
-            self.SS2=self.pp.QuantileTransformer(n_quantiles=out_data.shape[0])
+            self.SS2=self.pp.QuantileTransformer(n_quantiles=
+                                                 out_data.shape[0])
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='standard':
             self.SS2=self.pp.StandardScaler()
@@ -1626,17 +1640,22 @@ class interpm_torch_dnn:
 
         n_pts=numpy.shape(x_train)[0]
         self.nd_in=numpy.shape(x_train)[1]
-        nd_out=numpy.shape(y_train)[1]
+        self.nd_out=numpy.shape(y_train)[1]
 
-        act=self._string_to_activation(activation)
+        act=self._string_to_activation(self.activation)
         
         layers2=[]
         layers2.append(self.nn.Linear(self.nd_in,hlayers[0]))
+        if layer_norm==True:
+            layers2.append(self.nn.LayerNorm(hlayers[0]))
         layers2.append(act)
         for k in range(0,len(hlayers)-1):
             layers2.append(self.nn.Linear(hlayers[k],hlayers[k+1]))
+            if layer_norm==True:
+                layers2.append(self.nn.LayerNorm(hlayers[k+1]))
             layers2.append(act)
-        layers2.append(self.nn.Linear(hlayers[len(hlayers)-1],nd_out))
+        layers2.append(self.nn.Linear(hlayers[len(hlayers)-1],
+                                      self.nd_out))
         self.dnn=self.nn.Sequential(*layers2).to(self.device)
         
         # Convert numpy to torch, there's probably a better way...
@@ -1676,12 +1695,13 @@ class interpm_torch_dnn:
                 
             if self.verbose>0:
                 if test_size>0.0:
-                    print('Epoch:',str(epoch+1)+'/'+str(epochs),
-                          'loss: %7.6e, best_loss: %7.6e, test_loss: %7.6e' %
+                    print('  Epoch:',str(epoch+1)+'/'+str(epochs),
+                          ('loss: %7.6e, best_loss: %7.6e, '+
+                           'test_loss: %7.6e') %
                           (loss.item(),best_loss,test_loss))
                            
                 else:
-                    print('Epoch',str(epoch+1)+'/'+str(epochs),
+                    print('  Epoch',str(epoch+1)+'/'+str(epochs),
                           'loss %7.6e, best_loss: %7.6e' %
                           (loss.item(),best_loss))
                     
@@ -1694,7 +1714,7 @@ class interpm_torch_dnn:
                 trigger+=1
                 if trigger>=patience:
                     if self.verbose>0:
-                        print('Stopping early.')
+                        print('  Stopping early.')
                     done=True
             
             epoch+=1
@@ -1722,7 +1742,9 @@ class interpm_torch_dnn:
         try:
 
             ten_in=self.torch.from_numpy(v_trans).float()
-            pred=self.dnn(ten_in)
+            self.dnn.eval()
+            with self.torch.no_grad():
+                pred=self.dnn(ten_in).cpu()
         except Exception as e:
             print('Exception 4 in interpm_torch_dnn:',e)
             raise
@@ -1778,7 +1800,9 @@ class interpm_torch_dnn:
 
         try:
             ten_in=self.torch.from_numpy(v).float()
-            pred=self.dnn(ten_in)
+            self.dnn.eval()
+            with self.torch.no_grad():
+                pred=self.dnn(ten_in).cpu()
         except Exception as e:
             print('Exception at evaluation in '+
                   'interpm_torch_dnn::eval_list():',e)
@@ -1841,51 +1865,56 @@ class interpm_torch_dnn:
             ten_in=self.torch.from_numpy(v_trans).float()
                 
             ten_in.requires_grad_(True)
+            self.dnn.eval()
             pred=self.dnn(ten_in)
-            pgrad=self.torch.autograd.grad(pred,ten_in,
-                                           grad_outputs=
-                                           self.torch.ones_like(pred),
-                                           create_graph=True)
-            # The grad function returns a tuple, and the gradient
-            # is the first entry of that tuple.
-            pgrad=pgrad[0][i]
+            
+            from torch.autograd.functional import jacobian
+            def f(inp):
+                return self.dnn(inp).squeeze(0)
+            jac=jacobian(f,ten_in)  # shape (n_out, n_in)
+            jac=jac.detach().cpu().numpy()
             
         except Exception as e:
-            print('Exception at model training',
+            print('Exception at model evalution',
                   'in interpm_torch_dnn::deriv():',e)
             raise
             
-        if self.transform_out!='none':
-            try:
-                pgrad2=pgrad.detach().numpy()
-                if pgrad2.ndim<=1:
-                    pgrad2=pgrad2.reshape(-1,1)
-                pgrad_trans=self.SS2.inverse_transform(pgrad2)
-            except Exception as e:
-                print('Exception at inverse transformation',
-                      'in interpm_torch_dnn::deriv():',e)
-                raise
-        else:
-            pgrad_trans=pgrad.detach().numpy()
-    
-        if self.outformat=='list':
-            return pgrad_trans.tolist()
-
-        if pgrad_trans.ndim==1:
-            
-            if self.verbose>1:
-                print('interpm_torch_dnn::deriv():',
-                      'type(pgrad_trans),pgrad_trans:',
-                      type(pgrad_trans),pgrad_trans)
-                    
-            return numpy.ascontiguousarray(pgrad_trans)
+        if self.transform_out=='none':
+            return jac
         
-        if self.verbose>1:
-            print('interpm_torch_dnn::deriv():',
-                  'type(pgrad_trans),pgrad_trans:',
-                  type(pgrad_trans),pgrad_trans)
+        if self.transform_out!='moto' and self.transform_out!='standard':
+            raise ValueError("Cannot get derivative.")
+        
+        try:
+            # sklearn: inverse is y = scale_ * y_scaled + mean_
+            scales=getattr(self.SS2,'scale_',None)
+            if scales is None:
+                raise RuntimeError("transform_out has no scale_ attribute")
+            # multiply each output row by scale
+            jac=(jac.T*scales.reshape(-1)).T
+        except:
+            raise ValueError("Rescale.")
+            
+        return jac
 
-        return numpy.ascontiguousarray(pgrad_trans)
+        #if self.outformat=='list':
+        #     return pgrad_trans.tolist()
+
+        #if pgrad_trans.ndim==1:
+        #    
+        #    if self.verbose>1:
+        #        print('interpm_torch_dnn::deriv():',
+        #              'type(pgrad_trans),pgrad_trans:',
+        #              type(pgrad_trans),pgrad_trans)
+        #            
+        #    return numpy.ascontiguousarray(pgrad_trans)
+        
+        #if self.verbose>1:
+        #    print('interpm_torch_dnn::deriv():',
+        #'type(pgrad_trans),pgrad_trans:',
+        #          type(pgrad_trans),pgrad_trans)
+
+        #return numpy.ascontiguousarray(pgrad_trans)
 
     def save(self,filename):
         """
@@ -1895,19 +1924,58 @@ class interpm_torch_dnn:
         """
         if filename[-3:]!='.pt':
             filename=filename+'.pt'
-        self.torch.save(self.dnn,filename)
-
+            
+        #self.torch.save(self.dnn,filename)
+        self.torch.save({'model_state': self.dnn.state_dict(),
+                         'nd_in': self.nd_in,
+                         'nd_out': self.nd_out,
+                         'activation': self.activation,
+                         'hlayers': self.hlayers},filename)
+        
         return
     
-    def load(self,filename):
-        """
-        Load the interpolation settings from a file
-
-        (No custom object support)
+    def load(self,filename,device=None):
+        """Load the interpolation settings from a file
         """        
         if filename[-3:]!='.pt':
             filename=filename+'.pt'
-        self.torch.load(self.dnn,filename)
+            
+        if device is None:
+            self.device=self.torch.device('cuda'
+                                          if self.torch.cuda.is_available()
+                                          else 'cpu')
+        else:
+            self.device=self.torch.device(device)
+            
+        data=self.torch.load(filename,map_location=self.device)
+        
+        if (not 'model_state' in data or
+            not 'nd_in' in data or
+            not 'nd_out' in data or
+            not 'activation' in data or
+            not 'hlayers' in data):
+            raise RuntimeError("Missing information in "+
+                               "interpm_torch_dnn::load()")
+        
+        self.nd_in=data['nd_in']
+        self.nd_out=data['nd_out']
+        self.activation=data['activation']
+        self.hlayers=data['hlayers']
+        
+        act=self._string_to_activation(self.activation)
+        
+        layers2=[]
+        layers2.append(self.nn.Linear(self.nd_in,self.hlayers[0]))
+        layers2.append(act)
+        for k in range(0,len(self.hlayers)-1):
+            layers2.append(self.nn.Linear(self.hlayers[k],
+                                          self.hlayers[k+1]))
+            layers2.append(act)
+        layers2.append(self.nn.Linear(self.hlayers[len(self.hlayers)-1],
+                                      self.nd_out))
+        self.dnn=self.nn.Sequential(*layers2).to(self.device)
+        
+        self.dnn.load_state_dict(data['model_state'])
 
         return
 
