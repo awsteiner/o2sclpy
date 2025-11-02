@@ -69,6 +69,9 @@ class interpm_sklearn_gp:
         self.random_state=0
         self.normalize_y=True
 
+        import sklearn.preprocessing as preprocessing
+        self.pp=preprocessing
+        
     def set_data(self,in_data,out_data,kernel=None,test_size=0.0,
                  normalize_y=True,transform_in='none',alpha=1.0e-10,
                  outformat='native',verbose=0,random_state=None):
@@ -115,18 +118,14 @@ class interpm_sklearn_gp:
         # ----------------------------------------------------------
         # Handle the data transformations
         
-        from sklearn.preprocessing import QuantileTransformer
-        from sklearn.preprocessing import MinMaxScaler
-        from sklearn.preprocessing import StandardScaler
-        
         if self.transform_in=='moto':
-            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            self.SS1=self.pp.MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
-            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            self.SS1=self.pp.QuantileTransformer(n_quantiles=in_data.shape[0])
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='standard':
-            self.SS1=StandardScaler()
+            self.SS1=self.pp.StandardScaler()
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
             in_data_trans=in_data
@@ -546,6 +545,9 @@ class interpm_sklearn_dtr:
         self.nd_in=0
         self.nd_out=0
         
+        import sklearn.preprocessing as preprocessing
+        self.pp=preprocessing
+        
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',verbose=0,
@@ -573,30 +575,26 @@ class interpm_sklearn_dtr:
         # ----------------------------------------------------------
         # Handle the data transformations
         
-        from sklearn.preprocessing import QuantileTransformer
-        from sklearn.preprocessing import MinMaxScaler
-        from sklearn.preprocessing import StandardScaler
-        
         if self.transform_in=='moto':
-            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            self.SS1=self.pp.MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
-            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            self.SS1=self.pp.QuantileTransformer(n_quantiles=in_data.shape[0])
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='standard':
-            self.SS1=StandardScaler()
+            self.SS1=self.pp.StandardScaler()
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
             in_data_trans=in_data
             
         if self.transform_out=='moto':
-            self.SS2=MinMaxScaler(feature_range=(-1,1))
+            self.SS2=self.pp.MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
-            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
+            self.SS2=self.pp.QuantileTransformer(n_quantiles=out_data.shape[0])
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='standard':
-            self.SS2=StandardScaler()
+            self.SS2=self.pp.StandardScaler()
             out_data_trans=self.SS2.fit_transform(out_data)
         else:
             out_data_trans=out_data
@@ -842,6 +840,9 @@ class interpm_sklearn_mlpr:
         self.nd_in=0
         self.nd_out=0
         
+        import sklearn.preprocessing as preprocessing
+        self.pp=preprocessing
+        
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',test_size=0.0,
@@ -874,30 +875,26 @@ class interpm_sklearn_mlpr:
         # ----------------------------------------------------------
         # Handle the data transformations
         
-        from sklearn.preprocessing import QuantileTransformer
-        from sklearn.preprocessing import MinMaxScaler
-        from sklearn.preprocessing import StandardScaler
-        
         if self.transform_in=='moto':
-            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            self.SS1=self.pp.MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
-            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            self.SS1=self.pp.QuantileTransformer(n_quantiles=in_data.shape[0])
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='standard':
-            self.SS1=StandardScaler()
+            self.SS1=self.pp.StandardScaler()
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
             in_data_trans=in_data
             
         if self.transform_out=='moto':
-            self.SS2=MinMaxScaler(feature_range=(-1,1))
+            self.SS2=self.pp.MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
-            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
+            self.SS2=self.pp.QuantileTransformer(n_quantiles=out_data.shape[0])
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='standard':
-            self.SS2=StandardScaler()
+            self.SS2=self.pp.StandardScaler()
             out_data_trans=self.SS2.fit_transform(out_data)
         else:
             out_data_trans=out_data
@@ -1169,6 +1166,9 @@ class interpm_sklearn_adaboost:
         self.nd_in=0
         self.nd_out=0
         
+        import sklearn.preprocessing as preprocessing
+        self.pp=preprocessing
+        
         return
     
     def set_data(self,in_data,out_data,outformat='numpy',test_size=0.0,
@@ -1200,30 +1200,26 @@ class interpm_sklearn_adaboost:
         # ----------------------------------------------------------
         # Handle the data transformations
         
-        from sklearn.preprocessing import QuantileTransformer
-        from sklearn.preprocessing import MinMaxScaler
-        from sklearn.preprocessing import StandardScaler
-        
         if self.transform_in=='moto':
-            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            self.SS1=self.pp.MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
-            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            self.SS1=self.pp.QuantileTransformer(n_quantiles=in_data.shape[0])
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='standard':
-            self.SS1=StandardScaler()
+            self.SS1=self.pp.StandardScaler()
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
             in_data_trans=in_data
             
         if self.transform_out=='moto':
-            self.SS2=MinMaxScaler(feature_range=(-1,1))
+            self.SS2=self.pp.MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
-            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
+            self.SS2=self.pp.QuantileTransformer(n_quantiles=out_data.shape[0])
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='standard':
-            self.SS2=StandardScaler()
+            self.SS2=self.pp.StandardScaler()
             out_data_trans=self.SS2.fit_transform(out_data)
         else:
             out_data_trans=out_data
@@ -1728,6 +1724,7 @@ class interpm_torch_dnn:
         Evaluate the NN at point ``v``.
         """
 
+        #print('eval,v',v)
         if self.transform_in!='none':
             v_trans=0
             try:
@@ -1738,6 +1735,7 @@ class interpm_torch_dnn:
                 raise
         else:
             v_trans=v
+        #print('eval,v_trans',v_trans)
 
         try:
 
@@ -1749,6 +1747,7 @@ class interpm_torch_dnn:
             print('Exception 4 in interpm_torch_dnn:',e)
             raise
             
+        #print('eval,pred',pred)
         if self.transform_out!='none':
             try:
                 predx=pred.detach().numpy()
@@ -1760,6 +1759,7 @@ class interpm_torch_dnn:
                 raise
         else:
             pred_trans=pred.detach().numpy()
+        #print('eval,pred_trans',pred_trans)
     
         if self.outformat=='list':
             return pred_trans.tolist()
@@ -1788,6 +1788,7 @@ class interpm_torch_dnn:
         """
 
         v_trans=0
+        #print('el,v',v)
         try:
             if self.transform_in!='none':
                 v_trans=self.SS1.transform(v)
@@ -1797,6 +1798,7 @@ class interpm_torch_dnn:
             print('Exception at input transformation ',
                   'in interpm_torch_dnn::eval_list():',e)
             raise
+        #print('el,v_trans',v_trans)
 
         try:
             ten_in=self.torch.from_numpy(v).float()
@@ -1807,6 +1809,7 @@ class interpm_torch_dnn:
             print('Exception at evaluation in '+
                   'interpm_torch_dnn::eval_list():',e)
             raise
+        #print('el,pred',pred)
 
         pred_trans=0
         try:
@@ -1818,6 +1821,7 @@ class interpm_torch_dnn:
             print('Exception at output transformation '+
                   'in interpm_torch_dnn::eval_list():',e)
             raise
+        #print('el,pred_trans',pred_trans)
     
         if self.outformat=='list':
             return pred_trans.tolist()
@@ -2007,16 +2011,22 @@ class interpm_tf_dnn:
 
     def __init__(self):
 
-        self.dnn=0
-        self.SS1=0
-        self.SS2=0
-        self.transform_in=0
-        self.transform_out=0
+        self.dnn=None
+        self.SS1=None
+        self.SS2=None
+        self.transform_in=None
+        self.transform_out=None
         self.outformat='numpy'
-        self.nd_in=0
-        self.nd_out=0
+        self.nd_in=None
+        self.nd_out=None
         self.loss=[]
         self.val_loss=[]
+        
+        import tensorflow as tf
+        self.tf=tf
+        
+        import sklearn.preprocessing as preprocessing
+        self.pp=preprocessing
         
         return
 
@@ -2024,12 +2034,11 @@ class interpm_tf_dnn:
         """
         Check if Tensorflow is likely to use the GPU
         """
-        import tensorflow as tf
         try:
-            with tf.device('/GPU:0'):
-                a=tf.constant([[1.0,2.0]])
-                b=tf.constant([[3.0],[4.0]])
-                c=tf.matmul(a,b)
+            with self.tf.device('/GPU:0'):
+                a=self.tf.constant([[1.0,2.0]])
+                b=self.tf.constant([[3.0],[4.0]])
+                c=self.tf.matmul(a,b)
         except:
             return False
         return True
@@ -2057,7 +2066,6 @@ class interpm_tf_dnn:
         import os
         os.environ['TF_ENABLE_ONEDNN_OPTS']=tf_onednn_opts
         os.environ['TF_CPP_MIN_LOG_LEVEL']=tf_logs
-        import tensorflow as tf
         
         if verbose>0:
             print('interpm_tf_dnn::set_data():')
@@ -2083,28 +2091,26 @@ class interpm_tf_dnn:
         # ----------------------------------------------------------
         # Handle the data transformations
         
-        from sklearn.preprocessing import QuantileTransformer
-        from sklearn.preprocessing import MinMaxScaler
         if self.transform_in=='moto':
-            self.SS1=MinMaxScaler(feature_range=(-1,1))
+            self.SS1=self.pp.MinMaxScaler(feature_range=(-1,1))
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='quant':
-            self.SS1=QuantileTransformer(n_quantiles=in_data.shape[0])
+            self.SS1=self.pp.QuantileTransformer(n_quantiles=in_data.shape[0])
             in_data_trans=self.SS1.fit_transform(in_data)
         elif self.transform_in=='standard':
-            self.SS1=StandardScaler()
+            self.SS1=self.pp.StandardScaler()
             in_data_trans=self.SS1.fit_transform(in_data)
         else:
             in_data_trans=in_data
             
         if self.transform_out=='moto':
-            self.SS2=MinMaxScaler(feature_range=(-1,1))
+            self.SS2=self.pp.MinMaxScaler(feature_range=(-1,1))
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='quant':
-            self.SS2=QuantileTransformer(n_quantiles=out_data.shape[0])
+            self.SS2=self.pp.QuantileTransformer(n_quantiles=out_data.shape[0])
             out_data_trans=self.SS2.fit_transform(out_data)
         elif self.transform_out=='standard':
-            self.SS2=StandardScaler()
+            self.SS2=self.pp.StandardScaler()
             out_data_trans=self.SS2.fit_transform(out_data)
         else:
             out_data_trans=out_data
@@ -2157,22 +2163,22 @@ class interpm_tf_dnn:
         try:
             nl=len(hlayers)
             na=len(activations)
-            inp=tf.keras.Input(shape=(nd_in,))
-            layers=[inp,tf.keras.layers.Dense(hlayers[0],
+            inp=self.tf.keras.Input(shape=(nd_in,))
+            layers=[inp,self.tf.keras.layers.Dense(hlayers[0],
                                               activation=activations[0])]
             if self.verbose>0:
                 print('Layer: dense',hlayers[0],nd_in,activations[0])
             for i in range(1,nl):
                 act=activations[i%na]
-                layers.append(tf.keras.layers.Dense(hlayers[i],
+                layers.append(self.tf.keras.layers.Dense(hlayers[i],
                                                     activation=act))
                 if self.verbose>0:
                     print('Layer: dense',hlayers[i],act)
-            layers.append(tf.keras.layers.Dense(nd_out,
+            layers.append(self.tf.keras.layers.Dense(nd_out,
                                                 activation='linear'))
             if self.verbose>0:
                 print('Layer: dense',nd_out,'linear')
-            model=tf.keras.Sequential(layers)
+            model=self.tf.keras.Sequential(layers)
         except Exception as e:
             print('Exception in interpm_tf_dnn::set_data()',
                   'at model definition.',e)
@@ -2212,8 +2218,8 @@ class interpm_tf_dnn:
             model.compile(loss=loss,optimizer='adam')
 
             # Convert numpy array to TensorFlow tensor
-            x_tf=tf.convert_to_tensor(x_train)
-            y_tf=tf.convert_to_tensor(y_train)
+            x_tf=self.tf.convert_to_tensor(x_train)
+            y_tf=self.tf.convert_to_tensor(y_train)
             
             if test_size>0.0:
                 # Fit the model to training data
@@ -2295,7 +2301,6 @@ class interpm_tf_dnn:
         Python list.
         
         """
-        import tensorflow as tf
 
         if self.transform_in!='none':
             v_trans=0
@@ -2311,7 +2316,7 @@ class interpm_tf_dnn:
 
         try:
             # Convert numpy array to TensorFlow tensor
-            v_tf=tf.convert_to_tensor(v_trans)
+            v_tf=self.tf.convert_to_tensor(v_trans)
                 
             # We don't want output at every point, even if verbose is
             # 1, so we use self.verbose-1 here for the argument to
@@ -2379,7 +2384,6 @@ class interpm_tf_dnn:
         Evaluate the neural network at the list of points given
         in ``v``.
         """
-        import tensorflow as tf
 
         v_trans=0
         try:
@@ -2394,7 +2398,7 @@ class interpm_tf_dnn:
 
         try:
             # Convert numpy array to TensorFlow tensor
-            v_tf=tf.convert_to_tensor(v_trans)
+            v_tf=self.tf.convert_to_tensor(v_trans)
             
             yp=self.dnn.predict(v_tf, verbose=self.verbose)
         except Exception as e:
