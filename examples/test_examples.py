@@ -165,7 +165,7 @@ def test_table_scatter():
 def test_table3d_den_plot():
     ret=os.system('cd examples; ./table3d_den_plot.scr')
     # 9/12/21: I'm not sure why this is failing right now
-    #assert ret==0
+    assert ret==0
     compare_images('table3d_den_plot')
     return
 
