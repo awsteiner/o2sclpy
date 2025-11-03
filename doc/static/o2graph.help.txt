@@ -3,106 +3,103 @@ o2graph: A data viewing and processing program for O2scl.
  
 List of command-line options which do not require a current object:
 
-  -addcbar         Add a color bar.
-  -alias           Create a command alias.
-  -append-images   Combine two images side by side
-  -arrow           Plot an arrow.
-  -autocorr        Compute autocorrelation coefficients. 
-  -backend         Select the matplotlib backend to use.
-  -bl-import       Load a GLTF file into Blender
-  -bl-six-mp4      View each axis of a set of 3D objects in a movie 
-  -bl-yaw-mp4      View 3D objects in a movie by rotating the camera
-  -calc            Compute the value of a constant expression. 
-  -canvas          Create a plotting canvas.
-  -clear           Clear the current object. 
-  -clf             Clear the current figure.
-  -cmap            Create a continuous colormap or list colormaps.
-  -colors          Show color information.
-  -commands        List available commands for current or specified type.
-  -constant        Get or modify a physical or numerical constant. 
-  -convert         Manipulate or use a unit conversion factor. 
-  -create          Create an object. 
-  -docs            Open local O₂scl HTML documentation. 
-  -download        Download a file from the specified URL. 
-  -ellipse         Plot an ellipse.
-  -error-point     Plot a single point with errorbars.
-  -eval            Run the python eval() function.
-  -exec            Run the python code specified in a file.
-  -exit            Exit (synonymous with 'quit').
-  -filelist        List objects in a HDF5 file. 
-  -generic         Read an object from a generic text file. 
-  -get             Get the value of a parameter.
-  -gltf            Produce a GLTF file with the current set of 3D objects.
-  -h5-copy         Copy an O₂scl-generated HDF5 file. 
-  -help            Show help information.
-  -image           Plot a png file in a matplotlib window.
-  -inset           Add a new set of axes
-  -interactive     Toggle interactive mode. 
-  -internal        Output current object in the internal HDF5 format. 
-  -license         Show license information.
-  -line            Plot a line from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
-  -modax           Modify current axes properties.
-  -mp4             Create an mp4 file from a series of images.
-  -nderiv          Numerically differentiate a user-specified function. 
-  -ninteg          Numerically integrate a user-specified function. 
-  -no-intro        Do not print introductory text.
-  -o2scl-addl-libs Specify a list of list of additional libraries to load.
-  -o2scl-cpp-lib   Specify the location of the standard C++ library.
-  -o2scl-lib-dir   Specify the directory for the libo2scl shared library.
-  -output          Output the current object to screen or text file. 
-  -plotv           Plot several vector-like data sets.
-  -point           Plot a single point.
-  -preview         Preview the current object. 
-  -python          Begin an interactive python session.
-  -quit            Quit (synonymous with 'exit').
-  -read            Read an object from an O₂scl-style HDF5 file. 
-  -rect            Plot a rectangle.
-  -run             Run a file containing a list of commands.
-  -save            Save the current plot in a file.
-  -selax           Select an axis from the current list of axes
-  -set             Set the value of a parameter.
-  -shell           Run a shell command.
-  -show            Show the current plot.
-  -slack           Send a slack message. 
-  -subadj          Adjust spacing of subplots
-  -subplots        Create subplots.
-  -td-arrow        Create a 3D arrow (experimental)
-  -td-axis         Create a 3D axis (experimental).
-  -td-axis-label   Create a 3D axis label (experimental).
-  -td-cyl          Create a 3D cylinder (experimental)
-  -td-den-plot     Create a 3D density plot (experimental).
-  -td-icos         Create a 3D icosphere (experimental).
-  -td-line         Plot a line in a 3d visualization (experimental)
-  -td-mat          Create a 3D material (experimental)
-  -td-pgram        Plot a 3D parallelogram (experimental)
-  -td-point        Plot a 3D point (experimental)
-  -td-scatter      Create a 3D scatter plot (experimental).
-  -text            Plot text in the data coordinates.
-  -textbox         Plot a box with text.
-  -ttext           Plot text in window coordinates [(0,0) to (1,1)].
-  -type            Output the type of the current object. 
-  -version         Print version information and O₂scl settings. 
-  -warranty        Show warranty information.
-  -wdocs           Open remote HTML O₂scl or O₂sclpy docs. 
-  -xlimits         Set the x-axis limits
-  -xml-to-o2       Parse doxygen XML to generate runtime docs. 
-  -xtitle          Add a title for the x-axis
-  -ylimits         Set the y-axis limits
-  -yt-ann          Annotate a yt rendering (experimental).
-  -yt-arrow        Plot an arrow in a yt volume visualization. 
-  -yt-axis         Add an axis to the yt volume.
-  -yt-box          Create a box in a yt visualization. 
-  -yt-line         Plot a line in a yt volume visualization.
-  -yt-path         Add a path to the yt animation.
-  -yt-render       Render the yt volume visualization.
-  -yt-source-list  List yt sources
-  -yt-text         Add text to the yt volume.
-  -yt-tf           Edit the yt transfer function.
-  -yt-xtitle       Add a title to the x axis in yt
-  -yt-ytitle       Add a title to the y axis in yt
-  -yt-ztitle       Add a title to the z axis in yt
-  -ytitle          Add a title for the y-axis
-  -zlimits         Set the z-axis limits
+  -addcbar        Add a color bar.
+  -alias          Create a command alias.
+  -append-images  Combine two images side by side
+  -arrow          Plot an arrow.
+  -autocorr       Compute autocorrelation coefficients. 
+  -backend        Select the matplotlib backend to use.
+  -bl-import      Load a GLTF file into Blender
+  -bl-six-mp4     View each axis of a set of 3D objects in a movie 
+  -bl-yaw-mp4     View 3D objects in a movie by rotating the camera
+  -calc           Compute the value of a constant expression. 
+  -canvas         Create a plotting canvas.
+  -clear          Clear the current object. 
+  -clf            Clear the current figure.
+  -cmap           Create a continuous colormap or list colormaps.
+  -colors         Show color information.
+  -commands       List available commands for current or specified type.
+  -constant       Get or modify a physical or numerical constant. 
+  -convert        Manipulate or use a unit conversion factor. 
+  -create         Create an object. 
+  -docs           Open local O₂scl HTML documentation. 
+  -download       Download a file from the specified URL. 
+  -ellipse        Plot an ellipse.
+  -error-point    Plot a single point with errorbars.
+  -eval           Run the python eval() function.
+  -exec           Run the python code specified in a file.
+  -exit           Exit (synonymous with 'quit').
+  -filelist       List objects in a HDF5 file. 
+  -generic        Read an object from a generic text file. 
+  -get            Get the value of a parameter.
+  -gltf           Produce a GLTF file with the current set of 3D objects.
+  -h5-copy        Copy an O₂scl-generated HDF5 file. 
+  -help           Show help information.
+  -image          Plot a png file in a matplotlib window.
+  -inset          Add a new set of axes
+  -interactive    Toggle interactive mode. 
+  -internal       Output current object in the internal HDF5 format. 
+  -license        Show license information.
+  -line           Plot a line from :math:`(x_1,y_1)` to :math:`(x_2,y_2)`
+  -modax          Modify current axes properties.
+  -mp4            Create an mp4 file from a series of images.
+  -nderiv         Numerically differentiate a user-specified function. 
+  -ninteg         Numerically integrate a user-specified function. 
+  -no-intro       Do not print introductory text.
+  -output         Output the current object to screen or text file. 
+  -plotv          Plot several vector-like data sets.
+  -point          Plot a single point.
+  -preview        Preview the current object. 
+  -python         Begin an interactive python session.
+  -quit           Quit (synonymous with 'exit').
+  -read           Read an object from an O₂scl-style HDF5 file. 
+  -rect           Plot a rectangle.
+  -run            Run a file containing a list of commands.
+  -save           Save the current plot in a file.
+  -selax          Select an axis from the current list of axes
+  -set            Set the value of a parameter.
+  -shell          Run a shell command.
+  -show           Show the current plot.
+  -slack          Send a slack message. 
+  -subadj         Adjust spacing of subplots
+  -subplots       Create subplots.
+  -td-arrow       Create a 3D arrow (experimental)
+  -td-axis        Create a 3D axis (experimental).
+  -td-axis-label  Create a 3D axis label (experimental).
+  -td-cyl         Create a 3D cylinder (experimental)
+  -td-den-plot    Create a 3D density plot (experimental).
+  -td-icos        Create a 3D icosphere (experimental).
+  -td-line        Plot a line in a 3d visualization (experimental)
+  -td-mat         Create a 3D material (experimental)
+  -td-pgram       Plot a 3D parallelogram (experimental)
+  -td-point       Plot a 3D point (experimental)
+  -td-scatter     Create a 3D scatter plot (experimental).
+  -text           Plot text in the data coordinates.
+  -textbox        Plot a box with text.
+  -ttext          Plot text in window coordinates [(0,0) to (1,1)].
+  -type           Output the type of the current object. 
+  -version        Print version information and O₂scl settings. 
+  -warranty       Show warranty information.
+  -wdocs          Open remote HTML O₂scl or O₂sclpy docs. 
+  -xlimits        Set the x-axis limits
+  -xml-to-o2      Parse doxygen XML to generate runtime docs. 
+  -xtitle         Add a title for the x-axis
+  -ylimits        Set the y-axis limits
+  -yt-ann         Annotate a yt rendering (experimental).
+  -yt-arrow       Plot an arrow in a yt volume visualization. 
+  -yt-axis        Add an axis to the yt volume.
+  -yt-box         Create a box in a yt visualization. 
+  -yt-line        Plot a line in a yt volume visualization.
+  -yt-path        Add a path to the yt animation.
+  -yt-render      Render the yt volume visualization.
+  -yt-source-list List yt sources
+  -yt-text        Add text to the yt volume.
+  -yt-tf          Edit the yt transfer function.
+  -yt-xtitle      Add a title to the x axis in yt
+  -yt-ytitle      Add a title to the y axis in yt
+  -yt-ztitle      Add a title to the z axis in yt
+  -ytitle         Add a title for the y-axis
+  -zlimits        Set the z-axis limits
 
 ------------------------------------------------------------------------------
 Additional help topics: fonts, functions, index-spec, markers, markers-plot,
