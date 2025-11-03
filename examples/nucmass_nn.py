@@ -120,7 +120,7 @@ for Z in range(8,200):
 # Write the table to a file
 
 hf=o2sclpy.hdf_file()
-hf.open_or_create('nm2.o2')
+hf.open_or_create('data/nucmass_nn1.o2')
 o2sclpy.hdf_output_table(hf,tab,b'table')
 hf.close()
 
@@ -159,7 +159,7 @@ if True:
                  activations=[act,act,act,act],
                  hlayers=[240*M,120*M,60*M,40*M])
 else:
-    im2.load('nucmass_nn')
+    im2.load('data/nucmass_nn2')
 
 # Print the absolute deviation
 
@@ -172,7 +172,7 @@ print('Quality: %7.6e' %(qual))
 
 # Save the result in a file
 
-im2.save('nucmass_nn')
+im2.save('data/nucmass_nn2')
 
 # Plot the loss and the validation loss
 

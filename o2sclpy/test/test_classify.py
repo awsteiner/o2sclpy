@@ -22,8 +22,14 @@
 import o2sclpy
 import numpy
 
-def test_all():
+def test_all(tmp_path):
     
+    # Handle the tmp_path fixture gracefully if we're not using pytest
+    if 'pytest' in sys.modules:
+        filename=str(tmp_path/"test_classify.o2")
+    else:
+        filename=str(tmp_path+"test_classify.o2")
+        
     x=numpy.array([[0.0,0.0,5.67],
                    [1.0,1.19,8.0],
                    [5.0,7.3,0.0],
@@ -55,10 +61,10 @@ def test_all():
         print('exact,result 1:', exact,result)
         assert numpy.allclose(exact,result,rtol=1.0e-4)
         
-        im.save('test_classify.o2','dtc')
+        im.save(filename,'dtc')
         
         im4=o2sclpy.classify_sklearn_dtc()
-        im4.load('test_classify.o2','dtc')
+        im4.load(filename,'dtc')
         result=im4.eval(x[0])
         print('exact,result 4:', exact,result)
         assert numpy.allclose(exact,result,rtol=1.0e-4)
@@ -82,10 +88,10 @@ def test_all():
         print('exact,result 2:', exact,result)
         assert numpy.allclose(exact,result,rtol=1.0)
         
-        im2.save('test_classify.o2','mlpc')
+        im2.save(filename,'mlpc')
 
         im5=o2sclpy.classify_sklearn_mlpc()
-        im5.load('test_classify.o2','mlpc')
+        im5.load(filename,'mlpc')
         result=im5.eval(x[1])
         print('exact,result 5:', exact,result)
         assert numpy.allclose(exact,result,rtol=1.0e-4)
@@ -107,10 +113,10 @@ def test_all():
         print('exact,result 3:', exact,result)
         assert numpy.allclose(exact,result,rtol=1.0)
         
-        im3.save('test_classify.o2','gnb')
+        im3.save(filename,'gnb')
         
         im6=o2sclpy.classify_sklearn_gnb()
-        im6.load('test_classify.o2','gnb')
+        im6.load(filename,'gnb')
         result=im6.eval(x[1])
         print('exact,result 6:', exact,result)
         assert numpy.allclose(exact,result,rtol=1.0)
@@ -121,5 +127,11 @@ def test_all():
         print(' ')
         
 if __name__ == '__main__':
-    test_all()
+
+    # Handle the tmp_path fixture gracefully if we're not using pytest
+    if 'pytest' in sys.modules:
+        test_all()
+    else:
+        test_all('./')
+
     print('All tests passed.')

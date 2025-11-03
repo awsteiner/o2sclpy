@@ -74,8 +74,15 @@ def p2(h,a):
     print(stng)
     return
 
-def test_all():
+def test_all(tmp_path):
 
+    # Handle the tmp_path fixture gracefully if we're not using pytest
+    if 'pytest' in sys.modules:
+        prefix=str(tmp_path/"test_classify")
+    else:
+        prefix=str(tmp_path+"test_classify")
+    filename=prefix+'.o2'
+        
     mode='all'
     if len(sys.argv)>=2:
         mode=sys.argv[1]
@@ -174,10 +181,10 @@ def test_all():
             assert numpy.allclose(exact[1],std1c,atol=gp_tol)
 
             # Saving
-            save_str=im1.save('test_interpm.o2','ti_gp')
+            save_str=im1.save(filename,'ti_gp')
             # Loading
             im1b=o2sclpy.interpm_sklearn_gp()
-            im1b.load('test_interpm.o2','ti_gp')
+            im1b.load(filename,'ti_gp')
             
             exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp1d=im1b.eval_list(v2)
@@ -256,9 +263,9 @@ def test_all():
             print('eval_list():',p(interp2b))
             assert numpy.allclose(exact,interp2b,rtol=1.0)
 
-            im2.save(('test_interpm_tf_'+str(ik)+'.keras'))
+            im2.save((prefix+'_tf_'+str(ik)+'.keras'))
             im2b=o2sclpy.interpm_tf_dnn()
-            im2b.load(('test_interpm_tf_'+str(ik)+'.keras'))
+            im2b.load((prefix+'_tf_'+str(ik)+'.keras'))
 
             if True:
                 # This doesn't work yet because we need to store
@@ -339,9 +346,9 @@ def test_all():
             print('eval_list():',p(interp3b))
             assert numpy.allclose(exact,interp3b,rtol=1.0)
             
-            save_str=im3.save('test_interpm.o2','ti_mlpr')
+            save_str=im3.save(filename,'ti_mlpr')
             im3b=o2sclpy.interpm_sklearn_mlpr()
-            im3b.load('test_interpm.o2','ti_mlpr')
+            im3b.load(filename,'ti_mlpr')
             
             exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp3c=im3b.eval_list(v2)
@@ -407,9 +414,9 @@ def test_all():
             print('eval_list():',p(interp4b))
             assert numpy.allclose(exact,interp4b,rtol=1.0)
             
-            save_str=im4.save('test_interpm.o2','ti_dtr')
+            save_str=im4.save(filename,'ti_dtr')
             im4b=o2sclpy.interpm_sklearn_dtr()
-            im4b.load('test_interpm.o2','ti_dtr')
+            im4b.load(filename,'ti_dtr')
             
             exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp4c=im4b.eval_list(v2)
@@ -471,9 +478,9 @@ def test_all():
             print('eval_list():',p(interp4b))
             assert numpy.allclose(exact,interp4b,rtol=1.0)
             
-            save_str=im4.save('test_interpm.o2','ti_ab')
+            save_str=im4.save(filename,'ti_ab')
             im4b=o2sclpy.interpm_sklearn_adaboost()
-            im4b.load('test_interpm.o2','ti_ab')
+            im4b.load(filename,'ti_ab')
             
             exact=[f(v2[0,0],v2[0,1]),f(v2[1,0],v2[1,1])]
             interp4c=im4b.eval_list(v2)
@@ -530,11 +537,11 @@ def test_all():
             # AWS, 3/11/25: this doesn't work yet
             if False:
                 print('Saving:')
-                im5.save('test_interpm_torch_'+str(ik)+'.pt')
+                im5.save(prefix+'_torch_'+str(ik)+'.pt')
             
                 print('Loading:')
                 im5b=o2sclpy.interpm_torch_dnn()
-                im5b.load('test_interpm_torch_'+str(ik)+'.pt')
+                im5b.load(prefix+'_torch_'+str(ik)+'.pt')
             
                 print('Testing:')
                 interp5c=im5b.eval_list(v2)
@@ -547,5 +554,11 @@ def test_all():
     return
         
 if __name__ == '__main__':
-    test_all()
+
+    # Handle the tmp_path fixture gracefully if we're not using pytest
+    if 'pytest' in sys.modules:
+        test_all()
+    else:
+        test_all('./')
+
     print('All tests passed.')
