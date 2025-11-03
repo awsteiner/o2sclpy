@@ -26,7 +26,8 @@ cli = [
   "torch",
   "normflows",
   "ipython",
-  "distro"
+  "distro",
+  "tqdm"
 ]
 
 [project.scripts]

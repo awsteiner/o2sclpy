@@ -103,12 +103,12 @@ base_list=[
     ["line",plot_base.line.__doc__],
     ["modax",plot_base.modax.__doc__],
     ["mp4",0],
-    ["o2scl-addl-libs",
-     "Specify a list of list of additional libraries to load."],
-    ["o2scl-cpp-lib",
-     "Specify the location of the standard C++ library."],
-    ["o2scl-lib-dir",
-     "Specify the directory for the libo2scl shared library."],
+#    ["o2scl-addl-libs",
+#     "Specify a list of list of additional libraries to load."],
+#    ["o2scl-cpp-lib",
+#     "Specify the location of the standard C++ library."],
+#    ["o2scl-lib-dir",
+#     "Specify the directory for the libo2scl shared library."],
     ["plotv",0],
     ["point",plot_base.point.__doc__],
     ["python","Begin an interactive python session."],
@@ -7091,26 +7091,26 @@ class o2graph_plotter(td_plot_base):
                                   strlist[ix+3],strlist[ix+4],
                                   **string_to_dict(strlist[ix+5]))
                         
-                elif cmd_name=='o2scl-cpp-lib':
+                # elif cmd_name=='o2scl-cpp-lib':
                     
-                    if self.verbose>2:
-                        print('o2graph_plotter::parse_string_list():',
-                              'Process o2scl-cpp-lib.')
-                        print('args:',strlist[ix:ix_next])
+                #     if self.verbose>2:
+                #         print('o2graph_plotter::parse_string_list():',
+                #               'Process o2scl-cpp-lib.')
+                #         print('args:',strlist[ix:ix_next])
                         
-                elif cmd_name=='o2scl-lib-dir':
+                # elif cmd_name=='o2scl-lib-dir':
                     
-                    if self.verbose>2:
-                        print('o2graph_plotter::parse_string_list():',
-                              'Process o2scl-lib-dir.')
-                        print('args:',strlist[ix:ix_next])
+                #     if self.verbose>2:
+                #         print('o2graph_plotter::parse_string_list():',
+                #               'Process o2scl-lib-dir.')
+                #         print('args:',strlist[ix:ix_next])
                     
-                elif cmd_name=='o2scl-addl-libs':
+                # elif cmd_name=='o2scl-addl-libs':
                     
-                    if self.verbose>2:
-                        print('o2graph_plotter::parse_string_list():',
-                              'Process o2scl-addl-libs.')
-                        print('args:',strlist[ix:ix_next])
+                #     if self.verbose>2:
+                #         print('o2graph_plotter::parse_string_list():',
+                #               'Process o2scl-addl-libs.')
+                #         print('args:',strlist[ix:ix_next])
                     
                 elif cmd_name=='debug-first-pass':
                     

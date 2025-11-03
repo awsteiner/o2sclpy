@@ -120,7 +120,11 @@ for Z in range(8,200):
 # Write the table to a file
 
 hf=o2sclpy.hdf_file()
-hf.open_or_create('data/nucmass_nn1.o2')
+if 'pytest' in sys.modules:
+    filename='examples/data/nucmass_nn.o2'
+else:
+    filename='data/nucmass_nn.o2'
+hf.open_or_create(filename)
 o2sclpy.hdf_output_table(hf,tab,b'table')
 hf.close()
 
@@ -172,7 +176,10 @@ print('Quality: %7.6e' %(qual))
 
 # Save the result in a file
 
-im2.save('data/nucmass_nn2')
+if 'pytest' in sys.modules:
+    im2.save('examples/data/nucmass_nn2')
+else:
+    im2.save('data/nucmass_nn2')
 
 # Plot the loss and the validation loss
 

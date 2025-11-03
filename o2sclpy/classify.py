@@ -196,7 +196,6 @@ class classify_sklearn_dtc:
         Save the classifer to an HDF5 file named ``filename`` as a
         string named ``obj_prefix``. 
         """
-        print('new save')
         try:
             import pickle
     
@@ -221,14 +220,14 @@ class classify_sklearn_dtc:
             print('Exception 3 in classify_sklearn_dtc::save()',e)
             raise
 
-        try:
-            for i in range(0,len(byte_string),int(len(byte_string)/10)):
-                print('save',i,int(byte_string[i]))
-            for i in range(0,len(dct_string),int(len(dct_string)/10)):
-                print('save',i,int(dct_string[i]))
-        except Exception as e:
-            print('Exception 2 in classify_sklearn_dtc::save()',e)
-            raise
+        # try:
+        #     for i in range(0,len(byte_string),int(len(byte_string)/10)):
+        #         print('save',i,int(byte_string[i]))
+        #     for i in range(0,len(dct_string),int(len(dct_string)/10)):
+        #         print('save',i,int(dct_string[i]))
+        # except Exception as e:
+        #     print('Exception 2 in classify_sklearn_dtc::save()',e)
+        #     raise
         
         if self.verbose>2:
             print('In classify_sklearn_dtc::save().')
@@ -273,14 +272,14 @@ class classify_sklearn_dtc:
             print('  len(sb):',len(sb))
             print('  len(sb2):',len(sb2))
 
-        try:
-            for i in range(0,len(sb),int(len(sb)/10)):
-                print('load',i,int(sb[i]),int.from_bytes(s[i]))
-            for i in range(0,len(sb2),int(len(sb2)/10)):
-                print('load',i,int(sb2[i]),int.from_bytes(s2[i]))
-        except Exception as e:
-            print('Exception 2 in classify_sklearn_dtc::load()',e)
-            raise
+        # try:
+        #     for i in range(0,len(sb),int(len(sb)/10)):
+        #         print('load',i,int(sb[i]),int.from_bytes(s[i]))
+        #     for i in range(0,len(sb2),int(len(sb2)/10)):
+        #         print('load',i,int(sb2[i]),int.from_bytes(s2[i]))
+        # except Exception as e:
+        #     print('Exception 2 in classify_sklearn_dtc::load()',e)
+        #     raise
             
         try:
             loc_dct=pickle.loads(sb2)

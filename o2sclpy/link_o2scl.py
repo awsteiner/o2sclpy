@@ -105,7 +105,7 @@ class linker:
         loc_verbose=self.verbose
         olv=os.getenv('O2SCL_LINK_VERBOSE')
         env_verbose=0
-        if olv is not None:
+        if (olv is not None and olv!=''):
             env_verbose=int(olv)
         if env_verbose>loc_verbose:
             loc_verbose=env_verbose
@@ -205,7 +205,7 @@ class linker:
                 try:
                     import distro
                     
-                    if self.verbose>0:
+                    if loc_verbose>0:
                         print("linker::link_o2scl():",
                               "Linux distribution:",
                               distro.name(),distro.version())
@@ -218,8 +218,8 @@ class linker:
                         
                 except Exception as e:
                     
-                    if self.verbose>0:
-                        print("linker::link_o2scl(): Failed to ",
+                    if loc_verbose>0:
+                        print("linker::link_o2scl(): Failed to",
                               'get distribution from distro module.')
 
             if (len(self.o2scl_addl_libs)==0 and
@@ -238,7 +238,7 @@ class linker:
                     if loc_verbose>0:
                         print("linker::link_o2scl():",
                               'Loading additional library\n',
-                              ' ',self.o2scl_addl_libs[i],'.')
+                              ' ',self.o2scl_addl_libs[i]+'.')
                     self.o2scl_addl.append(ctypes.CDLL(self.o2scl_addl_libs[i],
                                                   mode=ctypes.RTLD_GLOBAL))
                 if loc_verbose>0:

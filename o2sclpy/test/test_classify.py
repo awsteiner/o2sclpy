@@ -21,6 +21,7 @@
 
 import o2sclpy
 import numpy
+import sys
 
 def test_all(tmp_path):
     
@@ -29,7 +30,7 @@ def test_all(tmp_path):
         filename=str(tmp_path/"test_classify.o2")
     else:
         filename=str(tmp_path+"test_classify.o2")
-        
+
     x=numpy.array([[0.0,0.0,5.67],
                    [1.0,1.19,8.0],
                    [5.0,7.3,0.0],
