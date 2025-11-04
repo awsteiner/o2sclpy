@@ -9,8 +9,8 @@ The most recent release version of O₂sclpy can be installed with e.g.
 ``pip3 install o2sclpy``.
 
 O₂sclpy requires an installation of the development version of O₂scl.
-The release version, O₂sclpy 0.930, requires the O₂scl v0.930 release
-from https://github.com/awsteiner/o2scl/releases/tag/v0.930 .
+The release version, O₂sclpy 0.931, requires the O₂scl v0.931 release
+from https://github.com/awsteiner/o2scl/releases/tag/v0.931 .
 
 O₂sclpy requires python3 packages `numpy <https://www.numpy.org>`_, and
 `matplotlib <https://matplotlib.org>`_. O₂sclpy also assumes LaTeX is
@@ -39,6 +39,6 @@ Because of the complexities of installing O₂scl, O₂sclpy, and all of
 the associated dependencies, a Docker tag with a full installation
 is provided at
 https://hub.docker.com/repository/docker/awsteiner/o2scl/general ,
-see e.g. the v0.930_u24.04_py tag for an installation on Ubuntu 24.04.
+see e.g. the v0.931_u24.04_py tag for an installation on Ubuntu 24.04.
 
 
