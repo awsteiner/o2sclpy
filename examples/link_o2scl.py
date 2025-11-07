@@ -29,5 +29,5 @@ o2scl_settings=o2sclpy.lib_settings_class()
 print('O₂scl library version',o2scl_settings.o2scl_version())
 
 def test_fun():
-    assert o2scl_settings.o2scl_version()==b'0.931'
+    assert o2scl_settings.o2scl_version()==b'0.932'
     return
