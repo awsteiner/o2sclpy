@@ -81,15 +81,6 @@ base_list=[
     ["colors",plot_base.colors.__doc__],
     ["ellipse",plot_base.ellipse.__doc__],
     ["error-point",plot_base.error_point.__doc__],
-    ["eval","Documentation for eval\n\n"+
-     "Run the python eval() function.\n\n"+
-     "<python code>\n\n"+
-     "Take the python code given and execute it using eval(). "+
-     "For example::\n\no2graph -eval \"print(numpy.pi)\""],
-    ["exec","Documentation for exec\n\n"+
-     "Run the python code specified in a file.\n\n"+
-     "<filename>\n\n"+
-     "Take the python code given and execute it using execfile()."],
     ["gltf","Produce a GLTF file (experimental)\n\n"+
      "Produce a GLTF file with the current set of 3D objects."+
      "\n\n<file name>\n\n"+
@@ -111,7 +102,6 @@ base_list=[
 #     "Specify the directory for the libo2scl shared library."],
     ["plotv",0],
     ["point",plot_base.point.__doc__],
-    ["python","Begin an interactive python session."],
     ["rect",plot_base.rect.__doc__],
     ["save",
      "Documentation for save\n\n"+
@@ -180,6 +170,18 @@ base_list=[
     ["yt-ztitle",yt_plot_base.yt_ztitle.__doc__],
     ["zlimits",plot_base.zlimits.__doc__]
 ]
+
+if not 'O2GRAPH_NO_SHELL' in os.environ:
+    base_list.append(["eval","Documentation for eval\n\n"+
+                      "Run the python eval() function.\n\n"+
+                      "<python code>\n\nTake the python code "+
+                      "given and execute it using eval(). "+
+                      "For example::\n\no2graph -eval \"print(numpy.pi)\""])
+    base_list.append(["exec","Documentation for exec\n\n"+
+                      "Run the python code specified in a file.\n\n"+
+                      "<filename>\n\nTake the python code "+
+                      "given and execute it using execfile()."])
+    base_list.append(["python","Begin an interactive python session."])
 
 extra_list=[
     ["double[]","plot1",0],
@@ -7201,34 +7203,43 @@ class o2graph_plotter(td_plot_base):
                         
                 elif cmd_name=='python':
                     
-                    if self.verbose>2:
-                        print('o2graph_plotter::parse_string_list():',
-                              'Process python.')
-                        print('args:',strlist[ix:ix_next])
-
-                    print("The o2graph_plotter() object is named 'self'.")
-                    print("Use 'import o2sclpy' and 'help(o2sclpy)' +"
-                          "for more help on o2sclpy "+
-                          "classes and functions.")
-                    code.interact(local=locals())
+                    if 'O2GRAPH_NO_SHELL' in os.environ:
+                        print("Command 'python' disabled.")
+                    else:
+                        if self.verbose>2:
+                            print('o2graph_plotter::parse_string_list():',
+                                  'Process python.')
+                            print('args:',strlist[ix:ix_next])
+    
+                        print("The o2graph_plotter() object is named 'self'.")
+                        print("Use 'import o2sclpy' and 'help(o2sclpy)' +"
+                              "for more help on o2sclpy "+
+                              "classes and functions.")
+                        code.interact(local=locals())
                     
                 elif cmd_name=='eval':
-                    
-                    if self.verbose>2:
-                        print('o2graph_plotter::parse_string_list():',
-                              'Process eval.')
-                        print('args:',strlist[ix:ix_next])
 
-                    eval(strlist[ix+1],None,locals())
+                    if 'O2GRAPH_NO_SHELL' in os.environ:
+                        print("Command 'eval' disabled.")
+                    else:
+                        if self.verbose>2:
+                            print('o2graph_plotter::parse_string_list():',
+                                  'Process eval.')
+                            print('args:',strlist[ix:ix_next])
+                            
+                        eval(strlist[ix+1],None,locals())
                     
                 elif cmd_name=='exec':
                     
-                    if self.verbose>2:
-                        print('o2graph_plotter::parse_string_list():',
-                              'Process exec.')
-                        print('args:',strlist[ix:ix_next])
-
-                    exec(open(strlist[ix+1]).read(),None,locals())
+                    if 'O2GRAPH_NO_SHELL' in os.environ:
+                        print("Command 'exec' disabled.")
+                    else:
+                        if self.verbose>2:
+                            print('o2graph_plotter::parse_string_list():',
+                                  'Process exec.')
+                            print('args:',strlist[ix:ix_next])
+    
+                        exec(open(strlist[ix+1]).read(),None,locals())
                     
                 elif cmd_name=='image':
                     
