@@ -293,7 +293,7 @@ class plot_base:
         """
 
         if self.verbose>1:
-            print('cmap name:',cmap_name,'list:',col_list)
+            print('plot_base::cmap(): Name:',cmap_name,'list:',col_list)
 
         if cmap_name=='list':
         
@@ -319,7 +319,8 @@ class plot_base:
                 return
             
             if self.verbose>1:
-                print('cmap name:',cmap_name,'list:',col_list)
+                print('plot_base::cmap(): Sharp. Name:',cmap_name,
+                      'list:',col_list)
             
             # This value is used to indicate values in the colormap
             # tuples that are ignored by LinearSegmentedColormap()
@@ -341,7 +342,9 @@ class plot_base:
                     rgb_list.append(to_rgba(col_list[i]))
     
             if self.verbose>1:
-                print('rgb_list:',rgb_list)
+                print('plot_base::cmap(): RGB list:')
+                for i in range(0,len(rgb_list)):
+                    print(" ",i,rgb_list[i])
 
             for i in range(0,int(N/2)+1):
                 col_r[i][0]=float(i)/float(N/2)
@@ -357,7 +360,7 @@ class plot_base:
                     col_g[i][2]=rgb_list[0][1]
                     col_b[i][2]=rgb_list[0][2]
                     col_a[i][2]=rgb_list[0][3]
-                elif i==N/2:
+                elif i==int(N/2):
                     col_r[i][1]=rgb_list[N-1][0]
                     col_g[i][1]=rgb_list[N-1][1]
                     col_b[i][1]=rgb_list[N-1][2]
@@ -367,14 +370,14 @@ class plot_base:
                     col_b[i][2]=unused
                     col_a[i][2]=unused
                 else:
-                    col_r[i][1]=rgb_list[int(i/2+1)][0]
-                    col_g[i][1]=rgb_list[int(i/2+1)][1]
-                    col_b[i][1]=rgb_list[int(i/2+1)][2]
-                    col_a[i][1]=rgb_list[int(i/2+1)][3]
-                    col_r[i][2]=rgb_list[int(i/2+2)][0]
-                    col_g[i][2]=rgb_list[int(i/2+2)][1]
-                    col_b[i][2]=rgb_list[int(i/2+2)][2]
-                    col_a[i][2]=rgb_list[int(i/2+2)][3]
+                    col_r[i][1]=rgb_list[int(i*2-1)][0]
+                    col_g[i][1]=rgb_list[int(i*2-1)][1]
+                    col_b[i][1]=rgb_list[int(i*2-1)][2]
+                    col_a[i][1]=rgb_list[int(i*2-1)][3]
+                    col_r[i][2]=rgb_list[int(i*2)][0]
+                    col_g[i][2]=rgb_list[int(i*2)][1]
+                    col_b[i][2]=rgb_list[int(i*2)][2]
+                    col_a[i][2]=rgb_list[int(i*2)][3]
     
                 if self.verbose>1:
                     print('red  ',col_r[i][0],col_r[i][1],col_r[i][2])
@@ -2665,6 +2668,11 @@ class plot_base:
             # set the scales back to linear and manually take the log
             self.axes.set_xscale('linear')
             self.axes.set_yscale('linear')
+
+            mask=kwargs.pop('mask','')
+            if mask!='':
+                print('using mask',mask)
+                sl=numpy.ma.masked_where(eval(mask),sl)
             
             f=self.axes.imshow
             self.last_image=f(sl,interpolation='nearest',
