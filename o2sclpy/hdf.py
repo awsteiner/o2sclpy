@@ -1711,6 +1711,14 @@ class acol_manager:
         func(self._ptr,s_new_type._ptr)
         return
 
+    def clear_obj(self):
+        """
+        """
+        func=self._link.o2scl.o2scl_hdf_acol_manager_clear_obj
+        func.argtypes=[ctypes.c_void_p]
+        func(self._ptr)
+        return
+
     def command_del(self,ltype):
         """
         | Parameters:

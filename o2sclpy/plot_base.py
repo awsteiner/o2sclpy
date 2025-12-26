@@ -2443,6 +2443,69 @@ class plot_base:
                             
         return
 
+    def denoise(self,args,**kwargs):
+        """three slices of a table3d object,
+
+        The argument list ``args`` can be of the form
+        ``[table3d,slice 1,slice 2,slice 3]``
+
+        The documentation for the o2graph ``den-plot`` command is in
+        the docstring for
+        :py:func:`o2sclpy.o2graph_plotter.den_plot_o2graph()`.
+
+        """
+        
+        if len(args)<4:
+            print('Failed, not enough information to denoise.')
+            return
+
+        if str(type(args[0]))!='<class \'o2sclpy.base.table3d\'>':
+
+            print("Not correct type.")
+            return
+        
+        table3d=args[0]
+        slice_r=args[1]
+        slice_g=args[2]
+        slice_b=args[3]
+
+        # This effectively makes a copy I think, so we'll need to
+        # copy the result back to the table3d object?
+        sl_r=table3d.get_slice(slice_r).to_numpy()
+        sl_g=table3d.get_slice(slice_g).to_numpy()
+        sl_b=table3d.get_slice(slice_b).to_numpy()
+
+        # Renormalize to [0,1]
+        
+        combined=np.asarray([sl_r,sl_g,sl_b],dtype=np.float64)
+        print(numpy.shape(combined))
+        quit()
+
+        from PIL import Image
+        from skimage.restoration import denoise_nl_means, estimate_sigma
+        from skimage.util import random_noise
+
+        sigma_est = np.mean(estimate_sigma(combined,channel_axis=-1))
+
+        denoised = denoise_nl_means(
+            combined,
+            # filtering strength
+            h=1.15 * sigma_est,     
+            fast_mode=True,
+            patch_size=5,
+            patch_distance=6,
+            channel_axis=-1
+        )
+
+        # Copy back to the table object
+        for i in range(0,table3d.get_nx()):
+            for j in range(0,table3d.get_ny()):
+                table3d.set(i,j,slice_r,combined[i,j,0])
+                table3d.set(i,j,slice_g,combined[i,j,1])
+                table3d.set(i,j,slice_b,combined[i,j,2])
+
+        return
+            
     def den_plot(self,args,**kwargs):
         """Create a density plot from a matrix, a slice of a table3d object,
         or a hist_2d object.

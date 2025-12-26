@@ -208,6 +208,7 @@ extra_list=[
     ["table","tsne",0],
     ["table3d","den-plot",0],
     ["table3d","den-plot-rgb",0],
+    ["table3d","denoise",0],
     ["tensor","den-plot",0],
     ["tensor<int>","den-plot",0],
     ["tensor<size_t>","den-plot",0],
@@ -686,6 +687,8 @@ class o2graph_plotter(td_plot_base):
                 line[2]=o2graph_plotter.den_plot_o2graph.__doc__
             elif line[1]=="den-plot-rgb":
                 line[2]=o2graph_plotter.den_plot_rgb_o2graph.__doc__
+            elif line[1]=="denoise":
+                line[2]=o2graph_plotter.denoise_o2graph.__doc__
             elif line[1]=="den-plot-anim":
                 line[2]=o2graph_plotter.den_plot_anim.__doc__
             elif line[1]=="errorbar":
@@ -1554,6 +1557,42 @@ class o2graph_plotter(td_plot_base):
 
         dctt=string_to_dict(kwstring)
         self.den_plot([amt.get_table3d_obj(),slice_name],**dctt)
+
+        return
+
+    def denoise_o2graph(self,amp,args):
+        """Documentation for o2graph command ``denoise``:
+
+        For objects of type ``table3d``:
+
+        Denoise an image stored in three slices of a table3d object
+
+        Command-line arguments: ``<r> <g> <b>``
+
+        Desc
+
+        """
+        
+        curr_type=o2scl_get_type(amp)
+        amt=acol_manager(amp)
+
+        kwstring=''
+        slice_name=''
+        
+        if curr_type==b'table3d':
+            slice_r=args[0]
+            slice_g=args[1]
+            slice_b=args[2]
+            if len(args)>=2:
+                kwstring=args[3]
+        else:
+            print("Command 'denoise' not supported for type",
+                  curr_type,".")
+            return
+
+        dctt=string_to_dict(kwstring)
+        self.den_plot([amt.get_table3d_obj(),slice_r,slice_g,
+                       slice_b],**dctt)
 
         return
 
@@ -2688,8 +2727,8 @@ class o2graph_plotter(td_plot_base):
                 if len(args)<3:
                     c,x,y,self.last_image=self.axes.hist2d(xv,yv)
                 else:
-                    c,x,y,self.last_image=self.axes.hist2d(xv,yv,
-                                                           **string_to_dict(args[2]))
+                    c,x,y,self.last_image=self.axes.hist2d(
+                        xv,yv,**string_to_dict(args[2]))
                 
                 if self.colbar==True:
                     cbar=plot.colorbar(self.last_image,ax=self.axes)
@@ -6727,6 +6766,16 @@ class o2graph_plotter(td_plot_base):
                     self.den_plot_o2graph(amp,
                                           strlist[ix+1:ix_next])
                 
+                elif cmd_name=='denoise':
+                    
+                    if self.verbose>2:
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process denoise.')
+                        print('args:',strlist[ix:ix_next])
+
+                    self.den_plot_o2graph(amp,
+                                          strlist[ix+1:ix_next])
+                
                 elif cmd_name=='den-plot-anim':
                     
                     if self.verbose>2:
@@ -7268,6 +7317,49 @@ class o2graph_plotter(td_plot_base):
                     plot.imshow(im)
                     plot.show()
                     
+                elif cmd_name=='load-image':
+                    
+                    if self.verbose>2:
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process load-image.')
+                        print('args:',strlist[ix:ix_next])
+
+                    import matplotlib.image as img
+                    im=img.imread(strlist[ix+1])
+                    
+                    # Rescale the figure to insure the correct
+                    # aspect ratio
+                    height=im.shape[0]
+                    width=im.shape[1]
+                    ndim=im.shape[2]
+
+                    if ndim>=4:
+                        print("Warning, there are more than 3 channels.")
+                    
+                    ug_x=o2sclpy.uniform_grid_end_width.init(0,width-1,1)
+                    ug_y=o2sclpy.uniform_grid_end_width.init(0,height-1,1)
+                    t3d=o2sclpy.table3d()
+                    t3d.set_xy_grid('x',ug_x,'y',ug_y)
+                    t3d.new_slice('r')
+                    t3d.new_slice('g')
+                    t3d.new_slice('b')
+
+                    for i in range(0,width):
+                        for j in range(0,height):
+                            t3d.set(i,j,'r',im[j,i,0])
+                            t3d.set(i,j,'g',im[j,i,1])
+                            t3d.set(i,j,'b',im[j,i,2])
+
+                    # Set this table3d object as the new acol object
+                    amt=acol_manager(amp)
+                    old_type=amt.get_type()
+                    amt.command_del(old_type)
+                    amt.clear_obj()
+                    t3d._owner=False
+                    amt.set_table3d_obj(t3d)
+                    amt.command_add(b'table3d')
+                    amt.set_type(b'table3d')
+                            
                 elif cmd_name=='rect':
                     
                     if self.verbose>2:
