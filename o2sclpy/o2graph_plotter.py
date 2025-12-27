@@ -1583,7 +1583,7 @@ class o2graph_plotter(td_plot_base):
             slice_r=args[0]
             slice_g=args[1]
             slice_b=args[2]
-            if len(args)>=2:
+            if len(args)>=4:
                 kwstring=args[3]
         else:
             print("Command 'denoise' not supported for type",
@@ -1591,8 +1591,9 @@ class o2graph_plotter(td_plot_base):
             return
 
         dctt=string_to_dict(kwstring)
-        self.den_plot([amt.get_table3d_obj(),slice_r,slice_g,
-                       slice_b],**dctt)
+        print('denoise:',slice_r,slice_g,slice_b)
+        self.denoise([amt.get_table3d_obj(),slice_r,slice_g,
+                      slice_b],**dctt)
 
         return
 
@@ -6773,8 +6774,11 @@ class o2graph_plotter(td_plot_base):
                               'Process denoise.')
                         print('args:',strlist[ix:ix_next])
 
-                    self.den_plot_o2graph(amp,
-                                          strlist[ix+1:ix_next])
+                    if ix_next-ix>=4:
+                        self.denoise_o2graph(amp,
+                                             strlist[ix+1:ix_next])
+                    else:
+                        print('Not enough arguments to denoise.')
                 
                 elif cmd_name=='den-plot-anim':
                     
@@ -7324,6 +7328,10 @@ class o2graph_plotter(td_plot_base):
                               'Process load-image.')
                         print('args:',strlist[ix:ix_next])
 
+                    # 12/26/25: FIXME: in the future, this should
+                    # be replaced with a PIL image read. This
+                    # function defaults to scaling the pixels
+                    # to [0,1]
                     import matplotlib.image as img
                     im=img.imread(strlist[ix+1])
                     

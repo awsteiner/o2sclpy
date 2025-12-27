@@ -2444,7 +2444,7 @@ class plot_base:
         return
 
     def denoise(self,args,**kwargs):
-        """three slices of a table3d object,
+        """...three slices of a table3d object...
 
         The argument list ``args`` can be of the form
         ``[table3d,slice 1,slice 2,slice 3]``
@@ -2468,6 +2468,8 @@ class plot_base:
         slice_r=args[1]
         slice_g=args[2]
         slice_b=args[3]
+        
+        print('denoise2:',slice_r,slice_g,slice_b)
 
         # This effectively makes a copy I think, so we'll need to
         # copy the result back to the table3d object?
@@ -2475,34 +2477,37 @@ class plot_base:
         sl_g=table3d.get_slice(slice_g).to_numpy()
         sl_b=table3d.get_slice(slice_b).to_numpy()
 
-        # Renormalize to [0,1]
-        
-        combined=np.asarray([sl_r,sl_g,sl_b],dtype=np.float64)
-        print(numpy.shape(combined))
-        quit()
+        combined=numpy.asarray([sl_r,sl_g,sl_b],dtype=numpy.float64)
+        print('nsc:',numpy.shape(combined))
 
         from PIL import Image
         from skimage.restoration import denoise_nl_means, estimate_sigma
         from skimage.util import random_noise
 
-        sigma_est = np.mean(estimate_sigma(combined,channel_axis=-1))
-
-        denoised = denoise_nl_means(
+        sigma_est=numpy.mean(estimate_sigma(combined,channel_axis=-1))
+        print('sigma_est',sigma_est)
+        
+        denoised=denoise_nl_means(
             combined,
             # filtering strength
-            h=1.15 * sigma_est,     
-            fast_mode=True,
-            patch_size=5,
-            patch_distance=6,
+            h=0.06,
+            fast_mode=True,patch_size=5,patch_distance=6,
             channel_axis=-1
         )
 
+        print('t3d:',table3d.get_nx(),table3d.get_ny())
+        print(numpy.shape(combined))
+        print(numpy.shape(denoised))
+        
         # Copy back to the table object
+        sumx=0
         for i in range(0,table3d.get_nx()):
             for j in range(0,table3d.get_ny()):
-                table3d.set(i,j,slice_r,combined[i,j,0])
-                table3d.set(i,j,slice_g,combined[i,j,1])
-                table3d.set(i,j,slice_b,combined[i,j,2])
+                table3d.set(i,j,slice_r,denoised[0,i,j])
+                table3d.set(i,j,slice_g,denoised[1,i,j])
+                table3d.set(i,j,slice_b,denoised[2,i,j])
+                sumx+=denoised[0,i,j]-combined[0,i,j]
+        print('sumx',sumx)
 
         return
             
