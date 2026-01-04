@@ -42,7 +42,7 @@ class linker:
     to the global O2scl library settings object.
     """
 
-    o2scl_lib_dir=''
+    o2scl_lib=''
     """
     O2scl library directory from command-line or environment variables
     """
@@ -57,12 +57,12 @@ class linker:
     Backend specification from command-line
     """
 
-    o2scl_addl_libs = []
+    o2scl_addl_libs=[]
     """
     Additional library list from command-line or environment variables
     """
 
-    o2scl_addl = []
+    o2scl_addl=[]
     """
     List of additional library objects
     """
@@ -119,19 +119,19 @@ class linker:
                 force_bytes(os.getenv('O2SCL_CPP_LIB'))!=b'None'):
                 self.o2scl_cpp_lib=os.getenv('O2SCL_CPP_LIB')
                 if loc_verbose>0:
-                    print("linker::link_o2scl():",
+                    print("linker::link_o2scl() [Darwin]:",
                           "Set o2scl_cpp_lib from environment",
                           "variable O2SCL_CPP_LIB to\n  '"+
                           self.o2scl_cpp_lib+"'.")
         
             if self.o2scl_cpp_lib!='':
                 if loc_verbose>0:
-                    print("linker::link_o2scl():",
+                    print("linker::link_o2scl(): [Darwin]",
                           "Loading C++ library '"+self.o2scl_cpp_lib+"'.")
                 self.systcpp=ctypes.CDLL(self.o2scl_cpp_lib,
                                          mode=ctypes.RTLD_GLOBAL)
                 if loc_verbose>0:
-                    print("linker::link_o2scl():",
+                    print("linker::link_o2scl(): [Darwin]",
                           'Finished loading C++ library.')
         
             if (len(self.o2scl_addl_libs)==0 and
@@ -140,7 +140,7 @@ class linker:
                 
                 self.o2scl_addl_libs=os.getenv('O2SCL_ADDL_LIBS').split(',')
                 if loc_verbose>0:
-                    print("linker::link_o2scl():",
+                    print("linker::link_o2scl(): [Darwin]",
                           'Set o2scl_addl_libs from environment',
                           'variable O2SCL_ADDL_LIBS to:\n  ',
                           self.o2scl_addl_libs)
@@ -148,51 +148,50 @@ class linker:
             if len(self.o2scl_addl_libs)>0:
                 for i in range(0,len(self.o2scl_addl_libs)):
                     if loc_verbose>0:
-                        print("linker::link_o2scl():",
+                        print("linker::link_o2scl(): [Darwin]",
                           "Loading additional library '"+
                               self.o2scl_addl_libs[i]+"'.")
                     self.o2scl_addl.append(ctypes.CDLL(self.o2scl_addl_libs[i],
                                                   mode=ctypes.RTLD_GLOBAL))
                 if loc_verbose>0:
-                    print("linker::link_o2scl():",
+                    print("linker::link_o2scl(): [Darwin]",
                           'Finished loading additional libraries.')
         
             # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
             # the former is a more common notation for library directories
-            if (self.o2scl_lib_dir=='' and os.getenv('O2SCL_LIB')
+            if (self.o2scl_lib=='' and os.getenv('O2SCL_LIB')
                 is not None and
                 force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
-                self.o2scl_lib_dir=os.getenv('O2SCL_LIB')
+                self.o2scl_lib=os.getenv('O2SCL_LIB')
                 if loc_verbose>0:
-                    print("linker::link_o2scl():",
-                          'Set o2scl_lib_dir from environment',
+                    print("linker::link_o2scl(): [Darwin]",
+                          'Set o2scl_lib from environment',
                           "variable O2SCL_LIB to\n  '"+
-                          self.o2scl_lib_dir+"'.")
+                          self.o2scl_lib+"'.")
             
-            if self.o2scl_lib_dir!='':
+            if self.o2scl_lib!='':
                 if loc_verbose>0:
-                    print("linker::link_o2scl():",
-                          'Loading',self.o2scl_lib_dir+
+                    print("linker::link_o2scl(): [Darwin]",
+                          'Loading',self.o2scl_lib+
                           '/libo2scl.dylib.')
-                self.o2scl=ctypes.CDLL(self.o2scl_lib_dir+
-                                       '/libo2scl.dylib',
-                                  mode=ctypes.RTLD_GLOBAL)
+                self.o2scl=ctypes.CDLL(self.o2scl_lib,
+                                       mode=ctypes.RTLD_GLOBAL)
             else:
                 if loc_verbose>0:
-                    print("linker::link_o2scl():",
+                    print("linker::link_o2scl(): [Darwin]",
                           'Loading libo2scl.dylib.')
                 self.o2scl=ctypes.CDLL('libo2scl.dylib',
                                        mode=ctypes.RTLD_GLOBAL)
                 
             if loc_verbose>0:
-                print("linker::link_o2scl():",
+                print("linker::link_o2scl(): [Darwin]",
                       'Done loading o2scl libraries.')
         
         else:
         
             if loc_verbose>0:
                 print("linker::link_o2scl():",
-                      'Loading C++ library.')
+                      'Loading C++ library using find_library().')
             stdcpp=ctypes.CDLL(find_library("stdc++"),
                                mode=ctypes.RTLD_GLOBAL)
             if loc_verbose>0:
@@ -247,29 +246,29 @@ class linker:
             
             # Note that we use O2SCL_LIB instead of O2SCL_LIB_DIR as
             # the former is a more common notation for library directories
-            if (self.o2scl_lib_dir=='' and os.getenv('O2SCL_LIB')
+            if (self.o2scl_lib=='' and os.getenv('O2SCL_LIB')
                 is not None and
                 force_bytes(os.getenv('O2SCL_LIB'))!=b'None'):
-                self.o2scl_lib_dir=os.getenv('O2SCL_LIB')
+                self.o2scl_lib=os.getenv('O2SCL_LIB')
                 if loc_verbose>0:
                     print("linker::link_o2scl():",
-                          'Set o2scl_lib_dir from environment',
+                          'Set o2scl_lib from environrment',
                           'variable to\n  ',
-                          self.o2scl_lib_dir)
+                          self.o2scl_lib)
             
-            if self.o2scl_lib_dir=='':
+            if self.o2scl_lib=='':
                 if loc_verbose>0:
                     print("linker::link_o2scl():",
-                          'Loading O₂scl.')
+                          'Loading O₂scl using find_library().')
                 self.o2scl=ctypes.CDLL(find_library("o2scl"),
                                   mode=ctypes.RTLD_GLOBAL)
                 
             else:
                 if loc_verbose>0:
                     print("linker::link_o2scl():",
-                          'Loading',self.o2scl_lib_dir+'/libo2scl.so .')
-                self.o2scl=ctypes.CDLL(self.o2scl_lib_dir+'/libo2scl.so',
-                                  mode=ctypes.RTLD_GLOBAL)
+                          'Loading',self.o2scl_lib)
+                self.o2scl=ctypes.CDLL(self.o2scl_lib,
+                                       mode=ctypes.RTLD_GLOBAL)
         
             if loc_verbose>0:
                 print("linker::link_o2scl():",
@@ -313,10 +312,10 @@ class linker:
                 if i>=len(argv)-1:
                     print('Option -o2scl-lib-dir specified with no value.')
                 else:
-                    self.o2scl_lib_dir=argv[i+1]
+                    self.o2scl_lib=argv[i+1]
                     if self.verbose>0:
-                        print('Set o2scl_lib_dir from command-line to',
-                              self.o2scl_lib_dir)
+                        print('Set o2scl_lib from command-line to',
+                              self.o2scl_lib)
             elif argv[i]=='-o2scl-cpp-lib':
                 if i>=len(argv)-1:
                     print('Option -o2scl-cpp-lib specified with no value.')
