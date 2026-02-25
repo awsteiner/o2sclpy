@@ -1,6 +1,6 @@
 #  ───────────────────────────────────────────────────────────────────
 #  
-#  Copyright (C) 2006-2025, Andrew W. Steiner
+#  Copyright (C) 2006-2026, Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
 #  
@@ -936,7 +936,7 @@ class threed_objects:
         jdat={"asset": {"generator": "o2sclpy v"+version,
                         "version": "2.0",
                         "copyright":
-                        "Copyright (C) 2023-2025, Andrew W. Steiner", },
+                        "Copyright (C) 2023-2026, Andrew W. Steiner", },
               "scene": 0,
               "scenes": [{ "name": "Scene",
                            "nodes": nodes_list

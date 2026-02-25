@@ -1,6 +1,6 @@
 #  ───────────────────────────────────────────────────────────────────
 #  
-#  Copyright (C) 2006-2025, Andrew W. Steiner
+#  Copyright (C) 2006-2026, Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
 #  
@@ -7437,10 +7437,12 @@ class o2graph_plotter(td_plot_base):
                     plot.clf()
                     self.canvas_flag=False
                 elif cmd_name=='backend':
+                    import matplotlib 
                     if self.verbose>2:
                         print('o2graph_plotter::parse_string_list():',
                               'Process backend in __init__.py.')
                         print('args:',strlist[ix:ix_next])
+                    print("Current backend:",matplotlib.get_backend())
                     print("List of backends:",
                           matplotlib.backends.backend_registry.list_builtin())
                 else:

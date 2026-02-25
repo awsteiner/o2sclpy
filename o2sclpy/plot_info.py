@@ -1,6 +1,6 @@
 #  ───────────────────────────────────────────────────────────────────
 #  
-#  Copyright (C) 2006-2025, Andrew W. Steiner
+#  Copyright (C) 2006-2026, Andrew W. Steiner
 #  
 #  This file is part of O2sclpy.
 #  
@@ -560,6 +560,9 @@ def colors_plot(fname='',dpi=10):
     from matplotlib import colors as mc
     import matplotlib.pyplot as plot
 
+    import matplotlib
+    print("Current backend:",matplotlib.get_backend())
+    
     colors=dict(**mc.CSS4_COLORS)
     by_hsv=sorted((tuple(mc.rgb_to_hsv(mc.to_rgba(color)[:3])),name)
                     for name, color in colors.items())
