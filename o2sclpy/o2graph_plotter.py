@@ -63,9 +63,7 @@ base_list=[
       "Select the matplotlib backend to use.\n\n"+
       "<backend>\n\n"+
       "This commend selects the matplotlib backend. "+
-      "Typical values are 'Agg', 'TkAgg', 'WX', 'QTAgg', "+
-      "and 'QT4Agg'. Use backend Agg to save the plot to a "+
-      "file without opening a window. The backend can only "+
+      "The backend can only "+
       "be changed once, i.e. if the backend command is "+
       "invoked more than once, then only the last invocation "+
       "will have any effect.")],
@@ -7443,6 +7441,8 @@ class o2graph_plotter(td_plot_base):
                         print('o2graph_plotter::parse_string_list():',
                               'Process backend in __init__.py.')
                         print('args:',strlist[ix:ix_next])
+                    print("List of backends:",
+                          matplotlib.backends.backend_registry.list_builtin())
                 else:
                     if self.verbose>2:
                         print('o2graph_plotter::parse_string_list():',
