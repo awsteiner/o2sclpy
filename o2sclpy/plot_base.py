@@ -34,8 +34,9 @@ from o2sclpy.utils import string_to_color
 from o2sclpy.base import std_vector
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
 from o2sclpy.plot_info import colors_plot, color_list, colors_near
+from o2sclpy.plot_info import colors_info, cmap_utils
 
-class plot_base:
+class plot_base(colors_info,cmap_utils):
     """
     This class currently has two goals: (i) some simplifications for
     making plots using matplotlib and (ii) provide an interface for
@@ -181,75 +182,6 @@ class plot_base:
         plot_base::new_cmaps().
         """
         self.new_cmaps()
-    
-    def colors(self,args=[]):
-        """Documentation for o2graph command ``colors``:
-
-        Show color information.
-
-        Command-line arguments: ``list`` or ``plot [filename]`` or 
-        ``near <color> [filename]`` or ``xkcd``.
-
-        The ``colors`` command outputs or plots information about
-        matplotlib colors.
-
-        If the "list" argument is given, then the 8 base colors and
-        their RGB definitions are output and then 148 CSS4 colors
-        (which include the 8 base colors) are output along with their
-        associated hexadecimal values.
-
-        If the "plot" argument is given, then the 148 CSS4 colors
-        are plotted in a matplotlib figure. If an additional filename
-        argument is specified, the figure is written to the specified
-        file. 
-
-        If the "near" argument is given, then the 80 colors 
-        closest to <color> are plotted in a matplotlib figure. If 
-        an additional filename argument is specified, then the 
-        figure is written to the specified file. To determine 
-        which colors are "nearest", the sum of the absolute
-        values of the differences in the RGB values are used.
-
-        Finally, if the "xkcd" argument is given, then all 
-        949 xkcd colors are listed along with their HTML
-        hexadecimal RBG values.
-
-        Color arguments in o2graph supports the (r,g,b) format, the
-        [r,g,b,a] format, the HTML format, the grayscale single-value
-        format, and the XKCD colors. For (r,g,b) colors, parentheses
-        must be used, and the r, g, and b numbers should be from 0.0
-        to 1.0. For [r,g,b,a] colors, square brackets must be used and
-        the r, g, b, and a numbers should be from 0.0 to 1.0. The HTML
-        format is #RRGGBB where RR, GG, and BB are two-digit
-        hexadecimal values.
-        """
-
-        if len(args)>=1 and args[0]=='list':
-            color_list()
-            return
-
-        if len(args)>=1 and args[0]=='plot':
-            if len(args)>=2:
-                colors_plot(args[1])
-            else:
-                colors_plot()
-            return
-
-        if len(args)>=1 and args[0]=='near':
-            if len(args)>=3:
-                colors_near(col=args[1],fname=args[2])
-            elif len(args)>=2:
-                colors_near(col=args[1])
-            else:
-                colors_near()
-            return
-
-        if len(args)>=1 and args[0]=='xkcd':
-            xkcd_colors_list()
-            return
-
-        print('Arguments for command "colors" not understood.')
-        return
     
     def cmap(self,cmap_name,col_list=[]):
         """Documentation for o2graph command ``cmap``:
@@ -473,116 +405,6 @@ class plot_base:
         
         return
         
-    def new_cmaps(self):
-        """Add a few new colormaps. This function is called by
-        plot_base::__init__().
-
-        This function adds the colormaps 'jet2' 'pastel2', 'reds2',
-        'greens2', and 'blues2'.
-        """
-
-        import matplotlib.pyplot as plot
-        import matplotlib
-        from matplotlib.colors import LinearSegmentedColormap
-
-        if 'jet2' not in plot.colormaps():
-            # LinearSegmentedColormap
-            # 
-            # Each row in the table for a given color is a sequence of x,
-            # y0, y1 tuples. In each sequence, x must increase
-            # monotonically from 0 to 1. For any input value z falling
-            # between x[i] and x[i+1], the output value of a given color
-            # will be linearly interpolated between y1[i] and y0[i+1]:
-            # Hence y0 in the first row and y1 in the last row are never used.
-    
-            # This value is used to indicate values in the colormap
-            # tuples that are ignored by LinearSegmentedColormap()
-            unused=0.0
-    
-            # A white to red colormap
-            cdict={'red': ((0.0,unused,1.0),(1.0,1.0,unused)),
-                   'green': ((0.0,unused,1.0),(1.0,0.0,unused)),
-                   'blue': ((0.0,unused,1.0),(1.0,0.0,unused))}
-            reds2=LinearSegmentedColormap('reds2',cdict)
-            matplotlib.colormaps.register(cmap=reds2)
-            #plot.register_cmap(cmap=reds2)
-            
-            # Colormap reds2, reversed
-            reds2_r=reds2.reversed()
-            matplotlib.colormaps.register(cmap=reds2_r)
-            #plot.register_cmap(cmap=reds2_r)
-            
-            # A new version of the ``jet`` colormap which starts with
-            # white instead of blue. In order, the index colors are white,
-            # blue, green, yellow, orange, and red
-            cdict={'red': ((0.0,unused,1.0),(0.2,0.0,0.0),
-                           (0.4,0.0,0.0),(0.6,1.0,1.0),
-                           (0.8,1.0,1.0),(1.0,1.0,unused)),
-                   'green': ((0.0,unused,1.0),(0.2,0.0,0.0),
-                             (0.4,0.5,0.5),(0.6,1.0,1.0),
-                             (0.8,0.6,0.6),(1.0,0.0,unused)),
-                   'blue': ((0.0,unused,1.0),(0.2,1.0,1.0),
-                            (0.4,0.0,0.0),(0.6,0.0,0.0),
-                            (0.8,0.0,0.0),(1.0,0.0,unused))}
-            jet2=LinearSegmentedColormap('jet2',cdict)
-            matplotlib.colormaps.register(cmap=jet2)
-            #plot.register_cmap(cmap=jet2)
-    
-            # Colormap jet2, reversed
-            jet2_r=jet2.reversed()
-            matplotlib.colormaps.register(cmap=jet2_r)
-            #plot.register_cmap(cmap=jet2_r)
-    
-            # A new version of the ``pastel`` colormap which starts with
-            # white instead of blue. In order, the index colors are white,
-            # blue, green, yellow, orange, and red
-            cdict={'red': ((0.0,unused,1.0),(0.2,0.3,0.3),
-                           (0.4,0.3,0.3),(0.6,1.0,1.0),
-                           (0.8,1.0,1.0),(1.0,1.0,1.0)),
-                   'green': ((0.0,unused,1.0),(0.2,0.3,unused),
-                             (0.4,0.5,0.5),(0.6,1.0,1.0),
-                             (0.8,0.6,0.6),(1.0,0.3,unused)),
-                   'blue': ((0.0,unused,1.0),(0.2,1.0,1.0),
-                            (0.4,0.3,0.3),(0.6,0.3,0.3),
-                            (0.8,0.3,0.3),(1.0,0.3,unused))}
-            pastel2=LinearSegmentedColormap('pastel2',cdict)
-            matplotlib.colormaps.register(cmap=pastel2)
-            #plot.register_cmap(cmap=pastel2)
-            
-            # Colormap pastel2, reversed
-            pastel2_r=pastel2.reversed()
-            matplotlib.colormaps.register(cmap=pastel2_r)
-            #plot.register_cmap(cmap=pastel2_r)
-    
-            # A white to green colormap
-            cdict={'red': ((0.0,unused,1.0),(1.0,0.0,unused)),
-                   'green': ((0.0,unused,1.0),(1.0,1.0,unused)),
-                   'blue': ((0.0,unused,1.0),(1.0,0.0,unused))}
-            greens2=LinearSegmentedColormap('greens2',cdict)
-            matplotlib.colormaps.register(cmap=greens2)
-            #plot.register_cmap(cmap=greens2)
-            
-            # Colormap greens2, reversed
-            greens2_r=greens2.reversed()
-            matplotlib.colormaps.register(cmap=greens2_r)
-            #plot.register_cmap(cmap=greens2_r)
-            
-            # A white to blue colormap
-            cdict={'red': ((0.0,unused,1.0),(1.0,0.0,unused)),
-                   'green': ((0.0,unused,1.0),(1.0,0.0,unused)),
-                   'blue': ((0.0,unused,1.0),(1.0,1.0,unused))}
-            blues2=LinearSegmentedColormap('blues2',cdict)
-            matplotlib.colormaps.register(cmap=blues2)
-            #plot.register_cmap(cmap=blues2)
-            
-            # Colormap blues2, reversed
-            blues2_r=blues2.reversed()
-            matplotlib.colormaps.register(cmap=blues2_r)
-            #plot.register_cmap(cmap=blues2_r)
-
-        # End of function plot_base::new_cmaps()
-        return
-
     def set(self,name,value):
         """Set the value of parameter named ``name`` to value ``value``. The
         documentation for the o2graph command ``set`` is given in
