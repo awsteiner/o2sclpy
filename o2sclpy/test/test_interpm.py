@@ -503,7 +503,7 @@ def test_all(tmp_path):
             elif ik==1:
                 im5.set_data(x,y,verbose=0,test_size=0.1,
                              hlayers=[60,60],
-                             transform_in='quant',transform_out='standard',
+                             transform_in='standard',transform_out='standard',
                              epochs=500,patience=50,device='cpu')
             else:
                 im5.set_data(x,y,verbose=0,test_size=0.1,

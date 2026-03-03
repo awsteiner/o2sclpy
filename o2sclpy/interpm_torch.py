@@ -20,6 +20,13 @@
 #  
 #  ───────────────────────────────────────────────────────────────────
 
+import numpy
+from o2sclpy.utils import string_to_dict2
+from o2sclpy.hdf import *
+from o2sclpy.doc_data import version
+# for deepcopy
+import copy
+
 class interpm_torch_dnn:
     """Interpolate one or many multidimensional data sets using
     PyTorch.
@@ -357,7 +364,7 @@ class interpm_torch_dnn:
         #print('el,v',v)
         try:
             if self.transform_in!='none':
-                v_trans=self.SS1.transform(v_trans)
+                v_trans=self.SS1.transform(v)
             else:
                 v_trans=v
         except Exception as e:
@@ -420,7 +427,7 @@ class interpm_torch_dnn:
         """
 
         if self.transform_in=='quant':
-            raise ValueError('Exception at input transformation in '+
+            raise ValueError('Transformation quant not supported in '+
                              'interpm_torch_dnn::deriv():')
         
         if self.transform_in!='none':
