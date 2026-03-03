@@ -203,18 +203,18 @@ class interpm_torch_dnn:
         self.nd_in=numpy.shape(x_train)[1]
         self.nd_out=numpy.shape(y_train)[1]
 
-        act=self._string_to_activation(self.activation)
-        
         layers2=[]
         layers2.append(self.nn.Linear(self.nd_in,hlayers[0]))
         if layer_norm==True:
             layers2.append(self.nn.LayerNorm(hlayers[0]))
+        act=self._string_to_activation(self.activation)
         layers2.append(act)
         for k in range(0,len(hlayers)-1):
             layers2.append(self.nn.Linear(hlayers[k],hlayers[k+1]))
             if layer_norm==True:
                 layers2.append(self.nn.LayerNorm(hlayers[k+1]))
-            layers2.append(act)
+            act2=self._string_to_activation(self.activation)
+            layers2.append(act2)
         layers2.append(self.nn.Linear(hlayers[len(hlayers)-1],
                                       self.nd_out))
         self.dnn=self.nn.Sequential(*layers2).to(self.device)
@@ -222,8 +222,9 @@ class interpm_torch_dnn:
         # Convert numpy to torch, there's probably a better way...
         ten_in=self.torch.from_numpy(x_train).float().to(self.device)
         ten_out=self.torch.from_numpy(y_train).float().to(self.device)
-        test_in=self.torch.from_numpy(x_test).float().to(self.device)
-        test_out=self.torch.from_numpy(y_test).float().to(self.device)
+        if test_size>0.0:
+            test_in=self.torch.from_numpy(x_test).float().to(self.device)
+            test_out=self.torch.from_numpy(y_test).float().to(self.device)
 
         crit=self.nn.MSELoss()
         opt=self.optim.Adam(self.dnn.parameters(),lr=0.01)
@@ -356,7 +357,7 @@ class interpm_torch_dnn:
         #print('el,v',v)
         try:
             if self.transform_in!='none':
-                v_trans=self.SS1.transform(v)
+                v_trans=self.SS1.transform(v_trans)
             else:
                 v_trans=v
         except Exception as e:
@@ -366,7 +367,7 @@ class interpm_torch_dnn:
         #print('el,v_trans',v_trans)
 
         try:
-            ten_in=self.torch.from_numpy(v).float()
+            ten_in=self.torch.from_numpy(v_trans).float()
             self.dnn.eval()
             with self.torch.no_grad():
                 pred=self.dnn(ten_in).cpu()
@@ -418,6 +419,10 @@ class interpm_torch_dnn:
         respect to the variable with index ``i``
         """
 
+        if self.transform_in=='quant':
+            raise ValueError('Exception at input transformation in '+
+                             'interpm_torch_dnn::deriv():')
+        
         if self.transform_in!='none':
             v_trans=0
             try:
@@ -499,6 +504,7 @@ class interpm_torch_dnn:
                          'nd_in': self.nd_in,
                          'nd_out': self.nd_out,
                          'activation': self.activation,
+                         'layer_norm': self.layer_norm,
                          'hlayers': self.hlayers},filename)
         
         return
@@ -522,6 +528,7 @@ class interpm_torch_dnn:
             not 'nd_in' in data or
             not 'nd_out' in data or
             not 'activation' in data or
+            not 'layer_norm' in data or
             not 'hlayers' in data):
             raise RuntimeError("Missing information in "+
                                "interpm_torch_dnn::load()")
@@ -530,6 +537,7 @@ class interpm_torch_dnn:
         self.nd_out=data['nd_out']
         self.activation=data['activation']
         self.hlayers=data['hlayers']
+        self.layer_norm=data['layer_norm']
         
         act=self._string_to_activation(self.activation)
         
