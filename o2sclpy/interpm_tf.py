@@ -20,6 +20,13 @@
 #  
 #  ───────────────────────────────────────────────────────────────────
 
+import numpy
+from o2sclpy.utils import string_to_dict2
+from o2sclpy.hdf import *
+from o2sclpy.doc_data import version
+# for deepcopy
+import copy
+
 class interpm_tf_dnn:
     """Interpolate one or many multimensional data sets using a
     neural network from TensorFlow
