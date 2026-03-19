@@ -2604,6 +2604,12 @@ class plot_base(colors_info,cmap_utils):
 
         If the make_png keyword argument is specified, then ``Pillow``
         Python package is required.
+
+        When make_png is true, this requires two copies: first from
+        a table3d to a 3d tensor, and second from a 3d tensor to a
+        matrix of tuples. it would be nice to avoid at least one
+        or both of those copies. One possibility is to rewrite this
+        function to accept tensor inputs.
         """
 
         nxt=table3d.get_nx()
