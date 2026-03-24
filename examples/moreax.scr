@@ -1,0 +1,14 @@
+# An example showing how to modify axes using the 'modax' command. 
+#
+o2graph -backend Agg -create table x grid:-3.14,3.14,0.1 \
+	-function "(1+sin(x))/2" y \
+	-set xlo "(-3.14)" -set xhi 3.14 -xtitle "$ x$" -deriv x y yp \
+	-preview 20 -plot x y marker=.,color=blue \
+	-plot x yp lw=2,color=red -text 0.5 0.95 "$ f(x)$" \
+        -modax "x_minor_tick_len=0,x_tick_len=0,y_minor_tick_len=0,y_tick_len=0,facecolor=palegreen" \
+        -spines left "visible=False" \
+        -spines top "visible=False" \
+        -spines right "visible=False" \
+        -spines bottom "visible=False" \
+        -grid "axis=both,which=major,lw=2,color=white,ls=--,alpha=0.5" \
+	-save figures/moreax.png

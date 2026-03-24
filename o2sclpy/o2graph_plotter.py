@@ -83,6 +83,7 @@ base_list=[
      "Produce a GLTF file with the current set of 3D objects."+
      "\n\n<file name>\n\n"+
      "Desc."],
+    ["grid",plot_base.grid.__doc__],
     ["image","Documentation for image\n\n"+
      "Plot a png file in a matplotlib window.\n\n"+
      "<png file>\n\n"+
@@ -112,6 +113,7 @@ base_list=[
      ".svg, and .tif."],
     ["selax",plot_base.selax.__doc__],
     ["show",plot_base.show.__doc__],
+    ["spines",plot_base.spines.__doc__],
     ["subadj","Documentation for subadj\n\n"+
      "Adjust spacing of subplots\n\n"+
      "<kwargs>\n\n"+
@@ -7063,6 +7065,33 @@ class o2graph_plotter(td_plot_base):
                         print('Not enough parameters for inset option.')
                     else:
                         self.modax(**string_to_dict(strlist[ix+1]))
+                        
+                elif cmd_name=='spines':
+                    
+                    if self.verbose>1:
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process modax.')
+                        print('args:',strlist[ix:ix_next])
+                        
+                    if ix_next-ix<3:
+                        print('Not enough parameters for inset option.')
+                    else:
+                        self.spines(strlist[ix+1],
+                                   **string_to_dict2(strlist[ix+2],
+                                                     list_of_bools=[
+                                                         'visible']))
+                        
+                elif cmd_name=='grid':
+                    
+                    if self.verbose>1:
+                        print('o2graph_plotter::parse_string_list():',
+                              'Process grid.')
+                        print('args:',strlist[ix:ix_next])
+                        
+                    if ix_next-ix<2:
+                        print('Not enough parameters for inset option.')
+                    else:
+                        self.grid(strlist[ix+1])
                         
                 elif cmd_name=='subadj':
                     

@@ -30,7 +30,7 @@ import os
 
 from o2sclpy.utils import parse_arguments, string_to_dict
 from o2sclpy.utils import force_bytes, default_plot
-from o2sclpy.utils import string_to_color
+from o2sclpy.utils import string_to_color, string_to_dict2
 from o2sclpy.base import std_vector
 from o2sclpy.plot_info import cmap_list_func, cmaps_plot, xkcd_colors_list
 from o2sclpy.plot_info import colors_plot, color_list, colors_near
@@ -1826,7 +1826,11 @@ class plot_base(colors_info,cmap_utils):
         """
 
         import matplotlib.pyplot as plot
-        
+
+        if 'facecolor' in kwargs:
+            col_dict=string_to_dict2('facecolor='+kwargs['facecolor'])
+            self.axes.set_facecolor(col_dict['facecolor'])
+            
         if 'x_major_loc' in kwargs:
             self.axes.get_xaxis().set_major_locator(plot.MultipleLocator
                                         (float(kwargs['x_major_loc'])))
@@ -1897,10 +1901,10 @@ class plot_base(colors_info,cmap_utils):
             
         if 'x_tick_len' in kwargs:
             self.axes.tick_params('x',which='major',
-                                  length=kwargs['x_tick_len'])
+                                  length=float(kwargs['x_tick_len']))
         if 'x_minor_tick_len' in kwargs:
             self.axes.tick_params('x',which='minor',
-                                  length=kwargs['x_minor_tick_len'])
+                                  length=float(kwargs['x_minor_tick_len']))
                 
         if 'y_tick_len' in kwargs:
             self.axes.tick_params('y',which='major',
@@ -1922,6 +1926,65 @@ class plot_base(colors_info,cmap_utils):
         if 'y_minor_tick_wid' in kwargs:
             self.axes.tick_params('y',which='minor',
                                   width=float(kwargs['y_minor_tick_wid']))
+        return
+    
+    def grid(self,grid_spec):
+        """
+        Documentation for o2graph command ``grid``:
+
+        Modify axes grid.
+
+        Command-line arguments: ``<grid spec.>``
+
+        """
+
+        import matplotlib.pyplot as plot
+
+        #def string_to_dict2(s,list_of_ints=[],
+        #list_of_floats=[],list_of_bools=[],
+        #list_of_colors=[]):
+
+        dct=string_to_dict2(grid_spec,list_of_bools=['visible'],
+                            list_of_colors=['c','color','gapcolor',
+                                            'markeredgecolor','mec',
+                                            'markerfacecolor','mfc'],
+                            list_of_floats=['linewidth','lw',
+                                            'markeredgewidth','mew',
+                                            'zorder','markersize','ms',
+                                            'alpha'])
+        visible=dct.pop('visible',None)
+        which=dct.pop('which','major')
+        axis=dct.pop('axis','both')
+        self.axes.grid(visible=visible,which=which,
+                       axis=axis,**dct)
+            
+        return
+    
+    def spines(self,which,visible=None):
+        """
+        Documentation for o2graph command ``spines``:
+
+        Modify axes grid.
+
+        Command-line arguments: ``<which> <spec>``
+
+        """
+
+        import matplotlib.pyplot as plot
+
+        if which=='left':
+            if visible is not None:
+                self.axes.spines.left.set_visible(visible)
+        elif which=='right':
+            if visible is not None:
+                self.axes.spines.right.set_visible(visible)
+        elif which=='top':
+            if visible is not None:
+                self.axes.spines.top.set_visible(visible)
+        elif which=='bottom':
+            if visible is not None:
+                self.axes.spines.bottom.set_visible(visible)
+            
         return
     
     def addcbar(self,left,bottom,width,height,image='last',cmap='',**kwargs):
