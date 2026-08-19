@@ -2,7 +2,7 @@ help:
 	@echo "This the O2sclpy root directory makefile. It is not intended"
 	@echo "for the end-user. Use 'pip install' for standard "
 	@echo "installation."
-	@echo "-------------------------------------------------------------"
+	@echo "─────────────────────────────────────────────────────────────"
 	@echo "Developer targets:"
 	@echo "doc:                 Make the documentation (requires sphinx & breathe)"
 	@echo "test:                Test the library and output results to test.out"
@@ -16,7 +16,7 @@ help:
 	@echo "statfiles:           Make the images and extra files for the docs"
 	@echo "                      (to be run before 'make doc')"
 	@echo
-	@echo "-------------------------------------------------------------"
+	@echo "─────────────────────────────────────────────────────────────"
 	@echo "Notes: to upload to pypi run 'rm dist/*', 'python3 -m build',"
 	@echo "and then 'python3 -m twine upload dist/*'"
 
@@ -37,17 +37,7 @@ web-doc: .empty
 doc: .empty
 	cd doc/static; o2graph -h | grep -v "Set o2scl" | \
 		grep -v "Compiled at" | grep -v "New alias" > o2graph.help.txt
-	cd examples; $(MAKE) link_o2scl.ipynb
-	cd examples; $(MAKE) table.ipynb
-	cd examples; $(MAKE) tov.ipynb
-	cd examples; $(MAKE) unit_conv.ipynb
-	cd examples; $(MAKE) skyrme.ipynb
-	cd examples; $(MAKE) interpm.ipynb
-	cd examples; $(MAKE) nucmass.ipynb
-	cd examples; $(MAKE) nucmass_nn.ipynb
-	cd examples; $(MAKE) SFHo_SFHx.ipynb
-	cd examples; $(MAKE) DSH.ipynb
-	cd examples; $(MAKE) buchdahl.ipynb
+	cd examples; $(MAKE) update
 	cd doc; $(MAKE) html
 
 release-sync-doc:

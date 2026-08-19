@@ -10,6 +10,7 @@ Reference for C++ interface
 
    string
    base
+   min
    other
    hdf
    part

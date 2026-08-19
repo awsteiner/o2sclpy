@@ -27,6 +27,7 @@ from o2sclpy.utils import force_bytes
 import o2sclpy.doc_data
 
 from o2sclpy.base import *
+from o2sclpy.min import *
 from o2sclpy.part import *
 
 class nucleus(part):
@@ -2573,6 +2574,37 @@ class nucmass_fit:
         func(self._ptr,value)
         return
 
+    def get_dist(self):
+        """
+        Get object of type :class:`std::vector<nucleus>`
+        """
+        func1=self._link.o2scl.o2scl_nucmass_fit_get_dist
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=std_vector_nucleus(ptr)
+        return obj
+
+    def set_dist(self,value):
+        """
+        Set object of type :class:`std::vector<nucleus>`
+        """
+        func=self._link.o2scl.o2scl_nucmass_fit_set_dist
+        func.argtypes=[ctypes.c_void_p,ctypes.c_void_p]
+        func(self._ptr,value._ptr)
+        return
+
+    def get_def_mmin(self):
+        """
+        Get object of type :class:`mmin_simp2<>`
+        """
+        func1=self._link.o2scl.o2scl_nucmass_fit_get_def_mmin
+        func1.restype=ctypes.c_void_p
+        func1.argtypes=[ctypes.c_void_p]
+        ptr=func1(self._ptr)
+        obj=mmin_simp2(ptr)
+        return obj
+
     def fit(self,n):
         """
         | Parameters:
@@ -2770,6 +2802,20 @@ def hfb_sp_load(hfb,model,filename):
     s_filename=o2sclpy.std_string()
     s_filename.init_bytes(force_bytes_string(filename))
     func=o2sclpy.doc_data.top_linker.o2scl.o2scl_hfb_sp_load_wrapper
+    func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
+    func(hfb._ptr,model,s_filename._ptr)
+    return
+
+def bskg_load(hfb,model,filename):
+    """
+        | Parameters:
+        | *hfb*: :class:`nucmass_hfb_sp` object
+        | *model*: ``size_t``
+        | *filename*: string
+    """
+    s_filename=o2sclpy.std_string()
+    s_filename.init_bytes(force_bytes_string(filename))
+    func=o2sclpy.doc_data.top_linker.o2scl.o2scl_bskg_load_wrapper
     func.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p]
     func(hfb._ptr,model,s_filename._ptr)
     return

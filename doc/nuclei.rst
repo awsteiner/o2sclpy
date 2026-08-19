@@ -31,6 +31,7 @@ Nuclei and nuclear mass classes
 * :ref:`Function mnmsk_load`
 * :ref:`Function hfb_load`
 * :ref:`Function hfb_sp_load`
+* :ref:`Function bskg_load`
 * :ref:`Function nucdist_set`
 * :ref:`Function nucdist_pair_set`
 * :ref:`Function nucdist_set_ext`
@@ -305,6 +306,11 @@ Function hfb_sp_load
 --------------------
 
 .. autofunction:: o2sclpy.hfb_sp_load(hfb,model,filename)
+
+Function bskg_load
+------------------
+
+.. autofunction:: o2sclpy.bskg_load(hfb,model,filename)
 
 Function nucdist_set
 --------------------
